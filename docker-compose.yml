@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - '${PORT}:80'
+    volumes:
+      - .:/app

@@ -1,0 +1,32 @@
+div.ps__rail-y {
+  /* display: none; */
+  height: 33px !important;
+}
+
+.ps__thumb-y {
+  height: 51px !important;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 120px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a8a6a690 #f1f1f1;
+}
