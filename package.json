@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/inter": "^5.0.18",
@@ -19,27 +20,26 @@
     "@mui/icons-material": "^5.16.0",
     "@mui/material": "^5.15.20",
     "@mui/x-date-pickers": "^7.9.0",
+    "@tabler/icons-react": "^3.7.0",
     "@tanstack/react-query": "^5.40.0",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "leaflet": "^1.9.4",
     "material-react-table": "^2.13.0",
+    "material-ui-popup-state": "^5.1.2",
     "million": "^3.1.7",
     "react": "^18.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.5",
     "react-icons": "^5.2.1",
     "react-leaflet": "^4.2.1",
+    "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
     "simplebar-react": "^3.2.6",
     "yup": "^1.4.0",
-    "zustand": "^4.5.2",
-    "@ant-design/icons": "^5.3.7",
-    "@tabler/icons-react": "^3.7.0",
-    "material-ui-popup-state": "^5.1.2",
-    "react-device-detect": "^2.2.3",
-    "react-perfect-scrollbar": "^1.5.8"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.35.6",
@@ -53,19 +53,24 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "husky": "^9.0.11",
+    "husky": "^9.1.4",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
+    "sass": "^1.77.6",
     "ts-morph": "^23.0.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
-    "yargs": "^17.7.2",
-    "sass": "^1.77.6"
+    "yargs": "^17.7.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

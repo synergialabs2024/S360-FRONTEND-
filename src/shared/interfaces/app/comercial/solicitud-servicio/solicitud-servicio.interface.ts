@@ -54,4 +54,13 @@ export interface SolicitudServicio {
   departamento?: number;
   canal_venta?: number;
   vendedor?: number;
+
+  toDelete?: boolean;
+  somNewStructure?: boolean;
+
+  toRest?: boolean;
+
+  totestss?: string;
+
+  someCode?: string;
 }
