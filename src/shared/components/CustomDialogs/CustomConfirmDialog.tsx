@@ -38,11 +38,26 @@ const CustomConfirmDialog: React.FC<CustomConfirmDialogProps> = () => {
       }}
     >
       <DialogTitle>
-        <Typography variant="h4">{title}</Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '1.11rem',
+          }}
+        >
+          {title}
+        </Typography>
       </DialogTitle>
 
       <DialogContent>
-        <Typography variant="subtitle1">{subtitle}</Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: '.97rem',
+          }}
+        >
+          {subtitle}
+        </Typography>
       </DialogContent>
 
       <DialogActions

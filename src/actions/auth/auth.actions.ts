@@ -2,7 +2,9 @@ import { ToastWrapper } from '@/shared/wrappers';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 
-import { erpAPI, handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios';
+
+import { erpAPI } from '@/shared/axios/erp-api';
 import {
   HTTPResStatusCodeEnum,
   LOGIN_ERRORS,

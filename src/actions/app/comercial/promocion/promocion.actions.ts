@@ -1,7 +1,9 @@
 import { ToastWrapper } from '@/shared/wrappers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { erpAPI, handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios';
+
+import { erpAPI } from '@/shared/axios/erp-api';
 import {
   PagingPartialParams,
   Promocion,

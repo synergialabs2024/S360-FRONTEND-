@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { erpAPI } from '@/shared/axios';
+import { erpAPI } from '@/shared/axios/erp-api';
 import {
   SystemPermission,
   SystemPermissionsPaginatedRes,

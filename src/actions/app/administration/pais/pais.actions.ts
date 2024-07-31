@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-import { erpAPI, handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios';
 import {
   Pais,
   PaisesPaginatedRes,
@@ -10,6 +10,7 @@ import {
 } from '@/shared/interfaces';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
+import { erpAPI } from '@/shared/axios/erp-api';
 
 const { get, post, patch } = erpAPI();
 
