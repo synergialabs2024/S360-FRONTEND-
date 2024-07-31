@@ -8,7 +8,15 @@ export const ciudadFormSchema = yup.object({
   metraje_autorizado: yup
     .string()
     .required('El campo metraje autorizado es requerido')
-    .max(200, 'El campo metraje autorizado no debe exceder los 200 caracteres'),
+    .max(200, 'El campo metraje autorizado no debe exceder los 200 caracteres')
+    .test(
+      'is-number',
+      'El campo metraje autorizado debe ser un número positivo',
+      value => {
+        const isValidNumber = isFinite(+value) && +value >= 0;
+        return isValidNumber;
+      },
+    ),
   has_coverage: yup
     .boolean()
     .typeError('El campo has coverage es requerido')

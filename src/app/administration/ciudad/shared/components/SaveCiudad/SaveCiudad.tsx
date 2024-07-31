@@ -12,6 +12,7 @@ import {
 } from '@/actions/app';
 import {
   CustomAutocomplete,
+  CustomNumberTextField,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
@@ -71,6 +72,7 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
     enabled: !!watchedCountry,
     params: {
       pais: watchedCountry,
+      page_size: 600,
     },
   });
 
@@ -141,7 +143,7 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
         helperText={errors.name?.message}
         size={gridSizeMdLg6}
       />
-      <CustomTextField
+      <CustomNumberTextField
         label="Metraje autorizado"
         name="metraje_autorizado"
         control={form.control}
