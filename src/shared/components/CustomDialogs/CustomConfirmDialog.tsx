@@ -37,7 +37,9 @@ const CustomConfirmDialog: React.FC<CustomConfirmDialogProps> = () => {
         !onClose ? setConfirmDialogIsOpen(false) : onClose();
       }}
     >
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>
+        <Typography variant="h4">{title}</Typography>
+      </DialogTitle>
 
       <DialogContent>
         <Typography variant="subtitle1">{subtitle}</Typography>
@@ -52,7 +54,7 @@ const CustomConfirmDialog: React.FC<CustomConfirmDialogProps> = () => {
           onClick={() => {
             !onClose ? setConfirmDialogIsOpen(false) : onClose();
           }}
-          sx={{ color: theme.palette.primary.main }}
+          sx={{ color: theme.palette.text.primary }}
         >
           {cancelTextBtn || 'Cancelar'}
         </Button>

@@ -40,7 +40,7 @@ export const useUiStore = create<UiState>(set => ({
   openMenus: {}, // { level: menuId }
   customization: {
     borderRadius: '12',
-    fontFamily: 'Poppins, sans-serif',
+    fontFamily: 'Roboto, sans-serif',
     isOpenMenuItem: [],
     isOpen: [],
     opened: true,

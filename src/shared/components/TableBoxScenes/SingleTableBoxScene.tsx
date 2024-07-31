@@ -56,9 +56,12 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
       component="main"
       sx={{
         flexGrow: 1,
-        pb: 8,
+        // pb: 8,
         // pt: 10,
         pt: 7,
+        pb: 4,
+        backgroundColor: '#fff',
+        borderRadius: '15px',
       }}
     >
       <Container maxWidth="xl">
@@ -74,7 +77,7 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
               pb={isMainTableStates ? 0 : 4}
             >
               <Stack spacing={1} pb={isMainTableStates ? 1 : 5}>
-                <Typography variant="h3" component="h1">
+                <Typography variant="h2" component="h1">
                   {title}
                 </Typography>
                 <>

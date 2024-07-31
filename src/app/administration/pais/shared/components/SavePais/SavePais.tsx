@@ -64,10 +64,8 @@ const SavePais: React.FC<SavePaisProps> = ({ title, pais }) => {
       return;
     }
 
-    console.log('lllllllllllllllll');
     ///* create
     createPaisMutation.mutate(data);
-    console.log('2222222222');
   };
 
   ///* effects

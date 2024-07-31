@@ -49,8 +49,8 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
         '& + .MuiSwitch-track': {
           backgroundColor:
             theme.palette.mode === 'dark'
-              ? theme.palette.secondary.main
-              : theme.palette.secondary.main,
+              ? theme.palette.primary.main
+              : theme.palette.primary.main,
           opacity: 1,
           border: 0,
         },
@@ -59,7 +59,7 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
         },
       },
       '&.Mui-focusVisible .MuiSwitch-thumb': {
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
         border: '6px solid #fff',
       },
       '&.Mui-disabled .MuiSwitch-thumb': {

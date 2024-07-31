@@ -25,6 +25,7 @@ export const createAppTheme = (customization: CustomizationOptions): Theme => {
     menuSelectedBack: color.secondaryLight,
     divider: color.grey200,
     customization,
+    fontFamily: customization.fontFamily,
   };
 
   const themeOptions = {

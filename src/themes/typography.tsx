@@ -12,7 +12,7 @@ export default function themeTypography(theme: any) {
       fontWeight: 500,
     },
     h4: {
-      fontSize: '1rem',
+      fontSize: '1.1rem',
       color: theme.heading,
       fontWeight: 600,
     },
@@ -22,7 +22,7 @@ export default function themeTypography(theme: any) {
       fontWeight: 600,
     },
     h2: {
-      fontSize: '1.5rem',
+      fontSize: '1.9rem',
       color: theme.heading,
       fontWeight: 700,
     },
@@ -32,7 +32,7 @@ export default function themeTypography(theme: any) {
       fontWeight: 700,
     },
     subtitle1: {
-      fontSize: '0.875rem',
+      fontSize: '0.91rem',
       fontWeight: 500,
       color: theme.textDark,
     },
