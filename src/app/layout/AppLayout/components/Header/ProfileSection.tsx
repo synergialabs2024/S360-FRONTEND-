@@ -19,6 +19,7 @@ import {
 
 // project imports
 import { MainCard } from '@/shared/components/template';
+import { useAuthStore } from '@/store/auth';
 import { useUiStore } from '@/store/ui';
 import {
   Divider,
@@ -41,6 +42,8 @@ const ProfileSection: React.FC<ProfileSectionProps> = () => {
   const [value, setValue] = useState('');
 
   const customization = useUiStore(s => s.customization);
+  const user = useAuthStore(s => s.user);
+  const onLogout = useAuthStore(s => s.onLogout);
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement | null>(null);
@@ -59,7 +62,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = () => {
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
-    link: string
+    link: string,
   ) => {
     console.log('handleListItemClick', link, event, index);
     setOpen(false);
@@ -148,13 +151,13 @@ const ProfileSection: React.FC<ProfileSectionProps> = () => {
               <Box sx={{ p: 2, pb: 0 }}>
                 <Stack>
                   <Stack direction="row" spacing={0.5} alignItems="center">
-                    <Typography variant="h4">Good Morning,</Typography>
+                    <Typography variant="h4">Hola,</Typography>
                     <Typography
                       component="span"
                       variant="h4"
                       sx={{ fontWeight: 400 }}
                     >
-                      Johne Doe
+                      {user?.username}
                     </Typography>
                   </Stack>
                   <Typography variant="subtitle2">Project Admin</Typography>
@@ -258,6 +261,9 @@ const ProfileSection: React.FC<ProfileSectionProps> = () => {
                     </ListItemIcon>
                     <ListItemText
                       primary={<Typography variant="body2">Logout</Typography>}
+                      onClick={async () => {
+                        await onLogout();
+                      }}
                     />
                   </ListItemButton>
                 </List>

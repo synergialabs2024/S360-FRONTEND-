@@ -34,9 +34,11 @@ import {
   ALL_MONTHS_STRING,
   DiscountTypeEnumChoice,
   RECURRENCE_ARRAY_CHOICES,
+  SAVE_PROMOCION_PERMISSIONS,
 } from '@/shared/constants/app';
 import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders, useTabsOnly } from '@/shared/hooks';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import type {
   Ciudad,
   Plan,
@@ -64,6 +66,8 @@ type SaveFormData = CreatePromocionParamsBase & {
 };
 
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
+  useCheckPermissionsArray(SAVE_PROMOCION_PERMISSIONS);
+
   ///* hooks ----------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly({

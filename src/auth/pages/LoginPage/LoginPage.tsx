@@ -188,10 +188,6 @@ const Login: React.FC = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               disabled={loginMutation.isPending || isBlocked}
-              style={{
-                backgroundColor: isBlocked ? '#374151' : '#2563eb',
-                color: 'white',
-              }}
             >
               Login
             </Button>

@@ -21,3 +21,11 @@ export const SAVE_SECTOR_PERMISSIONS = [
   PermissionsEnum.administration_view_ciudad,
   PermissionsEnum.administration_view_zona,
 ];
+
+export const SAVE_PROMOCION_PERMISSIONS = [
+  PermissionsEnum.administration_view_provincia,
+  PermissionsEnum.administration_view_ciudad,
+  PermissionsEnum.administration_view_zona,
+  PermissionsEnum.administration_view_sector,
+  PermissionsEnum.servicios_view_plan,
+];

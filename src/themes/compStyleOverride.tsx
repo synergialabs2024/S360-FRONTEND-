@@ -1,5 +1,5 @@
 export default function componentStyleOverrides(theme: any) {
-  const bgColor = theme.colors?.grey50;
+  // const bgColor = theme.colors?.grey50;
 
   return {
     MuiButton: {
@@ -92,18 +92,19 @@ export default function componentStyleOverrides(theme: any) {
     MuiInputBase: {
       styleOverrides: {
         input: {
-          color: theme.textDark,
-          '&::placeholder': {
-            color: theme.darkTextSecondary,
-            fontSize: '0.875rem',
-          },
+          // TODO: sss
+          // color: theme.textDark,
+          // '&::placeholder': {
+          //   color: theme.darkTextSecondary,
+          //   fontSize: '0.875rem',
+          // },
         },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          background: bgColor,
+          // background: bgColor,
           borderRadius: `${theme?.customization?.borderRadius}px`,
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.colors?.grey400,
@@ -117,7 +118,7 @@ export default function componentStyleOverrides(theme: any) {
         },
         input: {
           fontWeight: 500,
-          background: bgColor,
+          // background: bgColor,
           padding: '15.5px 14px',
           borderRadius: `${theme?.customization?.borderRadius}px`,
           '&.MuiInputBase-inputSizeSmall': {

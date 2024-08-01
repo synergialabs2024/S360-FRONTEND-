@@ -11,13 +11,16 @@ import {
   SingleTableBoxScene,
   ViewMoreTextModalTableCell,
 } from '@/shared/components';
-import { DiscountTypeEnumChoice } from '@/shared/constants/app';
+import {
+  DiscountTypeEnumChoice,
+  SAVE_PROMOCION_PERMISSIONS,
+} from '@/shared/constants/app';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Promocion } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlPromocionsPage = ROUTER_PATHS.comercial.promocionesNav;
@@ -381,7 +384,10 @@ const PromocionsPage: React.FC<PromocionsPageProps> = () => {
     <SingleTableBoxScene
       title="Promociones"
       createPageUrl={`${returnUrlPromocionsPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.comercial_add_promocion)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.comercial_add_promocion,
+        ...SAVE_PROMOCION_PERMISSIONS,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -406,11 +412,15 @@ const PromocionsPage: React.FC<PromocionsPageProps> = () => {
         rowCount={PromocionsPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.comercial_change_promocion,
-        )}
+        enableActionsColumn={hasAllPermissions([
+          PermissionsEnum.comercial_add_promocion,
+          ...SAVE_PROMOCION_PERMISSIONS,
+        ])}
         // crud
-        canEdit={hasPermission(PermissionsEnum.comercial_change_promocion)}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.comercial_add_promocion,
+          ...SAVE_PROMOCION_PERMISSIONS,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />
