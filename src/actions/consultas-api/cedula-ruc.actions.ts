@@ -57,6 +57,9 @@ export type UpdateCedulaCitizenParams<T> = {
   id: string;
   data: T;
 };
+export type SearchCedulaParams = {
+  cedula: string;
+};
 
 export const searchCedula = async <T>(data: CreateCedulaCitizenParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;

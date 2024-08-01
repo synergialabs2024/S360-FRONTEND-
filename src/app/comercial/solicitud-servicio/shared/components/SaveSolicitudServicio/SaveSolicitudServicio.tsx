@@ -11,6 +11,7 @@ import {
   useCreateSolicitudServicio,
   useUpdateSolicitudServicio,
 } from '@/actions/app';
+import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
 import {
   CustomAutocompleteArrString,
   CustomCellphoneTextField,
@@ -35,7 +36,6 @@ import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
-import { useSearchCedula } from '@/actions/consultas-api';
 
 export interface SaveSolicitudServicioProps {
   title: string;
@@ -88,12 +88,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       navigate,
       returnUrl: returnUrlSolicitudsServicioPage,
     });
-  const useSearchCedulaMutation = useSearchCedula({
+  const useSearchCedulaMutation = useSearchCedula<SearchCedulaParams>({
     enableErrorNavigate: false,
   });
 
   const handleFetchCedulaRucInfo = async (value: string) => {
-    const res = await useSearchCedulaMutation.mutateAsync(value);
+    const res = await useSearchCedulaMutation.mutateAsync({
+      cedula: value,
+    });
     console.log('res', res);
   };
 
