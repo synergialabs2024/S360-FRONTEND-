@@ -70,6 +70,10 @@ const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
         flexGrow: 1,
         pt: isMobile ? 3 : 8,
         pb: 8,
+
+        backgroundColor: '#fff',
+        borderRadius: '12px',
+        height: '100%',
       }}
     >
       <Container maxWidth={maxWidth}>
@@ -78,7 +82,7 @@ const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
           {titlePageNode ? (
             titlePageNode
           ) : (
-            <Typography variant="h3" component="h1" pb={isMobile ? 3 : 6}>
+            <Typography variant="h2" component="h1" pb={isMobile ? 3 : 6}>
               {titlePage}
             </Typography>
           )}
