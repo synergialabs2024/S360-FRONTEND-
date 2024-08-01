@@ -5,8 +5,7 @@ import { useAuthStore } from '@/store/auth';
 import { ApiResponse } from '../interfaces/common';
 import { getEnvs } from '../utils';
 
-const { VITE_ERPAPI_URL, VITE_STORAGEAPI_URL, VITE_CONSULTAAPI_URL } =
-  getEnvs();
+const { VITE_ERPAPI_URL, VITE_STORAGEAPI_URL, VITE_CONSULTAS_URL } = getEnvs();
 
 export type ErpApiParams = {
   isStorageApi?: boolean;
@@ -31,7 +30,7 @@ export const erpAPI = ({
     const urlApi = isStorageApi
       ? VITE_STORAGEAPI_URL
       : isCedulaRucApi
-        ? VITE_CONSULTAAPI_URL
+        ? VITE_CONSULTAS_URL
         : VITE_ERPAPI_URL;
 
     const config: AxiosRequestConfig = {

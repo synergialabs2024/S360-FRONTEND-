@@ -35,6 +35,7 @@ import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
+import { useSearchCedula } from '@/actions/consultas-api';
 
 export interface SaveSolicitudServicioProps {
   title: string;
@@ -87,6 +88,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       navigate,
       returnUrl: returnUrlSolicitudsServicioPage,
     });
+  const useSearchCedulaMutation = useSearchCedula({
+    enableErrorNavigate: false,
+  });
+
+  const handleFetchCedulaRucInfo = async (value: string) => {
+    const res = await useSearchCedulaMutation.mutateAsync(value);
+    console.log('res', res);
+  };
 
   ///* handlers -----------------
   const onSave = async (data: SaveFormData) => {
@@ -143,8 +152,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             defaultValue={form.getValues('identificacion')}
             error={errors.identificacion}
             helperText={errors.identificacion?.message}
-            onFetchCedulaRucInfo={value => {
-              alert(value);
+            onFetchCedulaRucInfo={async value => {
+              await handleFetchCedulaRucInfo(value);
             }}
             disabled={!watchedIdentificationType}
           />
