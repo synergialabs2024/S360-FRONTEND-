@@ -19,8 +19,6 @@ export const handleAxiosError = (
   customMessageErrorToast?: string | null,
   customMessageErrorSeverityToast: ToastSeverityType = 'error',
 ) => {
-  console.log('-------------------------------------------');
-
   ///* axios errror handler
   if (isAxiosError(error)) {
     // custom message error
@@ -41,13 +39,13 @@ export const handleAxiosError = (
           customMessageErrorToast || error.response?.data?.message,
         );
 
-      console.log('error.response?.data', error.response?.data);
+      // errors obj + arr
       if ((error as any)?.response?.data?.errors?.length) {
         return ToastWrapper.error((error as any)?.response?.data?.errors[0]);
       }
 
       return ToastWrapper.error(
-        error?.message + 'aaaaaaaaaaaaaaa' ||
+        error?.message ||
           'Error no controlado, contacte al administrador del sistema',
       );
     }

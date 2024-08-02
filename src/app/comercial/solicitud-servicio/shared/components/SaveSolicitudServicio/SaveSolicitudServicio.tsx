@@ -1,5 +1,7 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
@@ -12,11 +14,14 @@ import {
   useUpdateSolicitudServicio,
 } from '@/actions/app';
 import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
+import { ToastWrapper } from '@/shared';
 import {
   CustomAutocompleteArrString,
   CustomCellphoneTextField,
   CustomCoordsTextField,
+  CustomDatePicker,
   CustomIdentificacionTextField,
+  CustomNumberTextField,
   CustomTextField,
   InputAndBtnGridSpace,
   MapModalComponent,
@@ -24,16 +29,22 @@ import {
   SingleFormBoxScene,
   SingleIconButton,
 } from '@/shared/components';
-import { IDENTIFICATION_TYPE_ARRAY_CHOICES } from '@/shared/constants/app';
+import {
+  EstadoSolicitudServicioEnumChoice,
+  IDENTIFICATION_TYPE_ARRAY_CHOICES,
+  IdentificationTypeEnumChoice,
+} from '@/shared/constants/app';
 import {
   gridSize,
   gridSizeMdLg1,
   gridSizeMdLg11,
+  gridSizeMdLg4,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
+import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
 
@@ -56,7 +67,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   ///* form -----------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(solicitudServicioFormSchema) as any,
-    defaultValues: {},
+    defaultValues: {
+      estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
+      es_tercera_edad: false,
+      es_discapacitado: false,
+      es_cliente: false,
+      tiene_cobertura: false,
+      linea_servicio: 1,
+    },
   });
   const {
     handleSubmit,
@@ -77,6 +95,24 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     setLatLng,
   });
 
+  // handlers ------------
+  const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
+    const correctFechaNacimiento = dayjs(
+      cedulaCitizen?.fechaNacimiento,
+      'DD/MM/YYYY',
+    ).format('YYYY-MM-DD');
+
+    form.reset({
+      ...form.getValues(),
+      razon_social: cedulaCitizen?.fullName,
+      es_discapacitado: cedulaCitizen?.esDiscapacitado,
+      es_tercera_edad: cedulaCitizen?.esTerceraEdad,
+      fecha_nacimiento: correctFechaNacimiento,
+      edad: cedulaCitizen?.edad,
+
+      // TODO: get data from equifax
+    });
+  };
   ///* mutations -----------------
   const createSolicitudServicioMutation = useCreateSolicitudServicio({
     navigate,
@@ -90,13 +126,21 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     });
   const useSearchCedulaMutation = useSearchCedula<SearchCedulaParams>({
     enableErrorNavigate: false,
+    customOnSuccess: data => {
+      onSuccessSearchCedula(data as CedulaCitizen);
+    },
   });
 
   const handleFetchCedulaRucInfo = async (value: string) => {
-    const res = await useSearchCedulaMutation.mutateAsync({
-      cedula: value,
-    });
-    console.log('res', res);
+    if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
+      await useSearchCedulaMutation.mutateAsync({
+        cedula: value,
+      });
+    } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
+      // await useSearchRucMutation.mutateAsync({
+      //   ruc: value,
+      // });
+    }
   };
 
   ///* handlers -----------------
@@ -126,7 +170,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     <SingleFormBoxScene
       titlePage={title}
       onCancel={() => navigate(returnUrlSolicitudsServicioPage)}
-      onSave={handleSubmit(onSave, () => {})}
+      onSave={handleSubmit(onSave, () => {
+        console.log('error', errors);
+        ToastWrapper.error('Faltan campos requeridos');
+      })}
     >
       <CustomAutocompleteArrString
         label="Tipo de identificación"
@@ -175,6 +222,54 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.razon_social}
         helperText={errors.razon_social?.message}
       />
+      <CustomDatePicker
+        label="Fecha nacimiento"
+        name="fecha_nacimiento"
+        control={form.control}
+        defaultValue={form.getValues().fecha_nacimiento}
+        error={errors.fecha_nacimiento}
+        helperText={errors.fecha_nacimiento?.message}
+        size={gridSizeMdLg6}
+        onChangeValue={() => {
+          // apply logic (planes,promos 3era edad, etc)
+        }}
+      />
+      <CustomNumberTextField
+        label="Edad"
+        name="edad"
+        control={form.control}
+        defaultValue={form.getValues().edad}
+        error={errors.edad}
+        helperText={errors.edad?.message}
+        size={gridSizeMdLg6}
+        min={0}
+        disabled
+      />
+      <SampleCheckbox
+        label="Es tercera edad"
+        name="es_tercera_edad"
+        control={form.control}
+        defaultValue={form.getValues().es_tercera_edad}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <SampleCheckbox
+        label="Es discapacitado"
+        name="es_discapacitado"
+        control={form.control}
+        defaultValue={form.getValues().es_discapacitado}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <SampleCheckbox
+        label="Es cliente"
+        name="es_cliente"
+        control={form.control}
+        defaultValue={form.getValues().es_cliente}
+        size={gridSizeMdLg4}
+        disabled
+      />
+
       <CustomTextField
         label="Email"
         name="email"
@@ -240,6 +335,24 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
               onClose={() => {
                 setOpenMapModal(false);
               }}
+              //
+              showCustomTitleNode
+              customTitleNode={
+                <Grid item container xs={12}>
+                  <Typography variant="h4">
+                    Ubicación | Coordenadas:{' '}
+                    <span
+                      style={{
+                        fontSize: '0.93rem',
+                        fontWeight: 400,
+                      }}
+                    >
+                      {latLng?.lat}, {latLng?.lng}
+                    </span>
+                  </Typography>
+                </Grid>
+              }
+              minWidthModal="70%"
               contentNodeOverride={
                 <Map
                   coordenadas={
@@ -258,31 +371,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           </>
         }
         btnGridSize={gridSizeMdLg1}
-      />
-
-      <SampleCheckbox
-        label="Es discapacitado"
-        name="es_discapacitado"
-        control={form.control}
-        defaultValue={form.getValues().es_discapacitado}
-        size={gridSizeMdLg6}
-        disabled
-      />
-      <SampleCheckbox
-        label="Es tercera edad"
-        name="es_tercera_edad"
-        control={form.control}
-        defaultValue={form.getValues().es_tercera_edad}
-        size={gridSizeMdLg6}
-        disabled
-      />
-      <SampleCheckbox
-        label="Es cliente"
-        name="es_cliente"
-        control={form.control}
-        defaultValue={form.getValues().es_cliente}
-        size={gridSizeMdLg6}
-        disabled
       />
 
       <CustomTextField

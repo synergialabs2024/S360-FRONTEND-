@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from '@mui/material';
 
 import { ButtonVariantType, ColorButtonType } from '@/shared/interfaces';
@@ -30,6 +31,9 @@ export interface ScrollableDialogPropsProps {
 
   cancelColorBtn?: ColorButtonType;
   confirmColorBtn?: ColorButtonType;
+
+  showCustomTitleNode?: boolean;
+  customTitleNode?: React.ReactNode;
 }
 
 const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
@@ -49,10 +53,13 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
   showCustomActions = false,
   customActions,
 
-  cancelColorBtn = 'primary',
+  cancelColorBtn = 'inherit',
   confirmColorBtn = 'primary',
 
   showConfirmBtn = true,
+
+  showCustomTitleNode = false,
+  customTitleNode,
 }) => {
   return (
     <>
@@ -64,7 +71,13 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
       >
         {/* ========= Title ========= */}
         <DialogTitle style={{ padding: '24px 24px' }} id="scroll-dialog-title">
-          {title}
+          {showCustomTitleNode && customTitleNode ? (
+            customTitleNode
+          ) : (
+            <Typography variant="h4" component="span">
+              {title}
+            </Typography>
+          )}
         </DialogTitle>
 
         {/* ========= Content ========= */}

@@ -12,6 +12,8 @@ export type MapModalComponentProps = Partial<ScrollableDialogPropsProps> & {
   canDragMarker?: boolean;
 
   setLatLng?: (coordenadas: CoordenadasType) => void;
+
+  minWidthModal?: string;
 };
 
 const MapModalComponent: React.FC<MapModalComponentProps> = ({
@@ -25,14 +27,22 @@ const MapModalComponent: React.FC<MapModalComponentProps> = ({
   contentNodeOverride = null,
   canDragMarker = false,
   setLatLng,
+
+  minWidthModal,
+
+  showCustomTitleNode = false,
+  customTitleNode = null,
 }) => {
   return (
     <>
       <ScrollableDialogProps
         title={title}
         open={!!open}
+        showCustomTitleNode={showCustomTitleNode}
+        customTitleNode={customTitleNode}
         onClose={onClose!}
         cancelTextBtn={cancelTextBtn}
+        minWidth={minWidthModal}
         contentNode={
           <>
             {!contentNodeOverride ? (

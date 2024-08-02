@@ -25,13 +25,15 @@ export const useSearchCedula = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
     mutationFn: (params: CreateCedulaCitizenParams<T>) => searchCedula(params),
-    onSuccess: () => {
+    onSuccess: res => {
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      customOnSuccess && customOnSuccess(res?.data);
       enableToast &&
         ToastWrapper.success(
           customMessageToast || 'Cédula consultada correctamente',

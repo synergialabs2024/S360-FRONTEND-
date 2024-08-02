@@ -25,6 +25,8 @@ export interface SolicitudServicio {
   es_discapacitado: boolean;
   es_tercera_edad: boolean;
   es_cliente: boolean;
+  fecha_nacimiento: string;
+  edad: number;
 
   linea_servicio: number;
   coordenadas: string; // to get factibilidad directly
