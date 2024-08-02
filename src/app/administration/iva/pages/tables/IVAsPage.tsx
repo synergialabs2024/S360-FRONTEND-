@@ -211,6 +211,9 @@ const IVAsPage: React.FC<IVAsPageProps> = () => {
         rowCount={IsVAPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasPermission(
+          PermissionsEnum.administration_change_iva,
+        )}
         // crud
         canEdit={hasPermission(PermissionsEnum.administration_change_iva)}
         onEdit={onEdit}

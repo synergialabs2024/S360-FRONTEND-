@@ -11,9 +11,10 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { IVA } from '@/shared/interfaces';
+import { IVA, PermissionsEnum } from '@/shared/interfaces';
 import { iVAFormSchema } from '@/shared/utils';
 import { returnUrlIVAsPage } from '../../../pages/tables/IVAsPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveIVAProps {
   title: string;
@@ -23,6 +24,7 @@ export interface SaveIVAProps {
 type SaveFormData = CreateIVAParamsBase & {};
 
 const SaveIVA: React.FC<SaveIVAProps> = ({ title, iva }) => {
+  useCheckPermission(PermissionsEnum.administration_view_iva);
   const navigate = useNavigate();
 
   ///* form

@@ -21,6 +21,7 @@ import {
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { SAVE_EMPRESA_PERMISSIONS } from '@/shared';
 
 export const returnUrlEmpresasPage = ROUTER_PATHS.administracion.empresasNav;
 
@@ -307,6 +308,7 @@ const EmpresasPage: React.FC<EmpresasPageProps> = () => {
       createPageUrl={`${returnUrlEmpresasPage}/crear`}
       showCreateBtn={hasAllPermissions([
         PermissionsEnum.administration_add_empresa,
+        ...SAVE_EMPRESA_PERMISSIONS,
       ])}
     >
       <CustomSearch
@@ -332,9 +334,14 @@ const EmpresasPage: React.FC<EmpresasPageProps> = () => {
         rowCount={EmpresasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasAllPermissions([
+          PermissionsEnum.administration_change_empresa,
+          ...SAVE_EMPRESA_PERMISSIONS,
+        ])}
         // crud
         canEdit={hasAllPermissions([
           PermissionsEnum.administration_change_empresa,
+          ...SAVE_EMPRESA_PERMISSIONS,
         ])}
         onEdit={onEdit}
         canDelete={false}

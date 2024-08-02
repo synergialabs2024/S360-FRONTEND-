@@ -22,10 +22,11 @@ import {
   SYSTEM_PARAMETER_BOOLEAN_TYPE_ARRAY_CHOICES,
   SYSTEM_PARAMETER_TYPE_ARRAY_CHOICES,
 } from '@/shared/constants/app';
-import { ParametroSistema } from '@/shared/interfaces';
+import { ParametroSistema, PermissionsEnum } from '@/shared/interfaces';
 import { parametro_sistemaFormSchema } from '@/shared/utils';
 import { returnUrlParamestrosSistemasPage } from '../../../pages/tables/ParametrosSistemasPage';
 import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveParametroSistemaProps {
   title: string;
@@ -38,6 +39,7 @@ const SaveParametroSistema: React.FC<SaveParametroSistemaProps> = ({
   title,
   parametro_sistema,
 }) => {
+  useCheckPermission(PermissionsEnum.administration_view_parametrosistema);
   const navigate = useNavigate();
 
   ///* form

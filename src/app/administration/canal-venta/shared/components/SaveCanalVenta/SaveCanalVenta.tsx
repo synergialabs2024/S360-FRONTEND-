@@ -17,9 +17,10 @@ import {
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
-import { CanalVenta, Empresa } from '@/shared/interfaces';
+import { CanalVenta, Empresa, PermissionsEnum } from '@/shared/interfaces';
 import { canalVentaFormSchema } from '@/shared/utils';
 import { returnUrlCanalesVentaPage } from '../../../pages/tables/CanalesVentaPage';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export interface SaveCanalVentaProps {
   title: string;
@@ -32,6 +33,9 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
   title,
   canalventa,
 }) => {
+  useCheckPermissionsArray([PermissionsEnum.administration_view_empresa]);
+
+  ///* hooks ---------------
   const navigate = useNavigate();
 
   ///* form

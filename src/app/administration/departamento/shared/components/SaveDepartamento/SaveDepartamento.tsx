@@ -22,6 +22,8 @@ import { useLoaders } from '@/shared/hooks';
 import { Area, Departamento, Empresa } from '@/shared/interfaces';
 import { departamentoFormSchema } from '@/shared/utils';
 import { returnUrlDepartamentosPage } from '../../../pages/tables/DepartamentosPage';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import { SAVE_DEPARTAMENTO_PERMISSIONS } from '@/shared';
 
 export interface SaveDepartamentoProps {
   title: string;
@@ -34,6 +36,9 @@ const SaveDepartamento: React.FC<SaveDepartamentoProps> = ({
   title,
   departamento,
 }) => {
+  useCheckPermissionsArray(SAVE_DEPARTAMENTO_PERMISSIONS);
+
+  ///* hooks ----------------
   const navigate = useNavigate();
 
   ///* form

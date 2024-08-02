@@ -18,9 +18,10 @@ import {
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
-import { Area, Empresa } from '@/shared/interfaces';
+import { Area, Empresa, PermissionsEnum } from '@/shared/interfaces';
 import { areaFormSchema } from '@/shared/utils';
 import { returnUrlAreasPage } from '../../../pages/tables/AreasPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveAreaProps {
   title: string;
@@ -30,6 +31,7 @@ export interface SaveAreaProps {
 type SaveFormData = CreateAreaParams & {};
 
 const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
+  useCheckPermission(PermissionsEnum.administration_view_empresa);
   const navigate = useNavigate();
 
   ///* form

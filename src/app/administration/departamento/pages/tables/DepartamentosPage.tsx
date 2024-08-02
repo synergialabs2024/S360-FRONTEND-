@@ -22,6 +22,7 @@ import {
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { SAVE_DEPARTAMENTO_PERMISSIONS } from '@/shared';
 
 export const returnUrlDepartamentosPage =
   ROUTER_PATHS.administracion.departamentosNav;
@@ -29,7 +30,7 @@ export const returnUrlDepartamentosPage =
 export type DepartamentosPageProps = {};
 
 const DepartamentosPage: React.FC<DepartamentosPageProps> = () => {
-  useCheckPermission(PermissionsEnum.administration_add_departamento);
+  useCheckPermission(PermissionsEnum.administration_view_departamento);
 
   const navigate = useNavigate();
 
@@ -209,8 +210,8 @@ const DepartamentosPage: React.FC<DepartamentosPageProps> = () => {
       title="Departamento"
       createPageUrl={`${returnUrlDepartamentosPage}/crear`}
       showCreateBtn={hasAllPermissions([
-        PermissionsEnum.administration_view_empresa,
         PermissionsEnum.administration_add_departamento,
+        ...SAVE_DEPARTAMENTO_PERMISSIONS,
       ])}
     >
       <CustomSearch
@@ -236,10 +237,14 @@ const DepartamentosPage: React.FC<DepartamentosPageProps> = () => {
         rowCount={DepartamentosPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasAllPermissions([
+          PermissionsEnum.administration_change_departamento,
+          ...SAVE_DEPARTAMENTO_PERMISSIONS,
+        ])}
         // crud
         canEdit={hasAllPermissions([
-          PermissionsEnum.administration_view_empresa,
           PermissionsEnum.administration_change_departamento,
+          ...SAVE_DEPARTAMENTO_PERMISSIONS,
         ])}
         onEdit={onEdit}
         canDelete={false}

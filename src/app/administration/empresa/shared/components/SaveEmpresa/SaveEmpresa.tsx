@@ -19,6 +19,8 @@ import { Empresa } from '@/shared/interfaces';
 import { uploadFileUtils } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlEmpresasPage } from '../../../pages/tables/EmpresasPage';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import { SAVE_EMPRESA_PERMISSIONS } from '@/shared';
 
 export interface SaveEmpresaProps {
   title: string;
@@ -28,6 +30,8 @@ export interface SaveEmpresaProps {
 type SaveFormData = CreateEmpresaParamsBase & {};
 
 const SaveEmpresa: React.FC<SaveEmpresaProps> = ({ title, empresa }) => {
+  useCheckPermissionsArray(SAVE_EMPRESA_PERMISSIONS);
+
   ///* hooks
   const navigate = useNavigate();
   const {

@@ -35,6 +35,7 @@ import {
 import {
   EMPLOYEE_TYPE_ARRAY_CHOICES,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
+  SAVE_EMPLEADO_PERMISSIONS,
 } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
@@ -54,6 +55,7 @@ import {
 import { empleadoFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlEmpleadosPage } from '../../../pages/tables/EmpleadosPage';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export interface SaveEmpleadoProps {
   title: string;
@@ -63,6 +65,9 @@ export interface SaveEmpleadoProps {
 type SaveFormData = CreateEmpleadoParamsBase & {};
 
 const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
+  useCheckPermissionsArray(SAVE_EMPLEADO_PERMISSIONS);
+
+  ///* hooks
   const navigate = useNavigate();
 
   ///* form ---------------------

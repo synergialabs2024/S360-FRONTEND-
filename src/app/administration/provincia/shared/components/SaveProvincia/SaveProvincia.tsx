@@ -17,9 +17,10 @@ import {
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
-import { Pais, Provincia } from '@/shared/interfaces';
+import { Pais, PermissionsEnum, Provincia } from '@/shared/interfaces';
 import { provinciaFormSchema } from '@/shared/utils';
 import { returnUrlProvinciasPage } from '../../../pages/tables/ProvinciasPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveProvinciaProps {
   title: string;
@@ -29,6 +30,7 @@ export interface SaveProvinciaProps {
 type SaveFormData = CreateProvinciaParams & {};
 
 const SaveProvincia: React.FC<SaveProvinciaProps> = ({ title, provincia }) => {
+  useCheckPermission(PermissionsEnum.administration_view_pais);
   const navigate = useNavigate();
 
   ///* form

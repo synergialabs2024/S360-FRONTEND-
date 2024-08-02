@@ -221,7 +221,10 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
     <SingleTableBoxScene
       title="Zonas"
       createPageUrl={`${returnUrlZonasPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_zona)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.administration_add_zona,
+        ...SAVE_ZONA_PERMISSIONS,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -246,13 +249,14 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
         rowCount={ZonasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
+        enableActionsColumn={hasAllPermissions([
           PermissionsEnum.administration_change_zona,
-        )}
+          ...SAVE_ZONA_PERMISSIONS,
+        ])}
         // crud
         canEdit={hasAllPermissions([
-          ...SAVE_ZONA_PERMISSIONS,
           PermissionsEnum.administration_change_zona,
+          ...SAVE_ZONA_PERMISSIONS,
         ])}
         onEdit={onEdit}
         canDelete={false}
