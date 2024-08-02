@@ -23,9 +23,10 @@ import {
   INTERNET_UNIT_VELOCITY_ARRAY_CHOICES,
 } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { Plan } from '@/shared/interfaces';
+import { PermissionsEnum, Plan } from '@/shared/interfaces';
 import { planFormSchema } from '@/shared/utils';
 import { returnUrlPlansPage } from '../../../pages/tables/PlansPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SavePlanProps {
   title: string;
@@ -35,6 +36,8 @@ export interface SavePlanProps {
 type SaveFormData = CreatePlanParamsBase & {};
 
 const SavePlan: React.FC<SavePlanProps> = ({ title, plan }) => {
+  useCheckPermission(PermissionsEnum.servicios_view_plan);
+
   const navigate = useNavigate();
 
   ///* form

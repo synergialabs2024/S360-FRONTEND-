@@ -230,7 +230,10 @@ const CiudadesPage: React.FC<CiudadesPageProps> = () => {
     <SingleTableBoxScene
       title="Ciudades"
       createPageUrl={`${returnUrlCiudadesPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_ciudad)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.administration_add_ciudad,
+        ...SAVE_CIUDAD_PERMISSIONS,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -256,13 +259,13 @@ const CiudadesPage: React.FC<CiudadesPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasAllPermissions([
-          ...SAVE_CIUDAD_PERMISSIONS,
           PermissionsEnum.administration_change_ciudad,
+          ...SAVE_CIUDAD_PERMISSIONS,
         ])}
         // crud
         canEdit={hasAllPermissions([
-          ...SAVE_CIUDAD_PERMISSIONS,
           PermissionsEnum.administration_change_ciudad,
+          ...SAVE_CIUDAD_PERMISSIONS,
         ])}
         onEdit={onEdit}
         canDelete={false}

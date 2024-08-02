@@ -413,12 +413,12 @@ const PromocionsPage: React.FC<PromocionsPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasAllPermissions([
-          PermissionsEnum.comercial_add_promocion,
+          PermissionsEnum.comercial_change_promocion,
           ...SAVE_PROMOCION_PERMISSIONS,
         ])}
         // crud
         canEdit={hasAllPermissions([
-          PermissionsEnum.comercial_add_promocion,
+          PermissionsEnum.comercial_change_promocion,
           ...SAVE_PROMOCION_PERMISSIONS,
         ])}
         onEdit={onEdit}

@@ -14,9 +14,10 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { Pais } from '@/shared/interfaces';
+import { Pais, PermissionsEnum } from '@/shared/interfaces';
 import { paisFormSchema } from '@/shared/utils';
 import { returnUrlPaisesPage } from '../../../pages/tables/PaisesPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SavePaisProps {
   title: string;
@@ -26,6 +27,8 @@ export interface SavePaisProps {
 type SaveFormData = CreatePaisBaseParams & {};
 
 const SavePais: React.FC<SavePaisProps> = ({ title, pais }) => {
+  useCheckPermission(PermissionsEnum.administration_view_pais);
+
   const navigate = useNavigate();
 
   ///* form

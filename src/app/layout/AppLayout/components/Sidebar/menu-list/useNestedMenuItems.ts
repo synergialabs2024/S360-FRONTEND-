@@ -1,10 +1,15 @@
-import { IconDashboard } from '@tabler/icons-react';
+import {
+  IconBroadcast,
+  IconBuildings,
+  IconDashboard,
+  IconReportMoney,
+  IconUserShield,
+} from '@tabler/icons-react';
 import { useCallback, useMemo } from 'react';
 
 import { ROUTER_PATHS } from '@/router/constants';
 import { SidenavModulesEnum } from '@/shared';
 import { hasSystemModule } from '@/shared/utils/auth';
-import { MdAdminPanelSettings } from 'react-icons/md';
 import { MenuItemType } from './menu-item.interface';
 
 export type NestedMenuItem = {
@@ -83,7 +88,7 @@ export const useNestedMenu = () => {
           id: 'administracion',
           title: 'Administración',
           type: MenuItemType.COLLAPSE,
-          icon: MdAdminPanelSettings,
+          icon: IconUserShield,
           children: [
             renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
               id: 'paises',
@@ -174,7 +179,7 @@ export const useNestedMenu = () => {
           id: 'nomina',
           title: 'Nomina',
           type: MenuItemType.COLLAPSE,
-          icon: MdAdminPanelSettings,
+          icon: IconReportMoney,
           children: [
             renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
               id: 'cargos',
@@ -197,7 +202,7 @@ export const useNestedMenu = () => {
           id: 'servicios',
           title: 'Servicio',
           type: MenuItemType.COLLAPSE,
-          icon: MdAdminPanelSettings,
+          icon: IconBroadcast,
           children: [
             renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
               id: 'planes',
@@ -214,7 +219,7 @@ export const useNestedMenu = () => {
           id: 'comercial',
           title: 'Comercial',
           type: MenuItemType.COLLAPSE,
-          icon: MdAdminPanelSettings,
+          icon: IconBuildings,
           children: [
             renderByModule(SidenavModulesEnum.COMERCIAL_SOLICITUD_SERVICIO, {
               id: 'solicitud-servicio',

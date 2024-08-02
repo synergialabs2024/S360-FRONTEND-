@@ -20,7 +20,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlAreasPage = ROUTER_PATHS.administracion.areasNav;
@@ -197,7 +197,10 @@ const AreasPage: React.FC<AreasPageProps> = () => {
     <SingleTableBoxScene
       title="Area"
       createPageUrl={`${returnUrlAreasPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_area)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.administration_add_area,
+        PermissionsEnum.administration_view_empresa,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -222,11 +225,15 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         rowCount={areasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
+        enableActionsColumn={hasAllPermissions([
           PermissionsEnum.administration_change_area,
-        )}
+          PermissionsEnum.administration_view_empresa,
+        ])}
         // crud
-        canEdit={hasPermission(PermissionsEnum.administration_change_area)}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.administration_change_area,
+          PermissionsEnum.administration_view_empresa,
+        ])}
         onEdit={onEdit}
         canDelete={false}
         // onDelete={onDelete}

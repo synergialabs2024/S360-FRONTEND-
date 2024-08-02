@@ -222,9 +222,10 @@ const ProvinciasPage: React.FC<ProvinciasPageProps> = () => {
     <SingleTableBoxScene
       title="Provincias"
       createPageUrl={`${returnUrlProvinciasPage}/crear`}
-      showCreateBtn={hasPermission(
+      showCreateBtn={hasAllPermissions([
         PermissionsEnum.administration_add_provincia,
-      )}
+        PermissionsEnum.administration_view_pais,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}

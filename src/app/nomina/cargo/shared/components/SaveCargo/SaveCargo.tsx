@@ -4,7 +4,7 @@ import {
   useFetchEmpresas,
   useUpdateCargo,
 } from '@/actions/app';
-import { Cargo, Empresa } from '@/shared/interfaces';
+import { Cargo, Empresa, PermissionsEnum } from '@/shared/interfaces';
 import { cargoFormSchema } from '@/shared/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveCargoProps {
   title: string;
@@ -29,6 +30,8 @@ export interface SaveCargoProps {
 type SaveFormData = CreateCargoParams & {};
 
 const SaveCargo: React.FC<SaveCargoProps> = ({ title, cargo }) => {
+  useCheckPermission(PermissionsEnum.administration_view_empresa);
+
   const navigate = useNavigate();
 
   ///* form

@@ -19,8 +19,9 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { SAVE_EMPLEADO_PERMISSIONS } from '@/shared';
 
 export const returnUrlEmpleadosPage = ROUTER_PATHS.nomina.empleadosNav;
 
@@ -329,7 +330,10 @@ const EmpleadosPage: React.FC<EmpleadosPageProps> = () => {
     <SingleTableBoxScene
       title="Empleados"
       createPageUrl={`${returnUrlEmpleadosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.nomina_add_empleado)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.nomina_add_empleado,
+        ...SAVE_EMPLEADO_PERMISSIONS,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -354,11 +358,15 @@ const EmpleadosPage: React.FC<EmpleadosPageProps> = () => {
         rowCount={EmpleadosPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
+        enableActionsColumn={hasAllPermissions([
           PermissionsEnum.nomina_change_empleado,
-        )}
+          ...SAVE_EMPLEADO_PERMISSIONS,
+        ])}
         // crud
-        canEdit={hasPermission(PermissionsEnum.nomina_change_empleado)}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.nomina_change_empleado,
+          ...SAVE_EMPLEADO_PERMISSIONS,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />

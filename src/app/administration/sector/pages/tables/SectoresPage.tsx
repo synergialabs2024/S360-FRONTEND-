@@ -230,7 +230,10 @@ const SectoresPage: React.FC<SectoresPageProps> = () => {
     <SingleTableBoxScene
       title="Sectores"
       createPageUrl={`${returnUrlSectoresPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_sector)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.administration_add_sector,
+        ...SAVE_SECTOR_PERMISSIONS,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -255,13 +258,14 @@ const SectoresPage: React.FC<SectoresPageProps> = () => {
         rowCount={SectoresPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
+        enableActionsColumn={hasAllPermissions([
           PermissionsEnum.administration_change_sector,
-        )}
+          ...SAVE_SECTOR_PERMISSIONS,
+        ])}
         // crud
         canEdit={hasAllPermissions([
-          ...SAVE_SECTOR_PERMISSIONS,
           PermissionsEnum.administration_change_sector,
+          ...SAVE_SECTOR_PERMISSIONS,
         ])}
         onEdit={onEdit}
         canDelete={false}

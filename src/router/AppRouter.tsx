@@ -8,263 +8,276 @@ import AuthRoutes from './AuthRoutes';
 import { ROUTER_PATHS } from './constants';
 
 const AppLayout = Loadable(
-  lazy(() => import('@/app/layout/AppLayout/AppLayout'))
+  lazy(() => import('@/app/layout/AppLayout/AppLayout')),
 );
 const AuthLayout = Loadable(
-  lazy(() => import('@/auth/layout/AuthLayout/AuthLayout'))
+  lazy(() => import('@/auth/layout/AuthLayout/AuthLayout')),
 );
 
 const Home1 = Loadable(lazy(() => import('@/app/home/pages/Home1')));
+const Error404 = Loadable(lazy(() => import('@/shared/pages/error/Error404')));
+
 const LoginPage = Loadable(
-  lazy(() => import('@/auth/pages/LoginPage/LoginPage'))
+  lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
 );
 
 const AdministrationModule = Loadable(
-  lazy(() => import('@/app/administration/AdministrationModule'))
+  lazy(() => import('@/app/administration/AdministrationModule')),
 );
 const PaisesPage = Loadable(
-  lazy(() => import('@/app/administration/pais/pages/tables/PaisesPage'))
+  lazy(() => import('@/app/administration/pais/pages/tables/PaisesPage')),
 );
 const UpdatePaisPage = Loadable(
-  lazy(() => import('@/app/administration/pais/pages/forms/UpdatePaisPage'))
+  lazy(() => import('@/app/administration/pais/pages/forms/UpdatePaisPage')),
 );
 const CreatePaisPage = Loadable(
-  lazy(() => import('@/app/administration/pais/pages/forms/CreatePaisPage'))
+  lazy(() => import('@/app/administration/pais/pages/forms/CreatePaisPage')),
 );
 const ProvinciasPage = Loadable(
   lazy(
-    () => import('@/app/administration/provincia/pages/tables/ProvinciasPage')
-  )
+    () => import('@/app/administration/provincia/pages/tables/ProvinciasPage'),
+  ),
 );
 const CreateProvinciaPage = Loadable(
   lazy(
     () =>
-      import('@/app/administration/provincia/pages/forms/CreateProvinciaPage')
-  )
+      import('@/app/administration/provincia/pages/forms/CreateProvinciaPage'),
+  ),
 );
 const UpdateProvinciaPage = Loadable(
   lazy(
     () =>
-      import('@/app/administration/provincia/pages/forms/UpdateProvinciaPage')
-  )
+      import('@/app/administration/provincia/pages/forms/UpdateProvinciaPage'),
+  ),
 );
 const CiudadesPage = Loadable(
-  lazy(() => import('@/app/administration/ciudad/pages/tables/CiudadesPage'))
+  lazy(() => import('@/app/administration/ciudad/pages/tables/CiudadesPage')),
 );
 const CreateCiudadPage = Loadable(
-  lazy(() => import('@/app/administration/ciudad/pages/forms/CreateCiudadPage'))
+  lazy(
+    () => import('@/app/administration/ciudad/pages/forms/CreateCiudadPage'),
+  ),
 );
 const UpdateCiudadPage = Loadable(
-  lazy(() => import('@/app/administration/ciudad/pages/forms/UpdateCiudadPage'))
+  lazy(
+    () => import('@/app/administration/ciudad/pages/forms/UpdateCiudadPage'),
+  ),
 );
 const ZonasPage = Loadable(
-  lazy(() => import('@/app/administration/zona/pages/tables/ZonasPage'))
+  lazy(() => import('@/app/administration/zona/pages/tables/ZonasPage')),
 );
 const CreateZonaPage = Loadable(
-  lazy(() => import('@/app/administration/zona/pages/forms/CreateZonaPage'))
+  lazy(() => import('@/app/administration/zona/pages/forms/CreateZonaPage')),
 );
 const UpdateZonaPage = Loadable(
-  lazy(() => import('@/app/administration/zona/pages/forms/UpdateZonaPage'))
+  lazy(() => import('@/app/administration/zona/pages/forms/UpdateZonaPage')),
 );
 const SectoresPage = Loadable(
-  lazy(() => import('@/app/administration/sector/pages/tables/SectoresPage'))
+  lazy(() => import('@/app/administration/sector/pages/tables/SectoresPage')),
 );
 const CreateSectorPage = Loadable(
-  lazy(() => import('@/app/administration/sector/pages/forms/CreateSectorPage'))
+  lazy(
+    () => import('@/app/administration/sector/pages/forms/CreateSectorPage'),
+  ),
 );
 const UpdateSectorPage = Loadable(
-  lazy(() => import('@/app/administration/sector/pages/forms/UpdateSectorPage'))
+  lazy(
+    () => import('@/app/administration/sector/pages/forms/UpdateSectorPage'),
+  ),
 );
 const AreasPage = Loadable(
-  lazy(() => import('@/app/administration/area/pages/tables/AreasPage'))
+  lazy(() => import('@/app/administration/area/pages/tables/AreasPage')),
 );
 const CreateAreaPage = Loadable(
-  lazy(() => import('@/app/administration/area/pages/forms/CreateAreaPage'))
+  lazy(() => import('@/app/administration/area/pages/forms/CreateAreaPage')),
 );
 const UpdateAreaPage = Loadable(
-  lazy(() => import('@/app/administration/area/pages/forms/UpdateAreaPage'))
+  lazy(() => import('@/app/administration/area/pages/forms/UpdateAreaPage')),
 );
 
 const SystemUserPage = Loadable(
   lazy(
-    () => import('@/app/administration/system-user/pages/tables/SystemUserPage')
-  )
+    () =>
+      import('@/app/administration/system-user/pages/tables/SystemUserPage'),
+  ),
 );
 const SystemsGroupPage = Loadable(
   lazy(
     () =>
-      import('@/app/administration/system-group/pages/tables/SystemsGroupPage')
-  )
+      import('@/app/administration/system-group/pages/tables/SystemsGroupPage'),
+  ),
 );
 const CreateSystemGroupPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/system-group/pages/forms/CreateSystemGroupPage'
-      )
-  )
+      ),
+  ),
 );
 const UpdateSystemGroupPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/system-group/pages/forms/UpdateSystemGroupPage'
-      )
-  )
+      ),
+  ),
 );
 const CreateSystemUserPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/system-user/pages/forms/CreateSystemUserPage'
-      )
-  )
+      ),
+  ),
 );
 const UpdateSystemUserPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/system-user/pages/forms/UpdateSystemUserPage'
-      )
-  )
+      ),
+  ),
 );
 const DepartamentosPage = Loadable(
   lazy(
     () =>
-      import('@/app/administration/departamento/pages/tables/DepartamentosPage')
-  )
+      import(
+        '@/app/administration/departamento/pages/tables/DepartamentosPage'
+      ),
+  ),
 );
 const CreateDepartamentoPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/departamento/pages/forms/CreateDepartamentoPage'
-      )
-  )
+      ),
+  ),
 );
 const UpdateDepartamentoPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/departamento/pages/forms/UpdateDepartamentoPage'
-      )
-  )
+      ),
+  ),
 );
 const CanalesVentaPage = Loadable(
   lazy(
     () =>
-      import('@/app/administration/canal-venta/pages/tables/CanalesVentaPage')
-  )
+      import('@/app/administration/canal-venta/pages/tables/CanalesVentaPage'),
+  ),
 );
 const CreateCanalVentaPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/canal-venta/pages/forms/CreateCanalVentaPage'
-      )
-  )
+      ),
+  ),
 );
 const UpdateCanalVentaPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/canal-venta/pages/forms/UpdateCanalVentaPage'
-      )
-  )
+      ),
+  ),
 );
 const EmpresasPage = Loadable(
-  lazy(() => import('@/app/administration/empresa/pages/tables/EmpresasPage'))
+  lazy(() => import('@/app/administration/empresa/pages/tables/EmpresasPage')),
 );
 const CreateEmpresaPage = Loadable(
   lazy(
-    () => import('@/app/administration/empresa/pages/forms/CreateEmpresaPage')
-  )
+    () => import('@/app/administration/empresa/pages/forms/CreateEmpresaPage'),
+  ),
 );
 const UpdateEmpresaPage = Loadable(
   lazy(
-    () => import('@/app/administration/empresa/pages/forms/UpdateEmpresaPage')
-  )
+    () => import('@/app/administration/empresa/pages/forms/UpdateEmpresaPage'),
+  ),
 );
 const IVAsPage = Loadable(
-  lazy(() => import('@/app/administration/iva/pages/tables/IVAsPage'))
+  lazy(() => import('@/app/administration/iva/pages/tables/IVAsPage')),
 );
 const CreateIVAPage = Loadable(
-  lazy(() => import('@/app/administration/iva/pages/forms/CreateIVAPage'))
+  lazy(() => import('@/app/administration/iva/pages/forms/CreateIVAPage')),
 );
 const UpdateIVAPage = Loadable(
-  lazy(() => import('@/app/administration/iva/pages/forms/UpdateIVAPage'))
+  lazy(() => import('@/app/administration/iva/pages/forms/UpdateIVAPage')),
 );
 const ParametrosSistemasPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/parametro-sistema/pages/tables/ParametrosSistemasPage'
-      )
-  )
+      ),
+  ),
 );
 const CreateParametroSistemaPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/parametro-sistema/pages/forms/CreateParametroSistemaPage'
-      )
-  )
+      ),
+  ),
 );
 const UpdateParametroSistemaPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/administration/parametro-sistema/pages/forms/UpdateParametroSistemaPage'
-      )
-  )
+      ),
+  ),
 );
 
 ///* NOMINA
 //Cargo
 const CargosPage = Loadable(
-  lazy(() => import('@/app/nomina/cargo/pages/tables/CargosPage'))
+  lazy(() => import('@/app/nomina/cargo/pages/tables/CargosPage')),
 );
 const CreateCargoPage = Loadable(
-  lazy(() => import('@/app/nomina/cargo/pages/forms/CreateCargoPage'))
+  lazy(() => import('@/app/nomina/cargo/pages/forms/CreateCargoPage')),
 );
 const UpdateCargoPage = Loadable(
-  lazy(() => import('@/app/nomina/cargo/pages/forms/UpdateCargoPage'))
+  lazy(() => import('@/app/nomina/cargo/pages/forms/UpdateCargoPage')),
 );
 const EmpleadosPage = Loadable(
-  lazy(() => import('@/app/nomina/empleado/pages/tables/EmpleadosPage'))
+  lazy(() => import('@/app/nomina/empleado/pages/tables/EmpleadosPage')),
 );
 const CreateEmpleadoPage = Loadable(
-  lazy(() => import('@/app/nomina/empleado/pages/forms/CreateEmpleadoPage'))
+  lazy(() => import('@/app/nomina/empleado/pages/forms/CreateEmpleadoPage')),
 );
 const UpdateEmpleadoPage = Loadable(
-  lazy(() => import('@/app/nomina/empleado/pages/forms/UpdateEmpleadoPage'))
+  lazy(() => import('@/app/nomina/empleado/pages/forms/UpdateEmpleadoPage')),
 );
 
 const PlansPage = Loadable(
-  lazy(() => import('@/app/servicios/plan/pages/tables/PlansPage'))
+  lazy(() => import('@/app/servicios/plan/pages/tables/PlansPage')),
 );
 const CreatePlanPage = Loadable(
-  lazy(() => import('@/app/servicios/plan/pages/forms/CreatePlanPage'))
+  lazy(() => import('@/app/servicios/plan/pages/forms/CreatePlanPage')),
 );
 const UpdatePlanPage = Loadable(
-  lazy(() => import('@/app/servicios/plan/pages/forms/UpdatePlanPage'))
+  lazy(() => import('@/app/servicios/plan/pages/forms/UpdatePlanPage')),
 );
 
 const ComercialModule = Loadable(
-  lazy(() => import('@/app/comercial/ComercialModule'))
+  lazy(() => import('@/app/comercial/ComercialModule')),
 );
 const PromocionesPage = Loadable(
-  lazy(() => import('@/app/comercial/promocion/pages/tables/PromocionsPage'))
+  lazy(() => import('@/app/comercial/promocion/pages/tables/PromocionsPage')),
 );
 const CreatePromocionPage = Loadable(
   lazy(
-    () => import('@/app/comercial/promocion/pages/forms/CreatePromocionPage')
-  )
+    () => import('@/app/comercial/promocion/pages/forms/CreatePromocionPage'),
+  ),
 );
 const UpdatePromocionPage = Loadable(
   lazy(
-    () => import('@/app/comercial/promocion/pages/forms/UpdatePromocionPage')
-  )
+    () => import('@/app/comercial/promocion/pages/forms/UpdatePromocionPage'),
+  ),
 );
 
 ///* Sales ---------------------
@@ -273,16 +286,16 @@ const SolicitudesServicioMainPage = Loadable(
     () =>
       import(
         '@/app/comercial/solicitud-servicio/pages/tables/SolicitudesServicioMainPage'
-      )
-  )
+      ),
+  ),
 );
 const CreateSolicitudServicioPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/comercial/solicitud-servicio/pages/forms/CreateSolicitudServicioPage'
-      )
-  )
+      ),
+  ),
 );
 
 const AppRouter = createBrowserRouter([
@@ -581,6 +594,10 @@ const AppRouter = createBrowserRouter([
             element: <CreateSolicitudServicioPage />,
           },
         ],
+      },
+      {
+        path: '/404',
+        element: <Error404 />,
       },
     ],
   },

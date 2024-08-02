@@ -195,7 +195,10 @@ const CargosPage: React.FC<CargosPageProps> = () => {
     <SingleTableBoxScene
       title="Cargos"
       createPageUrl={`${returnUrlCargosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.nomina_add_cargo)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.nomina_add_cargo,
+        PermissionsEnum.administration_view_empresa,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -222,9 +225,13 @@ const CargosPage: React.FC<CargosPageProps> = () => {
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasAllPermissions([
           PermissionsEnum.nomina_change_cargo,
+          PermissionsEnum.administration_view_empresa,
         ])}
         // crud
-        canEdit={hasAllPermissions([PermissionsEnum.nomina_change_cargo])}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.nomina_change_cargo,
+          PermissionsEnum.administration_view_empresa,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />

@@ -8,6 +8,7 @@ import {
   CustomSearch,
   CustomTable,
   SingleTableBoxScene,
+  ViewMoreTextModalTableCell,
 } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
@@ -109,7 +110,17 @@ const SystemsGroupPage: React.FC<SystemsGroupPageProps> = () => {
         size: 180,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'system_modules'),
+        Cell: ({ row }) => {
+          const modulesArray = row?.original?.system_modules ?? ['N/A'];
+          const str = modulesArray.join(' / ');
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Modulos de ${row?.original?.name}`}
+            />
+          );
+        },
       },
 
       {
@@ -118,7 +129,17 @@ const SystemsGroupPage: React.FC<SystemsGroupPageProps> = () => {
         size: 180,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'permissions'),
+        Cell: ({ row }) => {
+          const permissionsArray = row?.original?.permissions ?? ['N/A'];
+          const str = permissionsArray.join(', ');
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Permisos de ${row?.original?.name}`}
+            />
+          );
+        },
       },
     ],
     [],
