@@ -45,7 +45,7 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
   ///* global state
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen
+    s => s.setConfirmDialogIsOpen,
   );
 
   ///* mutations
@@ -219,7 +219,7 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [changeHasCoverage, changeState, setConfirmDialog, setConfirmDialogIsOpen]
+    [changeHasCoverage, changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
   return (
@@ -252,7 +252,7 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
-          PermissionsEnum.administration_change_pais
+          PermissionsEnum.administration_change_pais,
         )}
         // crud
         canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
