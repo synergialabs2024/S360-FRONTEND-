@@ -174,7 +174,7 @@ export const login = async (data: LoginData) => {
       ...(data.force_login && { force_login: data.force_login }),
       empresa: data.empresa,
     },
-    true,
+    false,
   );
 
   const { token } = loginRes?.data ?? {};
