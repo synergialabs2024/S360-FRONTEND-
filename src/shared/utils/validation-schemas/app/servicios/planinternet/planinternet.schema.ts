@@ -4,7 +4,7 @@ import {
   fieldStateYupValidation,
 } from '../../common';
 
-export const planFormSchema = yup.object({
+export const planinternetFormSchema = yup.object({
   name: yup
     .string()
     .required('El campo name es requerido')

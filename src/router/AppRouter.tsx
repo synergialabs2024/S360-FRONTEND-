@@ -253,14 +253,22 @@ const UpdateEmpleadoPage = Loadable(
   lazy(() => import('@/app/nomina/empleado/pages/forms/UpdateEmpleadoPage')),
 );
 
-const PlansPage = Loadable(
-  lazy(() => import('@/app/servicios/plan/pages/tables/PlansPage')),
+const PlanInternetsPage = Loadable(
+  lazy(
+    () => import('@/app/servicios/planinternet/pages/tables/PlanInternetsPage'),
+  ),
 );
-const CreatePlanPage = Loadable(
-  lazy(() => import('@/app/servicios/plan/pages/forms/CreatePlanPage')),
+const CreatePlanInternetPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/servicios/planinternet/pages/forms/CreatePlanInternetPage'),
+  ),
 );
-const UpdatePlanPage = Loadable(
-  lazy(() => import('@/app/servicios/plan/pages/forms/UpdatePlanPage')),
+const UpdatePlanInternetPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/servicios/planinternet/pages/forms/UpdatePlanInternetPage'),
+  ),
 );
 
 const ComercialModule = Loadable(
@@ -551,16 +559,16 @@ const AppRouter = createBrowserRouter([
         children: [
           ///* plan
           {
-            path: ROUTER_PATHS.servicios.planes,
-            element: <PlansPage />,
+            path: ROUTER_PATHS.servicios.planesinternet,
+            element: <PlanInternetsPage />,
           },
           {
-            path: ROUTER_PATHS.servicios.planesCrear,
-            element: <CreatePlanPage />,
+            path: ROUTER_PATHS.servicios.planesinternetCrear,
+            element: <CreatePlanInternetPage />,
           },
           {
-            path: ROUTER_PATHS.servicios.planesEditar,
-            element: <UpdatePlanPage />,
+            path: ROUTER_PATHS.servicios.planesinternetEditar,
+            element: <UpdatePlanInternetPage />,
           },
         ],
       },

@@ -1,13 +1,13 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
-export interface PlanesPaginatedRes {
+export interface PlanesInternetPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: Plan[];
+  items: PlanInternet[];
 }
 
-export interface Plan {
+export interface PlanInternet {
   id?: number;
   uuid?: string;
 
@@ -31,4 +31,4 @@ export interface Plan {
   tipo_plan: string;
 }
 
-export type PlanLimitData = Pick<Plan, 'uuid' | 'name'>;
+export type PlanInternetLimitData = Pick<PlanInternet, 'uuid' | 'name'>;

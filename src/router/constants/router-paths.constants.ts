@@ -112,11 +112,11 @@ export const ROUTER_PATHS = {
   servicios: {
     root: 'servicios',
 
-    ///* planes
-    planes: 'planes',
-    planesCrear: 'planes/crear',
-    planesEditar: 'planes/editar/:uuid',
-    planesNav: '/servicios/planes',
+    ///* planes internet
+    planesinternet: 'planesinternet',
+    planesinternetCrear: 'planesinternet/crear',
+    planesinternetEditar: 'planesinternet/editar/:uuid',
+    planesinternetNav: '/servicios/planesinternet',
   },
 
   /////* Comercial ----------------
