@@ -21,6 +21,7 @@ import {
   useFetchZonas,
   useUpdateSystemUser,
 } from '@/actions/app';
+import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
 import {
   a11yProps,
   CustomAutocomplete,
@@ -42,6 +43,7 @@ import {
 import {
   EMPLOYEE_TYPE_ARRAY_CHOICES,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
+  IdentificationTypeEnumChoice,
   USER_ROLES_ARRAY_CHOICES,
   UserRolesEnumChoice,
 } from '@/shared/constants/app';
@@ -60,6 +62,7 @@ import {
   SystemUserItem,
   Zona,
 } from '@/shared/interfaces';
+import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { systemUserFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -115,6 +118,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   } = form;
   const watchedCreateEmployee = form.watch('create_employee');
   const watchedIdentificationType = form.watch('tipo_identificacion');
+  const watchedIdentification = form.watch('identificacion');
   const watchedIsEdit = form.watch('isEdit');
   const watchedArea = form.watch('area');
   const whatchedIsEdit = form.watch('isEdit');
@@ -227,6 +231,14 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     },
   });
 
+  // handlers ------------
+  const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
+    form.reset({
+      ...form.getValues(),
+      razon_social: cedulaCitizen?.fullName,
+    });
+  };
+
   ///* mutation ----------------
   const createUser = useCreateSystemUser<CreateUserProfileData>({
     navigate,
@@ -236,11 +248,27 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     navigate,
     returnUrl: returnUrlSystemUserPage,
   });
+  const useSearchCedulaMutation = useSearchCedula<SearchCedulaParams>({
+    enableErrorNavigate: false,
+    customOnSuccess: data => {
+      onSuccessSearchCedula(data as CedulaCitizen);
+    },
+  });
+  const handleFetchCedulaRucInfo = async (value: string) => {
+    if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
+      await useSearchCedulaMutation.mutateAsync({
+        cedula: value,
+      });
+    } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
+      // await useSearchRucMutation.mutateAsync({
+      //   ruc: value,
+      // });
+    }
+  };
 
   ///* handlers ----------------
   const onSave = (data: SaveFormData) => {
     const { password, ...rest } = data;
-    console.log(data);
 
     //* upd
     if (systemUserItem) {
@@ -281,6 +309,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
 
     setCanSelectCanalVenta(AVAILABLE_VENETAS_ROLE.includes(userRole!));
     setCanWritePassword(false);
+    form.setValue('canal_venta', user?.canal_venta);
   }, [form, systemUserItem]);
 
   // alerts no data | empty arr
@@ -378,7 +407,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
       titlePage={title}
       onCancel={() => navigate(returnUrlSystemUserPage)}
       onSave={handleSubmit(onSave, () => {
-        console.log('error', errors);
         ToastWrapper.error('Faltan campos requeridos por completar');
       })}
       tabs={
@@ -407,9 +435,12 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
             helperText={errors.tipo_identificacion?.message}
             size={gridSizeMdLg6}
             disableClearable
-            onChangeValue={() => {
-              form.setValue('identificacion', '');
-              form.setValue('razon_social', '');
+            onChangeValue={value => {
+              // form.setValue('identificacion', '');
+              // form.setValue('razon_social', '');
+              form.reset({
+                tipo_identificacion: value ? value : undefined,
+              });
             }}
           />
           <InputAndBtnGridSpace
@@ -422,16 +453,37 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
                 defaultValue={form.getValues('identificacion')}
                 error={errors.identificacion}
                 helperText={errors.identificacion?.message}
-                onFetchCedulaRucInfo={value => {
-                  alert(value);
+                onFetchCedulaRucInfo={async value => {
+                  await handleFetchCedulaRucInfo(value);
                 }}
                 disabled={!watchedIdentificationType}
               />
             }
             btnLabel="Buscar"
             iconBtn={<CiSearch />}
+            disabledBtn={
+              watchedIdentificationType ===
+              IdentificationTypeEnumChoice.PASAPORTE
+            }
             onClick={() => {
-              alert('search');
+              if (!watchedIdentification)
+                return ToastWrapper.warning(
+                  'Ingrese un número de identificación válido',
+                );
+
+              if (
+                watchedIdentificationType ==
+                  IdentificationTypeEnumChoice.CEDULA &&
+                watchedIdentification?.length < 10
+              )
+                return ToastWrapper.warning('Ingrese una cécula válida');
+              if (
+                watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
+                watchedIdentification?.length < 13
+              )
+                return ToastWrapper.warning('Ingrese RUC válido');
+
+              handleFetchCedulaRucInfo(watchedIdentification);
             }}
           />
 
@@ -552,7 +604,9 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
                 valueKey="name"
                 actualValueKey="id"
                 defaultValue={form.getValues().canal_venta}
-                isLoadingData={isLoadingCanalesVenta}
+                isLoadingData={
+                  isLoadingCanalesVenta || isRefetchingCanalesVenta
+                }
                 // vaidation
                 control={form.control}
                 error={errors.canal_venta}

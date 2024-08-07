@@ -132,7 +132,6 @@ export interface UpdateCargoParams<T> {
 
 export const getCargos = async (params?: GetCargosParams) => {
   const stateParams = { ...params };
-  console.log('stateParams', stateParams);
 
   // filter by state
   if (stateParams.filterByState === false && stateParams.state === undefined) {

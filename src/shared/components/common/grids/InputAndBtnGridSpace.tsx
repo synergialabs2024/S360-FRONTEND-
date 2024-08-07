@@ -20,6 +20,7 @@ export type InputAndBtnGridSpaceProps = {
   btnLabel?: string;
   btnColor?: ColorButtonType;
   onClick?: () => void;
+  disabledBtn?: boolean;
 
   //
   mainGridSize?: GridSizeType;
@@ -40,6 +41,8 @@ const InputAndBtnGridSpace: React.FC<InputAndBtnGridSpaceProps> = ({
   mainGridSize = gridSizeMdLg6,
   inputGridSize = showIconBtn ? gridSizeMdLg10 : gridSize,
   btnGridSize = gridSizeMdLg2,
+
+  disabledBtn = false,
 }) => {
   return (
     <>
@@ -61,6 +64,7 @@ const InputAndBtnGridSpace: React.FC<InputAndBtnGridSpaceProps> = ({
                   onClick={() => {
                     onClick && onClick();
                   }}
+                  disabled={disabledBtn}
                 />
               </>
             )}

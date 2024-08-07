@@ -82,6 +82,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     formState: { errors, isValid },
   } = form;
   const watchedIdentificationType = form.watch('tipo_identificacion');
+  const watchedIdentification = form.watch('identificacion');
   const watchedCoords = form.watch('coordenadas');
 
   const { Map, latLng, setLatLng } = useMapComponent({
@@ -109,6 +110,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_tercera_edad: cedulaCitizen?.esTerceraEdad,
       fecha_nacimiento: correctFechaNacimiento,
       edad: cedulaCitizen?.edad,
+      direccion: cedulaCitizen?.domicilio,
 
       // TODO: get data from equifax
     });
@@ -209,8 +211,27 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         }
         btnLabel="Buscar"
         iconBtn={<CiSearch />}
+        disabledBtn={
+          watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
+        }
         onClick={() => {
-          alert('search');
+          if (!watchedIdentification)
+            return ToastWrapper.warning(
+              'Ingrese un número de identificación válido',
+            );
+
+          if (
+            watchedIdentificationType == IdentificationTypeEnumChoice.CEDULA &&
+            watchedIdentification?.length < 10
+          )
+            return ToastWrapper.warning('Ingrese una cécula válida');
+          if (
+            watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
+            watchedIdentification?.length < 13
+          )
+            return ToastWrapper.warning('Ingrese RUC válido');
+
+          handleFetchCedulaRucInfo(watchedIdentification);
         }}
       />
 
