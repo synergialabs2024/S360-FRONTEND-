@@ -324,23 +324,19 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   useEffect(() => {
     if (isLoadingAreas) return;
     !areaPagingRes?.data?.items?.length &&
-      ToastWrapper.warning(
-        'No se encontraron áreas para la empresa seleccionada',
-      );
+      ToastWrapper.warning('No se encontraron áreas disponibles');
 
     if ((isLoadingCargos || isRefetchingCargos) && !!watchedCreateEmployee)
       return;
     !cargosPagingRes?.data?.items?.length &&
       watchedCreateEmployee &&
       ToastWrapper.warning(
-        'No se encontraron cargos para la empresa seleccionada',
+        'No se encontraron cargos disponibles para el empleado',
       );
 
     if (isLoadingCanalesVenta || isRefetchingCanalesVenta) return;
     !canalesVentaPagingRes?.data?.items?.length &&
-      ToastWrapper.warning(
-        'No se encontraron canales de venta para la empresa seleccionada',
-      );
+      ToastWrapper.warning('No se encontraron canales de venta disponibles');
   }, [
     areaPagingRes?.data?.items?.length,
     canalesVentaPagingRes?.data?.items?.length,

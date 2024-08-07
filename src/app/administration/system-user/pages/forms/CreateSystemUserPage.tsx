@@ -5,7 +5,7 @@ import { SaveSystemUser } from '../../shared/components';
 export type CreateSystemUserPageProps = {};
 
 const CreateSystemUserPage: React.FC<CreateSystemUserPageProps> = () => {
-  useCheckPermission(PermissionsEnum.users_add_profile);
+  useCheckPermission(PermissionsEnum.users_add_user);
 
   return <SaveSystemUser title="Crear Usuario" />;
 };

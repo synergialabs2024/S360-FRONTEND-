@@ -10,7 +10,7 @@ import { returnUrlSystemUserPage } from '../tables/SystemUserPage';
 export type UpdateSystemUserPageProps = {};
 
 const UpdateSystemUserPage: React.FC<UpdateSystemUserPageProps> = () => {
-  useCheckPermission(PermissionsEnum.users_change_profile);
+  useCheckPermission(PermissionsEnum.users_change_user);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetSystemUser(uuid!);
