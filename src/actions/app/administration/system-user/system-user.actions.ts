@@ -10,7 +10,6 @@ import {
   SystemUsersPaginatedRes,
   UseFetchEnabledParams,
   UseMutationParams,
-  UserProfile,
 } from '@/shared/interfaces';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
@@ -138,12 +137,12 @@ export const getSystemUsers = async (params?: GetSystemUsersParams) => {
   const stateParams = { ...params };
 
   const queryParams = getUrlParams(stateParams);
-  return get<SystemUsersPaginatedRes>(`/users/all/?${queryParams}`, true);
+  return get<SystemUsersPaginatedRes>(`/usuario/all/?${queryParams}`, true);
 };
 
 export const getSystemUser = async (uuid: string) => {
   try {
-    return await get<SystemUserItem>(`/users/${uuid}`, true);
+    return await get<SystemUserItem>(`/usuario/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
@@ -153,7 +152,7 @@ export const createSystemUser = async <T>(data: CreateSystemUserParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<SystemUser>('/users/', data, true);
+  return post<SystemUser>('/usuario/', data, true);
 };
 
 export const updateSystemUser = async <T>({
@@ -163,39 +162,40 @@ export const updateSystemUser = async <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<SystemUser>(`/users/${id}/`, data, true);
+  return patch<SystemUser>(`/usuario/${id}/`, data, true);
 };
 
 ///* action types -----------------
 export type CreateUserProfileData = Pick<
   SystemUser,
-  'username' | 'email' | 'razon_social' | 'groups'
+  | 'username'
+  | 'email'
+  | 'razon_social'
+  | 'groups'
+  //
+  | 'tipo_identificacion'
+  | 'identificacion'
+  | 'role'
+  | 'area'
+  | 'departamento'
+  | 'canal_venta'
 > & {
   password?: string;
-} & Pick<
-    UserProfile,
-    | 'tipo_identificacion'
-    | 'identificacion'
-    | 'role'
-    | 'empresa'
-    | 'area'
-    | 'departamento'
-    | 'canal_venta'
-  > & {
-    // helper
-    create_employee?: boolean;
+} & {
+  // helper
+  create_employee?: boolean;
 
-    // opt - employee
-    address?: string;
-    phone_1?: string;
-    phone_2?: string;
-    phone_3?: string;
-    salary?: string;
-    cargo?: number;
-    tipo_empleado?: string; // choice
-    pais?: number;
-    provincia?: number;
-    ciudad?: number;
-    zona?: number;
-    sector?: number;
-  };
+  // opt - employee
+  address?: string;
+  phone_1?: string;
+  phone_2?: string;
+  phone_3?: string;
+  salary?: string;
+  cargo?: number;
+  tipo_empleado?: string; // choice
+  pais?: number;
+  provincia?: number;
+  ciudad?: number;
+  zona?: number;
+  sector?: number;
+};

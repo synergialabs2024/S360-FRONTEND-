@@ -23,7 +23,7 @@ export const returnUrlSystemUserPage = ROUTER_PATHS.administracion.usuariosNav;
 export type SystemUserPageProps = {};
 
 const SystemUserPage: React.FC<SystemUserPageProps> = () => {
-  useCheckPermission(PermissionsEnum.users_view_profile);
+  useCheckPermission(PermissionsEnum.users_view_user);
 
   const navigate = useNavigate();
 
@@ -132,7 +132,7 @@ const SystemUserPage: React.FC<SystemUserPageProps> = () => {
     <SingleTableBoxScene
       title="Usuarios"
       createPageUrl={`${returnUrlSystemUserPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.users_add_profile)}
+      showCreateBtn={hasPermission(PermissionsEnum.users_add_user)}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -160,7 +160,7 @@ const SystemUserPage: React.FC<SystemUserPageProps> = () => {
         // crud
         canEdit={hasAllPermissions([
           ...SAVE_USER_PROFILE_PERMISSIONS,
-          PermissionsEnum.users_change_profile,
+          PermissionsEnum.users_change_user,
         ])}
         onEdit={onEdit}
         canDelete={false}

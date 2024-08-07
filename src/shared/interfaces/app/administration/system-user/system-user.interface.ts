@@ -1,4 +1,4 @@
-import { UserProfile } from '@/shared/interfaces/auth';
+import { UserRolesEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { Empleado } from '../../nomina';
 
@@ -11,7 +11,6 @@ export interface SystemUsersPaginatedRes {
 
 export interface SystemUserItem {
   user: SystemUser;
-  profile: UserProfile;
   create_employee?: boolean; // only serializer
   employee?: Empleado; // only serializer
 }
@@ -22,10 +21,14 @@ export interface SystemUser {
   username: string;
   email: string;
 
-  // name: string;
-  // last_name: string;
-
   razon_social?: string;
+  tipo_identificacion: string; // choice
+  identificacion: string;
 
+  ///* fk
   groups: number[];
+  area?: number;
+  departamento?: number;
+  canal_venta?: number;
+  role?: UserRolesEnumChoice; // choice
 }

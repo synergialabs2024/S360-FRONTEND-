@@ -14,7 +14,6 @@ import {
   useFetchCargos,
   useFetchCiudades,
   useFetchDepartamentos,
-  useFetchEmpresas,
   useFetchPaises,
   useFetchProvincias,
   useFetchSectores,
@@ -54,7 +53,6 @@ import {
   Cargo,
   Ciudad,
   Departamento,
-  Empresa,
   Pais,
   Provincia,
   Sector,
@@ -118,28 +116,16 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   const watchedCreateEmployee = form.watch('create_employee');
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const watchedIsEdit = form.watch('isEdit');
-  const watchedEmpresa = form.watch('empresa');
   const watchedArea = form.watch('area');
   const whatchedIsEdit = form.watch('isEdit');
 
   ///* fetch data ----------------
   const {
-    data: empresaPagingRes,
-    isLoading: isLoadingEmpresas,
-    isRefetching: isRefetchingEmpresas,
-  } = useFetchEmpresas({
-    params: {
-      page_size: 100,
-    },
-  });
-  const {
     data: areaPagingRes,
     isLoading: isLoadingAreas,
     isRefetching: isRefetchingAreas,
   } = useFetchAreas({
-    enabled: !!watchedEmpresa,
     params: {
-      empresa: watchedEmpresa,
       page_size: 726,
     },
   });
@@ -159,9 +145,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isLoading: isLoadingCanalesVenta,
     isRefetching: isRefetchingCanalesVenta,
   } = useFetchCanalVentas({
-    enabled: !!watchedEmpresa,
     params: {
-      empresa: watchedEmpresa,
       page_size: 1000,
     },
   });
@@ -179,9 +163,8 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isLoading: isLoadingCargos,
     isRefetching: isRefetchingCargos,
   } = useFetchCargos({
-    enabled: !!watchedEmpresa && !!watchedCreateEmployee,
+    enabled: !!watchedCreateEmployee,
     params: {
-      empresa: watchedEmpresa,
       page_size: 1000,
     },
   });
@@ -284,13 +267,12 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   ///* effects ----------------
   useEffect(() => {
     if (!systemUserItem) return;
-    const { user, profile, employee } = systemUserItem;
+    const { user, employee } = systemUserItem;
     const createEmployee = !!employee;
-    const userRole = profile?.role; // choice
+    const userRole = user?.role; // choice
 
     form.reset({
       ...user,
-      ...profile,
       create_employee: createEmployee,
       ...(employee && { ...employee }),
       groups: user.groups?.at(0) as any,
@@ -340,7 +322,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
 
   // alerts no data | empty arr
   useEffect(() => {
-    if (!watchedEmpresa) return;
     if (isLoadingAreas) return;
     !areaPagingRes?.data?.items?.length &&
       ToastWrapper.warning(
@@ -371,12 +352,9 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isRefetchingCargos,
     watchedArea,
     watchedCreateEmployee,
-    watchedEmpresa,
   ]);
 
   const customLoader =
-    isLoadingEmpresas ||
-    isRefetchingEmpresas ||
     isLoadingAreas ||
     isRefetchingAreas ||
     isLoadingDepartamentos ||
@@ -520,21 +498,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
           />
 
           {/* ---------- FK ---------- */}
-          <CustomAutocomplete<Empresa>
-            label="Empresa"
-            name="empresa"
-            // options
-            options={empresaPagingRes?.data?.items || []}
-            valueKey="razon_social"
-            actualValueKey="id"
-            defaultValue={form.getValues().empresa}
-            isLoadingData={isLoadingEmpresas}
-            // vaidation
-            control={form.control}
-            error={errors.empresa}
-            helperText={errors.empresa?.message}
-            size={gridSizeMdLg6}
-          />
           <CustomAutocomplete<Area>
             label="Area"
             name="area"
@@ -614,13 +577,9 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
               }}
               disabled={
                 (!!systemUserItem && !!systemUserItem?.create_employee) ||
-                !watchedEmpresa ||
                 !!whatchedIsEdit
               }
               onClickDisabled={() => {
-                if (!watchedEmpresa)
-                  return ToastWrapper.warning('Seleccione una empresa');
-
                 ToastWrapper.warning(
                   'Una vez creado el usuario no podrá gestionar el empleado desde este módulo',
                 );
