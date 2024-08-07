@@ -114,7 +114,7 @@ const SystemUserPage: React.FC<SystemUserPageProps> = () => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) =>
-          emptyCellNested(row, ['profile', 'tipo_identificacion']),
+          emptyCellNested(row, ['user', 'tipo_identificacion']),
       },
       {
         accessorKey: 'identificacion',
@@ -122,7 +122,7 @@ const SystemUserPage: React.FC<SystemUserPageProps> = () => {
         size: 180,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) => emptyCellNested(row, ['profile', 'identificacion']),
+        Cell: ({ row }) => emptyCellNested(row, ['user', 'identificacion']),
       },
     ],
     [],
