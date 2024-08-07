@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFetchEmpleados, useUpdateEmpleado } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
+import { SAVE_EMPLEADO_PERMISSIONS } from '@/shared';
 import {
   CustomSearch,
   CustomSwitch,
@@ -21,7 +22,6 @@ import {
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { SAVE_EMPLEADO_PERMISSIONS } from '@/shared';
 
 export const returnUrlEmpleadosPage = ROUTER_PATHS.nomina.empleadosNav;
 

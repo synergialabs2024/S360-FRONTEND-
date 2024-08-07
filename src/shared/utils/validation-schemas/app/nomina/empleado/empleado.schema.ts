@@ -47,10 +47,6 @@ export const empleadoFormSchema = yup.object({
     .required('El campo tipo empleado es requerido')
     .max(200, 'El campo tipo empleado no debe exceder los 200 caracteres'),
 
-  empresa: yup
-    .number()
-    .typeError('El campo empresa es requerido')
-    .required('El campo empresa es requerido'),
   area: yup
     .number()
     .typeError('El campo area es requerido')

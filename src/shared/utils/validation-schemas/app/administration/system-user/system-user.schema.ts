@@ -22,10 +22,6 @@ export const systemUserFormSchema = yup.object({
     .string()
     .required('El campo identificacion es requerido')
     .max(200, 'El campo identificacion no debe exceder los 200 caracteres'),
-  empresa: yup
-    .number()
-    .typeError('El campo empresa es requerido')
-    .required('El campo empresa es requerido'),
   area: yup
     .number()
     .typeError('El campo area es requerido')

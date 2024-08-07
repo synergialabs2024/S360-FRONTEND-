@@ -142,7 +142,7 @@ export const getSystemUsers = async (params?: GetSystemUsersParams) => {
 
 export const getSystemUser = async (uuid: string) => {
   try {
-    return await get<SystemUserItem>(`/usuario/${uuid}`, true);
+    return await get<SystemUserItem>(`/usuario/uuid/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

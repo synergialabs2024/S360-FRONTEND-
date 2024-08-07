@@ -12,7 +12,6 @@ import {
   useFetchCargos,
   useFetchCiudades,
   useFetchDepartamentos,
-  useFetchEmpresas,
   useFetchPaises,
   useFetchProvincias,
   useFetchSectores,
@@ -39,6 +38,7 @@ import {
 } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import {
   Area,
   CanalVenta,
@@ -46,7 +46,6 @@ import {
   Ciudad,
   Departamento,
   Empleado,
-  Empresa,
   Pais,
   Provincia,
   Sector,
@@ -55,7 +54,6 @@ import {
 import { empleadoFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlEmpleadosPage } from '../../../pages/tables/EmpleadosPage';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export interface SaveEmpleadoProps {
   title: string;
@@ -85,7 +83,6 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
   } = form;
 
   ///* fetch data ---------------------
-  const watchedEmpresa = form.watch('empresa');
   const watchedArea = form.watch('area');
   const watchedCountry = form.watch('pais');
   const watchedProvincia = form.watch('provincia');
@@ -93,22 +90,11 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
   const watchedZona = form.watch('zona');
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const {
-    data: empresaPagingRes,
-    isLoading: isLoadingEmpresas,
-    isRefetching: isRefetchingEmpresas,
-  } = useFetchEmpresas({
-    params: {
-      page_size: 100,
-    },
-  });
-  const {
     data: areaPagingRes,
     isLoading: isLoadingAreas,
     isRefetching: isRefetchingAreas,
   } = useFetchAreas({
-    enabled: !!watchedEmpresa,
     params: {
-      empresa: watchedEmpresa,
       page_size: 726,
     },
   });
@@ -128,9 +114,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
     isLoading: isLoadingCargos,
     isRefetching: isRefetchingCargos,
   } = useFetchCargos({
-    enabled: !!watchedEmpresa,
     params: {
-      empresa: watchedEmpresa,
       page_size: 1000,
     },
   });
@@ -192,9 +176,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
     isLoading: isLoadingCanalesVenta,
     isRefetching: isRefetchingCanalesVenta,
   } = useFetchCanalVentas({
-    enabled: !!watchedEmpresa,
     params: {
-      empresa: watchedEmpresa,
       page_size: 1000,
     },
   });
@@ -268,7 +250,6 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
   ]);
   // alerts no data | empty arr
   useEffect(() => {
-    if (!watchedEmpresa) return;
     if (isLoadingAreas) return;
     !areaPagingRes?.data?.items?.length &&
       ToastWrapper.warning(
@@ -296,11 +277,9 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
     isRefetchingCanalesVenta,
     isRefetchingCargos,
     watchedArea,
-    watchedEmpresa,
   ]);
 
   const isLoadingCustom =
-    isLoadingEmpresas ||
     isLoadingAreas ||
     isLoadingDepartamentos ||
     isLoadingPaises ||
@@ -308,7 +287,6 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
     isLoadingCiudades ||
     isLoadingZonas ||
     isLoadingSectores ||
-    isRefetchingEmpresas ||
     isRefetchingAreas ||
     isRefetchingDepartamentos ||
     isRefetchingPaises ||
@@ -393,20 +371,6 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
       <CustomTypoLabel
         text="Cargo en la Empresa"
         pt={CustomTypoLabelEnum.ptMiddlePosition}
-      />
-      <CustomAutocomplete<Empresa>
-        label="Empresa"
-        name="empresa"
-        // options
-        options={empresaPagingRes?.data?.items || []}
-        valueKey="razon_social"
-        actualValueKey="id"
-        defaultValue={form.getValues().empresa}
-        isLoadingData={isLoadingEmpresas}
-        // vaidation
-        control={form.control}
-        error={errors.empresa}
-        helperText={errors.empresa?.message}
       />
       <CustomAutocomplete<Area>
         label="Area"

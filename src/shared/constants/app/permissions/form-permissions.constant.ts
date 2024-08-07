@@ -42,7 +42,6 @@ export const SAVE_EMPRESA_PERMISSIONS = [
 ];
 
 export const SAVE_EMPLEADO_PERMISSIONS = [
-  PermissionsEnum.administration_view_empresa,
   PermissionsEnum.administration_view_area,
   PermissionsEnum.administration_view_departamento,
   PermissionsEnum.administration_view_canalventa,
