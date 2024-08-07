@@ -79,7 +79,7 @@ export const getFiles = async (params?: GetFilesParams) => {
 export const getFile = async (uuid: string) => {
   const { get } = erpAPI({ isStorageApi: true });
   try {
-    return await get<FileDocument>(`/iva/uuid/${uuid}`, true);
+    return await get<FileDocument>(`/iva/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

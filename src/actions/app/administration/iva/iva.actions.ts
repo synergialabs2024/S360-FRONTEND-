@@ -142,7 +142,7 @@ export const getIVAs = async (params?: GetIVAsParams) => {
 
 export const getIVA = async (uuid: string) => {
   try {
-    return await get<IVA>(`/iva/uuid/${uuid}`, true);
+    return await get<IVA>(`/iva/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

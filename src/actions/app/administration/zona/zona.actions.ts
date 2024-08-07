@@ -140,7 +140,7 @@ export const getZonas = async (params?: GetZonasParams) => {
 
 export const getZona = async (uuid: string) => {
   try {
-    return await get<Zona>(`/zona/uuid/${uuid}`, true);
+    return await get<Zona>(`/zona/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

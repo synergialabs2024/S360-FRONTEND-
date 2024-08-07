@@ -142,7 +142,7 @@ export const getPlans = async (params?: GetPlansParams) => {
 
 export const getPlan = async (uuid: string) => {
   try {
-    return await get<Plan>(`/plan/uuid/${uuid}`, true);
+    return await get<Plan>(`/plan/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

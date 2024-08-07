@@ -144,7 +144,7 @@ export const getCanalVentas = async (params?: GetCanalVentasParams) => {
 
 export const getCanalVenta = async (uuid: string) => {
   try {
-    return await get<CanalVenta>(`/canalventa/uuid/${uuid}`, true);
+    return await get<CanalVenta>(`/canalventa/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

@@ -144,7 +144,7 @@ export const getPromocions = async (params?: GetPromocionsParams) => {
 
 export const getPromocion = async (uuid: string) => {
   try {
-    return await get<Promocion>(`/promocion/uuid/${uuid}`, true);
+    return await get<Promocion>(`/promocion/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

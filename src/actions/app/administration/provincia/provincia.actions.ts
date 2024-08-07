@@ -148,7 +148,7 @@ export const getProvincias = async (params?: GetProvinciasParams) => {
 
 export const getProvincia = async (uuid: string) => {
   try {
-    return await get<Provincia>(`/provincia/uuid/${uuid}`, true);
+    return await get<Provincia>(`/provincia/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

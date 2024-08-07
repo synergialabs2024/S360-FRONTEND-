@@ -1,10 +1,6 @@
-import { UserProfile } from './user-profile.interface';
-
 export interface LoginResponse {
   token: string;
-  id: number;
   user: UserLoginResponse;
-  profile?: UserProfile;
   system_modules?: string[];
 }
 
@@ -16,13 +12,18 @@ export const LOGIN_ERRORS = {
 };
 
 export interface UserLoginResponse {
-  id?: number;
   uuid?: string;
   username: string;
   email: string;
   razon_social: string;
+  profile_image_url?: string;
 
   ///* fk
   permissions: string[];
   groups: number[];
+
+  area?: string;
+  departamento?: string;
+  canal_venta?: string;
+  role?: string; // choice
 }

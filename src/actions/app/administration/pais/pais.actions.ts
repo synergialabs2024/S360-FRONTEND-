@@ -154,7 +154,7 @@ export const getPaises = async (params?: GetPaisesParams) => {
 
 export const getPais = async (uuid: string) => {
   try {
-    return await get<Pais>(`/pais/uuid/${uuid}`, true);
+    return await get<Pais>(`/pais/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

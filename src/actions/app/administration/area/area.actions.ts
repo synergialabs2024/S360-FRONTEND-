@@ -141,7 +141,7 @@ export const getAreas = async (params?: GetAreasParams) => {
 
 export const getArea = async (uuid: string) => {
   try {
-    return await get<Area>(`/area/uuid/${uuid}`, true);
+    return await get<Area>(`/area/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

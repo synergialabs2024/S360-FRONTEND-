@@ -148,7 +148,7 @@ export const getCargos = async (params?: GetCargosParams) => {
 
 export const getCargo = async (uuid: string) => {
   try {
-    return await get<Cargo>(`/cargo/uuid/${uuid}`, true);
+    return await get<Cargo>(`/cargo/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

@@ -149,7 +149,7 @@ export const getDepartamentos = async (params?: GetDepartamentosParams) => {
 
 export const getDepartamento = async (uuid: string) => {
   try {
-    return await get<Departamento>(`/departamento/uuid/${uuid}`, true);
+    return await get<Departamento>(`/departamento/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

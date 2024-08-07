@@ -143,7 +143,7 @@ export const getCiudads = async (params?: GetCiudadsParams) => {
 
 export const getCiudad = async (uuid: string) => {
   try {
-    return await get<Ciudad>(`/ciudad/uuid/${uuid}`, true);
+    return await get<Ciudad>(`/ciudad/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

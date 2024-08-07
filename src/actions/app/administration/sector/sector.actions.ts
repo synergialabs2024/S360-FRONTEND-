@@ -143,7 +143,7 @@ export const getSectors = async (params?: GetSectorsParams) => {
 
 export const getSector = async (uuid: string) => {
   try {
-    return await get<Sector>(`/sector/uuid/${uuid}`, true);
+    return await get<Sector>(`/sector/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

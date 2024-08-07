@@ -158,7 +158,7 @@ export const getParametrosSistemas = async (
 
 export const getParametroSistema = async (uuid: string) => {
   try {
-    return await get<ParametroSistema>(`/parametrosistema/uuid/${uuid}`, true);
+    return await get<ParametroSistema>(`/parametrosistema/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

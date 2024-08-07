@@ -2,11 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import { logOutAxios } from '@/actions/auth';
-import {
-  Nullable,
-  UserLoginResponse,
-  UserProfileLimit,
-} from '@/shared/interfaces';
+import { Nullable, UserLoginResponse } from '@/shared/interfaces';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useUiStore } from '../ui';
 
@@ -15,16 +11,11 @@ interface AuthState {
   token: string | null;
   isAuth: boolean;
   user: Nullable<UserLoginResponseType>;
-  userProfile: Nullable<UserProfileLimit>;
   isLoading: boolean;
 
   setToken: (token: string | null) => void;
   setIsAuth: (isAuth: boolean) => void;
-  setAuth: (
-    token: string,
-    user: Nullable<UserLoginResponseType>,
-    userProfile: Nullable<UserProfileLimit>,
-  ) => void;
+  setAuth: (token: string, user: Nullable<UserLoginResponseType>) => void;
 
   onLogout: () => void;
   onLogOutWithoutToken: () => void;
@@ -44,8 +35,8 @@ export const useAuthStore = create<AuthState>()(
       setToken: token => set({ token }),
       setIsAuth: isAuth => set({ isAuth }),
 
-      setAuth: (token, user, userProfile) => {
-        set({ token, user, isAuth: !!token && !!user?.email, userProfile });
+      setAuth: (token, user) => {
+        set({ token, user, isAuth: !!token && !!user?.uuid });
       },
 
       onLogout: async (showAlert = true) => {

@@ -52,11 +52,7 @@ export const useLogin = () => {
     onSuccess: async res => {
       const { loginResponse } = res;
 
-      setAuth(
-        loginResponse.token,
-        loginResponse?.user || null,
-        loginResponse?.profile || null,
-      );
+      setAuth(loginResponse.token, loginResponse?.user || null);
       setPermissions(loginResponse?.user?.permissions || []);
       setModulos(loginResponse?.system_modules || []);
 
@@ -128,11 +124,7 @@ export const useLogin = () => {
                   force_login: true,
                   empresa: loginData?.empresa ?? '',
                 });
-                setAuth(
-                  loginResponse.token,
-                  loginResponse.user || null,
-                  loginResponse.profile || null,
-                );
+                setAuth(loginResponse.token, loginResponse.user || null);
                 setPermissions(loginResponse.user?.permissions || []);
                 setModulos(loginResponse?.system_modules || []);
 

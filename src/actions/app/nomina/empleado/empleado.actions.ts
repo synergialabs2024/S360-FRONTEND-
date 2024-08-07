@@ -144,7 +144,7 @@ export const getEmpleados = async (params?: GetEmpleadosParams) => {
 
 export const getEmpleado = async (uuid: string) => {
   try {
-    return await get<Empleado>(`/empleado/uuid/${uuid}`, true);
+    return await get<Empleado>(`/empleado/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
