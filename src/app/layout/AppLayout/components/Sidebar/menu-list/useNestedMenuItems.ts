@@ -139,12 +139,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.canalesVentaNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {
               id: 'empresas',
               title: 'Empresas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.empresasNav,
             }),
+            */
             renderByModule(SidenavModulesEnum.ADMIN_IVA, {
               id: 'ivas',
               title: 'IVA',
@@ -205,10 +207,10 @@ export const useNestedMenu = () => {
           icon: IconBroadcast,
           children: [
             renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
-              id: 'planes',
-              title: 'Planes',
+              id: 'planesinternet',
+              title: 'Plan Internet',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.servicios.planesNav,
+              url: ROUTER_PATHS.servicios.planesinternetNav,
               // target: true, // target blank
             }),
           ].filter(item => !!item) as NestedMenuItem[],

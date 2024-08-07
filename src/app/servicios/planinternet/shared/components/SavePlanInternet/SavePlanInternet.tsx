@@ -4,11 +4,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  CreatePlanParamsBase,
-  useCreatePlan,
-  useUpdatePlan,
-} from '@/actions/app';
-import {
   CustomAutocompleteArrString,
   CustomNumberTextField,
   CustomTextArea,
@@ -18,31 +13,39 @@ import {
 } from '@/shared/components';
 import {
   INTERNET_PERMANENCE_ARRAY_CHOICES,
-  INTERNET_PLAN_TYPE_ARRAY_CHOICES,
+  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   INTERNET_UNIT_VELOCITY_ARRAY_CHOICES,
 } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { PermissionsEnum, Plan } from '@/shared/interfaces';
-import { planFormSchema } from '@/shared/utils';
-import { returnUrlPlansPage } from '../../../pages/tables/PlansPage';
+import { PermissionsEnum, PlanInternet } from '@/shared/interfaces';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import {
+  CreatePlanInternetParamsBase,
+  useCreatePlanInternet,
+  useUpdatePlanInternet,
+} from '@/actions/app';
+import { planinternetFormSchema } from '@/shared';
+import { returnUrlPlanInternetsPage } from '../../../pages/tables/PlanInternetsPage';
 
-export interface SavePlanProps {
+export interface SavePlanInternetProps {
   title: string;
-  plan?: Plan;
+  planinternet?: PlanInternet;
 }
 
-type SaveFormData = CreatePlanParamsBase & {};
+type SaveFormData = CreatePlanInternetParamsBase & {};
 
-const SavePlan: React.FC<SavePlanProps> = ({ title, plan }) => {
-  useCheckPermission(PermissionsEnum.servicios_view_plan);
+const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
+  title,
+  planinternet,
+}) => {
+  useCheckPermission(PermissionsEnum.servicios_view_planinternet);
 
   const navigate = useNavigate();
 
   ///* form
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(planFormSchema) as any,
+    resolver: yupResolver(planinternetFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -56,40 +59,41 @@ const SavePlan: React.FC<SavePlanProps> = ({ title, plan }) => {
   const watchedSpeedUnit = form.watch('unidad_velocidad');
 
   ///* mutations
-  const createPlanMutation = useCreatePlan({
+  const createPlanInternetMutation = useCreatePlanInternet({
     navigate,
-    returnUrl: returnUrlPlansPage,
+    returnUrl: returnUrlPlanInternetsPage,
     enableErrorNavigate: false,
   });
-  const updatePlanMutation = useUpdatePlan<CreatePlanParamsBase>({
-    navigate,
-    returnUrl: returnUrlPlansPage,
-  });
+  const updatePlanInternetMutation =
+    useUpdatePlanInternet<CreatePlanInternetParamsBase>({
+      navigate,
+      returnUrl: returnUrlPlanInternetsPage,
+    });
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
     ///* upd
-    if (plan?.id) {
-      updatePlanMutation.mutate({ id: plan.id!, data });
+    if (planinternet?.id) {
+      updatePlanInternetMutation.mutate({ id: planinternet.id!, data });
       return;
     }
 
     ///* create
-    createPlanMutation.mutate(data);
+    createPlanInternetMutation.mutate(data);
   };
 
   ///* effects
   useEffect(() => {
-    if (!plan?.id) return;
-    reset(plan);
-  }, [plan, reset]);
+    if (!planinternet?.id) return;
+    reset(planinternet);
+  }, [planinternet, reset]);
 
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlPlansPage)}
+      onCancel={() => navigate(returnUrlPlanInternetsPage)}
       onSave={handleSubmit(onSave, () => {})}
     >
       <CustomTextField
@@ -223,7 +227,7 @@ const SavePlan: React.FC<SavePlanProps> = ({ title, plan }) => {
       <CustomAutocompleteArrString
         label="Tipo de plan"
         name="tipo_plan"
-        options={INTERNET_PLAN_TYPE_ARRAY_CHOICES}
+        options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES}
         isLoadingData={false}
         control={form.control}
         defaultValue={form.getValues().tipo_plan}
@@ -243,4 +247,4 @@ const SavePlan: React.FC<SavePlanProps> = ({ title, plan }) => {
   );
 };
 
-export default SavePlan;
+export default SavePlanInternet;

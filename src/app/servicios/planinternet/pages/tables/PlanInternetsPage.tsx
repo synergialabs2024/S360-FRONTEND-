@@ -2,7 +2,6 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchPlans, useUpdatePlan } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
@@ -14,7 +13,7 @@ import {
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum, Plan } from '@/shared/interfaces';
+import { PermissionsEnum, PlanInternet } from '@/shared/interfaces';
 import {
   emptyCellOneLevel,
   formatConcat2valuesCell,
@@ -23,13 +22,15 @@ import {
 } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { useFetchPlanInternets, useUpdatePlanInternet } from '@/actions/app';
 
-export const returnUrlPlansPage = ROUTER_PATHS.servicios.planesNav;
+export const returnUrlPlanInternetsPage =
+  ROUTER_PATHS.servicios.planesinternetNav;
 
-export type PlansPageProps = {};
+export type PlanInternetsPageProps = {};
 
-const PlansPage: React.FC<PlansPageProps> = () => {
-  useCheckPermission(PermissionsEnum.servicios_view_plan);
+const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
+  useCheckPermission(PermissionsEnum.servicios_view_planinternet);
 
   const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ const PlansPage: React.FC<PlansPageProps> = () => {
   );
 
   ///* mutations
-  const changeState = useUpdatePlan({
+  const changeState = useUpdatePlanInternet({
     enableNavigate: false,
   });
 
@@ -60,10 +61,10 @@ const PlansPage: React.FC<PlansPageProps> = () => {
 
   ///* fetch data
   const {
-    data: PlansPagingRes,
+    data: PlanInternetsPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchPlans({
+  } = useFetchPlanInternets({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -75,20 +76,20 @@ const PlansPage: React.FC<PlansPageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (plan: Plan) => {
+  const onEdit = (plan: PlanInternet) => {
     setConfirmDialog({
       isOpen: true,
       title: 'Editar Plan',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlPlansPage}/editar/${plan.uuid}`);
+        navigate(`${returnUrlPlanInternetsPage}/editar/${plan.uuid}`);
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<Plan>[]>(
+  const columns = useMemo<MRT_ColumnDef<PlanInternet>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -244,7 +245,9 @@ const PlansPage: React.FC<PlansPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.servicios_change_plan))
+                if (
+                  !hasPermission(PermissionsEnum.servicios_change_planinternet)
+                )
                   return;
 
                 setConfirmDialog({
@@ -300,8 +303,8 @@ const PlansPage: React.FC<PlansPageProps> = () => {
   return (
     <SingleTableBoxScene
       title="Planes de Internet"
-      createPageUrl={`${returnUrlPlansPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.servicios_add_plan)}
+      createPageUrl={`${returnUrlPlanInternetsPage}/crear`}
+      showCreateBtn={hasPermission(PermissionsEnum.servicios_add_planinternet)}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -309,9 +312,9 @@ const PlansPage: React.FC<PlansPageProps> = () => {
         text="por nombre"
       />
 
-      <CustomTable<Plan>
+      <CustomTable<PlanInternet>
         columns={columns}
-        data={PlansPagingRes?.data?.items || []}
+        data={PlanInternetsPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -323,14 +326,14 @@ const PlansPage: React.FC<PlansPageProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={PlansPagingRes?.data?.meta?.count}
+        rowCount={PlanInternetsPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
-          PermissionsEnum.servicios_change_plan,
+          PermissionsEnum.servicios_change_planinternet,
         )}
         // crud
-        canEdit={hasPermission(PermissionsEnum.servicios_change_plan)}
+        canEdit={hasPermission(PermissionsEnum.servicios_change_planinternet)}
         onEdit={onEdit}
         canDelete={false}
         // onDelete={onDelete}
@@ -339,4 +342,4 @@ const PlansPage: React.FC<PlansPageProps> = () => {
   );
 };
 
-export default PlansPage;
+export default PlanInternetsPage;

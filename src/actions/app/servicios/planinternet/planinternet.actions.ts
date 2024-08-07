@@ -5,8 +5,8 @@ import { handleAxiosError } from '@/shared/axios';
 
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
-  Plan,
-  PlanesPaginatedRes,
+  PlanesInternetPaginatedRes,
+  PlanInternet,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
@@ -15,31 +15,34 @@ import { useUiStore } from '@/store/ui';
 
 const { get, post, patch } = erpAPI();
 
-export enum PlanTSQEnum {
-  PLANS = 'plans',
-  PLAN = 'plan',
+export enum PlanInternetTSQEnum {
+  PLANINTERNETS = 'planinternets',
+  PLANINTERNET = 'planinternet',
 }
 ///* tanStack query ---------------
-export const useFetchPlans = ({
+export const useFetchPlanInternets = ({
   enabled = true,
   params,
-}: UseFetchEnabledParams<GetPlansParams>) => {
+}: UseFetchEnabledParams<GetPlanInternetsParams>) => {
   return useQuery({
-    queryKey: [PlanTSQEnum.PLANS, ...Object.values(params || {})],
-    queryFn: () => getPlans(params),
+    queryKey: [
+      PlanInternetTSQEnum.PLANINTERNETS,
+      ...Object.values(params || {}),
+    ],
+    queryFn: () => getPlanInternets(params),
     enabled: enabled,
   });
 };
 
-export const useGetPlan = (uuid: string) => {
+export const useGetPlanInternet = (uuid: string) => {
   return useQuery({
-    queryKey: [PlanTSQEnum.PLAN, uuid],
-    queryFn: () => getPlan(uuid),
+    queryKey: [PlanInternetTSQEnum.PLANINTERNET, uuid],
+    queryFn: () => getPlanInternet(uuid),
     retry: false,
   });
 };
 
-export const useCreatePlan = <T>({
+export const useCreatePlanInternet = <T>({
   navigate,
   returnUrl,
   returnErrorUrl,
@@ -53,9 +56,12 @@ export const useCreatePlan = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: CreatePlanParams<T>) => createPlan(params),
+    mutationFn: (params: CreatePlanInternetParams<T>) =>
+      createPlanInternet(params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PlanTSQEnum.PLANS] });
+      queryClient.invalidateQueries({
+        queryKey: [PlanInternetTSQEnum.PLANINTERNETS],
+      });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(customMessageToast || 'Plan creado correctamente');
@@ -74,7 +80,7 @@ export const useCreatePlan = <T>({
   });
 };
 
-export const useUpdatePlan = <T>({
+export const useUpdatePlanInternet = <T>({
   navigate,
   returnUrl,
   returnErrorUrl,
@@ -88,9 +94,12 @@ export const useUpdatePlan = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: UpdatePlanParams<T>) => updatePlan(params),
+    mutationFn: (params: UpdatePlanInternetParams<T>) =>
+      updatePlanInternet(params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PlanTSQEnum.PLANS] });
+      queryClient.invalidateQueries({
+        queryKey: [PlanInternetTSQEnum.PLANINTERNETS],
+      });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
@@ -112,20 +121,20 @@ export const useUpdatePlan = <T>({
 };
 
 ///* axios ---------------
-export type GetPlansParams = Partial<Plan> & {
+export type GetPlanInternetsParams = Partial<PlanInternet> & {
   page?: number;
   page_size?: number;
 
   filterByState?: boolean;
 };
-export type CreatePlanParams<T> = T;
-export type CreatePlanParamsBase = Omit<Plan, 'id'>;
-export interface UpdatePlanParams<T> {
+export type CreatePlanInternetParams<T> = T;
+export type CreatePlanInternetParamsBase = Omit<PlanInternet, 'id'>;
+export interface UpdatePlanInternetParams<T> {
   id: number;
   data: T;
 }
 
-export const getPlans = async (params?: GetPlansParams) => {
+export const getPlanInternets = async (params?: GetPlanInternetsParams) => {
   const stateParams = { ...params };
 
   // filter by state
@@ -137,27 +146,32 @@ export const getPlans = async (params?: GetPlansParams) => {
   delete stateParams.filterByState;
 
   const queryParams = getUrlParams(stateParams);
-  return get<PlanesPaginatedRes>(`/plan/?${queryParams}`, true);
+  return get<PlanesInternetPaginatedRes>(`/planinternet/?${queryParams}`, true);
 };
 
-export const getPlan = async (uuid: string) => {
+export const getPlanInternet = async (uuid: string) => {
   try {
-    return await get<Plan>(`/plan/${uuid}`, true);
+    return await get<PlanInternet>(`/planinternet/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
 };
 
-export const createPlan = async <T>(data: CreatePlanParams<T>) => {
+export const createPlanInternet = async <T>(
+  data: CreatePlanInternetParams<T>,
+) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<Plan>('/plan/', data, true);
+  return post<PlanInternet>('/planinternet/', data, true);
 };
 
-export const updatePlan = async <T>({ id, data }: UpdatePlanParams<T>) => {
+export const updatePlanInternet = async <T>({
+  id,
+  data,
+}: UpdatePlanInternetParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<Plan>(`/plan/${id}/`, data, true);
+  return patch<PlanInternet>(`/planinternet/${id}/`, data, true);
 };

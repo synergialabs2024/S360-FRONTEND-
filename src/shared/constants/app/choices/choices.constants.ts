@@ -33,13 +33,13 @@ export const INTERNET_SERVICE_TYPE_ARRAY_CHOICES = [
   InternetServiceTypeEnumChoice.WIRELESS,
 ];
 
-export enum InternetPlanTypeEnumChoice {
+export enum InternetPlanInternetTypeEnumChoice {
   HOGAR = 'HOGAR',
   CORPORATIVO = 'CORPORATIVO',
 }
-export const INTERNET_PLAN_TYPE_ARRAY_CHOICES = [
-  InternetPlanTypeEnumChoice.HOGAR,
-  InternetPlanTypeEnumChoice.CORPORATIVO,
+export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES = [
+  InternetPlanInternetTypeEnumChoice.HOGAR,
+  InternetPlanInternetTypeEnumChoice.CORPORATIVO,
 ];
 
 export enum InternetUnitVelocityEnumChoice {
