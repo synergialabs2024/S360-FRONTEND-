@@ -300,9 +300,9 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     const userRole = user?.role; // choice
 
     form.reset({
+      ...(employee && { ...employee }),
       ...user,
       create_employee: createEmployee,
-      ...(employee && { ...employee }),
       groups: user.groups?.at(0) as any,
       isEdit: true,
     });
