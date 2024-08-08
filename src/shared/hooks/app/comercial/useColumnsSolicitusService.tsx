@@ -22,6 +22,16 @@ export const useColumnsSolicitusService = (
 ) => {
   const solicitudServicioBase = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
     () => [
+      // TODO: del
+      {
+        accessorKey: 'block_until',
+        header: 'Bloqueado hasta',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }: MRTSServiceType) =>
+          formatDateWithTimeCell(row, 'block_until'),
+      },
       {
         accessorKey: 'numero_referencia',
         header: 'NUMERO REFERENCIA',
@@ -222,14 +232,6 @@ export const useColumnsSolicitusService = (
       // TODO: trazabilidad
 
       {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'uuid'),
-      },
-      {
         accessorKey: 'codigo',
         header: 'CODIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
@@ -246,7 +248,6 @@ export const useColumnsSolicitusService = (
         Cell: ({ row }: MRTSServiceType) =>
           formatDateWithTimeCell(row, 'created_at'),
       },
-
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',

@@ -35,6 +35,8 @@ export interface SolicitudServicio {
   // detalle si ya es cliente x linea (plan, estado actual cliente, etc.)
   detalle_servicios_contratados?: string; // JSON
 
+  block_until?: string; // timestamp
+
   // EQUIFAX
   categoria_score_desicion: string;
   valor_maximo: string;

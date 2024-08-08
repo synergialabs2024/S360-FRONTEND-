@@ -113,6 +113,13 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       direccion: cedulaCitizen?.domicilio,
 
       // TODO: get data from equifax
+      categoria_score_desicion: 'A',
+      valor_maximo: '1000',
+      valor_minimo: '500',
+      score_inclusion: '600',
+      score_sobreendeudamiento: '9999',
+      score_servicios: '700',
+      rango_capacidad_pago: 'A',
     });
   };
   ///* mutations -----------------
@@ -402,6 +409,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.categoria_score_desicion}
         helperText={errors.categoria_score_desicion?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomTextField
@@ -412,6 +420,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.valor_maximo}
         helperText={errors.valor_maximo?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomTextField
@@ -422,6 +431,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.valor_minimo}
         helperText={errors.valor_minimo?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomTextField
@@ -432,6 +442,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.score_inclusion}
         helperText={errors.score_inclusion?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomTextField
@@ -442,6 +453,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.score_sobreendeudamiento}
         helperText={errors.score_sobreendeudamiento?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomTextField
@@ -452,6 +464,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.score_servicios}
         helperText={errors.score_servicios?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomTextField
@@ -461,7 +474,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         defaultValue={form.getValues().rango_capacidad_pago}
         error={errors.rango_capacidad_pago}
         helperText={errors.rango_capacidad_pago?.message}
-        size={gridSizeMdLg6}
+        disabled
       />
     </SingleFormBoxScene>
   );
