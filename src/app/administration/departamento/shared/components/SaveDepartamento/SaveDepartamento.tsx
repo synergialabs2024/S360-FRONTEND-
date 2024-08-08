@@ -7,9 +7,9 @@ import {
   CreateDepartamentoParamsBase,
   useCreateDepartamento,
   useFetchAreas,
-  useFetchEmpresas,
   useUpdateDepartamento,
 } from '@/actions/app';
+import { SAVE_DEPARTAMENTO_PERMISSIONS } from '@/shared';
 import {
   CustomAutocomplete,
   CustomTextArea,
@@ -17,13 +17,11 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
-import { Area, Departamento, Empresa } from '@/shared/interfaces';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import { Area, Departamento } from '@/shared/interfaces';
 import { departamentoFormSchema } from '@/shared/utils';
 import { returnUrlDepartamentosPage } from '../../../pages/tables/DepartamentosPage';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
-import { SAVE_DEPARTAMENTO_PERMISSIONS } from '@/shared';
 
 export interface SaveDepartamentoProps {
   title: string;
@@ -56,15 +54,6 @@ const SaveDepartamento: React.FC<SaveDepartamentoProps> = ({
   } = form;
 
   ///* fetch data
-  const {
-    data: empresasPagingRes,
-    isLoading: isLoadingEmpresas,
-    isRefetching: isRefetchingEmpresas,
-  } = useFetchEmpresas({
-    params: {
-      page_size: 600,
-    },
-  });
   const {
     data: areasPagingRes,
     isLoading: isLoadingAreas,
@@ -106,11 +95,7 @@ const SaveDepartamento: React.FC<SaveDepartamentoProps> = ({
     if (!departamento?.id) return;
     reset(departamento);
   }, [departamento, reset]);
-  const isCustomLoader =
-    isLoadingEmpresas ||
-    isRefetchingEmpresas ||
-    isLoadingAreas ||
-    isRefetchingAreas;
+  const isCustomLoader = isLoadingAreas || isRefetchingAreas;
   useLoaders(isCustomLoader);
 
   return (
@@ -128,21 +113,6 @@ const SaveDepartamento: React.FC<SaveDepartamentoProps> = ({
         helperText={errors.name?.message}
       />
 
-      <CustomAutocomplete<Empresa>
-        label="Empresa"
-        name="empresa"
-        // options
-        options={(empresasPagingRes?.data?.items as unknown as Empresa[]) || []}
-        valueKey="razon_social"
-        actualValueKey="id"
-        defaultValue={form.getValues().empresa}
-        isLoadingData={isLoadingEmpresas || isRefetchingEmpresas}
-        // vaidation
-        control={form.control}
-        error={errors.empresa}
-        helperText={errors.empresa?.message}
-        size={gridSizeMdLg6}
-      />
       <CustomAutocomplete<Area>
         label="Area"
         name="area"
@@ -156,7 +126,6 @@ const SaveDepartamento: React.FC<SaveDepartamentoProps> = ({
         control={form.control}
         error={errors.area}
         helperText={errors.area?.message}
-        size={gridSizeMdLg6}
       />
 
       <CustomTextArea

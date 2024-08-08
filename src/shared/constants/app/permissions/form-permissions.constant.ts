@@ -31,7 +31,6 @@ export const SAVE_PROMOCION_PERMISSIONS = [
 ];
 
 export const SAVE_DEPARTAMENTO_PERMISSIONS = [
-  PermissionsEnum.administration_view_empresa,
   PermissionsEnum.administration_view_area,
 ];
 

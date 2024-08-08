@@ -100,15 +100,6 @@ const DepartamentosPage: React.FC<DepartamentosPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
-        accessorKey: 'empresa__razon_social',
-        header: 'EMPRESA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['empresa_data', 'razon_social']),
-      },
-      {
         accessorKey: 'area__name',
         header: 'ÁREA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

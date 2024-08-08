@@ -2,6 +2,7 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
+import { UserRolesEnumChoice } from '@/shared/constants';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import type { SolicitudServicio } from '@/shared/interfaces';
 import {
@@ -9,6 +10,7 @@ import {
   formatBooleanCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+import { useAuthStore } from '@/store/auth';
 
 type UseColumnsSolicitusServiceProps = {
   imageModalTitle?: string;
@@ -18,8 +20,12 @@ type UseColumnsSolicitusServiceProps = {
 type MRTSServiceType = { row: MRT_Row<SolicitudServicio> };
 
 export const useColumnsSolicitusService = (
-  props?: UseColumnsSolicitusServiceProps,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _props?: UseColumnsSolicitusServiceProps,
 ) => {
+  const isSalesman =
+    useAuthStore(s => s.user?.role) === UserRolesEnumChoice.AGENTE;
+
   const solicitudServicioBase = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
     () => [
       // TODO: del
@@ -70,7 +76,7 @@ export const useColumnsSolicitusService = (
       },
 
       // only supervisor to top
-      ...(props?.isSalesman
+      ...(isSalesman
         ? []
         : [
             {
@@ -158,7 +164,7 @@ export const useColumnsSolicitusService = (
           emptyCellOneLevel(row, 'linea_servicio'),
       },
 
-      ...(props?.isSalesman
+      ...(isSalesman
         ? []
         : [
             {
@@ -258,7 +264,7 @@ export const useColumnsSolicitusService = (
           formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [props?.isSalesman],
+    [isSalesman],
   );
 
   return { solicitudServicioBase };
