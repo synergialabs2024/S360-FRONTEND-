@@ -11,10 +11,6 @@ export const areaFormSchema = yup.object({
     .max(200, 'El campo name no debe exceder los 200 caracteres'),
 
   description: descriptionYupValidation,
-  empresa: yup
-    .number()
-    .typeError('El campo empresa es requerido')
-    .required('El campo empresa es requerido'),
 
   state: fieldStateYupValidation,
 });

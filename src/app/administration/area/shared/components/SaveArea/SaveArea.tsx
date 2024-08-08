@@ -3,25 +3,16 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { CreateAreaParams, useCreateArea, useUpdateArea } from '@/actions/app';
 import {
-  CreateAreaParams,
-  useCreateArea,
-  useFetchEmpresas,
-  useUpdateArea,
-} from '@/actions/app';
-import {
-  CustomAutocomplete,
   CustomTextArea,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { useLoaders } from '@/shared/hooks';
-import { Area, Empresa, PermissionsEnum } from '@/shared/interfaces';
+import { Area } from '@/shared/interfaces';
 import { areaFormSchema } from '@/shared/utils';
 import { returnUrlAreasPage } from '../../../pages/tables/AreasPage';
-import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveAreaProps {
   title: string;
@@ -31,7 +22,6 @@ export interface SaveAreaProps {
 type SaveFormData = CreateAreaParams & {};
 
 const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
-  useCheckPermission(PermissionsEnum.administration_view_empresa);
   const navigate = useNavigate();
 
   ///* form
@@ -49,15 +39,6 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
   } = form;
 
   ///* fetch data
-  const {
-    data: empresasPagingRes,
-    isLoading: isLoadingEmpresas,
-    isRefetching: isRefetchingEmpresas,
-  } = useFetchEmpresas({
-    params: {
-      page_size: 600,
-    },
-  });
 
   ///* mutations
   const createAreaMutation = useCreateArea({
@@ -89,7 +70,6 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
     if (!area?.id) return;
     reset(area);
   }, [area, reset]);
-  useLoaders(isLoadingEmpresas || isRefetchingEmpresas);
 
   return (
     <SingleFormBoxScene
@@ -104,22 +84,6 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomAutocomplete<Empresa>
-        label="Empresa"
-        name="empresa"
-        // options
-        options={(empresasPagingRes?.data?.items as unknown as Empresa[]) || []}
-        valueKey="razon_social"
-        actualValueKey="id"
-        defaultValue={form.getValues().empresa}
-        isLoadingData={isLoadingEmpresas || isRefetchingEmpresas}
-        // vaidation
-        control={form.control}
-        error={errors.empresa}
-        helperText={errors.empresa?.message}
-        size={gridSizeMdLg6}
       />
       <CustomTextArea
         label="Descripción"

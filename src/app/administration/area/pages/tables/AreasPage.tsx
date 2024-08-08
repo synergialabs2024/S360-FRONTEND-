@@ -15,11 +15,7 @@ import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { Area, PermissionsEnum } from '@/shared/interfaces';
-import {
-  emptyCellNested,
-  emptyCellOneLevel,
-  formatDateWithTimeCell,
-} from '@/shared/utils';
+import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
@@ -96,15 +92,6 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
-      },
-      {
-        accessorKey: 'empresa__razon_social',
-        header: 'EMPRESA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['empresa_data', 'razon_social']),
       },
       {
         accessorKey: 'description',
@@ -199,7 +186,6 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       createPageUrl={`${returnUrlAreasPage}/crear`}
       showCreateBtn={hasAllPermissions([
         PermissionsEnum.administration_add_area,
-        PermissionsEnum.administration_view_empresa,
       ])}
     >
       <CustomSearch
@@ -227,12 +213,10 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasAllPermissions([
           PermissionsEnum.administration_change_area,
-          PermissionsEnum.administration_view_empresa,
         ])}
         // crud
         canEdit={hasAllPermissions([
           PermissionsEnum.administration_change_area,
-          PermissionsEnum.administration_view_empresa,
         ])}
         onEdit={onEdit}
         canDelete={false}
