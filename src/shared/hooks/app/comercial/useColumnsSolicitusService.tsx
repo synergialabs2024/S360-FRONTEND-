@@ -50,12 +50,13 @@ export const useColumnsSolicitusService = (
           emptyCellOneLevel(row, 'tipo_identificacion'),
       },
       {
-        accessorKey: 'nombres',
+        accessorKey: 'razon_social',
         header: 'NOMBRES',
         size: 312,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'nombres'),
+        Cell: ({ row }: MRTSServiceType) =>
+          emptyCellOneLevel(row, 'razon_social'),
       },
 
       // only supervisor to top
