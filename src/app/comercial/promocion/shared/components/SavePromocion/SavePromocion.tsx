@@ -9,7 +9,7 @@ import {
   CreatePromocionParamsBase,
   useCreatePromocion,
   useFetchCiudades,
-  useFetchPlans,
+  useFetchPlanInternets,
   useFetchProvincias,
   useFetchSectores,
   useFetchZonas,
@@ -41,7 +41,7 @@ import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import type {
   Ciudad,
-  Plan,
+  PlanInternet,
   Promocion,
   Provincia,
   Sector,
@@ -143,7 +143,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     data: planesPaging,
     isLoading: isLoadingPlanes,
     isRefetching: isRefetchingPlanes,
-  } = useFetchPlans({
+  } = useFetchPlanInternets({
     params: {
       page_size: 600,
     },
@@ -344,7 +344,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
         <InputAndBtnGridSpace
           mainGridSize={gridSize}
           inputNode={
-            <CustomAutocompleteMultiple<Plan>
+            <CustomAutocompleteMultiple<PlanInternet>
               label="Planes"
               name="planes"
               textFieldKey="nombre"
@@ -354,7 +354,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               options={planesPaging?.data?.items || []}
               defaultValue={
                 form.getValues().planes?.length
-                  ? planesPaging?.data?.items?.filter((plan: Plan) =>
+                  ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
                       (form.getValues().planes as any[])?.includes(plan?.id!),
                     )
                   : []

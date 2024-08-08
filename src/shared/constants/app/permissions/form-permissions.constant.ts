@@ -27,7 +27,7 @@ export const SAVE_PROMOCION_PERMISSIONS = [
   PermissionsEnum.administration_view_ciudad,
   PermissionsEnum.administration_view_zona,
   PermissionsEnum.administration_view_sector,
-  PermissionsEnum.servicios_view_plan,
+  PermissionsEnum.servicios_view_planinternet,
 ];
 
 export const SAVE_DEPARTAMENTO_PERMISSIONS = [
