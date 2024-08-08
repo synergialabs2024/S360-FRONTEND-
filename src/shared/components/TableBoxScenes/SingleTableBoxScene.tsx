@@ -52,13 +52,11 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
   const navigate = useNavigate();
 
   return (
-    <>
+    <Box sx={{ maxHeight: '16cm' }}>
       <Box
-        component="main"
         sx={{
           flexGrow: 1,
           pt: 1,
-          pb: 2,
           backgroundColor: '#fff',
           borderRadius: '15px',
         }}
@@ -114,7 +112,6 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
       </Box>
 
       <Box
-        component="main"
         sx={{
           flexGrow: 1,
           pt: 2,
@@ -129,7 +126,7 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
           <Stack spacing={3}>{children}</Stack>
         </Container>
       </Box>
-    </>
+    </Box>
   );
 };
 
