@@ -80,7 +80,7 @@ const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
             {titlePageNode ? (
               titlePageNode
             ) : (
-              <Typography variant="h3" component="h2" pb={isMobile ? 1 : 2}>
+              <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
                 {titlePage}
               </Typography>
             )}
