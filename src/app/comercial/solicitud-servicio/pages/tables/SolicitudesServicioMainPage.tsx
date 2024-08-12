@@ -30,7 +30,6 @@ const SolicitudesServicioMainPage: React.FC<
         PermissionsEnum.comercial_add_solicitudservicio,
       ])}
       createPageUrl={`${returnUrlSolicitudsServicioPage}/crear`}
-      isMainTableStates
     >
       <BoxFormTabsOnly
         tabValue={tabValue}
