@@ -12,8 +12,9 @@ import {
   CreateSolicitudServicioParamsBase,
   useCreateSolicitudServicio,
   useUpdateSolicitudServicio,
+  useValidateCedulaSolService,
+  ValidateIdentificacionParams,
 } from '@/actions/app';
-import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
 import { ToastWrapper } from '@/shared';
 import {
   CustomAutocompleteArrString,
@@ -46,6 +47,7 @@ import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
 
 export interface SaveSolicitudServicioProps {
@@ -63,6 +65,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   ///* local state -----------------
   const [openMapModal, setOpenMapModal] = useState(false);
+
+  ///* global state -----------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* form -----------------
   const form = useForm<SaveFormData>({
@@ -122,6 +130,34 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       rango_capacidad_pago: 'A',
     });
   };
+  const onErrorSearchCedula = (err: any) => {
+    const data = err?.response?.data?.data;
+    const createdAt = dayjs(data?.created_at);
+    const blockedUntil = dayjs(data?.block_until);
+    const now = dayjs();
+    const hoursBlocked = now.diff(createdAt, 'hours');
+    const minutesBlocked = now.diff(createdAt, 'minutes');
+    const timeBlocked = minutesBlocked > 60 ? hoursBlocked : minutesBlocked;
+
+    // solicitud_servicio in process
+    if (blockedUntil) {
+      setConfirmDialog({
+        isOpen: true,
+        title: 'Prospecto existente',
+        subtitle: `Prospecto registrado hace ${timeBlocked} ${
+          minutesBlocked > 60 ? 'horas' : 'minutos'
+        }. Para poderlo ingresar en un nuevo proceso debe solicitar desbloqueo o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}. 
+        ¿Desea solicitar desbloqueo?`,
+        onConfirm: () => {
+          setConfirmDialogIsOpen(false);
+          alert('solicitud desbloqueo');
+          // TODO: solicitud desbloqueo
+        },
+        confirmTextBtn: 'Solicitar desbloqueo',
+        cancelTextBtn: 'Cerrar',
+      });
+    }
+  };
   ///* mutations -----------------
   const createSolicitudServicioMutation = useCreateSolicitudServicio({
     navigate,
@@ -133,17 +169,21 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       navigate,
       returnUrl: returnUrlSolicitudsServicioPage,
     });
-  const useSearchCedulaMutation = useSearchCedula<SearchCedulaParams>({
-    enableErrorNavigate: false,
-    customOnSuccess: data => {
-      onSuccessSearchCedula(data as CedulaCitizen);
-    },
-  });
+  const useSearchCedulaMutation =
+    useValidateCedulaSolService<ValidateIdentificacionParams>({
+      enableErrorNavigate: false,
+      customOnSuccess: data => {
+        onSuccessSearchCedula(data as CedulaCitizen);
+      },
+      customOnError: err => {
+        onErrorSearchCedula(err);
+      },
+    });
 
   const handleFetchCedulaRucInfo = async (value: string) => {
     if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
       await useSearchCedulaMutation.mutateAsync({
-        cedula: value,
+        identificacion: value,
       });
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
       // await useSearchRucMutation.mutateAsync({

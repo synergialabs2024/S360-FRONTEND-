@@ -174,6 +174,10 @@ export const updateSolicitudServicio = async <T>({
 };
 
 /////* consulta cedula ---------------------
+export type ValidateIdentificacionParams = {
+  identificacion: string;
+};
+
 export const useValidateCedulaSolService = <T>({
   navigate,
   returnUrl,
@@ -184,6 +188,7 @@ export const useValidateCedulaSolService = <T>({
   enableErrorNavigate = false,
   enableToast = true,
   customOnSuccess,
+  customOnError,
 }: UseMutationParams) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
@@ -195,7 +200,7 @@ export const useValidateCedulaSolService = <T>({
       customOnSuccess && customOnSuccess(res?.data);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Cédula consultada correctamente',
+          customMessageToast || 'Cédula validada correctamente',
         );
     },
     onError: error => {
@@ -204,6 +209,10 @@ export const useValidateCedulaSolService = <T>({
         returnUrl &&
         navigate(returnErrorUrl || returnUrl || '');
 
+      if (customOnError) {
+        customOnError(error);
+        return;
+      }
       handleAxiosError(error, customMessageErrorToast);
     },
     onSettled: () => {
@@ -215,5 +224,8 @@ export const useValidateCedulaSolService = <T>({
 export const validateCedulaSolService = async <T>(
   data: CreateCedulaCitizenParams<T>,
 ) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
   return post('/solicitudservicio/validate/identificacion/', data, true);
 };
