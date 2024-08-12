@@ -42,7 +42,7 @@ const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
           pt: isMobile ? 1 : 2,
 
           backgroundColor: '#fff',
-          borderRadius: '12px',
+          borderRadius: '15px',
         }}
       >
         <Container maxWidth={maxWidth}>
@@ -51,7 +51,7 @@ const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
             {titleNode ? (
               titleNode
             ) : titlePage ? (
-              <Typography variant="h3" component="h2" pb={isMobile ? 1 : 2}>
+              <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
                 {titlePage}
               </Typography>
             ) : null}
