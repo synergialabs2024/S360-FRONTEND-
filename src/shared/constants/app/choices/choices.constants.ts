@@ -172,3 +172,27 @@ export const ESTADO_SOLICITUD_SERVICIO_ARRAY_CHOICES = [
   EstadoSolicitudServicioEnumChoice.ESPERA_DESBLOQUEO,
   EstadoSolicitudServicioEnumChoice.DESBLOQUEADO,
 ];
+
+// global states
+export enum GeneralModelStatesEnumChoice {
+  ESPERA = 'ESPERA',
+  APROBADO = 'APROBADO',
+  RECHAZADO = 'RECHAZADO',
+}
+export const GENERAL_MODEL_STATES_ARRAY_CHOICES = [
+  GeneralModelStatesEnumChoice.ESPERA,
+  GeneralModelStatesEnumChoice.APROBADO,
+  GeneralModelStatesEnumChoice.RECHAZADO,
+];
+
+// sales models - trazabilidad/unblock sales
+export enum SalesModelsEnumChoice {
+  SOLICITUD_SERVICIO = 'SOLICITUD_SERVICIO',
+  PREVENTA = 'PREVENTA',
+  SOLICITUD_DESBLOQUEO_VENTAS = 'SOLICITUD_DESBLOQUEO_VENTAS',
+}
+export const SALES_MODELS_ARRAY_CHOICES = [
+  SalesModelsEnumChoice.SOLICITUD_SERVICIO,
+  SalesModelsEnumChoice.PREVENTA,
+  SalesModelsEnumChoice.SOLICITUD_DESBLOQUEO_VENTAS,
+];
