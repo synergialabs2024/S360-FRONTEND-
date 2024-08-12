@@ -72,9 +72,14 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
                 justifyContent="space-between"
                 alignItems="center"
                 spacing={2}
-                pb={isMainTableStates ? 0 : 2}
+                pb={isMainTableStates ? 2 : 2}
               >
-                <Grid container spacing={1}>
+                <Grid
+                  container
+                  spacing={1}
+                  alignItems="center"
+                  justifyContent="center"
+                >
                   <Grid item xs>
                     <Stack spacing={1}>
                       <Typography variant="h2" component="h1">
@@ -86,23 +91,29 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
                     </Stack>
                   </Grid>
                   <Grid item>
-                    {showCreateBtn && createPageUrl && (
-                      <Button
-                        startIcon={
-                          <SvgIcon fontSize="small">
-                            <FaPlus />
-                          </SvgIcon>
-                        }
-                        variant="contained"
-                        onClick={
-                          onClickCreateBtn ||
-                          (() => createPageUrl && navigate(createPageUrl))
-                        }
-                      >
-                        {createBtnText}
-                      </Button>
-                    )}
-                    {showCustomBtns && <div>{customBtns}</div>}
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      {showCreateBtn && createPageUrl && (
+                        <Button
+                          startIcon={
+                            <SvgIcon fontSize="small">
+                              <FaPlus />
+                            </SvgIcon>
+                          }
+                          variant="contained"
+                          onClick={
+                            onClickCreateBtn ||
+                            (() => createPageUrl && navigate(createPageUrl))
+                          }
+                        >
+                          {createBtnText}
+                        </Button>
+                      )}
+                      {showCustomBtns && <div>{customBtns}</div>}
+                    </Stack>
                   </Grid>
                 </Grid>
               </Stack>
