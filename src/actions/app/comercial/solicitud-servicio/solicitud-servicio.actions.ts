@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { handleAxiosError } from '@/shared/axios';
 
+import { CreateCedulaCitizenParams } from '@/actions/consultas-api';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
   PagingPartialParamsOnly,
@@ -170,4 +171,49 @@ export const updateSolicitudServicio = async <T>({
   setIsGlobalLoading(true);
 
   return patch<SolicitudServicio>(`/solicitudservicio/${id}/`, data, true);
+};
+
+/////* consulta cedula ---------------------
+export const useValidateCedulaSolService = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+  customOnSuccess,
+}: UseMutationParams) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateCedulaCitizenParams<T>) =>
+      validateCedulaSolService(params),
+    onSuccess: res => {
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      customOnSuccess && customOnSuccess(res?.data);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Cédula consultada correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const validateCedulaSolService = async <T>(
+  data: CreateCedulaCitizenParams<T>,
+) => {
+  return post('/solicitudservicio/validate/identificacion/', data, true);
 };
