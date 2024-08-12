@@ -136,7 +136,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     const blockedUntil = dayjs(data?.block_until);
     const now = dayjs();
     const hoursBlocked = now.diff(createdAt, 'hours');
-    const minutesBlocked = now.diff(createdAt, 'minutes');
+    const minutesBlocked = now.diff(createdAt, 'minutes') || 1;
     const timeBlocked = minutesBlocked > 60 ? hoursBlocked : minutesBlocked;
 
     // solicitud_servicio in process
