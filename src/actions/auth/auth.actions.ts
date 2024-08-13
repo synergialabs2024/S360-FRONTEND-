@@ -105,7 +105,10 @@ export const useLogin = () => {
         }
 
         // // // Session is active --------------
-        if (err.response?.status === HTTPResStatusCodeEnum.ACTIVE_SESSION) {
+        if (
+          err.response?.status ===
+          HTTPResStatusCodeEnum.CONFLICTS_OR_ACTIVE_SESSION
+        ) {
           const loginData = useAuthNoLSStore.getState().loginData;
           setConfirmDialog({
             isOpen: true,

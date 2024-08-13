@@ -15,7 +15,7 @@ import {
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
 } from '@/actions/app';
-import { ToastWrapper } from '@/shared';
+import { handleAxiosError, ToastWrapper } from '@/shared';
 import {
   CustomAutocompleteArrString,
   CustomCellphoneTextField,
@@ -44,7 +44,7 @@ import {
 } from '@/shared/constants/ui';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
-import { SolicitudServicio } from '@/shared/interfaces';
+import { HTTPResStatusCodeEnum, SolicitudServicio } from '@/shared/interfaces';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -131,6 +131,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     });
   };
   const onErrorSearchCedula = (err: any) => {
+    const status = err?.response?.status;
     const data = err?.response?.data?.data;
     const createdAt = dayjs(data?.created_at);
     const blockedUntil = dayjs(data?.block_until);
@@ -140,22 +141,27 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     const timeBlocked = minutesBlocked > 60 ? hoursBlocked : minutesBlocked;
 
     // solicitud_servicio in process
-    if (blockedUntil) {
-      setConfirmDialog({
-        isOpen: true,
-        title: 'Prospecto existente',
-        subtitle: `Prospecto registrado hace ${timeBlocked} ${
-          minutesBlocked > 60 ? 'horas' : 'minutos'
-        }. Para poderlo ingresar en un nuevo proceso debe solicitar desbloqueo o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}. 
+    if (status === HTTPResStatusCodeEnum.CONFLICTS_OR_ACTIVE_SESSION) {
+      if (blockedUntil) {
+        setConfirmDialog({
+          isOpen: true,
+          title: 'Prospecto existente',
+          subtitle: `Prospecto registrado hace ${timeBlocked} ${
+            minutesBlocked > 60 ? 'horas' : 'minutos'
+          }. Para poderlo ingresar en un nuevo proceso debe solicitar desbloqueo o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}. 
         ¿Desea solicitar desbloqueo?`,
-        onConfirm: () => {
-          setConfirmDialogIsOpen(false);
-          alert('solicitud desbloqueo');
-          // TODO: solicitud desbloqueo
-        },
-        confirmTextBtn: 'Solicitar desbloqueo',
-        cancelTextBtn: 'Cerrar',
-      });
+          onConfirm: () => {
+            setConfirmDialogIsOpen(false);
+            alert('solicitud desbloqueo');
+            // TODO: solicitud desbloqueo
+          },
+          confirmTextBtn: 'Solicitar desbloqueo',
+          cancelTextBtn: 'Cerrar',
+        });
+      }
+    } else {
+      form.reset();
+      handleAxiosError(err);
     }
   };
   ///* mutations -----------------
