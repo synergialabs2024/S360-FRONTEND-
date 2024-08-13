@@ -1,5 +1,6 @@
+/* eslint-disable indent */
 import EastIcon from '@mui/icons-material/East';
-import { MRT_ColumnDef } from 'material-react-table';
+import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo, useState } from 'react';
 
 import { useFetchSolicitudDesbloqueoVentass } from '@/actions/app';
@@ -28,6 +29,7 @@ import { HandleSolUnblockServicioModal } from '../../shared/components/tables';
 export type SolicitudUnblockSolServicioByStatePageProps = {
   state: GeneralModelStatesEnumChoice;
 };
+type MRTSServiceType = { row: MRT_Row<SolicitudDesbloqueoVentas> };
 
 const SolicitudUnblockSolServicioByStatePage: React.FC<
   SolicitudUnblockSolServicioByStatePageProps
@@ -154,8 +156,32 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
       },
 
       // approved or rejected
-      ...(state === GeneralModelStatesEnumChoice.APROBADO ? [] : []),
-      ...(state === GeneralModelStatesEnumChoice.RECHAZADO ? [] : []),
+      ...(state === GeneralModelStatesEnumChoice.APROBADO
+        ? [
+            {
+              accessorKey: 'aprobado_at',
+              header: 'APROBADO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: MRTSServiceType) =>
+                formatDateWithTimeCell(row, 'modified_at'),
+            },
+          ]
+        : []),
+      ...(state === GeneralModelStatesEnumChoice.RECHAZADO
+        ? [
+            {
+              accessorKey: 'rejected_at',
+              header: 'RECHAZADO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: MRTSServiceType) =>
+                formatDateWithTimeCell(row, 'modified_at'),
+            },
+          ]
+        : []),
     ],
     [state],
   );

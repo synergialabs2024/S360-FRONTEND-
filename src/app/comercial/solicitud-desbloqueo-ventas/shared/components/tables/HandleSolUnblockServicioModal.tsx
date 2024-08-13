@@ -2,10 +2,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
-import { ApproveOrRejectSolicitudDesbloqueoVentasParams } from '@/actions/app';
+import {
+  ApproveOrRejectSolicitudDesbloqueoVentasData,
+  useUpdateSolicitudDesbloqueoVentas,
+} from '@/actions/app';
 import {
   approveOrRejectSolUnblockSalesFormSchema,
+  GeneralModelStatesEnumChoice,
   Nullable,
+  SalesModelsEnumChoice,
+  SalesStatesEnumChoice,
   SolicitudDesbloqueoVentas,
 } from '@/shared';
 import {
@@ -13,6 +19,8 @@ import {
   CustomTextArea,
   ScrollableDialogProps,
 } from '@/shared/components';
+import { useNavigate } from 'react-router-dom';
+import { returnUrlSolicitudsDesbloqueoVentasPage } from '../../../pages/tables/SolicitudsDesbloqueoVentasMainPage';
 
 export type HandleSolUnblockServicioModalProps = {
   openModal: boolean;
@@ -20,30 +28,68 @@ export type HandleSolUnblockServicioModalProps = {
   selectedSolicitudDesbloqueoVentas: Nullable<SolicitudDesbloqueoVentas>;
 };
 
-type SaveFormData = ApproveOrRejectSolicitudDesbloqueoVentasParams & {};
+type SaveFormData = ApproveOrRejectSolicitudDesbloqueoVentasData & {};
 
 const HandleSolUnblockServicioModal: React.FC<
   HandleSolUnblockServicioModalProps
 > = ({ onClose, openModal, selectedSolicitudDesbloqueoVentas }) => {
+  ///* hooks ----------------
+  const navigate = useNavigate();
+
   ///* form ----------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(approveOrRejectSolUnblockSalesFormSchema) as any,
   });
   const { errors } = form.formState;
 
-  ///* handlers
+  ///* mutations ----------------
+  const approveOrRejectMutation =
+    useUpdateSolicitudDesbloqueoVentas<ApproveOrRejectSolicitudDesbloqueoVentasData>(
+      {
+        navigate,
+        returnUrl: returnUrlSolicitudsDesbloqueoVentasPage,
+      },
+    );
+
+  ///* handlers ----------------
   const onSave = async (data: SaveFormData) => {
-    console.log(data);
+    approveOrRejectMutation.mutate({
+      id: selectedSolicitudDesbloqueoVentas?.id!,
+      data: {
+        solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice.APROBADO,
+        motivo: data.motivo,
+
+        modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
+        modelo_id: selectedSolicitudDesbloqueoVentas?.modelo_id!,
+        modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
+      },
+    });
+  };
+  const onReject = async (data: SaveFormData) => {
+    approveOrRejectMutation.mutate({
+      id: selectedSolicitudDesbloqueoVentas?.id!,
+      data: {
+        solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice.RECHAZADO,
+        motivo: data.motivo,
+
+        modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
+        modelo_id: selectedSolicitudDesbloqueoVentas?.modelo_id!,
+        modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_RECHAZADO,
+      },
+    });
   };
 
   return (
     <ScrollableDialogProps
       title="Gestionar Solicitud Desbloqueo Venta"
       open={openModal}
-      onClose={onClose}
+      onClose={() => {
+        form.reset();
+        onClose();
+      }}
       onConfirm={form.handleSubmit(onSave)}
       contentNode={
-        <Grid item container spacing={3}>
+        <Grid item container spacing={3} py={3}>
           <Grid item xs={12}>
             <Typography variant="body1" gutterBottom>
               La solicitud de desbloqueo para la solicitud de servicio{' '}
@@ -77,9 +123,12 @@ const HandleSolUnblockServicioModal: React.FC<
         <>
           <ConfirmRejectCantelButtonsForm
             // cancel -----------------
-            onCancel={onClose}
+            onCancel={() => {
+              form.reset();
+              onClose();
+            }}
             // reject -----------------
-            onReject={() => {}}
+            onReject={form.handleSubmit(onReject)}
             // confirm -----------------
             confirmTextBtn="Liberar"
             onConfirm={form.handleSubmit(onSave)}

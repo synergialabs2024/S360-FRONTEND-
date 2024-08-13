@@ -30,11 +30,12 @@ export interface SolicitudDesbloqueoVentas {
   created_at?: string;
   modified_at?: string;
 
-  ///* fk
+  ///* fk ------
+  // controlled by backend
   area?: number; // admin area desbloqua (comercial)
   departamento?: number;
   canal_venta?: number;
-  vendedor?: number;
+  vendedor?: number; // user token
 
   vendedor_data?: SystemUserLimitData;
   modelo_data?: SolicitudServicioLimitData;

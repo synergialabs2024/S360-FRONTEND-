@@ -199,6 +199,11 @@ export const updateSolicitudDesbloqueoVentas = async <T>({
 };
 
 ///* action data types ---------------
-export type ApproveOrRejectSolicitudDesbloqueoVentasParams = {
-  motivo: string;
-};
+export type ApproveOrRejectSolicitudDesbloqueoVentasData = Pick<
+  SolicitudDesbloqueoVentas,
+  | 'motivo'
+  | 'solicitud_desbloqueo_estado'
+  | 'modelo'
+  | 'modelo_id'
+  | 'modelo_estado'
+> & {};
