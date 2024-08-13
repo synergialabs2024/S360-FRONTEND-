@@ -28,16 +28,6 @@ export const useColumnsSolicitusService = (
 
   const solicitudServicioBase = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
     () => [
-      // TODO: del
-      {
-        accessorKey: 'block_until',
-        header: 'Bloqueado hasta',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatDateWithTimeCell(row, 'block_until'),
-      },
       {
         accessorKey: 'numero_referencia',
         header: 'NUMERO REFERENCIA',

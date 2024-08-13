@@ -59,3 +59,16 @@ export interface SolicitudServicio {
   canal_venta?: number;
   vendedor?: number;
 }
+
+export type SolicitudServicioLimitData = Pick<
+  SolicitudServicio,
+  | 'uuid'
+  | 'numero_referencia'
+  | 'codigo'
+  | 'estado_solicitud'
+  | 'created_at'
+
+  // prospecto
+  | 'identificacion'
+  | 'razon_social'
+>;

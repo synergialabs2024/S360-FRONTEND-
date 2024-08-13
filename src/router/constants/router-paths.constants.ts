@@ -135,4 +135,15 @@ export const ROUTER_PATHS = {
     solicitudServicioEditar: 'solicitud-servicio/editar/:uuid',
     solicitudServicioNav: '/comercial/solicitud-servicio',
   },
+
+  /////* Supervision Comercial ----------------
+  supervisionComercial: {
+    root: 'supervision-comercial',
+
+    ///* solicitud desbloqueo ventas - administración area/supervisor ventas
+    solicitudDesbloqueoVentas: 'solicitud-desbloqueo-ventas',
+    solicitudDesbloqueoVentasEditar: 'solicitud-desbloqueo-ventas/editar/:uuid',
+    solicitudDesbloqueoVentasNav:
+      '/supervision-comercial/solicitud-desbloqueo-ventas',
+  },
 };

@@ -1,7 +1,9 @@
-import { Grid } from '@mui/material';
-
 import { useFetchSolicitudServicios } from '@/actions/app';
-import { CustomSearch, CustomTable } from '@/shared/components';
+import {
+  CustomSearch,
+  CustomTable,
+  GridTableTabsContainerOnly,
+} from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import {
   useColumnsSolicitusService,
@@ -51,7 +53,7 @@ const SolicitudServicioByStatePage: React.FC<
   const { solicitudServicioBase } = useColumnsSolicitusService();
 
   return (
-    <Grid item xs={12}>
+    <GridTableTabsContainerOnly>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
@@ -84,7 +86,7 @@ const SolicitudServicioByStatePage: React.FC<
         // onEdit={onEdit}
         canDelete={false}
       />
-    </Grid>
+    </GridTableTabsContainerOnly>
   );
 };
 

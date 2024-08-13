@@ -32,3 +32,8 @@ export interface SystemUser {
   canal_venta?: number;
   role?: UserRolesEnumChoice; // choice
 }
+
+export type SystemUserLimitData = Pick<
+  SystemUser,
+  'username' | 'email' | 'razon_social' | 'uuid'
+>;

@@ -3,6 +3,8 @@ import {
   SalesModelsEnumChoice,
 } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { SystemUserLimitData } from '../../administration';
+import { SolicitudServicioLimitData } from '../solicitud-servicio';
 
 export interface SolicitudDesbloqueoVentasPaginatedRes {
   status: number;
@@ -16,6 +18,7 @@ export interface SolicitudDesbloqueoVentas {
   uuid?: string;
 
   solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice; // choice
+  state: boolean;
 
   // model related
   modelo: SalesModelsEnumChoice; // choice
@@ -30,6 +33,9 @@ export interface SolicitudDesbloqueoVentas {
   departamento?: number;
   canal_venta?: number;
   vendedor?: number;
+
+  vendedor_data?: SystemUserLimitData;
+  solicitud_servicio_data?: SolicitudServicioLimitData;
 }
 
 export interface Meta {

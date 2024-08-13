@@ -1,6 +1,7 @@
 import {
   IconBroadcast,
   IconBuildings,
+  IconCube3dSphere,
   IconDashboard,
   IconReportMoney,
   IconUserShield,
@@ -213,6 +214,26 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.servicios.planesinternetNav,
               // target: true, // target blank
             }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+
+        /////* Supervisión Comercial ----------------
+        {
+          id: 'supervision-comercial',
+          title: 'Supervisión Comercial',
+          type: MenuItemType.COLLAPSE,
+          icon: IconCube3dSphere,
+          children: [
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_DESBLOQUEO_VENTAS,
+              {
+                id: 'solicitud-desbloqueo-ventas',
+                title: 'Solicitud Liberación Ventas',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial
+                  .solicitudDesbloqueoVentasNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

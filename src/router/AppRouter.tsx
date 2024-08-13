@@ -306,6 +306,15 @@ const CreateSolicitudServicioPage = Loadable(
   ),
 );
 
+const SolicitudsDesbloqueoVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-desbloqueo-ventas/pages/tables/SolicitudsDesbloqueoVentasMainPage'
+      ),
+  ),
+);
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -569,6 +578,19 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.servicios.planesinternetEditar,
             element: <UpdatePlanInternetPage />,
+          },
+        ],
+      },
+
+      //////////* Supervision Comercial ------------
+      {
+        path: ROUTER_PATHS.supervisionComercial.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* solicitud liberacion
+          {
+            path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoVentas,
+            element: <SolicitudsDesbloqueoVentasMainPage />,
           },
         ],
       },
