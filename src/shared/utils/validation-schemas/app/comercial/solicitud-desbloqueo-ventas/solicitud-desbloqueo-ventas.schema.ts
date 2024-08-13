@@ -15,3 +15,10 @@ export const solicitudDesbloqueoVentasFormSchema = yup.object({
     .required('El campo modelo estado es requerido')
     .max(200, 'El campo modelo estado no debe exceder los 200 caracteres'),
 });
+
+export const approveOrRejectSolUnblockSalesFormSchema = yup.object({
+  motivo: yup
+    .string()
+    .required('El campo motivo es requerido')
+    .max(849, 'El campo motivo no debe exceder los 849 caracteres'),
+});

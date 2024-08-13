@@ -1,6 +1,6 @@
 import { Button, Grid } from '@mui/material';
 
-import { SxPropsType } from '@/shared/interfaces';
+import { ColorButtonType, SxPropsType } from '@/shared/interfaces';
 
 export type ConfirmRejectCantelButtonsFormProps = {
   onCancel: () => void;
@@ -17,6 +17,10 @@ export type ConfirmRejectCantelButtonsFormProps = {
   auxiliarBtn?: React.ReactNode;
 
   sxContainer?: SxPropsType;
+
+  //
+  confirmVariantBtn?: 'text' | 'contained' | 'outlined';
+  cancelColorBtn?: ColorButtonType;
 };
 
 const ConfirmRejectCantelButtonsForm: React.FC<
@@ -36,12 +40,15 @@ const ConfirmRejectCantelButtonsForm: React.FC<
   sxContainer,
 
   showRejectBtn = true,
+
+  confirmVariantBtn = 'contained',
+  cancelColorBtn = 'inherit',
 }) => {
   return (
     <Grid container spacing={1} sx={sxContainer} justifyContent="end" pt={6}>
       <>
         <Grid item>
-          <Button onClick={onCancel} variant="text">
+          <Button onClick={onCancel} variant="text" color={cancelColorBtn}>
             {cancelTextBtn}
           </Button>
         </Grid>
@@ -63,7 +70,7 @@ const ConfirmRejectCantelButtonsForm: React.FC<
 
       {/* -------- CONFIRMAR --------  */}
       <Grid item>
-        <Button onClick={onConfirm} variant="contained">
+        <Button onClick={onConfirm} variant={confirmVariantBtn}>
           {confirmTextBtn}
         </Button>
       </Grid>

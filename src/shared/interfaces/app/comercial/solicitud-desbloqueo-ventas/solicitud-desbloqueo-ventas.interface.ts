@@ -20,6 +20,8 @@ export interface SolicitudDesbloqueoVentas {
   solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice; // choice
   state: boolean;
 
+  motivo?: string;
+
   // model related
   modelo: SalesModelsEnumChoice; // choice
   modelo_id: number;
@@ -35,7 +37,7 @@ export interface SolicitudDesbloqueoVentas {
   vendedor?: number;
 
   vendedor_data?: SystemUserLimitData;
-  solicitud_servicio_data?: SolicitudServicioLimitData;
+  modelo_data?: SolicitudServicioLimitData;
 }
 
 export interface Meta {

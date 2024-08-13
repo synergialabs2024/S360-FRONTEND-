@@ -1,9 +1,11 @@
+import EastIcon from '@mui/icons-material/East';
 import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useFetchSolicitudDesbloqueoVentass } from '@/actions/app';
 import { GeneralModelStatesEnumChoice } from '@/shared';
 import {
+  ChipModelState,
   CustomSearch,
   CustomTable,
   GridTableTabsContainerOnly,
@@ -21,7 +23,7 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
+import { HandleSolUnblockServicioModal } from '../../shared/components/tables';
 
 export type SolicitudUnblockSolServicioByStatePageProps = {
   state: GeneralModelStatesEnumChoice;
@@ -32,15 +34,16 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
 > = ({ state }) => {
   useCheckPermission(PermissionsEnum.comercial_view_solicituddesbloqueoventas);
 
+  // local state
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [
+    selectedSolicitudDesbloqueoVentas,
+    setSelectedSolicitudDesbloqueoVentas,
+  ] = useState<SolicitudDesbloqueoVentas | null>(null);
+
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table
   const {
@@ -71,15 +74,9 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
 
   ///* handlers
   const onEdit = (solicituddesbloqueoventas: SolicitudDesbloqueoVentas) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Gestionar Solicitud Desbloqueo Venta',
-      subtitle: `La solicitud de desbloqueo para la solicitud de servicio '${solicituddesbloqueoventas.id}' está pendiente de revisión. Por favor, confirme si desea desbloquear la solicitud de servicio o no.`,
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        alert('Solicitud de desbloqueo de venta gestionada');
-      },
-    });
+    setSelectedSolicitudDesbloqueoVentas(solicituddesbloqueoventas);
+    console.log('solicituddesbloqueoventas', solicituddesbloqueoventas);
+    setOpenModal(true);
   };
 
   ///* columns
@@ -127,8 +124,24 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellOneLevel(row, 'solicitud_desbloqueo_estado'),
+        Cell: ({ row }) => {
+          const state = row.original?.solicitud_desbloqueo_estado;
+
+          return (
+            <ChipModelState
+              label={state}
+              color={
+                state === GeneralModelStatesEnumChoice.ESPERA
+                  ? 'info'
+                  : state === GeneralModelStatesEnumChoice.APROBADO
+                    ? 'success'
+                    : state === GeneralModelStatesEnumChoice.RECHAZADO
+                      ? 'error'
+                      : 'warning'
+              }
+            />
+          );
+        },
       },
 
       {
@@ -139,8 +152,12 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
+
+      // approved or rejected
+      ...(state === GeneralModelStatesEnumChoice.APROBADO ? [] : []),
+      ...(state === GeneralModelStatesEnumChoice.RECHAZADO ? [] : []),
     ],
-    [],
+    [state],
   );
 
   return (
@@ -171,15 +188,28 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
         rowCount={SolicitudsDesbloqueoVentasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.comercial_change_solicituddesbloqueoventas,
-        )}
+        enableActionsColumn={
+          hasPermission(
+            PermissionsEnum.comercial_change_solicituddesbloqueoventas,
+          ) && state === GeneralModelStatesEnumChoice.ESPERA
+        }
         // crud
-        canEdit={hasPermission(
-          PermissionsEnum.comercial_change_solicituddesbloqueoventas,
-        )}
+        canEdit={
+          hasPermission(
+            PermissionsEnum.comercial_change_solicituddesbloqueoventas,
+          ) && state === GeneralModelStatesEnumChoice.ESPERA
+        }
         onEdit={onEdit}
         canDelete={false}
+        editIcon={<EastIcon />}
+        toolTipTitleEditIcon="Gestionar"
+      />
+
+      {/* ============== Modal =========== */}
+      <HandleSolUnblockServicioModal
+        openModal={openModal}
+        onClose={() => setOpenModal(false)}
+        selectedSolicitudDesbloqueoVentas={selectedSolicitudDesbloqueoVentas}
       />
     </GridTableTabsContainerOnly>
   );

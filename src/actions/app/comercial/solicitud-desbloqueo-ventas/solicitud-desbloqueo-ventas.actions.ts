@@ -197,3 +197,8 @@ export const updateSolicitudDesbloqueoVentas = async <T>({
     true,
   );
 };
+
+///* action data types ---------------
+export type ApproveOrRejectSolicitudDesbloqueoVentasParams = {
+  motivo: string;
+};

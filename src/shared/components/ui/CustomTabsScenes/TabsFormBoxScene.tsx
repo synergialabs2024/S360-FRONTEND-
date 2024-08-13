@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
 
+import { useIsMediaQuery } from '@/shared';
 import { gridSize } from '@/shared/constants';
-import { useIsMediaQuery } from '@/shared/hooks/ui';
 import { GridSizeType, MaxWidthType } from '@/shared/interfaces';
 import {
   ConfirmRejectCantelButtonsForm,
@@ -17,7 +17,7 @@ export type TabsFormBoxSceneProps = {
   showBtns?: boolean;
   onCancel?: () => void;
   onSave?: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
   ) => Promise<void>;
   cancelTextBtn?: string;
   saveTextBtn?: string;

@@ -18,6 +18,13 @@ export type JustifyContentType =
   | 'space-around'
   | 'space-evenly';
 
+export type AlignItemsType =
+  | 'flex-start'
+  | 'center'
+  | 'flex-end'
+  | 'stretch'
+  | 'baseline';
+
 export type SxPropsType = SxProps<Theme>;
 
 export type ColorButtonType =
@@ -62,3 +69,11 @@ export type TooltipPlacementType =
   | undefined;
 
 export type TextFieldSizeType = 'medium' | 'small' | undefined;
+
+export type ColorChipType =
+  | 'primary'
+  | 'secondary'
+  | 'warning'
+  | 'error'
+  | 'info'
+  | 'success';

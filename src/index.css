@@ -38,3 +38,8 @@ div.ps__rail-y {
   scrollbar-width: thin;
   scrollbar-color: #a8a6a690 #f1f1f1;
 }
+
+/*  */
+.spacer {
+  flex: 1;
+}
