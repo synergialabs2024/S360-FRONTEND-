@@ -12,10 +12,4 @@ export const cargoFormSchema = yup.object({
   description: descriptionYupValidation,
 
   state: fieldStateYupValidation,
-
-  empresa: yup
-    .number()
-    .typeError('El campo empresa es requerido')
-    .optional()
-    .nullable(),
 });

@@ -14,12 +14,8 @@ import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { CanalVenta, PermissionsEnum } from '@/shared/interfaces';
-import {
-  emptyCellNested,
-  emptyCellOneLevel,
-  formatDateWithTimeCell,
-} from '@/shared/utils';
-import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
+import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlCanalesVentaPage =
@@ -98,15 +94,6 @@ const CanalesVentaPage: React.FC<CanalesVentaPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
-        accessorKey: 'empresa__razon_social',
-        header: 'EMPRESA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['empresa_data', 'razon_social']),
-      },
-      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
@@ -181,10 +168,9 @@ const CanalesVentaPage: React.FC<CanalesVentaPageProps> = () => {
     <SingleTableBoxScene
       title="Canales de Venta"
       createPageUrl={`${returnUrlCanalesVentaPage}/crear`}
-      showCreateBtn={hasAllPermissions([
+      showCreateBtn={hasPermission(
         PermissionsEnum.administration_add_canalventa,
-        PermissionsEnum.administration_view_empresa,
-      ])}
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -210,10 +196,9 @@ const CanalesVentaPage: React.FC<CanalesVentaPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
-        canEdit={hasAllPermissions([
+        canEdit={hasPermission(
           PermissionsEnum.administration_change_canalventa,
-          PermissionsEnum.administration_view_empresa,
-        ])}
+        )}
         onEdit={onEdit}
         canDelete={false}
       />

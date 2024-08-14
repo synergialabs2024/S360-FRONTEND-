@@ -1,26 +1,22 @@
 import {
   CreateCargoParams,
   useCreateCargo,
-  useFetchEmpresas,
   useUpdateCargo,
 } from '@/actions/app';
-import { Cargo, Empresa, PermissionsEnum } from '@/shared/interfaces';
+import { Cargo } from '@/shared/interfaces';
 import { cargoFormSchema } from '@/shared/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { returnUrlCargosPage } from '../../../pages/tables/CargosPage';
 import { useEffect } from 'react';
-import { useLoaders } from '@/shared/hooks';
 import {
-  CustomAutocomplete,
   CustomTextArea,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveCargoProps {
   title: string;
@@ -30,8 +26,6 @@ export interface SaveCargoProps {
 type SaveFormData = CreateCargoParams & {};
 
 const SaveCargo: React.FC<SaveCargoProps> = ({ title, cargo }) => {
-  useCheckPermission(PermissionsEnum.administration_view_empresa);
-
   const navigate = useNavigate();
 
   ///* form
@@ -47,17 +41,6 @@ const SaveCargo: React.FC<SaveCargoProps> = ({ title, cargo }) => {
     reset,
     formState: { errors, isValid },
   } = form;
-
-  ///* fetch data
-  const {
-    data: empresasPagingRes,
-    isLoading: isLoadingEmpresas,
-    isRefetching: isRefetchingEmpresas,
-  } = useFetchEmpresas({
-    params: {
-      page_size: 600,
-    },
-  });
 
   ///* mutations
   const createCargoMutation = useCreateCargo({
@@ -89,7 +72,6 @@ const SaveCargo: React.FC<SaveCargoProps> = ({ title, cargo }) => {
     if (!cargo?.id) return;
     reset(cargo);
   }, [cargo, reset]);
-  useLoaders(isLoadingEmpresas || isRefetchingEmpresas);
 
   return (
     <SingleFormBoxScene
@@ -114,21 +96,6 @@ const SaveCargo: React.FC<SaveCargoProps> = ({ title, cargo }) => {
         error={errors.description}
         helperText={errors.description?.message}
         required={false}
-      />
-      <CustomAutocomplete<Empresa>
-        label="Empresa"
-        name="empresa"
-        // options
-        options={(empresasPagingRes?.data?.items as unknown as Empresa[]) || []}
-        valueKey="razon_social"
-        actualValueKey="id"
-        defaultValue={form.getValues().empresa}
-        isLoadingData={isLoadingEmpresas || isRefetchingEmpresas}
-        // vaidation
-        control={form.control}
-        error={errors.empresa}
-        helperText={errors.empresa?.message}
-        size={gridSizeMdLg6}
       />
       <SampleCheckbox
         label="Estado"
