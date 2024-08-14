@@ -9,7 +9,9 @@ import { MdEditLocationAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  CreateSolicitudDesbloqueoVentasData,
   CreateSolicitudServicioParamsBase,
+  useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
   useUpdateSolicitudServicio,
   useValidateCedulaSolService,
@@ -32,8 +34,11 @@ import {
 } from '@/shared/components';
 import {
   EstadoSolicitudServicioEnumChoice,
+  GeneralModelStatesEnumChoice,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
   IdentificationTypeEnumChoice,
+  SalesModelsEnumChoice,
+  SalesStatesEnumChoice,
 } from '@/shared/constants/app';
 import {
   gridSize,
@@ -152,8 +157,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ¿Desea solicitar desbloqueo?`,
           onConfirm: () => {
             setConfirmDialogIsOpen(false);
-            alert('solicitud desbloqueo');
-            // TODO: solicitud desbloqueo
+            useCreateSolUnblockSolServiceMutation.mutate({
+              modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
+              modelo_id: data.id,
+              modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
+              solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice.ESPERA,
+            });
           },
           confirmTextBtn: 'Solicitar desbloqueo',
           cancelTextBtn: 'Cerrar',
@@ -184,6 +193,13 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       customOnError: err => {
         onErrorSearchCedula(err);
       },
+    });
+
+  const useCreateSolUnblockSolServiceMutation =
+    useCreateSolicitudDesbloqueoVentas<CreateSolicitudDesbloqueoVentasData>({
+      navigate,
+      returnUrl: returnUrlSolicitudsServicioPage,
+      enableErrorNavigate: false,
     });
 
   const handleFetchCedulaRucInfo = async (value: string) => {
