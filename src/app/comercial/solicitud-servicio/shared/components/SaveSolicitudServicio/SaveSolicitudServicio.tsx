@@ -60,7 +60,10 @@ export interface SaveSolicitudServicioProps {
   solicitudservicio?: SolicitudServicio;
 }
 
-type SaveFormData = CreateSolicitudServicioParamsBase & {};
+type SaveFormData = CreateSolicitudServicioParamsBase & {
+  // helper
+  isFormBlocked?: boolean;
+};
 
 const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   title,
@@ -87,6 +90,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_cliente: false,
       tiene_cobertura: false,
       linea_servicio: 1,
+      isFormBlocked: false,
     },
   });
   const {
@@ -97,6 +101,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const watchedIdentification = form.watch('identificacion');
   const watchedCoords = form.watch('coordenadas');
+  const watchedIsFormBlocked = form.watch('isFormBlocked');
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
@@ -124,6 +129,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       fecha_nacimiento: correctFechaNacimiento,
       edad: cedulaCitizen?.edad,
       direccion: cedulaCitizen?.domicilio,
+      isFormBlocked: false,
 
       // TODO: get data from equifax
       categoria_score_desicion: 'A',
@@ -159,7 +165,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             setConfirmDialogIsOpen(false);
             useCreateSolUnblockSolServiceMutation.mutate({
               modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
-              modelo_id: data.id,
+              modelo_id: data.solicitud_servicio_id,
               modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
               solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice.ESPERA,
             });
@@ -169,7 +175,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         });
       }
     } else {
-      form.reset();
+      form.reset({
+        isFormBlocked: true,
+      });
       handleAxiosError(err);
     }
   };
@@ -245,6 +253,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         console.log('error', errors);
         ToastWrapper.error('Faltan campos requeridos');
       })}
+      disableSubmitBtn={watchedIsFormBlocked}
     >
       <CustomAutocompleteArrString
         label="Tipo de identificación"
