@@ -6,21 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateCanalVentaParamsBase,
   useCreateCanalVenta,
-  useFetchEmpresas,
   useUpdateCanalVenta,
 } from '@/actions/app';
 import {
-  CustomAutocomplete,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { useLoaders } from '@/shared/hooks';
-import { CanalVenta, Empresa, PermissionsEnum } from '@/shared/interfaces';
+import { CanalVenta } from '@/shared/interfaces';
 import { canalVentaFormSchema } from '@/shared/utils';
 import { returnUrlCanalesVentaPage } from '../../../pages/tables/CanalesVentaPage';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export interface SaveCanalVentaProps {
   title: string;
@@ -33,8 +29,6 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
   title,
   canalventa,
 }) => {
-  useCheckPermissionsArray([PermissionsEnum.administration_view_empresa]);
-
   ///* hooks ---------------
   const navigate = useNavigate();
 
@@ -51,17 +45,6 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
     reset,
     formState: { errors, isValid },
   } = form;
-
-  ///* fetch data
-  const {
-    data: empresasPagingRes,
-    isLoading: isLoadingEmpresas,
-    isRefetching: isRefetchingEmpresas,
-  } = useFetchEmpresas({
-    params: {
-      page_size: 600,
-    },
-  });
 
   ///* mutations
   const createCanalVentaMutation = useCreateCanalVenta({
@@ -94,7 +77,6 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
     if (!canalventa?.id) return;
     reset(canalventa);
   }, [canalventa, reset]);
-  useLoaders(isLoadingEmpresas || isRefetchingEmpresas);
 
   return (
     <SingleFormBoxScene
@@ -109,21 +91,6 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
-      />
-      <CustomAutocomplete<Empresa>
-        label="Empresa"
-        name="empresa"
-        // options
-        options={(empresasPagingRes?.data?.items as unknown as Empresa[]) || []}
-        valueKey="razon_social"
-        actualValueKey="id"
-        defaultValue={form.getValues().empresa}
-        isLoadingData={isLoadingEmpresas || isRefetchingEmpresas}
-        // vaidation
-        control={form.control}
-        error={errors.empresa}
-        helperText={errors.empresa?.message}
-        size={gridSizeMdLg6}
       />
 
       <SampleCheckbox

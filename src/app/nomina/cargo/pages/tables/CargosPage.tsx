@@ -16,15 +16,11 @@ import {
   ChangeModelStateData,
   PermissionsEnum,
 } from '@/shared/interfaces';
-import {
-  emptyCellNested,
-  emptyCellOneLevel,
-  formatDateWithTimeCell,
-} from '@/shared/utils';
+import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
+import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlCargosPage = ROUTER_PATHS.nomina.cargosNav;
@@ -121,16 +117,6 @@ const CargosPage: React.FC<CargosPageProps> = () => {
         },
       },
       {
-        accessorKey: 'empresa__razon_social',
-        header: 'EMPRESA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['empresa_data', 'razon_social']),
-      },
-
-      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
@@ -195,10 +181,7 @@ const CargosPage: React.FC<CargosPageProps> = () => {
     <SingleTableBoxScene
       title="Cargos"
       createPageUrl={`${returnUrlCargosPage}/crear`}
-      showCreateBtn={hasAllPermissions([
-        PermissionsEnum.nomina_add_cargo,
-        PermissionsEnum.administration_view_empresa,
-      ])}
+      showCreateBtn={hasPermission(PermissionsEnum.nomina_add_cargo)}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -223,15 +206,9 @@ const CargosPage: React.FC<CargosPageProps> = () => {
         rowCount={CargosPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasAllPermissions([
-          PermissionsEnum.nomina_change_cargo,
-          PermissionsEnum.administration_view_empresa,
-        ])}
+        enableActionsColumn={hasPermission(PermissionsEnum.nomina_change_cargo)}
         // crud
-        canEdit={hasAllPermissions([
-          PermissionsEnum.nomina_change_cargo,
-          PermissionsEnum.administration_view_empresa,
-        ])}
+        canEdit={hasPermission(PermissionsEnum.nomina_change_cargo)}
         onEdit={onEdit}
         canDelete={false}
       />
