@@ -161,6 +161,8 @@ export enum EstadoSolicitudServicioEnumChoice {
   GESTIONANDO = 'GESTIONANDO',
   RECHAZADO = 'RECHAZADO',
 
+  SIN_GESTION = 'SIN_GESTION', // unblock sale approved
+
   ESPERA_DESBLOQUEO = 'ESPERA_DESBLOQUEO',
   DESBLOQUEADO = 'DESBLOQUEADO',
 }

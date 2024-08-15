@@ -40,6 +40,7 @@ const SolicitudesServicioMainPage: React.FC<
         <Tab label={'INGRESADAS'} value={1} {...a11yProps(1)} />
         <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} />
         <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
+        <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -57,6 +58,12 @@ const SolicitudesServicioMainPage: React.FC<
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <SolicitudServicioByStatePage
           state={EstadoSolicitudServicioEnumChoice.RECHAZADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.SIN_GESTION}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>
