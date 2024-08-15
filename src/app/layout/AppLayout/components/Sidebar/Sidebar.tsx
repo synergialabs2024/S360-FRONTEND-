@@ -12,7 +12,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Scrollbar } from '@/shared/components/common';
 import { useUiStore } from '@/store/ui';
 import { LogoSection } from '../Header';
-import MenuCard from './MenuCard';
 import { MenuList } from './menu-list';
 
 interface SidebarProps {
@@ -69,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ window }) => {
       <MobileView>
         <Box sx={{ px: 2 }}>
           <MenuList />
-          <MenuCard />
+          {/* <MenCard /> */}
           <Stack direction="row" justifyContent="center" sx={{ mb: 2 }}>
             <Chip
               label={import.meta.env.VITE_APP_VERSION}
