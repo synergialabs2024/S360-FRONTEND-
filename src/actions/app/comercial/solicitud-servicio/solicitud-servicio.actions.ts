@@ -67,7 +67,7 @@ export const useCreateSolicitudServicio = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'SolicitudServicio creado correctamente',
+          customMessageToast || 'Solicitud Servicio creado correctamente',
         );
     },
     onError: error => {
@@ -107,7 +107,7 @@ export const useUpdateSolicitudServicio = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'SolicitudServicio actualizado correctamente',
+          customMessageToast || 'Solicitud Servicio actualizado correctamente',
         );
     },
     onError: error => {
