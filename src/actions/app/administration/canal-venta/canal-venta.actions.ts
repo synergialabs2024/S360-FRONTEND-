@@ -59,7 +59,7 @@ export const useCreateCanalVenta = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'CanalVenta creado correctamente',
+          customMessageToast || 'Canal Venta creado correctamente',
         );
     },
     onError: error => {
@@ -96,7 +96,7 @@ export const useUpdateCanalVenta = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'CanalVenta actualizado correctamente',
+          customMessageToast || 'Canal Venta actualizado correctamente',
         );
     },
     onError: error => {

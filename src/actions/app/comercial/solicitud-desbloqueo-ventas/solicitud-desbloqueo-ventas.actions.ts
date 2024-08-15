@@ -69,7 +69,7 @@ export const useCreateSolicitudDesbloqueoVentas = <T>({
       enableToast &&
         ToastWrapper.success(
           customMessageToast ||
-            'SolicitudDesbloqueoVentas creado correctamente',
+            'Solicitud Desbloqueo  Ventas creado correctamente',
         );
     },
     onError: error => {
@@ -110,7 +110,7 @@ export const useUpdateSolicitudDesbloqueoVentas = <T>({
       enableToast &&
         ToastWrapper.success(
           customMessageToast ||
-            'SolicitudDesbloqueoVentas actualizado correctamente',
+            'Solicitud Desbloqueo Ventas actualizado correctamente',
         );
     },
     onError: error => {
