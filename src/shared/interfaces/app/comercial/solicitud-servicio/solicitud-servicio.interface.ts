@@ -51,6 +51,8 @@ export interface SolicitudServicio {
 
   ///* fk -----------
   plan_sugerido?: number;
+  pais?: number;
+  nacionalidad?: string; // pais can cupd
 
   // sales filter logic
   empresa?: number;

@@ -13,12 +13,14 @@ import {
   CreateSolicitudServicioParamsBase,
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
+  useFetchPaises,
   useUpdateSolicitudServicio,
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
 } from '@/actions/app';
-import { handleAxiosError, ToastWrapper } from '@/shared';
+import { handleAxiosError, ToastWrapper, useLoaders } from '@/shared';
 import {
+  CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCellphoneTextField,
   CustomCoordsTextField,
@@ -49,7 +51,11 @@ import {
 } from '@/shared/constants/ui';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
-import { HTTPResStatusCodeEnum, SolicitudServicio } from '@/shared/interfaces';
+import {
+  HTTPResStatusCodeEnum,
+  Pais,
+  SolicitudServicio,
+} from '@/shared/interfaces';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -116,12 +122,26 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     setLatLng,
   });
 
+  ///* fetch data -----------------
+  const {
+    data: paisesPaging,
+    isLoading: isLoadingPaises,
+    isRefetching: isRefetchingPaises,
+  } = useFetchPaises({
+    params: {
+      page_size: 200,
+    },
+  });
+
   // handlers ------------
   const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
     const correctFechaNacimiento = dayjs(
       cedulaCitizen?.fechaNacimiento,
       'DD/MM/YYYY',
     ).format('YYYY-MM-DD');
+    const currentCountry = paisesPaging?.data.items.find(
+      country => country.nationality === cedulaCitizen?.nacionalidad,
+    );
 
     form.reset({
       ...form.getValues(),
@@ -133,6 +153,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       direccion: cedulaCitizen?.domicilio,
       isFormBlocked: false,
       isValidIdentificacion: true,
+
+      pais: currentCountry?.id,
+      nacionalidad: cedulaCitizen?.nacionalidad,
 
       // TODO: get data from equifax
       categoria_score_desicion: 'A',
@@ -267,6 +290,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
       plan_sugerido: undefined,
       isValidIdentificacion: false, // helper
+
+      pais: undefined,
+      nacionalidad: '',
     });
   };
 
@@ -275,6 +301,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     if (!solicitudservicio?.id) return;
     reset(solicitudservicio);
   }, [solicitudservicio, reset]);
+
+  const isCustomLoading = isLoadingPaises || isRefetchingPaises;
+  useLoaders(isCustomLoading);
+
+  if (isCustomLoading) return null;
 
   return (
     <SingleFormBoxScene
@@ -379,6 +410,37 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         min={0}
         disabled
       />
+      <CustomAutocomplete<Pais>
+        label="Pais"
+        name="pais"
+        valueKey="name"
+        actualValueKey="id"
+        control={form.control}
+        defaultValue={form.getValues().pais}
+        options={paisesPaging?.data.items || []}
+        isLoadingData={isCustomLoading}
+        error={errors.pais}
+        helperText={errors.pais?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<any>
+        label="Nacionalidad"
+        name="nacionalidad"
+        valueKey="name"
+        actualValueKey="name"
+        control={form.control}
+        defaultValue={form.getValues().pais}
+        options={
+          paisesPaging?.data?.items?.map(country => ({
+            name: country.nationality,
+          })) || []
+        }
+        isLoadingData={isCustomLoading}
+        error={errors.pais}
+        helperText={errors.pais?.message}
+        size={gridSizeMdLg6}
+      />
+
       <SampleCheckbox
         label="Es tercera edad"
         name="es_tercera_edad"

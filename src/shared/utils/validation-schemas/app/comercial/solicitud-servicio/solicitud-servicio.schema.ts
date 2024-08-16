@@ -60,6 +60,15 @@ export const solicitudServicioFormSchema = yup.object({
     .typeError('El campo tiene cobertura es requerido')
     .required('El campo tiene cobertura es requerido'),
 
+  pais: yup
+    .number()
+    .typeError('El campo país es requerido')
+    .required('El campo país es requerido'),
+  nacionalidad: yup
+    .string()
+    .required('El campo nacionalidad es requerido')
+    .max(200, 'El campo nacionalidad no debe exceder los 200 caracteres'),
+
   // EQUIFAX -----------
   categoria_score_desicion: yup
     .string()
