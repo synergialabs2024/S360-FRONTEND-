@@ -57,6 +57,7 @@ export enum PermissionsEnum {
   users_view_profile = 'users.view_profile',
   users_view_user = 'users.view_usuario',
   comercial_view_solicituddesbloqueoventas = 'comercial.view_solicituddesbloqueoventas',
+  comercial_view_preventa = 'comercial.view_preventa',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -110,6 +111,7 @@ export enum PermissionsEnum {
   users_add_profile = 'users.add_profile',
   users_add_user = 'users.add_usuario',
   comercial_add_solicituddesbloqueoventas = 'comercial.add_solicituddesbloqueoventas',
+  comercial_add_preventa = 'comercial.add_preventa',
 
   // // // // CHANGE ---------------------------
   admin_change_logentry = 'admin.change_logentry',
@@ -162,6 +164,7 @@ export enum PermissionsEnum {
   users_change_profile = 'users.change_profile',
   users_change_user = 'users.change_usuario',
   comercial_change_solicituddesbloqueoventas = 'comercial.change_solicituddesbloqueoventas',
+  comercial_change_preventa = 'comercial.change_preventa',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',
@@ -221,4 +224,5 @@ export enum PermissionsEnum {
   users_delete_profile = 'users.delete_profile',
   users_delete_user = 'users.delete_usuario',
   comercial_delete_solicituddesbloqueoventas = 'comercial.delete_solicituddesbloqueoventas',
+  comercial_delete_preventa = 'comercial.delete_preventa',
 }
