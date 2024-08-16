@@ -63,6 +63,7 @@ export interface SaveSolicitudServicioProps {
 type SaveFormData = CreateSolicitudServicioParamsBase & {
   // helper
   isFormBlocked?: boolean;
+  isValidIdentificacion?: boolean;
 };
 
 const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
@@ -102,6 +103,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedIdentification = form.watch('identificacion');
   const watchedCoords = form.watch('coordenadas');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
+  const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
@@ -130,6 +132,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       edad: cedulaCitizen?.edad,
       direccion: cedulaCitizen?.domicilio,
       isFormBlocked: false,
+      isValidIdentificacion: true,
 
       // TODO: get data from equifax
       categoria_score_desicion: 'A',
@@ -239,6 +242,34 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     createSolicitudServicioMutation.mutate(data);
   };
 
+  const clearForm = () => {
+    form.reset({
+      ...form.getValues(),
+      razon_social: '',
+      es_discapacitado: false,
+      es_tercera_edad: false,
+      fecha_nacimiento: '',
+      edad: undefined,
+      direccion: '',
+      identificacion: '',
+      tiene_cobertura: false,
+      categoria_score_desicion: '',
+      email: '',
+      celular: '',
+      score_inclusion: '',
+      score_servicios: '',
+      score_sobreendeudamiento: '',
+      rango_capacidad_pago: '',
+      valor_maximo: '',
+      valor_minimo: '',
+      es_cliente: false,
+      linea_servicio: 1,
+      estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
+      plan_sugerido: undefined,
+      isValidIdentificacion: false, // helper
+    });
+  };
+
   ///* effects -----------------
   useEffect(() => {
     if (!solicitudservicio?.id) return;
@@ -253,7 +284,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         console.log('error', errors);
         ToastWrapper.error('Faltan campos requeridos');
       })}
-      disableSubmitBtn={watchedIsFormBlocked}
+      disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
     >
       <CustomAutocompleteArrString
         label="Tipo de identificación"
@@ -267,8 +298,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         size={gridSizeMdLg6}
         disableClearable
         onChangeValue={() => {
-          form.setValue('identificacion', '');
-          form.setValue('razon_social', '');
+          clearForm();
         }}
       />
       <InputAndBtnGridSpace
@@ -285,6 +315,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
               await handleFetchCedulaRucInfo(value);
             }}
             disabled={!watchedIdentificationType}
+            onChangeValue={value => {
+              if (!value?.length) {
+                clearForm();
+              }
+            }}
           />
         }
         btnLabel="Buscar"

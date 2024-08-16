@@ -22,6 +22,7 @@ type CustomIdentificacionTextFieldProps = {
   name: string;
   defaultValue?: string | number;
   selectedDocumentType: string;
+  onChangeValue?: (value: string) => void;
 };
 
 const CustomIdentificacionTextField: React.FC<
@@ -40,6 +41,7 @@ const CustomIdentificacionTextField: React.FC<
   name,
   defaultValue,
   selectedDocumentType,
+  onChangeValue,
 }) => {
   return (
     <Grid item {...size}>
@@ -59,6 +61,7 @@ const CustomIdentificacionTextField: React.FC<
                 currentValue.length <= 10
               ) {
                 field.onChange(currentValue);
+                onChangeValue && onChangeValue(currentValue);
 
                 // fetch data from consulta-cedula api
                 currentValue.length === 10 &&
@@ -70,6 +73,7 @@ const CustomIdentificacionTextField: React.FC<
                 currentValue.length <= 13
               ) {
                 field.onChange(currentValue);
+                onChangeValue && onChangeValue(currentValue);
 
                 // fetch data from consulta-ruc api
                 currentValue.length === 13 &&
@@ -81,6 +85,7 @@ const CustomIdentificacionTextField: React.FC<
                 currentValue.length <= 30
               ) {
                 field.onChange(currentValue);
+                onChangeValue && onChangeValue(currentValue);
               }
             };
 
