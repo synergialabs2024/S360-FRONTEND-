@@ -15,7 +15,12 @@ import StepConnector, {
 } from '@mui/material/StepConnector';
 import { styled } from '@mui/material/styles';
 
-import { gridSizeMdLg8, useIsMediaQuery } from '@/shared';
+import {
+  gridSizeMdLg8,
+  GridSizeType,
+  MaxWidthType,
+  useIsMediaQuery,
+} from '@/shared';
 
 ///* custom styles for stepper
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -92,19 +97,16 @@ export type StepperBoxSceneProps = {
   handleBack: () => void;
   disableNextStepBtn: boolean;
 
-  titlePage: string;
+  titlePage?: string;
+  titleNode?: React.ReactNode;
 
   children: React.ReactNode;
 
-  size?: {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-  };
+  size?: GridSizeType;
 
   py?: number;
-  num_referencia?: string;
+
+  maxWidth?: MaxWidthType;
 };
 
 const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
@@ -123,7 +125,10 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
 
   children,
   py = 8,
-  num_referencia,
+
+  titleNode,
+
+  maxWidth = 'lg',
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -133,17 +138,15 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
       sx={{
         flexGrow: 1,
         py: py,
+
+        backgroundColor: '#fff',
+        borderRadius: '12px',
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth={maxWidth}>
         <Stack spacing={3}>
-          {num_referencia ? (
-            <Typography variant="h4">
-              {`${titlePage} `}
-              <span className="cliente__page--subtitle">
-                (#{num_referencia})
-              </span>
-            </Typography>
+          {titleNode ? (
+            titleNode
           ) : (
             <Typography variant="h4" pb={isMobile ? 3 : 6}>
               {titlePage}
@@ -167,11 +170,6 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
                       <StepLabel StepIconComponent={QontoStepIcon}>
                         {label}
                       </StepLabel>
-
-                      {/* button for Non-linear label */}
-                      {/* <StepButton onClick={handleStep(index)}>
-                          {label}
-                        </StepButton> */}
                     </Step>
                   );
                 })}
@@ -179,7 +177,9 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
 
               {/* ============ stepper conentent & handlers ============ */}
               {/* ======= actual content ======= */}
-              {children}
+              <Grid item container justifyContent="center" spacing={3}>
+                {children}
+              </Grid>
 
               {/* ======= handler btns ======= */}
               <Box sx={{ display: 'flex', flexDirection: 'row', pt: 6 }}>
