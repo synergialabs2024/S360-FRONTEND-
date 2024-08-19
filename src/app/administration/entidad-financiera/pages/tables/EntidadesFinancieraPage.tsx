@@ -2,7 +2,10 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchAreas, useUpdateArea } from '@/actions/app';
+import {
+  useFetchEntidadFinancieras,
+  useUpdateEntidadFinanciera,
+} from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
@@ -14,17 +17,18 @@ import {
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { Area, PermissionsEnum } from '@/shared/interfaces';
+import { EntidadFinanciera, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-export const returnUrlAreasPage = ROUTER_PATHS.administracion.areasNav;
+export const returnUrlEntidadesFinancieraPage =
+  ROUTER_PATHS.administracion.entidadesFinancieraNav;
 
-export type AreasPageProps = {};
+export type EntidadesFinancieraPageProps = {};
 
-const AreasPage: React.FC<AreasPageProps> = () => {
-  useCheckPermission(PermissionsEnum.administration_view_area);
+const EntidadesFinancieraPage: React.FC<EntidadesFinancieraPageProps> = () => {
+  useCheckPermission(PermissionsEnum.administration_view_entidadfinanciera);
 
   const navigate = useNavigate();
 
@@ -39,7 +43,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
   );
 
   ///* mutations
-  const changeState = useUpdateArea({
+  const changeState = useUpdateEntidadFinanciera({
     enableNavigate: false,
   });
 
@@ -55,10 +59,10 @@ const AreasPage: React.FC<AreasPageProps> = () => {
 
   ///* fetch data
   const {
-    data: areasPagingRes,
+    data: entidadsFinancieraPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchAreas({
+  } = useFetchEntidadFinancieras({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -70,20 +74,22 @@ const AreasPage: React.FC<AreasPageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (area: Area) => {
+  const onEdit = (entidadfinanciera: EntidadFinanciera) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Area',
+      title: 'Editar Entidad Financiera',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlAreasPage}/editar/${area.uuid}`);
+        navigate(
+          `${returnUrlEntidadesFinancieraPage}/editar/${entidadfinanciera.uuid}`,
+        );
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<Area>[]>(
+  const columns = useMemo<MRT_ColumnDef<EntidadFinanciera>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -106,7 +112,11 @@ const AreasPage: React.FC<AreasPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.administration_change_area))
+                if (
+                  !hasPermission(
+                    PermissionsEnum.administration_change_entidadfinanciera,
+                  )
+                )
                   return;
 
                 setConfirmDialog({
@@ -119,7 +129,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
                       id: row.original.id!,
                       data: {
                         state: !row.original.state,
-                      } as any,
+                      },
                     });
                     setConfirmDialogIsOpen(false);
                   },
@@ -133,8 +143,8 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       },
       {
         accessorKey: 'description',
-        header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        header: 'DESCRIPCIÓN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => {
@@ -150,10 +160,11 @@ const AreasPage: React.FC<AreasPageProps> = () => {
           );
         },
       },
+
       {
         accessorKey: 'uuid',
         header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: 180,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
@@ -161,7 +172,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       {
         accessorKey: 'created_at',
         header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: 180,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
@@ -169,7 +180,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: 180,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
@@ -180,9 +191,11 @@ const AreasPage: React.FC<AreasPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Area"
-      createPageUrl={`${returnUrlAreasPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_area)}
+      title="Entidades Financieras"
+      createPageUrl={`${returnUrlEntidadesFinancieraPage}/crear`}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.administration_add_entidadfinanciera,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -190,9 +203,9 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         text="por nombre"
       />
 
-      <CustomTable<Area>
+      <CustomTable<EntidadFinanciera>
         columns={columns}
-        data={areasPagingRes?.data?.items || []}
+        data={entidadsFinancieraPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -204,20 +217,18 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={areasPagingRes?.data?.meta?.count}
+        rowCount={entidadsFinancieraPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.administration_change_area,
-        )}
         // crud
-        canEdit={hasPermission(PermissionsEnum.administration_change_area)}
+        canEdit={hasPermission(
+          PermissionsEnum.administration_change_entidadfinanciera,
+        )}
         onEdit={onEdit}
         canDelete={false}
-        // onDelete={onDelete}
       />
     </SingleTableBoxScene>
   );
 };
 
-export default AreasPage;
+export default EntidadesFinancieraPage;

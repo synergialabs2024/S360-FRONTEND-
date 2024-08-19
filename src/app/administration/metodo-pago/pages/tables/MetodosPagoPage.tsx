@@ -2,8 +2,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchAreas, useUpdateArea } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
+import { useFetchMetodoPagos, useUpdateMetodoPago } from '@/actions/app';
 import {
   CustomSearch,
   CustomSwitch,
@@ -11,20 +10,29 @@ import {
   SingleTableBoxScene,
   ViewMoreTextModalTableCell,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import { ROUTER_PATHS } from '@/router/constants';
+import {
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+  MetodoPago,
+  MODEL_STATE_BOOLEAN,
+  PermissionsEnum,
+  TABLE_CONSTANTS,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared';
+
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { Area, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-export const returnUrlAreasPage = ROUTER_PATHS.administracion.areasNav;
+export const returnUrlMetodosPagoPage =
+  ROUTER_PATHS.administracion.metodospagoNav;
 
-export type AreasPageProps = {};
+export type MetodosPagoPageProps = {};
 
-const AreasPage: React.FC<AreasPageProps> = () => {
-  useCheckPermission(PermissionsEnum.administration_view_area);
+const MetodosPagoPage: React.FC<MetodosPagoPageProps> = () => {
+  useCheckPermission(PermissionsEnum.administration_view_metodopago);
 
   const navigate = useNavigate();
 
@@ -39,7 +47,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
   );
 
   ///* mutations
-  const changeState = useUpdateArea({
+  const changeState = useUpdateMetodoPago({
     enableNavigate: false,
   });
 
@@ -55,10 +63,10 @@ const AreasPage: React.FC<AreasPageProps> = () => {
 
   ///* fetch data
   const {
-    data: areasPagingRes,
+    data: metodosPagoPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchAreas({
+  } = useFetchMetodoPagos({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -70,20 +78,20 @@ const AreasPage: React.FC<AreasPageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (area: Area) => {
+  const onEdit = (metodopago: MetodoPago) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Area',
+      title: 'Editar Metodo Pago',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlAreasPage}/editar/${area.uuid}`);
+        navigate(`${returnUrlMetodosPagoPage}/editar/${metodopago.uuid}`);
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<Area>[]>(
+  const columns = useMemo<MRT_ColumnDef<MetodoPago>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -106,7 +114,11 @@ const AreasPage: React.FC<AreasPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.administration_change_area))
+                if (
+                  !hasPermission(
+                    PermissionsEnum.administration_change_metodopago,
+                  )
+                )
                   return;
 
                 setConfirmDialog({
@@ -119,7 +131,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
                       id: row.original.id!,
                       data: {
                         state: !row.original.state,
-                      } as any,
+                      },
                     });
                     setConfirmDialogIsOpen(false);
                   },
@@ -133,8 +145,8 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       },
       {
         accessorKey: 'description',
-        header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        header: 'DESCRIPCIÓN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => {
@@ -150,10 +162,11 @@ const AreasPage: React.FC<AreasPageProps> = () => {
           );
         },
       },
+
       {
         accessorKey: 'uuid',
         header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: 180,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
@@ -161,7 +174,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       {
         accessorKey: 'created_at',
         header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: 180,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
@@ -169,7 +182,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: 180,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
@@ -180,9 +193,11 @@ const AreasPage: React.FC<AreasPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Area"
-      createPageUrl={`${returnUrlAreasPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_area)}
+      title="Metodo Pago"
+      createPageUrl={`${returnUrlMetodosPagoPage}/crear`}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.administration_add_metodopago,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -190,9 +205,9 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         text="por nombre"
       />
 
-      <CustomTable<Area>
+      <CustomTable<MetodoPago>
         columns={columns}
-        data={areasPagingRes?.data?.items || []}
+        data={metodosPagoPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -204,20 +219,18 @@ const AreasPage: React.FC<AreasPageProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={areasPagingRes?.data?.meta?.count}
+        rowCount={metodosPagoPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.administration_change_area,
-        )}
         // crud
-        canEdit={hasPermission(PermissionsEnum.administration_change_area)}
+        canEdit={hasPermission(
+          PermissionsEnum.administration_change_metodopago,
+        )}
         onEdit={onEdit}
         canDelete={false}
-        // onDelete={onDelete}
       />
     </SingleTableBoxScene>
   );
 };
 
-export default AreasPage;
+export default MetodosPagoPage;

@@ -148,11 +148,23 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.administracion.empresasNav,
             }),
             */
+            renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {
+              id: 'entidades-financiera',
+              title: 'Entidades Financieras',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.entidadesFinancieraNav,
+            }),
             renderByModule(SidenavModulesEnum.ADMIN_IVA, {
               id: 'ivas',
               title: 'IVA',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.ivasNav,
+            }),
+            renderByModule(SidenavModulesEnum.ADMIN_IVA, {
+              id: 'metodos-pago',
+              title: 'Metodos Pagos',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.metodospagoNav,
             }),
             renderByModule(SidenavModulesEnum.ADMIN_PARAMETRO_SISTEMA, {
               id: 'parametros-sistemas',

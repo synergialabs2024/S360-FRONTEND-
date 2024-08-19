@@ -35,11 +35,23 @@ export const ROUTER_PATHS = {
     empresasEditar: 'empresas/editar/:uuid',
     empresasNav: '/parametrizacion/empresas',
 
+    ///* entidad financiera
+    entidadesFinanciera: 'entidades-financiera',
+    entidadesFinancieraCrear: 'entidades-financiera/crear',
+    entidadesFinancieraEditar: 'entidades-financiera/editar/:uuid',
+    entidadesFinancieraNav: '/parametrizacion/entidades-financiera',
+
     ///* iva
     ivas: 'ivas',
     ivasCrear: 'ivas/crear',
     ivasEditar: 'ivas/editar/:uuid',
     ivasNav: '/parametrizacion/ivas',
+
+    ///* metodo pago
+    metodospago: 'metodospago',
+    metodospagoCrear: 'metodospago/crear',
+    metodospagoEditar: 'metodospago/editar/:uuid',
+    metodospagoNav: '/parametrizacion/metodospago',
 
     ///* paises
     pais: 'paises',

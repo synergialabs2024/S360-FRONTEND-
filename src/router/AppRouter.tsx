@@ -198,6 +198,30 @@ const UpdateEmpresaPage = Loadable(
     () => import('@/app/administration/empresa/pages/forms/UpdateEmpresaPage'),
   ),
 );
+const EntidadesFinancieraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/entidad-financiera/pages/tables/EntidadesFinancieraPage'
+      ),
+  ),
+);
+const CreateEntidadFinancieraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/entidad-financiera/pages/forms/CreateEntidadFinancieraPage'
+      ),
+  ),
+);
+const UpdateEntidadFinancieraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/entidad-financiera/pages/forms/UpdateEntidadFinancieraPage'
+      ),
+  ),
+);
 const IVAsPage = Loadable(
   lazy(() => import('@/app/administration/iva/pages/tables/IVAsPage')),
 );
@@ -206,6 +230,28 @@ const CreateIVAPage = Loadable(
 );
 const UpdateIVAPage = Loadable(
   lazy(() => import('@/app/administration/iva/pages/forms/UpdateIVAPage')),
+);
+const MetodosPagoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administration/metodo-pago/pages/tables/MetodosPagoPage'),
+  ),
+);
+const CreateMetodoPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/metodo-pago/pages/forms/CreateMetodoPagoPage'
+      ),
+  ),
+);
+const UpdateMetodoPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/metodo-pago/pages/forms/UpdateMetodoPagoPage'
+      ),
+  ),
 );
 const ParametrosSistemasPage = Loadable(
   lazy(
@@ -478,6 +524,20 @@ const AppRouter = createBrowserRouter([
             element: <UpdateEmpresaPage />,
           },
 
+          ///* entidad financiera
+          {
+            path: ROUTER_PATHS.administracion.entidadesFinanciera,
+            element: <EntidadesFinancieraPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.entidadesFinancieraCrear,
+            element: <CreateEntidadFinancieraPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.entidadesFinancieraEditar,
+            element: <UpdateEntidadFinancieraPage />,
+          },
+
           ///* iva
           {
             path: ROUTER_PATHS.administracion.ivas,
@@ -490,6 +550,19 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracion.ivasEditar,
             element: <UpdateIVAPage />,
+          },
+          ///* metodo pago
+          {
+            path: ROUTER_PATHS.administracion.metodospago,
+            element: <MetodosPagoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.metodospagoCrear,
+            element: <CreateMetodoPagoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.metodospagoEditar,
+            element: <UpdateMetodoPagoPage />,
           },
 
           ///* Parametro Sistema
