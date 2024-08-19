@@ -64,7 +64,7 @@ const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
   const isMobile = useIsMediaQuery('sm');
 
   return (
-    <Box sx={{ maxHeight: '16cm' }}>
+    <>
       <Box
         sx={{
           flexGrow: 1,
@@ -153,7 +153,7 @@ const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
           </Stack>
         </Container>
       </Box>
-    </Box>
+    </>
   );
 };
 
