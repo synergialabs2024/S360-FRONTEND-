@@ -1,4 +1,9 @@
+import { HiDocumentPlus } from 'react-icons/hi2';
+import { useNavigate } from 'react-router-dom';
+
 import { useFetchSolicitudServicios } from '@/actions/app';
+import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
+import { EstadoSolicitudServicioEnumChoice } from '@/shared';
 import {
   CustomSearch,
   CustomTable,
@@ -19,6 +24,9 @@ export type SolicitudServicioByStatePageProps = {
 const SolicitudServicioByStatePage: React.FC<
   SolicitudServicioByStatePageProps
 > = ({ state }) => {
+  // hooks
+  const navigate = useNavigate();
+
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -48,6 +56,20 @@ const SolicitudServicioByStatePage: React.FC<
       page: pageIndex + 1,
     },
   });
+
+  ///* handlers
+  const calcEnableActionsColumn = (): boolean => {
+    if (state === EstadoSolicitudServicioEnumChoice.INGRESADO) {
+      return true;
+    }
+
+    return false;
+  };
+  const calcOnEdit = (data: SolicitudServicio) => {
+    if (state === EstadoSolicitudServicioEnumChoice.INGRESADO) {
+      navigate(`${returnUrlPreventasPage}/crear/${data.uuid}`);
+    }
+  };
 
   ///* columns
   const { solicitudServicioBase } = useColumnsSolicitusService();
@@ -80,10 +102,12 @@ const SolicitudServicioByStatePage: React.FC<
         rowCount={SolicitudsServicioPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={false}
+        enableActionsColumn={calcEnableActionsColumn()}
         // crud
-        canEdit={false}
-        // onEdit={onEdit}
+        canEdit={calcEnableActionsColumn()}
+        onEdit={calcOnEdit}
+        editIcon={<HiDocumentPlus />}
+        toolTipTitleEditIcon="Crear preventa"
         canDelete={false}
       />
     </GridTableTabsContainerOnly>
