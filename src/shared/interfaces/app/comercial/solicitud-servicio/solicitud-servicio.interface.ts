@@ -52,10 +52,9 @@ export interface SolicitudServicio {
   ///* fk -----------
   plan_sugerido?: number;
   pais?: number;
-  nacionalidad?: string; // pais can cupd
+  nacionalidad?: string; // pais can upd
 
   // sales filter logic
-  empresa?: number;
   area?: number;
   departamento?: number;
   canal_venta?: number;
