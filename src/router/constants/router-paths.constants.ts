@@ -137,7 +137,7 @@ export const ROUTER_PATHS = {
 
     ///* preventa
     preventas: 'preventas',
-    preventasCrear: 'preventas/crear', // open solicitud_servicio
+    preventasCrear: 'preventas/crear/:uuid', // open solicitud_servicio
     preventasNav: '/comercial/preventas',
   },
 

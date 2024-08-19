@@ -18,6 +18,7 @@ import {
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
 } from '@/actions/app';
+import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
 import { handleAxiosError, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomAutocomplete,
@@ -207,11 +208,31 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       handleAxiosError(err);
     }
   };
+  const onSuccessCreateSolService = (data: SolicitudServicio) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Solicitud de servicio creada',
+      subtitle: `La solicitud de servicio ${data.numero_referencia} ha sido creada con éxito. ¿Desea continuar con la preventa?`,
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(`${returnUrlPreventasPage}/crear/${data.uuid}`);
+      },
+      confirmTextBtn: 'SI, CONTINUAR',
+      cancelTextBtn: 'CERRAR',
+      onClose: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(returnUrlSolicitudsServicioPage);
+      },
+    });
+  };
   ///* mutations -----------------
   const createSolicitudServicioMutation = useCreateSolicitudServicio({
-    navigate,
-    returnUrl: returnUrlSolicitudsServicioPage,
+    // navigate,
+    // returnUrl: returnUrlSolicitudsServicioPage,
     enableErrorNavigate: false,
+    customOnSuccess: data => {
+      onSuccessCreateSolService(data as SolicitudServicio);
+    },
   });
   const updateSolicitudServicioMutation =
     useUpdateSolicitudServicio<CreateSolicitudServicioParamsBase>({
@@ -231,8 +252,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   const useCreateSolUnblockSolServiceMutation =
     useCreateSolicitudDesbloqueoVentas<CreateSolicitudDesbloqueoVentasData>({
-      navigate,
-      returnUrl: returnUrlSolicitudsServicioPage,
+      // navigate,
+      // returnUrl: returnUrlSolicitudsServicioPage,
       enableErrorNavigate: false,
     });
 
@@ -473,7 +494,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         control={form.control}
         defaultValue={form.getValues().email}
         error={errors.email}
-        helperText={errors.email?.message}
+        helperText={
+          errors.email
+            ? errors.email?.message
+            : 'Ingrese un correo válido al que se enviará el contrato'
+        }
         size={gridSizeMdLg6}
       />
       <CustomCellphoneTextField

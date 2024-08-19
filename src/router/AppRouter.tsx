@@ -318,6 +318,9 @@ const SolicitudsDesbloqueoVentasMainPage = Loadable(
 const PreventasMainPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/tables/PreventasMainPage')),
 );
+const CreatePreventaPage = Loadable(
+  lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
+);
 
 const AppRouter = createBrowserRouter([
   ////* Auth
@@ -632,6 +635,10 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.comercial.preventas,
             element: <PreventasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.preventasCrear,
+            element: <CreatePreventaPage />,
           },
         ],
       },

@@ -72,7 +72,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   ///* effects
   useEffect(() => {
     if (!solicitudServicio?.id) return;
-    reset(solicitudServicio);
+    reset({
+      ...solicitudServicio,
+    });
   }, [solicitudServicio, reset]);
 
   return (
