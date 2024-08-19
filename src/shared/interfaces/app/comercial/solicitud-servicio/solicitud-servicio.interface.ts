@@ -1,4 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { TrazabilidadVentas } from '../trazabilidad';
 
 export interface SolicitudServiciosPaginatedRes {
   status: number;
@@ -59,6 +60,8 @@ export interface SolicitudServicio {
   departamento?: number;
   canal_venta?: number;
   vendedor?: number;
+
+  trazabilidad_data?: TrazabilidadVentas[]; // JSON
 }
 
 export type SolicitudServicioLimitData = Pick<

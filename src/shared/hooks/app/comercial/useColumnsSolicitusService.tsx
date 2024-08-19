@@ -224,8 +224,6 @@ export const useColumnsSolicitusService = (
             },
           ]),
 
-      // TODO: trazabilidad
-
       {
         accessorKey: 'codigo',
         header: 'CODIGO',
@@ -234,24 +232,44 @@ export const useColumnsSolicitusService = (
         enableSorting: true,
         Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'codigo'),
       },
+
+      {
+        accessorKey: 'vendedor_ingresa',
+        header: 'VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidadData = row.original.trazabilidad_data;
+          const created = trazabilidadData?.at(0);
+
+          return created ? created?.user_data?.razon_social : 'N/A';
+        },
+      },
+      // TODO: trazabilidad
+
       {
         accessorKey: 'created_at',
-        header: 'CREADO',
+        header: 'INGRESADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }: MRTSServiceType) =>
           formatDateWithTimeCell(row, 'created_at'),
       },
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatDateWithTimeCell(row, 'modified_at'),
-      },
+
+      ...(isSalesman
+        ? []
+        : [
+            {
+              accessorKey: 'modified_at',
+              header: 'MODIFICADO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: MRTSServiceType) =>
+                formatDateWithTimeCell(row, 'modified_at'),
+            },
+          ]),
     ],
     [isSalesman],
   );
