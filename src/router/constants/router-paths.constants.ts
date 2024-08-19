@@ -134,6 +134,11 @@ export const ROUTER_PATHS = {
     solicitudServicioCrear: 'solicitud-servicio/crear',
     solicitudServicioEditar: 'solicitud-servicio/editar/:uuid',
     solicitudServicioNav: '/comercial/solicitud-servicio',
+
+    ///* preventa
+    preventas: 'preventas',
+    preventasCrear: 'preventas/crear', // open solicitud_servicio
+    preventasNav: '/comercial/preventas',
   },
 
   /////* Supervision Comercial ----------------

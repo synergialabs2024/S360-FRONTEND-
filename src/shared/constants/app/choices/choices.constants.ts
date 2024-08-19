@@ -175,6 +175,16 @@ export const ESTADO_SOLICITUD_SERVICIO_ARRAY_CHOICES = [
   EstadoSolicitudServicioEnumChoice.DESBLOQUEADO,
 ];
 
+export enum EstadoPreventaEnumChoice {
+  ESPERA = 'ESPERA',
+  REALIZADO = 'REALIZADO',
+  RECHAZADO = 'RECHAZADO',
+
+  SIN_GESTION = 'SIN_GESTION', // unblock sale approved
+}
+
+// -----------------------------------------------
+
 // global states
 export enum GeneralModelStatesEnumChoice {
   ESPERA = 'ESPERA',

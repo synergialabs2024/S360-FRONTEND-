@@ -251,6 +251,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.comercial.solicitudServicioNav,
               // target: true, // target blank
             }),
+            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+              id: 'preventas',
+              title: 'Preventas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.comercial.preventasNav,
+            }),
             renderByModule(SidenavModulesEnum.COMERCIAL_PROMOCIONES, {
               id: 'promociones',
               title: 'Promociones',

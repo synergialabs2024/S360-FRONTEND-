@@ -14,7 +14,6 @@ import { useAuthStore } from '@/store/auth';
 
 type UseColumnsSolicitusServiceProps = {
   imageModalTitle?: string;
-  isSalesman?: boolean;
 };
 
 type MRTSServiceType = { row: MRT_Row<SolicitudServicio> };

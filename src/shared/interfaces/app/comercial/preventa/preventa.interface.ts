@@ -1,3 +1,4 @@
+import { EstadoPreventaEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SolicitudServicio } from '../solicitud-servicio';
 
@@ -12,9 +13,7 @@ export interface Preventa {
   id?: number;
   uuid?: string;
 
-  created_at?: string;
-  modified_at?: string;
-
+  estado_preventa: EstadoPreventaEnumChoice;
   numero_referencia: string;
   codigo: string;
 
@@ -31,6 +30,9 @@ export interface Preventa {
   url_foto_cedula_frontal: string;
   url_foto_cedula_trasera: string;
   url_foto_documento_cuenta: string;
+
+  created_at?: string;
+  modified_at?: string;
 
   ///* fk
   metodo_pago?: number;
