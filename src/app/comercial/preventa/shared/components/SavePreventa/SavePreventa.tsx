@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { MdAddCircle, MdExpandLess } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -8,17 +9,29 @@ import {
   useCreatePreventa,
   useUpdatePreventa,
 } from '@/actions/app';
-import { ToastWrapper } from '@/shared';
 import {
+  IdentificationTypeEnumChoice,
+  REFERIDO_TYPE_ARRAY_CHOICES,
+  ReferidoTypeEnumChoice,
+  ToastWrapper,
+} from '@/shared';
+import {
+  CustomCellphoneTextField,
+  CustomIdentificacionTextField,
   CustomNumberTextField,
   CustomTextField,
-  SampleCheckbox,
+  CustomTypoLabel,
+  InputAndBtnGridSpace,
+  SelectTextFieldArrayString,
+  SingleIconButton,
   StepperBoxScene,
+  TabTexLabelCustomSpace,
   useCustomStepper,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { SolicitudServicio } from '@/shared/interfaces';
-import { preventaFormSchema } from '@/shared/utils';
+import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
+import { CiSearch } from 'react-icons/ci';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 
 export interface SavePreventaProps {
@@ -26,7 +39,11 @@ export interface SavePreventaProps {
   solicitudServicio?: SolicitudServicio;
 }
 
-type SaveFormData = CreatePreventaParamsBase & {};
+type SaveFormData = CreatePreventaParamsBase &
+  Partial<SolicitudServicio> & {
+    // helpers
+    identificacion_refiere?: string;
+  };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
 
@@ -35,6 +52,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   solicitudServicio,
 }) => {
   const navigate = useNavigate();
+
+  ///* local state -------------------
+  const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -53,8 +73,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     reset,
     formState: { errors, isValid },
   } = form;
+  const watchedTipoReferido = form.watch('tipo_referido');
+  const watchedIdentificationRefiere = form.watch('identificacion_refiere');
 
-  ///* mutations
+  ///* mutations ---------------------
   const createPreventaMutation = useCreatePreventa({
     navigate,
     returnUrl: returnUrlPreventasPage,
@@ -65,7 +87,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     returnUrl: returnUrlPreventasPage,
   });
 
-  ///* handlers
+  ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
@@ -79,9 +101,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     createPreventaMutation.mutate(data);
   };
 
-  ///* effects
+  const handleFetchCedulaRucInfo = async (value: string) => {
+    console.log('handleFetchCedulaRucInfo', value);
+  };
+
+  ///* effects ---------------------
   useEffect(() => {
     if (!solicitudServicio?.id) return;
+
     reset({
       ...solicitudServicio,
     });
@@ -105,34 +132,164 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       {/* ============= Datos Generales ============= */}
       {activeStep === 0 && (
         <>
-          <SampleCheckbox
-            label="Es referido SI/NO"
-            name="es_referido"
+          <CustomTypoLabel text="Datos Cliente" />
+
+          <CustomTextField
+            label="Tipo identificación"
+            name="tipo_identificacion"
             control={form.control}
-            defaultValue={form.getValues().es_referido}
+            defaultValue={form.getValues().tipo_identificacion}
+            error={errors.tipo_identificacion}
+            helperText={errors.tipo_identificacion?.message}
+            disabled
+            size={gridSizeMdLg6}
+          />
+          <CustomTextField
+            label="Identificación"
+            name="identificacion"
+            control={form.control}
+            defaultValue={form.getValues().identificacion}
+            error={errors.identificacion}
+            helperText={errors.identificacion?.message}
+            disabled
+            size={gridSizeMdLg6}
+          />
+          <CustomTextField
+            label="Razon social"
+            name="razon_social"
+            control={form.control}
+            defaultValue={form.getValues().razon_social}
+            error={errors.razon_social}
+            helperText={errors.razon_social?.message}
+            disabled
+          />
+
+          <CustomTextField
+            label="Fecha nacimiento"
+            name="fecha_nacimiento"
+            control={form.control}
+            defaultValue={form.getValues().fecha_nacimiento}
+            error={errors.fecha_nacimiento}
+            helperText={errors.fecha_nacimiento?.message}
+            disabled
+            size={gridSizeMdLg6}
+          />
+          <CustomNumberTextField
+            label="Edad"
+            name="edad"
+            control={form.control}
+            defaultValue={form.getValues().edad}
+            error={errors.edad}
+            helperText={errors.edad?.message}
+            disabled
             size={gridSizeMdLg6}
           />
 
           <CustomTextField
-            label="Cliente refiere"
-            name="cliente_refiere"
+            label="Email"
+            name="email"
+            type="email"
             control={form.control}
-            defaultValue={form.getValues().cliente_refiere}
-            error={errors.cliente_refiere}
-            helperText={errors.cliente_refiere?.message}
+            defaultValue={form.getValues().email}
+            error={errors.email}
+            helperText={errors.email?.message}
+            disabled
+            size={gridSizeMdLg6}
+          />
+          <CustomCellphoneTextField
+            label="Celular adicional"
+            name="celular_adicional"
+            control={form.control}
+            defaultValue={form.getValues().celular_adicional}
+            error={errors.celular_adicional}
+            helperText={errors.celular_adicional?.message}
             size={gridSizeMdLg6}
           />
 
-          <CustomTextField
-            label="Correo cliente refiere"
-            name="correo_cliente_refiere"
-            control={form.control}
-            defaultValue={form.getValues().correo_cliente_refiere}
-            error={errors.correo_cliente_refiere}
-            helperText={errors.correo_cliente_refiere?.message}
-            size={gridSizeMdLg6}
+          <TabTexLabelCustomSpace
+            textContent="Sistema Referidos"
+            showCustomRightSpace={true}
+            customRightSpace={
+              <SingleIconButton
+                newCustomButton
+                startIcon={
+                  showReferidosPart ? <MdExpandLess /> : <MdAddCircle />
+                }
+                label={showReferidosPart ? '' : 'AGREGAR'}
+                variant="text"
+                onClick={() => {
+                  setShowReferidosPart(true);
+                }}
+              />
+            }
           />
+          {showReferidosPart && (
+            <>
+              <SelectTextFieldArrayString
+                label="Tipo referido"
+                name="tipo_referido"
+                textFieldKey="tipo_referido"
+                // options
+                options={REFERIDO_TYPE_ARRAY_CHOICES}
+                defaultValue={form.getValues()?.tipo_referido || ''}
+                // errors
+                control={form.control}
+                error={form.formState.errors.tipo_referido}
+                helperText={form.formState.errors.tipo_referido?.message}
+                gridSize={gridSizeMdLg6}
+              />
+              {!watchedTipoReferido && <span className="spacer" />}
 
+              <>
+                {watchedTipoReferido === ReferidoTypeEnumChoice.CLIENTE ? (
+                  <>
+                    <InputAndBtnGridSpace
+                      inputNode={
+                        <CustomIdentificacionTextField
+                          label="Identificación"
+                          name="identificacion_refiere"
+                          control={form.control}
+                          selectedDocumentType={
+                            IdentificationTypeEnumChoice.CEDULA
+                          }
+                          defaultValue={form.getValues(
+                            'identificacion_refiere',
+                          )}
+                          error={errors.identificacion_refiere}
+                          helperText={errors.identificacion_refiere?.message}
+                          onFetchCedulaRucInfo={async value => {
+                            await handleFetchCedulaRucInfo(value);
+                          }}
+                        />
+                      }
+                      btnLabel="Buscar"
+                      iconBtn={<CiSearch />}
+                      onClick={() => {
+                        if (
+                          !watchedIdentificationRefiere ||
+                          watchedIdentificationRefiere?.length < 10 ||
+                          !validarCedulaEcuador(watchedIdentificationRefiere)
+                        )
+                          return ToastWrapper.warning(
+                            'Ingrese un número de cédula válido',
+                          );
+
+                        handleFetchCedulaRucInfo(watchedIdentificationRefiere);
+                      }}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </>
+            </>
+          )}
+        </>
+      )}
+
+      {/* ============= Ubicación ============= */}
+      {activeStep === 1 && (
+        <>
           <CustomTextField
             label="Tipo servicio"
             name="tipo_servicio"

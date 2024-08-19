@@ -1,4 +1,7 @@
-import { EstadoPreventaEnumChoice } from '@/shared/constants';
+import {
+  EstadoPreventaEnumChoice,
+  ReferidoTypeEnumChoice,
+} from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SolicitudServicio } from '../solicitud-servicio';
 
@@ -17,13 +20,19 @@ export interface Preventa {
   numero_referencia: string;
   codigo: string;
 
-  es_referido: boolean;
-  cliente_refiere: string;
-  correo_cliente_refiere: string;
+  celular_adicional: string;
+
+  tipo_referido?: ReferidoTypeEnumChoice;
+  es_referido?: boolean;
+  cliente_refiere?: number; // fk
+  correo_cliente_refiere?: string;
+  flota_refiere?: number; // fk
   // detalle_servicios: Detalle;
   // detalle_productos: Detalle;
+
   tipo_servicio: string;
   tipo_plan: string;
+
   numero_cuenta_bancaria: string;
   costo_instalacion: string;
 

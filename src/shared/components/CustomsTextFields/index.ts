@@ -7,3 +7,4 @@ export { default as CustomTextArea } from './CustomTextArea';
 export { default as CustomTextField } from './CustomTextField';
 
 export * from './no-form';
+export * from './seletcs';

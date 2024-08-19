@@ -155,6 +155,15 @@ export const RECURRENCE_ARRAY_CHOICES = [
   RecurrenceEnumChoice.ANUAL,
 ];
 
+export enum ReferidoTypeEnumChoice {
+  CLIENTE = 'CLIENTE',
+  FLOTA = 'FLOTA',
+}
+export const REFERIDO_TYPE_ARRAY_CHOICES = [
+  ReferidoTypeEnumChoice.CLIENTE,
+  ReferidoTypeEnumChoice.FLOTA,
+];
+
 // // // SALES ================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',

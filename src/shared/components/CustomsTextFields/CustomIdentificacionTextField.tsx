@@ -4,6 +4,8 @@ import { Controller, FieldError } from 'react-hook-form';
 import { IdentificationTypeEnumChoice } from '@/shared/constants/app';
 import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
+import { validarCedulaEcuador } from '@/shared/utils';
+import { ToastWrapper } from '@/shared/wrappers';
 
 type CustomIdentificacionTextFieldProps = {
   label: string;
@@ -63,8 +65,16 @@ const CustomIdentificacionTextField: React.FC<
                 field.onChange(currentValue);
                 onChangeValue && onChangeValue(currentValue);
 
+                let isValidCedula = false;
+                if (currentValue.length === 10) {
+                  isValidCedula = validarCedulaEcuador(currentValue);
+                  !isValidCedula &&
+                    ToastWrapper.warning('Ingrese un número de cédula válido');
+                }
+
                 // fetch data from consulta-cedula api
                 currentValue.length === 10 &&
+                  isValidCedula &&
                   onFetchCedulaRucInfo &&
                   onFetchCedulaRucInfo(currentValue);
               } else if (
