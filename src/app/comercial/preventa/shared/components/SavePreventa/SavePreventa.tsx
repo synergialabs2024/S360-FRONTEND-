@@ -20,7 +20,7 @@ import { preventaFormSchema } from '@/shared/utils';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 
 export interface SavePreventaProps {
-  title: string;
+  title: React.ReactNode;
   solicitudServicio?: SolicitudServicio;
 }
 
@@ -79,7 +79,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   return (
     <SingleFormBoxScene
-      titlePage={title}
+      titleNode={title}
       onCancel={() => navigate(returnUrlPreventasPage)}
       onSave={handleSubmit(onSave, () => {})}
     >

@@ -2,6 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetSolicitudServicio } from '@/actions/app';
 import { useLoaders } from '@/shared';
+import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { SavePreventa } from '../../shared/components';
@@ -20,7 +21,17 @@ const CreatePreventaPage: React.FC<CreatePreventaPageProps> = () => {
   if (isLoading || isRefetching) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlPreventasPage} />;
 
-  return <SavePreventa title="Crear Preventa" solicitudServicio={data.data} />;
+  return (
+    <SavePreventa
+      title={
+        <CustomTitleRefNumber
+          initialText="Crear Preventa"
+          referenceNumber={data?.data?.numero_referencia}
+        />
+      }
+      solicitudServicio={data.data}
+    />
+  );
 };
 
 export default CreatePreventaPage;
