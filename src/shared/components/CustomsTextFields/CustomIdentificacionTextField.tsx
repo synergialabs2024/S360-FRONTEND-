@@ -25,6 +25,7 @@ type CustomIdentificacionTextFieldProps = {
   defaultValue?: string | number;
   selectedDocumentType: string;
   onChangeValue?: (value: string) => void;
+  onClear?: () => void;
 };
 
 const CustomIdentificacionTextField: React.FC<
@@ -44,6 +45,8 @@ const CustomIdentificacionTextField: React.FC<
   defaultValue,
   selectedDocumentType,
   onChangeValue,
+
+  onClear,
 }) => {
   return (
     <Grid item {...size}>
@@ -77,6 +80,8 @@ const CustomIdentificacionTextField: React.FC<
                   isValidCedula &&
                   onFetchCedulaRucInfo &&
                   onFetchCedulaRucInfo(currentValue);
+
+                !currentValue.length && onClear && onClear();
               } else if (
                 isNumber &&
                 selectedDocumentType === IdentificationTypeEnumChoice.RUC &&
@@ -89,6 +94,7 @@ const CustomIdentificacionTextField: React.FC<
                 currentValue.length === 13 &&
                   onFetchCedulaRucInfo &&
                   onFetchCedulaRucInfo(currentValue);
+                !currentValue.length && onClear && onClear();
               } else if (
                 selectedDocumentType ===
                   IdentificationTypeEnumChoice.PASAPORTE &&
@@ -96,6 +102,7 @@ const CustomIdentificacionTextField: React.FC<
               ) {
                 field.onChange(currentValue);
                 onChangeValue && onChangeValue(currentValue);
+                !currentValue.length && onClear && onClear();
               }
             };
 

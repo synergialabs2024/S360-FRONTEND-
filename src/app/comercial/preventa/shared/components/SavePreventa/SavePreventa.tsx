@@ -42,7 +42,11 @@ export interface SavePreventaProps {
 type SaveFormData = CreatePreventaParamsBase &
   Partial<SolicitudServicio> & {
     // helpers
+    thereAreClientRefiere?: boolean;
     identificacion_refiere?: string;
+    clienteRefiere?: string;
+    celularRefiere?: string;
+    direccionRefiere?: string;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -65,7 +69,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   ///* form --------------------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(preventaFormSchema) as any,
-    defaultValues: {},
+    defaultValues: {
+      thereAreClientRefiere: false,
+    },
   });
 
   const {
@@ -75,6 +81,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   } = form;
   const watchedTipoReferido = form.watch('tipo_referido');
   const watchedIdentificationRefiere = form.watch('identificacion_refiere');
+  const watchedThereAreClientRefiere = form.watch('thereAreClientRefiere');
 
   ///* mutations ---------------------
   const createPreventaMutation = useCreatePreventa({
@@ -101,8 +108,26 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     createPreventaMutation.mutate(data);
   };
 
-  const handleFetchCedulaRucInfo = async (value: string) => {
+  const handleFetchClienteByCedula = async (value: string) => {
+    // TODO: fetch client data:
     console.log('handleFetchCedulaRucInfo', value);
+    form.reset({
+      ...form.getValues(),
+      thereAreClientRefiere: true,
+      clienteRefiere: 'Cliente Refiere',
+      celularRefiere: '0999999999',
+      direccionRefiere: 'Dirección Refiere',
+    });
+  };
+  const onClearCedula = () => {
+    form.reset({
+      ...form.getValues(),
+      thereAreClientRefiere: false,
+      identificacion_refiere: '',
+      clienteRefiere: '',
+      celularRefiere: '',
+      direccionRefiere: '',
+    });
   };
 
   ///* effects ---------------------
@@ -237,6 +262,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 error={form.formState.errors.tipo_referido}
                 helperText={form.formState.errors.tipo_referido?.message}
                 gridSize={gridSizeMdLg6}
+                onChangeValue={() => {
+                  onClearCedula();
+                }}
               />
               {!watchedTipoReferido && <span className="spacer" />}
 
@@ -258,7 +286,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                           error={errors.identificacion_refiere}
                           helperText={errors.identificacion_refiere?.message}
                           onFetchCedulaRucInfo={async value => {
-                            await handleFetchCedulaRucInfo(value);
+                            await handleFetchClienteByCedula(value);
+                          }}
+                          onClear={() => {
+                            onClearCedula();
                           }}
                         />
                       }
@@ -274,13 +305,50 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             'Ingrese un número de cédula válido',
                           );
 
-                        handleFetchCedulaRucInfo(watchedIdentificationRefiere);
+                        handleFetchClienteByCedula(
+                          watchedIdentificationRefiere,
+                        );
                       }}
                     />
+                    <>
+                      {watchedThereAreClientRefiere && (
+                        <>
+                          <CustomTextField
+                            label="Cliente refiere"
+                            name="clienteRefiere"
+                            control={form.control}
+                            defaultValue={form.getValues().clienteRefiere}
+                            error={errors.clienteRefiere}
+                            helperText={errors.clienteRefiere?.message}
+                            disabled
+                            size={gridSizeMdLg6}
+                          />
+                          <CustomCellphoneTextField
+                            label="Celular refiere"
+                            name="celularRefiere"
+                            control={form.control}
+                            defaultValue={form.getValues().celularRefiere}
+                            error={errors.celularRefiere}
+                            helperText={errors.celularRefiere?.message}
+                            disabled
+                            size={gridSizeMdLg6}
+                          />
+                          <CustomTextField
+                            label="Dirección refiere"
+                            name="direccionRefiere"
+                            control={form.control}
+                            defaultValue={form.getValues().direccionRefiere}
+                            error={errors.direccionRefiere}
+                            helperText={errors.direccionRefiere?.message}
+                            disabled
+                          />
+                        </>
+                      )}
+                    </>
                   </>
-                ) : (
-                  <></>
-                )}
+                ) : watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA ? (
+                  <>FLOTA AUTOCOMPLETE</>
+                ) : null}
               </>
             </>
           )}
