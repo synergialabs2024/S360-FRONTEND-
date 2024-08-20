@@ -139,7 +139,7 @@ export const getFlotas = async (params?: GetFlotasParams) => {
 
 export const getFlota = async (uuid: string) => {
   try {
-    return await get<Flota>(`/flota/uuid/${uuid}`, true);
+    return await get<Flota>(`/flota/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

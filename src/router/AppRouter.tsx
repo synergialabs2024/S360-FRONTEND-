@@ -375,6 +375,12 @@ const MantenimientoOperacionModule = Loadable(
 const FlotasPage = Loadable(
   lazy(() => import('@/app/mante-operacion/flota/pages/tables/FlotasPage')),
 );
+const CreateFlotaPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/forms/CreateFlotaPage')),
+);
+const UpdateFlotaPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
+);
 
 const AppRouter = createBrowserRouter([
   ////* Auth
@@ -658,6 +664,14 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.mantenimientoOperacion.flotasNav,
             element: <FlotasPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.flotasCrear,
+            element: <CreateFlotaPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.flotasEditar,
+            element: <UpdateFlotaPage />,
           },
         ],
       },
