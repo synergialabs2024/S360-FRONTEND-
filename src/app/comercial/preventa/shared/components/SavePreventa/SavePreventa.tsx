@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { MdAddCircle, MdExpandLess } from 'react-icons/md';
+import { MdAddCircle } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -32,6 +32,7 @@ import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
 import { CiSearch } from 'react-icons/ci';
+import { IoMdTrash } from 'react-icons/io';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 
 export interface SavePreventaProps {
@@ -128,6 +129,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       celularRefiere: '',
       direccionRefiere: '',
     });
+  };
+  const onClearFlotaRefiere = () => {
+    form.reset({
+      ...form.getValues(),
+      tipo_identificacion: undefined,
+      thereAreClientRefiere: false,
+    });
+  };
+  const onTrashReferidosPart = () => {
+    onClearCedula();
+    onClearFlotaRefiere();
   };
 
   ///* effects ---------------------
@@ -237,13 +249,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             customRightSpace={
               <SingleIconButton
                 newCustomButton
-                startIcon={
-                  showReferidosPart ? <MdExpandLess /> : <MdAddCircle />
-                }
-                label={showReferidosPart ? '' : 'AGREGAR'}
+                color={!showReferidosPart ? 'primary' : 'error'}
+                startIcon={showReferidosPart ? <IoMdTrash /> : <MdAddCircle />}
+                label={showReferidosPart ? 'REMOVER' : 'AGREGAR'}
                 variant="text"
                 onClick={() => {
-                  setShowReferidosPart(true);
+                  setShowReferidosPart(prev => !prev);
+                  if (!showReferidosPart) {
+                    onTrashReferidosPart();
+                  }
                 }}
               />
             }
@@ -264,6 +278,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 gridSize={gridSizeMdLg6}
                 onChangeValue={() => {
                   onClearCedula();
+                  onClearFlotaRefiere();
                 }}
               />
               {!watchedTipoReferido && <span className="spacer" />}
