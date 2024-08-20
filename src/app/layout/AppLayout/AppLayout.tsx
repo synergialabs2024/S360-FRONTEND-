@@ -32,21 +32,18 @@ const Main = styled('main', {
     ...theme.typography.mainContent,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    transition: theme.transitions.create(
-      'margin',
-      open
-        ? {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }
-        : {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }
-    ),
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: open
+        ? theme.transitions.easing.easeOut
+        : theme.transitions.easing.sharp,
+      duration: open
+        ? theme.transitions.duration.enteringScreen
+        : theme.transitions.duration.leavingScreen,
+    }),
     [theme.breakpoints.up('md')]: {
-      marginLeft: open ? 0 : -(drawerWidth - 20),
-      width: `calc(100% - ${open && matchUpMd ? drawerWidth : 20}px)`,
+      marginLeft: open ? `${drawerWidth}px` : '20px',
+      marginRight: '20px',
+      width: `calc(100% - ${open ? drawerWidth + 20 : 40}px)`,
     },
     [theme.breakpoints.down('md')]: {
       marginLeft: '20px',
@@ -68,7 +65,7 @@ const AppLayout: React.FC<AppLayoutInterface> = () => {
   const leftDrawerOpened = useUiStore(s => s.customization.opened);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'block' }}>
       <CssBaseline />
 
       {/* header */}
