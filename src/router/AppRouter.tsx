@@ -368,6 +368,14 @@ const CreatePreventaPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
 );
 
+///* Mantenimiento Operaciones ------------
+const MantenimientoOperacionModule = Loadable(
+  lazy(() => import('@/app/mante-operacion/MantenimientoOperacionModule')),
+);
+const FlotasPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/tables/FlotasPage')),
+);
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -637,6 +645,19 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.nomina.empleadosEditar,
             element: <UpdateEmpleadoPage />,
+          },
+        ],
+      },
+
+      //////////* Mantenimiento Operaciones ------------
+      {
+        path: ROUTER_PATHS.mantenimientoOperacion.root,
+        element: <MantenimientoOperacionModule />,
+        children: [
+          ///* flotas
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.flotasNav,
+            element: <FlotasPage />,
           },
         ],
       },

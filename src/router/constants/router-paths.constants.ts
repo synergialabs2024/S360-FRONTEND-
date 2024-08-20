@@ -153,6 +153,17 @@ export const ROUTER_PATHS = {
     preventasNav: '/comercial/preventas',
   },
 
+  /////* Mantenimiento y Operación ----------------
+  mantenimientoOperacion: {
+    root: 'mantenimiento-operacion',
+
+    ///* flotas
+    flotas: 'flotas',
+    flotasCrear: 'flotas/crear',
+    flotasEditar: 'flotas/editar/:uuid',
+    flotasNav: '/mantenimiento-operacion/flotas',
+  },
+
   /////* Supervision Comercial ----------------
   supervisionComercial: {
     root: 'supervision-comercial',

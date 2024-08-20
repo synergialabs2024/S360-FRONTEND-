@@ -229,6 +229,22 @@ export const useNestedMenu = () => {
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
+        /////* Mantenimiento Operación ----------------
+        {
+          id: 'mantenimiento-operacion',
+          title: 'Mantenimiento y Operación',
+          type: MenuItemType.COLLAPSE,
+          icon: IconBroadcast,
+          children: [
+            renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
+              id: 'flotas',
+              title: 'Flotas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.mantenimientoOperacion.flotasNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+
         /////* Supervisión Comercial ----------------
         {
           id: 'supervision-comercial',
