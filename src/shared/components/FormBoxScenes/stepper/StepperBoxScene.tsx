@@ -133,92 +133,108 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
   const isMobile = useIsMediaQuery('sm');
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: py,
+    <>
+      <Box
+        sx={{
+          flexGrow: 1,
+          py: py,
 
-        backgroundColor: '#fff',
-        borderRadius: '12px',
-      }}
-    >
-      <Container maxWidth={maxWidth}>
-        <Stack spacing={3}>
-          {titleNode ? (
-            titleNode
-          ) : (
-            <Typography variant="h4" pb={isMobile ? 3 : 6}>
-              {titlePage}
-            </Typography>
-          )}
+          backgroundColor: '#fff',
+          borderRadius: '12px',
+        }}
+      >
+        <Container maxWidth={maxWidth}>
+          <Stack>
+            {titleNode ? (
+              titleNode
+            ) : (
+              <Typography variant="h2" pb={isMobile ? 3 : 6}>
+                {titlePage}
+              </Typography>
+            )}
+          </Stack>
+        </Container>
+      </Box>
 
-          {/* ================ main conent ================ */}
-          <Grid container justifyContent="center" alignItems="center">
-            <Grid item {...size}>
-              {/* ============ stepper labels ============ */}
-              <Stepper
-                activeStep={activeStep}
-                sx={{ mb: '38px', overflowX: 'auto' }}
-                connector={<QontoConnector />}
-              >
-                {steps.map(label => {
-                  // labels
-                  return (
-                    <Step key={label}>
-                      {/* label for linear */}
-                      <StepLabel StepIconComponent={QontoStepIcon}>
-                        {label}
-                      </StepLabel>
-                    </Step>
-                  );
-                })}
-              </Stepper>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: py,
 
-              {/* ============ stepper conentent & handlers ============ */}
-              {/* ======= actual content ======= */}
-              <Grid item container justifyContent="center" spacing={3}>
-                {children}
+          backgroundColor: '#fff',
+          borderRadius: '12px',
+        }}
+      >
+        <Container maxWidth={maxWidth}>
+          <Stack spacing={2}>
+            {/* ================ main conent ================ */}
+            <Grid container justifyContent="center" alignItems="center">
+              <Grid item {...size}>
+                {/* ============ stepper labels ============ */}
+                <Stepper
+                  activeStep={activeStep}
+                  sx={{ mb: '38px', overflowX: 'auto' }}
+                  connector={<QontoConnector />}
+                >
+                  {steps.map(label => {
+                    // labels
+                    return (
+                      <Step key={label}>
+                        {/* label for linear */}
+                        <StepLabel StepIconComponent={QontoStepIcon}>
+                          {label}
+                        </StepLabel>
+                      </Step>
+                    );
+                  })}
+                </Stepper>
+
+                {/* ============ stepper conentent & handlers ============ */}
+                {/* ======= actual content ======= */}
+                <Grid item container justifyContent="center" spacing={3}>
+                  {children}
+                </Grid>
+
+                {/* ======= handler btns ======= */}
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 6 }}>
+                  <Button
+                    onClick={onCancel}
+                    sx={{
+                      color: '#4D5761',
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+
+                  <span className="spacer"></span>
+
+                  <Button
+                    color="inherit"
+                    onClick={handleBack}
+                    sx={{ mr: 1 }}
+                    disabled={activeStep === 0}
+                  >
+                    Atrás
+                  </Button>
+
+                  {activeStep !== steps.length - 1 && (
+                    <Button onClick={handleNext} disabled={disableNextStepBtn}>
+                      Siguiente
+                    </Button>
+                  )}
+                  {activeStep === steps.length - 1 && (
+                    <Button onClick={onSave} variant="contained">
+                      Guardar
+                    </Button>
+                  )}
+                </Box>
               </Grid>
-
-              {/* ======= handler btns ======= */}
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 6 }}>
-                <Button
-                  onClick={onCancel}
-                  sx={{
-                    color: '#4D5761',
-                  }}
-                >
-                  Cancelar
-                </Button>
-
-                <span className="spacer"></span>
-
-                <Button
-                  color="inherit"
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                  disabled={activeStep === 0}
-                >
-                  Atrás
-                </Button>
-
-                {activeStep !== steps.length - 1 && (
-                  <Button onClick={handleNext} disabled={disableNextStepBtn}>
-                    Siguiente
-                  </Button>
-                )}
-                {activeStep === steps.length - 1 && (
-                  <Button onClick={onSave} variant="contained">
-                    Guardar
-                  </Button>
-                )}
-              </Box>
             </Grid>
-          </Grid>
-        </Stack>
-      </Container>
-    </Box>
+          </Stack>
+        </Container>
+      </Box>
+    </>
   );
 };
 
