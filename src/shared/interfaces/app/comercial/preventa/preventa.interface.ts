@@ -20,8 +20,11 @@ export interface Preventa {
   numero_referencia: string;
   codigo: string;
 
+  nombre_persona_referencia: string;
   celular_adicional: string;
+  parentesco_referencia: string;
 
+  // sistema referido
   tipo_referido?: ReferidoTypeEnumChoice;
   es_referido?: boolean;
   cliente_refiere?: number; // fk

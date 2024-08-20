@@ -164,6 +164,23 @@ export const REFERIDO_TYPE_ARRAY_CHOICES = [
   ReferidoTypeEnumChoice.FLOTA,
 ];
 
+export const ParentescoTypeEnumChoice = {
+  PADRE: 'PADRE',
+  MADRE: 'MADRE',
+  HERMANO_A: 'HERMANO/A',
+  PRIMO_A: 'PRIMO/A',
+  TIO_A: 'TIO/A',
+  OTRO: 'OTRO',
+};
+export const PARENTESCO_TYPE_ARRAY_CHOICES = [
+  ParentescoTypeEnumChoice.PADRE,
+  ParentescoTypeEnumChoice.MADRE,
+  ParentescoTypeEnumChoice.HERMANO_A,
+  ParentescoTypeEnumChoice.PRIMO_A,
+  ParentescoTypeEnumChoice.TIO_A,
+  ParentescoTypeEnumChoice.OTRO,
+];
+
 // // // SALES ================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',

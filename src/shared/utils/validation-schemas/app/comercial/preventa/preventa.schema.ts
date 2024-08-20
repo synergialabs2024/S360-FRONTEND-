@@ -17,6 +17,28 @@ export const preventaFormSchema = yup.object({
       'El campo correo cliente refiere no debe exceder los 200 caracteres',
     ),
 
+  nombre_persona_referencia: yup
+    .string()
+    .required('El campo nombre persona referencia es requerido')
+    .max(
+      200,
+      'El campo nombre persona referencia no debe exceder los 200 caracteres',
+    ),
+  parentesco_referencia: yup
+    .string()
+    .required('El campo parentesco referencia es requerido')
+    .max(
+      200,
+      'El campo parentesco referencia no debe exceder los 200 caracteres',
+    ),
+  celular_adicional: yup
+    .string()
+    .required('El campo celular de la persona de referencia es requerido')
+    .max(
+      200,
+      'El campo celular de la persona de referencia no debe exceder los 200 caracteres',
+    ),
+
   numero_cuenta_bancaria: yup
     .string()
     .required('El campo numero cuenta bancaria es requerido')

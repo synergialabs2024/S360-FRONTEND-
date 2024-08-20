@@ -1,6 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { CiSearch } from 'react-icons/ci';
+import { IoMdTrash } from 'react-icons/io';
 import { MdAddCircle } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +13,7 @@ import {
 } from '@/actions/app';
 import {
   IdentificationTypeEnumChoice,
+  PARENTESCO_TYPE_ARRAY_CHOICES,
   REFERIDO_TYPE_ARRAY_CHOICES,
   ReferidoTypeEnumChoice,
   ToastWrapper,
@@ -21,6 +24,7 @@ import {
   CustomNumberTextField,
   CustomTextField,
   CustomTypoLabel,
+  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
   SelectTextFieldArrayString,
   SingleIconButton,
@@ -31,8 +35,6 @@ import {
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
-import { CiSearch } from 'react-icons/ci';
-import { IoMdTrash } from 'react-icons/io';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 
 export interface SavePreventaProps {
@@ -118,6 +120,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       clienteRefiere: 'Cliente Refiere',
       celularRefiere: '0999999999',
       direccionRefiere: 'Dirección Refiere',
+      es_referido: true,
     });
   };
   const onClearCedula = () => {
@@ -128,6 +131,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       clienteRefiere: '',
       celularRefiere: '',
       direccionRefiere: '',
+      es_referido: false,
     });
   };
   const onClearFlotaRefiere = () => {
@@ -135,11 +139,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...form.getValues(),
       tipo_identificacion: undefined,
       thereAreClientRefiere: false,
+      es_referido: false,
     });
   };
   const onTrashReferidosPart = () => {
     onClearCedula();
     onClearFlotaRefiere();
+    form.setValue('es_referido', false);
   };
 
   ///* effects ---------------------
@@ -166,7 +172,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         ToastWrapper.error('Faltan campos por requeridos');
       })}
     >
-      {/* ============= Datos Generales ============= */}
+      {/* ========================= Datos Generales ========================= */}
       {activeStep === 0 && (
         <>
           <CustomTypoLabel text="Datos Cliente" />
@@ -221,7 +227,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             disabled
             size={gridSizeMdLg6}
           />
-
           <CustomTextField
             label="Email"
             name="email"
@@ -231,142 +236,175 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             error={errors.email}
             helperText={errors.email?.message}
             disabled
-            size={gridSizeMdLg6}
-          />
-          <CustomCellphoneTextField
-            label="Celular adicional"
-            name="celular_adicional"
-            control={form.control}
-            defaultValue={form.getValues().celular_adicional}
-            error={errors.celular_adicional}
-            helperText={errors.celular_adicional?.message}
-            size={gridSizeMdLg6}
           />
 
-          <TabTexLabelCustomSpace
-            textContent="Sistema Referidos"
-            showCustomRightSpace={true}
-            customRightSpace={
-              <SingleIconButton
-                newCustomButton
-                color={!showReferidosPart ? 'primary' : 'error'}
-                startIcon={showReferidosPart ? <IoMdTrash /> : <MdAddCircle />}
-                label={showReferidosPart ? 'REMOVER' : 'AGREGAR'}
-                variant="text"
-                onClick={() => {
-                  setShowReferidosPart(prev => !prev);
-                  if (!showReferidosPart) {
-                    onTrashReferidosPart();
+          {/* ============= Persona Referencia ============= */}
+          <>
+            <CustomTypoLabel
+              text="Persona Referencia"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+            <CustomTextField
+              label="Nombre Persona Referencia"
+              name="nombre_persona_referencia"
+              control={form.control}
+              defaultValue={form.getValues().nombre_persona_referencia}
+              error={errors.nombre_persona_referencia}
+              helperText={errors.nombre_persona_referencia?.message}
+            />
+            <SelectTextFieldArrayString
+              label="Parentesco Referencia"
+              name="parentesco_referencia"
+              textFieldKey="parentesco_referencia"
+              // options
+              options={PARENTESCO_TYPE_ARRAY_CHOICES}
+              defaultValue={form.getValues()?.parentesco_referencia || ''}
+              // errors
+              control={form.control}
+              error={form.formState.errors.parentesco_referencia}
+              helperText={form.formState.errors.parentesco_referencia?.message}
+              gridSize={gridSizeMdLg6}
+            />
+            <CustomCellphoneTextField
+              label="Celular Referencia"
+              name="celular_adicional"
+              control={form.control}
+              defaultValue={form.getValues().celular_adicional}
+              error={errors.celular_adicional}
+              helperText={errors.celular_adicional?.message}
+              size={gridSizeMdLg6}
+            />
+          </>
+
+          {/* ============= Sistema Referidos ============= */}
+          <>
+            <TabTexLabelCustomSpace
+              textContent="Sistema Referidos"
+              showCustomRightSpace={true}
+              customRightSpace={
+                <SingleIconButton
+                  newCustomButton
+                  color={!showReferidosPart ? 'primary' : 'error'}
+                  startIcon={
+                    showReferidosPart ? <IoMdTrash /> : <MdAddCircle />
                   }
-                }}
-              />
-            }
-          />
-          {showReferidosPart && (
-            <>
-              <SelectTextFieldArrayString
-                label="Tipo referido"
-                name="tipo_referido"
-                textFieldKey="tipo_referido"
-                // options
-                options={REFERIDO_TYPE_ARRAY_CHOICES}
-                defaultValue={form.getValues()?.tipo_referido || ''}
-                // errors
-                control={form.control}
-                error={form.formState.errors.tipo_referido}
-                helperText={form.formState.errors.tipo_referido?.message}
-                gridSize={gridSizeMdLg6}
-                onChangeValue={() => {
-                  onClearCedula();
-                  onClearFlotaRefiere();
-                }}
-              />
-              {!watchedTipoReferido && <span className="spacer" />}
-
+                  label={showReferidosPart ? 'REMOVER' : 'AGREGAR'}
+                  variant="text"
+                  onClick={() => {
+                    setShowReferidosPart(prev => !prev);
+                    if (!showReferidosPart) {
+                      onTrashReferidosPart();
+                    }
+                  }}
+                />
+              }
+            />
+            {showReferidosPart && (
               <>
-                {watchedTipoReferido === ReferidoTypeEnumChoice.CLIENTE ? (
-                  <>
-                    <InputAndBtnGridSpace
-                      inputNode={
-                        <CustomIdentificacionTextField
-                          label="Identificación"
-                          name="identificacion_refiere"
-                          control={form.control}
-                          selectedDocumentType={
-                            IdentificationTypeEnumChoice.CEDULA
-                          }
-                          defaultValue={form.getValues(
-                            'identificacion_refiere',
-                          )}
-                          error={errors.identificacion_refiere}
-                          helperText={errors.identificacion_refiere?.message}
-                          onFetchCedulaRucInfo={async value => {
-                            await handleFetchClienteByCedula(value);
-                          }}
-                          onClear={() => {
-                            onClearCedula();
-                          }}
-                        />
-                      }
-                      btnLabel="Buscar"
-                      iconBtn={<CiSearch />}
-                      onClick={() => {
-                        if (
-                          !watchedIdentificationRefiere ||
-                          watchedIdentificationRefiere?.length < 10 ||
-                          !validarCedulaEcuador(watchedIdentificationRefiere)
-                        )
-                          return ToastWrapper.warning(
-                            'Ingrese un número de cédula válido',
-                          );
+                <SelectTextFieldArrayString
+                  label="Tipo referido"
+                  name="tipo_referido"
+                  textFieldKey="tipo_referido"
+                  // options
+                  options={REFERIDO_TYPE_ARRAY_CHOICES}
+                  defaultValue={form.getValues()?.tipo_referido || ''}
+                  // errors
+                  control={form.control}
+                  error={form.formState.errors.tipo_referido}
+                  helperText={form.formState.errors.tipo_referido?.message}
+                  gridSize={gridSizeMdLg6}
+                  onChangeValue={() => {
+                    onClearCedula();
+                    onClearFlotaRefiere();
+                  }}
+                />
+                {!watchedTipoReferido && <span className="spacer" />}
 
-                        handleFetchClienteByCedula(
-                          watchedIdentificationRefiere,
-                        );
-                      }}
-                    />
+                <>
+                  {watchedTipoReferido === ReferidoTypeEnumChoice.CLIENTE ? (
                     <>
-                      {watchedThereAreClientRefiere && (
-                        <>
-                          <CustomTextField
-                            label="Cliente refiere"
-                            name="clienteRefiere"
+                      <InputAndBtnGridSpace
+                        inputNode={
+                          <CustomIdentificacionTextField
+                            label="Identificación"
+                            name="identificacion_refiere"
                             control={form.control}
-                            defaultValue={form.getValues().clienteRefiere}
-                            error={errors.clienteRefiere}
-                            helperText={errors.clienteRefiere?.message}
-                            disabled
-                            size={gridSizeMdLg6}
+                            selectedDocumentType={
+                              IdentificationTypeEnumChoice.CEDULA
+                            }
+                            defaultValue={form.getValues(
+                              'identificacion_refiere',
+                            )}
+                            error={errors.identificacion_refiere}
+                            helperText={errors.identificacion_refiere?.message}
+                            onFetchCedulaRucInfo={async value => {
+                              await handleFetchClienteByCedula(value);
+                            }}
+                            onClear={() => {
+                              onClearCedula();
+                            }}
                           />
-                          <CustomCellphoneTextField
-                            label="Celular refiere"
-                            name="celularRefiere"
-                            control={form.control}
-                            defaultValue={form.getValues().celularRefiere}
-                            error={errors.celularRefiere}
-                            helperText={errors.celularRefiere?.message}
-                            disabled
-                            size={gridSizeMdLg6}
-                          />
-                          <CustomTextField
-                            label="Dirección refiere"
-                            name="direccionRefiere"
-                            control={form.control}
-                            defaultValue={form.getValues().direccionRefiere}
-                            error={errors.direccionRefiere}
-                            helperText={errors.direccionRefiere?.message}
-                            disabled
-                          />
-                        </>
-                      )}
+                        }
+                        btnLabel="Buscar"
+                        iconBtn={<CiSearch />}
+                        onClick={() => {
+                          if (
+                            !watchedIdentificationRefiere ||
+                            watchedIdentificationRefiere?.length < 10 ||
+                            !validarCedulaEcuador(watchedIdentificationRefiere)
+                          )
+                            return ToastWrapper.warning(
+                              'Ingrese un número de cédula válido',
+                            );
+
+                          handleFetchClienteByCedula(
+                            watchedIdentificationRefiere,
+                          );
+                        }}
+                      />
+                      <>
+                        {watchedThereAreClientRefiere && (
+                          <>
+                            <CustomTextField
+                              label="Cliente refiere"
+                              name="clienteRefiere"
+                              control={form.control}
+                              defaultValue={form.getValues().clienteRefiere}
+                              error={errors.clienteRefiere}
+                              helperText={errors.clienteRefiere?.message}
+                              disabled
+                              size={gridSizeMdLg6}
+                            />
+                            <CustomCellphoneTextField
+                              label="Celular refiere"
+                              name="celularRefiere"
+                              control={form.control}
+                              defaultValue={form.getValues().celularRefiere}
+                              error={errors.celularRefiere}
+                              helperText={errors.celularRefiere?.message}
+                              disabled
+                              size={gridSizeMdLg6}
+                            />
+                            <CustomTextField
+                              label="Dirección refiere"
+                              name="direccionRefiere"
+                              control={form.control}
+                              defaultValue={form.getValues().direccionRefiere}
+                              error={errors.direccionRefiere}
+                              helperText={errors.direccionRefiere?.message}
+                              disabled
+                            />
+                          </>
+                        )}
+                      </>
                     </>
-                  </>
-                ) : watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA ? (
-                  <>FLOTA AUTOCOMPLETE</>
-                ) : null}
+                  ) : watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA ? (
+                    <>FLOTA AUTOCOMPLETE</>
+                  ) : null}
+                </>
               </>
-            </>
-          )}
+            )}
+          </>
         </>
       )}
 
