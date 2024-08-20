@@ -148,7 +148,7 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
             {titleNode ? (
               titleNode
             ) : (
-              <Typography variant="h2" pb={isMobile ? 3 : 6}>
+              <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
                 {titlePage}
               </Typography>
             )}

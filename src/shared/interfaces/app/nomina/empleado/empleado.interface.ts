@@ -16,7 +16,7 @@ export interface EmpleadosPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: Empleado;
+  items: Empleado[];
 }
 
 export interface Empleado {
