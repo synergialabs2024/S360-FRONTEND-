@@ -5,7 +5,7 @@ import { ToastWrapper } from '@/shared/wrappers';
 import { CoordenadasType } from './useMapComponent';
 
 type UseLocationCoordsProps = {
-  form: UseFormReturn<any, any, undefined>;
+  form?: UseFormReturn<any, any, undefined>;
   setLatLng: (value: CoordenadasType) => void;
   isEditting?: boolean;
 };
@@ -24,7 +24,7 @@ export const useLocationCoords = ({
       navigator.geolocation.getCurrentPosition(
         position => {
           const { latitude, longitude } = position.coords;
-          form.setValue('coordenadas', `${latitude},${longitude}`);
+          form && form.setValue('coordenadas', `${latitude},${longitude}`);
 
           setLatLng({
             lat: latitude,

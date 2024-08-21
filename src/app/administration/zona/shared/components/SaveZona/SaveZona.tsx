@@ -1,6 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { PiPolygonBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -13,19 +15,23 @@ import {
 } from '@/actions/app';
 import {
   CustomAutocomplete,
+  CustomSingleButton,
   CustomTextField,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { SAVE_ZONA_PERMISSIONS } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { useLoaders, useMapPolygonComponent } from '@/shared/hooks';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { Ciudad, Pais, Provincia } from '@/shared/interfaces';
 import { Zona } from '@/shared/interfaces/app/administration/zona';
 import { zonaFormSchema } from '@/shared/utils';
-import { returnUrlZonasPage } from '../../../pages/tables/ZonasPage';
 import { ToastWrapper } from '@/shared/wrappers';
-import { useLoaders } from '@/shared/hooks';
-import { Ciudad, Pais, Provincia } from '@/shared/interfaces';
+import { returnUrlZonasPage } from '../../../pages/tables/ZonasPage';
 
 export interface SaveZonaProps {
   title: string;
@@ -38,6 +44,9 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   useCheckPermissionsArray(SAVE_ZONA_PERMISSIONS);
 
   const navigate = useNavigate();
+  const { MapPolygon, latLng, setLatLng, canDrawPolygon, setCanDrawPolygon } =
+    useMapPolygonComponent({});
+  useLocationCoords({ setLatLng });
 
   ///* form
   const form = useForm<SaveFormData>({
@@ -229,6 +238,40 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
         size={gridSizeMdLg6}
         isState
       />
+
+      <>
+        <CustomTypoLabel
+          text="Área con cobertura"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+          // pb={3}
+        />
+
+        <Grid item container xs={12}>
+          <Grid item xs={12}>
+            {!canDrawPolygon ? (
+              <CustomSingleButton
+                label="Dibujar área"
+                startIcon={<PiPolygonBold />}
+                variant="contained"
+                onClick={() => setCanDrawPolygon(true)}
+                sxGrid={{ pb: 3 }}
+              />
+            ) : (
+              <></>
+            )}
+          </Grid>
+
+          <Grid item xs={12}>
+            <MapPolygon
+              coordenadas={{
+                lat: latLng?.lat,
+                lng: latLng?.lng,
+              }}
+              canDrawPolygon={canDrawPolygon}
+            />
+          </Grid>
+        </Grid>
+      </>
     </SingleFormBoxScene>
   );
 };
