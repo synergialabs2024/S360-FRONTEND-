@@ -27,3 +27,38 @@ export const calcOtherZonesMultiPolygon = (
 
   return multiPolygon?.length ? multiPolygon : [];
 };
+
+/* 
+export const calcOtherZonesMultiPolygon = (
+  zones: Zona[],
+  savedCoords: CoordenadasTypeString[] = [],
+) => {
+  // Convertir las coordenadas guardadas a un Set de strings para comparación
+  const savedCoordsSet = new Set(
+    savedCoords.map(coord => JSON.stringify([coord.lat, coord.lng])),
+  );
+
+  // Construir el multiPolygon filtrando coordenadas
+  const multiPolygon = zones.reduce<number[][][]>((acc, zone) => {
+    const filteredCoords = (zone.coordenadas || []).reduce<number[][]>(
+      (subAcc, coord) => {
+        const coordString = JSON.stringify([coord.lat, coord.lng]);
+        if (!savedCoordsSet.has(coordString)) {
+          subAcc.push([parseFloat(coord.lat), parseFloat(coord.lng)]);
+        }
+        return subAcc;
+      },
+      [],
+    );
+
+    if (filteredCoords.length > 0) {
+      acc.push(filteredCoords);
+    }
+
+    return acc;
+  }, []);
+
+  return multiPolygon;
+};
+
+*/
