@@ -1,6 +1,13 @@
 import L from 'leaflet';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import {
+  MapContainer,
+  Marker,
+  Polygon,
+  Popup,
+  TileLayer,
+  useMap,
+} from 'react-leaflet';
 
 import { Grid, Paper } from '@mui/material';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -31,6 +38,7 @@ export type CoordenadasType = {
   lat: number;
   lng: number;
 };
+export type MultiPolygonType = number[][][];
 
 export type MapProps = {
   coordenadas: CoordenadasType;
@@ -40,7 +48,13 @@ export type MapProps = {
   zoomMap?: number;
 
   size?: GridSizeType;
+
+  showCoverage?: boolean;
+  coverage?: MultiPolygonType;
 };
+
+// polygon
+const greenOptions = { color: 'green' };
 
 const CustomMap: React.FC<MapProps> = ({
   coordenadas,
@@ -48,6 +62,9 @@ const CustomMap: React.FC<MapProps> = ({
   size = gridSize,
   canDragMarker = true,
   zoomMap = 15,
+
+  showCoverage = false,
+  coverage = [],
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
 
@@ -132,6 +149,14 @@ const CustomMap: React.FC<MapProps> = ({
           )}
 
           <RecenterAutomatically lat={center[0]} lng={center[1]} />
+
+          {/* -------- polygon -------- */}
+          {showCoverage && !!coverage.length && (
+            <Polygon
+              pathOptions={greenOptions}
+              positions={coverage as unknown as L.LatLngExpression[][][]}
+            />
+          )}
         </MapContainer>
       </Paper>
     </Grid>

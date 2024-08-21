@@ -87,3 +87,15 @@ export const calcOtherZonesMultiPolygon = (
 };
 
 */
+
+export const calcMultiPolygon = (zones: Zona[]) => {
+  const coordsArray = zones.map(zone => zone.coordenadas);
+
+  const multiPolygon = coordsArray.map(coords => {
+    return (coords || []).map(coord => {
+      return [parseFloat(coord.lat), parseFloat(coord.lng)];
+    });
+  });
+
+  return multiPolygon?.length ? multiPolygon : [];
+};
