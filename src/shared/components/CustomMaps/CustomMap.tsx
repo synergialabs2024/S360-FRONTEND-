@@ -152,10 +152,30 @@ const CustomMap: React.FC<MapProps> = ({
 
           {/* -------- polygon -------- */}
           {showCoverage && !!coverage.length && (
-            <Polygon
-              pathOptions={greenOptions}
-              positions={coverage as unknown as L.LatLngExpression[][][]}
-            />
+            <>
+              {coverage.map((polygon, index) => (
+                <Polygon
+                  key={index}
+                  pathOptions={greenOptions}
+                  positions={polygon as unknown as L.LatLngExpression[][]}
+                >
+                  <Popup>
+                    {/* Contenido personalizado del popup */}
+                    <div>
+                      <h4>Polígono {index + 1}</h4>
+                      <p>
+                        Este es un popup personalizado para el polígono{' '}
+                        {index + 1}.
+                      </p>
+                    </div>
+                  </Popup>
+                </Polygon>
+              ))}
+            </>
+            // <Polygon
+            //   pathOptions={greenOptions}
+            //   positions={coverage as unknown as L.LatLngExpression[][][]}
+            // />
           )}
         </MapContainer>
       </Paper>
