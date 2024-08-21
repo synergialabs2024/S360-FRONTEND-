@@ -47,11 +47,7 @@ type CoordenadasType = {
 };
 
 /* 
-const polygon = [
-  [51.515, -0.09],
-  [51.52, -0.1],
-  [51.52, -0.12],
-]
+
 */
 
 export type CustomMapPolygonProps = {
@@ -61,6 +57,7 @@ export type CustomMapPolygonProps = {
   limitOnePolygon?: boolean;
 
   polygon?: CoordenadasType[];
+  otherZones?: CoordenadasType[];
 
   onCancel?: () => void;
   onSave?: (arrayCoords: CoordenadasType[]) => void;
@@ -73,6 +70,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   limitOnePolygon = true,
 
   polygon = [],
+  otherZones = [], // multiPolygon
 
   onCancel,
   onSave,
@@ -85,6 +83,9 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
     useState<boolean>(!!polygon?.length);
 
   const savedPolygonArray = !isEdittingAlredySavedPolygon ? [] : polygon;
+  const savedMultiPolygonArray = !isEdittingAlredySavedPolygon
+    ? otherZones
+    : [];
 
   ///* Function to clear all polygons
   const clearPolygons = () => {
@@ -114,6 +115,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
 
   // polygon view
   const purpleOptions = { color: 'purple' };
+  const greenOptions = { color: 'green' };
 
   return (
     <Grid item {...size} sx={{ pb: 4 }}>
@@ -235,6 +237,10 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
 
           {/* -------- polygon -------- */}
           <Polygon pathOptions={purpleOptions} positions={savedPolygonArray} />
+          <Polygon
+            pathOptions={greenOptions}
+            positions={savedMultiPolygonArray}
+          />
         </MapContainer>
       </Paper>
     </Grid>

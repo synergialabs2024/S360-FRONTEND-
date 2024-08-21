@@ -10,6 +10,7 @@ import {
   useFetchCiudades,
   useFetchPaises,
   useFetchProvincias,
+  useFetchZonas,
   useUpdateZona,
 } from '@/actions/app';
 import {
@@ -28,7 +29,7 @@ import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { Ciudad, Pais, Provincia } from '@/shared/interfaces';
 import { Zona } from '@/shared/interfaces/app/administration/zona';
-import { zonaFormSchema } from '@/shared/utils';
+import { calcOtherZonesMultiPolygon, zonaFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlZonasPage } from '../../../pages/tables/ZonasPage';
 
@@ -48,7 +49,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
 
   const [coordsArray, setCoordsArray] = useState<CoordenadasType[]>([]);
 
-  ///* form
+  ///* form -------------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(zonaFormSchema),
     defaultValues: {
@@ -65,7 +66,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   const watchedCountry = form.watch('pais');
   const watchedProvince = form.watch('provincia');
 
-  ///* fetch data
+  ///* fetch data -------------------
   const {
     data: paisesPagingRes,
     isLoading: isLoadingPaises,
@@ -94,6 +95,16 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
     enabled: !!watchedProvince,
     params: {
       provincia: watchedProvince,
+      page_size: 1200,
+    },
+  });
+
+  const {
+    data: otherZonesPaging,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    params: {
       page_size: 1200,
     },
   });
@@ -162,14 +173,15 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
     isRefetchingProvincias,
     isRefetchingCiudades,
   ]);
-
   useLoaders(
     isLoadingPaises ||
       isRefetchingPaises ||
       isLoadingProvincias ||
       isRefetchingProvincias ||
       isLoadingCiudades ||
-      isRefetchingCiudades,
+      isRefetchingCiudades ||
+      isLoadingZonas ||
+      isRefetchingZonas,
   );
 
   return (
@@ -311,6 +323,12 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
               }}
               polygon={
                 zona?.coordenadas?.length ? (zona?.coordenadas as any) : []
+              }
+              otherZones={
+                calcOtherZonesMultiPolygon(
+                  otherZonesPaging?.data?.items || [],
+                  zona?.coordenadas,
+                ) as any
               }
             />
           </Grid>
