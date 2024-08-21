@@ -4,6 +4,30 @@ export const calcOtherZonesMultiPolygon = (
   zones: Zona[],
   savedCoords: CoordenadasTypeString[] = [],
 ) => {
+  const coordsArray = zones.map(zone => zone.coordenadas);
+
+  const multiPolygon = coordsArray.map(coords => {
+    return (coords || [])
+      .filter(
+        coord =>
+          !savedCoords.some(
+            savedCoord =>
+              savedCoord.lat === coord.lat && savedCoord.lng === coord.lng,
+          ),
+      )
+      .map(coord => {
+        return [parseFloat(coord.lat), parseFloat(coord.lng)];
+      });
+  });
+
+  return multiPolygon?.length ? multiPolygon : [];
+};
+
+/*
+export const calcOtherZonesMultiPolygon = (
+  zones: Zona[],
+  savedCoords: CoordenadasTypeString[] = [],
+) => {
   // Convertir las coordenadas guardadas a strings para comparación
   const savedCoordsStrings = savedCoords.map(coord =>
     JSON.stringify([coord.lat, coord.lng]),
@@ -27,6 +51,7 @@ export const calcOtherZonesMultiPolygon = (
 
   return multiPolygon?.length ? multiPolygon : [];
 };
+*/
 
 /* 
 export const calcOtherZonesMultiPolygon = (
