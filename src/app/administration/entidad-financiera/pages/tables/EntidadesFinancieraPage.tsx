@@ -162,14 +162,6 @@ const EntidadesFinancieraPage: React.FC<EntidadesFinancieraPageProps> = () => {
       },
 
       {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: 180,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
-      },
-      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: 180,

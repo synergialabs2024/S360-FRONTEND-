@@ -95,14 +95,6 @@ const SystemsGroupPage: React.FC<SystemsGroupPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'description'),
       },
-      {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: 180,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
-      },
 
       {
         accessorKey: 'system_modules',

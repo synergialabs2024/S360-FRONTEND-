@@ -197,12 +197,6 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
       },
 
       {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
-      },
-      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

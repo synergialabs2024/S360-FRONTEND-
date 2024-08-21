@@ -18,11 +18,7 @@ import {
   PermissionsEnum,
   SolicitudDesbloqueoVentas,
 } from '@/shared/interfaces';
-import {
-  emptyCellNested,
-  emptyCellOneLevel,
-  formatDateWithTimeCell,
-} from '@/shared/utils';
+import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { HandleSolUnblockServicioModal } from '../../shared/components/tables';
 
@@ -112,14 +108,6 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
           emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
 
-      {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
-      },
       {
         accessorKey: 'state',
         header: 'ESTADO',
