@@ -1,7 +1,8 @@
+import { CoordenadasTypeString } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { CiudadLimitData } from '../ciudad';
 import { PaisLimitData } from '../pais';
 import { ProvinciaLimitData } from '../provincia';
-import { CiudadLimitData } from '../ciudad';
 
 export interface ZonasPaginatedRes {
   status: number;
@@ -15,6 +16,8 @@ export interface Zona {
   uuid?: string;
   name: string;
   has_coverage: boolean;
+
+  coordenadas?: CoordenadasTypeString[];
 
   state: boolean;
   created_at?: string;

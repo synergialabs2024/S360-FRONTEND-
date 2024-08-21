@@ -3,9 +3,13 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { CustomMapPolygon } from '@/shared/components';
 
-export type CoordenadasType = {
+type CoordenadasType = {
   lat: number;
   lng: number;
+};
+export type CoordenadasTypeString = {
+  lat: string;
+  lng: string;
 };
 
 export type UseMapComponentProps = {

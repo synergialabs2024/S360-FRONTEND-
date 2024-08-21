@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +20,7 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
+import { CoordenadasType } from '@/shared/components/CustomMaps/CustomMap';
 import { SAVE_ZONA_PERMISSIONS } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders, useMapPolygonComponent } from '@/shared/hooks';
@@ -44,6 +45,8 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   const navigate = useNavigate();
   const { MapPolygon, latLng, setLatLng } = useMapPolygonComponent({});
   useLocationCoords({ setLatLng });
+
+  const [coordsArray, setCoordsArray] = useState<CoordenadasType[]>([]);
 
   ///* form
   const form = useForm<SaveFormData>({
@@ -109,15 +112,25 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+    const mapedCoords = coordsArray.map(({ lat, lng }) => ({
+      lat: lat?.toString(),
+      lng: lng?.toString(),
+    }));
 
     ///* upd
     if (zona?.id) {
-      updateZonasMutation.mutate({ id: zona.id!, data });
+      updateZonasMutation.mutate({
+        id: zona.id!,
+        data: {
+          ...data,
+          coordenadas: mapedCoords,
+        },
+      });
       return;
     }
 
     ///* create
-    createZonaMutation.mutate(data);
+    createZonaMutation.mutate({ ...data, coordenadas: mapedCoords });
   };
 
   ///* effects
@@ -293,6 +306,12 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
                 lat: latLng?.lat,
                 lng: latLng?.lng,
               }}
+              onSave={coordsArray => {
+                setCoordsArray(coordsArray);
+              }}
+              polygon={
+                zona?.coordenadas?.length ? (zona?.coordenadas as any) : []
+              }
             />
           </Grid>
         </Grid>

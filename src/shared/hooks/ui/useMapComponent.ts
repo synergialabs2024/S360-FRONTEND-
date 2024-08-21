@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { CustomMap } from '@/shared/components/CustomMaps';
 
-export type CoordenadasType = {
+type CoordenadasType = {
   lat: number;
   lng: number;
 };

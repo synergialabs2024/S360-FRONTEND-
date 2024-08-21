@@ -1,8 +1,14 @@
 import L from 'leaflet';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdCancel, MdSaveAs } from 'react-icons/md';
 import { PiPolygonBold } from 'react-icons/pi';
-import { FeatureGroup, MapContainer, TileLayer, useMap } from 'react-leaflet';
+import {
+  FeatureGroup,
+  MapContainer,
+  Polygon,
+  TileLayer,
+  useMap,
+} from 'react-leaflet';
 
 // polygon
 import { EditControl } from 'react-leaflet-draw';
@@ -35,16 +41,26 @@ const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const attribution =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
-export type CoordenadasType = {
+type CoordenadasType = {
   lat: number;
   lng: number;
 };
+
+/* 
+const polygon = [
+  [51.515, -0.09],
+  [51.52, -0.1],
+  [51.52, -0.12],
+]
+*/
 
 export type CustomMapPolygonProps = {
   coordenadas: CoordenadasType;
   zoomMap?: number;
   size?: GridSizeType;
   limitOnePolygon?: boolean;
+
+  polygon?: CoordenadasType[];
 
   onCancel?: () => void;
   onSave?: (arrayCoords: CoordenadasType[]) => void;
@@ -56,11 +72,19 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   zoomMap = 12,
   limitOnePolygon = true,
 
+  polygon = [],
+
   onCancel,
   onSave,
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
   const featureGroupRef = useRef<L.FeatureGroup>(null);
+
+  ///* local state --------------------
+  const [isEdittingAlredySavedPolygon, setIsEdittingAlredySavedPolygon] =
+    useState<boolean>(!!polygon?.length);
+
+  const savedPolygonArray = !isEdittingAlredySavedPolygon ? [] : polygon;
 
   ///* Function to clear all polygons
   const clearPolygons = () => {
@@ -88,6 +112,9 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   const { canDrawPolygon, coordsArray, setCanDrawPolygon, setCoordsArray } =
     useMapPolygonComponent({});
 
+  // polygon view
+  const purpleOptions = { color: 'purple' };
+
   return (
     <Grid item {...size} sx={{ pb: 4 }}>
       <>
@@ -96,7 +123,12 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
             label="Dibujar área"
             startIcon={<PiPolygonBold />}
             variant="contained"
-            onClick={() => setCanDrawPolygon(true)}
+            onClick={() => {
+              setCanDrawPolygon(true);
+              if (isEdittingAlredySavedPolygon) {
+                setIsEdittingAlredySavedPolygon(false);
+              }
+            }}
             sxGrid={{ pb: 3 }}
           />
         ) : (
@@ -124,6 +156,11 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                   setCanDrawPolygon(false);
                   clearPolygons();
                   onCancel && onCancel();
+
+                  // si cancela mostrar de nuevo el savedPolygonArray
+                  if (polygon?.length) {
+                    setIsEdittingAlredySavedPolygon(true);
+                  }
                 }}
                 sxGrid={{ pb: 3 }}
                 justifyContent="flex-end"
@@ -139,6 +176,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
           zoom={zoomMap}
           style={{ height: '100%', width: '100%' }}
         >
+          {/* -------------- Draw Polygon -------------- */}
           <FeatureGroup ref={featureGroupRef}>
             <EditControl
               position="topright"
@@ -194,6 +232,9 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
           <TileLayer url={url} attribution={attribution} />
 
           <RecenterAutomatically lat={center[0]} lng={center[1]} />
+
+          {/* -------- polygon -------- */}
+          <Polygon pathOptions={purpleOptions} positions={savedPolygonArray} />
         </MapContainer>
       </Paper>
     </Grid>
