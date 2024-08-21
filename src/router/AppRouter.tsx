@@ -6,6 +6,7 @@ import PrivateRoutes from './PrivateRoutes';
 import { Loadable } from '@/shared/components/common';
 import AuthRoutes from './AuthRoutes';
 import { ROUTER_PATHS } from './constants';
+import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 
 const AppLayout = Loadable(
   lazy(() => import('@/app/layout/AppLayout/AppLayout')),
@@ -367,6 +368,17 @@ const PreventasMainPage = Loadable(
 const CreatePreventaPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
 );
+///* Infraestructura ------------
+//Nodo
+const NodosPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nodo/pages/tables/NodosPage')),
+);
+const CreateNodoPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nodo/pages/forms/CreateNodoPage')),
+);
+const UpdateNodoPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nodo/pages/forms/UpdateNodoPage')),
+);
 
 ///* Mantenimiento Operaciones ------------
 const MantenimientoOperacionModule = Loadable(
@@ -672,6 +684,27 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.mantenimientoOperacion.flotasEditar,
             element: <UpdateFlotaPage />,
+          },
+        ],
+      },
+
+      //////////* Infraestructura ------------
+      {
+        path: ROUTER_PATHS.infraestructura.root,
+        element: <InfraestructuraModule />,
+        children: [
+          ///* Nodo
+          {
+            path: ROUTER_PATHS.infraestructura.nodosNav,
+            element: <NodosPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.nodosCrear,
+            element: <CreateNodoPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.nodosEditar,
+            element: <UpdateNodoPage />,
           },
         ],
       },
