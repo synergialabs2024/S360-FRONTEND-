@@ -52,3 +52,11 @@ export const SAVE_EMPLEADO_PERMISSIONS = [
   PermissionsEnum.administration_view_sector,
   PermissionsEnum.users_view_user,
 ];
+
+export const SAVE_NODO_PERMISSIONS = [
+  PermissionsEnum.administration_view_pais,
+  PermissionsEnum.administration_view_provincia,
+  PermissionsEnum.administration_view_ciudad,
+  PermissionsEnum.administration_view_zona,
+  PermissionsEnum.administration_view_sector,
+];

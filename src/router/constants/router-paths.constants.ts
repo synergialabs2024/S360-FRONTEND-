@@ -153,6 +153,17 @@ export const ROUTER_PATHS = {
     preventasNav: '/comercial/preventas',
   },
 
+  /////* Infraestructura ----------------
+  infraestructura: {
+    root: 'infraestructura',
+
+    ///* nodos
+    nodos: 'nodos',
+    nodosCrear: 'nodos/crear',
+    nodosEditar: 'nodos/editar/:uuid',
+    nodosNav: '/infraestructura/nodos',
+  },
+
   /////* Mantenimiento y Operación ----------------
   mantenimientoOperacion: {
     root: 'mantenimiento-operacion',
