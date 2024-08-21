@@ -4,7 +4,7 @@ export interface NodosPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: Nodo;
+  items: Nodo[];
 }
 
 export interface Nodo {
@@ -27,3 +27,5 @@ export interface Nodo {
   zona: number;
   sector: number;
 }
+
+export type NodoLimitData = Pick<Nodo, 'id' | 'uuid' | 'name'>;

@@ -389,6 +389,16 @@ const CreateOLTPage = Loadable(
 const UpdateOLTPage = Loadable(
   lazy(() => import('@/app/infraestructura/olt/pages/forms/UpdateOLTPage')),
 );
+// NAP
+const NapsPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nap/pages/tables/NapsPage')),
+);
+const CreateNapPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nap/pages/forms/CreateNapPage')),
+);
+const UpdateNapPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nap/pages/forms/UpdateNapPage')),
+);
 
 ///* Mantenimiento Operaciones ------------
 const MantenimientoOperacionModule = Loadable(
@@ -729,6 +739,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.infraestructura.oltsEditar,
             element: <UpdateOLTPage />,
+          },
+
+          ///* NAP
+          {
+            path: ROUTER_PATHS.infraestructura.naps,
+            element: <NapsPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.napsCrear,
+            element: <CreateNapPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.napsEditar,
+            element: <UpdateNapPage />,
           },
         ],
       },

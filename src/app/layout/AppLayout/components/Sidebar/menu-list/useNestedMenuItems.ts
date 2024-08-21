@@ -266,6 +266,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.oltsNav,
             }),
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_NAP, {
+              id: 'naps',
+              title: 'NAPs',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.infraestructura.napsNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

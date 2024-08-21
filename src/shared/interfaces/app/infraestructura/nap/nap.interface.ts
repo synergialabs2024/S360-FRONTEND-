@@ -1,4 +1,7 @@
 import { PagingMetaResponse, PuertoType } from '@/shared/interfaces/common';
+import { CiudadLimitData, SectorLimitData } from '../../administration';
+import { NodoLimitData } from '../nodo';
+import { OLTLimitData } from '../olt';
 
 export interface NapsPaginatedRes {
   status: number;
@@ -28,4 +31,9 @@ export interface Nap {
   olt: number;
   ciudad: number;
   sector: number;
+
+  nodo_data?: NodoLimitData;
+  olt_data?: OLTLimitData;
+  ciudad_data?: CiudadLimitData;
+  sector_data?: SectorLimitData;
 }

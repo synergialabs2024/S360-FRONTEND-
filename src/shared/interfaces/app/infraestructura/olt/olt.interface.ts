@@ -4,7 +4,7 @@ export interface OltsPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: OLT;
+  items: OLT[];
 }
 
 export interface OLT {
@@ -36,3 +36,5 @@ export interface OLT {
   zona?: number;
   sector?: number;
 }
+
+export type OLTLimitData = Pick<OLT, 'id' | 'uuid' | 'name'>;

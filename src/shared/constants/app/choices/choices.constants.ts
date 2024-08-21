@@ -181,6 +181,15 @@ export const PARENTESCO_TYPE_ARRAY_CHOICES = [
   ParentescoTypeEnumChoice.OTRO,
 ];
 
+export const enum NapStatusEnumChoice {
+  OPERATIVO = 'OPERATIVO',
+  AFECTACION = 'AFECTACION',
+}
+export const NAP_STATUS_ARRAY_CHOICES = [
+  NapStatusEnumChoice.OPERATIVO,
+  NapStatusEnumChoice.AFECTACION,
+];
+
 // // // SALES ================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',

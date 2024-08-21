@@ -168,6 +168,12 @@ export const ROUTER_PATHS = {
     oltsCrear: 'olts/crear',
     oltsEditar: 'olts/editar/:uuid',
     oltsNav: '/infraestructura/olts',
+
+    ///* nap
+    naps: 'naps',
+    napsCrear: 'naps/crear',
+    napsEditar: 'naps/editar/:uuid',
+    napsNav: '/infraestructura/naps',
   },
 
   /////* Mantenimiento y Operación ----------------
