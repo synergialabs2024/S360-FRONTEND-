@@ -162,6 +162,12 @@ export const ROUTER_PATHS = {
     nodosCrear: 'nodos/crear',
     nodosEditar: 'nodos/editar/:uuid',
     nodosNav: '/infraestructura/nodos',
+
+    ///* olt
+    olts: 'olts',
+    oltsCrear: 'olts/crear',
+    oltsEditar: 'olts/editar/:uuid',
+    oltsNav: '/infraestructura/olts',
   },
 
   /////* Mantenimiento y Operación ----------------

@@ -259,6 +259,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.nodosNav,
             }),
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_OLT, {
+              id: 'olts',
+              title: 'OLTs',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.infraestructura.oltsNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

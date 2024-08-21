@@ -3,10 +3,10 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import PrivateRoutes from './PrivateRoutes';
 
+import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 import { Loadable } from '@/shared/components/common';
 import AuthRoutes from './AuthRoutes';
 import { ROUTER_PATHS } from './constants';
-import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 
 const AppLayout = Loadable(
   lazy(() => import('@/app/layout/AppLayout/AppLayout')),
@@ -379,6 +379,16 @@ const CreateNodoPage = Loadable(
 const UpdateNodoPage = Loadable(
   lazy(() => import('@/app/infraestructura/nodo/pages/forms/UpdateNodoPage')),
 );
+// OLT
+const OLTsPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/tables/OLTsPage')),
+);
+const CreateOLTPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/forms/CreateOLTPage')),
+);
+const UpdateOLTPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/forms/UpdateOLTPage')),
+);
 
 ///* Mantenimiento Operaciones ------------
 const MantenimientoOperacionModule = Loadable(
@@ -674,7 +684,7 @@ const AppRouter = createBrowserRouter([
         children: [
           ///* flotas
           {
-            path: ROUTER_PATHS.mantenimientoOperacion.flotasNav,
+            path: ROUTER_PATHS.mantenimientoOperacion.flotas,
             element: <FlotasPage />,
           },
           {
@@ -695,7 +705,7 @@ const AppRouter = createBrowserRouter([
         children: [
           ///* Nodo
           {
-            path: ROUTER_PATHS.infraestructura.nodosNav,
+            path: ROUTER_PATHS.infraestructura.nodos,
             element: <NodosPage />,
           },
           {
@@ -705,6 +715,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.infraestructura.nodosEditar,
             element: <UpdateNodoPage />,
+          },
+
+          ///* OLT
+          {
+            path: ROUTER_PATHS.infraestructura.olts,
+            element: <OLTsPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.oltsCrear,
+            element: <CreateOLTPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.oltsEditar,
+            element: <UpdateOLTPage />,
           },
         ],
       },

@@ -29,10 +29,10 @@ export interface OLT {
   modified_at?: string;
 
   ///* fk
-  nodo: number;
-  pais: number;
-  provincia: number;
-  ciudad: number;
-  zona: number;
-  sector: number;
+  nodo?: number;
+  pais?: number;
+  provincia?: number;
+  ciudad?: number;
+  zona?: number;
+  sector?: number;
 }
