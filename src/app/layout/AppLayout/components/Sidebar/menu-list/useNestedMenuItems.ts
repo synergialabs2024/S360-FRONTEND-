@@ -3,6 +3,7 @@ import {
   IconBuildings,
   IconCube3dSphere,
   IconDashboard,
+  IconHierarchy3,
   IconReportMoney,
   IconUserShield,
 } from '@tabler/icons-react';
@@ -241,6 +242,22 @@ export const useNestedMenu = () => {
               title: 'Flotas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.mantenimientoOperacion.flotasNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+
+        /////* Infraestructura ----------------
+        {
+          id: 'infraestructura',
+          title: 'Infraestructura',
+          type: MenuItemType.COLLAPSE,
+          icon: IconHierarchy3,
+          children: [
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_NODO, {
+              id: 'nodos',
+              title: 'Nodos',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.infraestructura.nodosNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
