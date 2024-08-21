@@ -12,7 +12,7 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-import { useMapPolygonComponent } from '@/shared';
+import { ToastWrapper, useMapPolygonComponent } from '@/shared';
 import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
 import { CustomSingleButton } from '..';
@@ -44,6 +44,7 @@ export type CustomMapPolygonProps = {
   coordenadas: CoordenadasType;
   zoomMap?: number;
   size?: GridSizeType;
+  limitOnePolygon?: boolean;
 
   onCancel?: () => void;
   onSave?: (arrayCoords: CoordenadasType[]) => void;
@@ -53,6 +54,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   coordenadas,
   size = gridSize,
   zoomMap = 12,
+  limitOnePolygon = true,
 
   onCancel,
   onSave,
@@ -153,11 +155,25 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                 ...(canDrawPolygon === false && { edit: false }),
               }}
               onCreated={e => {
+                const featureGroup = featureGroupRef.current;
                 const { layerType, layer } = e;
-                const latlngs = layer.getLatLngs();
 
                 if (layerType === 'polygon') {
-                  setCoordsArray(latlngs[0]);
+                  // length = 1 by default
+                  if (
+                    featureGroup &&
+                    featureGroup.getLayers().length > 1 &&
+                    limitOnePolygon
+                  ) {
+                    // Ya hay un polígono, no permitir crear otro
+                    featureGroup.removeLayer(layer); // Remover el nuevo polígono creado
+                    ToastWrapper.warning(
+                      'Solo se permite crear un área de cobertura para cada zona',
+                    );
+                  } else {
+                    const latlngs = layer.getLatLngs();
+                    setCoordsArray(latlngs[0]);
+                  }
                 }
               }}
               onEdited={e => {
