@@ -299,14 +299,6 @@ const EmpleadosPage: React.FC<EmpleadosPageProps> = () => {
       },
 
       {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
-      },
-      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

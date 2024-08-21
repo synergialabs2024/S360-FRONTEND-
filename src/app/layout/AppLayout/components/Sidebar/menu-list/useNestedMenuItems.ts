@@ -1,6 +1,7 @@
 import {
   IconBroadcast,
   IconBuildings,
+  IconBulldozer,
   IconCube3dSphere,
   IconDashboard,
   IconHierarchy3,
@@ -235,7 +236,7 @@ export const useNestedMenu = () => {
           id: 'mantenimiento-operacion',
           title: 'Mantenimiento y Operación',
           type: MenuItemType.COLLAPSE,
-          icon: IconBroadcast,
+          icon: IconBulldozer,
           children: [
             renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
               id: 'flotas',
