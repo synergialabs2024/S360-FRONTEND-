@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { PiPolygonBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -15,7 +14,6 @@ import {
 } from '@/actions/app';
 import {
   CustomAutocomplete,
-  CustomSingleButton,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
@@ -44,8 +42,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   useCheckPermissionsArray(SAVE_ZONA_PERMISSIONS);
 
   const navigate = useNavigate();
-  const { MapPolygon, latLng, setLatLng, canDrawPolygon, setCanDrawPolygon } =
-    useMapPolygonComponent({});
+  const { MapPolygon, latLng, setLatLng } = useMapPolygonComponent({});
   useLocationCoords({ setLatLng });
 
   ///* form
@@ -247,7 +244,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
         />
 
         <Grid item container xs={12}>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             {!canDrawPolygon ? (
               <CustomSingleButton
                 label="Dibujar área"
@@ -257,9 +254,38 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
                 sxGrid={{ pb: 3 }}
               />
             ) : (
-              <></>
+              <Grid item container xs={12}>
+                <Grid item {...gridSizeMdLg6}>
+                  <CustomSingleButton
+                    label="Guardar área"
+                    startIcon={<MdSaveAs />}
+                    variant="contained"
+                    onClick={() => setCanDrawPolygon(false)}
+                    sxGrid={{ pb: 3 }}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  {...gridSizeMdLg6}
+                  container
+                  justifyContent="flex-end"
+                >
+                  <CustomSingleButton
+                    label="Cancelar"
+                    startIcon={<MdSaveAs />}
+                    variant="text"
+                    color="error"
+                    onClick={() => {
+                      setCanDrawPolygon(false);
+                    }}
+                    sxGrid={{ pb: 3 }}
+                    justifyContent="flex-end"
+                  />
+                </Grid>
+              </Grid>
             )}
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <MapPolygon
@@ -267,7 +293,6 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
                 lat: latLng?.lat,
                 lng: latLng?.lng,
               }}
-              canDrawPolygon={canDrawPolygon}
             />
           </Grid>
         </Grid>

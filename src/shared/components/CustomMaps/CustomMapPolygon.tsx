@@ -1,7 +1,10 @@
 import L from 'leaflet';
 import { useEffect, useRef } from 'react';
+import { MdCancel, MdSaveAs } from 'react-icons/md';
+import { PiPolygonBold } from 'react-icons/pi';
 import { FeatureGroup, MapContainer, TileLayer, useMap } from 'react-leaflet';
 
+// polygon
 import { EditControl } from 'react-leaflet-draw';
 
 import { Grid, Paper } from '@mui/material';
@@ -9,8 +12,11 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-import { gridSize } from '@/shared/constants/ui';
+import { useMapPolygonComponent } from '@/shared';
+import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
+import { CustomSingleButton } from '..';
+
 import 'leaflet/dist/leaflet.css';
 
 // // adapt leaflet to react ----
@@ -36,13 +42,11 @@ export type CoordenadasType = {
 
 export type CustomMapPolygonProps = {
   coordenadas: CoordenadasType;
-  // setLatLng: (coordenadas: CoordenadasType) => void;
-
-  canDrawPolygon?: boolean;
-
   zoomMap?: number;
-
   size?: GridSizeType;
+
+  onCancel?: () => void;
+  onSave?: (arrayCoords: CoordenadasType[]) => void;
 };
 
 const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
@@ -50,9 +54,19 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   size = gridSize,
   zoomMap = 12,
 
-  canDrawPolygon = false,
+  onCancel,
+  onSave,
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
+  const featureGroupRef = useRef<L.FeatureGroup>(null);
+
+  ///* Function to clear all polygons
+  const clearPolygons = () => {
+    const featureGroup = featureGroupRef.current;
+    if (featureGroup) {
+      featureGroup.clearLayers();
+    }
+  };
 
   ///* recenter
   const RecenterAutomatically = ({ lat, lng }: CoordenadasType) => {
@@ -68,22 +82,62 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
     return null;
   };
 
+  // hooks
+  const { canDrawPolygon, coordsArray, setCanDrawPolygon, setCoordsArray } =
+    useMapPolygonComponent({});
+
   return (
-    <Grid
-      item
-      {...size}
-      sx={{
-        pb: 4,
-      }}
-    >
+    <Grid item {...size} sx={{ pb: 4 }}>
+      <>
+        {!canDrawPolygon ? (
+          <CustomSingleButton
+            label="Dibujar área"
+            startIcon={<PiPolygonBold />}
+            variant="contained"
+            onClick={() => setCanDrawPolygon(true)}
+            sxGrid={{ pb: 3 }}
+          />
+        ) : (
+          <Grid item container xs={12}>
+            <Grid item {...gridSizeMdLg6}>
+              <CustomSingleButton
+                label="Guardar área"
+                startIcon={<MdSaveAs />}
+                variant="contained"
+                onClick={() => {
+                  setCanDrawPolygon(false);
+                  onSave && onSave(coordsArray);
+                }}
+                sxGrid={{ pb: 3 }}
+              />
+            </Grid>
+
+            <Grid item {...gridSizeMdLg6} container justifyContent="flex-end">
+              <CustomSingleButton
+                label="Cancelar"
+                startIcon={<MdCancel />}
+                variant="text"
+                color="error"
+                onClick={() => {
+                  setCanDrawPolygon(false);
+                  clearPolygons();
+                  onCancel && onCancel();
+                }}
+                sxGrid={{ pb: 3 }}
+                justifyContent="flex-end"
+              />
+            </Grid>
+          </Grid>
+        )}
+      </>
+
       <Paper elevation={3} style={{ height: '600px', width: '100%' }}>
         <MapContainer
           center={center as L.LatLngExpression}
           zoom={zoomMap}
-          // scrollWheelZoom={false}
           style={{ height: '100%', width: '100%' }}
         >
-          <FeatureGroup>
+          <FeatureGroup ref={featureGroupRef}>
             <EditControl
               position="topright"
               draw={{
@@ -92,7 +146,6 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                 circlemarker: false,
                 marker: false,
                 polyline: false,
-
                 polygon: canDrawPolygon,
               }}
               edit={{
@@ -100,13 +153,24 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                 ...(canDrawPolygon === false && { edit: false }),
               }}
               onCreated={e => {
-                console.log('onCreated', e);
+                const { layerType, layer } = e;
+                const latlngs = layer.getLatLngs();
+
+                if (layerType === 'polygon') {
+                  setCoordsArray(latlngs[0]);
+                }
               }}
               onEdited={e => {
-                console.log('onEdited', e);
+                const { layers } = e;
+                const latlngs = layers.getLayers()[0].getLatLngs();
+
+                setCoordsArray(latlngs[0]);
               }}
               onDeleted={e => {
-                console.log('onDeleted', e);
+                const { layers } = e;
+                const latlngs = layers.getLayers()[0].getLatLngs();
+
+                setCoordsArray(latlngs[0]);
               }}
             />
           </FeatureGroup>

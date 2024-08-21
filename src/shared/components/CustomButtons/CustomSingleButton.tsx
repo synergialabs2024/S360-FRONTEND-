@@ -1,5 +1,3 @@
-import { Button, Grid } from '@mui/material';
-
 import { gridSize } from '@/shared/constants';
 import { useIsMediaQuery } from '@/shared/hooks';
 import {
@@ -9,6 +7,7 @@ import {
   JustifyContentType,
   SxPropsThemeType,
 } from '@/shared/interfaces';
+import { Button, Grid } from '@mui/material';
 
 export type CustomSingleButtonProps = {
   label: string;
@@ -33,7 +32,7 @@ const CustomSingleButton: React.FC<CustomSingleButtonProps> = ({
   sxBtn,
   sxGrid,
   gridSizeBtn = gridSize,
-  justifyContent,
+  justifyContent = 'flex-start', // Default to 'flex-start'
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
