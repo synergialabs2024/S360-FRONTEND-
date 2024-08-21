@@ -123,7 +123,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
         id: zona.id!,
         data: {
           ...data,
-          coordenadas: mapedCoords,
+          coordenadas: mapedCoords?.length ? mapedCoords : zona?.coordenadas,
         },
       });
       return;
