@@ -65,6 +65,7 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
 
   ///* global state -------------------
   const addZonePk = useFlotasStore(s => s.addZonePk);
+  const addZoneObj = useFlotasStore(s => s.addZoneObj);
 
   return (
     <Grid
@@ -90,41 +91,38 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
                 const { coordenadas: zoneCoords } = zone;
 
                 return (
-                  <>
-                    <Polygon
-                      key={index}
-                      pathOptions={greenOptions}
-                      positions={
-                        zoneCoords as unknown as L.LatLngExpression[][]
-                      }
-                    >
-                      <Popup>
-                        <Typography variant="h5">Zona: {zone?.name}</Typography>
+                  <Polygon
+                    key={index}
+                    pathOptions={greenOptions}
+                    positions={zoneCoords as unknown as L.LatLngExpression[][]}
+                  >
+                    <Popup>
+                      <Typography variant="h5">Zona: {zone?.name}</Typography>
 
-                        <CustomSingleButton
-                          label="Asignar Zona"
-                          variant="text"
-                          onClick={() => {
-                            const currentZonesPk =
-                              useFlotasStore.getState().zonesPk;
-                            if (currentZonesPk.includes(zone?.id!)) {
-                              return ToastWrapper.warning(
-                                `La zona ${zone?.name} ya ha sido asignada`,
-                              );
-                            }
-
-                            addZonePk(zone?.id!);
-                            ToastWrapper.info(
-                              `Zona ${zone?.name} asignada correctamente`,
+                      <CustomSingleButton
+                        label="Asignar Zona"
+                        variant="text"
+                        onClick={() => {
+                          const currentZonesPk =
+                            useFlotasStore.getState().zonesPk;
+                          if (currentZonesPk.includes(zone?.id!)) {
+                            return ToastWrapper.warning(
+                              `La zona ${zone?.name} ya ha sido asignada`,
                             );
-                          }}
-                          sxGrid={{ pt: 1 }}
-                          gridSizeBtn={gridSize}
-                          justifyContent="center"
-                        />
-                      </Popup>
-                    </Polygon>
-                  </>
+                          }
+
+                          addZonePk(zone?.id!);
+                          addZoneObj(zone);
+                          ToastWrapper.info(
+                            `Zona ${zone?.name} asignada correctamente`,
+                          );
+                        }}
+                        sxGrid={{ pt: 1 }}
+                        gridSizeBtn={gridSize}
+                        justifyContent="center"
+                      />
+                    </Popup>
+                  </Polygon>
                 );
               })}
             </>

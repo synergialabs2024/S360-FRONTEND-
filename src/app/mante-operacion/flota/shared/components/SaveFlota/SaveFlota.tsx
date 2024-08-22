@@ -1,5 +1,5 @@
 import { Tab } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,9 +17,11 @@ import {
 } from '@/actions/app';
 import {
   EmployeeTypeEnumChoice,
+  emptyCellOneLevel,
   gridSizeMdLg11,
   gridSizeMdLg6,
   gridSizeMdLg8,
+  TABLE_CONSTANTS,
   ToastWrapper,
   useLoaders,
   useMapPolygonComponent,
@@ -52,6 +54,7 @@ import {
   Provincia,
 } from '@/shared/interfaces';
 import { useFlotasStore } from '@/store/app';
+import { MRT_ColumnDef } from 'material-react-table';
 import { returnUrlFlotasPage } from '../../../pages/tables/FlotasPage';
 
 export interface SaveFlotaProps {
@@ -70,6 +73,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
 
   ///* global state --------------------
   const zonesPk = useFlotasStore(s => s.zonesPk);
+  const zonesObj = useFlotasStore(s => s.zonesObj);
 
   ///* form --------------------
   const form = useForm<SaveFormData>({
@@ -193,7 +197,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
       zonesPk,
       data,
     });
-    return;
+    // return;
 
     ///* upd
     if (flota?.id) {
@@ -204,6 +208,21 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     ///* create
     createFlotaMutation.mutate(data);
   };
+
+  ///* table --------------------
+  const zoneColumns = useMemo<MRT_ColumnDef<Zona>[]>(
+    () => [
+      {
+        accessorKey: 'name',
+        header: 'NAME',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+      },
+    ],
+    [],
+  );
 
   ///* effects --------------------
   useEffect(() => {
@@ -484,7 +503,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
             {/* -------- zones table -------- */}
-            <CustomMinimalTable<Zona> columns={[]} data={[]} />
+            <CustomMinimalTable<Zona> columns={zoneColumns} data={zonesObj} />
 
             {/* -------- zones map -------- */}
             <FlotaZonesMap
