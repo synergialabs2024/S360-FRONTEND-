@@ -6,7 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateFlotaParamsBase,
   useCreateFlota,
+  useFetchAreas,
+  useFetchCiudades,
+  useFetchDepartamentos,
   useFetchEmpleados,
+  useFetchPaises,
+  useFetchProvincias,
   useUpdateFlota,
 } from '@/actions/app';
 import {
@@ -20,6 +25,8 @@ import {
   CustomCellphoneTextField,
   CustomNumberTextField,
   CustomTextField,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
   SampleCheckbox,
   StepperBoxScene,
   useCustomStepper,
@@ -32,7 +39,6 @@ import {
   Flota,
   Pais,
   Provincia,
-  Zona,
 } from '@/shared/interfaces';
 import { flotaFormSchema } from '@/shared/utils';
 import { returnUrlFlotasPage } from '../../../pages/tables/FlotasPage';
@@ -44,7 +50,7 @@ export interface SaveFlotaProps {
 
 type SaveFormData = CreateFlotaParamsBase & {};
 
-const steps = ['Datos generales', 'Cobertura', 'Automotor'];
+const steps = ['Datos generales', 'Cobertura'];
 
 const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ///* hooks --------------------
@@ -69,6 +75,8 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     reset,
     formState: { errors, isValid },
   } = form;
+  const watchedIsBodega = form.watch('es_bodega');
+  const watchedArea = form.watch('area');
 
   ///* fetch data --------------------
   const {
@@ -89,6 +97,59 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     params: {
       page_size: 200,
       tipo_empleado: EmployeeTypeEnumChoice.TECNICO,
+    },
+  });
+  const {
+    data: areasDataPagingRes,
+    isLoading: isLoadingAreas,
+    isRefetching: isRefetchingAreas,
+  } = useFetchAreas({
+    params: {
+      page_size: 200,
+    },
+  });
+  const {
+    data: departamentosDataPagingRes,
+    isLoading: isLoadingDepartamentos,
+    isRefetching: isRefetchingDepartamentos,
+  } = useFetchDepartamentos({
+    enabled: !!watchedArea,
+    params: {
+      area: watchedArea,
+      page_size: 600,
+    },
+  });
+  const watchedCountry = form.watch('pais');
+  const watchedProvince = form.watch('provincia');
+  const {
+    data: paisesPagingRes,
+    isLoading: isLoadingPaises,
+    isRefetching: isRefetchingPaises,
+  } = useFetchPaises({
+    params: {
+      page_size: 200,
+    },
+  });
+  const {
+    data: provinciasPagingRes,
+    isLoading: isLoadingProvincias,
+    isRefetching: isRefetchingProvincias,
+  } = useFetchProvincias({
+    enabled: !!watchedCountry,
+    params: {
+      pais: watchedCountry,
+      page_size: 600,
+    },
+  });
+  const {
+    data: ciudadesPagingRes,
+    isLoading: isLoadingCiudades,
+    isRefetching: isRefetchingCiudades,
+  } = useFetchCiudades({
+    enabled: !!watchedProvince,
+    params: {
+      provincia: watchedProvince,
+      page_size: 1200,
     },
   });
 
@@ -126,7 +187,17 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     isLoadingLider ||
     isLoadingAuxiliar ||
     isRefetchingLider ||
-    isRefetchingAuxiliar;
+    isRefetchingAuxiliar ||
+    isLoadingAreas ||
+    isRefetchingAreas ||
+    isLoadingDepartamentos ||
+    isRefetchingDepartamentos ||
+    isLoadingPaises ||
+    isRefetchingPaises ||
+    isLoadingProvincias ||
+    isRefetchingProvincias ||
+    isLoadingCiudades ||
+    isRefetchingCiudades;
   useLoaders(customLoader);
 
   return (
@@ -147,6 +218,8 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
       {/* ========================= Datos Generales ========================= */}
       {activeStep === 0 && (
         <>
+          <CustomTypoLabel text="Datos Contacto" />
+
           <CustomTextField
             label="Nombre flota"
             name="name"
@@ -154,7 +227,6 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             defaultValue={form.getValues().name}
             error={errors.name}
             helperText={errors.name?.message}
-            size={gridSizeMdLg6}
           />
           <CustomAutocomplete<Empleado>
             label="Lider"
@@ -168,7 +240,6 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             control={form.control}
             error={errors.lider}
             helperText={errors.lider?.message}
-            size={gridSizeMdLg6}
           />
           <CustomAutocomplete<Empleado>
             label="Auxiliar"
@@ -184,82 +255,6 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             helperText={errors.auxiliar?.message}
             size={gridSizeMdLg6}
           />
-        </>
-      )}
-
-      {activeStep === 10 && (
-        <>
-          <SampleCheckbox
-            label="state"
-            name="state"
-            control={form.control}
-            defaultValue={form.getValues().state}
-            size={gridSizeMdLg6}
-            isState
-          />
-
-          <CustomTextField
-            label="Marca vehiculo"
-            name="marca_vehiculo"
-            control={form.control}
-            defaultValue={form.getValues().marca_vehiculo}
-            error={errors.marca_vehiculo}
-            helperText={errors.marca_vehiculo?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Modelo vehiculo"
-            name="modelo_vehiculo"
-            control={form.control}
-            defaultValue={form.getValues().modelo_vehiculo}
-            error={errors.modelo_vehiculo}
-            helperText={errors.modelo_vehiculo?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomNumberTextField
-            label="Anio vehiculo"
-            name="anio_vehiculo"
-            control={form.control}
-            defaultValue={form.getValues().anio_vehiculo}
-            error={errors.anio_vehiculo}
-            helperText={errors.anio_vehiculo?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomTextField
-            label="Placa vehiculo"
-            name="placa_vehiculo"
-            control={form.control}
-            defaultValue={form.getValues().placa_vehiculo}
-            error={errors.placa_vehiculo}
-            helperText={errors.placa_vehiculo?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Color vehiculo"
-            name="color_vehiculo"
-            control={form.control}
-            defaultValue={form.getValues().color_vehiculo}
-            error={errors.color_vehiculo}
-            helperText={errors.color_vehiculo?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Email"
-            name="email"
-            type="email"
-            control={form.control}
-            defaultValue={form.getValues().email}
-            error={errors.email}
-            helperText={errors.email?.message}
-            size={gridSizeMdLg6}
-          />
-
           <CustomCellphoneTextField
             label="Telefono 1"
             name="telefono_1"
@@ -269,7 +264,15 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             helperText={errors.telefono_1?.message}
             size={gridSizeMdLg6}
           />
-
+          <CustomTextField
+            label="Email"
+            name="email"
+            type="email"
+            control={form.control}
+            defaultValue={form.getValues().email}
+            error={errors.email}
+            helperText={errors.email?.message}
+          />
           <CustomCellphoneTextField
             label="Telefono 2"
             name="telefono_2"
@@ -278,8 +281,8 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             error={errors.telefono_2}
             helperText={errors.telefono_2?.message}
             size={gridSizeMdLg6}
+            required={false}
           />
-
           <CustomCellphoneTextField
             label="Telefono 3"
             name="telefono_3"
@@ -288,144 +291,109 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             error={errors.telefono_3}
             helperText={errors.telefono_3?.message}
             size={gridSizeMdLg6}
+            required={false}
           />
 
-          <CustomNumberTextField
-            label="Zonas"
-            name="zonas"
+          <CustomTypoLabel
+            text="Datos Vehículo"
+            pt={CustomTypoLabelEnum.ptMiddlePosition}
+          />
+          <CustomTextField
+            label="Marca"
+            name="marca_vehiculo"
             control={form.control}
-            defaultValue={form.getValues().zonas}
-            error={errors.zonas}
-            helperText={errors.zonas?.message}
+            defaultValue={form.getValues().marca_vehiculo}
+            error={errors.marca_vehiculo}
+            helperText={errors.marca_vehiculo?.message}
+            size={gridSizeMdLg6}
+          />
+          <CustomTextField
+            label="Modelo"
+            name="modelo_vehiculo"
+            control={form.control}
+            defaultValue={form.getValues().modelo_vehiculo}
+            error={errors.modelo_vehiculo}
+            helperText={errors.modelo_vehiculo?.message}
+            size={gridSizeMdLg6}
+          />
+          <CustomNumberTextField
+            label="Placa"
+            name="placa_vehiculo"
+            control={form.control}
+            defaultValue={form.getValues().placa_vehiculo}
+            error={errors.placa_vehiculo}
+            helperText={errors.placa_vehiculo?.message}
+            size={gridSizeMdLg6}
+          />
+          <CustomTextField
+            label="Color"
+            name="color_vehiculo"
+            control={form.control}
+            defaultValue={form.getValues().color_vehiculo}
+            error={errors.color_vehiculo}
+            helperText={errors.color_vehiculo?.message}
+            size={gridSizeMdLg6}
+          />
+          <CustomNumberTextField
+            label="Año"
+            name="anio_vehiculo"
+            control={form.control}
+            defaultValue={form.getValues().anio_vehiculo}
+            error={errors.anio_vehiculo}
+            helperText={errors.anio_vehiculo?.message}
             size={gridSizeMdLg6}
             min={0}
           />
-
-          <CustomNumberTextField
-            label="User"
-            name="user"
+          <SampleCheckbox
+            label="state"
+            name="state"
             control={form.control}
-            defaultValue={form.getValues().user}
-            error={errors.user}
-            helperText={errors.user?.message}
+            defaultValue={form.getValues().state}
             size={gridSizeMdLg6}
-            min={0}
+            isState
           />
 
-          <CustomNumberTextField
-            label="Area"
-            name="area"
-            control={form.control}
-            defaultValue={form.getValues().area}
-            error={errors.area}
-            helperText={errors.area?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
+          <>
+            <SampleCheckbox
+              label="Es bodega externa"
+              name="es_bodega"
+              control={form.control}
+              defaultValue={form.getValues().state}
+              // size={gridSizeMdLg6}
+            />
+            {watchedIsBodega && <>BODEGA AUTOCOMPLETE</>}
+          </>
+        </>
+      )}
 
-          <CustomNumberTextField
-            label="Departamento"
-            name="departamento"
-            control={form.control}
-            defaultValue={form.getValues().departamento}
-            error={errors.departamento}
-            helperText={errors.departamento?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Lider"
-            name="lider"
-            control={form.control}
-            defaultValue={form.getValues().lider}
-            error={errors.lider}
-            helperText={errors.lider?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Auxiliar"
-            name="auxiliar"
-            control={form.control}
-            defaultValue={form.getValues().auxiliar}
-            error={errors.auxiliar}
-            helperText={errors.auxiliar?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Pais"
-            name="pais"
-            control={form.control}
-            defaultValue={form.getValues().pais}
-            error={errors.pais}
-            helperText={errors.pais?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Provincia"
-            name="provincia"
-            control={form.control}
-            defaultValue={form.getValues().provincia}
-            error={errors.provincia}
-            helperText={errors.provincia?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Ciudad"
-            name="ciudad"
-            control={form.control}
-            defaultValue={form.getValues().ciudad}
-            error={errors.ciudad}
-            helperText={errors.ciudad?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-          <CustomAutocomplete<Zona>
-            label="Zonas"
-            name="zonas"
-            // options
-            options={[] || []}
-            valueKey="name"
-            defaultValue={form.getValues().zonas}
-            isLoadingData={false} // TODO: add loading
-            // vaidation
-            control={form.control}
-            error={errors.zonas}
-            helperText={errors.zonas?.message}
-            size={gridSizeMdLg6}
-          />
+      {activeStep === 1 && (
+        <>
+          <CustomTypoLabel text="Organización" />
 
           <CustomAutocomplete<Area>
             label="Area"
             name="area"
             // options
-            options={[] || []}
+            options={areasDataPagingRes?.data?.items || []}
             valueKey="name"
+            actualValueKey="id"
             defaultValue={form.getValues().area}
-            isLoadingData={false} // TODO: add loading
+            isLoadingData={isLoadingAreas || isRefetchingAreas}
             // vaidation
             control={form.control}
             error={errors.area}
             helperText={errors.area?.message}
             size={gridSizeMdLg6}
           />
-
           <CustomAutocomplete<Departamento>
             label="Departamento"
             name="departamento"
             // options
-            options={[] || []}
+            options={departamentosDataPagingRes?.data?.items || []}
             valueKey="name"
+            actualValueKey="id"
             defaultValue={form.getValues().departamento}
-            isLoadingData={false} // TODO: add loading
+            isLoadingData={isLoadingDepartamentos || isRefetchingDepartamentos}
             // vaidation
             control={form.control}
             error={errors.departamento}
@@ -437,40 +405,41 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             label="Pais"
             name="pais"
             // options
-            options={[] || []}
+            options={paisesPagingRes?.data?.items || []}
             valueKey="name"
+            actualValueKey="id"
             defaultValue={form.getValues().pais}
-            isLoadingData={false} // TODO: add loading
+            isLoadingData={isLoadingPaises || isRefetchingPaises}
             // vaidation
             control={form.control}
             error={errors.pais}
             helperText={errors.pais?.message}
             size={gridSizeMdLg6}
           />
-
           <CustomAutocomplete<Provincia>
             label="Provincia"
             name="provincia"
             // options
-            options={[] || []}
+            options={provinciasPagingRes?.data?.items || []}
             valueKey="name"
+            actualValueKey="id"
             defaultValue={form.getValues().provincia}
-            isLoadingData={false} // TODO: add loading
+            isLoadingData={isLoadingProvincias || isRefetchingProvincias}
             // vaidation
             control={form.control}
             error={errors.provincia}
             helperText={errors.provincia?.message}
             size={gridSizeMdLg6}
           />
-
           <CustomAutocomplete<Ciudad>
             label="Ciudad"
             name="ciudad"
             // options
-            options={[] || []}
+            options={ciudadesPagingRes?.data?.items || []}
             valueKey="name"
+            actualValueKey="id"
             defaultValue={form.getValues().ciudad}
-            isLoadingData={false} // TODO: add loading
+            isLoadingData={isLoadingCiudades || isRefetchingCiudades}
             // vaidation
             control={form.control}
             error={errors.ciudad}

@@ -23,11 +23,12 @@ export interface Flota {
   telefono_2: string;
   telefono_3: string;
 
+  es_bodega: boolean;
+
   created_at?: string;
   modified_at?: string;
 
   ///* fk
-  zonas?: number;
   user?: number;
   area?: number;
   departamento?: number;
@@ -36,4 +37,5 @@ export interface Flota {
   pais?: number;
   provincia?: number;
   ciudad?: number;
+  zonas?: number[];
 }
