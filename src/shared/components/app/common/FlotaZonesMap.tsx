@@ -39,6 +39,7 @@ export type MultiPolygonType = number[][][];
 export type FlotaZonesMapProps = {
   coordenadas: CoordenadasType;
   zones: Zona[];
+  savedZones?: number[];
   flota?: Flota;
 
   zoomMap?: number;
@@ -56,12 +57,17 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
   size = gridSize,
   zoomMap = 15,
   zones,
+  savedZones = [],
 
   showCoverage = true,
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
 
   const coords = zones.map(zona => zona.coordenadas);
+  const thereAreSavedZones = !!savedZones?.length;
+  const coverage = thereAreSavedZones
+    ? zones.filter(zone => !savedZones.includes(zone?.id!))
+    : zones;
 
   ///* global state -------------------
   const addZoneObj = useFlotasStore(s => s.addZoneObj);
@@ -86,7 +92,7 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
           {/* -------- polygon -------- */}
           {showCoverage && !!coords.length && (
             <>
-              {zones.map((zone, index) => {
+              {coverage.map((zone, index) => {
                 const { coordenadas: zoneCoords } = zone;
 
                 return (

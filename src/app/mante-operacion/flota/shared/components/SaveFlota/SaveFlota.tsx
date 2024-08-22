@@ -278,9 +278,18 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
 
   ///* effects --------------------
   useEffect(() => {
-    if (!flota?.id) return;
+    if (!flota?.id || isLoadingZonas || isRefetchingZonas) return;
+
+    const zones = flota?.zonas?.map(zone => {
+      const currentZone = zonasDataPagingRes?.data?.items?.find(
+        item => item.id === zone,
+      );
+      return currentZone;
+    });
+    useFlotasStore.getState().setZonesObj((zones as Zona[]) || []);
+
     reset(flota);
-  }, [flota, reset]);
+  }, [flota, isLoadingZonas, isRefetchingZonas, reset, zonasDataPagingRes]);
   const customLoader =
     isLoadingLider ||
     isLoadingAuxiliar ||
@@ -562,6 +571,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
               coordenadas={latLng}
               flota={flota!}
               zones={zonasDataPagingRes?.data?.items || []}
+              savedZones={flota?.zonas || []}
               zoomMap={12}
             />
 
