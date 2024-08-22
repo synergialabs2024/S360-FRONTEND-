@@ -6,7 +6,7 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet';
 
-import { Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 
 import { gridSize } from '@/shared/constants/ui';
 import { Flota, GridSizeType, Zona } from '@/shared/interfaces';
@@ -115,6 +115,29 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
           )}
         </MapContainer>
       </Paper>
+
+      {/* =============== legend =============== */}
+      <>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          padding="10px"
+          marginTop="10px"
+        >
+          <Box display="flex" alignItems="center" marginRight="20px"></Box>
+
+          <Box display="flex" alignItems="center">
+            <Box
+              width="40px"
+              height="5px"
+              bgcolor="green"
+              marginRight="5px"
+            ></Box>
+            <Typography variant="body2">Área disponibles</Typography>
+          </Box>
+        </Box>
+      </>
     </Grid>
   );
 };
