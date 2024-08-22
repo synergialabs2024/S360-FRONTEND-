@@ -8,43 +8,40 @@ export const oLTFormSchema = yup.object({
   name: yup
     .string()
     .required('El campo name es requerido')
-    .max(200, 'El campo name no debe exceder los 200 caracteres'),
+    .max(245, 'El campo name no debe exceder los 245 caracteres'),
   direccion: yup
     .string()
     .required('El campo direccion es requerido')
-    .max(200, 'El campo direccion no debe exceder los 200 caracteres'),
+    .max(255, 'El campo direccion no debe exceder los 255 caracteres'),
   coordenadas: yup
     .string()
     .required('El campo coordenadas es requerido')
-    .max(200, 'El campo coordenadas no debe exceder los 200 caracteres'),
+    .max(255, 'El campo coordenadas no debe exceder los 255 caracteres'),
   descripcion: yup
     .string()
     .required('El campo descripcion es requerido')
-    .max(200, 'El campo descripcion no debe exceder los 200 caracteres'),
+    .max(700, 'El campo descripcion no debe exceder los 700 caracteres'),
   puerto: yup
     .string()
     .required('El campo puerto es requerido')
-    .max(200, 'El campo puerto no debe exceder los 200 caracteres'),
+    .max(100, 'El campo puerto no debe exceder los 100 caracteres'),
   hostname: yup
     .string()
     .required('El campo hostname es requerido')
-    .max(200, 'El campo hostname no debe exceder los 200 caracteres'),
+    .max(100, 'El campo hostname no debe exceder los 100 caracteres'),
   password: yup
     .string()
     .required('El campo password es requerido')
-    .max(200, 'El campo password no debe exceder los 200 caracteres'),
+    .max(100, 'El campo password no debe exceder los 100 caracteres'),
   user: yup
     .string()
     .required('El campo user es requerido')
-    .max(200, 'El campo user no debe exceder los 200 caracteres'),
+    .max(255, 'El campo user no debe exceder los 255 caracteres'),
   pppoe: yup
     .string()
     .required('El campo pppoe es requerido')
-    .max(200, 'El campo pppoe no debe exceder los 200 caracteres'),
-  ip_pppoe: yup
-    .string()
-    .required('El campo ip pppoe es requerido')
-    .max(200, 'El campo ip pppoe no debe exceder los 200 caracteres'),
+    .max(100, 'El campo pppoe no debe exceder los 100 caracteres'),
+  ip_pppoe: yup.string().required('El campo ip pppoe es requerido'),
 
   nodo: yup
     .number()

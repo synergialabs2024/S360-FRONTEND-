@@ -60,3 +60,19 @@ export const SAVE_NODO_PERMISSIONS = [
   PermissionsEnum.administration_view_zona,
   PermissionsEnum.administration_view_sector,
 ];
+
+export const SAVE_OLT_PERMISSIONS = [
+  PermissionsEnum.administration_view_pais,
+  PermissionsEnum.administration_view_provincia,
+  PermissionsEnum.administration_view_ciudad,
+  PermissionsEnum.administration_view_zona,
+  PermissionsEnum.administration_view_sector,
+  PermissionsEnum.infraestructura_view_nodo,
+];
+
+export const SAVE_NAP_PERMISSIONS = [
+  PermissionsEnum.administration_view_ciudad,
+  PermissionsEnum.administration_view_sector,
+  PermissionsEnum.infraestructura_view_nodo,
+  PermissionsEnum.infraestructura_view_olt,
+];

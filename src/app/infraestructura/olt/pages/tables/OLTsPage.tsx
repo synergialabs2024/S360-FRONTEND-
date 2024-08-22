@@ -9,14 +9,20 @@ import {
   CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
+  ViewMoreTextModalTableCell,
 } from '@/shared/components';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { OLT, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { SAVE_OLT_PERMISSIONS } from '@/shared';
 
 export const returnUrlOLTsPage = ROUTER_PATHS.infraestructura.oltsNav;
 
@@ -92,7 +98,25 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
-
+      {
+        accessorKey: 'descripcion',
+        header: 'DESCRIPCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.descripcion
+            ? row.original.descripcion
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Descripcion de ${row?.original?.name}`}
+            />
+          );
+        },
+      },
       {
         accessorKey: 'direccion',
         header: 'DIRECCION',
@@ -112,15 +136,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
       },
 
       {
-        accessorKey: 'descripcion',
-        header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
-      },
-
-      {
         accessorKey: 'puerto',
         header: 'PUERTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -137,16 +152,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'hostname'),
       },
-
-      {
-        accessorKey: 'password',
-        header: 'PASSWORD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'password'),
-      },
-
       {
         accessorKey: 'user',
         header: 'USER',
@@ -182,22 +187,16 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nodo'),
       },
-
       {
-        accessorKey: 'pais',
+        accessorKey: 'pais__name',
         header: 'PAIS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'pais'),
+        Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name']),
       },
-
       {
         accessorKey: 'provincia',
         header: 'PROVINCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'provincia'),
       },
 
@@ -288,9 +287,12 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="O L T"
+      title="OLT"
       createPageUrl={`${returnUrlOLTsPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.infraestructura_add_olt)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.infraestructura_add_olt,
+        ...SAVE_OLT_PERMISSIONS,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -315,11 +317,15 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         rowCount={OsLTPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
+        enableActionsColumn={hasAllPermissions([
           PermissionsEnum.infraestructura_change_olt,
-        )}
+          ...SAVE_OLT_PERMISSIONS,
+        ])}
         // crud
-        canEdit={hasPermission(PermissionsEnum.infraestructura_change_olt)}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.infraestructura_change_olt,
+          ...SAVE_OLT_PERMISSIONS,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />
