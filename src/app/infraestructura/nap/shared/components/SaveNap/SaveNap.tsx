@@ -127,7 +127,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     enabled: !!watchedNodo,
     params: {
       page_size: 900,
-      ciudad: watchedNodo!,
+      nodo: watchedNodo!,
     },
   });
 
