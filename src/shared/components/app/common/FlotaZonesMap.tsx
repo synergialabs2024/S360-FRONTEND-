@@ -30,6 +30,7 @@ type CoordenadasType = {
   lat: number;
   lng: number;
 };
+
 export type MultiPolygonType = number[][][];
 
 export type FlotaZonesMapProps = {
@@ -57,10 +58,11 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
   const center = [coordenadas.lat, coordenadas.lng];
 
   const coords = zones.map(zona => zona.coordenadas);
-  const thereAreSavedZones = savedZones.length > 0;
   const savedZonesArr = zones.filter(zone => savedZones.includes(zone.id!));
-  const restZones = zones.filter(zone => !savedZones.includes(zone.id!));
-  const restCoverage = thereAreSavedZones ? restZones : zones;
+  const restCoverage =
+    savedZones?.length > 0
+      ? zones.filter(zone => !savedZones.includes(zone.id!))
+      : zones;
 
   // global state handler
   const addZoneObj = useFlotasStore(s => s.addZoneObj);
@@ -116,45 +118,38 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
           )}
 
           {/* -------- saved polygon -------- */}
-          <Polygon
-            pathOptions={purpleOptions}
-            positions={savedZonesArr.map(
-              zone => zone.coordenadas as unknown as L.LatLngExpression[][],
-            )}
-          />
+          {savedZonesArr.map((zone, index) => (
+            <Polygon
+              key={index}
+              pathOptions={purpleOptions}
+              positions={zone.coordenadas as unknown as L.LatLngExpression[][]}
+            >
+              <Popup>
+                <Typography variant="h6">Zona: {zone.name}</Typography>
+              </Popup>
+            </Polygon>
+          ))}
         </MapContainer>
       </Paper>
 
       {/* =============== legend =============== */}
-      <>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          padding="10px"
-          marginTop="10px"
-        >
-          <Box display="flex" alignItems="center" marginRight="20px">
-            <Box
-              width="40px"
-              height="5px"
-              bgcolor="purple"
-              marginRight="5px"
-            ></Box>
-            <Typography variant="body2">Zonas seleccionadas</Typography>
-          </Box>
-
-          <Box display="flex" alignItems="center">
-            <Box
-              width="40px"
-              height="5px"
-              bgcolor="green"
-              marginRight="5px"
-            ></Box>
-            <Typography variant="body2">Área disponibles</Typography>
-          </Box>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        padding="10px"
+        marginTop="10px"
+      >
+        <Box display="flex" alignItems="center" marginRight="20px">
+          <Box width="40px" height="5px" bgcolor="purple" marginRight="5px" />
+          <Typography variant="body2">Zonas seleccionadas</Typography>
         </Box>
-      </>
+
+        <Box display="flex" alignItems="center">
+          <Box width="40px" height="5px" bgcolor="green" marginRight="5px" />
+          <Typography variant="body2">Área disponibles</Typography>
+        </Box>
+      </Box>
     </Grid>
   );
 };
