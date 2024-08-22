@@ -174,7 +174,7 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
       }
       formSize={gridSizeMdLg10}
     >
-      <CustomTabPanel value={tabValue} index={1} sxChild={gridSizeMdLg8}>
+      <CustomTabPanel value={tabValue} index={1} gridSizeChild={gridSizeMdLg8}>
         <CustomTextField
           label="Nombre"
           name="name"

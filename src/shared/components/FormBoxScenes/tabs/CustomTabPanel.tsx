@@ -10,7 +10,7 @@ export type CustomTabPanelProps = {
 
   sxBox?: SxPropsThemeType;
   ptGrid?: string | number;
-  sxChild?: GridSizeType;
+  gridSizeChild?: GridSizeType;
 };
 
 const CustomTabPanel: React.FC<CustomTabPanelProps> = ({
@@ -19,7 +19,7 @@ const CustomTabPanel: React.FC<CustomTabPanelProps> = ({
   index,
   sxBox = { padding: '0px 9px 0px 0px', minWidth: '100%' },
   ptGrid = 2,
-  sxChild = gridSize,
+  gridSizeChild = gridSize,
 }) => {
   return (
     <div
@@ -32,7 +32,7 @@ const CustomTabPanel: React.FC<CustomTabPanelProps> = ({
       {value === index && (
         <Box sx={sxBox}>
           <Grid item container spacing={3} justifyContent="center" pt={ptGrid}>
-            <Grid item container {...sxChild} spacing={3}>
+            <Grid item container {...gridSizeChild} spacing={3}>
               {children}
             </Grid>
           </Grid>

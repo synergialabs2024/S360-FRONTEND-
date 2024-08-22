@@ -77,3 +77,5 @@ export type ColorChipType =
   | 'error'
   | 'info'
   | 'success';
+
+export type DensityTableType = 'comfortable' | 'compact' | 'spacious';

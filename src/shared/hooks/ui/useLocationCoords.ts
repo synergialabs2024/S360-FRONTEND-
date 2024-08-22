@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
+import { CoordenadasType } from '@/shared/components/CustomMaps/CustomMap';
 import { ToastWrapper } from '@/shared/wrappers';
-import { CoordenadasType } from './useMapComponent';
 
 type UseLocationCoordsProps = {
   form?: UseFormReturn<any, any, undefined>;

@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Tab } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -12,25 +12,36 @@ import {
   useFetchEmpleados,
   useFetchPaises,
   useFetchProvincias,
+  useFetchZonas,
   useUpdateFlota,
 } from '@/actions/app';
 import {
   EmployeeTypeEnumChoice,
+  gridSizeMdLg11,
   gridSizeMdLg6,
+  gridSizeMdLg8,
   ToastWrapper,
   useLoaders,
+  useMapPolygonComponent,
+  useTabsOnly,
+  Zona,
 } from '@/shared';
 import {
+  a11yProps,
   CustomAutocomplete,
   CustomCellphoneTextField,
+  CustomMinimalTable,
   CustomNumberTextField,
+  CustomTabPanel,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
+  FlotaZonesMap,
+  FormTabsOnly,
   SampleCheckbox,
-  StepperBoxScene,
-  useCustomStepper,
+  TabsFormBoxScene,
 } from '@/shared/components';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import {
   Area,
   Ciudad,
@@ -40,7 +51,7 @@ import {
   Pais,
   Provincia,
 } from '@/shared/interfaces';
-import { flotaFormSchema } from '@/shared/utils';
+import { useFlotasStore } from '@/store/app';
 import { returnUrlFlotasPage } from '../../../pages/tables/FlotasPage';
 
 export interface SaveFlotaProps {
@@ -50,21 +61,19 @@ export interface SaveFlotaProps {
 
 type SaveFormData = CreateFlotaParamsBase & {};
 
-const steps = ['Datos generales', 'Cobertura'];
-
 const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ///* hooks --------------------
   const navigate = useNavigate();
+  const { tabValue, handleTabChange } = useTabsOnly({
+    initialTabValue: 1,
+  });
 
-  // stepper
-  const { activeStep, disableNextStepBtn, handleBack, handleNext } =
-    useCustomStepper({
-      steps,
-    });
+  ///* global state --------------------
+  const zonesPk = useFlotasStore(s => s.zonesPk);
 
   ///* form --------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(flotaFormSchema) as any,
+    // resolver: yupResolver(flotaFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -77,6 +86,9 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   } = form;
   const watchedIsBodega = form.watch('es_bodega');
   const watchedArea = form.watch('area');
+
+  const { latLng, setLatLng } = useMapPolygonComponent({});
+  useLocationCoords({ setLatLng });
 
   ///* fetch data --------------------
   const {
@@ -152,6 +164,15 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
       page_size: 1200,
     },
   });
+  const {
+    data: zonasDataPagingRes,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    params: {
+      page_size: 1200,
+    },
+  });
 
   ///* mutations --------------------
   const createFlotaMutation = useCreateFlota({
@@ -167,6 +188,12 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ///* handlers --------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    console.log('data', {
+      zonesPk,
+      data,
+    });
+    return;
 
     ///* upd
     if (flota?.id) {
@@ -197,26 +224,29 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     isLoadingProvincias ||
     isRefetchingProvincias ||
     isLoadingCiudades ||
-    isRefetchingCiudades;
+    isRefetchingCiudades ||
+    isLoadingZonas ||
+    isRefetchingZonas;
   useLoaders(customLoader);
 
   return (
-    <StepperBoxScene
+    <TabsFormBoxScene
       titlePage={title}
-      // steps
-      steps={steps}
-      activeStep={activeStep}
-      handleNext={handleNext}
-      handleBack={handleBack}
-      disableNextStepBtn={disableNextStepBtn}
-      // action btns
       onCancel={() => navigate(returnUrlFlotasPage)}
       onSave={handleSubmit(onSave, () => {
-        ToastWrapper.error('Faltan campos por requeridos');
+        ToastWrapper.error('Faltan campos requeridos por completar');
       })}
+      tabs={
+        <FormTabsOnly value={tabValue} onChange={handleTabChange}>
+          <Tab label="Datos Generales" value={1} {...a11yProps(1)} />
+
+          <Tab label="Área Operaciones " value={2} {...a11yProps(2)} />
+        </FormTabsOnly>
+      }
+      formSize={gridSizeMdLg11}
     >
       {/* ========================= Datos Generales ========================= */}
-      {activeStep === 0 && (
+      <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg8}>
         <>
           <CustomTypoLabel text="Datos Contacto" />
 
@@ -364,9 +394,10 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             {watchedIsBodega && <>BODEGA AUTOCOMPLETE</>}
           </>
         </>
-      )}
+      </CustomTabPanel>
 
-      {activeStep === 1 && (
+      {/* ========================= Cobertura ========================= */}
+      <CustomTabPanel index={2} value={tabValue}>
         <>
           <CustomTypoLabel text="Organización" />
 
@@ -446,9 +477,25 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             helperText={errors.ciudad?.message}
             size={gridSizeMdLg6}
           />
+
+          <>
+            <CustomTypoLabel
+              text="Zonas de operación"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+            {/* -------- zones table -------- */}
+            <CustomMinimalTable<Zona> columns={[]} data={[]} />
+
+            {/* -------- zones map -------- */}
+            <FlotaZonesMap
+              coordenadas={latLng}
+              flota={flota!}
+              zones={zonasDataPagingRes?.data?.items || []}
+            />
+          </>
         </>
-      )}
-    </StepperBoxScene>
+      </CustomTabPanel>
+    </TabsFormBoxScene>
   );
 };
 
