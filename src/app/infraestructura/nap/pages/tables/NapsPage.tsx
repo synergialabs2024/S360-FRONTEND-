@@ -49,6 +49,9 @@ const NapsPage: React.FC<NapsPageProps> = () => {
   const changeState = useUpdateNap({
     enableNavigate: false,
   });
+  const changeEsSoterrado = useUpdateNap<{ es_soterrado: boolean }>({
+    enableNavigate: false,
+  });
 
   ///* table
   const {
@@ -100,7 +103,6 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
-
       {
         accessorKey: 'direccion',
         header: 'DIRECCION',
@@ -109,7 +111,6 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'direccion'),
       },
-
       {
         accessorKey: 'coordenadas',
         header: 'COORDENADAS',
@@ -118,26 +119,6 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'coordenadas'),
       },
-
-      {
-        accessorKey: 'puertos',
-        header: 'PUERTOS',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'puertos'),
-      },
-
-      {
-        accessorKey: 'es_soterrado',
-        header: 'ES SOTERRADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        filterSelectOptions: MODEL_BOOLEAN,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'es_soterrado'),
-      },
-
       {
         accessorKey: 'status_nap',
         header: 'STATUS NAP',
@@ -146,7 +127,6 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'status_nap'),
       },
-
       {
         accessorKey: 'proyecto_cod',
         header: 'PROYECTO COD',
@@ -155,7 +135,6 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'proyecto_cod'),
       },
-
       {
         accessorKey: 'nodo__name',
         header: 'NODO',
@@ -186,11 +165,52 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
       },
+      {
+        accessorKey: 'puertos',
+        header: 'PUERTOS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'puertos'),
+      },
+      {
+        accessorKey: 'es_soterrado',
+        header: 'ES SOTERRADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_BOOLEAN,
+        Cell: ({ row }) => (
+          <CustomSwitch
+            title="Es Soterrado"
+            isSimpleBoolean
+            checked={row.original?.es_soterrado}
+            onChangeChecked={() => {
+              if (!hasPermission(PermissionsEnum.infraestructura_change_nap))
+                return;
 
+              setConfirmDialog({
+                isOpen: true,
+                title: 'Cambiar Soterrado',
+                subtitle:
+                  '¿Está seguro que desea cambiar la soterrado de este registro?',
+                onConfirm: () => {
+                  setConfirmDialogIsOpen(false);
+                  changeEsSoterrado.mutate({
+                    id: row.original.id!,
+                    data: {
+                      es_soterrado: !row.original?.es_soterrado,
+                    },
+                  });
+                },
+              });
+            }}
+          />
+        ),
+      },
       {
         accessorKey: 'state',
         header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableSorting: false,
         filterVariant: 'select',
         filterSelectOptions: MODEL_STATE_BOOLEAN,

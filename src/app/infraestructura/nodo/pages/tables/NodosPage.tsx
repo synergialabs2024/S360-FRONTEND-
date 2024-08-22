@@ -1,3 +1,7 @@
+import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useFetchNodos, useUpdateNodo } from '@/actions/app/infraestructura';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
@@ -23,9 +27,6 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { Nodo } from '@/shared/interfaces/app/infraestructura';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const returnUrlNodosPage = ROUTER_PATHS.infraestructura.nodosNav;
 
@@ -122,12 +123,16 @@ const NodosPage: React.FC<NodosPageProps> = () => {
         accessorKey: 'direccion',
         header: 'DIRECCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'direccion'),
       },
       {
         accessorKey: 'coordenadas',
         header: 'COORDENADAS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'coordenadas'),
       },
       {
