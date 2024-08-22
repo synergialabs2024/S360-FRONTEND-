@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from '@mui/material';
+import { Box, Card, Grid, Typography } from '@mui/material';
 import {
   MRT_RowData,
   MaterialReactTable,
@@ -9,7 +9,8 @@ import {
 import type { MRT_TableOptions } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-import { DensityTableType } from '@/shared/interfaces';
+import { gridSize } from '@/shared/constants';
+import { DensityTableType, GridSizeType } from '@/shared/interfaces';
 
 interface CustomMinimalTableProps<T extends MRT_RowData>
   extends MRT_TableOptions<T> {
@@ -19,15 +20,18 @@ interface CustomMinimalTableProps<T extends MRT_RowData>
   density?: DensityTableType;
   rowNumber?: boolean;
   enableTopToolbar?: boolean;
+  gridSizeTable?: GridSizeType;
 }
 
 const CustomMinimalTable = <T extends MRT_RowData>({
   columns,
   data,
   enablePagination = false,
-  density = 'comfortable',
+  density = 'compact',
   rowNumber = false,
   enableTopToolbar = false,
+
+  gridSizeTable = gridSize,
 }: CustomMinimalTableProps<T>) => {
   const table = useMaterialReactTable({
     columns,
@@ -79,16 +83,22 @@ const CustomMinimalTable = <T extends MRT_RowData>({
 
   //using MRT_Table instead of MaterialReactTable if we do not need any of the toolbar components or features
   return (
-    <Card>
-      <Box
+    <Grid item container justifyContent="center" p={2} {...gridSizeTable}>
+      <Card
         sx={{
           width: '100%',
         }}
       >
-        <MaterialReactTable table={table} />
-        {/* <MRT_Table table={table} /> */}
-      </Box>
-    </Card>
+        <Box
+          sx={{
+            width: '100%',
+          }}
+        >
+          <MaterialReactTable table={table} />
+          {/* <MRT_Table table={table} /> */}
+        </Box>
+      </Card>
+    </Grid>
   );
 };
 

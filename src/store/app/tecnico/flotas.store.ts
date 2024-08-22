@@ -5,13 +5,10 @@ import { CoordenadasType } from '@/shared/components/CustomMaps/CustomMap';
 
 type FlotasState = {
   // zones ----------
-  zonesPk: number[];
-  setZonesPk: (zones: number[]) => void;
-  addZonePk: (zone: number) => void;
-
   zonesObj: Zona[];
   setZonesObj: (zones: Zona[]) => void;
   addZoneObj: (zone: Zona) => void;
+  removeZoneObj: (zoneId: number) => void;
 
   zoneCoords: CoordenadasType[];
   setZoneCoords: (coords: CoordenadasType[]) => void;
@@ -19,12 +16,16 @@ type FlotasState = {
 
 export const useFlotasStore = create<FlotasState>(set => ({
   // zones ----------
-  zonesPk: [],
   zonesObj: [],
-  setZonesPk: zonesPk => set({ zonesPk }),
-  addZonePk: zone => set(state => ({ zonesPk: [...state.zonesPk, zone] })),
   setZonesObj: zonesObj => set({ zonesObj }),
-  addZoneObj: zone => set(state => ({ zonesObj: [...state.zonesObj, zone] })),
+  addZoneObj: zone =>
+    set(state => ({
+      zonesObj: [...state.zonesObj, zone],
+    })),
+  removeZoneObj: zoneId =>
+    set(state => ({
+      zonesObj: state.zonesObj.filter(zone => zone.id !== zoneId),
+    })),
 
   zoneCoords: [],
   setZoneCoords: zoneCoords => set({ zoneCoords }),

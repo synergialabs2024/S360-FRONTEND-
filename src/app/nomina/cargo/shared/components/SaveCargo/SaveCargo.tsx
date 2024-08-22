@@ -3,20 +3,19 @@ import {
   useCreateCargo,
   useUpdateCargo,
 } from '@/actions/app';
-import { Cargo } from '@/shared/interfaces';
-import { cargoFormSchema } from '@/shared/utils';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { returnUrlCargosPage } from '../../../pages/tables/CargosPage';
-import { useEffect } from 'react';
 import {
   CustomTextArea,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { Cargo } from '@/shared/interfaces';
+import { cargoFormSchema } from '@/shared/utils';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { returnUrlCargosPage } from '../../../pages/tables/CargosPage';
 
 export interface SaveCargoProps {
   title: string;
@@ -102,7 +101,6 @@ const SaveCargo: React.FC<SaveCargoProps> = ({ title, cargo }) => {
         name="state"
         control={form.control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg6}
         isState
       />
     </SingleFormBoxScene>

@@ -64,7 +64,6 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
   const coords = zones.map(zona => zona.coordenadas);
 
   ///* global state -------------------
-  const addZonePk = useFlotasStore(s => s.addZonePk);
   const addZoneObj = useFlotasStore(s => s.addZoneObj);
 
   return (
@@ -103,15 +102,19 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
                         label="Asignar Zona"
                         variant="text"
                         onClick={() => {
-                          const currentZonesPk =
-                            useFlotasStore.getState().zonesPk;
-                          if (currentZonesPk.includes(zone?.id!)) {
-                            return ToastWrapper.warning(
+                          const currentZones =
+                            useFlotasStore.getState().zonesObj;
+                          if (
+                            currentZones.some(
+                              currentZone => currentZone.id === zone.id,
+                            )
+                          ) {
+                            ToastWrapper.error(
                               `La zona ${zone?.name} ya ha sido asignada`,
                             );
+                            return;
                           }
 
-                          addZonePk(zone?.id!);
                           addZoneObj(zone);
                           ToastWrapper.info(
                             `Zona ${zone?.name} asignada correctamente`,

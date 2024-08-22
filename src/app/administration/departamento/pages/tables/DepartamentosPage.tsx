@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFetchDepartamentos, useUpdateDepartamento } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
+import { SAVE_DEPARTAMENTO_PERMISSIONS } from '@/shared';
 import {
   CustomSearch,
   CustomSwitch,
@@ -22,7 +23,6 @@ import {
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { SAVE_DEPARTAMENTO_PERMISSIONS } from '@/shared';
 
 export const returnUrlDepartamentosPage =
   ROUTER_PATHS.administracion.departamentosNav;
@@ -94,7 +94,7 @@ const DepartamentosPage: React.FC<DepartamentosPageProps> = () => {
       {
         accessorKey: 'name',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
@@ -110,7 +110,7 @@ const DepartamentosPage: React.FC<DepartamentosPageProps> = () => {
       {
         accessorKey: 'description',
         header: 'DESCRIPCIÓN',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => {

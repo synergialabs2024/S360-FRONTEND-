@@ -1,6 +1,8 @@
 import { Tab } from '@mui/material';
+import type { MRT_ColumnDef } from 'material-react-table';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -17,6 +19,7 @@ import {
 } from '@/actions/app';
 import {
   EmployeeTypeEnumChoice,
+  emptyCellNested,
   emptyCellOneLevel,
   gridSizeMdLg11,
   gridSizeMdLg6,
@@ -41,6 +44,7 @@ import {
   FlotaZonesMap,
   FormTabsOnly,
   SampleCheckbox,
+  SingleIconButton,
   TabsFormBoxScene,
 } from '@/shared/components';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
@@ -54,7 +58,6 @@ import {
   Provincia,
 } from '@/shared/interfaces';
 import { useFlotasStore } from '@/store/app';
-import { MRT_ColumnDef } from 'material-react-table';
 import { returnUrlFlotasPage } from '../../../pages/tables/FlotasPage';
 
 export interface SaveFlotaProps {
@@ -72,7 +75,6 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   });
 
   ///* global state --------------------
-  const zonesPk = useFlotasStore(s => s.zonesPk);
   const zonesObj = useFlotasStore(s => s.zonesObj);
 
   ///* form --------------------
@@ -192,33 +194,83 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ///* handlers --------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-
-    console.log('data', {
-      zonesPk,
-      data,
-    });
-    // return;
+    if (!zonesObj?.length)
+      return ToastWrapper.error('Debe agregar al menos una zona');
 
     ///* upd
     if (flota?.id) {
-      updateFlotaMutation.mutate({ id: flota.id!, data });
+      updateFlotaMutation.mutate({
+        id: flota.id!,
+        data: {
+          ...data,
+          zonas: zonesObj.map(zone => zone.id) as number[],
+        },
+      });
       return;
     }
 
     ///* create
-    createFlotaMutation.mutate(data);
+    createFlotaMutation.mutate({
+      ...data,
+      zonas: zonesObj.map(zone => zone.id),
+    });
   };
 
   ///* table --------------------
   const zoneColumns = useMemo<MRT_ColumnDef<Zona>[]>(
     () => [
       {
+        accessorKey: 'actions',
+        header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          const zonesObj = useFlotasStore.getState().zonesObj;
+          const removeZoneObj = useFlotasStore.getState().removeZoneObj;
+          const currentZone = zonesObj.find(
+            zone => zone.id === row.original.id,
+          );
+
+          return (
+            <>
+              <SingleIconButton
+                startIcon={<MdDelete />}
+                label="Remover"
+                color="error"
+                onClick={() => {
+                  removeZoneObj(currentZone?.id!);
+                }}
+              />
+            </>
+          );
+        },
+      },
+      {
         accessorKey: 'name',
-        header: 'NAME',
+        header: 'NOMBRE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+      },
+      {
+        accessorKey: 'ciudad__name',
+        header: 'CIUDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['ciudad_data', 'name']),
+      },
+      {
+        accessorKey: 'provincia__name',
+        header: 'PROVINCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['provincia_data', 'name']),
+      },
+      {
+        accessorKey: 'pais__name',
+        header: 'PAIS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name']),
       },
     ],
     [],
@@ -283,6 +335,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             // options
             options={liderDataPagingRes?.data?.items || []}
             valueKey="razon_social"
+            actualValueKey="id"
             defaultValue={form.getValues().lider}
             isLoadingData={isLoadingLider || isRefetchingLider}
             // vaidation
@@ -296,6 +349,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             // options
             options={auxiliarDataPagingRes?.data?.items || []}
             valueKey="razon_social"
+            actualValueKey="id"
             defaultValue={form.getValues().auxiliar}
             isLoadingData={isLoadingAuxiliar || isRefetchingAuxiliar}
             // vaidation
@@ -365,7 +419,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             helperText={errors.modelo_vehiculo?.message}
             size={gridSizeMdLg6}
           />
-          <CustomNumberTextField
+          <CustomTextField
             label="Placa"
             name="placa_vehiculo"
             control={form.control}
@@ -502,14 +556,20 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
               text="Zonas de operación"
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
-            {/* -------- zones table -------- */}
-            <CustomMinimalTable<Zona> columns={zoneColumns} data={zonesObj} />
 
             {/* -------- zones map -------- */}
             <FlotaZonesMap
               coordenadas={latLng}
               flota={flota!}
               zones={zonasDataPagingRes?.data?.items || []}
+              zoomMap={12}
+            />
+
+            {/* -------- zones table -------- */}
+            <CustomMinimalTable<Zona>
+              columns={zoneColumns}
+              data={zonesObj}
+              enablePagination
             />
           </>
         </>
