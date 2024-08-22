@@ -123,6 +123,11 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+    if (!coordsArray.length)
+      return ToastWrapper.error(
+        'Debe trazar un área de cobertura y guardar el trazo',
+      );
+
     const mapedCoords = coordsArray.map(({ lat, lng }) => ({
       lat: lat?.toString(),
       lng: lng?.toString(),
@@ -188,7 +193,9 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
     <SingleFormBoxScene
       titlePage={title}
       onCancel={() => navigate(returnUrlZonasPage)}
-      onSave={handleSubmit(onSave, () => {})}
+      onSave={handleSubmit(onSave, () => {
+        ToastWrapper.error('Debe completar los campos requeridos');
+      })}
     >
       <CustomTextField
         label="Nombre"

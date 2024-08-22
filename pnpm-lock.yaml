@@ -47,6 +47,9 @@ importers:
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
+      leaflet-geosearch:
+        specifier: ^4.0.0
+        version: 4.0.0
       material-react-table:
         specifier: ^2.13.0
         version: 2.13.1(fpv4vsysvtcfb2xswzttq5fqgu)
@@ -479,6 +482,9 @@ packages:
 
   '@fontsource/inter@5.0.19':
     resolution: {integrity: sha512-tVU77yjKnsoUotrXGYbbYxmL9nbm/MSo3deZietmf8V2FEDlbi9fvkJHMrYbo7ZsOqR1AYBBqRYmemz4pSE5Mg==}
+
+  '@googlemaps/js-api-loader@1.16.8':
+    resolution: {integrity: sha512-CROqqwfKotdO6EBjZO/gQGVTbeDps5V7Mt9+8+5Q+jTg5CRMi3Ii/L9PmV3USROrt2uWxtGzJHORmByxyo9pSQ==}
 
   '@hookform/resolvers@3.9.0':
     resolution: {integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==}
@@ -1541,6 +1547,9 @@ packages:
   leaflet-draw@1.0.4:
     resolution: {integrity: sha512-rsQ6saQO5ST5Aj6XRFylr5zvarWgzWnrg46zQ1MEOEIHsppdC/8hnN8qMoFvACsPvTioAuysya/TVtog15tyAQ==}
 
+  leaflet-geosearch@4.0.0:
+    resolution: {integrity: sha512-a92VNY9gxyv3oyEDqIWoCNoBllajWRYejztzOSNmpLRtzpA6JtGgy/wwl9tsB8+6Eek1fe+L6+W0MDEOaidbXA==}
+
   leaflet@1.9.4:
     resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
 
@@ -2514,6 +2523,9 @@ snapshots:
   '@floating-ui/utils@0.2.5': {}
 
   '@fontsource/inter@5.0.19': {}
+
+  '@googlemaps/js-api-loader@1.16.8':
+    optional: true
 
   '@hookform/resolvers@3.9.0(react-hook-form@7.52.1(react@18.3.1))':
     dependencies:
@@ -3529,6 +3541,11 @@ snapshots:
   kleur@4.1.5: {}
 
   leaflet-draw@1.0.4: {}
+
+  leaflet-geosearch@4.0.0:
+    optionalDependencies:
+      '@googlemaps/js-api-loader': 1.16.8
+      leaflet: 1.9.4
 
   leaflet@1.9.4: {}
 
