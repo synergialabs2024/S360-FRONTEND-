@@ -7,6 +7,7 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet';
 
 import { Box, Grid, Paper, Typography } from '@mui/material';
+import { MdAddLocationAlt } from 'react-icons/md';
 
 import { gridSize } from '@/shared/constants/ui';
 import { Flota, GridSizeType, Zona } from '@/shared/interfaces';
@@ -101,13 +102,16 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
                   }
                 >
                   <Popup>
-                    <Typography variant="h5">Zona: {zone.name}</Typography>
+                    <Typography variant="h5" align="center">
+                      Zona: {zone.name}
+                    </Typography>
 
                     <CustomSingleButton
                       label="Asignar Zona"
-                      variant="text"
+                      variant="outlined"
+                      startIcon={<MdAddLocationAlt />}
                       onClick={() => handleAssignZone(zone)}
-                      sxGrid={{ pt: 1 }}
+                      sxGrid={{ pt: 3 }}
                       gridSizeBtn={gridSize}
                       justifyContent="center"
                     />
