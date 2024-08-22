@@ -14,10 +14,6 @@ import { ToastWrapper } from '@/shared/wrappers';
 import { useFlotasStore } from '@/store/app';
 import { CustomSingleButton } from '../../CustomButtons';
 
-// // adapt leaflet to react ----
-// pnpm add leaflet react-leaflet
-// pnpm add -D @types/leaflet
-
 // @ts-expect-error
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -39,17 +35,14 @@ export type MultiPolygonType = number[][][];
 export type FlotaZonesMapProps = {
   coordenadas: CoordenadasType;
   zones: Zona[];
-  savedZones?: number[];
+  savedZones: number[];
   flota?: Flota;
-
   zoomMap?: number;
-
   size?: GridSizeType;
-
   showCoverage?: boolean;
 };
 
-// polygon
+// polygon options
 const greenOptions = { color: 'green' };
 
 const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
@@ -58,87 +51,67 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
   zoomMap = 15,
   zones,
   savedZones = [],
-
   showCoverage = true,
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
 
   const coords = zones.map(zona => zona.coordenadas);
-  const thereAreSavedZones = !!savedZones?.length;
-  const coverage = thereAreSavedZones
-    ? zones.filter(zone => !savedZones.includes(zone?.id!))
+  const thereAreSavedZones = savedZones.length > 0;
+  const restCoverage = thereAreSavedZones
+    ? zones.filter(zone => !savedZones.includes(zone.id!))
     : zones;
 
-  ///* global state -------------------
+  // global state handler
   const addZoneObj = useFlotasStore(s => s.addZoneObj);
 
+  const handleAssignZone = (zone: Zona) => {
+    const currentZones = useFlotasStore.getState().zonesObj;
+
+    if (currentZones.some(currentZone => currentZone.id === zone.id)) {
+      ToastWrapper.error(`La zona ${zone.name} ya ha sido asignada`);
+      return;
+    }
+
+    addZoneObj(zone);
+    ToastWrapper.info(`Zona ${zone.name} asignada correctamente`);
+  };
+
   return (
-    <Grid
-      item
-      {...size}
-      sx={{
-        pb: 4,
-      }}
-    >
+    <Grid item {...size} sx={{ pb: 4 }}>
       <Paper elevation={3} style={{ height: '600px', width: '100%' }}>
         <MapContainer
           center={center as L.LatLngExpression}
           zoom={zoomMap}
-          // scrollWheelZoom={false}
           style={{ height: '100%', width: '100%' }}
         >
           <TileLayer url={url} attribution={attribution} />
 
           {/* -------- polygon -------- */}
-          {showCoverage && !!coords.length && (
+          {showCoverage && coords.length > 0 && (
             <>
-              {coverage.map((zone, index) => {
-                const { coordenadas: zoneCoords } = zone;
+              {restCoverage.map((zone, index) => (
+                <Polygon
+                  key={index}
+                  pathOptions={greenOptions}
+                  positions={
+                    zone.coordenadas as unknown as L.LatLngExpression[][]
+                  }
+                >
+                  <Popup>
+                    <Typography variant="h5">Zona: {zone.name}</Typography>
 
-                return (
-                  <Polygon
-                    key={index}
-                    pathOptions={greenOptions}
-                    positions={zoneCoords as unknown as L.LatLngExpression[][]}
-                  >
-                    <Popup>
-                      <Typography variant="h5">Zona: {zone?.name}</Typography>
-
-                      <CustomSingleButton
-                        label="Asignar Zona"
-                        variant="text"
-                        onClick={() => {
-                          const currentZones =
-                            useFlotasStore.getState().zonesObj;
-                          if (
-                            currentZones.some(
-                              currentZone => currentZone.id === zone.id,
-                            )
-                          ) {
-                            ToastWrapper.error(
-                              `La zona ${zone?.name} ya ha sido asignada`,
-                            );
-                            return;
-                          }
-
-                          addZoneObj(zone);
-                          ToastWrapper.info(
-                            `Zona ${zone?.name} asignada correctamente`,
-                          );
-                        }}
-                        sxGrid={{ pt: 1 }}
-                        gridSizeBtn={gridSize}
-                        justifyContent="center"
-                      />
-                    </Popup>
-                  </Polygon>
-                );
-              })}
+                    <CustomSingleButton
+                      label="Asignar Zona"
+                      variant="text"
+                      onClick={() => handleAssignZone(zone)}
+                      sxGrid={{ pt: 1 }}
+                      gridSizeBtn={gridSize}
+                      justifyContent="center"
+                    />
+                  </Popup>
+                </Polygon>
+              ))}
             </>
-            // <Polygon
-            //   pathOptions={greenOptions}
-            //   positions={coverage as unknown as L.LatLngExpression[][][]}
-            // />
           )}
         </MapContainer>
       </Paper>
