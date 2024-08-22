@@ -44,6 +44,7 @@ export type FlotaZonesMapProps = {
 
 // polygon options
 const greenOptions = { color: 'green' };
+const purpleOptions = { color: 'purple' };
 
 const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
   coordenadas,
@@ -57,9 +58,9 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
 
   const coords = zones.map(zona => zona.coordenadas);
   const thereAreSavedZones = savedZones.length > 0;
-  const restCoverage = thereAreSavedZones
-    ? zones.filter(zone => !savedZones.includes(zone.id!))
-    : zones;
+  const savedZonesArr = zones.filter(zone => savedZones.includes(zone.id!));
+  const restZones = zones.filter(zone => !savedZones.includes(zone.id!));
+  const restCoverage = thereAreSavedZones ? restZones : zones;
 
   // global state handler
   const addZoneObj = useFlotasStore(s => s.addZoneObj);
@@ -113,6 +114,14 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
               ))}
             </>
           )}
+
+          {/* -------- saved polygon -------- */}
+          <Polygon
+            pathOptions={purpleOptions}
+            positions={savedZonesArr.map(
+              zone => zone.coordenadas as unknown as L.LatLngExpression[][],
+            )}
+          />
         </MapContainer>
       </Paper>
 
@@ -125,7 +134,15 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
           padding="10px"
           marginTop="10px"
         >
-          <Box display="flex" alignItems="center" marginRight="20px"></Box>
+          <Box display="flex" alignItems="center" marginRight="20px">
+            <Box
+              width="40px"
+              height="5px"
+              bgcolor="purple"
+              marginRight="5px"
+            ></Box>
+            <Typography variant="body2">Zonas seleccionadas</Typography>
+          </Box>
 
           <Box display="flex" alignItems="center">
             <Box
