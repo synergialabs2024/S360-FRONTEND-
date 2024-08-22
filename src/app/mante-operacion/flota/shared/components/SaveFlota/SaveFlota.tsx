@@ -76,6 +76,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
 
   ///* global state --------------------
   const zonesObj = useFlotasStore(s => s.zonesObj);
+  const clearZonesObj = useFlotasStore(s => s.clearZonesObj);
 
   ///* form --------------------
   const form = useForm<SaveFormData>({
@@ -206,6 +207,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
           zonas: zonesObj.map(zone => zone.id) as number[],
         },
       });
+      clearZonesObj();
       return;
     }
 
@@ -214,6 +216,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
       ...data,
       zonas: zonesObj.map(zone => zone.id),
     });
+    clearZonesObj();
   };
 
   ///* table --------------------
@@ -312,7 +315,10 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   return (
     <TabsFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlFlotasPage)}
+      onCancel={() => {
+        clearZonesObj();
+        navigate(returnUrlFlotasPage);
+      }}
       onSave={handleSubmit(onSave, () => {
         ToastWrapper.error('Faltan campos requeridos por completar');
       })}
