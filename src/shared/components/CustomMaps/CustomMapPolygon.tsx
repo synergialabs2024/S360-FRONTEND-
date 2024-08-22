@@ -1,33 +1,22 @@
 import L from 'leaflet';
-import { useEffect, useRef, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
+import { useRef, useState } from 'react';
 import { MdCancel, MdSaveAs } from 'react-icons/md';
 import { PiPolygonBold } from 'react-icons/pi';
-import {
-  FeatureGroup,
-  MapContainer,
-  Polygon,
-  TileLayer,
-  useMap,
-} from 'react-leaflet';
-
-// polygon
-import { EditControl } from 'react-leaflet-draw';
+import { FeatureGroup, MapContainer, Polygon, TileLayer } from 'react-leaflet';
 
 import { Grid, Paper } from '@mui/material';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
+// polygon
+import { EditControl } from 'react-leaflet-draw';
+
 import { ToastWrapper, useMapPolygonComponent } from '@/shared';
 import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
 import { CustomSingleButton } from '..';
-
-import 'leaflet/dist/leaflet.css';
-
-// // adapt leaflet to react ----
-// pnpm add leaflet react-leaflet
-// pnpm add -D @types/leaflet
 
 // @ts-expect-error
 delete L.Icon.Default.prototype._getIconUrl;
@@ -46,9 +35,14 @@ type CoordenadasType = {
   lng: number;
 };
 
-/* 
+// Helper function to calculate polygon center
+function calculatePolygonCenter(polygon: CoordenadasType[]): CoordenadasType {
+  const latlngs = polygon.map(coord => new L.LatLng(coord.lat, coord.lng));
+  const polygonBounds = L.latLngBounds(latlngs);
+  const center = polygonBounds.getCenter();
 
-*/
+  return { lat: center.lat, lng: center.lng };
+}
 
 export type CustomMapPolygonProps = {
   coordenadas: CoordenadasType;
@@ -66,7 +60,7 @@ export type CustomMapPolygonProps = {
 const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   coordenadas,
   size = gridSize,
-  zoomMap = 12,
+  zoomMap = 15,
   limitOnePolygon = true,
 
   polygon = [],
@@ -75,7 +69,11 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   onCancel,
   onSave,
 }) => {
-  const center = [coordenadas.lat, coordenadas.lng];
+  // Calculate the center of the polygon if available, otherwise use provided coordinates
+  const center = polygon?.length
+    ? calculatePolygonCenter(polygon)
+    : { lat: coordenadas.lat, lng: coordenadas.lng };
+
   const featureGroupRef = useRef<L.FeatureGroup>(null);
 
   ///* local state --------------------
@@ -93,20 +91,6 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
     if (featureGroup) {
       featureGroup.clearLayers();
     }
-  };
-
-  ///* recenter
-  const RecenterAutomatically = ({ lat, lng }: CoordenadasType) => {
-    const map = useMap();
-    const animateRef = useRef(true);
-    useEffect(() => {
-      map.setView([lat, lng], map.getZoom(), {
-        animate: animateRef.current || false,
-        duration: 1,
-      });
-    }, [lat, lng, map]);
-
-    return null;
   };
 
   // hooks
@@ -141,6 +125,12 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                 startIcon={<MdSaveAs />}
                 variant="contained"
                 onClick={() => {
+                  // validate if there is a polygon
+                  if (!coordsArray.length) {
+                    ToastWrapper.warning('Debe trazar un área de cobertura');
+                    return;
+                  }
+
                   setCanDrawPolygon(false);
                   onSave && onSave(coordsArray);
                 }}
@@ -232,8 +222,6 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
           </FeatureGroup>
 
           <TileLayer url={url} attribution={attribution} />
-
-          <RecenterAutomatically lat={center[0]} lng={center[1]} />
 
           {/* -------- polygon -------- */}
           <Polygon pathOptions={purpleOptions} positions={savedPolygonArray} />
