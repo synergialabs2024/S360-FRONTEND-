@@ -18,13 +18,13 @@ import {
 import {
   NAP_STATUS_ARRAY_CHOICES,
   NapStatusEnumChoice,
+  SAVE_NAP_PERMISSIONS,
   ToastWrapper,
   useLoaders,
 } from '@/shared';
 import {
   CustomAutocomplete,
   CustomCoordsTextField,
-  CustomTextArea,
   CustomTextField,
   InputAndBtnGridSpace,
   MapModalComponent,
@@ -44,6 +44,7 @@ import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { Ciudad, Nap, Nodo, OLT, Sector } from '@/shared/interfaces';
 import { napFormSchema } from '@/shared/utils';
 import { returnUrlNapsPage } from '../../../pages/tables/NapsPage';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export interface SaveNapProps {
   title: string;
@@ -53,6 +54,8 @@ export interface SaveNapProps {
 type SaveFormData = CreateNapParamsBase & {};
 
 const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
+  useCheckPermissionsArray(SAVE_NAP_PERMISSIONS);
+
   ///* hooks -----------------------
   const navigate = useNavigate();
 
@@ -75,6 +78,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     formState: { errors, isValid },
   } = form;
   const watchedCity = form.watch('ciudad');
+  const watchedSector = form.watch('sector');
   const watchedNodo = form.watch('nodo');
   const watchedCoords = form.watch('coordenadas');
 
@@ -98,14 +102,14 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     },
   });
   const {
-    data: sectorsPagingRes,
-    isLoading: isLoadingSectors,
-    isRefetching: isRefetchingSectors,
+    data: sectoresPagingRes,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
   } = useFetchSectores({
     enabled: !!watchedCity,
     params: {
       page_size: 900,
-      ciudad: watchedCity!,
+      ciudad: watchedCity,
     },
   });
   const {
@@ -116,7 +120,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     enabled: !!watchedCity,
     params: {
       page_size: 900,
-      ciudad: watchedCity!,
+      ciudad: watchedCity,
     },
   });
   const {
@@ -127,7 +131,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     enabled: !!watchedNodo,
     params: {
       page_size: 900,
-      nodo: watchedNodo!,
+      nodo: watchedNodo,
     },
   });
 
@@ -161,11 +165,40 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     if (!nap?.id) return;
     reset(nap);
   }, [nap, reset]);
+
+  // alets: not found province by country
+  useEffect(() => {
+    if (isLoadingSectores || isRefetchingSectores || !watchedCity) return;
+    !sectoresPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron sectores para la ciudad seleccionada',
+      );
+    if (isLoadingNodos || isRefetchingNodos || !watchedSector) return;
+    !nodosPagingRes?.data?.items?.length &&
+      ToastWrapper.error('No se encontraron nodos para el sector seleccionado');
+    if (isLoadingOlts || isRefetchingOlts || !watchedNodo) return;
+    !oltsPagingRes?.data?.items?.length &&
+      ToastWrapper.error('No se encontraron olt para el nodo seleccionado');
+  }, [
+    watchedCity,
+    watchedSector,
+    watchedNodo,
+    sectoresPagingRes,
+    nodosPagingRes,
+    oltsPagingRes,
+    isLoadingSectores,
+    isLoadingNodos,
+    isLoadingOlts,
+    isRefetchingSectores,
+    isRefetchingNodos,
+    isRefetchingOlts,
+  ]);
+
   const customLoader =
     isLoadingCities ||
     isRefetchingCities ||
-    isLoadingSectors ||
-    isRefetchingSectors ||
+    isLoadingSectores ||
+    isRefetchingSectores ||
     isLoadingNodos ||
     isRefetchingNodos ||
     isLoadingOlts ||
@@ -189,7 +222,92 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         error={errors.name}
         helperText={errors.name?.message}
       />
-      <CustomTextArea
+      <SelectTextFieldArrayString
+        label="Parentesco Referencia"
+        name="status_nap"
+        textFieldKey="status_nap"
+        // options
+        options={NAP_STATUS_ARRAY_CHOICES}
+        defaultValue={form.getValues()?.status_nap || ''}
+        // errors
+        control={form.control}
+        error={form.formState.errors.status_nap}
+        helperText={form.formState.errors.status_nap?.message}
+        gridSize={gridSizeMdLg6}
+      />
+
+      <CustomTextField
+        label="Proyecto cod"
+        name="proyecto_cod"
+        control={form.control}
+        defaultValue={form.getValues().proyecto_cod}
+        error={errors.proyecto_cod}
+        helperText={errors.proyecto_cod?.message}
+        size={gridSizeMdLg6}
+      />
+
+      <CustomAutocomplete<Ciudad>
+        label="Ciudad"
+        name="ciudad"
+        // options
+        options={citiesPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().ciudad}
+        isLoadingData={isLoadingCities || isRefetchingCities}
+        // vaidation
+        control={form.control}
+        error={errors.ciudad}
+        helperText={errors.ciudad?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<Sector>
+        label="Sector"
+        name="sector"
+        // options
+        options={sectoresPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().sector}
+        isLoadingData={isLoadingSectores || isRefetchingSectores}
+        // vaidation
+        control={form.control}
+        error={errors.sector}
+        helperText={errors.sector?.message}
+        size={gridSizeMdLg6}
+      />
+
+      <CustomAutocomplete<Nodo>
+        label="Nodo"
+        name="nodo"
+        // options
+        options={nodosPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().nodo}
+        isLoadingData={isLoadingNodos || isRefetchingNodos}
+        // vaidation
+        control={form.control}
+        error={errors.nodo}
+        helperText={errors.nodo?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<OLT>
+        label="OLT"
+        name="olt"
+        // options
+        options={oltsPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().olt}
+        isLoadingData={isLoadingOlts || isRefetchingOlts}
+        // vaidation
+        control={form.control}
+        error={errors.olt}
+        helperText={errors.olt?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
         label="Direccion"
         name="direccion"
         control={form.control}
@@ -197,7 +315,6 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         error={errors.direccion}
         helperText={errors.direccion?.message}
       />
-
       <InputAndBtnGridSpace
         mainGridSize={gridSize}
         inputGridSize={gridSizeMdLg11}
@@ -271,92 +388,6 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
           </>
         }
         btnGridSize={gridSizeMdLg1}
-      />
-
-      <SelectTextFieldArrayString
-        label="Parentesco Referencia"
-        name="status_nap"
-        textFieldKey="status_nap"
-        // options
-        options={NAP_STATUS_ARRAY_CHOICES}
-        defaultValue={form.getValues()?.status_nap || ''}
-        // errors
-        control={form.control}
-        error={form.formState.errors.status_nap}
-        helperText={form.formState.errors.status_nap?.message}
-        gridSize={gridSizeMdLg6}
-      />
-
-      <CustomTextField
-        label="Proyecto cod"
-        name="proyecto_cod"
-        control={form.control}
-        defaultValue={form.getValues().proyecto_cod}
-        error={errors.proyecto_cod}
-        helperText={errors.proyecto_cod?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomAutocomplete<Ciudad>
-        label="Ciudad"
-        name="ciudad"
-        // options
-        options={citiesPagingRes?.data?.items || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().ciudad}
-        isLoadingData={isLoadingCities || isRefetchingCities}
-        // vaidation
-        control={form.control}
-        error={errors.ciudad}
-        helperText={errors.ciudad?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomAutocomplete<Sector>
-        label="Sector"
-        name="sector"
-        // options
-        options={sectorsPagingRes?.data?.items || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().sector}
-        isLoadingData={isLoadingSectors || isRefetchingSectors}
-        // vaidation
-        control={form.control}
-        error={errors.sector}
-        helperText={errors.sector?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomAutocomplete<Nodo>
-        label="Nodo"
-        name="nodo"
-        // options
-        options={nodosPagingRes?.data?.items || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().nodo}
-        isLoadingData={isLoadingNodos || isRefetchingNodos}
-        // vaidation
-        control={form.control}
-        error={errors.nodo}
-        helperText={errors.nodo?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomAutocomplete<OLT>
-        label="OLT"
-        name="olt"
-        // options
-        options={oltsPagingRes?.data?.items || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().olt}
-        isLoadingData={isLoadingOlts || isRefetchingOlts}
-        // vaidation
-        control={form.control}
-        error={errors.olt}
-        helperText={errors.olt?.message}
-        size={gridSizeMdLg6}
       />
 
       <SampleCheckbox

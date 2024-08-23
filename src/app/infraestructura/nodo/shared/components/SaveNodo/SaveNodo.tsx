@@ -1,3 +1,24 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
+import {
+  CreateNodoParamsBase,
+  useCreateNodo,
+  useUpdateNodo,
+} from '@/actions/app/infraestructura';
+import {
+  CustomAutocomplete,
+  CustomCoordsTextField,
+  CustomTextArea,
+  CustomTextField,
+  InputAndBtnGridSpace,
+  MapModalComponent,
+  SampleCheckbox,
+  SingleFormBoxScene,
+  SingleIconButton,
+} from '@/shared/components';
 import {
   useFetchCiudades,
   useFetchPaises,
@@ -6,12 +27,8 @@ import {
   useFetchZonas,
 } from '@/actions/app';
 import {
-  CreateNodoParamsBase,
-  useCreateNodo,
-  useUpdateNodo,
-} from '@/actions/app/infraestructura';
-import {
   Ciudad,
+  gridSize,
   gridSizeMdLg1,
   gridSizeMdLg11,
   gridSizeMdLg6,
@@ -26,22 +43,8 @@ import {
 } from '@/shared';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { Nodo } from '@/shared/interfaces/app/infraestructura';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { returnUrlNodosPage } from '../../../pages/tables/NodosPage';
-import { useEffect, useState } from 'react';
-import {
-  CustomAutocomplete,
-  CustomCoordsTextField,
-  CustomTextArea,
-  CustomTextField,
-  InputAndBtnGridSpace,
-  MapModalComponent,
-  SampleCheckbox,
-  SingleFormBoxScene,
-  SingleIconButton,
-} from '@/shared/components';
+
 import { MdEditLocationAlt } from 'react-icons/md';
 import { Grid, Typography } from '@mui/material';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
@@ -245,25 +248,8 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
         error={errors.name}
         helperText={errors.name?.message}
       />
-      <CustomTextArea
-        label="Descripcion"
-        name="descripcion"
-        control={form.control}
-        defaultValue={form.getValues().descripcion}
-        error={errors.descripcion}
-        helperText={errors.descripcion?.message}
-      />
-      <CustomTextField
-        label="Direccion"
-        name="direccion"
-        control={form.control}
-        defaultValue={form.getValues().direccion}
-        error={errors.direccion}
-        helperText={errors.direccion?.message}
-        size={gridSizeMdLg6}
-      />
       <InputAndBtnGridSpace
-        mainGridSize={gridSizeMdLg6}
+        mainGridSize={gridSize}
         inputGridSize={gridSizeMdLg11}
         inputNode={
           <CustomCoordsTextField
@@ -408,12 +394,28 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
         helperText={errors.sector?.message}
         size={gridSizeMdLg6}
       />
+      <CustomTextField
+        label="Direccion"
+        name="direccion"
+        control={form.control}
+        defaultValue={form.getValues().direccion}
+        error={errors.direccion}
+        helperText={errors.direccion?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextArea
+        label="Descripcion"
+        name="descripcion"
+        control={form.control}
+        defaultValue={form.getValues().descripcion}
+        error={errors.descripcion}
+        helperText={errors.descripcion?.message}
+      />
       <SampleCheckbox
         label="Estado"
         name="state"
         control={form.control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg6}
         isState
       />
     </SingleFormBoxScene>
