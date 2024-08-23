@@ -75,7 +75,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   });
 
   ///* global state --------------------
-  const zonesObj = useFlotasStore(s => s.zonesObj);
+  const savedZonesObj = useFlotasStore(s => s.savedZonesObj);
   const clearZonesObj = useFlotasStore(s => s.clearZonesObj);
 
   ///* form --------------------
@@ -195,7 +195,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ///* handlers --------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    if (!zonesObj?.length)
+    if (!savedZonesObj?.length)
       return ToastWrapper.error('Debe agregar al menos una zona');
 
     ///* upd
@@ -204,7 +204,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
         id: flota.id!,
         data: {
           ...data,
-          zonas: zonesObj.map(zone => zone.id) as number[],
+          zonas: savedZonesObj.map(zone => zone.id) as number[],
         },
       });
       clearZonesObj();
@@ -214,7 +214,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     ///* create
     createFlotaMutation.mutate({
       ...data,
-      zonas: zonesObj.map(zone => zone.id),
+      zonas: savedZonesObj.map(zone => zone.id),
     });
     clearZonesObj();
   };
@@ -229,9 +229,10 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => {
-          const zonesObj = useFlotasStore.getState().zonesObj;
-          const removeZoneObj = useFlotasStore.getState().removeZoneObj;
-          const currentZone = zonesObj.find(
+          const savedZonesObj = useFlotasStore.getState().savedZonesObj;
+          const removeSavedZoneObj =
+            useFlotasStore.getState().removeSavedZoneObj;
+          const currentZone = savedZonesObj.find(
             zone => zone.id === row.original.id,
           );
 
@@ -242,7 +243,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
                 label="Remover"
                 color="error"
                 onClick={() => {
-                  removeZoneObj(currentZone?.id!);
+                  removeSavedZoneObj(currentZone?.id!);
                 }}
               />
             </>
@@ -283,16 +284,33 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   useEffect(() => {
     if (!flota?.id || isLoadingZonas || isRefetchingZonas) return;
 
-    const zones = flota?.zonas?.map(zone => {
-      const currentZone = zonasDataPagingRes?.data?.items?.find(
-        item => item.id === zone,
-      );
-      return currentZone;
-    });
-    useFlotasStore.getState().setZonesObj((zones as Zona[]) || []);
-
     reset(flota);
   }, [flota, isLoadingZonas, isRefetchingZonas, reset, zonasDataPagingRes]);
+  const setZonesObj = useFlotasStore(s => s.setZonesObj);
+  const setSavedZonesObj = useFlotasStore(s => s.setSavedZonesObj);
+
+  useEffect(() => {
+    if (isLoadingZonas || isRefetchingZonas) return;
+    if (zonasDataPagingRes?.data?.items) {
+      const allZones = zonasDataPagingRes.data.items;
+      const savedZones = flota?.zonas || [];
+      const savedZonesObj = allZones.filter(zone =>
+        savedZones.includes(zone.id!),
+      );
+      const restZones = allZones.filter(zone => !savedZones.includes(zone.id!));
+
+      setZonesObj(restZones);
+      setSavedZonesObj(savedZonesObj);
+    }
+  }, [
+    zonasDataPagingRes,
+    flota,
+    setZonesObj,
+    setSavedZonesObj,
+    isLoadingZonas,
+    isRefetchingZonas,
+  ]);
+
   const customLoader =
     isLoadingLider ||
     isLoadingAuxiliar ||
@@ -584,7 +602,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             {/* -------- zones table -------- */}
             <CustomMinimalTable<Zona>
               columns={zoneColumns}
-              data={zonesObj}
+              data={useFlotasStore.getState().savedZonesObj || []}
               enablePagination
             />
           </>

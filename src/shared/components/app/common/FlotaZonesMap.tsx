@@ -1,13 +1,11 @@
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet';
 
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import { MdAddLocationAlt } from 'react-icons/md';
+import { useRef } from 'react';
+import { MdAddLocationAlt, MdOutlineWrongLocation } from 'react-icons/md';
 
 import { gridSize } from '@/shared/constants/ui';
 import { Flota, GridSizeType, Zona } from '@/shared/interfaces';
@@ -17,12 +15,6 @@ import { CustomSingleButton } from '../../CustomButtons';
 
 // @ts-expect-error
 delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
-});
-
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const attribution =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
@@ -52,32 +44,40 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
   coordenadas,
   size = gridSize,
   zoomMap = 15,
-  zones,
-  savedZones = [],
   showCoverage = true,
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
-
-  const coords = zones.map(zona => zona.coordenadas);
-  const savedZonesArr = zones.filter(zone => savedZones.includes(zone.id!));
-  const restCoverage =
-    savedZones?.length > 0
-      ? zones.filter(zone => !savedZones.includes(zone.id!))
-      : zones;
+  const mapRef = useRef<L.Map>(null);
 
   // global state handler
-  const addZoneObj = useFlotasStore(s => s.addZoneObj);
+  const zonesObj = useFlotasStore(s => s.zonesObj);
+  const savedZonesObj = useFlotasStore(s => s.savedZonesObj);
+  const addSavedZoneObj = useFlotasStore(s => s.addSavedZoneObj);
+  const removeSavedZoneObj = useFlotasStore(s => s.removeSavedZoneObj);
 
   const handleAssignZone = (zone: Zona) => {
-    const currentZones = useFlotasStore.getState().zonesObj;
-
-    if (currentZones.some(currentZone => currentZone.id === zone.id)) {
+    if (savedZonesObj.some(savedZone => savedZone.id === zone.id)) {
       ToastWrapper.error(`La zona ${zone.name} ya ha sido asignada`);
       return;
     }
 
-    addZoneObj(zone);
+    addSavedZoneObj(zone);
     ToastWrapper.info(`Zona ${zone.name} asignada correctamente`);
+
+    // Close all popups
+    if (mapRef.current) {
+      mapRef.current.closePopup();
+    }
+  };
+
+  const handleRemoveZone = (zone: Zona) => {
+    removeSavedZoneObj(zone.id!);
+    ToastWrapper.info(`Zona ${zone.name} removida correctamente`);
+
+    // Close all popups
+    if (mapRef.current) {
+      mapRef.current.closePopup();
+    }
   };
 
   return (
@@ -87,13 +87,14 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
           center={center as L.LatLngExpression}
           zoom={zoomMap}
           style={{ height: '100%', width: '100%' }}
+          ref={mapRef}
         >
           <TileLayer url={url} attribution={attribution} />
 
-          {/* -------- polygon -------- */}
-          {showCoverage && coords.length > 0 && (
+          {/* -------- polygon for zonesObj -------- */}
+          {showCoverage && zonesObj.length > 0 && (
             <>
-              {restCoverage.map((zone, index) => (
+              {zonesObj.map((zone, index) => (
                 <Polygon
                   key={index}
                   pathOptions={greenOptions}
@@ -121,15 +122,28 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
             </>
           )}
 
-          {/* -------- saved polygon -------- */}
-          {savedZonesArr.map((zone, index) => (
+          {/* -------- polygon for savedZonesObj -------- */}
+          {savedZonesObj.map((zone, index) => (
             <Polygon
               key={index}
               pathOptions={purpleOptions}
               positions={zone.coordenadas as unknown as L.LatLngExpression[][]}
             >
               <Popup>
-                <Typography variant="h6">Zona: {zone.name}</Typography>
+                <Typography variant="h5" align="center">
+                  Zona: {zone.name}
+                </Typography>
+
+                <CustomSingleButton
+                  label="Remover Zona"
+                  variant="outlined"
+                  color="error"
+                  startIcon={<MdOutlineWrongLocation />}
+                  onClick={() => handleRemoveZone(zone)}
+                  sxGrid={{ pt: 3 }}
+                  gridSizeBtn={gridSize}
+                  justifyContent="center"
+                />
               </Popup>
             </Polygon>
           ))}
@@ -144,14 +158,14 @@ const FlotaZonesMap: React.FC<FlotaZonesMapProps> = ({
         padding="10px"
         marginTop="10px"
       >
-        <Box display="flex" alignItems="center" marginRight="20px">
-          <Box width="40px" height="5px" bgcolor="purple" marginRight="5px" />
-          <Typography variant="body2">Zonas seleccionadas</Typography>
-        </Box>
-
         <Box display="flex" alignItems="center">
           <Box width="40px" height="5px" bgcolor="green" marginRight="5px" />
           <Typography variant="body2">Área disponibles</Typography>
+        </Box>
+
+        <Box display="flex" alignItems="center" marginRight="20px">
+          <Box width="40px" height="5px" bgcolor="purple" marginRight="5px" />
+          <Typography variant="body2">Zonas seleccionadas</Typography>
         </Box>
       </Box>
     </Grid>
