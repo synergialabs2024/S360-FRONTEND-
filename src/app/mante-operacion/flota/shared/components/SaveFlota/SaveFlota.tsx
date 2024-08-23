@@ -77,6 +77,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ///* global state --------------------
   const savedZonesObj = useFlotasStore(s => s.savedZonesObj);
   const clearZonesObj = useFlotasStore(s => s.clearZonesObj);
+  const clearSavedZonesObj = useFlotasStore(s => s.clearSavedZonesObj);
 
   ///* form --------------------
   const form = useForm<SaveFormData>({
@@ -207,7 +208,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
           zonas: savedZonesObj.map(zone => zone.id) as number[],
         },
       });
-      clearZonesObj();
+      onFinalClear();
       return;
     }
 
@@ -216,7 +217,12 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
       ...data,
       zonas: savedZonesObj.map(zone => zone.id),
     });
+    onFinalClear();
+  };
+
+  const onFinalClear = () => {
     clearZonesObj();
+    clearSavedZonesObj();
   };
 
   ///* table --------------------
@@ -334,7 +340,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     <TabsFormBoxScene
       titlePage={title}
       onCancel={() => {
-        clearZonesObj();
+        onFinalClear();
         navigate(returnUrlFlotasPage);
       }}
       onSave={handleSubmit(onSave, () => {
