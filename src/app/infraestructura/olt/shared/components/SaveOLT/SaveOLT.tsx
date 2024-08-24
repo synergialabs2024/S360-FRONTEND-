@@ -103,6 +103,7 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
     initialCoords: olt?.id ? olt.coordenadas : watchedCoords,
   });
   useLocationCoords({
+    isEditting: !!olt?.id,
     form,
     setLatLng,
   });

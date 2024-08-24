@@ -120,6 +120,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       : watchedCoords,
   });
   useLocationCoords({
+    isEditting: !!solicitudservicio?.id,
     form,
     setLatLng,
   });

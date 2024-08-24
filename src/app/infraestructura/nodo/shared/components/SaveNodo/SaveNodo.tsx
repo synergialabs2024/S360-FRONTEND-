@@ -90,6 +90,7 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
     initialCoords: nodo?.id ? nodo.coordenadas : watchedCoords,
   });
   useLocationCoords({
+    isEditting: !!nodo?.id,
     form,
     setLatLng,
   });

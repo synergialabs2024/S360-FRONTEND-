@@ -87,6 +87,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     initialCoords: nap?.id ? nap?.coordenadas : watchedCoords,
   });
   useLocationCoords({
+    isEditting: !!nap?.id,
     form,
     setLatLng,
   });
