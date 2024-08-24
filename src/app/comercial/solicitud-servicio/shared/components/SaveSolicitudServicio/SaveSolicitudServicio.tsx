@@ -15,6 +15,7 @@ import {
   useCreateSolicitudServicio,
   useFetchPaises,
   useFetchZonas,
+  useGetZonesByCoords,
   useUpdateSolicitudServicio,
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
@@ -51,7 +52,7 @@ import {
   gridSizeMdLg4,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
-import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { useGeolocationCoords } from '@/shared/hooks/ui';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
   HTTPResStatusCodeEnum,
@@ -119,8 +120,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       ? solicitudservicio.coordenadas
       : watchedCoords,
   });
-  useLocationCoords({
-    isEditting: !!solicitudservicio?.id,
+  useGeolocationCoords({
     form,
     setLatLng,
   });
@@ -144,6 +144,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       page_size: 1200,
     },
   });
+  const {
+    // data: zonaByCoords,
+    isLoading: isLoadingZonaByCoords,
+    isRefetching: isRefetchingZonaByCoords,
+  } = useGetZonesByCoords(
+    {
+      coords: watchedCoords,
+    },
+    !!watchedCoords,
+  );
 
   // handlers ------------
   const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
@@ -338,10 +348,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     isLoadingPaises ||
     isRefetchingPaises ||
     isLoadingZonas ||
-    isRefetchingZonas;
+    isRefetchingZonas ||
+    isLoadingZonaByCoords ||
+    isRefetchingZonaByCoords;
   useLoaders(isCustomLoading);
 
-  if (isCustomLoading) return null;
+  // if (isCustomLoading) return null;
 
   return (
     <SingleFormBoxScene

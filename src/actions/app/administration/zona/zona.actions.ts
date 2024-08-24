@@ -18,6 +18,7 @@ const { get, post, patch } = erpAPI();
 export enum ZonaTSQEnum {
   ZONAS = 'zonas',
   ZONA = 'zona',
+  ZONA_COORDS = 'zonaCoords',
 }
 ///* tanStack query ---------------
 export const useFetchZonas = ({
@@ -33,9 +34,21 @@ export const useFetchZonas = ({
 
 export const useGetZona = (uuid: string) => {
   return useQuery({
-    queryKey: ['zona', uuid],
+    queryKey: [ZonaTSQEnum.ZONA, uuid],
     queryFn: () => getZona(uuid),
     retry: false,
+  });
+};
+
+export const useGetZonesByCoords = (
+  params: GetZonesByCoords,
+  enabled = true,
+) => {
+  return useQuery({
+    queryKey: [ZonaTSQEnum.ZONA_COORDS, params],
+    queryFn: () => getZonesByCoords(params),
+    retry: false,
+    enabled: enabled,
   });
 };
 
@@ -110,6 +123,7 @@ export const useUpdateZona = <T>({
     },
   });
 };
+
 ///* axios ---------------
 export type GetZonasParams = Partial<Zona> & {
   page?: number;
@@ -122,6 +136,9 @@ export interface UpdateZonaParams<T> {
   id: number;
   data: T;
 }
+export type GetZonesByCoords = {
+  coords: string;
+};
 
 export const getZonas = async (params?: GetZonasParams) => {
   const stateParams = { ...params };
@@ -144,6 +161,10 @@ export const getZona = async (uuid: string) => {
   } catch (error) {
     handleAxiosError(error);
   }
+};
+
+export const getZonesByCoords = async (params: GetZonesByCoords) => {
+  return get<Zona[]>(`/zona/coords/?coords=${params.coords}`, true);
 };
 
 export const createZona = async (data: CreateZonaParams) => {
