@@ -40,13 +40,10 @@ export const useGetZona = (uuid: string) => {
   });
 };
 
-export const useGetZonesByCoords = (
-  params: GetZonesByCoords,
-  enabled = true,
-) => {
+export const useGetZoneByCoords = (params: GetZoneByCoords, enabled = true) => {
   return useQuery({
     queryKey: [ZonaTSQEnum.ZONA_COORDS, params],
-    queryFn: () => getZonesByCoords(params),
+    queryFn: () => getZoneByCoords(params),
     retry: false,
     enabled: enabled,
   });
@@ -136,7 +133,7 @@ export interface UpdateZonaParams<T> {
   id: number;
   data: T;
 }
-export type GetZonesByCoords = {
+export type GetZoneByCoords = {
   coords: string;
 };
 
@@ -163,8 +160,8 @@ export const getZona = async (uuid: string) => {
   }
 };
 
-export const getZonesByCoords = async (params: GetZonesByCoords) => {
-  return get<Zona[]>(`/zona/coords/?coords=${params.coords}`, true);
+export const getZoneByCoords = async (params: GetZoneByCoords) => {
+  return get<Zona>(`/zona/coords/?coords=${params.coords}`, true);
 };
 
 export const createZona = async (data: CreateZonaParams) => {

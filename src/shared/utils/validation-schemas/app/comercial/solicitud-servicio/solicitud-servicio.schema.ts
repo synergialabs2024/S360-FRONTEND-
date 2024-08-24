@@ -107,4 +107,16 @@ export const solicitudServicioFormSchema = yup.object({
       200,
       'El campo rango capacidad pago no debe exceder los 200 caracteres',
     ),
+
+  //  coverage
+  thereIsCoverage: yup.boolean().optional().nullable(),
+  sector: yup
+    .number()
+    .optional()
+    .nullable()
+    .typeError('El campo sector es requerido')
+    .when('thereIsCoverage', {
+      is: true,
+      then: schema => schema.required('El campo sector es requerido'),
+    }),
 });

@@ -65,14 +65,16 @@ const CustomConfirmDialog: React.FC<CustomConfirmDialogProps> = () => {
           pr: 2,
         }}
       >
-        <Button
-          onClick={() => {
-            !onClose ? setConfirmDialogIsOpen(false) : onClose();
-          }}
-          sx={{ color: theme.palette.text.primary }}
-        >
-          {cancelTextBtn || 'Cancelar'}
-        </Button>
+        {onClose && (
+          <Button
+            onClick={() => {
+              !onClose ? setConfirmDialogIsOpen(false) : onClose();
+            }}
+            sx={{ color: theme.palette.text.primary }}
+          >
+            {cancelTextBtn || 'Cancelar'}
+          </Button>
+        )}
         <Button
           onClick={onConfirm}
           style={{

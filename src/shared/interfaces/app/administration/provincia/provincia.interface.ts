@@ -23,4 +23,4 @@ export interface Provincia {
   pais_data?: PaisLimitData;
 }
 
-export type ProvinciaLimitData = Pick<Provincia, 'uuid' | 'name'>;
+export type ProvinciaLimitData = Pick<Provincia, 'uuid' | 'name' | 'id'>;

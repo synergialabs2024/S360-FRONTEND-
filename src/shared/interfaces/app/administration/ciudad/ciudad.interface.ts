@@ -28,4 +28,4 @@ export interface Ciudad {
   provincia_data?: ProvinciaLimitData;
 }
 
-export type CiudadLimitData = Pick<Ciudad, 'uuid' | 'name'>;
+export type CiudadLimitData = Pick<Ciudad, 'uuid' | 'name' | 'id'>;

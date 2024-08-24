@@ -137,7 +137,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const onClearFlotaRefiere = () => {
     form.reset({
       ...form.getValues(),
-      tipo_identificacion: undefined,
       thereAreClientRefiere: false,
       es_referido: false,
     });

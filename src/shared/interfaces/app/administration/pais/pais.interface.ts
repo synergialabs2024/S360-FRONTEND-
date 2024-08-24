@@ -20,6 +20,6 @@ export interface Pais {
   modified_at?: string;
 }
 
-export type PaisLimitData = Pick<Pais, 'name' | 'uuid'>;
+export type PaisLimitData = Pick<Pais, 'name' | 'uuid' | 'id'>;
 
 // // country > province > city > parroquia > zona > sector

@@ -55,6 +55,11 @@ export interface SolicitudServicio {
   pais?: number;
   nacionalidad?: string; // pais can upd
 
+  provincia?: number;
+  ciudad?: number;
+  zona?: number; // calc based on coords
+  sector?: number; // select
+
   // sales filter logic
   area?: number;
   departamento?: number;

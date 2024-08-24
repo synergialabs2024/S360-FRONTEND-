@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
-import { MdEditLocationAlt } from 'react-icons/md';
+import { FaMapLocationDot } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -14,23 +14,27 @@ import {
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
   useFetchPaises,
+  useFetchSectores,
   useFetchZonas,
-  useGetZonesByCoords,
-  useUpdateSolicitudServicio,
+  useGetZoneByCoords,
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
 } from '@/actions/app';
 import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
-import { handleAxiosError, ToastWrapper, useLoaders } from '@/shared';
+import { handleAxiosError, Sector, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomAutocomplete,
   CustomAutocompleteArrString,
+  CustomCardAlert,
   CustomCellphoneTextField,
   CustomCoordsTextField,
   CustomDatePicker,
   CustomIdentificacionTextField,
   CustomNumberTextField,
+  CustomTextArea,
   CustomTextField,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
   MapModalComponent,
   SampleCheckbox,
@@ -52,7 +56,7 @@ import {
   gridSizeMdLg4,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
-import { useGeolocationCoords } from '@/shared/hooks/ui';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
   HTTPResStatusCodeEnum,
@@ -73,6 +77,11 @@ type SaveFormData = CreateSolicitudServicioParamsBase & {
   // helper
   isFormBlocked?: boolean;
   isValidIdentificacion?: boolean;
+
+  cityName?: string;
+  provinceName?: string;
+  zoneName?: string;
+  thereIsCoverage?: boolean;
 };
 
 const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
@@ -101,6 +110,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       tiene_cobertura: false,
       linea_servicio: 1,
       isFormBlocked: false,
+      thereIsCoverage: false,
     },
   });
   const {
@@ -113,6 +123,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedCoords = form.watch('coordenadas');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
   const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
+  const watchedZone = form.watch('zona');
+  const watchedThereIsCoverage = form.watch('thereIsCoverage');
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
@@ -120,7 +132,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       ? solicitudservicio.coordenadas
       : watchedCoords,
   });
-  useGeolocationCoords({
+  useLocationCoords({
+    isEditting: !!solicitudservicio?.id,
     form,
     setLatLng,
   });
@@ -145,15 +158,26 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     },
   });
   const {
-    // data: zonaByCoords,
+    data: zonaByCoordsRes,
     isLoading: isLoadingZonaByCoords,
     isRefetching: isRefetchingZonaByCoords,
-  } = useGetZonesByCoords(
+  } = useGetZoneByCoords(
     {
       coords: watchedCoords,
     },
-    !!watchedCoords,
+    !!watchedCoords && watchedCoords !== '0,0',
   );
+  const {
+    data: sectoresPaging,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
+  } = useFetchSectores({
+    enabled: !!watchedZone,
+    params: {
+      page_size: 900,
+      zona: watchedZone,
+    },
+  });
 
   // handlers ------------
   const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
@@ -255,11 +279,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       onSuccessCreateSolService(data as SolicitudServicio);
     },
   });
-  const updateSolicitudServicioMutation =
-    useUpdateSolicitudServicio<CreateSolicitudServicioParamsBase>({
-      navigate,
-      returnUrl: returnUrlSolicitudsServicioPage,
-    });
   const useSearchCedulaMutation =
     useValidateCedulaSolService<ValidateIdentificacionParams>({
       enableErrorNavigate: false,
@@ -294,17 +313,31 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    ///* upd
-    if (solicitudservicio?.id) {
-      updateSolicitudServicioMutation.mutate({
-        id: solicitudservicio.id!,
-        data,
-      });
-      return;
-    }
+    ///* not blocking alert (coverage)
+    if (!watchedThereIsCoverage) {
+      setConfirmDialog({
+        isOpen: true,
+        title: 'Ubicación sin cobertura',
+        subtitle:
+          'Esta solicitud de servicio no tiene cobertura en las coordenadas ingresadas. En este punto puede continuar con la creación de la solicitud de servicio, sin embargo, no podrá crear la preventa hasta que se tenga cobertura en las coordenadas ingresadas.',
+        onConfirm: () => {
+          setConfirmDialogIsOpen(false);
 
-    ///* create
-    createSolicitudServicioMutation.mutate(data);
+          ///* create
+          createSolicitudServicioMutation.mutate(data);
+
+          return;
+        },
+        confirmTextBtn: 'COMPRENDIDO, CONTINUAR',
+        cancelTextBtn: 'CERRAR',
+        onClose: () => {
+          setConfirmDialogIsOpen(false);
+        },
+      });
+    } else {
+      ///* create
+      createSolicitudServicioMutation.mutate(data);
+    }
   };
 
   const clearForm = () => {
@@ -344,16 +377,50 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     reset(solicitudservicio);
   }, [solicitudservicio, reset]);
 
+  // set zone to up
+  useEffect(() => {
+    if (!watchedCoords || watchedCoords === '0,0') return;
+
+    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
+    const zone = zonaByCoordsRes?.data;
+    if (!zone) {
+      ToastWrapper.error(
+        `No se encontró zona con cobertura para las coordenadas ${watchedCoords}`,
+      );
+      form.reset({
+        ...form.getValues(),
+        thereIsCoverage: false,
+      });
+      return;
+    }
+    form.reset({
+      ...form.getValues(),
+      zona: zone?.id,
+      ciudad: zone?.ciudad_data?.id!,
+      provincia: zone?.provincia_data?.id!,
+      cityName: zone?.ciudad_data?.name,
+      provinceName: zone?.provincia_data?.name,
+      zoneName: zone?.name,
+      thereIsCoverage: true,
+    });
+  }, [
+    zonaByCoordsRes,
+    isLoadingZonaByCoords,
+    isRefetchingZonaByCoords,
+    watchedCoords,
+    form,
+  ]);
+
   const isCustomLoading =
     isLoadingPaises ||
     isRefetchingPaises ||
     isLoadingZonas ||
     isRefetchingZonas ||
     isLoadingZonaByCoords ||
-    isRefetchingZonaByCoords;
+    isRefetchingZonaByCoords ||
+    isLoadingSectores ||
+    isRefetchingSectores;
   useLoaders(isCustomLoading);
-
-  // if (isCustomLoading) return null;
 
   return (
     <SingleFormBoxScene
@@ -428,7 +495,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       />
 
       <CustomTextField
-        label="Razon social"
+        label={
+          watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+            ? 'Razón social'
+            : 'Nombre y Apellido'
+        }
         name="razon_social"
         control={form.control}
         defaultValue={form.getValues().razon_social}
@@ -537,167 +608,233 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         helperText={errors.celular?.message}
         size={gridSizeMdLg6}
       />
-      <CustomTextField
-        label="Dirección"
-        name="direccion"
-        control={form.control}
-        defaultValue={form.getValues().direccion}
-        error={errors.direccion}
-        helperText={errors.direccion?.message}
-      />
 
-      <InputAndBtnGridSpace
-        mainGridSize={gridSize}
-        inputGridSize={gridSizeMdLg11}
-        inputNode={
-          <CustomCoordsTextField
-            label="Coordenadas"
-            name="coordenadas"
-            control={form.control}
-            defaultValue={form.getValues().coordenadas}
-            error={errors.coordenadas}
-            helperText={errors.coordenadas?.message}
-            onChangeValue={(value, isValidCoords) => {
-              if (isValidCoords) {
-                const s = value.split(',');
-                setLatLng({ lat: s[0], lng: s[1] });
-              }
-            }}
-          />
-        }
-        btnLabel="Ver mapa"
-        overrideBtnNode
-        customBtnNode={
-          <>
-            <SingleIconButton
-              startIcon={<MdEditLocationAlt />}
-              label={'Ver mapa'}
-              color={'default' as any}
-              onClick={() => {
-                setOpenMapModal(true);
+      {/* ------------- location ------------- */}
+      <>
+        <CustomTypoLabel
+          text="Ubicación"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+
+        <InputAndBtnGridSpace
+          mainGridSize={gridSize}
+          inputGridSize={gridSizeMdLg11}
+          inputNode={
+            <CustomCoordsTextField
+              label="Coordenadas"
+              name="coordenadas"
+              control={form.control}
+              defaultValue={form.getValues().coordenadas}
+              error={errors.coordenadas}
+              helperText={errors.coordenadas?.message}
+              onChangeValue={(value, isValidCoords) => {
+                if (isValidCoords) {
+                  const s = value.split(',');
+                  setLatLng({ lat: s[0], lng: s[1] });
+                }
               }}
             />
+          }
+          btnLabel="Ver mapa"
+          overrideBtnNode
+          customBtnNode={
+            <>
+              <SingleIconButton
+                startIcon={<FaMapLocationDot />}
+                label={'Ver mapa'}
+                color={'primary'}
+                onClick={() => {
+                  setOpenMapModal(true);
+                }}
+              />
 
-            <MapModalComponent
-              open={openMapModal}
-              onClose={() => {
-                setOpenMapModal(false);
-              }}
-              //
-              showCustomTitleNode
-              customTitleNode={
-                <Grid item container xs={12}>
-                  <Typography variant="h4">
-                    Ubicación | Coordenadas:{' '}
-                    <span
-                      style={{
-                        fontSize: '0.93rem',
-                        fontWeight: 400,
-                      }}
-                    >
-                      {latLng?.lat}, {latLng?.lng}
-                    </span>
-                  </Typography>
-                </Grid>
-              }
-              minWidthModal="70%"
-              contentNodeOverride={
-                <Map
-                  coordenadas={
-                    latLng
-                      ? {
-                          lat: latLng.lat,
-                          lng: latLng.lng,
-                        }
-                      : { lat: 0, lng: 0 }
-                  }
-                  canDragMarker={true}
-                  setLatLng={setLatLng}
-                  showCoverage
-                  coverage={calcMultiPolygon(zonasPaging?.data?.items || [])}
-                />
-              }
+              <MapModalComponent
+                open={openMapModal}
+                onClose={() => {
+                  setOpenMapModal(false);
+                }}
+                //
+                showCustomTitleNode
+                customTitleNode={
+                  <Grid item container xs={12}>
+                    <Typography variant="h4">
+                      Ubicación | Coordenadas:{' '}
+                      <span
+                        style={{
+                          fontSize: '0.93rem',
+                          fontWeight: 400,
+                        }}
+                      >
+                        {latLng?.lat}, {latLng?.lng}
+                      </span>
+                    </Typography>
+                  </Grid>
+                }
+                minWidthModal="70%"
+                contentNodeOverride={
+                  <Map
+                    coordenadas={
+                      latLng
+                        ? {
+                            lat: latLng.lat,
+                            lng: latLng.lng,
+                          }
+                        : { lat: 0, lng: 0 }
+                    }
+                    canDragMarker={true}
+                    setLatLng={setLatLng}
+                    showCoverage
+                    coverage={calcMultiPolygon(zonasPaging?.data?.items || [])}
+                  />
+                }
+              />
+            </>
+          }
+          btnGridSize={gridSizeMdLg1}
+        />
+
+        {watchedThereIsCoverage ? (
+          <>
+            <CustomAutocomplete<Sector>
+              label="Sector"
+              name="sector"
+              // options
+              options={sectoresPaging?.data?.items || []}
+              valueKey="name"
+              actualValueKey="id"
+              defaultValue={form.getValues().sector}
+              isLoadingData={isLoadingSectores || isRefetchingSectores}
+              // vaidation
+              control={form.control}
+              error={errors.sector}
+              helperText={errors.sector?.message}
+            />
+            <CustomTextField
+              label="Zona"
+              name="zoneName"
+              control={form.control}
+              defaultValue={form.getValues().zoneName}
+              error={errors.zoneName}
+              helperText={errors.zoneName?.message}
+              disabled
+            />
+            <CustomTextField
+              label="Ciudad"
+              name="cityName"
+              control={form.control}
+              defaultValue={form.getValues().cityName}
+              error={errors.cityName}
+              helperText={errors.cityName?.message}
+              size={gridSizeMdLg6}
+              disabled
+            />
+            <CustomTextField
+              label="Provincia"
+              name="provinceName"
+              control={form.control}
+              defaultValue={form.getValues().provinceName}
+              error={errors.provinceName}
+              helperText={errors.provinceName?.message}
+              size={gridSizeMdLg6}
+              disabled
             />
           </>
-        }
-        btnGridSize={gridSizeMdLg1}
-      />
+        ) : (
+          <>
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage="Ubicación sin cobertura"
+              alertSeverity="error"
+            />
+          </>
+        )}
 
-      <CustomTextField
-        label="Categoria score desicion"
-        name="categoria_score_desicion"
-        control={form.control}
-        defaultValue={form.getValues().categoria_score_desicion}
-        error={errors.categoria_score_desicion}
-        helperText={errors.categoria_score_desicion?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
+        <CustomTextArea
+          label="Dirección"
+          name="direccion"
+          control={form.control}
+          defaultValue={form.getValues().direccion}
+          error={errors.direccion}
+          helperText={errors.direccion?.message}
+        />
+      </>
 
-      <CustomTextField
-        label="Valor maximo"
-        name="valor_maximo"
-        control={form.control}
-        defaultValue={form.getValues().valor_maximo}
-        error={errors.valor_maximo}
-        helperText={errors.valor_maximo?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
-
-      <CustomTextField
-        label="Valor minimo"
-        name="valor_minimo"
-        control={form.control}
-        defaultValue={form.getValues().valor_minimo}
-        error={errors.valor_minimo}
-        helperText={errors.valor_minimo?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
-
-      <CustomTextField
-        label="Score inclusion"
-        name="score_inclusion"
-        control={form.control}
-        defaultValue={form.getValues().score_inclusion}
-        error={errors.score_inclusion}
-        helperText={errors.score_inclusion?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
-
-      <CustomTextField
-        label="Score sobreendeudamiento"
-        name="score_sobreendeudamiento"
-        control={form.control}
-        defaultValue={form.getValues().score_sobreendeudamiento}
-        error={errors.score_sobreendeudamiento}
-        helperText={errors.score_sobreendeudamiento?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
-
-      <CustomTextField
-        label="Score servicios"
-        name="score_servicios"
-        control={form.control}
-        defaultValue={form.getValues().score_servicios}
-        error={errors.score_servicios}
-        helperText={errors.score_servicios?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
-
-      <CustomTextField
-        label="Rango capacidad pago"
-        name="rango_capacidad_pago"
-        control={form.control}
-        defaultValue={form.getValues().rango_capacidad_pago}
-        error={errors.rango_capacidad_pago}
-        helperText={errors.rango_capacidad_pago?.message}
-        disabled
-      />
+      {/* ------------- Equifax ------------- */}
+      <>
+        <CustomTypoLabel
+          text="Equifax"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+        <CustomTextField
+          label="Categoria score desicion"
+          name="categoria_score_desicion"
+          control={form.control}
+          defaultValue={form.getValues().categoria_score_desicion}
+          error={errors.categoria_score_desicion}
+          helperText={errors.categoria_score_desicion?.message}
+          size={gridSizeMdLg6}
+          disabled
+        />
+        <CustomTextField
+          label="Valor maximo"
+          name="valor_maximo"
+          control={form.control}
+          defaultValue={form.getValues().valor_maximo}
+          error={errors.valor_maximo}
+          helperText={errors.valor_maximo?.message}
+          size={gridSizeMdLg6}
+          disabled
+        />
+        <CustomTextField
+          label="Valor minimo"
+          name="valor_minimo"
+          control={form.control}
+          defaultValue={form.getValues().valor_minimo}
+          error={errors.valor_minimo}
+          helperText={errors.valor_minimo?.message}
+          size={gridSizeMdLg6}
+          disabled
+        />
+        <CustomTextField
+          label="Score inclusion"
+          name="score_inclusion"
+          control={form.control}
+          defaultValue={form.getValues().score_inclusion}
+          error={errors.score_inclusion}
+          helperText={errors.score_inclusion?.message}
+          size={gridSizeMdLg6}
+          disabled
+        />
+        <CustomTextField
+          label="Score sobreendeudamiento"
+          name="score_sobreendeudamiento"
+          control={form.control}
+          defaultValue={form.getValues().score_sobreendeudamiento}
+          error={errors.score_sobreendeudamiento}
+          helperText={errors.score_sobreendeudamiento?.message}
+          size={gridSizeMdLg6}
+          disabled
+        />
+        <CustomTextField
+          label="Score servicios"
+          name="score_servicios"
+          control={form.control}
+          defaultValue={form.getValues().score_servicios}
+          error={errors.score_servicios}
+          helperText={errors.score_servicios?.message}
+          size={gridSizeMdLg6}
+          disabled
+        />
+        <CustomTextField
+          label="Rango capacidad pago"
+          name="rango_capacidad_pago"
+          control={form.control}
+          defaultValue={form.getValues().rango_capacidad_pago}
+          error={errors.rango_capacidad_pago}
+          helperText={errors.rango_capacidad_pago?.message}
+          disabled
+        />
+      </>
     </SingleFormBoxScene>
   );
 };

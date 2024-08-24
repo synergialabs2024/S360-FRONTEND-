@@ -1,6 +1,7 @@
 export * from './app';
 export * from './Checkboxes';
 export * from './common';
+export * from './CustomAlerts';
 export * from './CustomAutocompletes';
 export * from './CustomButtons';
 export * from './CustomChips';
