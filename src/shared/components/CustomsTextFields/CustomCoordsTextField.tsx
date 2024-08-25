@@ -60,7 +60,7 @@ const CustomCoordsTextField: React.FC<CustomCoordsTextFieldProps> = ({
 
   sxGrid,
 }) => {
-  const [isIinvalidInputValue, setIsInvalidInputValue] = useState(false);
+  const [isInvalidInputValue, setIsInvalidInputValue] = useState(false);
 
   return (
     <Grid item {...size} sx={sxGrid}>
@@ -73,18 +73,18 @@ const CustomCoordsTextField: React.FC<CustomCoordsTextFieldProps> = ({
             const onChange = (event: any) => {
               const currentValue = event.target.value;
 
+              // Verificar si la coordenada es válida
               const regex: RegExp =
                 /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/;
-              const isValidCoords = regex.test(currentValue);
+              const isValid = regex.test(currentValue);
 
-              if (isValidCoords) {
+              if (isValid) {
                 setIsInvalidInputValue(false);
               } else {
                 setIsInvalidInputValue(true);
-                helperText =
-                  'Ingresar una coordenada valida por ejemplo: "-0.3142,-78.4702"';
               }
-              onChangeValue && onChangeValue(currentValue, isValidCoords);
+
+              onChangeValue && onChangeValue(currentValue, isValid);
               return field.onChange(currentValue);
             };
 
@@ -103,9 +103,13 @@ const CustomCoordsTextField: React.FC<CustomCoordsTextFieldProps> = ({
                   startAdornment: startAdornmentInput ?? null,
                   endAdornment: endAdornmentInput ?? null,
                 }}
-                error={isIinvalidInputValue || !!error}
-                helperText={helperText || defaultHelperText}
-                type={'text'}
+                error={isInvalidInputValue || !!error}
+                helperText={
+                  isInvalidInputValue
+                    ? "Ingresar una coordenada válida. Ej: '-0.3142,-78.4702'"
+                    : helperText || defaultHelperText
+                }
+                type="text"
                 onChange={onChange}
                 required={required}
                 inputProps={{

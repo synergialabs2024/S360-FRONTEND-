@@ -24,6 +24,8 @@ export interface Nap {
   status_nap: string;
   proyecto_cod: string;
   distance?: number; // calc based on coords only for coordenadas_radio filter
+  latitude?: string;
+  longitude?: string;
 
   created_at?: string;
   modified_at?: string;

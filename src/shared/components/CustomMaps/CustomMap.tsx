@@ -1,4 +1,5 @@
-import L from 'leaflet';
+/* eslint-disable indent */
+import L, { Icon } from 'leaflet';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   MapContainer,
@@ -15,7 +16,7 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import { gridSize } from '@/shared/constants/ui';
-import { GridSizeType, Zona } from '@/shared/interfaces';
+import { GridSizeType, Nap, Zona } from '@/shared/interfaces';
 import 'leaflet/dist/leaflet.css';
 
 // // adapt leaflet to react ----
@@ -51,10 +52,22 @@ export type MapProps = {
 
   showCoverage?: boolean;
   coverageZones?: Zona[];
+
+  showNaps?: boolean;
+  naps?: Nap[];
 };
 
-// polygon
+// polygon -----------------
 const greenOptions = { color: 'green' };
+
+// nap -----------------
+const activeNapIcon = new Icon({
+  iconUrl: '/caja-nap.png',
+  iconSize: [39, 39], // size of the icon
+  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+  // className: 'nap__icon--active',
+});
 
 const CustomMap: React.FC<MapProps> = ({
   coordenadas,
@@ -65,6 +78,9 @@ const CustomMap: React.FC<MapProps> = ({
 
   showCoverage = false,
   coverageZones = [],
+
+  showNaps = false,
+  naps = [],
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
 
@@ -148,6 +164,7 @@ const CustomMap: React.FC<MapProps> = ({
             </Marker>
           )}
 
+          {/* -------- recenter -------- */}
           <RecenterAutomatically lat={center[0]} lng={center[1]} />
 
           {/* -------- polygon -------- */}
@@ -174,6 +191,34 @@ const CustomMap: React.FC<MapProps> = ({
             //   positions={coverage as unknown as L.LatLngExpression[][][]}
             // />
           )}
+
+          {/* -------- naps -------- */}
+          {showNaps && !!naps.length
+            ? naps.map(nap => {
+                const lat = nap?.latitude || 0;
+                const lng = nap?.longitude || 0;
+                const areValidCoords =
+                  !isNaN(Number(lat)) &&
+                  !isNaN(Number(lng)) &&
+                  +lat !== 0 &&
+                  +lng !== 0;
+
+                return (
+                  <>
+                    {areValidCoords ? (
+                      <>
+                        <Marker
+                          key={nap.id}
+                          position={[+lat, +lng] as L.LatLngExpression}
+                          title={nap.name}
+                          icon={activeNapIcon}
+                        ></Marker>
+                      </>
+                    ) : null}
+                  </>
+                );
+              })
+            : null}
         </MapContainer>
       </Paper>
     </Grid>

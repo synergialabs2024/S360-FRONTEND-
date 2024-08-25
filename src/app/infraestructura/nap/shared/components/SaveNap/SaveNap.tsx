@@ -1,15 +1,14 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { MdEditLocationAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import {
   CreateNapParamsBase,
   useCreateNap,
   useFetchCiudades,
+  useFetchNaps,
   useFetchNodos,
   useFetchOLTs,
   useFetchSectores,
@@ -28,19 +27,11 @@ import {
   CustomCoordsTextField,
   CustomTextArea,
   CustomTextField,
-  InputAndBtnGridSpace,
-  MapModalComponent,
   SampleCheckbox,
   SelectTextFieldArrayString,
   SingleFormBoxScene,
-  SingleIconButton,
 } from '@/shared/components';
-import {
-  gridSize,
-  gridSizeMdLg1,
-  gridSizeMdLg11,
-  gridSizeMdLg6,
-} from '@/shared/constants/ui';
+import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
@@ -53,16 +44,15 @@ export interface SaveNapProps {
   nap?: Nap;
 }
 
-type SaveFormData = CreateNapParamsBase & {};
+type SaveFormData = CreateNapParamsBase & {
+  isValidCoords?: boolean;
+};
 
 const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
   useCheckPermissionsArray(SAVE_NAP_PERMISSIONS);
 
   ///* hooks -----------------------
   const navigate = useNavigate();
-
-  ///* local state -----------------------
-  const [openMapModal, setOpenMapModal] = useState<boolean>(false);
 
   ///* form -----------------------
   const form = useForm<SaveFormData>({
@@ -137,6 +127,17 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
       nodo: watchedNodo,
     },
   });
+  const {
+    data: napsByCoordsPagingRes,
+    isLoading: isLoadingNaps,
+    isRefetching: isRefetchingNaps,
+  } = useFetchNaps({
+    enabled: !!watchedCoords,
+    params: {
+      page_size: 900,
+      coordenadas_radio: `${latLng.lat},${latLng.lng}`,
+    },
+  });
 
   ///* mutations -----------------------
   const createNapMutation = useCreateNap({
@@ -176,9 +177,9 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
       ToastWrapper.error(
         'No se encontraron sectores para la ciudad seleccionada',
       );
-    if (isLoadingNodos || isRefetchingNodos || !watchedSector) return;
+    if (isLoadingNodos || isRefetchingNodos || !watchedCity) return;
     !nodosPagingRes?.data?.items?.length &&
-      ToastWrapper.error('No se encontraron nodos para el sector seleccionado');
+      ToastWrapper.error('No se encontraron nodos para la ciudad seleccionada');
     if (isLoadingOlts || isRefetchingOlts || !watchedNodo) return;
     !oltsPagingRes?.data?.items?.length &&
       ToastWrapper.error('No se encontraron olt para el nodo seleccionado');
@@ -205,7 +206,9 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     isLoadingNodos ||
     isRefetchingNodos ||
     isLoadingOlts ||
-    isRefetchingOlts;
+    isRefetchingOlts ||
+    isLoadingNaps ||
+    isRefetchingNaps;
   useLoaders(customLoader);
 
   return (
@@ -331,79 +334,25 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         error={errors.direccion}
         helperText={errors.direccion?.message}
       />
-      <InputAndBtnGridSpace
-        mainGridSize={gridSize}
-        inputGridSize={gridSizeMdLg11}
-        inputNode={
-          <CustomCoordsTextField
-            label="Coordenadas"
-            name="coordenadas"
-            control={form.control}
-            defaultValue={form.getValues().coordenadas}
-            error={errors.coordenadas}
-            helperText={errors.coordenadas?.message}
-            onChangeValue={(value, isValidCoords) => {
-              if (isValidCoords) {
-                const s = value.split(',');
-                setLatLng({ lat: s[0], lng: s[1] });
-              }
-            }}
-          />
-        }
-        btnLabel="Ver mapa"
-        overrideBtnNode
-        customBtnNode={
-          <>
-            <SingleIconButton
-              startIcon={<MdEditLocationAlt />}
-              label={'Ver mapa'}
-              color={'default' as any}
-              onClick={() => {
-                setOpenMapModal(true);
-              }}
-            />
-
-            <MapModalComponent
-              open={openMapModal}
-              onClose={() => {
-                setOpenMapModal(false);
-              }}
-              //
-              showCustomTitleNode
-              customTitleNode={
-                <Grid item container xs={12}>
-                  <Typography variant="h4">
-                    Ubicación | Coordenadas:{' '}
-                    <span
-                      style={{
-                        fontSize: '0.93rem',
-                        fontWeight: 400,
-                      }}
-                    >
-                      {latLng?.lat}, {latLng?.lng}
-                    </span>
-                  </Typography>
-                </Grid>
-              }
-              minWidthModal="70%"
-              contentNodeOverride={
-                <Map
-                  coordenadas={
-                    latLng
-                      ? {
-                          lat: latLng.lat,
-                          lng: latLng.lng,
-                        }
-                      : { lat: 0, lng: 0 }
-                  }
-                  canDragMarker={true}
-                  setLatLng={setLatLng}
-                />
-              }
-            />
-          </>
-        }
-        btnGridSize={gridSizeMdLg1}
+      <CustomCoordsTextField
+        label="Coordenadas"
+        name="coordenadas"
+        control={form.control}
+        defaultValue={form.getValues().coordenadas}
+        error={errors.coordenadas}
+        helperText={errors.coordenadas?.message}
+        onChangeValue={(value, isValidCoords) => {
+          if (isValidCoords) {
+            const s = value.split(',');
+            setLatLng({ lat: s[0], lng: s[1] });
+          }
+        }}
+      />
+      <Map
+        coordenadas={latLng}
+        setLatLng={setLatLng}
+        showNaps
+        naps={napsByCoordsPagingRes?.data?.items || []}
       />
 
       <SampleCheckbox
