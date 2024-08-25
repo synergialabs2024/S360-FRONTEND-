@@ -9,13 +9,13 @@ import {
   useMap,
 } from 'react-leaflet';
 
-import { Grid, Paper } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import { gridSize } from '@/shared/constants/ui';
-import { GridSizeType } from '@/shared/interfaces';
+import { GridSizeType, Zona } from '@/shared/interfaces';
 import 'leaflet/dist/leaflet.css';
 
 // // adapt leaflet to react ----
@@ -50,7 +50,7 @@ export type MapProps = {
   size?: GridSizeType;
 
   showCoverage?: boolean;
-  coverage?: MultiPolygonType;
+  coverageZones?: Zona[];
 };
 
 // polygon
@@ -64,7 +64,7 @@ const CustomMap: React.FC<MapProps> = ({
   zoomMap = 15,
 
   showCoverage = false,
-  coverage = [],
+  coverageZones = [],
 }) => {
   const center = [coordenadas.lat, coordenadas.lng];
 
@@ -151,23 +151,20 @@ const CustomMap: React.FC<MapProps> = ({
           <RecenterAutomatically lat={center[0]} lng={center[1]} />
 
           {/* -------- polygon -------- */}
-          {showCoverage && !!coverage.length && (
+          {showCoverage && !!coverageZones.length && (
             <>
-              {coverage.map((polygon, index) => (
+              {coverageZones.map((zone, index) => (
                 <Polygon
                   key={index}
                   pathOptions={greenOptions}
-                  positions={polygon as unknown as L.LatLngExpression[][]}
+                  positions={
+                    zone?.coordenadas as unknown as L.LatLngExpression[][]
+                  }
                 >
                   <Popup>
-                    {/* Contenido personalizado del popup */}
-                    <div>
-                      <h4>Polígono {index + 1}</h4>
-                      <p>
-                        Este es un popup personalizado para el polígono{' '}
-                        {index + 1}.
-                      </p>
-                    </div>
+                    <Typography variant="h5" align="center">
+                      Zona: {zone.name}
+                    </Typography>
                   </Popup>
                 </Polygon>
               ))}

@@ -65,7 +65,7 @@ import {
   SolicitudServicio,
 } from '@/shared/interfaces';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
-import { calcMultiPolygon, solicitudServicioFormSchema } from '@/shared/utils';
+import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
 
@@ -721,7 +721,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
                     canDragMarker={true}
                     setLatLng={setLatLng}
                     showCoverage
-                    coverage={calcMultiPolygon(zonasPaging?.data?.items || [])}
+                    coverageZones={zonasPaging?.data?.items || []}
                   />
                 }
               />
