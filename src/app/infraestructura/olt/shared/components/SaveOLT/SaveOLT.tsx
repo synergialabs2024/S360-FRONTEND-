@@ -14,6 +14,7 @@ import {
   useFetchZonas,
   useUpdateOLT,
 } from '@/actions/app';
+import { SAVE_OLT_PERMISSIONS, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomAutocomplete,
   CustomCoordsTextField,
@@ -32,6 +33,9 @@ import {
   gridSizeMdLg11,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
   Ciudad,
   Nodo,
@@ -42,14 +46,10 @@ import {
   Zona,
 } from '@/shared/interfaces';
 import { oLTFormSchema } from '@/shared/utils';
-import { returnUrlOLTsPage } from '../../../pages/tables/OLTsPage';
-import { MdEdit, MdEditLocationAlt } from 'react-icons/md';
-import { Grid, Typography } from '@mui/material';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
-import { SAVE_OLT_PERMISSIONS, ToastWrapper, useLoaders } from '@/shared';
-import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
-import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { Grid, Typography } from '@mui/material';
+import { MdEdit, MdEditLocationAlt } from 'react-icons/md';
+import { returnUrlOLTsPage } from '../../../pages/tables/OLTsPage';
 
 export interface SaveOLTProps {
   title: string;
@@ -95,12 +95,11 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
   const watchedProvincia = form.watch('provincia');
   const watchedCiudad = form.watch('ciudad');
   const watchedZona = form.watch('zona');
-  const watchedCoords = form.watch('coordenadas');
   const watchedIsEdit = form.watch('isEdit');
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
-    initialCoords: olt?.id ? olt.coordenadas : watchedCoords,
+    initialCoords: olt?.id ? olt.coordenadas : '',
   });
   useLocationCoords({
     isEditting: !!olt?.id,

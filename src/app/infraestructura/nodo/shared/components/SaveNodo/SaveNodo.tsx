@@ -4,28 +4,17 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  CreateNodoParamsBase,
-  useCreateNodo,
-  useUpdateNodo,
-} from '@/actions/app/infraestructura';
-import {
-  CustomAutocomplete,
-  CustomCoordsTextField,
-  CustomTextArea,
-  CustomTextField,
-  InputAndBtnGridSpace,
-  MapModalComponent,
-  SampleCheckbox,
-  SingleFormBoxScene,
-  SingleIconButton,
-} from '@/shared/components';
-import {
   useFetchCiudades,
   useFetchPaises,
   useFetchProvincias,
   useFetchSectores,
   useFetchZonas,
 } from '@/actions/app';
+import {
+  CreateNodoParamsBase,
+  useCreateNodo,
+  useUpdateNodo,
+} from '@/actions/app/infraestructura';
 import {
   Ciudad,
   gridSize,
@@ -41,14 +30,25 @@ import {
   useLoaders,
   Zona,
 } from '@/shared';
+import {
+  CustomAutocomplete,
+  CustomCoordsTextField,
+  CustomTextArea,
+  CustomTextField,
+  InputAndBtnGridSpace,
+  MapModalComponent,
+  SampleCheckbox,
+  SingleFormBoxScene,
+  SingleIconButton,
+} from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { Nodo } from '@/shared/interfaces/app/infraestructura';
 import { returnUrlNodosPage } from '../../../pages/tables/NodosPage';
 
-import { MdEditLocationAlt } from 'react-icons/md';
-import { Grid, Typography } from '@mui/material';
-import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import { Grid, Typography } from '@mui/material';
+import { MdEditLocationAlt } from 'react-icons/md';
 
 export interface SaveNodoProps {
   title: string;
@@ -83,11 +83,10 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
   const watchedProvincia = form.watch('provincia');
   const watchedCiudad = form.watch('ciudad');
   const watchedZona = form.watch('zona');
-  const watchedCoords = form.watch('coordenadas');
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
-    initialCoords: nodo?.id ? nodo.coordenadas : watchedCoords,
+    initialCoords: nodo?.id ? nodo.coordenadas : '',
   });
   useLocationCoords({
     isEditting: !!nodo?.id,
