@@ -18,7 +18,8 @@ export interface Nap {
   name: string;
   direccion: string;
   coordenadas: string;
-  puertos: PuertoType[];
+  puertos: number;
+  puertos_list: PuertoType[];
   es_soterrado: boolean;
   status_nap: string;
   proyecto_cod: string;

@@ -190,7 +190,7 @@ export const NAP_STATUS_ARRAY_CHOICES = [
   NapStatusEnumChoice.AFECTACION,
 ];
 
-// // // SALES ================================
+// // // SALES ==============================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',
   GESTIONANDO = 'GESTIONANDO',

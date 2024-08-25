@@ -8,8 +8,8 @@ export interface SelectTextFieldArrayStringProps {
   label: string;
   required?: boolean;
   textFieldKey?: string;
-  defaultValue?: string;
-  options: string[];
+  defaultValue?: string | number;
+  options: string[] | number[];
 
   error: FieldError | undefined;
   helperText: React.ReactNode;
@@ -20,6 +20,7 @@ export interface SelectTextFieldArrayStringProps {
   onChangeValue?: (value: string) => void;
 
   gridSize?: GridSizeType;
+  disabled?: boolean;
 }
 
 const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
@@ -37,6 +38,8 @@ const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
   onChangeValue,
 
   gridSize = gridSizeMdLg6,
+
+  disabled = false,
 }) => {
   return (
     <Grid item {...gridSize}>
@@ -66,6 +69,11 @@ const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
                 helperText={helperText}
                 required={required}
                 onChange={onChange}
+                // // disabled style
+                disabled={disabled}
+                sx={{
+                  ...(disabled && { background: 'rgba(0, 0, 0, 0.04)' }),
+                }}
               >
                 {options.map(item => (
                   <MenuItem key={item} value={item}>

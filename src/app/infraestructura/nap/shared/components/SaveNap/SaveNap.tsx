@@ -17,6 +17,7 @@ import {
 } from '@/actions/app';
 import {
   NAP_STATUS_ARRAY_CHOICES,
+  NAPS_PORTS_QUANTITY_ARRAY,
   NapStatusEnumChoice,
   SAVE_NAP_PERMISSIONS,
   ToastWrapper,
@@ -25,6 +26,7 @@ import {
 import {
   CustomAutocomplete,
   CustomCoordsTextField,
+  CustomTextArea,
   CustomTextField,
   InputAndBtnGridSpace,
   MapModalComponent,
@@ -39,12 +41,12 @@ import {
   gridSizeMdLg11,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { Ciudad, Nap, Nodo, OLT, Sector } from '@/shared/interfaces';
 import { napFormSchema } from '@/shared/utils';
 import { returnUrlNapsPage } from '../../../pages/tables/NapsPage';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export interface SaveNapProps {
   title: string;
@@ -224,7 +226,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         helperText={errors.name?.message}
       />
       <SelectTextFieldArrayString
-        label="Parentesco Referencia"
+        label="Nap status"
         name="status_nap"
         textFieldKey="status_nap"
         // options
@@ -234,6 +236,20 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         control={form.control}
         error={form.formState.errors.status_nap}
         helperText={form.formState.errors.status_nap?.message}
+        gridSize={gridSizeMdLg6}
+      />
+      <SelectTextFieldArrayString
+        label="Cantidad de puertos"
+        name="puertos"
+        textFieldKey="puertos"
+        // options
+        options={NAPS_PORTS_QUANTITY_ARRAY}
+        defaultValue={form.getValues()?.puertos || ''}
+        // errors
+        control={form.control}
+        error={form.formState.errors.puertos}
+        helperText={form.formState.errors.puertos?.message}
+        disabled={!!nap?.id}
         gridSize={gridSizeMdLg6}
       />
 
@@ -275,7 +291,6 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         control={form.control}
         error={errors.sector}
         helperText={errors.sector?.message}
-        size={gridSizeMdLg6}
       />
 
       <CustomAutocomplete<Nodo>
@@ -308,7 +323,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         helperText={errors.olt?.message}
         size={gridSizeMdLg6}
       />
-      <CustomTextField
+      <CustomTextArea
         label="Direccion"
         name="direccion"
         control={form.control}
