@@ -7,7 +7,7 @@ export interface NapsPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: Nap;
+  items: Nap[];
 }
 
 export interface Nap {
@@ -22,6 +22,7 @@ export interface Nap {
   es_soterrado: boolean;
   status_nap: string;
   proyecto_cod: string;
+  distance?: number; // calc based on coords only for coordenadas_radio filter
 
   created_at?: string;
   modified_at?: string;

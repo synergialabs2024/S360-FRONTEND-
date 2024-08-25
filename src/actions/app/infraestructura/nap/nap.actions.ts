@@ -112,7 +112,10 @@ export const useUpdateNap = <T>({
 };
 
 ///* axios ---------------
-export type GetNapsParams = Partial<Nap> & PagingPartialParams;
+export type GetNapsParams = Partial<Nap> &
+  PagingPartialParams & {
+    coordenadas_radio?: string; // filter by coords & radio
+  };
 export type CreateNapParams<T> = T;
 export type CreateNapParamsBase = Omit<Nap, 'id'>;
 export interface UpdateNapParams<T> {

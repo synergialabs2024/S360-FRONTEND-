@@ -13,6 +13,7 @@ import {
   CreateSolicitudServicioParamsBase,
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
+  useFetchNaps,
   useFetchPaises,
   useFetchSectores,
   useFetchZonas,
@@ -82,6 +83,7 @@ type SaveFormData = CreateSolicitudServicioParamsBase & {
   provinceName?: string;
   zoneName?: string;
   thereIsCoverage?: boolean;
+  thereAreNaps?: boolean;
 };
 
 const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
@@ -109,8 +111,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_cliente: false,
       tiene_cobertura: false,
       linea_servicio: 1,
+
       isFormBlocked: false,
       thereIsCoverage: false,
+      thereAreNaps: false,
     },
   });
   const {
@@ -125,6 +129,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
   const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
+  const watchedThereAreNaps = form.watch('thereAreNaps');
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
@@ -176,6 +181,17 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     params: {
       page_size: 900,
       zona: watchedZone,
+    },
+  });
+  const {
+    data: napsPaging,
+    isLoading: isLoadingNaps,
+    isRefetching: isRefetchingNaps,
+  } = useFetchNaps({
+    enabled: !!watchedCoords && watchedCoords !== '0,0',
+    params: {
+      coordenadas_radio: watchedCoords,
+      page_size: 1200,
     },
   });
 
@@ -384,8 +400,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
     const zone = zonaByCoordsRes?.data;
     if (!zone) {
-      ToastWrapper.error(
-        `No se encontró zona con cobertura para las coordenadas ${watchedCoords}`,
+      ToastWrapper.warning(
+        `No se encontraron zonas con cobertura para las coordenadas ${watchedCoords}`,
       );
       form.reset({
         ...form.getValues(),
@@ -410,6 +426,25 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     watchedCoords,
     form,
   ]);
+  // naps available
+  useEffect(() => {
+    if (!watchedCoords || watchedCoords === '0,0') return;
+    if (isLoadingNaps || isRefetchingNaps) return;
+    const thereAreNaps = !!napsPaging?.data?.items?.length;
+    if (!thereAreNaps) {
+      form.reset({
+        ...form.getValues(),
+        thereAreNaps: false,
+      });
+      ToastWrapper.warning(
+        'No se encontraron NAPs disponibles para las coordenadas ingresadas',
+      );
+    }
+    form.reset({
+      ...form.getValues(),
+      thereAreNaps,
+    });
+  }, [napsPaging, isLoadingNaps, isRefetchingNaps, form, watchedCoords]);
 
   const isCustomLoading =
     isLoadingPaises ||
@@ -419,7 +454,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     isLoadingZonaByCoords ||
     isRefetchingZonaByCoords ||
     isLoadingSectores ||
-    isRefetchingSectores;
+    isRefetchingSectores ||
+    isLoadingNaps ||
+    isRefetchingNaps;
   useLoaders(isCustomLoading);
 
   return (
@@ -757,6 +794,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           error={errors.direccion}
           helperText={errors.direccion?.message}
         />
+
+        {watchedThereAreNaps && (
+          <CustomCardAlert
+            sizeType="small"
+            alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsPaging?.data?.items?.at(0)?.distance}m`}
+            alertSeverity="success"
+          />
+        )}
       </>
 
       {/* ------------- Equifax ------------- */}
