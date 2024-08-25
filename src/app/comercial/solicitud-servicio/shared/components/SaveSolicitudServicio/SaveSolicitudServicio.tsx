@@ -13,7 +13,6 @@ import {
   CreateSolicitudServicioParamsBase,
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
-  useFetchNaps,
   useFetchPaises,
   useFetchSectores,
   useFetchZonas,
@@ -124,18 +123,23 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   } = form;
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const watchedIdentification = form.watch('identificacion');
-  const watchedCoords = form.watch('coordenadas');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
   const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
   const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
 
-  const { Map, latLng, setLatLng } = useMapComponent({
+  const {
+    Map,
+    latLng,
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    setLatLng,
+  } = useMapComponent({
     form,
-    initialCoords: solicitudservicio?.id
-      ? solicitudservicio.coordenadas
-      : watchedCoords,
+    initialCoords: solicitudservicio?.id ? solicitudservicio.coordenadas : '',
+    enableFetchNaps: true,
   });
   useLocationCoords({
     isEditting: !!solicitudservicio?.id,
@@ -168,9 +172,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     isRefetching: isRefetchingZonaByCoords,
   } = useGetZoneByCoords(
     {
-      coords: watchedCoords,
+      coords: `${latLng?.lat},${latLng?.lng}`,
     },
-    !!watchedCoords && watchedCoords !== '0,0',
+    !!latLng?.lat && !!latLng?.lng,
   );
   const {
     data: sectoresPaging,
@@ -181,17 +185,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     params: {
       page_size: 900,
       zona: watchedZone,
-    },
-  });
-  const {
-    data: napsPaging,
-    isLoading: isLoadingNaps,
-    isRefetching: isRefetchingNaps,
-  } = useFetchNaps({
-    enabled: !!watchedCoords && watchedCoords !== '0,0',
-    params: {
-      coordenadas_radio: watchedCoords,
-      page_size: 1200,
     },
   });
 
@@ -330,12 +323,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     if (!isValid) return;
 
     ///* not blocking alert (coverage)
-    if (!watchedThereIsCoverage) {
+    if (!watchedThereIsCoverage || !watchedThereAreNaps) {
+      const keyMessage = !watchedThereIsCoverage ? 'cobertura' : 'cajas';
       setConfirmDialog({
         isOpen: true,
-        title: 'Ubicación sin cobertura',
-        subtitle:
-          'Esta solicitud de servicio no tiene cobertura en las coordenadas ingresadas. En este punto puede continuar con la creación de la solicitud de servicio, sin embargo, no podrá crear la preventa hasta que se tenga cobertura en las coordenadas ingresadas.',
+        title: `Ubicación sin ${keyMessage}`,
+        subtitle: `Esta solicitud de servicio no tiene ${keyMessage} en las coordenadas ingresadas. En este punto puede continuar con la creación de la solicitud de servicio, sin embargo, no podrá crear la preventa hasta que se tenga ${keyMessage} en las coordenadas ingresadas.`,
         onConfirm: () => {
           setConfirmDialogIsOpen(false);
 
@@ -395,13 +388,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   // set zone to up
   useEffect(() => {
-    if (!watchedCoords || watchedCoords === '0,0') return;
+    if (!latLng?.lat || !latLng?.lng) return;
 
     if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
     const zone = zonaByCoordsRes?.data;
     if (!zone) {
       ToastWrapper.warning(
-        `No se encontraron zonas con cobertura para las coordenadas ${watchedCoords}`,
+        `No se encontraron zonas con cobertura para las coordenadas ${
+          latLng?.lat
+        }, ${latLng?.lng}`,
       );
       form.reset({
         ...form.getValues(),
@@ -423,14 +418,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     zonaByCoordsRes,
     isLoadingZonaByCoords,
     isRefetchingZonaByCoords,
-    watchedCoords,
     form,
+    latLng?.lat,
+    latLng?.lng,
   ]);
   // naps available
   useEffect(() => {
-    if (!watchedCoords || watchedCoords === '0,0') return;
+    if (!latLng?.lat || !latLng?.lng) return;
     if (isLoadingNaps || isRefetchingNaps) return;
-    const thereAreNaps = !!napsPaging?.data?.items?.length;
+    const thereAreNaps = !!napsByCoords?.length;
     if (!thereAreNaps) {
       form.reset({
         ...form.getValues(),
@@ -444,7 +440,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       ...form.getValues(),
       thereAreNaps,
     });
-  }, [napsPaging, isLoadingNaps, isRefetchingNaps, form, watchedCoords]);
+  }, [
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
 
   const isCustomLoading =
     isLoadingPaises ||
@@ -795,11 +798,17 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           helperText={errors.direccion?.message}
         />
 
-        {watchedThereAreNaps && (
+        {watchedThereAreNaps ? (
           <CustomCardAlert
             sizeType="small"
-            alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsPaging?.data?.items?.at(0)?.distance}m`}
+            alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsByCoords?.at(0)?.distance}m`}
             alertSeverity="success"
+          />
+        ) : (
+          <CustomCardAlert
+            sizeType="small"
+            alertMessage="No se encontraron cajas disponibles"
+            alertSeverity="error"
           />
         )}
       </>

@@ -8,7 +8,6 @@ import {
   CreateNapParamsBase,
   useCreateNap,
   useFetchCiudades,
-  useFetchNaps,
   useFetchNodos,
   useFetchOLTs,
   useFetchSectores,
@@ -72,11 +71,18 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
   const watchedCity = form.watch('ciudad');
   const watchedSector = form.watch('sector');
   const watchedNodo = form.watch('nodo');
-  const watchedCoords = form.watch('coordenadas');
 
-  const { Map, latLng, setLatLng } = useMapComponent({
+  const {
+    Map,
+    latLng,
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    setLatLng,
+  } = useMapComponent({
     form,
-    initialCoords: nap?.id ? nap?.coordenadas : watchedCoords,
+    initialCoords: nap?.id ? nap?.coordenadas : '',
+    enableFetchNaps: true,
   });
   useLocationCoords({
     isEditting: !!nap?.id,
@@ -127,17 +133,6 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
       nodo: watchedNodo,
     },
   });
-  const {
-    data: napsByCoordsPagingRes,
-    isLoading: isLoadingNaps,
-    isRefetching: isRefetchingNaps,
-  } = useFetchNaps({
-    enabled: !!watchedCoords,
-    params: {
-      page_size: 900,
-      coordenadas_radio: `${latLng.lat},${latLng.lng}`,
-    },
-  });
 
   ///* mutations -----------------------
   const createNapMutation = useCreateNap({
@@ -156,7 +151,15 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
 
     ///* upd
     if (nap?.id) {
-      updateNapMutation.mutate({ id: nap.id!, data });
+      delete data.puertos;
+      delete data.puertos_list;
+
+      updateNapMutation.mutate({
+        id: nap.id!,
+        data: {
+          ...data,
+        },
+      });
       return;
     }
 
@@ -342,17 +345,16 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         error={errors.coordenadas}
         helperText={errors.coordenadas?.message}
         onChangeValue={(value, isValidCoords) => {
-          if (isValidCoords) {
-            const s = value.split(',');
-            setLatLng({ lat: s[0], lng: s[1] });
-          }
+          if (!isValidCoords) return;
+          const s = value.split(',');
+          setLatLng({ lat: s[0], lng: s[1] });
         }}
       />
       <Map
         coordenadas={latLng}
         setLatLng={setLatLng}
         showNaps
-        naps={napsByCoordsPagingRes?.data?.items || []}
+        naps={napsByCoords || []}
       />
 
       <SampleCheckbox
