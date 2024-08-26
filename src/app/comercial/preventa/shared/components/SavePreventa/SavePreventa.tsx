@@ -107,11 +107,23 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setImage1: setCedulaFrontalImg,
     image2: cedulaPosteriorImg,
     setImage2: setCedulaPosteriorImg,
+    image3: documentoCuentaBancariaImg,
+    setImage3: setDocumentoCuentaBancairaImg,
+    image4: documentoTarjetaCreditoImg,
+    setImage4: setDocumentoTarjetaCreditoImg,
   } = useUploadImageGeneric();
 
   ///* local state -------------------
   const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
+
+  // otp ------
+  // const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
+  // const [otpValue, setOtpValue] = useState('');
+  // const [otpRespData, setOtpRespData] = useState</*CodigoOTP |*/ null>(null);
+
+  // const setIsOTPGenerated = usePreventaStore(s => s.setIsOTPGenerated);
+  // const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -251,9 +263,23 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    // validate images
+    // validate images -----------
     if (!cedulaFrontalImg || !cedulaPosteriorImg)
       return ToastWrapper.error('Las fotos de la cédula son requeridas');
+    if (
+      !documentoCuentaBancariaImg &&
+      watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO
+    )
+      return ToastWrapper.error(
+        'La foto del documento de la cuenta bancaria es requerida cuando el método de pago es débito',
+      );
+    if (
+      !documentoTarjetaCreditoImg &&
+      watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO
+    )
+      return ToastWrapper.error(
+        'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
+      );
 
     ///* create
     createPreventaMutation.mutate(data);
@@ -981,19 +1007,46 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         </>
       )}
 
-      {/* ========================= Docs ========================= */}
+      {/* ========================= OTP & docs ========================= */}
       {activeStep === 3 && (
         <>
-          <UploadImageDropZoneComponent
-            buttonLabel="Cargar foto cédula frontal"
-            selectedImage={cedulaFrontalImg}
-            setSelectedImage={setCedulaFrontalImg}
-          />
-          <UploadImageDropZoneComponent
-            buttonLabel="Cargar foto cédula trasera"
-            selectedImage={cedulaPosteriorImg}
-            setSelectedImage={setCedulaPosteriorImg}
-          />
+          {/* ============= OPT ============= */}
+          <>
+            <CustomTypoLabel text="Generación de Código OTP" />
+          </>
+
+          {/* ============= Docs ============= */}
+          <>
+            <CustomTypoLabel
+              text="Documentos Adjuntos"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+
+            <UploadImageDropZoneComponent
+              buttonLabel="Foto cédula frontal"
+              selectedImage={cedulaFrontalImg}
+              setSelectedImage={setCedulaFrontalImg}
+            />
+            <UploadImageDropZoneComponent
+              buttonLabel="Foto cédula trasera"
+              selectedImage={cedulaPosteriorImg}
+              setSelectedImage={setCedulaPosteriorImg}
+            />
+
+            {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
+              <UploadImageDropZoneComponent
+                buttonLabel="Foto cuenta bancaria"
+                selectedImage={documentoCuentaBancariaImg}
+                setSelectedImage={setDocumentoCuentaBancairaImg}
+              />
+            ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
+              <UploadImageDropZoneComponent
+                buttonLabel="Foto tarjeta crédito"
+                selectedImage={documentoTarjetaCreditoImg}
+                setSelectedImage={setDocumentoTarjetaCreditoImg}
+              />
+            ) : null}
+          </>
         </>
       )}
 

@@ -197,6 +197,12 @@ export const TIPO_CUENTA_BANCARIA_ARRAY_CHOICES = [
   TipoCuentaBancariaEnumChoice.AHORRO,
 ];
 
+export enum OtpStatesEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  VERIFICADO = 'VERIFICADO',
+  EXPIRADO = 'EXPIRADO',
+}
+
 // // // SALES ==============================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',
