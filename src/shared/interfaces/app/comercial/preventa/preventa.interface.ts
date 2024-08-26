@@ -52,6 +52,7 @@ export interface Preventa {
   entidad_financiera?: number;
   tipo_cuenta_bancaria?: TipoCuentaBancariaEnumChoice;
   solicitud_servicio?: number;
+  tarjeta?: number;
 
   // sales filter logic
   area: number;

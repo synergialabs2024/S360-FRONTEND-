@@ -832,7 +832,26 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               />
             </>
           ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
-            <></>
+            <>
+              {/* TODO: */}
+              <CustomAutocomplete<EntidadFinanciera>
+                label="Entidad financiera"
+                name="entidad_financiera"
+                // options
+                options={entidadFinancierasPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().entidad_financiera}
+                isLoadingData={
+                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
+                }
+                // vaidation
+                control={form.control}
+                error={errors.entidad_financiera}
+                helperText={errors.entidad_financiera?.message}
+                size={gridSizeMdLg6}
+              />
+            </>
           ) : null}
         </>
       )}
