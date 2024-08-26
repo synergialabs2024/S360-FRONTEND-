@@ -1,6 +1,7 @@
 import {
   EstadoPreventaEnumChoice,
   ReferidoTypeEnumChoice,
+  TipoCuentaBancariaEnumChoice,
 } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SolicitudServicio } from '../solicitud-servicio';
@@ -49,6 +50,7 @@ export interface Preventa {
   ///* fk
   metodo_pago?: number;
   entidad_financiera?: number;
+  tipo_cuenta_bancaria?: TipoCuentaBancariaEnumChoice;
   solicitud_servicio?: number;
 
   // sales filter logic

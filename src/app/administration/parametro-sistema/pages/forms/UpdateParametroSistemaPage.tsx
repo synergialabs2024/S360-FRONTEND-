@@ -23,7 +23,10 @@ const UpdateParametroSistemaPage: React.FC<
     return <Navigate to={returnUrlParamestrosSistemasPage} />;
 
   return (
-    <SaveParametroSistema title="Editar Plan" parametro_sistema={data.data} />
+    <SaveParametroSistema
+      title="Editar Parámetro del Sistema"
+      parametro_sistema={data.data}
+    />
   );
 };
 

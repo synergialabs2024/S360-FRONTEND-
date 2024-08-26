@@ -43,6 +43,9 @@ type CustomTextFieldProps = {
 
   sxGrid?: SxPropsThemeType;
   InputProps?: any;
+
+  onlyNumbers?: boolean;
+  maxLength?: number;
 };
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -71,6 +74,9 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
 
   sxGrid,
   InputProps,
+
+  onlyNumbers,
+  maxLength,
 }) => {
   const [emailError, setEmailError] = useState<boolean>(false);
 
@@ -84,6 +90,15 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
           render={({ field }) => {
             const onChange = (event: any) => {
               const currentValue = event.target.value;
+
+              if (onlyNumbers) {
+                const onlyNums = currentValue.replace(/[^0-9]/g, '');
+                if (maxLength && onlyNums.length > maxLength) return;
+
+                field.onChange(onlyNums);
+                onChangeValue && onChangeValue(onlyNums);
+                return;
+              }
 
               if (ignoreTransform) {
                 onChangeValue && onChangeValue(currentValue);
@@ -127,7 +142,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
                         <MdEmail />
                       </InputAdornment>
                     ) : (
-                      startAdornmentInput ?? null
+                      (startAdornmentInput ?? null)
                     ),
 
                   endAdornment: endAdornmentInput ?? null,

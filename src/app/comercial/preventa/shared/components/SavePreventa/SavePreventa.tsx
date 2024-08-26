@@ -10,17 +10,23 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreatePreventaParamsBase,
   useCreatePreventa,
+  useFetchEntidadFinancieras,
+  useFetchMetodoPagos,
   useFetchSectores,
   useFetchZonas,
   useGetZoneByCoords,
   useUpdatePreventa,
 } from '@/actions/app';
 import {
+  EntidadFinanciera,
   IdentificationTypeEnumChoice,
+  MetodoPago,
+  MetodoPagoEnumUUID,
   PARENTESCO_TYPE_ARRAY_CHOICES,
   REFERIDO_TYPE_ARRAY_CHOICES,
   ReferidoTypeEnumChoice,
   Sector,
+  TIPO_CUENTA_BANCARIA_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
 } from '@/shared';
@@ -76,6 +82,8 @@ type SaveFormData = CreatePreventaParamsBase &
     zoneName?: string;
     thereIsCoverage?: boolean;
     thereAreNaps?: boolean;
+
+    rawPaymentMethod?: MetodoPago;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -116,6 +124,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
+
+  const watchedRawPaymentMethod = form.watch('rawPaymentMethod');
 
   // map ---------------
   const {
@@ -165,6 +175,26 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     params: {
       page_size: 900,
       zona: watchedZone,
+    },
+  });
+
+  // payment methods
+  const {
+    data: metodoPagosPaging,
+    isLoading: isLoadingMetodoPagos,
+    isRefetching: isRefetchingMetodoPagos,
+  } = useFetchMetodoPagos({
+    params: {
+      page_size: 900,
+    },
+  });
+  const {
+    data: entidadFinancierasPaging,
+    isLoading: isLoadingEntidadFinancieras,
+    isRefetching: isRefetchingEntidadFinancieras,
+  } = useFetchEntidadFinancieras({
+    params: {
+      page_size: 900,
     },
   });
 
@@ -307,7 +337,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     isLoadingZonaByCoords ||
     isRefetchingZonaByCoords ||
     isLoadingSectores ||
-    isRefetchingSectores;
+    isRefetchingSectores ||
+    isLoadingMetodoPagos ||
+    isRefetchingMetodoPagos ||
+    isLoadingEntidadFinancieras ||
+    isRefetchingEntidadFinancieras;
   useLoaders(isCustomLoading);
 
   return (
@@ -561,7 +595,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         </>
       )}
 
-      {/* ============= Ubicación ============= */}
+      {/* ========================= Ubicación ========================= */}
       {activeStep === 1 && (
         <>
           <CustomTypoLabel text="Ubicación" />
@@ -724,7 +758,86 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         </>
       )}
 
-      {/* ============= Ubicación ============= */}
+      {/* ========================= Service ========================= */}
+      {activeStep === 2 && (
+        <>
+          <CustomTypoLabel text="Método de pago" />
+
+          <CustomAutocomplete<MetodoPago>
+            label="Método de pago"
+            name="metodo_pago"
+            // options
+            options={metodoPagosPaging?.data?.items || []}
+            valueKey="name"
+            actualValueKey="id"
+            defaultValue={form.getValues().metodo_pago}
+            isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
+            // vaidation
+            control={form.control}
+            error={errors.metodo_pago}
+            helperText={errors.metodo_pago?.message}
+            size={gridSizeMdLg6}
+            onChangeValue={() => {
+              // reset related fields
+              form.setValue('entidad_financiera', '' as any);
+              form.setValue('tipo_cuenta_bancaria', '' as any);
+              form.setValue('numero_cuenta_bancaria', '');
+            }}
+            onChangeRawValue={rawValue => {
+              form.setValue('rawPaymentMethod', rawValue);
+            }}
+          />
+          {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
+            <>
+              <CustomAutocomplete<EntidadFinanciera>
+                label="Entidad financiera"
+                name="entidad_financiera"
+                // options
+                options={entidadFinancierasPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().entidad_financiera}
+                isLoadingData={
+                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
+                }
+                // vaidation
+                control={form.control}
+                error={errors.entidad_financiera}
+                helperText={errors.entidad_financiera?.message}
+                size={gridSizeMdLg6}
+              />
+              <SelectTextFieldArrayString
+                label="Tipo cuenta bancaria"
+                name="tipo_cuenta_bancaria"
+                textFieldKey="tipo_cuenta_bancaria"
+                // options
+                options={TIPO_CUENTA_BANCARIA_ARRAY_CHOICES}
+                defaultValue={form.getValues()?.tipo_cuenta_bancaria || ''}
+                // errors
+                control={form.control}
+                error={form.formState.errors.tipo_cuenta_bancaria}
+                helperText={form.formState.errors.tipo_cuenta_bancaria?.message}
+                gridSize={gridSizeMdLg6}
+              />
+              <CustomTextField
+                label="Número cuenta bancaria"
+                name="numero_cuenta_bancaria"
+                control={form.control}
+                defaultValue={form.getValues().numero_cuenta_bancaria}
+                error={errors.numero_cuenta_bancaria}
+                helperText={errors.numero_cuenta_bancaria?.message}
+                onlyNumbers
+                maxLength={25}
+                size={gridSizeMdLg6}
+              />
+            </>
+          ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
+            <></>
+          ) : null}
+        </>
+      )}
+
+      {/* ============= Others ============= */}
       {activeStep === 15 && (
         <>
           <CustomTextField

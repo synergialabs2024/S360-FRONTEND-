@@ -190,6 +190,15 @@ export const NAP_STATUS_ARRAY_CHOICES = [
   NapStatusEnumChoice.AFECTACION,
 ];
 
+export enum TipoCuentaBancariaEnumChoice {
+  CORRIENTE = 'CORRIENTE',
+  AHORRO = 'AHORRO',
+}
+export const TIPO_CUENTA_BANCARIA_ARRAY_CHOICES = [
+  TipoCuentaBancariaEnumChoice.CORRIENTE,
+  TipoCuentaBancariaEnumChoice.AHORRO,
+];
+
 // // // SALES ==============================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',
@@ -249,4 +258,11 @@ export enum SalesStatesEnumChoice {
   SOLICITUD_DESBLOQUEO_ESPERA = 'SOLICITUD_DESBLOQUEO_ESPERA', // CREADA
   SOLICITUD_DESBLOQUEO_APROBADO = 'SOLICITUD_DESBLOQUEO_APROBADO',
   SOLICITUD_DESBLOQUEO_RECHAZADO = 'SOLICITUD_DESBLOQUEO_RECHAZADO',
+}
+
+// // UUID
+export enum MetodoPagoEnumUUID {
+  DEBITO = 'b59daf11-8214-439f-a3ab-11ee7ec38260',
+  CREDITO = '9fea3665-bebd-4026-a64b-5cccf7d39de6',
+  RECAUDACIONES = '4750cfb2-1f08-402f-b1f3-be11fcfcd8ef',
 }
