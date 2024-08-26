@@ -18,7 +18,7 @@ const CreatePreventaPage: React.FC<CreatePreventaPageProps> = () => {
   const { data, isLoading, isRefetching } = useGetSolicitudServicio(uuid!);
   useLoaders(isLoading || isRefetching);
 
-  if (isLoading || isRefetching) return null;
+  if (isLoading) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlPreventasPage} />;
 
   return (

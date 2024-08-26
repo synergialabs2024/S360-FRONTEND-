@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -9,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreatePreventaParamsBase,
   useCreatePreventa,
+  useFetchSectores,
+  useFetchZonas,
+  useGetZoneByCoords,
   useUpdatePreventa,
 } from '@/actions/app';
 import {
@@ -16,25 +20,41 @@ import {
   PARENTESCO_TYPE_ARRAY_CHOICES,
   REFERIDO_TYPE_ARRAY_CHOICES,
   ReferidoTypeEnumChoice,
+  Sector,
   ToastWrapper,
+  useLoaders,
 } from '@/shared';
 import {
+  CustomAutocomplete,
+  CustomCardAlert,
   CustomCellphoneTextField,
+  CustomCoordsTextField,
   CustomIdentificacionTextField,
   CustomNumberTextField,
+  CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
   InputAndBtnGridSpace,
+  MapModalComponent,
   SelectTextFieldArrayString,
   SingleIconButton,
   StepperBoxScene,
   TabTexLabelCustomSpace,
   useCustomStepper,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSize,
+  gridSizeMdLg1,
+  gridSizeMdLg11,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
+import { Grid, Typography } from '@mui/material';
+import { FaMapLocationDot } from 'react-icons/fa6';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 
 export interface SavePreventaProps {
@@ -50,6 +70,12 @@ type SaveFormData = CreatePreventaParamsBase &
     clienteRefiere?: string;
     celularRefiere?: string;
     direccionRefiere?: string;
+
+    provinceName?: string;
+    cityName?: string;
+    zoneName?: string;
+    thereIsCoverage?: boolean;
+    thereAreNaps?: boolean;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -62,6 +88,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   ///* local state -------------------
   const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
+  const [openMapModal, setOpenMapModal] = useState<boolean>(false);
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -85,6 +112,61 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedTipoReferido = form.watch('tipo_referido');
   const watchedIdentificationRefiere = form.watch('identificacion_refiere');
   const watchedThereAreClientRefiere = form.watch('thereAreClientRefiere');
+
+  const watchedZone = form.watch('zona');
+  const watchedThereIsCoverage = form.watch('thereIsCoverage');
+  const watchedThereAreNaps = form.watch('thereAreNaps');
+
+  // map ---------------
+  const {
+    Map,
+    latLng,
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    setLatLng,
+  } = useMapComponent({
+    form,
+    initialCoords: solicitudServicio?.id ? solicitudServicio.coordenadas : '',
+    enableFetchNaps: true,
+  });
+  useLocationCoords({
+    isEditting: !!solicitudServicio?.id,
+    form,
+    setLatLng,
+  });
+
+  ///* fetch data ---------------------
+  const {
+    data: zonasPaging,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    params: {
+      page_size: 1200,
+    },
+  });
+  const {
+    data: zonaByCoordsRes,
+    isLoading: isLoadingZonaByCoords,
+    isRefetching: isRefetchingZonaByCoords,
+  } = useGetZoneByCoords(
+    {
+      coords: `${latLng?.lat},${latLng?.lng}`,
+    },
+    !!latLng?.lat && !!latLng?.lng,
+  );
+  const {
+    data: sectoresPaging,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
+  } = useFetchSectores({
+    enabled: !!watchedZone,
+    params: {
+      page_size: 900,
+      zona: watchedZone,
+    },
+  });
 
   ///* mutations ---------------------
   const createPreventaMutation = useCreatePreventa({
@@ -155,6 +237,78 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...solicitudServicio,
     });
   }, [solicitudServicio, reset]);
+
+  // set zone to up
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+
+    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
+    const zone = zonaByCoordsRes?.data;
+    if (!zone) {
+      ToastWrapper.error(
+        'No se encontraron zonas con cobertura para las coordenadas proporcionadas',
+      );
+      form.reset({
+        ...form.getValues(),
+        thereIsCoverage: false,
+      });
+      return;
+    }
+    form.reset({
+      ...form.getValues(),
+      zona: zone?.id,
+      ciudad: zone?.ciudad_data?.id!,
+      provincia: zone?.provincia_data?.id!,
+      cityName: zone?.ciudad_data?.name,
+      provinceName: zone?.provincia_data?.name,
+      zoneName: zone?.name,
+      thereIsCoverage: true,
+    });
+  }, [
+    zonaByCoordsRes,
+    isLoadingZonaByCoords,
+    isRefetchingZonaByCoords,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
+  // naps available
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+    if (isLoadingNaps || isRefetchingNaps) return;
+    const thereAreNaps = !!napsByCoords?.length;
+    if (!thereAreNaps) {
+      form.reset({
+        ...form.getValues(),
+        thereAreNaps: false,
+      });
+      ToastWrapper.error(
+        'No se encontraron cajas disponibles para las coordenadas ingresadas',
+      );
+    }
+    form.reset({
+      ...form.getValues(),
+      thereAreNaps,
+    });
+  }, [
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
+
+  const isCustomLoading =
+    isRefetchingNaps ||
+    isLoadingNaps ||
+    isLoadingZonas ||
+    isRefetchingZonas ||
+    isLoadingZonaByCoords ||
+    isRefetchingZonaByCoords ||
+    isLoadingSectores ||
+    isRefetchingSectores;
+  useLoaders(isCustomLoading);
 
   return (
     <StepperBoxScene
@@ -409,6 +563,169 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       {/* ============= Ubicación ============= */}
       {activeStep === 1 && (
+        <>
+          <CustomTypoLabel text="Ubicación" />
+
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputGridSize={gridSizeMdLg11}
+            inputNode={
+              <CustomCoordsTextField
+                label="Coordenadas"
+                name="coordenadas"
+                control={form.control}
+                defaultValue={form.getValues().coordenadas || ''}
+                error={errors.coordenadas}
+                helperText={errors.coordenadas?.message}
+                onChangeValue={(value, isValidCoords) => {
+                  if (isValidCoords) {
+                    const s = value.split(',');
+                    setLatLng({ lat: s[0], lng: s[1] });
+                  }
+                }}
+              />
+            }
+            btnLabel="Ver mapa"
+            overrideBtnNode
+            customBtnNode={
+              <>
+                <SingleIconButton
+                  startIcon={<FaMapLocationDot />}
+                  label={'Ver mapa'}
+                  color={'primary'}
+                  onClick={() => {
+                    setOpenMapModal(true);
+                  }}
+                />
+
+                <MapModalComponent
+                  open={openMapModal}
+                  onClose={() => {
+                    setOpenMapModal(false);
+                  }}
+                  //
+                  showCustomTitleNode
+                  customTitleNode={
+                    <Grid item container xs={12}>
+                      <Typography variant="h4">
+                        Ubicación | Coordenadas:{' '}
+                        <span
+                          style={{
+                            fontSize: '0.93rem',
+                            fontWeight: 400,
+                          }}
+                        >
+                          {latLng?.lat}, {latLng?.lng}
+                        </span>
+                      </Typography>
+                    </Grid>
+                  }
+                  minWidthModal="70%"
+                  contentNodeOverride={
+                    <Map
+                      coordenadas={
+                        latLng
+                          ? {
+                              lat: latLng.lat,
+                              lng: latLng.lng,
+                            }
+                          : { lat: 0, lng: 0 }
+                      }
+                      canDragMarker={true}
+                      setLatLng={setLatLng}
+                      showCoverage
+                      coverageZones={zonasPaging?.data?.items || []}
+                    />
+                  }
+                />
+              </>
+            }
+            btnGridSize={gridSizeMdLg1}
+          />
+
+          {watchedThereIsCoverage ? (
+            <>
+              <CustomAutocomplete<Sector>
+                label="Sector"
+                name="sector"
+                // options
+                options={sectoresPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().sector}
+                isLoadingData={isLoadingSectores || isRefetchingSectores}
+                // vaidation
+                control={form.control}
+                error={errors.sector}
+                helperText={errors.sector?.message}
+              />
+              <CustomTextField
+                label="Zona"
+                name="zoneName"
+                control={form.control}
+                defaultValue={form.getValues().zoneName}
+                error={errors.zoneName}
+                helperText={errors.zoneName?.message}
+                disabled
+              />
+              <CustomTextField
+                label="Ciudad"
+                name="cityName"
+                control={form.control}
+                defaultValue={form.getValues().cityName}
+                error={errors.cityName}
+                helperText={errors.cityName?.message}
+                size={gridSizeMdLg6}
+                disabled
+              />
+              <CustomTextField
+                label="Provincia"
+                name="provinceName"
+                control={form.control}
+                defaultValue={form.getValues().provinceName}
+                error={errors.provinceName}
+                helperText={errors.provinceName?.message}
+                size={gridSizeMdLg6}
+                disabled
+              />
+            </>
+          ) : (
+            <>
+              <CustomCardAlert
+                sizeType="small"
+                alertMessage="Ubicación sin cobertura"
+                alertSeverity="error"
+              />
+            </>
+          )}
+
+          <CustomTextArea
+            label="Dirección"
+            name="direccion"
+            control={form.control}
+            defaultValue={form.getValues().direccion}
+            error={errors.direccion}
+            helperText={errors.direccion?.message}
+          />
+
+          {watchedThereAreNaps ? (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsByCoords?.at(0)?.distance}m`}
+              alertSeverity="success"
+            />
+          ) : (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage="No se encontraron cajas disponibles"
+              alertSeverity="error"
+            />
+          )}
+        </>
+      )}
+
+      {/* ============= Ubicación ============= */}
+      {activeStep === 15 && (
         <>
           <CustomTextField
             label="Tipo servicio"
