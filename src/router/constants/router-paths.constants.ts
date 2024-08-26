@@ -131,6 +131,17 @@ export const ROUTER_PATHS = {
     planesinternetNav: '/servicios/planesinternet',
   },
 
+  /////* Cobranza ----------------
+  cobranza: {
+    root: 'cobranza',
+
+    ///* tarjetas
+    tarjetas: 'tarjetas',
+    tarjetasCrear: 'tarjetas/crear',
+    tarjetasEditar: 'tarjetas/editar/:uuid',
+    tarjetasNav: '/cobranza/tarjetas',
+  },
+
   /////* Comercial ----------------
   comercial: {
     root: 'comercial',

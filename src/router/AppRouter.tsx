@@ -414,6 +414,20 @@ const UpdateFlotaPage = Loadable(
   lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
 );
 
+///* Cobranza ------------
+const CobranzaModule = Loadable(
+  lazy(() => import('@/app/cobranza/CobranzaModule')),
+);
+const TarjetasPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/tables/TarjetasPage')),
+);
+const CreateTarjetaPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/CreateTarjetaPage')),
+);
+const UpdateTarjetaPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/UpdateTarjetaPage')),
+);
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -704,6 +718,27 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.mantenimientoOperacion.flotasEditar,
             element: <UpdateFlotaPage />,
+          },
+        ],
+      },
+
+      //////////* Cobranza ------------
+      {
+        path: ROUTER_PATHS.cobranza.root,
+        element: <CobranzaModule />,
+        children: [
+          ///* tarjetas
+          {
+            path: ROUTER_PATHS.cobranza.tarjetas,
+            element: <TarjetasPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.tarjetasCrear,
+            element: <CreateTarjetaPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.tarjetasEditar,
+            element: <UpdateTarjetaPage />,
           },
         ],
       },

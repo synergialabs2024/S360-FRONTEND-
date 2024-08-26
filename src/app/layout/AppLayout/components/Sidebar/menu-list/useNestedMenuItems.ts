@@ -275,6 +275,22 @@ export const useNestedMenu = () => {
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
+        /////* Cobranza ----------------
+        {
+          id: 'cobranza',
+          title: 'Cobranza',
+          type: MenuItemType.COLLAPSE,
+          icon: IconReportMoney,
+          children: [
+            renderByModule(SidenavModulesEnum.COBRANZA_TARJETA, {
+              id: 'tarjetas',
+              title: 'Tarjetas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.tarjetasNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+
         /////* Supervisión Comercial ----------------
         {
           id: 'supervision-comercial',
