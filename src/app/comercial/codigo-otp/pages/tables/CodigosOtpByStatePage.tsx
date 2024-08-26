@@ -1,4 +1,5 @@
-import type { MRT_ColumnDef } from 'material-react-table';
+/* eslint-disable indent */
+import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { useFetchCodigoOtps } from '@/actions/app';
@@ -23,6 +24,8 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 export type CodigosOtpByStatePageProps = {
   state: OtpStatesEnumChoice;
 };
+
+type MRTSCodigoOTPType = { row: MRT_Row<CodigoOtp> };
 
 const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   state,
@@ -62,9 +65,10 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   ///* columns
   const columns = useMemo<MRT_ColumnDef<CodigoOtp>[]>(
     () => [
+      // TODO: serializer
       {
         accessorKey: 'numero_referencia_solserv',
-        header: '# REFERENCIA SOLICITUD SERVICIO',
+        header: '# REFERENCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
@@ -100,22 +104,24 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo_otp'),
       },
+
+      // TODO: Trazabilidad
+      {
+        accessorKey: 'usuario_solicita',
+        header: 'COLABORADOR SOLICITA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'usuario_solicita'),
+      },
+
       {
         accessorKey: 'estado_otp',
-        header: 'ESTADO OTP',
+        header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_otp'),
-      },
-
-      {
-        accessorKey: 'available_until',
-        header: 'AVAILABLE UNTIL',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'available_until'),
       },
 
       {
@@ -126,17 +132,35 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
-
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
+      // approved or rejected
+      ...(state === OtpStatesEnumChoice.VERIFICADO
+        ? [
+            {
+              accessorKey: 'aprobado_at',
+              header: 'APROBADO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: MRTSCodigoOTPType) =>
+                formatDateWithTimeCell(row, 'modified_at'),
+            },
+          ]
+        : []),
+      ...(state === OtpStatesEnumChoice.EXPIRADO
+        ? [
+            {
+              accessorKey: 'expired_at',
+              header: 'EXPIRADO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: MRTSCodigoOTPType) =>
+                formatDateWithTimeCell(row, 'modified_at'),
+            },
+          ]
+        : []),
     ],
-    [],
+    [state],
   );
 
   return (

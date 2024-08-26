@@ -73,7 +73,6 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
   ///* handlers
   const onEdit = (solicituddesbloqueoventas: SolicitudDesbloqueoVentas) => {
     setSelectedSolicitudDesbloqueoVentas(solicituddesbloqueoventas);
-    console.log('solicituddesbloqueoventas', solicituddesbloqueoventas);
     setOpenModal(true);
   };
 
