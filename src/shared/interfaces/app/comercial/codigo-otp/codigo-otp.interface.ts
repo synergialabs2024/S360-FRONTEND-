@@ -1,3 +1,4 @@
+import { SolicitudServicioLimitData } from '@/shared';
 import { OtpStatesEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
@@ -25,4 +26,7 @@ export interface CodigoOtp {
   departamento: number;
   canal_venta: number;
   vendedor: number;
+
+  // only serializer
+  solicitud_servicio_data?: SolicitudServicioLimitData;
 }

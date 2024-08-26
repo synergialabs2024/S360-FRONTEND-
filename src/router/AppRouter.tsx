@@ -352,13 +352,17 @@ const CreateSolicitudServicioPage = Loadable(
       ),
   ),
 );
-
 const SolicitudsDesbloqueoVentasMainPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/comercial/solicitud-desbloqueo-ventas/pages/tables/SolicitudsDesbloqueoVentasMainPage'
       ),
+  ),
+);
+const CodigosOtpMainPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/codigo-otp/pages/tables/CodigosOtpMainPage'),
   ),
 );
 
@@ -637,6 +641,12 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracion.parametrosSistemasEditar,
             element: <UpdateParametroSistemaPage />,
+          },
+
+          ///* Codigo OTP
+          {
+            path: ROUTER_PATHS.administracion.codigosOtp,
+            element: <CodigosOtpMainPage />,
           },
 
           ///* USER ----------

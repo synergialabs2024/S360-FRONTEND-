@@ -89,6 +89,10 @@ export const ROUTER_PATHS = {
     parametrosSistemasEditar: 'parametros-sistemas/editar/:uuid',
     parametrosSistemasNav: '/parametrizacion/parametros-sistemas',
 
+    ///* codigos otp
+    codigosOtp: 'codigos-otp',
+    codigosOtpNav: '/parametrizacion/codigos-otp',
+
     // // =================================
     ///* usuarios
     usuarios: 'usuarios',
@@ -145,6 +149,10 @@ export const ROUTER_PATHS = {
   /////* Comercial ----------------
   comercial: {
     root: 'comercial',
+
+    ///* codigos otp
+    codigosOtp: 'codigos-otp',
+    codigosOtpNav: '/comercial/codigos-otp',
 
     ///* promociones
     promociones: 'promociones',
