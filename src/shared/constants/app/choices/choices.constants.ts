@@ -25,12 +25,10 @@ export const USER_ROLES_ARRAY_CHOICES = [
 export enum InternetServiceTypeEnumChoice {
   FIBRA = 'FIBRA',
   RADIO = 'RADIO',
-  WIRELESS = 'WIRELESS',
 }
 export const INTERNET_SERVICE_TYPE_ARRAY_CHOICES = [
   InternetServiceTypeEnumChoice.FIBRA,
   InternetServiceTypeEnumChoice.RADIO,
-  InternetServiceTypeEnumChoice.WIRELESS,
 ];
 
 export enum InternetPlanInternetTypeEnumChoice {

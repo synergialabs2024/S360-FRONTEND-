@@ -1,8 +1,10 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
+import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoMdTrash } from 'react-icons/io';
 import { MdAddCircle } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -12,26 +14,33 @@ import {
   useCreatePreventa,
   useFetchEntidadFinancieras,
   useFetchMetodoPagos,
+  useFetchPlanInternets,
   useFetchSectores,
+  useFetchTarjetas,
   useFetchZonas,
   useGetZoneByCoords,
-  useUpdatePreventa,
 } from '@/actions/app';
 import {
   EntidadFinanciera,
   IdentificationTypeEnumChoice,
+  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
+  INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   MetodoPago,
   MetodoPagoEnumUUID,
   PARENTESCO_TYPE_ARRAY_CHOICES,
+  PlanInternet,
   REFERIDO_TYPE_ARRAY_CHOICES,
   ReferidoTypeEnumChoice,
   Sector,
+  Tarjeta,
   TIPO_CUENTA_BANCARIA_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
+  useUploadImageGeneric,
 } from '@/shared';
 import {
   CustomAutocomplete,
+  CustomAutocompleteArrString,
   CustomCardAlert,
   CustomCellphoneTextField,
   CustomCoordsTextField,
@@ -59,8 +68,6 @@ import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
-import { Grid, Typography } from '@mui/material';
-import { FaMapLocationDot } from 'react-icons/fa6';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 
 export interface SavePreventaProps {
@@ -92,7 +99,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   title,
   solicitudServicio,
 }) => {
+  ///* hooks ---------------------
   const navigate = useNavigate();
+  const {
+    UploadImageDropZoneComponent,
+    image1: cedulaFrontalImg,
+    setImage1: setCedulaFrontalImg,
+    image2: cedulaPosteriorImg,
+    setImage2: setCedulaPosteriorImg,
+  } = useUploadImageGeneric();
 
   ///* local state -------------------
   const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
@@ -109,6 +124,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     resolver: yupResolver(preventaFormSchema) as any,
     defaultValues: {
       thereAreClientRefiere: false,
+      es_referido: false,
     },
   });
 
@@ -126,6 +142,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedThereAreNaps = form.watch('thereAreNaps');
 
   const watchedRawPaymentMethod = form.watch('rawPaymentMethod');
+
+  const watchedServiceType = form.watch('tipo_servicio');
+  const watchedServicePlan = form.watch('tipo_plan');
 
   // map ---------------
   const {
@@ -197,6 +216,29 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       page_size: 900,
     },
   });
+  const {
+    data: tarjetasPaging,
+    isLoading: isLoadingTarjetas,
+    isRefetching: isRefetchingTarjetas,
+  } = useFetchTarjetas({
+    params: {
+      page_size: 900,
+    },
+  });
+
+  // internet service
+  const {
+    data: planInternetsPaging,
+    isLoading: isLoadingPlanInternets,
+    isRefetching: isRefetchingPlanInternets,
+  } = useFetchPlanInternets({
+    enabled: !!watchedServiceType && !!watchedServicePlan,
+    params: {
+      page_size: 900,
+      tipo_servicio: watchedServiceType,
+      tipo_plan: watchedServicePlan,
+    },
+  });
 
   ///* mutations ---------------------
   const createPreventaMutation = useCreatePreventa({
@@ -204,20 +246,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     returnUrl: returnUrlPreventasPage,
     enableErrorNavigate: false,
   });
-  const updatePreventaMutation = useUpdatePreventa<CreatePreventaParamsBase>({
-    navigate,
-    returnUrl: returnUrlPreventasPage,
-  });
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    ///* upd
-    if (solicitudServicio?.id) {
-      updatePreventaMutation.mutate({ id: solicitudServicio.id!, data });
-      return;
-    }
+    // validate images
+    if (!cedulaFrontalImg || !cedulaPosteriorImg)
+      return ToastWrapper.error('Las fotos de la cédula son requeridas');
 
     ///* create
     createPreventaMutation.mutate(data);
@@ -328,6 +364,27 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     latLng?.lat,
     latLng?.lng,
   ]);
+  // internet service
+  useEffect(() => {
+    if (
+      isLoadingPlanInternets ||
+      isRefetchingPlanInternets ||
+      !watchedServiceType ||
+      !watchedServicePlan
+    )
+      return;
+
+    !planInternetsPaging?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron planes de internet para la combinación de tipos de servicio y plan seleccionados',
+      );
+  }, [
+    isLoadingPlanInternets,
+    isRefetchingPlanInternets,
+    planInternetsPaging?.data?.items?.length,
+    watchedServicePlan,
+    watchedServiceType,
+  ]);
 
   const isCustomLoading =
     isRefetchingNaps ||
@@ -341,7 +398,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     isLoadingMetodoPagos ||
     isRefetchingMetodoPagos ||
     isLoadingEntidadFinancieras ||
-    isRefetchingEntidadFinancieras;
+    isRefetchingEntidadFinancieras ||
+    isLoadingTarjetas ||
+    isRefetchingTarjetas ||
+    isLoadingPlanInternets ||
+    isRefetchingPlanInternets;
   useLoaders(isCustomLoading);
 
   return (
@@ -357,6 +418,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       onCancel={() => navigate(returnUrlPreventasPage)}
       onSave={handleSubmit(onSave, () => {
         ToastWrapper.error('Faltan campos por requeridos');
+        console.log(errors);
       })}
     >
       {/* ========================= Datos Generales ========================= */}
@@ -761,164 +823,183 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       {/* ========================= Service ========================= */}
       {activeStep === 2 && (
         <>
-          <CustomTypoLabel text="Método de pago" />
+          <>
+            <CustomTypoLabel text="Plan de Internet" />
 
-          <CustomAutocomplete<MetodoPago>
-            label="Método de pago"
-            name="metodo_pago"
-            // options
-            options={metodoPagosPaging?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().metodo_pago}
-            isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
-            // vaidation
-            control={form.control}
-            error={errors.metodo_pago}
-            helperText={errors.metodo_pago?.message}
-            size={gridSizeMdLg6}
-            onChangeValue={() => {
-              // reset related fields
-              form.setValue('entidad_financiera', '' as any);
-              form.setValue('tipo_cuenta_bancaria', '' as any);
-              form.setValue('numero_cuenta_bancaria', '');
-            }}
-            onChangeRawValue={rawValue => {
-              form.setValue('rawPaymentMethod', rawValue);
-            }}
+            <CustomAutocompleteArrString
+              label="Tipo de servicio"
+              name="tipo_servicio"
+              options={INTERNET_SERVICE_TYPE_ARRAY_CHOICES}
+              isLoadingData={false}
+              control={form.control}
+              defaultValue={form.getValues().tipo_servicio}
+              error={errors.tipo_servicio}
+              helperText={errors.tipo_servicio?.message}
+              size={gridSizeMdLg6}
+            />
+            <CustomAutocompleteArrString
+              label="Tipo de plan"
+              name="tipo_plan"
+              options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES}
+              isLoadingData={false}
+              control={form.control}
+              defaultValue={form.getValues().tipo_plan}
+              error={errors.tipo_plan}
+              helperText={errors.tipo_plan?.message}
+              size={gridSizeMdLg6}
+            />
+            <CustomAutocomplete<PlanInternet>
+              label="Plan de internet"
+              name="plan_internet"
+              // options
+              options={planInternetsPaging?.data?.items || []}
+              valueKey="name"
+              actualValueKey="id"
+              defaultValue={form.getValues().plan_internet}
+              isLoadingData={
+                isLoadingPlanInternets || isRefetchingPlanInternets
+              }
+              // vaidation
+              control={form.control}
+              error={errors.plan_internet}
+              helperText={errors.plan_internet?.message}
+            />
+          </>
+
+          <>
+            <CustomTypoLabel
+              text="Método de pago"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+
+            <CustomAutocomplete<MetodoPago>
+              label="Método de pago"
+              name="metodo_pago"
+              // options
+              options={metodoPagosPaging?.data?.items || []}
+              valueKey="name"
+              actualValueKey="id"
+              defaultValue={form.getValues().metodo_pago}
+              isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
+              // vaidation
+              control={form.control}
+              error={errors.metodo_pago}
+              helperText={errors.metodo_pago?.message}
+              size={gridSizeMdLg6}
+              onChangeValue={() => {
+                // reset related fields
+                form.setValue('entidad_financiera', '' as any);
+                form.setValue('tipo_cuenta_bancaria', '' as any);
+                form.setValue('numero_cuenta_bancaria', '');
+                form.setValue('tarjeta', '' as any);
+                form.setValue('numero_tarjeta_credito', '');
+              }}
+              onChangeRawValue={rawValue => {
+                form.setValue('rawPaymentMethod', rawValue);
+              }}
+            />
+            {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
+              <>
+                <CustomAutocomplete<EntidadFinanciera>
+                  label="Entidad financiera"
+                  name="entidad_financiera"
+                  // options
+                  options={entidadFinancierasPaging?.data?.items || []}
+                  valueKey="name"
+                  actualValueKey="id"
+                  defaultValue={form.getValues().entidad_financiera}
+                  isLoadingData={
+                    isLoadingEntidadFinancieras ||
+                    isRefetchingEntidadFinancieras
+                  }
+                  // vaidation
+                  control={form.control}
+                  error={errors.entidad_financiera}
+                  helperText={errors.entidad_financiera?.message}
+                  size={gridSizeMdLg6}
+                />
+                <SelectTextFieldArrayString
+                  label="Tipo cuenta bancaria"
+                  name="tipo_cuenta_bancaria"
+                  textFieldKey="tipo_cuenta_bancaria"
+                  // options
+                  options={TIPO_CUENTA_BANCARIA_ARRAY_CHOICES}
+                  defaultValue={form.getValues()?.tipo_cuenta_bancaria || ''}
+                  // errors
+                  control={form.control}
+                  error={form.formState.errors.tipo_cuenta_bancaria}
+                  helperText={
+                    form.formState.errors.tipo_cuenta_bancaria?.message
+                  }
+                  gridSize={gridSizeMdLg6}
+                />
+                <CustomTextField
+                  label="Número cuenta bancaria"
+                  name="numero_cuenta_bancaria"
+                  control={form.control}
+                  defaultValue={form.getValues().numero_cuenta_bancaria}
+                  error={errors.numero_cuenta_bancaria}
+                  helperText={errors.numero_cuenta_bancaria?.message}
+                  onlyNumbers
+                  maxLength={25}
+                  size={gridSizeMdLg6}
+                />
+              </>
+            ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
+              <>
+                <CustomAutocomplete<Tarjeta>
+                  label="Tarjeta de crédito"
+                  name="tarjeta"
+                  // options
+                  options={tarjetasPaging?.data?.items || []}
+                  valueKey="name"
+                  actualValueKey="id"
+                  defaultValue={form.getValues().tarjeta}
+                  isLoadingData={
+                    isLoadingEntidadFinancieras ||
+                    isRefetchingEntidadFinancieras
+                  }
+                  // vaidation
+                  control={form.control}
+                  error={errors.tarjeta}
+                  helperText={errors.tarjeta?.message}
+                  size={gridSizeMdLg6}
+                />
+                <CustomTextField
+                  label="Número tarjeta crédito"
+                  name="numero_tarjeta_credito"
+                  control={form.control}
+                  defaultValue={form.getValues().numero_tarjeta_credito}
+                  error={errors.numero_tarjeta_credito}
+                  helperText={errors.numero_tarjeta_credito?.message}
+                  onlyNumbers
+                  maxLength={25}
+                />
+              </>
+            ) : null}
+          </>
+        </>
+      )}
+
+      {/* ========================= Docs ========================= */}
+      {activeStep === 3 && (
+        <>
+          <UploadImageDropZoneComponent
+            buttonLabel="Cargar foto cédula frontal"
+            selectedImage={cedulaFrontalImg}
+            setSelectedImage={setCedulaFrontalImg}
           />
-          {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
-            <>
-              <CustomAutocomplete<EntidadFinanciera>
-                label="Entidad financiera"
-                name="entidad_financiera"
-                // options
-                options={entidadFinancierasPaging?.data?.items || []}
-                valueKey="name"
-                actualValueKey="id"
-                defaultValue={form.getValues().entidad_financiera}
-                isLoadingData={
-                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
-                }
-                // vaidation
-                control={form.control}
-                error={errors.entidad_financiera}
-                helperText={errors.entidad_financiera?.message}
-                size={gridSizeMdLg6}
-              />
-              <SelectTextFieldArrayString
-                label="Tipo cuenta bancaria"
-                name="tipo_cuenta_bancaria"
-                textFieldKey="tipo_cuenta_bancaria"
-                // options
-                options={TIPO_CUENTA_BANCARIA_ARRAY_CHOICES}
-                defaultValue={form.getValues()?.tipo_cuenta_bancaria || ''}
-                // errors
-                control={form.control}
-                error={form.formState.errors.tipo_cuenta_bancaria}
-                helperText={form.formState.errors.tipo_cuenta_bancaria?.message}
-                gridSize={gridSizeMdLg6}
-              />
-              <CustomTextField
-                label="Número cuenta bancaria"
-                name="numero_cuenta_bancaria"
-                control={form.control}
-                defaultValue={form.getValues().numero_cuenta_bancaria}
-                error={errors.numero_cuenta_bancaria}
-                helperText={errors.numero_cuenta_bancaria?.message}
-                onlyNumbers
-                maxLength={25}
-                size={gridSizeMdLg6}
-              />
-            </>
-          ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
-            <>
-              {/* TODO: */}
-              <CustomAutocomplete<EntidadFinanciera>
-                label="Entidad financiera"
-                name="entidad_financiera"
-                // options
-                options={entidadFinancierasPaging?.data?.items || []}
-                valueKey="name"
-                actualValueKey="id"
-                defaultValue={form.getValues().entidad_financiera}
-                isLoadingData={
-                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
-                }
-                // vaidation
-                control={form.control}
-                error={errors.entidad_financiera}
-                helperText={errors.entidad_financiera?.message}
-                size={gridSizeMdLg6}
-              />
-            </>
-          ) : null}
+          <UploadImageDropZoneComponent
+            buttonLabel="Cargar foto cédula trasera"
+            selectedImage={cedulaPosteriorImg}
+            setSelectedImage={setCedulaPosteriorImg}
+          />
         </>
       )}
 
       {/* ============= Others ============= */}
       {activeStep === 15 && (
         <>
-          <CustomTextField
-            label="Tipo servicio"
-            name="tipo_servicio"
-            control={form.control}
-            defaultValue={form.getValues().tipo_servicio}
-            error={errors.tipo_servicio}
-            helperText={errors.tipo_servicio?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Tipo plan"
-            name="tipo_plan"
-            control={form.control}
-            defaultValue={form.getValues().tipo_plan}
-            error={errors.tipo_plan}
-            helperText={errors.tipo_plan?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Numero cuenta bancaria"
-            name="numero_cuenta_bancaria"
-            control={form.control}
-            defaultValue={form.getValues().numero_cuenta_bancaria}
-            error={errors.numero_cuenta_bancaria}
-            helperText={errors.numero_cuenta_bancaria?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Costo instalacion"
-            name="costo_instalacion"
-            control={form.control}
-            defaultValue={form.getValues().costo_instalacion}
-            error={errors.costo_instalacion}
-            helperText={errors.costo_instalacion?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Url foto cedula frontal"
-            name="url_foto_cedula_frontal"
-            control={form.control}
-            defaultValue={form.getValues().url_foto_cedula_frontal}
-            error={errors.url_foto_cedula_frontal}
-            helperText={errors.url_foto_cedula_frontal?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Url foto cedula trasera"
-            name="url_foto_cedula_trasera"
-            control={form.control}
-            defaultValue={form.getValues().url_foto_cedula_trasera}
-            error={errors.url_foto_cedula_trasera}
-            helperText={errors.url_foto_cedula_trasera?.message}
-            size={gridSizeMdLg6}
-          />
-
           <CustomTextField
             label="Url foto documento cuenta"
             name="url_foto_documento_cuenta"
@@ -927,83 +1008,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             error={errors.url_foto_documento_cuenta}
             helperText={errors.url_foto_documento_cuenta?.message}
             size={gridSizeMdLg6}
-          />
-
-          <CustomNumberTextField
-            label="Metodo pago"
-            name="metodo_pago"
-            control={form.control}
-            defaultValue={form.getValues().metodo_pago}
-            error={errors.metodo_pago}
-            helperText={errors.metodo_pago?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Entidad financiera"
-            name="entidad_financiera"
-            control={form.control}
-            defaultValue={form.getValues().entidad_financiera}
-            error={errors.entidad_financiera}
-            helperText={errors.entidad_financiera?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Solicitud servicio"
-            name="solicitud_servicio"
-            control={form.control}
-            defaultValue={form.getValues().solicitud_servicio}
-            error={errors.solicitud_servicio}
-            helperText={errors.solicitud_servicio?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Area"
-            name="area"
-            control={form.control}
-            defaultValue={form.getValues().area}
-            error={errors.area}
-            helperText={errors.area?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Departamento"
-            name="departamento"
-            control={form.control}
-            defaultValue={form.getValues().departamento}
-            error={errors.departamento}
-            helperText={errors.departamento?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Canal venta"
-            name="canal_venta"
-            control={form.control}
-            defaultValue={form.getValues().canal_venta}
-            error={errors.canal_venta}
-            helperText={errors.canal_venta?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Vendedor"
-            name="vendedor"
-            control={form.control}
-            defaultValue={form.getValues().vendedor}
-            error={errors.vendedor}
-            helperText={errors.vendedor?.message}
-            size={gridSizeMdLg6}
-            min={0}
           />
         </>
       )}

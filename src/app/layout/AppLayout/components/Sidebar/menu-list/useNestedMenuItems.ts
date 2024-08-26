@@ -5,6 +5,7 @@ import {
   IconCube3dSphere,
   IconDashboard,
   IconHierarchy3,
+  IconPigMoney,
   IconReportMoney,
   IconUserShield,
 } from '@tabler/icons-react';
@@ -280,7 +281,7 @@ export const useNestedMenu = () => {
           id: 'cobranza',
           title: 'Cobranza',
           type: MenuItemType.COLLAPSE,
-          icon: IconReportMoney,
+          icon: IconPigMoney,
           children: [
             renderByModule(SidenavModulesEnum.COBRANZA_TARJETA, {
               id: 'tarjetas',

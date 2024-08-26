@@ -1,12 +1,21 @@
-import { CardMedia, Grid, IconButton, Tooltip, Box } from '@mui/material';
+import {
+  Box,
+  CardMedia,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
+
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import {
   GridSizeType,
   JustifyContentType,
   SxPropsType,
 } from '@/shared/interfaces';
+
 interface UploadImagePreviewBtnProps {
   buttonLabel: string;
   setSelectedImage: React.Dispatch<React.SetStateAction<File | null>>;
@@ -98,9 +107,9 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
           disabled={disabledInputAndRemoveBtn}
         />
         <label htmlFor={'image-upload-input-' + buttonLabel}>
-          <p>
-            Arrastra y suelta una imagen aquí, o haz clic para seleccionar una
-          </p>
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+            {buttonLabel}
+          </Typography>
         </label>
       </Box>
       {(selectedImage || imagenUrl) && (

@@ -1,5 +1,7 @@
 import {
   EstadoPreventaEnumChoice,
+  InternetPlanInternetTypeEnumChoice,
+  InternetServiceTypeEnumChoice,
   ReferidoTypeEnumChoice,
   TipoCuentaBancariaEnumChoice,
 } from '@/shared/constants';
@@ -34,25 +36,28 @@ export interface Preventa {
   // detalle_servicios: Detalle;
   // detalle_productos: Detalle;
 
-  tipo_servicio: string;
-  tipo_plan: string;
+  tipo_servicio: InternetServiceTypeEnumChoice;
+  tipo_plan: InternetPlanInternetTypeEnumChoice;
 
-  numero_cuenta_bancaria: string;
+  numero_cuenta_bancaria?: string; // debito
   costo_instalacion: string;
+  numero_tarjeta_credito?: string; // credito
 
   url_foto_cedula_frontal: string;
   url_foto_cedula_trasera: string;
-  url_foto_documento_cuenta: string;
+  url_foto_documento_cuenta?: string;
 
   created_at?: string;
   modified_at?: string;
 
   ///* fk
   metodo_pago?: number;
-  entidad_financiera?: number;
-  tipo_cuenta_bancaria?: TipoCuentaBancariaEnumChoice;
+  entidad_financiera?: number; // debito
+  tipo_cuenta_bancaria?: TipoCuentaBancariaEnumChoice; // debito
   solicitud_servicio?: number;
-  tarjeta?: number;
+  tarjeta?: number; // credito
+
+  plan_internet?: number;
 
   // sales filter logic
   area: number;

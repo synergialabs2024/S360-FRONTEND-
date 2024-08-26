@@ -1,22 +1,6 @@
 import * as yup from 'yup';
 
 export const preventaFormSchema = yup.object({
-  es_referido: yup
-    .boolean()
-    .typeError('El campo es referido es requerido')
-    .required('El campo es referido es requerido'),
-  cliente_refiere: yup
-    .string()
-    .required('El campo cliente refiere es requerido')
-    .max(200, 'El campo cliente refiere no debe exceder los 200 caracteres'),
-  correo_cliente_refiere: yup
-    .string()
-    .required('El campo correo cliente refiere es requerido')
-    .max(
-      200,
-      'El campo correo cliente refiere no debe exceder los 200 caracteres',
-    ),
-
   nombre_persona_referencia: yup
     .string()
     .required('El campo nombre persona referencia es requerido')
@@ -33,23 +17,8 @@ export const preventaFormSchema = yup.object({
     ),
   celular_adicional: yup
     .string()
-    .required('El campo celular de la persona de referencia es requerido')
-    .max(
-      200,
-      'El campo celular de la persona de referencia no debe exceder los 200 caracteres',
-    ),
-
-  numero_cuenta_bancaria: yup
-    .string()
-    .required('El campo numero cuenta bancaria es requerido')
-    .max(
-      200,
-      'El campo numero cuenta bancaria no debe exceder los 200 caracteres',
-    ),
-  costo_instalacion: yup
-    .string()
-    .required('El campo costo instalacion es requerido')
-    .max(200, 'El campo costo instalacion no debe exceder los 200 caracteres'),
+    .required('El campo celular adicional es requerido')
+    .max(200, 'El campo celular adicional no debe exceder los 200 caracteres'),
 
   ///* fk ---------------------------
   tipo_servicio: yup
