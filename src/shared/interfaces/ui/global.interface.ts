@@ -82,3 +82,11 @@ export type DensityTableType = 'comfortable' | 'compact' | 'spacious';
 
 export type AlertVariantType = 'filled' | 'outlined' | 'standard' | undefined;
 export type AlertSeverityType = 'error' | 'warning' | 'info' | 'success';
+
+// toaster
+export enum ToastSeverityEnum {
+  error = 'error',
+  warning = 'warning',
+  info = 'info',
+  success = 'success',
+}

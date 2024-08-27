@@ -120,10 +120,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   // otp ------
   // const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
   // const [otpValue, setOtpValue] = useState('');
-  // const [otpRespData, setOtpRespData] = useState</*CodigoOTP |*/ null>(null);
+  // const [otpRespData, setOtpRespData] = useState<CodigoOtp | null>(null);
 
   // const setIsOTPGenerated = usePreventaStore(s => s.setIsOTPGenerated);
   // const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
+
+  // const start = useGenericCountdownStore(s => s.start);
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =

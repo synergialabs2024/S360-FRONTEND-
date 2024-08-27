@@ -31,11 +31,12 @@ export const useFetchPreventas = ({
   });
 };
 
-export const useGetPreventa = (uuid: string) => {
+export const useGetPreventa = (uuid: string, refetchOnWindowFocus = false) => {
   return useQuery({
     queryKey: [PreventaTSQEnum.PREVENTA, uuid],
     queryFn: () => getPreventa(uuid),
     retry: false,
+    refetchOnWindowFocus,
   });
 };
 
