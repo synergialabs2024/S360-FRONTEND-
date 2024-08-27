@@ -3,14 +3,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoMdTrash } from 'react-icons/io';
-import { MdAddCircle } from 'react-icons/md';
+import { MdAddCircle, MdChangeCircle, MdOutlineTextsms } from 'react-icons/md';
+import { RiMailSendFill } from 'react-icons/ri';
+import OtpInput from 'react-otp-input';
 import { useNavigate } from 'react-router-dom';
 
 import {
   CreatePreventaParamsBase,
+  useCreateOtpCode,
   useCreatePreventa,
   useFetchEntidadFinancieras,
   useFetchMetodoPagos,
@@ -21,12 +25,15 @@ import {
   useGetZoneByCoords,
 } from '@/actions/app';
 import {
+  CodigoOtp,
   EntidadFinanciera,
   IdentificationTypeEnumChoice,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   MetodoPago,
   MetodoPagoEnumUUID,
+  Nullable,
+  OtpStatesEnumChoice,
   PARENTESCO_TYPE_ARRAY_CHOICES,
   PlanInternet,
   REFERIDO_TYPE_ARRAY_CHOICES,
@@ -39,6 +46,7 @@ import {
   useUploadImageGeneric,
 } from '@/shared';
 import {
+  ChipModelState,
   CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCardAlert,
@@ -46,6 +54,7 @@ import {
   CustomCoordsTextField,
   CustomIdentificacionTextField,
   CustomNumberTextField,
+  CustomSingleButton,
   CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
@@ -68,7 +77,10 @@ import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
+import { usePreventaStore } from '@/store/app';
+import { useGenericCountdownStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
+import CountDownOTPPReventa from './CountDownOTPPReventa';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -91,6 +103,8 @@ type SaveFormData = CreatePreventaParamsBase &
     thereAreNaps?: boolean;
 
     rawPaymentMethod?: MetodoPago;
+
+    estadoOtp?: Nullable<OtpStatesEnumChoice>;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -118,14 +132,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
 
   // otp ------
-  // const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
-  // const [otpValue, setOtpValue] = useState('');
+  const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
+  const [otpValue, setOtpValue] = useState('');
   // const [otpRespData, setOtpRespData] = useState<CodigoOtp | null>(null);
 
-  // const setIsOTPGenerated = usePreventaStore(s => s.setIsOTPGenerated);
-  // const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
+  const setIsOTPGenerated = usePreventaStore(s => s.setIsOTPGenerated);
+  const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
 
-  // const start = useGenericCountdownStore(s => s.start);
+  const startTimer = useGenericCountdownStore(s => s.start);
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -139,6 +153,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     defaultValues: {
       thereAreClientRefiere: false,
       es_referido: false,
+      estadoOtp: null,
     },
   });
 
@@ -159,6 +174,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   const watchedServiceType = form.watch('tipo_servicio');
   const watchedServicePlan = form.watch('tipo_plan');
+
+  const watchedCelular = form.watch('celular');
+  const watchedEstadoOtp = form.watch('estadoOtp');
 
   // map ---------------
   const {
@@ -254,11 +272,27 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     },
   });
 
+  // mutation handlers ------
+  const onSuccessOtpGen = (resData: CodigoOtp) => {
+    console.log('resData', resData);
+    // setOtpRespData(resData);
+    setIsOTPGenerated(true);
+    startTimer(600);
+  };
+
   ///* mutations ---------------------
   const createPreventaMutation = useCreatePreventa({
     navigate,
     returnUrl: returnUrlPreventasPage,
     enableErrorNavigate: false,
+  });
+
+  const createOTP = useCreateOtpCode({
+    enableNavigate: false,
+    customMessageToast: 'Código OTP generado correctamente',
+    customOnSuccess(resData) {
+      onSuccessOtpGen(resData as CodigoOtp);
+    },
   });
 
   ///* handlers ---------------------
@@ -323,12 +357,32 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     form.setValue('es_referido', false);
   };
 
+  // // OPT ------
+  const handlePhoneVerification = async () => {
+    if (!watchedCelular) {
+      ToastWrapper.warning('El campo celular es requerido');
+      return;
+    }
+    const regexp = new RegExp('^(09)[0-9]{8}$');
+    const isValidECNumber = regexp.test(watchedCelular);
+    if (!isValidECNumber) {
+      ToastWrapper.error('El número de celular ingresado no es válido');
+      return;
+    }
+
+    createOTP.mutateAsync({
+      celular: watchedCelular,
+      identificacion: form.getValues().identificacion!,
+    });
+  };
+
   ///* effects ---------------------
   useEffect(() => {
     if (!solicitudServicio?.id) return;
 
     reset({
       ...solicitudServicio,
+      estadoOtp: solicitudServicio?.codigo_otp_data?.estado_otp || null,
     });
   }, [solicitudServicio, reset]);
 
@@ -1015,6 +1069,151 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           {/* ============= OPT ============= */}
           <>
             <CustomTypoLabel text="Generación de Código OTP" />
+
+            <>
+              {!isOTPGenerated ? (
+                <>
+                  <CustomCellphoneTextField
+                    label="Celular"
+                    name="celular"
+                    control={form.control}
+                    defaultValue={form.getValues().celular}
+                    error={form.formState.errors.celular}
+                    helperText={form.formState.errors.celular?.message}
+                    size={gridSizeMdLg6}
+                    disabled={!canChangeCelular}
+                  />
+
+                  {/* -------- buttons -------- */}
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    container
+                    spacing={3}
+                    alignItems="center"
+                  >
+                    <Grid item>
+                      {/* not set otp */}
+                      {!watchedEstadoOtp && (
+                        <SingleIconButton
+                          label="Cambiar Número"
+                          startIcon={<MdChangeCircle />}
+                          color="info"
+                          variant="outlined"
+                          onClick={() => {
+                            setCanChangeCelular(true);
+                          }}
+                        />
+                      )}
+                    </Grid>
+                    <Grid item>
+                      {/* no opt set */}
+                      {!watchedEstadoOtp ? (
+                        <CustomSingleButton
+                          label="Enviar Código"
+                          startIcon={<MdOutlineTextsms />}
+                          color="secondary"
+                          onClick={handlePhoneVerification}
+                        />
+                      ) : watchedEstadoOtp === OtpStatesEnumChoice.PENDIENTE ? (
+                        <ChipModelState
+                          label="CÓDIGO ENVIADO"
+                          color="success"
+                          alignItems="center"
+                          justifyContent="center"
+                          sxChip={{
+                            fontWeight: 600,
+                            width: '100%',
+                          }}
+                        />
+                      ) : watchedEstadoOtp ===
+                        OtpStatesEnumChoice.VERIFICADO ? (
+                        <CustomSingleButton
+                          label="Número Verificado"
+                          startIcon={<RiMailSendFill />}
+                          color="success"
+                          // sxBtn={{
+                          //   color: 'white', // text
+                          //   backgroundColor: '#3891A6', // bg
+                          //   ':hover': {
+                          //     backgroundColor: '#237a8e',
+                          //   },
+                          // }}
+                          disabled
+                        />
+                      ) : null}
+                    </Grid>
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <CountDownOTPPReventa celular={watchedCelular!} />
+
+                  <>
+                    <Grid
+                      item
+                      xs={12}
+                      container
+                      spacing={3}
+                      alignItems="center"
+                    >
+                      <Grid
+                        item
+                        xs={12}
+                        md={8}
+                        sx={{
+                          scrollBehavior: 'auto',
+                          overflowX: 'auto',
+                        }}
+                      >
+                        <OtpInput
+                          value={otpValue}
+                          onChange={setOtpValue}
+                          numInputs={6}
+                          inputType="tel" // to hide rows
+                          inputStyle={{
+                            height: '60px',
+                            width: '60px',
+                            borderRadius: '5px',
+                            border: '0.5px solid gray',
+                            fontSize: '25px',
+                          }}
+                          renderSeparator={
+                            <span style={{ padding: '5px 10px' }} />
+                          }
+                          renderInput={props => <input {...props} />}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} md={4} container spacing={2}>
+                        <CustomSingleButton
+                          label="Verificar Código"
+                          startIcon={<BsSendCheckFill />}
+                          color="success"
+                          variant="outlined"
+                          sxBtn={{
+                            width: '100%',
+                          }}
+                          onClick={async () => {
+                            if (!otpValue || otpValue.length < 6)
+                              return ToastWrapper.warning(
+                                'Ingrese un código OTP válido',
+                              );
+
+                            // await validateCodigoOTP.mutateAsync({
+                            //   codigo: otpValue,
+                            //   solicitud_servicio: preventa?.solicitud_servicio!,
+                            // });
+                          }}
+                          gridSizeBtn={gridSizeMdLg6}
+                        />
+                      </Grid>
+                    </Grid>
+                  </>
+                </>
+              )}
+            </>
           </>
 
           {/* ============= Docs ============= */}

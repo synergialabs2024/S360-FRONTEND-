@@ -30,3 +30,8 @@ export interface CodigoOtp {
   // only serializer
   solicitud_servicio_data?: SolicitudServicioLimitData;
 }
+
+export type CodigoOtpLimitData = Pick<
+  CodigoOtp,
+  'id' | 'uuid' | 'celular' | 'codigo_otp' | 'estado_otp' | 'available_until'
+>;

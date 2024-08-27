@@ -6,6 +6,7 @@ import {
   ColorButtonType,
   GridSizeType,
   JustifyContentType,
+  SxPropsType,
   TooltipPlacementType,
 } from '@/shared/interfaces';
 
@@ -30,6 +31,8 @@ export type SingleIconButtonProps = {
   justifyContent?: JustifyContentType;
 
   customColor?: string;
+
+  sxIconBtn?: SxPropsType;
 };
 
 const SingleIconButton: React.FC<SingleIconButtonProps> = ({
@@ -43,7 +46,7 @@ const SingleIconButton: React.FC<SingleIconButtonProps> = ({
   customClassName,
   tooltipPlacement = 'top',
   justifyContent,
-  customColor,
+  sxIconBtn,
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -66,9 +69,7 @@ const SingleIconButton: React.FC<SingleIconButtonProps> = ({
                   : '' + customClassName || ''
               }
               disabled={disabled}
-              sx={{
-                color: customColor,
-              }}
+              sx={sxIconBtn}
             >
               {startIcon}
             </IconButton>
