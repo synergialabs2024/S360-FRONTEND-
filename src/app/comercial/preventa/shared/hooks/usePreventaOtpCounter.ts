@@ -24,6 +24,7 @@ export const usePreventaOtpCounter = ({
   ///* global state ============================
   const setIsGLobalLoading = useUiStore(s => s.setIsGlobalLoading);
   const startTimer = useGenericCountdownStore(s => s.start);
+  const clearAll = useGenericCountdownStore(s => s.clearAll);
   const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
   const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
 
@@ -57,7 +58,10 @@ export const usePreventaOtpCounter = ({
       // start timer -------
       const timerOtp = dayjs(data?.limitTimeOtp).diff(dayjs(), 'second');
       const timerNewOtp = dayjs(data?.limitTimeNewOtp).diff(dayjs(), 'second');
-      startTimer(counterIdOtp, timerOtp);
+      startTimer(counterIdOtp, timerOtp, () => {
+        clearAll();
+        setIsComponentBlocked(false);
+      });
       startTimer(counterIdNewOtp, timerNewOtp);
     })();
   }, [
@@ -69,5 +73,6 @@ export const usePreventaOtpCounter = ({
     setIsComponentBlocked,
     startTimer,
     setCachedOtpData,
+    clearAll,
   ]);
 };

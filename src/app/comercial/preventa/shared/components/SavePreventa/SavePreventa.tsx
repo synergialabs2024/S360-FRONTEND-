@@ -312,8 +312,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       // custom clear cb
       async () => {
         useGenericCountdownStore.getState().clearAll();
+        setIsComponentBlocked(false);
       },
     );
+    // new otp timer NOT clear all 'cause it's a new otp in the same 10 minutes
     startTimer(
       countdownIdNewOtpPreventa,
       TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
@@ -337,9 +339,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       },
     });
   };
-  const onSuccessNewOtpGen = (resData: CodigoOtp) => {
-    console.log('resData', resData);
-    // setOtpRespData(resData);
+  const onSuccessNewOtpGen = () => {
     startTimer(
       countdownIdNewOtpPreventa,
       TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
@@ -380,8 +380,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const resetOtp = useCreateOtpCode({
     enableNavigate: false,
     customMessageToast: 'Código OTP regenerado correctamente',
-    customOnSuccess(resData) {
-      onSuccessNewOtpGen(resData as CodigoOtp);
+    customOnSuccess() {
+      onSuccessNewOtpGen();
     },
   });
   const setCache = useSetCacheRedis<SetCodigoOtpInCacheData>({

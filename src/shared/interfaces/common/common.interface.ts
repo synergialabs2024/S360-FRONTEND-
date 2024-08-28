@@ -13,16 +13,13 @@ export interface CacheResponse<T> {
 }
 
 export enum TimerSolicitudServicioEnum {
-  // initialCountMinutes = 0.35, // approximately 21 seconds
-  // initialCountSeconds = 21, // 21 seconds
-
-  // initialCountMinutes = 0.1667, // approximately 10 seconds
-  // initialCountSeconds = 10, // 10 seconds
-
-  initalOtpCountSeconds = 600, // 10 minutes
+  // initalOtpCountMinutes = 0.1667, // 10 seconds
+  // initalOtpCountSeconds = 10, // 10 seconds
   initalOtpCountMinutes = 10, // 10 minutes
+  initalOtpCountSeconds = 600, // 10 minutes
 
-  initialOtpRangeNewOtpSeconds = 120, // 2 minutes
-  // initialOtpRangeNewOtpMinutes = 0.1667, // 2 minutes
+  // initialOtpRangeNewOtpMinutes = 0.1, // 6 seconds
+  // initialOtpRangeNewOtpSeconds = 6, // 6 seconds
   initialOtpRangeNewOtpMinutes = 2, // 2 minutes
+  initialOtpRangeNewOtpSeconds = 120, // 2 minutes
 }
