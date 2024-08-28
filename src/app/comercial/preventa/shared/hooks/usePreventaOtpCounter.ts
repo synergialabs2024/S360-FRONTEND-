@@ -1,22 +1,33 @@
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
 import { getCacheRedis } from '@/actions/shared';
 import { SetCodigoOtpInCacheData } from '@/actions/shared/cache-redis-types.interface';
-import type { CacheResponse } from '@/shared';
-import { useUiStore } from '@/store/ui';
+import { HTTPResStatusCodeEnum, type CacheResponse } from '@/shared';
+import { usePreventaStore } from '@/store/app';
+import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 
 export type UsePreventaOtpCounterParams = {
   cackeKey: string;
+  counterIdOtp: string;
+  counterIdNewOtp: string;
 };
 
 export const usePreventaOtpCounter = ({
   cackeKey,
+  counterIdOtp,
+  counterIdNewOtp,
 }: UsePreventaOtpCounterParams) => {
   ///* local state ============================
   const [isMounted, setIsMounted] = useState(false);
 
   ///* global state ============================
   const setIsGLobalLoading = useUiStore(s => s.setIsGlobalLoading);
+  const startTimer = useGenericCountdownStore(s => s.start);
+  const setIsComponentBlocked = useGenericCountdownStore(
+    s => s.setIsComponentBlocked,
+  );
+  const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
 
   ///* effects ============================
   useEffect(() => {
@@ -38,9 +49,27 @@ export const usePreventaOtpCounter = ({
         key: cackeKey,
         showErrorToast: false,
       });
-      const data = res?.data;
-      console.log('data', data);
+      if (res?.status !== HTTPResStatusCodeEnum.OK || !res?.data) return;
+
+      const data = res?.data as unknown as SetCodigoOtpInCacheData;
       setIsGLobalLoading(false);
+      setIsComponentBlocked(true);
+      setCachedOtpData(data);
+
+      // start timer -------
+      const timerOtp = dayjs(data?.limitTimeOtp).diff(dayjs(), 'second');
+      const timerNewOtp = dayjs(data?.limitTimeNewOtp).diff(dayjs(), 'second');
+      startTimer(counterIdOtp, timerOtp);
+      startTimer(counterIdNewOtp, timerNewOtp);
     })();
-  }, [cackeKey, isMounted, setIsGLobalLoading]);
+  }, [
+    cackeKey,
+    counterIdNewOtp,
+    counterIdOtp,
+    isMounted,
+    setIsGLobalLoading,
+    setIsComponentBlocked,
+    startTimer,
+    setCachedOtpData,
+  ]);
 };

@@ -20,6 +20,9 @@ export enum TimerSolicitudServicioEnum {
   // initialCountSeconds = 10, // 10 seconds
 
   initalOtpCountSeconds = 600, // 10 minutes
+  initalOtpCountMinutes = 10, // 10 minutes
 
   initialOtpRangeNewOtpSeconds = 120, // 2 minutes
+  initialOtpRangeNewOtpMinutes = 0.1667, // 2 minutes
+  // initialOtpRangeNewOtpMinutes = 2, // 2 minutes
 }

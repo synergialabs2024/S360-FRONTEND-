@@ -2,6 +2,9 @@ import { CodigoOtp } from '@/shared';
 import { CounterType } from '@/store/ui';
 
 export type SetCodigoOtpInCacheData = {
+  limitTimeOtp: string; // timestamp
+  limitTimeNewOtp: string; // timestamp
+
   otpCode: string | null;
 
   counterOtp: {
