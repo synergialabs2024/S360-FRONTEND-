@@ -1178,7 +1178,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             <CustomTypoLabel text="Generación de Código OTP" />
 
             <>
-              {isComponentBlocked ? (
+              {!isComponentBlocked ? (
                 <>
                   <CustomCellphoneTextField
                     label="Celular"
@@ -1202,7 +1202,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                   >
                     <Grid item>
                       {/* not set otp */}
-                      {!watchedEstadoOtp && (
+                      {!isComponentBlocked && (
                         <SingleIconButton
                           label="Cambiar Número"
                           startIcon={<MdChangeCircle />}
@@ -1246,121 +1246,107 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                     </Grid>
                   </Grid>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <CountDownOTPPReventa
+                    celular={watchedCelular!}
+                    countdownOtpId={countdownPreventaId}
+                  />
 
-              <>
-                {isComponentBlocked ? (
-                  <>
-                    <>
-                      <CountDownOTPPReventa
-                        celular={watchedCelular!}
-                        countdownOtpId={countdownPreventaId}
+                  <Grid item xs={12} container spacing={3} alignItems="center">
+                    <Grid
+                      item
+                      xs={12}
+                      md={8}
+                      sx={{
+                        scrollBehavior: 'auto',
+                        overflowX: 'auto',
+                      }}
+                    >
+                      <OtpInput
+                        value={otpValue}
+                        onChange={setOtpValue}
+                        numInputs={6}
+                        inputType="tel" // to hide rows
+                        inputStyle={{
+                          height: '60px',
+                          width: '60px',
+                          borderRadius: '5px',
+                          border: '0.5px solid gray',
+                          fontSize: '25px',
+                        }}
+                        renderSeparator={
+                          <span style={{ padding: '5px 10px' }} />
+                        }
+                        renderInput={props => <input {...props} />}
                       />
+                    </Grid>
 
-                      <Grid
-                        item
-                        xs={12}
-                        container
-                        spacing={3}
-                        alignItems="center"
-                      >
-                        <Grid
-                          item
-                          xs={12}
-                          md={8}
-                          sx={{
-                            scrollBehavior: 'auto',
-                            overflowX: 'auto',
-                          }}
-                        >
-                          <OtpInput
-                            value={otpValue}
-                            onChange={setOtpValue}
-                            numInputs={6}
-                            inputType="tel" // to hide rows
-                            inputStyle={{
-                              height: '60px',
-                              width: '60px',
-                              borderRadius: '5px',
-                              border: '0.5px solid gray',
-                              fontSize: '25px',
-                            }}
-                            renderSeparator={
-                              <span style={{ padding: '5px 10px' }} />
-                            }
-                            renderInput={props => <input {...props} />}
-                          />
-                        </Grid>
-
-                        <Grid
-                          item
-                          xs={12}
-                          md={4}
-                          container
-                          direction="column"
-                          spacing={2}
-                          sx={{
+                    <Grid
+                      item
+                      xs={12}
+                      md={4}
+                      container
+                      direction="column"
+                      spacing={2}
+                      sx={{
+                        width: '100%',
+                      }}
+                    >
+                      <Grid item xs={12}>
+                        <CustomSingleButton
+                          label="Verificar Código"
+                          startIcon={<BsSendCheckFill />}
+                          color="primary"
+                          variant="outlined"
+                          sxBtn={{
                             width: '100%',
                           }}
-                        >
-                          <Grid item xs={12}>
-                            <CustomSingleButton
-                              label="Verificar Código"
-                              startIcon={<BsSendCheckFill />}
-                              color="primary"
-                              variant="outlined"
-                              sxBtn={{
-                                width: '100%',
-                              }}
-                              onClick={async () => {
-                                if (!otpValue || otpValue.length < 6)
-                                  return ToastWrapper.warning(
-                                    'Ingrese un código OTP válido',
-                                  );
+                          onClick={async () => {
+                            if (!otpValue || otpValue.length < 6)
+                              return ToastWrapper.warning(
+                                'Ingrese un código OTP válido',
+                              );
 
-                                // await validateCodigoOTP.mutateAsync({
-                                //   codigo: otpValue,
-                                //   solicitud_servicio: preventa?.solicitud_servicio!,
-                                // });
-                              }}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12}>
-                            <CustomSingleButton
-                              label={
-                                // if countdown is running show timer, else send new otp
-                                (countdownNewOtpValue || 0) > 0
-                                  ? `Reenviar Código en ${minutesNewOtp}:${secondsNewOtp}`
-                                  : 'Reenviar Código'
-                              }
-                              startIcon={<MdRefresh />}
-                              color="info"
-                              variant="outlined"
-                              sxBtn={{
-                                width: '100%',
-                                textTransform: 'none',
-                              }}
-                              onClick={() => {
-                                if ((countdownNewOtpValue || 0) > 0)
-                                  return ToastWrapper.warning(
-                                    'Espere un momento para volver a enviar el código',
-                                  );
-
-                                handleNewOtp();
-                              }}
-                              // disabled if countdownNewotp is running else enable
-                              disabled={(countdownNewOtpValue || 0) > 0}
-                            />
-                          </Grid>
-                        </Grid>
+                            // await validateCodigoOTP.mutateAsync({
+                            //   codigo: otpValue,
+                            //   solicitud_servicio: preventa?.solicitud_servicio!,
+                            // });
+                          }}
+                        />
                       </Grid>
-                    </>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </>
+
+                      <Grid item xs={12}>
+                        <CustomSingleButton
+                          label={
+                            // if countdown is running show timer, else send new otp
+                            (countdownNewOtpValue || 0) > 0
+                              ? `Reenviar Código en ${minutesNewOtp}:${secondsNewOtp}`
+                              : 'Reenviar Código'
+                          }
+                          startIcon={<MdRefresh />}
+                          color="info"
+                          variant="outlined"
+                          sxBtn={{
+                            width: '100%',
+                            textTransform: 'none',
+                          }}
+                          onClick={() => {
+                            if ((countdownNewOtpValue || 0) > 0)
+                              return ToastWrapper.warning(
+                                'Espere un momento para volver a enviar el código',
+                              );
+
+                            handleNewOtp();
+                          }}
+                          // disabled if countdownNewotp is running else enable
+                          disabled={(countdownNewOtpValue || 0) > 0}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
+              )}
             </>
           </>
 
