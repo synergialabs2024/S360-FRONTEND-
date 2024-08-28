@@ -72,7 +72,17 @@ export const systemUserFormSchema = yup.object({
     .when('create_employee', {
       is: true,
       then: schema => schema.required('El campo teléfono 1 es requerido'),
-    }),
+    })
+    .test(
+      'unique-phone-1',
+      'El número de celular no se puede repetir con teléfono 2 o teléfono 3',
+      function (value) {
+        const { phone_2, phone_3 } = this.parent;
+        const otherPhones = [phone_2, phone_3].filter(Boolean);
+        return !otherPhones.includes(value);
+      },
+    ),
+
   phone_2: yup
     .string()
     .optional()
@@ -80,8 +90,30 @@ export const systemUserFormSchema = yup.object({
     .when('create_employee', {
       is: true,
       then: schema => schema.required('El campo teléfono 2 es requerido'),
-    }),
-  phone_3: yup.string().optional().nullable(),
+    })
+    .test(
+      'unique-phone-2',
+      'El número de celular no se puede repetir con teléfono 1 o teléfono 3',
+      function (value) {
+        const { phone_1, phone_3 } = this.parent;
+        const otherPhones = [phone_1, phone_3].filter(Boolean);
+        return !otherPhones.includes(value);
+      },
+    ),
+
+  phone_3: yup
+    .string()
+    .optional()
+    .nullable()
+    .test(
+      'unique-phone-3',
+      'El número de celular no se puede repetir con teléfono 1 o teléfono 2',
+      function (value) {
+        const { phone_1, phone_2 } = this.parent;
+        const otherPhones = [phone_1, phone_2].filter(Boolean);
+        return !otherPhones.includes(value);
+      },
+    ),
   address: yup
     .string()
     .optional()
