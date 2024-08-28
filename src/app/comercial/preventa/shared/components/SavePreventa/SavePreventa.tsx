@@ -394,6 +394,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+    if (
+      !watchedEstadoOtp ||
+      watchedEstadoOtp !== OtpStatesEnumChoice.VERIFICADO
+    ) {
+      ToastWrapper.error('El código OTP no ha sido verificado');
+      return;
+    }
 
     // validate images -----------
     if (!cedulaFrontalImg || !cedulaPosteriorImg)
