@@ -21,10 +21,6 @@ type GenericCounterDownState = {
   setIsClear: (id: string, isClear: boolean) => void;
 
   clearAll: () => void;
-
-  // helper cache
-  isComponentBlocked: boolean;
-  setIsComponentBlocked: (isComponentBlocked: boolean) => void;
 };
 
 type CustomClearCb = () => Promise<void> | void;
@@ -32,9 +28,6 @@ type CustomClearCb = () => Promise<void> | void;
 export const useGenericCountdownStore = create<GenericCounterDownState>(
   (set, get) => ({
     counters: {},
-
-    // helper cache - TODO: muve to usePreventaStore()
-    isComponentBlocked: false,
 
     start: (
       id: string,
@@ -164,11 +157,6 @@ export const useGenericCountdownStore = create<GenericCounterDownState>(
       Object.keys(get().counters).forEach(id => {
         get().clear(id);
       });
-    },
-
-    // helper methods
-    setIsComponentBlocked: isComponentBlocked => {
-      set({ isComponentBlocked });
     },
   }),
 );

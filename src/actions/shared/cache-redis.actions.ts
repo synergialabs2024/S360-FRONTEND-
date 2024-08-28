@@ -10,7 +10,7 @@ import { erpAPI } from '@/shared/axios/erp-api';
 import { ToastSeverityEnum } from '@/shared/interfaces/ui/alerts.interface';
 import { useUiStore } from '@/store/ui';
 
-const { get, post } = erpAPI();
+const { get, post, patch } = erpAPI();
 
 ///* tanStack query
 export const useGetCacheRedis = ({ key }: GetCacheRedisParams) => {
@@ -38,6 +38,42 @@ export const useSetCacheRedis = <T>({
       enableToast &&
         ToastWrapper[customMessageSuccessSeverityToast](
           customMessageToast || 'Cache guardado correctamente',
+        );
+
+      customOnSuccess && customOnSuccess(res);
+    },
+    onError: err => {
+      customOnError && customOnError(err);
+      handleAxiosError(
+        err,
+        customMessageErrorToast,
+        customMessageErrorSeverityToast,
+      );
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const useUpdateCacheRedis = <T>({
+  customMessageToast,
+  enableToast = true,
+  customOnSuccess,
+  customMessageSuccessSeverityToast = ToastSeverityEnum.success,
+
+  customMessageErrorToast,
+  customMessageErrorSeverityToast,
+  customOnError,
+}: UseMutationParams = {}) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: SetCacheRedisValue<T>) => updateCacheRedis(params),
+    onSuccess: res => {
+      enableToast &&
+        ToastWrapper[customMessageSuccessSeverityToast](
+          customMessageToast || 'Cache actualizado correctamente',
         );
 
       customOnSuccess && customOnSuccess(res);
@@ -91,4 +127,15 @@ export const setCacheRedis = async <T>({
     { data: value, key }, // it can overwrite the value if the key already exists
     true,
   );
+};
+
+// /cache/{key}/
+export const updateCacheRedis = async <T>({
+  key,
+  value,
+}: SetCacheRedisValue<T>) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return patch<CacheResponse<T>>(`/cache/${key}/`, { data: value }, true);
 };

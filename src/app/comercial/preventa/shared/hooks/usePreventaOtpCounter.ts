@@ -24,9 +24,7 @@ export const usePreventaOtpCounter = ({
   ///* global state ============================
   const setIsGLobalLoading = useUiStore(s => s.setIsGlobalLoading);
   const startTimer = useGenericCountdownStore(s => s.start);
-  const setIsComponentBlocked = useGenericCountdownStore(
-    s => s.setIsComponentBlocked,
-  );
+  const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
   const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
 
   ///* effects ============================

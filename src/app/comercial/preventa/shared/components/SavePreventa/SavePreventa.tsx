@@ -29,8 +29,11 @@ import {
   useFetchZonas,
   useGetZoneByCoords,
 } from '@/actions/app';
-import { useSetCacheRedis } from '@/actions/shared';
-import { SetCodigoOtpInCacheData } from '@/actions/shared/cache-redis-types.interface';
+import { useSetCacheRedis, useUpdateCacheRedis } from '@/actions/shared';
+import {
+  ResendOtpDataCache,
+  SetCodigoOtpInCacheData,
+} from '@/actions/shared/cache-redis-types.interface';
 import {
   CodigoOtp,
   EntidadFinanciera,
@@ -151,12 +154,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const [otpValue, setOtpValue] = useState('');
   // const [otpRespData, setOtpRespData] = useState<CodigoOtp | null>(null);
 
-  const isComponentBlocked = useGenericCountdownStore(
-    s => s.isComponentBlocked,
-  );
-  const setIsComponentBlocked = useGenericCountdownStore(
-    s => s.setIsComponentBlocked,
-  );
+  const isComponentBlocked = usePreventaStore(s => s.isComponentBlocked);
+  const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
 
   const startTimer = useGenericCountdownStore(s => s.start);
   const countdownNewOtpValue = useGenericCountdownStore(
@@ -349,7 +348,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     // opt cache
     const cachedOtpData = usePreventaStore.getState().cachedOtpData;
 
-    setCache.mutateAsync({
+    updateCache.mutateAsync({
       key: codigoOtpCacheLeyPreventa,
       value: {
         // to calculate limit time and reset counter after each refresh
@@ -360,8 +359,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             'minutes',
           )
           .format(),
-
-        otpData: resData,
       },
     });
   };
@@ -388,6 +385,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     },
   });
   const setCache = useSetCacheRedis<SetCodigoOtpInCacheData>({
+    enableToast: false,
+  });
+  const updateCache = useUpdateCacheRedis<ResendOtpDataCache>({
     enableToast: false,
   });
 

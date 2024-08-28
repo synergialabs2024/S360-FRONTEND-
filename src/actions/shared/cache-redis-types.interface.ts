@@ -7,3 +7,8 @@ export type SetCodigoOtpInCacheData = {
 
   otpData: CodigoOtp | null;
 } | null;
+
+export type ResendOtpDataCache = {
+  limitTimeNewOtp: string; // timestamp
+  limitTimeOtp: string; // timestamp to not override the previous timer
+};
