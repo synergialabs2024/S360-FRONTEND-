@@ -7,7 +7,12 @@ import { BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoMdTrash } from 'react-icons/io';
-import { MdAddCircle, MdChangeCircle, MdOutlineTextsms } from 'react-icons/md';
+import {
+  MdAddCircle,
+  MdChangeCircle,
+  MdOutlineTextsms,
+  MdRefresh,
+} from 'react-icons/md';
 import { RiMailSendFill } from 'react-icons/ri';
 import OtpInput from 'react-otp-input';
 import { useNavigate } from 'react-router-dom';
@@ -40,6 +45,7 @@ import {
   ReferidoTypeEnumChoice,
   Sector,
   Tarjeta,
+  TimerSolicitudServicioEnum,
   TIPO_CUENTA_BANCARIA_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
@@ -108,6 +114,8 @@ type SaveFormData = CreatePreventaParamsBase &
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
+const countdownId = 'otpCountdownPreventa';
+const countdownIdNewOtp = 'otpCountdownNewOtp';
 
 const SavePreventa: React.FC<SavePreventaProps> = ({
   title,
@@ -140,6 +148,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
 
   const startTimer = useGenericCountdownStore(s => s.start);
+  const countdownIdNewOtpValue = useGenericCountdownStore(
+    s => s.counters[countdownIdNewOtp]?.count,
+  );
+  const minutesNewOtp = Math.floor((countdownIdNewOtpValue ?? 0) / 60);
+  const secondsNewOtp = (countdownIdNewOtpValue ?? 0) % 60;
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -277,7 +290,19 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     console.log('resData', resData);
     // setOtpRespData(resData);
     setIsOTPGenerated(true);
-    startTimer(600);
+    startTimer(countdownId, TimerSolicitudServicioEnum.initalOtpCountSeconds);
+    startTimer(
+      countdownIdNewOtp,
+      TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
+    );
+  };
+  const onSuccessNewOtpGen = (resData: CodigoOtp) => {
+    console.log('resData', resData);
+    // setOtpRespData(resData);
+    startTimer(
+      countdownIdNewOtp,
+      TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
+    );
   };
 
   ///* mutations ---------------------
@@ -292,6 +317,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     customMessageToast: 'Código OTP generado correctamente',
     customOnSuccess(resData) {
       onSuccessOtpGen(resData as CodigoOtp);
+    },
+  });
+  const resetOtp = useCreateOtpCode({
+    enableNavigate: false,
+    customMessageToast: 'Código OTP regenerado correctamente',
+    customOnSuccess(resData) {
+      onSuccessNewOtpGen(resData as CodigoOtp);
     },
   });
 
@@ -371,6 +403,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     }
 
     createOTP.mutateAsync({
+      celular: watchedCelular,
+      identificacion: form.getValues().identificacion!,
+    });
+  };
+  const handleNewOtp = async () => {
+    if (!watchedCelular) {
+      ToastWrapper.warning('El campo celular es requerido');
+      return;
+    }
+
+    resetOtp.mutateAsync({
       celular: watchedCelular,
       identificacion: form.getValues().identificacion!,
     });
@@ -1148,45 +1191,52 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 </>
               ) : (
                 <>
-                  <CountDownOTPPReventa celular={watchedCelular!} />
+                  <CountDownOTPPReventa
+                    celular={watchedCelular!}
+                    countdownOtpId={countdownId}
+                  />
 
-                  <>
+                  <Grid item xs={12} container spacing={3} alignItems="center">
                     <Grid
                       item
                       xs={12}
-                      container
-                      spacing={3}
-                      alignItems="center"
+                      md={8}
+                      sx={{
+                        scrollBehavior: 'auto',
+                        overflowX: 'auto',
+                      }}
                     >
-                      <Grid
-                        item
-                        xs={12}
-                        md={8}
-                        sx={{
-                          scrollBehavior: 'auto',
-                          overflowX: 'auto',
+                      <OtpInput
+                        value={otpValue}
+                        onChange={setOtpValue}
+                        numInputs={6}
+                        inputType="tel" // to hide rows
+                        inputStyle={{
+                          height: '60px',
+                          width: '60px',
+                          borderRadius: '5px',
+                          border: '0.5px solid gray',
+                          fontSize: '25px',
                         }}
-                      >
-                        <OtpInput
-                          value={otpValue}
-                          onChange={setOtpValue}
-                          numInputs={6}
-                          inputType="tel" // to hide rows
-                          inputStyle={{
-                            height: '60px',
-                            width: '60px',
-                            borderRadius: '5px',
-                            border: '0.5px solid gray',
-                            fontSize: '25px',
-                          }}
-                          renderSeparator={
-                            <span style={{ padding: '5px 10px' }} />
-                          }
-                          renderInput={props => <input {...props} />}
-                        />
-                      </Grid>
+                        renderSeparator={
+                          <span style={{ padding: '5px 10px' }} />
+                        }
+                        renderInput={props => <input {...props} />}
+                      />
+                    </Grid>
 
-                      <Grid item xs={12} md={4} container spacing={2}>
+                    <Grid
+                      item
+                      xs={12}
+                      md={4}
+                      container
+                      direction="column"
+                      spacing={2}
+                      sx={{
+                        width: '100%',
+                      }}
+                    >
+                      <Grid item xs={12}>
                         <CustomSingleButton
                           label="Verificar Código"
                           startIcon={<BsSendCheckFill />}
@@ -1206,11 +1256,38 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             //   solicitud_servicio: preventa?.solicitud_servicio!,
                             // });
                           }}
-                          gridSizeBtn={gridSizeMdLg6}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <CustomSingleButton
+                          label={
+                            // if countdown is running show timer, else send new otp
+                            (countdownIdNewOtpValue || 0) > 0
+                              ? `Reenviar Código en ${minutesNewOtp}:${secondsNewOtp}`
+                              : 'Reenviar Código'
+                          }
+                          startIcon={<MdRefresh />}
+                          color="info"
+                          variant="outlined"
+                          sxBtn={{
+                            width: '100%',
+                            textTransform: 'none',
+                          }}
+                          onClick={() => {
+                            if ((countdownIdNewOtpValue || 0) > 0)
+                              return ToastWrapper.warning(
+                                'Espere un momento para volver a enviar el código',
+                              );
+
+                            handleNewOtp();
+                          }}
+                          // disabled if countdownNewotp is running else enable
+                          disabled={(countdownIdNewOtpValue || 0) > 0}
                         />
                       </Grid>
                     </Grid>
-                  </>
+                  </Grid>
                 </>
               )}
             </>

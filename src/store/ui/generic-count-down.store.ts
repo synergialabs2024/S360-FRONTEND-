@@ -1,70 +1,162 @@
 import { create } from 'zustand';
 
-type State = {
+type Counter = {
   count: number | null;
   isClear: boolean;
-  start: (initialCount: number, customClearCb?: CustomClearCb) => void;
-  stop: () => void;
-  reset: (newInitialCount: number) => void;
-  clear: (customClearCb?: CustomClearCb) => void;
-  setIsClear: (isClear: boolean) => void;
+  interval: NodeJS.Timeout | null;
 };
+
+type GenericCounterDownState = {
+  counters: Record<string, Counter>;
+
+  start: (
+    id: string,
+    initialCount: number,
+    customClearCb?: CustomClearCb,
+  ) => void;
+
+  stop: (id: string) => void;
+  reset: (id: string, newInitialCount: number) => void;
+  clear: (id: string, customClearCb?: CustomClearCb) => void;
+  setIsClear: (id: string, isClear: boolean) => void;
+
+  clearAll: () => void;
+};
+
 type CustomClearCb = () => Promise<void> | void;
 
-let interval: NodeJS.Timeout | null = null;
+export const useGenericCountdownStore = create<GenericCounterDownState>(
+  (set, get) => ({
+    counters: {},
 
-export const useGenericCountdownStore = create<State>((set, get) => ({
-  count: null,
-  isClear: false,
+    start: (
+      id: string,
+      initialCount: number,
+      customClearCb?: CustomClearCb,
+    ) => {
+      const counter = get().counters[id] || {
+        count: null,
+        isClear: false,
+        interval: null,
+      };
 
-  start: (initialCount: number, customClearCb?: CustomClearCb) => {
-    if (interval !== null) {
-      return;
-    }
-
-    // if is negative, clear the interval
-    if (initialCount <= 0) {
-      get().clear(customClearCb);
-      return;
-    }
-
-    // set initial count
-    set({ count: initialCount });
-    interval = setInterval(() => {
-      set(state => ({ count: state.count ? state.count - 1 : 0 }));
-
-      if ((get().count || 0) <= 0) {
-        get().clear(customClearCb);
+      if (counter.interval !== null) {
+        return;
       }
-    }, 1000);
-  },
-  stop: () => {
-    if (interval !== null) {
-      clearInterval(interval);
-      interval = null;
-    }
-  },
-  reset: (newInitialCount: number) => {
-    if (interval !== null) {
-      clearInterval(interval);
-      interval = null;
-    }
-    set({ count: newInitialCount });
-    interval = setInterval(() => {
-      set(state => ({ count: state.count ? state.count - 1 : 0 }));
-    }, 1000);
-  },
-  clear: customClearCb => {
-    if (interval !== null) {
-      clearInterval(interval);
-      interval = null;
-    }
 
-    set({ count: null, isClear: true });
+      if (initialCount <= 0) {
+        get().clear(id, customClearCb);
+        return;
+      }
 
-    customClearCb && customClearCb();
-  },
-  setIsClear: (isClear: boolean) => {
-    set({ isClear });
-  },
-}));
+      counter.count = initialCount;
+      counter.interval = setInterval(() => {
+        set(state => {
+          const newCount = state.counters[id].count
+            ? state.counters[id].count! - 1
+            : 0;
+          if (newCount <= 0) {
+            get().clear(id, customClearCb);
+          }
+          return {
+            counters: {
+              ...state.counters,
+              [id]: { ...state.counters[id], count: newCount },
+            },
+          };
+        });
+      }, 1000);
+
+      set(state => ({
+        counters: {
+          ...state.counters,
+          [id]: counter,
+        },
+      }));
+    },
+
+    stop: (id: string) => {
+      const counter = get().counters[id];
+      if (counter && counter.interval !== null) {
+        clearInterval(counter.interval);
+        counter.interval = null;
+        set(state => ({
+          counters: {
+            ...state.counters,
+            [id]: counter,
+          },
+        }));
+      }
+    },
+
+    reset: (id: string, newInitialCount: number) => {
+      const counter = get().counters[id] || {
+        count: null,
+        isClear: false,
+        interval: null,
+      };
+
+      if (counter.interval !== null) {
+        clearInterval(counter.interval);
+        counter.interval = null;
+      }
+
+      counter.count = newInitialCount;
+      counter.interval = setInterval(() => {
+        set(state => {
+          const newCount = state.counters[id].count
+            ? state.counters[id].count! - 1
+            : 0;
+          if (newCount <= 0) {
+            get().clear(id);
+          }
+          return {
+            counters: {
+              ...state.counters,
+              [id]: { ...state.counters[id], count: newCount },
+            },
+          };
+        });
+      }, 1000);
+
+      set(state => ({
+        counters: {
+          ...state.counters,
+          [id]: counter,
+        },
+      }));
+    },
+
+    clear: (id: string, customClearCb?: CustomClearCb) => {
+      const counter = get().counters[id];
+      if (counter && counter.interval !== null) {
+        clearInterval(counter.interval);
+        counter.interval = null;
+      }
+
+      set(state => ({
+        counters: {
+          ...state.counters,
+          [id]: { count: null, isClear: true, interval: null },
+        },
+      }));
+
+      customClearCb && customClearCb();
+    },
+
+    setIsClear: (id: string, isClear: boolean) => {
+      set(state => ({
+        counters: {
+          ...state.counters,
+          [id]: { ...state.counters[id], isClear },
+        },
+      }));
+    },
+
+    clearAll: () => {
+      Object.keys(get().counters).forEach(id => {
+        get().clear(id);
+      });
+    },
+  }),
+);

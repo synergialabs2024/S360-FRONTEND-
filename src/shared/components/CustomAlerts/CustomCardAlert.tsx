@@ -22,7 +22,6 @@ export type CustomCardAlertProps = {
 };
 
 const CustomCardAlert: React.FC<CustomCardAlertProps> = ({
-  sizeType,
   alertTitle,
   alertMessage,
   alertContentNode,
@@ -30,6 +29,7 @@ const CustomCardAlert: React.FC<CustomCardAlertProps> = ({
   alertSeverity = 'info',
   gridSizeCard = gridSize,
   isLoading = false,
+  sizeType = 'small',
 }) => {
   if (isLoading) {
     return (
