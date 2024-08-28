@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-type Counter = {
-  count: number | null;
+export type CounterType = {
+  count?: number | null;
   isClear: boolean;
-  interval: NodeJS.Timeout | null;
+  interval?: NodeJS.Timeout | null;
 };
 
 type GenericCounterDownState = {
-  counters: Record<string, Counter>;
+  counters: Record<string, CounterType>;
 
   start: (
     id: string,

@@ -29,6 +29,8 @@ import {
   useFetchZonas,
   useGetZoneByCoords,
 } from '@/actions/app';
+import { useSetCacheRedis } from '@/actions/shared';
+import { SetCodigoOtpInCacheData } from '@/actions/shared/cache-redis-types.interface';
 import {
   CodigoOtp,
   EntidadFinanciera,
@@ -86,11 +88,12 @@ import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
 import { usePreventaStore } from '@/store/app';
 import { useGenericCountdownStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
+import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
-  solicitudServicio?: SolicitudServicio;
+  solicitudServicio: SolicitudServicio;
 }
 
 type SaveFormData = CreatePreventaParamsBase &
@@ -114,6 +117,7 @@ type SaveFormData = CreatePreventaParamsBase &
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
+
 const countdownId = 'otpCountdownPreventa';
 const countdownIdNewOtp = 'otpCountdownNewOtp';
 
@@ -121,6 +125,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   title,
   solicitudServicio,
 }) => {
+  const codigoOtpCacheLeyPreventa = `codigo_otp_preventa_${solicitudServicio?.uuid}`;
+
   ///* hooks ---------------------
   const navigate = useNavigate();
   const {
@@ -148,11 +154,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
 
   const startTimer = useGenericCountdownStore(s => s.start);
-  const countdownIdNewOtpValue = useGenericCountdownStore(
+  const countdownNewOtpValue = useGenericCountdownStore(
     s => s.counters[countdownIdNewOtp]?.count,
   );
-  const minutesNewOtp = Math.floor((countdownIdNewOtpValue ?? 0) / 60);
-  const secondsNewOtp = (countdownIdNewOtpValue ?? 0) % 60;
+  const minutesNewOtp = Math.floor((countdownNewOtpValue ?? 0) / 60);
+  const secondsNewOtp = (countdownNewOtpValue ?? 0) % 60;
+
+  usePreventaOtpCounter({
+    cackeKey: codigoOtpCacheLeyPreventa,
+  });
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -286,15 +296,46 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   });
 
   // mutation handlers ------
-  const onSuccessOtpGen = (resData: CodigoOtp) => {
-    console.log('resData', resData);
-    // setOtpRespData(resData);
+  const onSuccessOtpGen = async (resData: CodigoOtp) => {
     setIsOTPGenerated(true);
-    startTimer(countdownId, TimerSolicitudServicioEnum.initalOtpCountSeconds);
+    startTimer(
+      countdownId,
+      TimerSolicitudServicioEnum.initalOtpCountSeconds,
+      // custom clear cb
+      async () => {
+        useGenericCountdownStore.getState().clearAll();
+        // await setCache.mutateAsync({
+        //   key: codigoOtpCacheLeyPreventa,
+        //   value: null,
+        // });
+      },
+    );
     startTimer(
       countdownIdNewOtp,
       TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
     );
+
+    //
+    const counterOtp =
+      useGenericCountdownStore.getState().counters[countdownId];
+    const countdownNewOtp =
+      useGenericCountdownStore.getState().counters[countdownIdNewOtp];
+
+    setCache.mutateAsync({
+      key: codigoOtpCacheLeyPreventa,
+      value: {
+        counterOtp: {
+          actualCount: TimerSolicitudServicioEnum.initalOtpCountSeconds,
+          counter: counterOtp,
+        },
+        counterNewOtp: {
+          actualCount: TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
+          counter: countdownNewOtp,
+        },
+        otpData: resData,
+        otpCode: resData?.codigo_otp!,
+      },
+    });
   };
   const onSuccessNewOtpGen = (resData: CodigoOtp) => {
     console.log('resData', resData);
@@ -325,6 +366,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     customOnSuccess(resData) {
       onSuccessNewOtpGen(resData as CodigoOtp);
     },
+  });
+  const setCache = useSetCacheRedis<SetCodigoOtpInCacheData>({
+    customMessageToast: 'Horario de instalación apartado durante 10 minutos',
   });
 
   ///* handlers ---------------------
@@ -402,7 +446,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return;
     }
 
-    createOTP.mutateAsync({
+    await createOTP.mutateAsync({
       celular: watchedCelular,
       identificacion: form.getValues().identificacion!,
     });
@@ -1263,7 +1307,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                         <CustomSingleButton
                           label={
                             // if countdown is running show timer, else send new otp
-                            (countdownIdNewOtpValue || 0) > 0
+                            (countdownNewOtpValue || 0) > 0
                               ? `Reenviar Código en ${minutesNewOtp}:${secondsNewOtp}`
                               : 'Reenviar Código'
                           }
@@ -1275,7 +1319,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             textTransform: 'none',
                           }}
                           onClick={() => {
-                            if ((countdownIdNewOtpValue || 0) > 0)
+                            if ((countdownNewOtpValue || 0) > 0)
                               return ToastWrapper.warning(
                                 'Espere un momento para volver a enviar el código',
                               );
@@ -1283,7 +1327,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             handleNewOtp();
                           }}
                           // disabled if countdownNewotp is running else enable
-                          disabled={(countdownIdNewOtpValue || 0) > 0}
+                          disabled={(countdownNewOtpValue || 0) > 0}
                         />
                       </Grid>
                     </Grid>

@@ -260,7 +260,7 @@ export const useCreateOtpCode = ({
     mutationFn: (params: GenerateOtpCodeParams) => createOtpCode(params),
     onSuccess: res => {
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
-      customOnSuccess && customOnSuccess(res?.data);
+      customOnSuccess && customOnSuccess(res);
       enableToast &&
         ToastWrapper.success(
           customMessageToast || 'Código OTP generado correctamente',

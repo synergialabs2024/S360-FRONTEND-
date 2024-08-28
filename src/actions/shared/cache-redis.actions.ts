@@ -3,11 +3,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CacheResponse,
   handleAxiosError,
-  ToastSeverityEnum,
   ToastWrapper,
   UseMutationParams,
 } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
+import { ToastSeverityEnum } from '@/shared/interfaces/ui/alerts.interface';
 import { useUiStore } from '@/store/ui';
 
 const { get, post } = erpAPI();
@@ -59,6 +59,7 @@ export const useSetCacheRedis = <T>({
 ///* axios
 export type GetCacheRedisParams = {
   key: string;
+  showErrorToast?: boolean;
 };
 
 export type SetCacheRedisValue<T> = {
@@ -68,11 +69,12 @@ export type SetCacheRedisValue<T> = {
 
 export const getCacheRedis = async <T>({
   key,
+  showErrorToast = true,
 }: GetCacheRedisParams): Promise<CacheResponse<T> | null> => {
   try {
     return (await get<CacheResponse<T>>(`/cache/?key=${key}`, true)) as any;
   } catch (error) {
-    handleAxiosError(error);
+    showErrorToast && handleAxiosError(error);
     return null;
   }
 };
