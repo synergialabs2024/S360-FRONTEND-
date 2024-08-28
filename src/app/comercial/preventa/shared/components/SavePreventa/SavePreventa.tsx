@@ -151,10 +151,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const [otpValue, setOtpValue] = useState('');
   // const [otpRespData, setOtpRespData] = useState<CodigoOtp | null>(null);
 
-  const setIsOTPGenerated = usePreventaStore(s => s.setIsOTPGenerated);
-  const isOTPGenerated = usePreventaStore(s => s.isOTPGenerated);
   const isComponentBlocked = useGenericCountdownStore(
     s => s.isComponentBlocked,
+  );
+  const setIsComponentBlocked = useGenericCountdownStore(
+    s => s.setIsComponentBlocked,
   );
 
   const startTimer = useGenericCountdownStore(s => s.start);
@@ -303,17 +304,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   // mutation handlers ------
   const onSuccessOtpGen = async (resData: CodigoOtp) => {
-    setIsOTPGenerated(true);
+    // to render otp component
+    setIsComponentBlocked(true);
+
     startTimer(
       countdownPreventaId,
       TimerSolicitudServicioEnum.initalOtpCountSeconds,
       // custom clear cb
       async () => {
         useGenericCountdownStore.getState().clearAll();
-        // await setCache.mutateAsync({
-        //   key: codigoOtpCacheLeyPreventa,
-        //   value: null,
-        // });
       },
     );
     startTimer(
@@ -321,13 +320,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
     );
 
-    // otp cache
-    const counterOtp =
-      useGenericCountdownStore.getState().counters[countdownPreventaId];
-    const countdownNewOtp =
-      useGenericCountdownStore.getState().counters[countdownIdNewOtpPreventa];
-
-    setCache.mutateAsync({
+    await setCache.mutateAsync({
       key: codigoOtpCacheLeyPreventa,
       value: {
         // to calculate limit time and reset counter after each refresh
@@ -341,16 +334,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           )
           .format(),
 
-        counterOtp: {
-          actualCount: TimerSolicitudServicioEnum.initalOtpCountSeconds,
-          counter: counterOtp,
-        },
-        counterNewOtp: {
-          actualCount: TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
-          counter: countdownNewOtp,
-        },
         otpData: resData,
-        otpCode: resData?.codigo_otp!,
       },
     });
   };
@@ -363,10 +347,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     );
 
     // opt cache
-    const counterOtp =
-      useGenericCountdownStore.getState().counters[countdownPreventaId];
-    const countdownNewOtp =
-      useGenericCountdownStore.getState().counters[countdownIdNewOtpPreventa];
     const cachedOtpData = usePreventaStore.getState().cachedOtpData;
 
     setCache.mutateAsync({
@@ -381,16 +361,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           )
           .format(),
 
-        counterOtp: {
-          actualCount: TimerSolicitudServicioEnum.initalOtpCountSeconds,
-          counter: counterOtp,
-        },
-        counterNewOtp: {
-          actualCount: TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
-          counter: countdownNewOtp,
-        },
         otpData: resData,
-        otpCode: resData?.codigo_otp!,
       },
     });
   };
@@ -417,7 +388,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     },
   });
   const setCache = useSetCacheRedis<SetCodigoOtpInCacheData>({
-    customMessageToast: 'Horario de instalación apartado durante 10 minutos',
+    enableToast: false,
   });
 
   ///* handlers ---------------------
@@ -1207,7 +1178,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             <CustomTypoLabel text="Generación de Código OTP" />
 
             <>
-              {!isOTPGenerated || isComponentBlocked ? (
+              {isComponentBlocked ? (
                 <>
                   <CustomCellphoneTextField
                     label="Celular"
@@ -1245,14 +1216,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                     </Grid>
                     <Grid item>
                       {/* no opt set */}
-                      {!watchedEstadoOtp ? (
+                      {!isComponentBlocked ? (
                         <CustomSingleButton
                           label="Enviar Código"
                           startIcon={<MdOutlineTextsms />}
                           color="secondary"
                           onClick={handlePhoneVerification}
                         />
-                      ) : watchedEstadoOtp === OtpStatesEnumChoice.PENDIENTE ? (
+                      ) : isComponentBlocked ? (
                         <ChipModelState
                           label="CÓDIGO ENVIADO"
                           color="success"
@@ -1269,13 +1240,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                           label="Número Verificado"
                           startIcon={<RiMailSendFill />}
                           color="success"
-                          // sxBtn={{
-                          //   color: 'white', // text
-                          //   backgroundColor: '#3891A6', // bg
-                          //   ':hover': {
-                          //     backgroundColor: '#237a8e',
-                          //   },
-                          // }}
                           disabled
                         />
                       ) : null}
@@ -1343,7 +1307,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             <CustomSingleButton
                               label="Verificar Código"
                               startIcon={<BsSendCheckFill />}
-                              color="success"
+                              color="primary"
                               variant="outlined"
                               sxBtn={{
                                 width: '100%',
