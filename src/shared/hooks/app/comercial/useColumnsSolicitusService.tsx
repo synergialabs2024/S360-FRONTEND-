@@ -2,12 +2,16 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { UserRolesEnumChoice } from '@/shared/constants';
+import {
+  SalesStatesActionsEnumChoice,
+  UserRolesEnumChoice,
+} from '@/shared/constants';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import type { SolicitudServicio } from '@/shared/interfaces';
 import {
   emptyCellOneLevel,
   formatBooleanCell,
+  formatDateWithTime,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { useAuthStore } from '@/store/auth';
@@ -245,7 +249,65 @@ export const useColumnsSolicitusService = (
           return created ? created?.user_data?.razon_social : 'N/A';
         },
       },
+
       // TODO: trazabilidad
+      ...(isSalesman
+        ? []
+        : [
+            {
+              accessorKey: 'vendedor_solicita_desbloqueo',
+              header: 'SOICITO DESBLOQUEO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+              enableColumnFilter: false,
+              Cell: ({ row }: MRTSServiceType) => {
+                const trazabilidadData = row.original?.trazabilidad_data || [];
+                let lastSolicitaDesbloqueo;
+                for (let i = 0; i < trazabilidadData.length; i++) {
+                  const item = trazabilidadData[i];
+                  if (
+                    item?.modelo_estado ===
+                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA
+                  ) {
+                    lastSolicitaDesbloqueo = item;
+                    break;
+                  }
+                }
+
+                return lastSolicitaDesbloqueo?.user_data?.razon_social
+                  ? `${lastSolicitaDesbloqueo?.user_data?.razon_social} | ${formatDateWithTime(
+                      lastSolicitaDesbloqueo?.timestamp,
+                    )}`
+                  : 'N/A';
+              },
+            },
+
+            {
+              accessorKey: 'admin_aprueba_desbloqueo',
+              header: 'APRUEBA DESBLOQUEO',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+              enableColumnFilter: false,
+              Cell: ({ row }: MRTSServiceType) => {
+                const trazabilidadData = row.original?.trazabilidad_data || [];
+                let lastApruebaDesbloqueo;
+                for (let i = 0; i < trazabilidadData.length; i++) {
+                  const item = trazabilidadData[i];
+                  if (
+                    item?.modelo_estado ===
+                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO
+                  ) {
+                    lastApruebaDesbloqueo = item;
+                    break;
+                  }
+                }
+
+                return lastApruebaDesbloqueo?.user_data?.razon_social
+                  ? `${lastApruebaDesbloqueo?.user_data?.razon_social} | ${formatDateWithTime(
+                      lastApruebaDesbloqueo?.timestamp,
+                    )}`
+                  : 'N/A';
+              },
+            },
+          ]),
 
       {
         accessorKey: 'created_at',
