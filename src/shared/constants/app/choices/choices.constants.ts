@@ -94,25 +94,27 @@ export const SYSTEM_PARAMETER_TYPE_ARRAY_CHOICES = [
 ];
 
 export enum EmployeeTypeEnumChoice {
-  EVENTUAL = 'EVENTUAL',
-  PASANTE = 'PASANTE',
   ADMINISTRATIVO = 'ADMINISTRATIVO',
-  COMERCIAL = 'COMERCIAL',
+  SUPERVISOR = 'SUPERVISOR',
   VENDEDOR = 'VENDEDOR',
+  COMERCIAL = 'COMERCIAL',
   TECNICO = 'TECNICO',
   OPERARIO = 'OPERARIO',
   LOGISTICO = 'LOGISTICO',
+  EVENTUAL = 'EVENTUAL',
+  PASANTE = 'PASANTE',
   OTRO = 'OTRO',
 }
 export const EMPLOYEE_TYPE_ARRAY_CHOICES = [
-  EmployeeTypeEnumChoice.EVENTUAL,
-  EmployeeTypeEnumChoice.PASANTE,
   EmployeeTypeEnumChoice.ADMINISTRATIVO,
-  EmployeeTypeEnumChoice.COMERCIAL,
+  EmployeeTypeEnumChoice.SUPERVISOR,
   EmployeeTypeEnumChoice.VENDEDOR,
+  EmployeeTypeEnumChoice.COMERCIAL,
   EmployeeTypeEnumChoice.TECNICO,
   EmployeeTypeEnumChoice.OPERARIO,
   EmployeeTypeEnumChoice.LOGISTICO,
+  EmployeeTypeEnumChoice.EVENTUAL,
+  EmployeeTypeEnumChoice.PASANTE,
   EmployeeTypeEnumChoice.OTRO,
 ];
 

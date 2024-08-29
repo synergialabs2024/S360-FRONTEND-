@@ -39,6 +39,7 @@ export interface SolicitudDesbloqueoVentas {
   vendedor?: number; // user token
 
   vendedor_data?: SystemUserLimitData;
+  gestionado_by_data?: SystemUserLimitData;
   modelo_data?: SolicitudServicioLimitData;
 }
 

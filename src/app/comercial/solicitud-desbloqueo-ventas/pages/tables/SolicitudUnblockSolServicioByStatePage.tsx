@@ -100,7 +100,7 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
       {
         accessorKey: 'vendedor__razon_social',
         header: 'VENDEDOR SOLICITA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) =>
@@ -146,6 +146,15 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
       ...(state === GeneralModelStatesEnumChoice.APROBADO
         ? [
             {
+              accessorKey: 'gestionado_by__razon_social',
+              header: 'APROBADO POR',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+              enableColumnFilter: true,
+              enableSorting: true,
+              Cell: ({ row }: MRTSServiceType) =>
+                emptyCellNested(row, ['gestionado_by_data', 'razon_social']),
+            },
+            {
               accessorKey: 'aprobado_at',
               header: 'APROBADO',
               size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -158,6 +167,15 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
         : []),
       ...(state === GeneralModelStatesEnumChoice.RECHAZADO
         ? [
+            {
+              accessorKey: 'gestionado_by__razon_social',
+              header: 'RECHAZADO POR',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+              enableColumnFilter: true,
+              enableSorting: true,
+              Cell: ({ row }: MRTSServiceType) =>
+                emptyCellNested(row, ['gestionado_by_data', 'razon_social']),
+            },
             {
               accessorKey: 'rejected_at',
               header: 'RECHAZADO',
