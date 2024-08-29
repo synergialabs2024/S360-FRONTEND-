@@ -11,7 +11,7 @@ import {
   GeneralModelStatesEnumChoice,
   Nullable,
   SalesModelsEnumChoice,
-  SalesStatesEnumChoice,
+  SalesStatesActionsEnumChoice,
   SolicitudDesbloqueoVentas,
 } from '@/shared';
 import {
@@ -61,7 +61,8 @@ const HandleSolUnblockServicioModal: React.FC<
 
         modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
         modelo_id: selectedSolicitudDesbloqueoVentas?.modelo_id!,
-        modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
+        modelo_estado:
+          SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
       },
     });
   };
@@ -74,7 +75,8 @@ const HandleSolUnblockServicioModal: React.FC<
 
         modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
         modelo_id: selectedSolicitudDesbloqueoVentas?.modelo_id!,
-        modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_RECHAZADO,
+        modelo_estado:
+          SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_RECHAZADO,
       },
     });
   };

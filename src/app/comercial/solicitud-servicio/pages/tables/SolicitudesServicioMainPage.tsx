@@ -38,8 +38,11 @@ const SolicitudesServicioMainPage: React.FC<
         isMainTableStates
       >
         <Tab label={'INGRESADAS'} value={1} {...a11yProps(1)} />
-        <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} />
+        {/* <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} /> */}
+
         <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
+
+        {/* desbloqueadas para crear un nuevo proceso desde sol_service: */}
         <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 
@@ -49,11 +52,12 @@ const SolicitudesServicioMainPage: React.FC<
         />
       </CustomTabPanel>
 
-      <CustomTabPanel value={tabValue} index={2} ptGrid="0">
+      {/* NO hay Factibilidad */}
+      {/* <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <SolicitudServicioByStatePage
           state={EstadoSolicitudServicioEnumChoice.GESTIONANDO}
         />
-      </CustomTabPanel>
+      </CustomTabPanel> */}
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <SolicitudServicioByStatePage

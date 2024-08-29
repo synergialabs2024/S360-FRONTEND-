@@ -47,7 +47,7 @@ import {
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
   IdentificationTypeEnumChoice,
   SalesModelsEnumChoice,
-  SalesStatesEnumChoice,
+  SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
 import {
   gridSize,
@@ -247,7 +247,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             useCreateSolUnblockSolServiceMutation.mutate({
               modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
               modelo_id: data.solicitud_servicio_id,
-              modelo_estado: SalesStatesEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
+              modelo_estado:
+                SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
               solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice.ESPERA,
             });
           },
@@ -333,7 +334,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           setConfirmDialogIsOpen(false);
 
           ///* create
-          createSolicitudServicioMutation.mutate(data);
+          createSolicitudServicioMutation.mutate({
+            ...data,
+            tiene_cobertura: !!watchedThereIsCoverage && !!watchedThereAreNaps,
+          });
 
           return;
         },
@@ -345,7 +349,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       });
     } else {
       ///* create
-      createSolicitudServicioMutation.mutate(data);
+      createSolicitudServicioMutation.mutate({
+        ...data,
+        tiene_cobertura: !!watchedThereIsCoverage && !!watchedThereAreNaps,
+      });
     }
   };
 

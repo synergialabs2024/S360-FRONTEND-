@@ -1,4 +1,4 @@
-import { SolicitudServicioLimitData } from '@/shared';
+import { SolicitudServicioLimitData, TrazabilidadVentas } from '@/shared';
 import { OtpStatesEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
@@ -29,6 +29,7 @@ export interface CodigoOtp {
 
   // only serializer
   solicitud_servicio_data?: SolicitudServicioLimitData;
+  trazabilidad_data?: TrazabilidadVentas[];
 }
 
 export type CodigoOtpLimitData = Pick<

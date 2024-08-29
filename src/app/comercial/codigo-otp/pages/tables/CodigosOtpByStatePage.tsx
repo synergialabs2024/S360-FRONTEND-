@@ -10,6 +10,7 @@ import {
   formatDateWithTimeCell,
   OtpStatesEnumChoice,
   PermissionsEnum,
+  SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
   useTableFilter,
   useTableServerSideFiltering,
@@ -65,7 +66,6 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   ///* columns
   const columns = useMemo<MRT_ColumnDef<CodigoOtp>[]>(
     () => [
-      // TODO: serializer
       {
         accessorKey: 'numero_referencia_solserv',
         header: '# REFERENCIA',
@@ -105,14 +105,29 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo_otp'),
       },
 
-      // TODO: Trazabilidad
+      // Trazabilidad: the last one that has OTP_CREADO in model_state (SalesStatesActionsEnumChoice)
       {
         accessorKey: 'usuario_solicita',
         header: 'COLABORADOR SOLICITA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'usuario_solicita'),
+        Cell: ({ row }) => {
+          const trazabilidadData = row.original?.trazabilidad_data || [];
+          let lastOtpCreated = null;
+
+          for (let i = trazabilidadData.length - 1; i >= 0; i--) {
+            if (
+              trazabilidadData[i].modelo_estado ===
+              SalesStatesActionsEnumChoice.OTP_CREADO
+            ) {
+              lastOtpCreated = trazabilidadData[i];
+              break;
+            }
+          }
+
+          return lastOtpCreated?.user_data?.razon_social || '';
+        },
       },
 
       {
