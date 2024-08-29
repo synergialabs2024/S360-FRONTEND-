@@ -376,21 +376,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       value: null,
     });
 
-    // reset form
+    // reset form: no invalidate query 'cause invalidate doesn't return the updated data
     setIsGlobalLoading(true);
     const res = await getSolicitudServicio(solicitudServicio?.uuid!);
     setIsGlobalLoading(false);
     const updatedSolServicio = res?.data;
-    console.log('updatedSolServicio', updatedSolServicio, 'prevForm', prevForm);
 
-    // set timeout to reset form
-    setTimeout(() => {
-      reset({
-        ...prevForm,
-        ...updatedSolServicio,
-        estadoOtp: updatedSolServicio?.codigo_otp_data?.estado_otp || null,
-      });
-    }, 100);
+    reset({
+      ...prevForm,
+      ...updatedSolServicio,
+      estadoOtp: updatedSolServicio?.codigo_otp_data?.estado_otp || null,
+    });
   };
 
   ///* mutations ---------------------
