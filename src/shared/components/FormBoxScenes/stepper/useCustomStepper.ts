@@ -4,7 +4,7 @@ type UseCustomStepperProps = {
   steps: string[];
 };
 export const useCustomStepper = ({ steps }: UseCustomStepperProps) => {
-  const [activeStep, setActiveStep] = useState(3); // TODO: change to 0
+  const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [disableNextStepBtn, setDisableNextStepBtn] = useState(false);
 
