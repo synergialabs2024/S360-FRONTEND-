@@ -72,7 +72,8 @@ const SolicitudServicioByStatePage: React.FC<
   };
 
   ///* columns
-  const { solicitudServicioBase } = useColumnsSolicitusService();
+  const { solicitudServicioBase, solicitudServicioWithoutGestion } =
+    useColumnsSolicitusService();
 
   return (
     <GridTableTabsContainerOnly>
@@ -86,7 +87,14 @@ const SolicitudServicioByStatePage: React.FC<
       />
 
       <CustomTable<SolicitudServicio>
-        columns={solicitudServicioBase}
+        columns={
+          // solicitudServicioBase
+          state === EstadoSolicitudServicioEnumChoice.INGRESADO
+            ? solicitudServicioBase
+            : state === EstadoSolicitudServicioEnumChoice.SIN_GESTION
+              ? solicitudServicioWithoutGestion
+              : solicitudServicioBase
+        }
         data={SolicitudsServicioPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

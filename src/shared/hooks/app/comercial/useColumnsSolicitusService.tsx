@@ -29,7 +29,7 @@ export const useColumnsSolicitusService = (
   const isSalesman =
     useAuthStore(s => s.user?.role) === UserRolesEnumChoice.AGENTE;
 
-  const solicitudServicioBase = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
+  const solicitudServicioBase01 = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
     () => [
       {
         accessorKey: 'numero_referencia',
@@ -249,8 +249,11 @@ export const useColumnsSolicitusService = (
           return created ? created?.user_data?.razon_social : 'N/A';
         },
       },
-
-      // TODO: trazabilidad
+    ],
+    [isSalesman],
+  );
+  const solServiceTrazoSinGestion = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
+    () => [
       ...(isSalesman
         ? []
         : [
@@ -280,7 +283,6 @@ export const useColumnsSolicitusService = (
                   : 'N/A';
               },
             },
-
             {
               accessorKey: 'admin_aprueba_desbloqueo',
               header: 'APRUEBA DESBLOQUEO',
@@ -309,16 +311,6 @@ export const useColumnsSolicitusService = (
             },
           ]),
 
-      {
-        accessorKey: 'created_at',
-        header: 'INGRESADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatDateWithTimeCell(row, 'created_at'),
-      },
-
       ...(isSalesman
         ? []
         : [
@@ -335,6 +327,36 @@ export const useColumnsSolicitusService = (
     ],
     [isSalesman],
   );
+  const solServiceCreatedAt = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
+    () => [
+      {
+        accessorKey: 'created_at',
+        header: 'INGRESADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }: MRTSServiceType) =>
+          formatDateWithTimeCell(row, 'created_at'),
+      },
+    ],
+    [],
+  );
 
-  return { solicitudServicioBase };
+  const solicitudServicioBase = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
+    () => [...solicitudServicioBase01, ...solServiceCreatedAt],
+    [solServiceCreatedAt, solicitudServicioBase01],
+  );
+
+  const solicitudServicioWithoutGestion = useMemo<
+    MRT_ColumnDef<SolicitudServicio>[]
+  >(
+    () => [
+      ...solicitudServicioBase01,
+      ...solServiceTrazoSinGestion,
+      ...solServiceCreatedAt,
+    ],
+    [solServiceCreatedAt, solServiceTrazoSinGestion, solicitudServicioBase01],
+  );
+
+  return { solicitudServicioBase, solicitudServicioWithoutGestion };
 };
