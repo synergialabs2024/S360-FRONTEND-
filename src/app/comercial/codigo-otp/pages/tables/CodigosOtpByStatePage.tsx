@@ -105,13 +105,22 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo_otp'),
       },
 
+      {
+        accessorKey: 'estado_otp',
+        header: 'ESTADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_otp'),
+      },
+
       // Trazabilidad: the last one that has OTP_CREADO in model_state (SalesStatesActionsEnumChoice)
       {
         accessorKey: 'usuario_solicita',
         header: 'COLABORADOR SOLICITA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
+        enableColumnFilter: false,
+        enableSorting: false,
         Cell: ({ row }) => {
           const trazabilidadData = row.original?.trazabilidad_data || [];
           let lastOtpCreated = null;
@@ -131,15 +140,6 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
       },
 
       {
-        accessorKey: 'estado_otp',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_otp'),
-      },
-
-      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -151,8 +151,31 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
       ...(state === OtpStatesEnumChoice.VERIFICADO
         ? [
             {
+              accessorKey: 'user_vaerifica_otp',
+              header: 'COLABORADOR VERIFICA OTP',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: MRTSCodigoOTPType) => {
+                let firstOtpVerified = null;
+                const trazabilidadData = row.original?.trazabilidad_data || [];
+
+                for (let i = 0; i < trazabilidadData.length; i++) {
+                  if (
+                    trazabilidadData[i].modelo_estado ===
+                    SalesStatesActionsEnumChoice.OTP_VERIFICADO
+                  ) {
+                    firstOtpVerified = trazabilidadData[i];
+                    break;
+                  }
+                }
+
+                return firstOtpVerified?.user_data?.razon_social || '';
+              },
+            },
+            {
               accessorKey: 'aprobado_at',
-              header: 'APROBADO',
+              header: 'VERIFICADO',
               size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
               enableColumnFilter: false,
               enableSorting: false,
