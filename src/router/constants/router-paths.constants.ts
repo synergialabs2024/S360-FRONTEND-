@@ -1,6 +1,29 @@
 export const ROUTER_PATHS = {
   home: '/',
+  notFound: '/404',
 
+  /////* Planificacion ----------------
+  planificacion: {
+    root: 'planificacion',
+
+    ///* borrador de proyecto
+    borradorProyecto: 'borrador-proyecto',
+    borradorProyectoCrear: 'borrador-proyecto/crear',
+    borradorProyectoEditar: 'borrador-proyecto/editar/:uuid',
+    borradorProyectoNav: '/planificacion/borrador-proyecto',
+
+    ///* definicion alcance del proyecto
+    alcanceProyecto: 'alcance-proyecto',
+    alcanceProyectoCrear: 'alcance-proyecto/crear',
+    alcanceProyectoEditar: 'alcance-proyecto/editar/:uuid',
+    alcanceProyectoNav: '/planificacion/alcance-proyecto',
+
+    ///* analisis de recursos
+    analisisRecurso: 'analisis-recursos',
+    analisisRecursoCrear: 'analisis-recursos/crear',
+    analisisRecursoEditar: 'analisis-recursos/editar/:uuid',
+    analisisRecursoNav: '/planificacion/analisis-recursos',
+  },
   /////* Administración ----------------
   administracion: {
     root: 'parametrizacion',
