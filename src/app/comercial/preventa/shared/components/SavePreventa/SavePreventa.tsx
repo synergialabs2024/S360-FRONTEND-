@@ -1,6 +1,8 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsSendCheckFill } from 'react-icons/bs';
@@ -92,8 +94,6 @@ import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
 import { usePreventaStore } from '@/store/app';
 import { useGenericCountdownStore } from '@/store/ui';
-import { useQueryClient } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
