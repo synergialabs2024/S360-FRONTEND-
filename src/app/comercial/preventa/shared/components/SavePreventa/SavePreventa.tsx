@@ -368,6 +368,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     });
   };
   const onSuccessOtpValidation = async () => {
+    const prevForm = form.getValues();
     clearAllTimers();
     setCanChangeCelular(false);
     setOtpValue('');
@@ -377,12 +378,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       value: null,
     });
 
+    console.log('form.getValues()', form.getValues());
     await queryClient.invalidateQueries({
       queryKey: [
         SolicitudServicioTSQEnum.SOLICITUDSERVICIO,
         solicitudServicio?.uuid!,
       ],
     });
+
+    reset(prevForm);
   };
 
   ///* mutations ---------------------
@@ -608,6 +612,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     watchedServicePlan,
     watchedServiceType,
   ]);
+  // clear all timers when unmount
+  useEffect(() => {
+    return () => {
+      clearAllTimers();
+    };
+  }, [clearAllTimers]);
 
   const isCustomLoading =
     isRefetchingNaps ||
@@ -638,7 +648,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       handleBack={handleBack}
       disableNextStepBtn={disableNextStepBtn}
       // action btns
-      onCancel={() => navigate(returnUrlPreventasPage)}
+      onCancel={() => {
+        navigate(returnUrlPreventasPage);
+        clearAllTimers();
+      }}
       onSave={handleSubmit(onSave, () => {
         ToastWrapper.error('Faltan campos por requeridos');
         console.log(errors);
