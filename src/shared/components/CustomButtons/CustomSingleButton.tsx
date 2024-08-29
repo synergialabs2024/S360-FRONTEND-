@@ -1,6 +1,7 @@
 import { gridSize } from '@/shared/constants';
 import { useIsMediaQuery } from '@/shared/hooks';
 import {
+  BtnStylesType,
   ButtonVariantType,
   ColorButtonType,
   GridSizeType,
@@ -20,6 +21,7 @@ export type CustomSingleButtonProps = {
   gridSizeBtn?: GridSizeType;
   sxGrid?: SxPropsThemeType;
   justifyContent?: JustifyContentType;
+  btnStyles?: BtnStylesType;
 };
 
 const CustomSingleButton: React.FC<CustomSingleButtonProps> = ({
@@ -33,6 +35,7 @@ const CustomSingleButton: React.FC<CustomSingleButtonProps> = ({
   sxGrid,
   gridSizeBtn = gridSize,
   justifyContent = 'flex-start', // Default to 'flex-start'
+  btnStyles,
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -51,6 +54,7 @@ const CustomSingleButton: React.FC<CustomSingleButtonProps> = ({
         variant={variant}
         onClick={onClick}
         disabled={disabled}
+        style={btnStyles}
       >
         {label}
       </Button>

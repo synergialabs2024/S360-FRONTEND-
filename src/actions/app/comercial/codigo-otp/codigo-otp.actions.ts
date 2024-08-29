@@ -12,7 +12,6 @@ import {
 } from '@/shared/interfaces';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
-import { PreventaTSQEnum } from '../preventa';
 
 const { get, post, patch } = erpAPI();
 
@@ -158,54 +157,4 @@ export const updateCodigoOtp = async <T>({
   setIsGlobalLoading(true);
 
   return patch<CodigoOtp>(`/codigootp/${id}/`, data, true);
-};
-
-// // validate opt
-export const validateCodigoUtp = async <T>(data: T) => {
-  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
-  setIsGlobalLoading(true);
-
-  return patch<CodigoOtp>('/solicitudservicio/otp/', data, true);
-};
-
-export const useValidateCodigoOTP = <T>({
-  navigate,
-  returnUrl,
-  returnErrorUrl,
-  customMessageToast,
-  customMessageErrorToast,
-  enableNavigate = true,
-  enableErrorNavigate = true,
-  enableToast = true,
-  customOnSuccess,
-}: UseMutationParams) => {
-  const queryClient = useQueryClient();
-  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
-
-  return useMutation({
-    mutationFn: (params: T) => validateCodigoUtp(params),
-    onSuccess: res => {
-      queryClient.invalidateQueries({
-        queryKey: [PreventaTSQEnum.PREVENTA, CodigoOtpTSQEnum.CODIGOS_OTP],
-      });
-      enableNavigate && navigate && returnUrl && navigate(returnUrl);
-      enableToast &&
-        ToastWrapper.success(
-          customMessageToast || 'Codigo OTP confirmado correctamente',
-        );
-
-      customOnSuccess && customOnSuccess(res?.data);
-    },
-    onError: error => {
-      enableErrorNavigate &&
-        navigate &&
-        returnUrl &&
-        navigate(returnErrorUrl || returnUrl || '');
-
-      handleAxiosError(error, customMessageErrorToast);
-    },
-    onSettled: () => {
-      setIsGlobalLoading(false);
-    },
-  });
 };

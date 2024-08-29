@@ -82,3 +82,5 @@ export type DensityTableType = 'comfortable' | 'compact' | 'spacious';
 
 export type AlertVariantType = 'filled' | 'outlined' | 'standard' | undefined;
 export type AlertSeverityType = 'error' | 'warning' | 'info' | 'success';
+
+export type BtnStylesType = React.CSSProperties | undefined;

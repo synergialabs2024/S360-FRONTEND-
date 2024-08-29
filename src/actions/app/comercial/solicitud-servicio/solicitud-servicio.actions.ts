@@ -232,7 +232,8 @@ export const validateCedulaSolService = async <T>(
   return post('/solicitudservicio/validate/identificacion/', data, true);
 };
 
-/////* OPT code ---------------------
+/////* OPT code -------------------------------
+// create OTP
 export type GenerateOtpCodeParams = {
   identificacion: string;
   celular: string;
@@ -264,6 +265,54 @@ export const useCreateOtpCode = ({
       enableToast &&
         ToastWrapper.success(
           customMessageToast || 'Código OTP generado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+// validate OTP
+export type ValidateOtpCodeParams = {
+  identificacion: string;
+  codigo_otp: string;
+};
+export const validateOtpCode = async (data: ValidateOtpCodeParams) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post('/solicitudservicio/otp/validate/', data, true);
+};
+export const useValidateOtpCode = ({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+  customOnSuccess,
+}: UseMutationParams) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: ValidateOtpCodeParams) => validateOtpCode(params),
+    onSuccess: res => {
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      customOnSuccess && customOnSuccess(res);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Código OTP validado correctamente',
         );
     },
     onError: error => {

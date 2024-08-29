@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
+import { GrValidate } from 'react-icons/gr';
 import { IoMdTrash } from 'react-icons/io';
 import {
   MdAddCircle,
@@ -13,12 +14,12 @@ import {
   MdOutlineTextsms,
   MdRefresh,
 } from 'react-icons/md';
-import { RiMailSendFill } from 'react-icons/ri';
 import OtpInput from 'react-otp-input';
 import { useNavigate } from 'react-router-dom';
 
 import {
   CreatePreventaParamsBase,
+  SolicitudServicioTSQEnum,
   useCreateOtpCode,
   useCreatePreventa,
   useFetchEntidadFinancieras,
@@ -28,6 +29,7 @@ import {
   useFetchTarjetas,
   useFetchZonas,
   useGetZoneByCoords,
+  useValidateOtpCode,
 } from '@/actions/app';
 import { useSetCacheRedis, useUpdateCacheRedis } from '@/actions/shared';
 import {
@@ -90,6 +92,7 @@ import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
 import { usePreventaStore } from '@/store/app';
 import { useGenericCountdownStore } from '@/store/ui';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
@@ -133,6 +136,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   ///* hooks ---------------------
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const {
     UploadImageDropZoneComponent,
     image1: cedulaFrontalImg,
@@ -158,6 +162,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
 
   const startTimer = useGenericCountdownStore(s => s.start);
+  const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
   const countdownNewOtpValue = useGenericCountdownStore(
     s => s.counters[countdownIdNewOtpPreventa]?.count,
   );
@@ -362,6 +367,23 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       },
     });
   };
+  const onSuccessOtpValidation = async () => {
+    clearAllTimers();
+    setCanChangeCelular(false);
+    setOtpValue('');
+    setIsComponentBlocked(false);
+    await setCache.mutateAsync({
+      key: codigoOtpCacheLeyPreventa,
+      value: null,
+    });
+
+    await queryClient.invalidateQueries({
+      queryKey: [
+        SolicitudServicioTSQEnum.SOLICITUDSERVICIO,
+        solicitudServicio?.uuid!,
+      ],
+    });
+  };
 
   ///* mutations ---------------------
   const createPreventaMutation = useCreatePreventa({
@@ -389,6 +411,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   });
   const updateCache = useUpdateCacheRedis<ResendOtpDataCache>({
     enableToast: false,
+  });
+  const validateOtp = useValidateOtpCode({
+    enableNavigate: false,
+    customMessageToast: 'Código OTP validado correctamente',
+    customOnSuccess: onSuccessOtpValidation,
   });
 
   ///* handlers ---------------------
@@ -1185,7 +1212,38 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             <CustomTypoLabel text="Generación de Código OTP" />
 
             <>
-              {!isComponentBlocked ? (
+              {watchedEstadoOtp === OtpStatesEnumChoice.VERIFICADO ? (
+                <>
+                  <CustomCellphoneTextField
+                    label="Celular"
+                    name="celular"
+                    control={form.control}
+                    defaultValue={form.getValues().celular}
+                    error={form.formState.errors.celular}
+                    helperText={form.formState.errors.celular?.message}
+                    size={gridSizeMdLg6}
+                    disabled={!canChangeCelular}
+                  />
+
+                  <CustomSingleButton
+                    label="Número Verificado"
+                    startIcon={<GrValidate />}
+                    color="success"
+                    variant="outlined"
+                    disabled
+                    sxBtn={{
+                      width: '100%',
+                    }}
+                    gridSizeBtn={gridSizeMdLg6}
+                    btnStyles={{
+                      borderRadius: '5px',
+                      border: '1px solid green',
+                      color: 'green',
+                      fontWeight: 600,
+                    }}
+                  />
+                </>
+              ) : !isComponentBlocked ? (
                 <>
                   <CustomCellphoneTextField
                     label="Celular"
@@ -1240,14 +1298,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             fontWeight: 600,
                             width: '100%',
                           }}
-                        />
-                      ) : watchedEstadoOtp ===
-                        OtpStatesEnumChoice.VERIFICADO ? (
-                        <CustomSingleButton
-                          label="Número Verificado"
-                          startIcon={<RiMailSendFill />}
-                          color="success"
-                          disabled
                         />
                       ) : null}
                     </Grid>
@@ -1315,10 +1365,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                                 'Ingrese un código OTP válido',
                               );
 
-                            // await validateCodigoOTP.mutateAsync({
-                            //   codigo: otpValue,
-                            //   solicitud_servicio: preventa?.solicitud_servicio!,
-                            // });
+                            await validateOtp.mutateAsync({
+                              identificacion: form.getValues().identificacion!,
+                              codigo_otp: otpValue!,
+                            });
                           }}
                         />
                       </Grid>
