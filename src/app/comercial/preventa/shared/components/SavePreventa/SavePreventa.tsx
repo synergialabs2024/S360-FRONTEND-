@@ -616,8 +616,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   useEffect(() => {
     return () => {
       clearAllTimers();
+      setIsComponentBlocked(false);
     };
-  }, [clearAllTimers]);
+  }, [clearAllTimers, setIsComponentBlocked]);
 
   const isCustomLoading =
     isRefetchingNaps ||
