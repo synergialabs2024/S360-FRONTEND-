@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   CreatePreventaParamsBase,
-  SolicitudServicioTSQEnum,
+  getSolicitudServicio,
   useCreateOtpCode,
   useCreatePreventa,
   useFetchEntidadFinancieras,
@@ -93,7 +92,7 @@ import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
 import { usePreventaStore } from '@/store/app';
-import { useGenericCountdownStore } from '@/store/ui';
+import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
@@ -136,7 +135,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   ///* hooks ---------------------
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const {
     UploadImageDropZoneComponent,
     image1: cedulaFrontalImg,
@@ -156,7 +154,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   // otp ------
   const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
   const [otpValue, setOtpValue] = useState('');
-  // const [otpRespData, setOtpRespData] = useState<CodigoOtp | null>(null);
 
   const isComponentBlocked = usePreventaStore(s => s.isComponentBlocked);
   const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
@@ -174,6 +171,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     counterIdOtp: countdownPreventaId,
     counterIdNewOtp: countdownIdNewOtpPreventa,
   });
+  const setIsGlobalLoading = useUiStore(s => s.setIsGlobalLoading);
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -378,15 +376,21 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       value: null,
     });
 
-    console.log('form.getValues()', form.getValues());
-    await queryClient.invalidateQueries({
-      queryKey: [
-        SolicitudServicioTSQEnum.SOLICITUDSERVICIO,
-        solicitudServicio?.uuid!,
-      ],
-    });
+    // reset form
+    setIsGlobalLoading(true);
+    const res = await getSolicitudServicio(solicitudServicio?.uuid!);
+    setIsGlobalLoading(false);
+    const updatedSolServicio = res?.data;
+    console.log('updatedSolServicio', updatedSolServicio, 'prevForm', prevForm);
 
-    reset(prevForm);
+    // set timeout to reset form
+    setTimeout(() => {
+      reset({
+        ...prevForm,
+        ...updatedSolServicio,
+        estadoOtp: updatedSolServicio?.codigo_otp_data?.estado_otp || null,
+      });
+    }, 100);
   };
 
   ///* mutations ---------------------
