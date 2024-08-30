@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useEffect, useMemo } from 'react';
@@ -21,6 +22,7 @@ import {
   EmployeeTypeEnumChoice,
   emptyCellNested,
   emptyCellOneLevel,
+  flotaFormSchema,
   gridSizeMdLg11,
   gridSizeMdLg6,
   gridSizeMdLg8,
@@ -81,7 +83,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
 
   ///* form --------------------
   const form = useForm<SaveFormData>({
-    // resolver: yupResolver(flotaFormSchema) as any,
+    resolver: yupResolver(flotaFormSchema) as any,
     defaultValues: {
       state: true,
     },
