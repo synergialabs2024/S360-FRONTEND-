@@ -3,23 +3,14 @@ import {
   IconAccessPoint,
   IconAugmentedReality2,
   IconBrandAirtable,
-  IconBrandAuth0,
+  IconBroadcast,
   IconBuilding,
-  //IconBroadcast,
   IconBuildings,
-  IconBulb,
-  IconCoins,
-  //IconBulldozer,
-  //IconCube3dSphere,
   IconDashboard,
   IconDeviceDesktopAnalytics,
-  IconDevicesPlus,
   IconHeartHandshake,
   IconHierarchy3,
-  IconMoodSing,
-  //IconPigMoney,
   IconReportMoney,
-  IconReservedLine,
   IconRouter,
   IconSettings2,
   IconUsersGroup,
@@ -104,159 +95,6 @@ export const useNestedMenu = () => {
       // caption: 'Módulos',
       type: MenuItemType.GROUP,
       children: [
-        /////* Planificacion ----------------
-        {
-          id: 'planificacion',
-          title: 'Planificacion',
-          type: MenuItemType.COLLAPSE,
-          icon: IconBulb,
-          children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
-              id: 'borrador-proyecto',
-              title: 'Borrador de proyecto',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'alcance-proyecto',
-              title: 'Definicion alcance del proyecto',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'analisis-recursos',
-              title: 'Analisis de recursos',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
-        /////* Resumen del Presupuesto ----------------
-        {
-          id: 'resumen-presupuesto',
-          title: 'Resumen del Presupuesto',
-          type: MenuItemType.COLLAPSE,
-          icon: IconCoins,
-          children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
-              id: 'revision-propuesta',
-              title: 'Revision de propuesta',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'revision-presupuesto',
-              title: 'Revision de presupuesto',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'aprobacion-presupuesto',
-              title: 'Aprobacion de Presupuesto',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
-        /////* Despliegue de Servidores ----------------
-        {
-          id: 'despliegue-servidores',
-          title: 'Despliegue de Servidores',
-          type: MenuItemType.COLLAPSE,
-          icon: IconReservedLine,
-          children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
-              id: 'despliegue-entorno-Devops',
-              title: 'Despliegue entorno Devops ',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'levantamiento-cicd',
-              title: 'Levantamiento de CI/CD',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'despliegue-maquina-sonarqube',
-              title: 'Despliegue Maquina GIT-SONARQUBE',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'despliegue-maquina-desarrollo',
-              title: 'Despliegue Maquina Desarrollo',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'despliegue-maquina-preproduccion',
-              title: 'Despliegue de Maquina Pre-produccion',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'despliegue-maquina-minioos',
-              title: 'Despliegue de Maquina Minio OS',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
-        /////* Diseño ----------------
-        {
-          id: 'diseño',
-          title: 'Diseño',
-          type: MenuItemType.COLLAPSE,
-          icon: IconMoodSing,
-          children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
-              id: 'borrador-diseño',
-              title: 'Borrador de Diseño',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'prueba-concepto',
-              title: 'Prueba de Concepto',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'especificacion-tecnica',
-              title: 'Especificaciones Tecnicas',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'diseño-completo',
-              title: 'Diseño Completo',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
-        /////* Autenticacion ----------------
-        {
-          id: 'autenticacion',
-          title: 'Autenticacion',
-          type: MenuItemType.COLLAPSE,
-          icon: IconBrandAuth0,
-          children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
-              id: 'desarrollo-login-usuario',
-              title: 'Desarollo de Login de Usuario',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
-              id: 'autenticacion-usuario-empresa',
-              title: 'Conexión Autenticacion Usuario Empresa',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
         /////* Administración ----------------
         {
           id: 'administracion',
@@ -283,20 +121,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.ciudadesNav,
             }),
-            /*
-            renderByModule(SidenavModulesEnum.ADMIN_ZONAS, {
-              id: 'zonas',
-              title: 'Zonas',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.administracion.zonasNav,
-            }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
-              id: 'sectores',
-              title: 'Sectores',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.administracion.sectoresNav,
-            }),
-            */
             renderByModule(SidenavModulesEnum.ADMIN_AREAS, {
               id: 'areas',
               title: 'Areas',
@@ -382,12 +206,12 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
-        /////* Modulo Servicios ----------------
+        /////* Servicios ----------------
         {
-          id: 'modulo-servicio',
-          title: 'Modulo Servicios',
+          id: 'servicios',
+          title: 'Servicio',
           type: MenuItemType.COLLAPSE,
-          icon: IconDevicesPlus,
+          icon: IconBroadcast,
           children: [
             renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
               id: 'planesinternet',
@@ -461,14 +285,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            /*
-            renderByModule(SidenavModulesEnum.COMERCIAL_PROMOCIONES, {
-              id: 'promociones',
-              title: 'Promociones',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.comercial.promocionesNav,
-            }),
-            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Supervision Comercial ----------------
@@ -503,6 +319,16 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_DESBLOQUEO_VENTAS,
+              {
+                id: 'solicitud-desbloqueo-ventas',
+                title: 'Solicitud Liberación Ventas',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial
+                  .solicitudDesbloqueoVentasNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Operaciones ----------------
@@ -1037,7 +863,7 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
-        /////* Finanzas ----------------
+        /////* Ajustes ----------------
         {
           id: 'ajustes',
           title: 'Ajustes',
@@ -1137,25 +963,6 @@ export const useNestedMenu = () => {
         },
         */
 
-        /*
-        /////* Servicios ----------------
-        {
-          id: 'servicios',
-          title: 'Servicio',
-          type: MenuItemType.COLLAPSE,
-          icon: IconBroadcast,
-          children: [*/
-        /*
-            renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
-              id: 'planesinternet',
-              title: 'Plan Internet',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.servicios.planesinternetNav,
-              // target: true, // target blank
-            }),
-            */ /*
-          ].filter(item => !!item) as NestedMenuItem[],
-        },*/
         /*
         /////* Mantenimiento Operación ----------------
         {
