@@ -96,15 +96,27 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   } = form;
   const watchedIsBodega = form.watch('es_bodega');
   const watchedArea = form.watch('area');
+  const watchedLider = form.watch('lider');
+  const watchedAuxiliar = form.watch('auxiliar');
 
   const { latLng, setLatLng } = useMapPolygonComponent({});
   useLocationCoords({ setLatLng });
 
   ///* fetch data --------------------
   const {
-    data: tecnicosDataPagingRes,
-    isLoading: isLoadingTecnicos,
-    isRefetching: isRefetchingTecnicos,
+    data: liderDataPagingRes,
+    isLoading: isLoadingLider,
+    isRefetching: isRefetchingLider,
+  } = useFetchEmpleados({
+    params: {
+      page_size: 200,
+      tipo_empleado: EmployeeTypeEnumChoice.TECNICO,
+    },
+  });
+  const {
+    data: auxiliarDataPagingRes,
+    isLoading: isLoadingAuxiliar,
+    isRefetching: isRefetchingAuxiliar,
   } = useFetchEmpleados({
     params: {
       page_size: 200,
@@ -310,8 +322,10 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ]);
 
   const customLoader =
-    isLoadingTecnicos ||
-    isRefetchingTecnicos ||
+    isLoadingLider ||
+    isLoadingAuxiliar ||
+    isRefetchingLider ||
+    isRefetchingAuxiliar ||
     isLoadingAreas ||
     isRefetchingAreas ||
     isLoadingDepartamentos ||
@@ -362,31 +376,41 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             label="Lider"
             name="lider"
             // options
-            options={tecnicosDataPagingRes?.data?.items || []}
+            options={liderDataPagingRes?.data?.items || []}
             valueKey="razon_social"
             actualValueKey="id"
             defaultValue={form.getValues().lider}
-            isLoadingData={isLoadingTecnicos || isRefetchingTecnicos}
+            isLoadingData={isLoadingLider || isRefetchingLider}
             // vaidation
             control={form.control}
             error={errors.lider}
             helperText={errors.lider?.message}
+            onChangeValue={value => {
+              if (value == watchedAuxiliar) {
+                form.setValue('auxiliar', undefined);
+              }
+            }}
           />
           <CustomAutocomplete<Empleado>
             label="Auxiliar"
             name="auxiliar"
             // options
-            options={tecnicosDataPagingRes?.data?.items || []}
+            options={
+              auxiliarDataPagingRes?.data?.items.filter(
+                item => item.id !== watchedLider,
+              ) || []
+            }
             valueKey="razon_social"
             actualValueKey="id"
             defaultValue={form.getValues().auxiliar}
-            isLoadingData={isLoadingTecnicos || isRefetchingTecnicos}
-            // vaidation
+            isLoadingData={isLoadingAuxiliar || isRefetchingAuxiliar}
+            // validation
             control={form.control}
             error={errors.auxiliar}
             helperText={errors.auxiliar?.message}
             size={gridSizeMdLg6}
           />
+
           <CustomCellphoneTextField
             label="Telefono 1"
             name="telefono_1"
