@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+const currentYear = new Date().getFullYear();
+
 export const flotaFormSchema = yup.object({
   name: yup
     .string()
@@ -15,8 +17,12 @@ export const flotaFormSchema = yup.object({
     .max(200, 'El campo modelo vehiculo no debe exceder los 200 caracteres'),
   anio_vehiculo: yup
     .number()
-    .typeError('El campo anio vehiculo es requerido')
-    .required('El campo anio vehiculo es requerido'),
+    .typeError('El campo año vehiculo es requerido')
+    .required('El campo año vehiculo es requerido')
+    .max(
+      currentYear,
+      `El año del vehículo no puede ser mayor que ${currentYear}`,
+    ),
   placa_vehiculo: yup
     .string()
     .required('El campo placa vehiculo es requerido')
@@ -32,15 +38,44 @@ export const flotaFormSchema = yup.object({
   telefono_1: yup
     .string()
     .required('El campo telefono 1 es requerido')
-    .max(200, 'El campo telefono 1 no debe exceder los 200 caracteres'),
+    .max(100, 'El campo telefono 1 no debe exceder los 100 caracteres')
+    .test(
+      'unique-telefono-1',
+      'El número de celular no se puede repetir',
+      function (value) {
+        const { telefono_2, telefono_3 } = this.parent;
+        const othertelefonos = [telefono_2, telefono_3].filter(Boolean);
+        return !othertelefonos.includes(value);
+      },
+    ),
   telefono_2: yup
     .string()
     .required('El campo telefono 2 es requerido')
-    .max(200, 'El campo telefono 2 no debe exceder los 200 caracteres'),
+    .optional()
+    .max(100, 'El campo telefono 2 no debe exceder los 100 caracteres')
+    .test(
+      'unique-telefono-2',
+      'El número de celular no se puede repetir',
+      function (value) {
+        const { telefono_1, telefono_3 } = this.parent;
+        const othertelefonos = [telefono_1, telefono_3].filter(Boolean);
+        return !othertelefonos.includes(value);
+      },
+    ),
   telefono_3: yup
     .string()
     .required('El campo telefono 3 es requerido')
-    .max(200, 'El campo telefono 3 no debe exceder los 200 caracteres'),
+    .max(100, 'El campo telefono 3 no debe exceder los 100 caracteres')
+    .optional()
+    .test(
+      'unique-telefono-3',
+      'El número de celular no se puede repetir',
+      function (value) {
+        const { telefono_1, telefono_2 } = this.parent;
+        const othertelefonos = [telefono_1, telefono_2].filter(Boolean);
+        return !othertelefonos.includes(value);
+      },
+    ),
   zonas: yup
     .number()
     .typeError('El campo zonas es requerido')
@@ -69,8 +104,16 @@ export const flotaFormSchema = yup.object({
   auxiliar: yup
     .number()
     .typeError('El campo auxiliar es requerido')
-    .optional()
-    .nullable(),
+    .nullable()
+    .required('El campo auxiliar es requerido')
+    .test(
+      'not-same-as-lider',
+      'Auxiliar no puede ser la misma persona que el Líder',
+      function (value) {
+        const { lider } = this.parent;
+        return value === null || lider === null || value !== lider;
+      },
+    ),
   pais: yup
     .number()
     .typeError('El campo pais es requerido')

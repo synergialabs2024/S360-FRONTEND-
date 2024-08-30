@@ -96,6 +96,8 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   } = form;
   const watchedIsBodega = form.watch('es_bodega');
   const watchedArea = form.watch('area');
+  const watchedLider = form.watch('lider');
+  const watchedAuxiliar = form.watch('auxiliar');
 
   const { latLng, setLatLng } = useMapPolygonComponent({});
   useLocationCoords({ setLatLng });
@@ -371,12 +373,21 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             control={form.control}
             error={errors.lider}
             helperText={errors.lider?.message}
+            onChangeValue={value => {
+              if (value == watchedAuxiliar) {
+                form.setValue('auxiliar', undefined);
+              }
+            }}
           />
           <CustomAutocomplete<Empleado>
             label="Auxiliar"
             name="auxiliar"
             // options
-            options={tecnicosDataPagingRes?.data?.items || []}
+            options={
+              tecnicosDataPagingRes?.data?.items.filter(
+                item => item.id !== watchedLider,
+              ) || []
+            }
             valueKey="razon_social"
             actualValueKey="id"
             defaultValue={form.getValues().auxiliar}
