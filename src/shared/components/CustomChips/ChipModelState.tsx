@@ -19,12 +19,15 @@ export type ChipModelStateProps = {
   alignItems?: AlignItemsType;
 
   sxChip?: SxPropsType;
+  customColor?: string;
 };
 
 const ChipModelState: React.FC<ChipModelStateProps> = ({
   label,
   color = 'success',
   variant = 'outlined',
+
+  customColor,
 
   size = gridSize,
   justifyContent = 'center',
@@ -36,18 +39,40 @@ const ChipModelState: React.FC<ChipModelStateProps> = ({
     fontSize: '14px',
   },
 }) => {
+  const chipSx = customColor
+    ? {
+      ...sxChip,
+      backgroundColor:
+          variant === 'filled'
+            ? customColor
+            : (sxChip as any).backgroundColor || 'transparent',
+      color:
+          (sxChip as any).color ||
+          (variant === 'filled' ? '#000' : customColor),
+      borderColor:
+          variant === 'outlined'
+            ? customColor
+            : (sxChip as any).borderColor || 'transparent',
+      borderWidth: variant === 'outlined' ? '1px' : '0',
+      borderStyle: 'solid',
+    }
+    : sxChip;
+
   return (
-    <>
-      <Grid
-        item
-        {...size}
-        container
-        justifyContent={justifyContent}
-        alignItems={alignItems}
-      >
-        <Chip label={label} color={color} variant={variant} sx={sxChip} />
-      </Grid>
-    </>
+    <Grid
+      item
+      {...size}
+      container
+      justifyContent={justifyContent}
+      alignItems={alignItems}
+    >
+      <Chip
+        label={label}
+        color={!customColor ? color : undefined}
+        variant={variant}
+        sx={chipSx}
+      />
+    </Grid>
   );
 };
 
