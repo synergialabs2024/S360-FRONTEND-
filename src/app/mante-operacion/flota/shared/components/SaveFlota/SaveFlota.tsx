@@ -100,19 +100,9 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
 
   ///* fetch data --------------------
   const {
-    data: liderDataPagingRes,
-    isLoading: isLoadingLider,
-    isRefetching: isRefetchingLider,
-  } = useFetchEmpleados({
-    params: {
-      page_size: 200,
-      tipo_empleado: EmployeeTypeEnumChoice.TECNICO,
-    },
-  });
-  const {
-    data: auxiliarDataPagingRes,
-    isLoading: isLoadingAuxiliar,
-    isRefetching: isRefetchingAuxiliar,
+    data: tecnicosDataPagingRes,
+    isLoading: isLoadingTecnicos,
+    isRefetching: isRefetchingTecnicos,
   } = useFetchEmpleados({
     params: {
       page_size: 200,
@@ -318,10 +308,8 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   ]);
 
   const customLoader =
-    isLoadingLider ||
-    isLoadingAuxiliar ||
-    isRefetchingLider ||
-    isRefetchingAuxiliar ||
+    isLoadingTecnicos ||
+    isRefetchingTecnicos ||
     isLoadingAreas ||
     isRefetchingAreas ||
     isLoadingDepartamentos ||
@@ -372,11 +360,11 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             label="Lider"
             name="lider"
             // options
-            options={liderDataPagingRes?.data?.items || []}
+            options={tecnicosDataPagingRes?.data?.items || []}
             valueKey="razon_social"
             actualValueKey="id"
             defaultValue={form.getValues().lider}
-            isLoadingData={isLoadingLider || isRefetchingLider}
+            isLoadingData={isLoadingTecnicos || isRefetchingTecnicos}
             // vaidation
             control={form.control}
             error={errors.lider}
@@ -386,11 +374,11 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             label="Auxiliar"
             name="auxiliar"
             // options
-            options={auxiliarDataPagingRes?.data?.items || []}
+            options={tecnicosDataPagingRes?.data?.items || []}
             valueKey="razon_social"
             actualValueKey="id"
             defaultValue={form.getValues().auxiliar}
-            isLoadingData={isLoadingAuxiliar || isRefetchingAuxiliar}
+            isLoadingData={isLoadingTecnicos || isRefetchingTecnicos}
             // vaidation
             control={form.control}
             error={errors.auxiliar}
