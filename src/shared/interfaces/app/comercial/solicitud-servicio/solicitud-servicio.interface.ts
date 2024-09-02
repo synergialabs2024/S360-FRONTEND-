@@ -30,7 +30,6 @@ export interface SolicitudServicio {
   fecha_nacimiento: string;
   edad: number;
 
-  linea_servicio: number;
   coordenadas: string; // to get factibilidad directly
   tiene_cobertura: boolean;
 
@@ -62,6 +61,8 @@ export interface SolicitudServicio {
   ciudad?: number;
   zona?: number; // calc based on coords
   sector?: number; // select
+
+  linea_servicio?: number; // fk
 
   // sales filter logic
   area?: number;

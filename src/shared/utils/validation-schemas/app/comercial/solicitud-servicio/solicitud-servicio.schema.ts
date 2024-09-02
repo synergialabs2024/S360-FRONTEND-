@@ -46,11 +46,6 @@ export const solicitudServicioFormSchema = yup.object({
     .typeError('El campo es cliente es requerido')
     .required('El campo es cliente es requerido'),
 
-  linea_servicio: yup
-    .number()
-    .typeError('El campo linea servicio es requerido')
-    .required('El campo linea servicio es requerido'),
-
   coordenadas: yup
     .string()
     .required('El campo coordenadas es requerido')

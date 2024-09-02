@@ -109,7 +109,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_discapacitado: false,
       es_cliente: false,
       tiene_cobertura: false,
-      linea_servicio: 1,
 
       isFormBlocked: false,
       thereIsCoverage: false,
@@ -377,7 +376,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       valor_maximo: '',
       valor_minimo: '',
       es_cliente: false,
-      linea_servicio: 1,
       estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
       plan_sugerido: undefined,
       isValidIdentificacion: false, // helper
