@@ -261,25 +261,25 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.preventasNav,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'agendamientos',
               title: 'Agendamiento',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'seguimiento-cliente',
               title: 'Seguimiento Clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'integracion-equifax',
               title: 'Integracion Equifax',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'comiciones',
               title: 'Comisiones',
               type: MenuItemType.ITEM,
@@ -294,26 +294,26 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBuildings,
           children: [
-            renderByModule(SidenavModulesEnum.COMERCIAL_SOLICITUD_SERVICIO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloque-prosperos',
               title: 'Desbloqueo de Prospectos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-preventas',
               title: 'Desbloqueo de Preventas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-agendas',
               title: 'Desbloqueos de Agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reasignacion-gestion-vendedor',
               title: 'Reasignacion de Gestion Vendedores',
               type: MenuItemType.ITEM,
@@ -338,20 +338,20 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBrandAirtable,
           children: [
-            renderByModule(SidenavModulesEnum.COMERCIAL_SOLICITUD_SERVICIO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'coordinacion-agendas',
               title: 'Coordinación de Agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'recordinacion-agendas',
               title: 'Recordinacion de Agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rechazo-agendas',
               title: 'Rechazo de Agendas',
               type: MenuItemType.ITEM,
