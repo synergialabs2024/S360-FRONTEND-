@@ -263,7 +263,7 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [changeEsSoterrado, changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
   return (
