@@ -36,5 +36,7 @@ export enum SidenavModulesEnum {
   USUARIOS_USUARIOS = 'USUARIOS.USUARIOS',
   USUARIOS_GRUPOS = 'USUARIOS.GRUPOS',
 
-  INDEFINIDO = 'INDEFINIDO',
+  // TODO: modulo temporal visto solo por admin
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+  INDEFINIDO = 'USUARIOS.GRUPOS',
 }
