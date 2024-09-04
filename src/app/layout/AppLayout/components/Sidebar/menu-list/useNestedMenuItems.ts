@@ -290,7 +290,7 @@ export const useNestedMenu = () => {
         /////* Supervision Comercial ----------------
         {
           id: 'supervision-comercial',
-          title: 'Supervision Comercial',
+          title: 'Supervisión Comercial',
           type: MenuItemType.COLLAPSE,
           icon: IconBuildings,
           children: [
@@ -362,7 +362,7 @@ export const useNestedMenu = () => {
         /////* Logistica ----------------
         {
           id: 'logistica',
-          title: 'Logistica',
+          title: 'Logística',
           type: MenuItemType.COLLAPSE,
           icon: IconAbacus,
           children: [
@@ -396,7 +396,7 @@ export const useNestedMenu = () => {
         /////* Tecnicos ----------------
         {
           id: 'tecnicos',
-          title: 'Tecnicos',
+          title: 'Técnicos',
           type: MenuItemType.COLLAPSE,
           icon: IconAugmentedReality2,
           children: [
@@ -549,7 +549,7 @@ export const useNestedMenu = () => {
         /////* Administracion de Red ----------------
         {
           id: 'adminitracion-red',
-          title: 'Administracion de Red',
+          title: 'Administración de red',
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
@@ -918,7 +918,7 @@ export const useNestedMenu = () => {
         /////* Soporte Tecnico ----------------
         {
           id: 'soporte-tecnico',
-          title: 'Soporte Tecnico',
+          title: 'Soporte Técnico',
           type: MenuItemType.COLLAPSE,
           icon: IconHeartHandshake,
           children: [
@@ -941,7 +941,7 @@ export const useNestedMenu = () => {
         /////* Nomina ----------------
         {
           id: 'nomina',
-          title: 'Nomina',
+          title: 'Nómina',
           type: MenuItemType.COLLAPSE,
           icon: IconReportMoney,
           children: [
