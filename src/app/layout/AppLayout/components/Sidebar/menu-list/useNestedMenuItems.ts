@@ -123,7 +123,7 @@ export const useNestedMenu = () => {
             }),
             renderByModule(SidenavModulesEnum.ADMIN_AREAS, {
               id: 'areas',
-              title: 'Areas',
+              title: 'Áreas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.areasNav,
             }),
@@ -149,13 +149,13 @@ export const useNestedMenu = () => {
             */
             renderByModule(SidenavModulesEnum.ADMIN_ENTIDAD_FINANCIERA, {
               id: 'entidades-financiera',
-              title: 'Entidades Financieras',
+              title: 'Entidades financieras',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.entidadesFinancieraNav,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_ENTIDAD_FINANCIERA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'tipo-instalacion',
-              title: 'Tipo de Instalacion',
+              title: 'Tipo de instalación',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -167,13 +167,13 @@ export const useNestedMenu = () => {
             }),
             renderByModule(SidenavModulesEnum.ADMIN_METODO_PAGO, {
               id: 'metodos-pago',
-              title: 'Metodos Pagos',
+              title: 'Métodos de pago',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.metodospagoNav,
             }),
             renderByModule(SidenavModulesEnum.ADMIN_PARAMETRO_SISTEMA, {
               id: 'parametros-sistemas',
-              title: 'Parametro Sistema',
+              title: 'Parámetro del sistema',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.parametrosSistemasNav,
             }),
@@ -198,9 +198,9 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.gruposNav,
             }),
-            renderByModule(SidenavModulesEnum.USUARIOS_GRUPOS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'prueba-integracion',
-              title: 'Pruebas de Integracion',
+              title: 'Pruebas de integración',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -215,14 +215,14 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
               id: 'planesinternet',
-              title: 'Plan Internet',
+              title: 'Plan de Internet',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.servicios.planesinternetNav,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'servicio-adicional',
-              title: 'Servicios Adicionales',
+              title: 'Servicios adicionales',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -232,9 +232,9 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.promocionesNav,
             }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_PROMOCIONES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'prueba-integracion',
-              title: 'Pruebas de Integracion',
+              title: 'Pruebas de integración',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -250,7 +250,7 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.COMERCIAL_SOLICITUD_SERVICIO, {
               id: 'solicitud-servicio',
-              title: 'Solicitud de Servicio',
+              title: 'Solicitud de servicio',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.solicitudServicioNav,
               // target: true, // target blank
@@ -269,13 +269,13 @@ export const useNestedMenu = () => {
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'seguimiento-cliente',
-              title: 'Seguimiento Clientes',
+              title: 'Seguimiento a clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'integracion-equifax',
-              title: 'Integracion Equifax',
+              title: 'Integración Equifax',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -296,26 +296,26 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloque-prosperos',
-              title: 'Desbloqueo de Prospectos',
+              title: 'Desbloqueo de prospectos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-preventas',
-              title: 'Desbloqueo de Preventas',
+              title: 'Desbloqueo de preventas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-agendas',
-              title: 'Desbloqueos de Agendas',
+              title: 'Desbloqueo de agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reasignacion-gestion-vendedor',
-              title: 'Reasignacion de Gestion Vendedores',
+              title: 'Reasignación de gestión de vendedores',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -323,7 +323,7 @@ export const useNestedMenu = () => {
               SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_DESBLOQUEO_VENTAS,
               {
                 id: 'solicitud-desbloqueo-ventas',
-                title: 'Solicitud Liberación Ventas',
+                title: 'Solicitud de liberación de ventas',
                 type: MenuItemType.ITEM,
                 url: ROUTER_PATHS.supervisionComercial
                   .solicitudDesbloqueoVentasNav,
@@ -340,20 +340,20 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'coordinacion-agendas',
-              title: 'Coordinación de Agendas',
+              title: 'Coordinación de agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'recordinacion-agendas',
-              title: 'Recordinacion de Agendas',
+              title: 'Recordinación de agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rechazo-agendas',
-              title: 'Rechazo de Agendas',
+              title: 'Rechazo de agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -384,9 +384,9 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.sectoresNav,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
-              id: 'planificaicones',
-              title: 'Planificacion',
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'planificaciones',
+              title: 'Planificación',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -400,57 +400,57 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconAugmentedReality2,
           children: [
-            renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-materiales',
-              title: 'Solicitud de Materiales',
+              title: 'Solicitud de materiales',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_ZONAS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'detalle-material-disponible',
-              title: 'Detalle Materiales Disponibles',
+              title: 'Detalle de materiales disponibles',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'motivo-orden-trabajo',
-              title: 'Motivos Orden de Trabajo',
+              title: 'Motivos de orden de trabajo',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'asignacion-orden-trabajo',
-              title: 'Asignacion Orden de Trabajo',
+              title: 'Asignación de orden de trabajo',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-orden-trabajo-instalacion',
-              title: 'Registro de Orden de Trabajo Instalaciones',
+              title: 'Registro de orden de trabajo de instalaciones',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-orden-trabajo-visita',
-              title: 'Registro de Orden de Trabajo Visitas',
+              title: 'Registro de orden de trabajo de visitas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-orden-trabajo-retiro',
-              title: 'Registro de Orden de Trabajo Retiros',
+              title: 'Registro de orden de trabajo de retiros',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'fizcalizacion',
-              title: 'Fiscalizacion',
+              title: 'Fiscalización',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-orden-trabajo-cambio',
-              title: 'Registro de Orden de Trabajo Cambios de Domicilio',
+              title: 'Registro de orden de trabajo de cambios de domicilio',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -481,7 +481,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.napsNav,
             }),
-            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_NAP, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rutas',
               title: 'Rutas',
               type: MenuItemType.ITEM,
@@ -496,51 +496,51 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconAccessPoint,
           children: [
-            renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'autorizacion-onus',
-              title: 'Autorizacion de Onus ',
+              title: 'Autorización de ONUs',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_ZONAS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'gestion-onus',
-              title: 'Gestion de Onus',
+              title: 'Gestión de ONUs',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'estado-caidas',
-              title: 'Estado de Caidas',
+              title: 'Estado de caídas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-onus-configuracion',
-              title: 'Registro Onus Configuradas',
+              title: 'Registro de ONUs configuradas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'vlans',
               title: 'VLANS',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'profiles',
               title: 'Profiles',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'integracion-apis',
-              title: 'Integracion de Apis',
+              title: 'Integración de APIs',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'configuracion-snmp',
-              title: 'Configuracion de SNMP',
+              title: 'Configuración de SNMP',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -553,45 +553,45 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
-            renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'routers',
               title: 'Router',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_ZONAS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'traficos',
-              title: 'Radius(Trafico)',
+              title: 'Radius',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'monitoreos',
               title: 'Monitoreo',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'configuracion-equipos',
-              title: 'Configuracion Equipos',
+              title: 'Configuración de equipos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'ipv4s',
               title: 'PooL IPV4',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'ipv6s',
               title: 'PooL IPV6',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'interaciones',
-              title: 'Autorizacion',
+              title: 'Autorización',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -604,39 +604,39 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUsersGroup,
           children: [
-            renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'clientes-homes',
               title: 'Clientes Home',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_ZONAS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'clientes-corporativos',
-              title: 'Clientes Corporativos',
+              title: 'Clientes corporativos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'notificaciones',
               title: 'Notificaciones',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'mapa-clientes',
-              title: 'Mapa Clientes',
+              title: 'Mapa de clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'contratos',
               title: 'Contratos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'administracion-general',
-              title: 'Administracion General',
+              title: 'Administración general',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -649,147 +649,147 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconWallet,
           children: [
-            renderByModule(SidenavModulesEnum.MANTENIMIENTO_OPERACION, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rubros',
               title: 'Rubros',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_ZONAS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-pagos',
-              title: 'Registro de Pagos',
+              title: 'Registro de pagos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'gestion-retiro-clientes',
-              title: 'Gestion de Retiros de Clientes',
+              title: 'Gestión de retiros de clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'promesas-pago',
-              title: 'Promesas de Pago',
+              title: 'Promesas de pago',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-pagos-masivos',
-              title: 'Registro de Pagos Masivos',
+              title: 'Registro de pagos masivos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'notas-credito',
-              title: 'Notas de Credito',
+              title: 'Notas de crédito',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'promesas-pago-emergentes',
-              title: 'Promesas de Pago Emergentes',
+              title: 'Promesas de pago emergentes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'promesas-pago-temporales',
-              title: 'Promesas de Pago Temporales',
+              title: 'Promesas de pago temporales',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'suspencion-clientes',
-              title: 'Suspension de Clientes',
+              title: 'Suspensión de clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'activacion-temporal',
-              title: 'Activacion Temporal',
+              title: 'Activación temporal',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reconexiones',
-              title: 'Reconexion',
+              title: 'Reconexión',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'parametrizacion-fecha-corte',
-              title: 'Parametrizacion Fechas de Corte',
+              title: 'Parametrización de fechas de corte',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'suspension-temporal',
-              title: 'Suspension Temporal',
+              title: 'Suspensión temporal',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'retiro-clientes',
-              title: 'Retiro de Clientes',
+              title: 'Retiro de clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'consulta-contratos',
-              title: 'Consulta de Contratos',
+              title: 'Consulta de contratos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'transacciones',
               title: 'Transacciones',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reporte-pagos',
-              title: 'Reporte de Pagos',
+              title: 'Reporte de pagos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'factura-electronicas',
-              title: 'Facturacion Electronica',
+              title: 'Facturación electrónica',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'estadisticas',
-              title: 'Estadistica',
+              title: 'Estadística',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'consulta-equifax',
               title: 'Consulta de Equifax',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reporte-equifax',
               title: 'Reporte de Equifax',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'cambio-domicilio',
-              title: 'Cambio de Domicilio ',
+              title: 'Cambio de domicilio ',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'consulta-contratos',
-              title: 'Consulta de Contratos',
+              title: 'Consulta de contratos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'parametrizacion-costos-visitas',
-              title: 'Parametrizacion Costos Visitas',
+              title: 'Parametrización de costos de visitas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -802,34 +802,34 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconDeviceDesktopAnalytics,
           children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'consulta-deuda',
-              title: 'Consulta de Deuda',
+              title: 'Consulta de deuda',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'pago-deuda',
-              title: 'Pago de Deuda',
+              title: 'Pago de deuda',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reverso-deuda',
-              title: 'Reverso de Deuda',
+              title: 'Reverso de deuda',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'integracion-entidad-bancaria',
-              title: 'Integracion Entidad Bancaria',
+              title: 'Integración de entidad bancaria',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'conciliacion-bancaria',
-              title: 'Conciliacion Bancaria',
+              title: 'Conciliación bancaria',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -842,22 +842,22 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconReportMoney,
           children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'reporte-conciliacion',
-              title: 'Reporte de Conciliacion',
+              title: 'Reporte de conciliación',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'recaudacion-pichincha',
-              title: 'Recaudacion Pichincha',
+              title: 'Recaudación Pichincha',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'consulta-debito-bancarios',
-              title: 'Consulta de Debitos Bancarios',
+              title: 'Consulta de débitos bancarios',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -870,46 +870,46 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconSettings2,
           children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'logs-sistemas',
-              title: 'Logs del Sistema',
+              title: 'Logs del sistema',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'integracion-servicios',
-              title: 'Intgegracion de Servicios',
+              title: 'Integración de servicios',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'crontabs',
               title: 'Crontabs',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'importacion-clientes',
-              title: 'Importacion de Clientes',
+              title: 'Importación de clientes',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'base-datos',
-              title: 'Base de Datos',
+              title: 'Base de datos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'informacion-servidor',
-              title: 'Informacion de Servidor',
+              title: 'Información del servidor',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'pasarela-pago',
-              title: 'Pasarela de Pago',
+              title: 'Pasarela de pago',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -922,23 +922,22 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconHeartHandshake,
           children: [
-            renderByModule(SidenavModulesEnum.NOMINA_CARGO, {
-              id: 'debloquear-usuarios',
-              title: 'Debloquear usuarios',
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'desbloquear-usuarios',
+              title: 'Desbloquear usuarios',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
               // target: true, // target blank
             }),
-            renderByModule(SidenavModulesEnum.NOMINA_EMPLEADO, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'auditoria-facturas-nopagadas',
-              title: 'Auditoria Facturas No Pagadas',
+              title: 'Auditoría de facturas no pagadas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
-        /*
         /////* Nomina ----------------
         {
           id: 'nomina',
@@ -961,7 +960,6 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
-        */
 
         /*
         /////* Mantenimiento Operación ----------------
