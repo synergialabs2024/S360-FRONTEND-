@@ -65,6 +65,7 @@ const HandleSolUnblockServicioModal: React.FC<
           SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
       },
     });
+    onClose();
   };
   const onReject = async (data: SaveFormData) => {
     approveOrRejectMutation.mutate({
@@ -79,6 +80,7 @@ const HandleSolUnblockServicioModal: React.FC<
           SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_RECHAZADO,
       },
     });
+    onClose();
   };
 
   return (
