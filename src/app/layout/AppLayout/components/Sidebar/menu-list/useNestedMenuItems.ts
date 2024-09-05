@@ -10,6 +10,7 @@ import {
   IconDeviceDesktopAnalytics,
   IconHeartHandshake,
   IconHierarchy3,
+  IconPigMoney,
   IconReportMoney,
   IconRouter,
   IconSettings2,
@@ -960,6 +961,21 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
+        /////* Cobranza ----------------
+        {
+          id: 'cobranza',
+          title: 'Cobranza',
+          type: MenuItemType.COLLAPSE,
+          icon: IconPigMoney,
+          children: [
+            renderByModule(SidenavModulesEnum.COBRANZA_TARJETA, {
+              id: 'tarjetas',
+              title: 'Tarjetas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.tarjetasNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
 
         /*
         /////* Mantenimiento Operación ----------------
@@ -981,22 +997,6 @@ export const useNestedMenu = () => {
         },
 */
         /*
-        /////* Cobranza ----------------
-        {
-          id: 'cobranza',
-          title: 'Cobranza',
-          type: MenuItemType.COLLAPSE,
-          icon: IconPigMoney,
-          children: [
-            renderByModule(SidenavModulesEnum.COBRANZA_TARJETA, {
-              id: 'tarjetas',
-              title: 'Tarjetas',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.cobranza.tarjetasNav,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
-
         /////* Supervisión Comercial ----------------
         {
           id: 'supervision-comercial',
