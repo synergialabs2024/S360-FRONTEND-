@@ -58,7 +58,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   required = true,
   disabled = false,
   shouldDisableDate,
-  viewsDatePicker = ['month', 'day'],
+  viewsDatePicker = ['year', 'month', 'day'],
 }) => {
   return (
     <Grid

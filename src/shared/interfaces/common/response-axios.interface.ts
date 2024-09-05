@@ -25,4 +25,6 @@ export enum HTTPResStatusCodeEnum {
   CONFLICTS_OR_ACTIVE_SESSION = 409, // active session
 
   USER_BLOCKED = 423, // fail login more than 3 times
+
+  EXTERNAL_SERVER_ERROR = 503,
 }

@@ -56,6 +56,7 @@ import {
   gridSizeMdLg4,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
+import { calcAge } from '@/shared/helpers';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
@@ -231,8 +232,18 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     const minutesBlocked = now.diff(createdAt, 'minutes') || 1;
     const timeBlocked = minutesBlocked > 60 ? hoursBlocked : minutesBlocked;
 
-    // solicitud_servicio in process
-    if (status === HTTPResStatusCodeEnum.CONFLICTS_OR_ACTIVE_SESSION) {
+    // sri api is down
+    if (status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
+      ToastWrapper.warning(
+        'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos manualmente',
+      );
+      form.reset({
+        ...form.getValues(),
+        isFormBlocked: false,
+        isValidIdentificacion: true,
+      });
+      // solicitud_servicio in process
+    } else if (status === HTTPResStatusCodeEnum.CONFLICTS_OR_ACTIVE_SESSION) {
       if (blockedUntil) {
         setConfirmDialog({
           isOpen: true,
@@ -559,7 +570,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         error={errors.fecha_nacimiento}
         helperText={errors.fecha_nacimiento?.message}
         size={gridSizeMdLg6}
-        onChangeValue={() => {
+        onChangeValue={value => {
+          // 1997-05-10
+          const age = calcAge(value);
+          form.setValue('edad', age);
           // apply logic (planes,promos 3era edad, etc)
         }}
       />
