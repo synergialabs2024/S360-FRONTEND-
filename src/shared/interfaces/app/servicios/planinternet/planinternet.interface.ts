@@ -1,3 +1,4 @@
+import { ClasificacionPlanesScoreBuroEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface PlanesInternetPaginatedRes {
@@ -29,6 +30,7 @@ export interface PlanInternet {
   permanencia: string;
   tipo_servicio: string;
   tipo_plan: string;
+  clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice;
 }
 
 export type PlanInternetLimitData = Pick<PlanInternet, 'uuid' | 'name'>;

@@ -4,6 +4,12 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  CreatePlanInternetParamsBase,
+  useCreatePlanInternet,
+  useUpdatePlanInternet,
+} from '@/actions/app';
+import { planinternetFormSchema } from '@/shared';
+import {
   CustomAutocompleteArrString,
   CustomNumberTextField,
   CustomTextArea,
@@ -12,20 +18,15 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
+  CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES,
   INTERNET_PERMANENCE_ARRAY_CHOICES,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   INTERNET_UNIT_VELOCITY_ARRAY_CHOICES,
 } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { PermissionsEnum, PlanInternet } from '@/shared/interfaces';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import {
-  CreatePlanInternetParamsBase,
-  useCreatePlanInternet,
-  useUpdatePlanInternet,
-} from '@/actions/app';
-import { planinternetFormSchema } from '@/shared';
+import { PermissionsEnum, PlanInternet } from '@/shared/interfaces';
 import { returnUrlPlanInternetsPage } from '../../../pages/tables/PlanInternetsPage';
 
 export interface SavePlanInternetProps {
@@ -125,6 +126,17 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         customType="currency"
         min={0}
       />
+      <CustomAutocompleteArrString
+        label="Clasificación score buro"
+        name="clasificacion_score_buro"
+        options={CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES}
+        isLoadingData={false}
+        control={form.control}
+        defaultValue={form.getValues().clasificacion_score_buro}
+        error={errors.clasificacion_score_buro}
+        helperText={errors.clasificacion_score_buro?.message}
+        size={gridSizeMdLg6}
+      />
       <CustomTextField
         label="Comparticion"
         name="comparticion"
@@ -144,6 +156,7 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         defaultValue={form.getValues().unidad_velocidad}
         error={errors.unidad_velocidad}
         helperText={errors.unidad_velocidad?.message}
+        size={gridSizeMdLg6}
       />
       <CustomNumberTextField
         label="Velocidad descarga minima"

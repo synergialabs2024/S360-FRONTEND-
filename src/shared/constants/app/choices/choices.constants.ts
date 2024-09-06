@@ -205,6 +205,17 @@ export enum OtpStatesEnumChoice {
   EXPIRADO = 'EXPIRADO',
 }
 
+export enum ClasificacionPlanesScoreBuroEnumChoice {
+  BAJO = 'BAJO',
+  MEDIO = 'MEDIO',
+  ALTO = 'ALTO',
+}
+export const CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES = [
+  ClasificacionPlanesScoreBuroEnumChoice.BAJO,
+  ClasificacionPlanesScoreBuroEnumChoice.MEDIO,
+  ClasificacionPlanesScoreBuroEnumChoice.ALTO,
+];
+
 // // // SALES ==============================================
 export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',
