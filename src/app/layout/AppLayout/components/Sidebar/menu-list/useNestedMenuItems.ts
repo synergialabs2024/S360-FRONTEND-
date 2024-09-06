@@ -178,14 +178,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.parametrosSistemasNav,
             }),
-            /*
             renderByModule(SidenavModulesEnum.ADMIN_CODIGO_OTP, {
               id: 'codigos-otp-admin',
               title: 'Códigos OTP',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.codigosOtpNav,
             }),
-            */
             //* users ---------------
             renderByModule(SidenavModulesEnum.USUARIOS_USUARIOS, {
               id: 'usuarios',
