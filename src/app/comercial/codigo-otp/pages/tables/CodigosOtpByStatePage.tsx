@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useFetchCodigoOtps } from '@/actions/app';
 import {
@@ -68,18 +68,25 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   });
 
   ///* handlers
-  const calculateColorState = (estadoOtp: OtpStatesEnumChoice) => {
-    switch (estadoOtp) {
-      case OtpStatesEnumChoice.PENDIENTE:
-        return theme.palette.warning.dark;
-      case OtpStatesEnumChoice.VERIFICADO:
-        return theme.palette.success.dark;
-      case OtpStatesEnumChoice.EXPIRADO:
-        return theme.palette.error.dark;
-      default:
-        return 'blue';
-    }
-  };
+  const calculateColorState = useCallback(
+    (estadoOtp: OtpStatesEnumChoice) => {
+      switch (estadoOtp) {
+        case OtpStatesEnumChoice.PENDIENTE:
+          return theme.palette.warning.dark;
+        case OtpStatesEnumChoice.VERIFICADO:
+          return theme.palette.success.dark;
+        case OtpStatesEnumChoice.EXPIRADO:
+          return theme.palette.error.dark;
+        default:
+          return 'blue';
+      }
+    },
+    [
+      theme.palette.error.dark,
+      theme.palette.success.dark,
+      theme.palette.warning.dark,
+    ],
+  );
 
   ///* columns
   const columns = useMemo<MRT_ColumnDef<CodigoOtp>[]>(
@@ -225,7 +232,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
           ]
         : []),
     ],
-    [state],
+    [calculateColorState, state],
   );
 
   return (
