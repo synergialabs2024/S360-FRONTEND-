@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useFetchCodigoOtps } from '@/actions/app';
 import {
@@ -16,11 +16,13 @@ import {
   useTableServerSideFiltering,
 } from '@/shared';
 import {
+  ChipModelState,
   CustomSearch,
   CustomTable,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { useTheme } from '@mui/material';
 
 export type CodigosOtpByStatePageProps = {
   state: OtpStatesEnumChoice;
@@ -32,6 +34,8 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   state,
 }) => {
   useCheckPermission(PermissionsEnum.administration_view_codigootp);
+
+  const theme = useTheme();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -62,6 +66,27 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
       estado_otp: state,
     },
   });
+
+  ///* handlers
+  const calculateColorState = useCallback(
+    (estadoOtp: OtpStatesEnumChoice) => {
+      switch (estadoOtp) {
+        case OtpStatesEnumChoice.PENDIENTE:
+          return theme.palette.warning.dark;
+        case OtpStatesEnumChoice.VERIFICADO:
+          return theme.palette.success.dark;
+        case OtpStatesEnumChoice.EXPIRADO:
+          return theme.palette.error.dark;
+        default:
+          return 'blue';
+      }
+    },
+    [
+      theme.palette.error.dark,
+      theme.palette.success.dark,
+      theme.palette.warning.dark,
+    ],
+  );
 
   ///* columns
   const columns = useMemo<MRT_ColumnDef<CodigoOtp>[]>(
@@ -111,7 +136,16 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_otp'),
+        Cell: ({ row }) => {
+          const estadoOtp = row.original?.estado_otp;
+
+          return (
+            <ChipModelState
+              label={estadoOtp}
+              customColor={calculateColorState(estadoOtp)}
+            />
+          );
+        },
       },
 
       // Trazabilidad: the last one that has OTP_CREADO in model_state (SalesStatesActionsEnumChoice)
@@ -198,7 +232,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
           ]
         : []),
     ],
-    [state],
+    [calculateColorState, state],
   );
 
   return (

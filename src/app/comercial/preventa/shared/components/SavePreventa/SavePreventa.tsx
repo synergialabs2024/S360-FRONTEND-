@@ -24,6 +24,7 @@ import {
   useCreateOtpCode,
   useCreatePreventa,
   useFetchEntidadFinancieras,
+  useFetchFlotas,
   useFetchMetodoPagos,
   useFetchPlanInternets,
   useFetchSectores,
@@ -40,6 +41,7 @@ import {
 import {
   CodigoOtp,
   EntidadFinanciera,
+  Flota,
   IdentificationTypeEnumChoice,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
@@ -304,6 +306,20 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     },
   });
 
+  // referidos
+  const {
+    data: flotasPagign,
+    isLoading: isLoadingFlotas,
+    isRefetching: isRefetchingFlotas,
+  } = useFetchFlotas({
+    enabled:
+      !!watchedTipoReferido &&
+      watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA,
+    params: {
+      page_size: 1200,
+    },
+  });
+
   // mutation handlers ------
   const onSuccessOtpGen = async (resData: CodigoOtp) => {
     // to render otp component
@@ -565,6 +581,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     latLng?.lat,
     latLng?.lng,
   ]);
+  //// alerts
   // naps available
   useEffect(() => {
     if (!latLng?.lat || !latLng?.lng) return;
@@ -612,6 +629,53 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     watchedServicePlan,
     watchedServiceType,
   ]);
+  // payment methods, entidad financiera, tarjetas, flotas
+  useEffect(() => {
+    if (
+      isLoadingMetodoPagos ||
+      isRefetchingMetodoPagos ||
+      isLoadingEntidadFinancieras ||
+      isRefetchingEntidadFinancieras ||
+      isLoadingTarjetas ||
+      isRefetchingTarjetas ||
+      isLoadingFlotas ||
+      isRefetchingFlotas
+    )
+      return;
+    if (!watchedRawPaymentMethod || !watchedTipoReferido) return;
+
+    // entidad financiera
+    if (!entidadFinancierasPaging?.data?.items?.length)
+      ToastWrapper.error(
+        'No se encontraron entidades financieras para el método de pago seleccionado',
+      );
+    // tarjetas
+    if (!tarjetasPaging?.data?.items?.length)
+      ToastWrapper.error(
+        'No se encontraron tarjetas para el método de pago seleccionado',
+      );
+    // flotas
+    if (watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA) {
+      if (!flotasPagign?.data?.items?.length)
+        ToastWrapper.error(
+          'No se encontraron flotas para el tipo de referido seleccionado',
+        );
+    }
+  }, [
+    entidadFinancierasPaging,
+    flotasPagign?.data?.items?.length,
+    isLoadingEntidadFinancieras,
+    isLoadingFlotas,
+    isLoadingMetodoPagos,
+    isLoadingTarjetas,
+    isRefetchingEntidadFinancieras,
+    isRefetchingFlotas,
+    isRefetchingMetodoPagos,
+    isRefetchingTarjetas,
+    tarjetasPaging?.data?.items?.length,
+    watchedRawPaymentMethod,
+    watchedTipoReferido,
+  ]);
   // clear all timers when unmount
   useEffect(() => {
     return () => {
@@ -636,7 +700,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     isLoadingTarjetas ||
     isRefetchingTarjetas ||
     isLoadingPlanInternets ||
-    isRefetchingPlanInternets;
+    isRefetchingPlanInternets ||
+    isLoadingFlotas ||
+    isRefetchingFlotas;
   useLoaders(isCustomLoading);
 
   return (
@@ -885,7 +951,23 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                       </>
                     </>
                   ) : watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA ? (
-                    <>FLOTA AUTOCOMPLETE</>
+                    <>
+                      <CustomAutocomplete<Flota>
+                        label="Flota"
+                        name="flota_refiere"
+                        // options
+                        options={flotasPagign?.data?.items || []}
+                        valueKey="name"
+                        actualValueKey="id"
+                        defaultValue={form.getValues().flota_refiere}
+                        isLoadingData={isLoadingFlotas || isRefetchingFlotas}
+                        // vaidation
+                        control={form.control}
+                        error={errors.flota_refiere}
+                        helperText={errors.flota_refiere?.message}
+                        size={gridSizeMdLg6}
+                      />
+                    </>
                   ) : null}
                 </>
               </>
