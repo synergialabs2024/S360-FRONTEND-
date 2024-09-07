@@ -1,3 +1,4 @@
+import { formatCountDownTimer } from '@/shared';
 import { CustomCardAlert } from '@/shared/components';
 import { useGenericCountdownStore } from '@/store/ui';
 import { Grid, Typography } from '@mui/material';
@@ -16,8 +17,6 @@ const CountDownOTPPReventa: React.FC<CountDownOTPPReventaProps> = ({
   const count = useGenericCountdownStore(
     s => s.counters[countdownOtpId]?.count,
   );
-  const minutes = Math.floor((count ?? 0) / 60);
-  const seconds = (count ?? 0) % 60;
 
   return (
     <Grid item container xs={12} spacing={3}>
@@ -35,9 +34,10 @@ const CountDownOTPPReventa: React.FC<CountDownOTPPReventaProps> = ({
             Ingresa el código
           </Typography>
         </Grid>
+
         <Grid item xs={12} md={6}>
-          <Typography variant="body1">
-            Tiempo restante: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+          <Typography variant="body1" textAlign="end">
+            Tiempo restante: <b>{formatCountDownTimer(count ?? 0)}</b>
           </Typography>
         </Grid>
       </Grid>

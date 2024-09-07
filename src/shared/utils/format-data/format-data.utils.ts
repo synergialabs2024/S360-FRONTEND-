@@ -34,3 +34,13 @@ export const formatDateToISOString = (date?: Date | string): string => {
 export const formatHourByNumber = (hour: number): string => {
   return dayjs().hour(hour).minute(0).format('hh:mm A');
 };
+
+// // // Timers ========================================
+export const formatCountDownTimer = (timer: number): string => {
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+
+  return `${
+    minutes < 10 ? `0${minutes}` : minutes
+  }:${seconds < 10 ? `0${seconds}` : seconds}`;
+};

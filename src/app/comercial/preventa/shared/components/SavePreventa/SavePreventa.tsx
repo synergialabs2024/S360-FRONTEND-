@@ -62,7 +62,6 @@ import {
   useUploadImageGeneric,
 } from '@/shared';
 import {
-  ChipModelState,
   CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCardAlert,
@@ -92,7 +91,11 @@ import {
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
-import { preventaFormSchema, validarCedulaEcuador } from '@/shared/utils';
+import {
+  formatCountDownTimer,
+  preventaFormSchema,
+  validarCedulaEcuador,
+} from '@/shared/utils';
 import { usePreventaStore } from '@/store/app';
 import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
@@ -165,8 +168,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const countdownNewOtpValue = useGenericCountdownStore(
     s => s.counters[countdownIdNewOtpPreventa]?.count,
   );
-  const minutesNewOtp = Math.floor((countdownNewOtpValue ?? 0) / 60);
-  const secondsNewOtp = (countdownNewOtpValue ?? 0) % 60;
 
   usePreventaOtpCounter({
     cackeKey: codigoOtpCacheLeyPreventa,
@@ -1377,36 +1378,27 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                     </Grid>
                     <Grid item>
                       {/* no opt set */}
-                      {!isComponentBlocked ? (
+                      {!isComponentBlocked && (
                         <CustomSingleButton
                           label="Enviar Código"
                           startIcon={<MdOutlineTextsms />}
                           color="secondary"
                           onClick={handlePhoneVerification}
                         />
-                      ) : isComponentBlocked ? (
-                        <ChipModelState
-                          label="CÓDIGO ENVIADO"
-                          color="success"
-                          alignItems="center"
-                          justifyContent="center"
-                          sxChip={{
-                            fontWeight: 600,
-                            width: '100%',
-                          }}
-                        />
-                      ) : null}
+                      )}
                     </Grid>
                   </Grid>
                 </>
               ) : (
                 <>
+                  {/* ---------- OTP GLobal Timer ---------- */}
                   <CountDownOTPPReventa
                     celular={watchedCelular!}
                     countdownOtpId={countdownPreventaId}
                   />
 
                   <Grid item xs={12} container spacing={3} alignItems="center">
+                    {/* ---------- OTP input ---------- */}
                     <Grid
                       item
                       xs={12}
@@ -1435,6 +1427,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                       />
                     </Grid>
 
+                    {/* ---------- OTP actions ---------- */}
                     <Grid
                       item
                       xs={12}
@@ -1474,7 +1467,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                           label={
                             // if countdown is running show timer, else send new otp
                             (countdownNewOtpValue || 0) > 0
-                              ? `Reenviar Código en ${minutesNewOtp}:${secondsNewOtp}`
+                              ? `Reenviar Código en ${formatCountDownTimer(
+                                  countdownNewOtpValue || 0,
+                                )}`
                               : 'Reenviar Código'
                           }
                           startIcon={<MdRefresh />}
