@@ -39,7 +39,7 @@ export const erpAPI = ({
       url: urlApi + url,
       data: data,
       responseType: typeJson ? 'json' : 'blob',
-      timeout: 60, // 1 minuto
+      timeout: 60000, // 1 minuto
     };
 
     if (auth) {
@@ -81,10 +81,7 @@ export const erpAPI = ({
         throw new Error('FORBIDDEN');
       }
 
-      ToastWrapper.error(
-        'El servidor no responde, por favor intenta más tarde',
-      );
-      console.error('Error en la petición', error);
+      // to be handled by handleAxiosError
       throw error;
     }
   };
