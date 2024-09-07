@@ -2,8 +2,9 @@
 import axios, { AxiosRequestConfig, isAxiosError } from 'axios';
 
 import { useAuthStore } from '@/store/auth';
-import { ApiResponse } from '../interfaces/common';
+import { ApiResponse, HTTPResStatusCodeEnum } from '../interfaces/common';
 import { getEnvs } from '../utils';
+import { ToastWrapper } from '../wrappers';
 
 const { VITE_ERPAPI_URL, VITE_STORAGEAPI_URL, VITE_CONSULTAS_URL } = getEnvs();
 
@@ -37,8 +38,8 @@ export const erpAPI = ({
       method: method,
       url: urlApi + url,
       data: data,
-      //timeout: 5000,
       responseType: typeJson ? 'json' : 'blob',
+      timeout: 60, // 1 minuto
     };
 
     if (auth) {
@@ -58,12 +59,32 @@ export const erpAPI = ({
 
       return dataResp;
     } catch (error) {
-      // handle ERR_INTERNET_DISCONNECTED error
-      console.warn('ERROR ERP API');
-
-      if (isAxiosError(error) && error.response?.status === 401) {
-        logout();
+      if ((error as any)?.code === 'ECONNABORTED') {
+        ToastWrapper.error(
+          'El servidor no responde, por favor intenta más tarde',
+        );
+        throw error;
       }
+      if (!isAxiosError(error)) {
+        ToastWrapper.error('Error en el servidor');
+        throw error;
+      }
+
+      if (error.response?.status === HTTPResStatusCodeEnum.UNAUTHORIZED) {
+        logout();
+        ToastWrapper.error('Sesión expirada');
+        throw new Error('UNAUTHORIZED');
+      }
+      if (error.response?.status === HTTPResStatusCodeEnum.FORBIDDEN) {
+        logout();
+        ToastWrapper.error('No tienes permisos para realizar esta acción');
+        throw new Error('FORBIDDEN');
+      }
+
+      ToastWrapper.error(
+        'El servidor no responde, por favor intenta más tarde',
+      );
+      console.error('Error en la petición', error);
       throw error;
     }
   };

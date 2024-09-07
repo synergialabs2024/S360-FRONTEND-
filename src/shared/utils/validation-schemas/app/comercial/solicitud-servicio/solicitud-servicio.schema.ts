@@ -1,4 +1,8 @@
+import { IdentificationTypeEnumChoice } from '@/shared/constants';
+import { validarCedulaEcuador } from '@/shared/utils/validators';
 import * as yup from 'yup';
+
+// validarCedulaEcuador('1718137159');
 
 export const solicitudServicioFormSchema = yup.object({
   estado_solicitud: yup
@@ -16,7 +20,14 @@ export const solicitudServicioFormSchema = yup.object({
   identificacion: yup
     .string()
     .required('El campo identificacion es requerido')
-    .max(200, 'El campo identificacion no debe exceder los 200 caracteres'),
+    .max(200, 'El campo identificacion no debe exceder los 200 caracteres')
+    .when('tipo_identificacion', {
+      is: IdentificationTypeEnumChoice.CEDULA,
+      then: schema =>
+        schema.test('validar-cedula', 'Cédula inválida', value =>
+          validarCedulaEcuador(value),
+        ),
+    }),
   razon_social: yup
     .string()
     .required('El campo razon social es requerido')
