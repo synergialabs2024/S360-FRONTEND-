@@ -233,7 +233,7 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
         onEdit={onEdit}
         canDelete={false}
         editIcon={<EastIcon />}
-        toolTipTitleEditIcon="Gestionar"
+        editIconToolTipTitle="Gestionar"
       />
 
       {/* ============== Modal =========== */}

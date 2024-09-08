@@ -72,6 +72,7 @@ export interface SolicitudServicio {
 
   trazabilidad_data?: TrazabilidadVentas[]; // JSON
   codigo_otp_data?: CodigoOtpLimitData;
+  codigos_otp_data?: CodigoOtpLimitData[];
 }
 
 export type SolicitudServicioLimitData = Pick<

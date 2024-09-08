@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { handleAxiosError } from '@/shared/axios';
 
 import { CreateCedulaCitizenParams } from '@/actions/consultas-api';
+import { OtpStatesEnumChoice } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
   PagingPartialParamsOnly,
@@ -14,6 +15,7 @@ import {
 } from '@/shared/interfaces';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
+import { CodigoOtpTSQEnum } from '../codigo-otp';
 
 const { get, post, patch } = erpAPI();
 
@@ -304,10 +306,14 @@ export const useValidateOtpCode = ({
   customOnSuccess,
 }: UseMutationParams) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (params: ValidateOtpCodeParams) => validateOtpCode(params),
     onSuccess: res => {
+      queryClient.invalidateQueries({
+        queryKey: [CodigoOtpTSQEnum.CODIGOS_OTP],
+      });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       customOnSuccess && customOnSuccess(res);
       enableToast &&
@@ -327,4 +333,9 @@ export const useValidateOtpCode = ({
       setIsGlobalLoading(false);
     },
   });
+};
+
+// request unlock OTP
+export type RequestUnlockOtpCodeParams = {
+  estado_otp: OtpStatesEnumChoice;
 };

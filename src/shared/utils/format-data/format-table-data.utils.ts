@@ -26,6 +26,20 @@ export const emptyCellNested = (
   return value ? value : defaultValue;
 };
 
+export const emptyCellNestedWithArray = (
+  row: any,
+  keyPath: string[],
+  defaultValue: string = 'N/A',
+  index: number = 0,
+) => {
+  const value = keyPath.reduce(
+    (obj, key) => (obj && obj[key] != null ? obj[key] : null),
+    row?.original,
+  );
+
+  return value && value.length > index ? value[index] : defaultValue;
+};
+
 export const formatDateCell = (row: any, key: string) => {
   const value = row?.original?.[key];
   return value ? formatDate(value) : 'N/A';

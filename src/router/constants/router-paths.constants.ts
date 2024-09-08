@@ -238,5 +238,9 @@ export const ROUTER_PATHS = {
     solicitudDesbloqueoVentasEditar: 'solicitud-desbloqueo-ventas/editar/:uuid',
     solicitudDesbloqueoVentasNav:
       '/supervision-comercial/solicitud-desbloqueo-ventas',
+
+    ///* codigos otp
+    codigosOtp: 'codigos-otp',
+    codigosOtpNav: '/supervision-comercial/codigos-otp',
   },
 };

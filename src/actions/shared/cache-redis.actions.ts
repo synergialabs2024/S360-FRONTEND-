@@ -40,7 +40,7 @@ export const useSetCacheRedis = <T>({
           customMessageToast || 'Cache guardado correctamente',
         );
 
-      customOnSuccess && customOnSuccess(res);
+      customOnSuccess && customOnSuccess(res?.data);
     },
     onError: err => {
       customOnError && customOnError(err);
@@ -76,7 +76,7 @@ export const useUpdateCacheRedis = <T>({
           customMessageToast || 'Cache actualizado correctamente',
         );
 
-      customOnSuccess && customOnSuccess(res);
+      customOnSuccess && customOnSuccess(res?.data);
     },
     onError: err => {
       customOnError && customOnError(err);

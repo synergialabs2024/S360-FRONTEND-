@@ -11,4 +11,5 @@ export type SetCodigoOtpInCacheData = {
 export type ResendOtpDataCache = {
   limitTimeNewOtp: string; // timestamp
   limitTimeOtp: string; // timestamp to not override the previous timer
+  otpData: CodigoOtp | null; // persist the data to resend the otp - id in supervisor unlock req
 };

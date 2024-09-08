@@ -28,20 +28,25 @@ const CodigosOtpSupervicionComercialMainPage: React.FC<
         handleTabChange={handleTabChange}
         isMainTableStates
       >
-        <Tab label={'PENDIENTES'} value={1} {...a11yProps(1)} />
-        <Tab label={'VERIFICADOS'} value={2} {...a11yProps(2)} />
-        <Tab label={'EXPIRADOS'} value={3} {...a11yProps(3)} />
+        <Tab label={'ESPERA APROBACIÓN'} value={1} {...a11yProps(1)} />
+        <Tab label={'PENDIENTES'} value={2} {...a11yProps(2)} />
+        <Tab label={'VERIFICADOS'} value={3} {...a11yProps(3)} />
+        <Tab label={'EXPIRADOS'} value={4} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <CodigosOtpByStatePage state={OtpStatesEnumChoice.PENDIENTE} />
+        <CodigosOtpByStatePage state={OtpStatesEnumChoice.ESPERA_APROBACION} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <CodigosOtpByStatePage state={OtpStatesEnumChoice.VERIFICADO} />
+        <CodigosOtpByStatePage state={OtpStatesEnumChoice.PENDIENTE} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
+        <CodigosOtpByStatePage state={OtpStatesEnumChoice.VERIFICADO} />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <CodigosOtpByStatePage state={OtpStatesEnumChoice.EXPIRADO} />
       </CustomTabPanel>
     </SingleTableBoxScene>

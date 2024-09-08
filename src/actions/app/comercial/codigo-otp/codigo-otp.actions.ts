@@ -87,16 +87,18 @@ export const useUpdateCodigoOtp = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
     mutationFn: (params: UpdateCodigoOtpParams<T>) => updateCodigoOtp(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [CodigoOtpTSQEnum.CODIGOS_OTP],
       });
+      customOnSuccess && customOnSuccess(res?.data);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(

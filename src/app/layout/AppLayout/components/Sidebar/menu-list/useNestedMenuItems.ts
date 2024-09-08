@@ -328,6 +328,12 @@ export const useNestedMenu = () => {
                   .solicitudDesbloqueoVentasNav,
               },
             ),
+            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
+              id: 'codigos-otp',
+              title: 'Códigos OTP',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.supervisionComercial.codigosOtpNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Operaciones ----------------

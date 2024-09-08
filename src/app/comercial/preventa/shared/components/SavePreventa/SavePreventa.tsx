@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,19 +8,15 @@ import { BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
 import { GrValidate } from 'react-icons/gr';
-import { IoMdTrash } from 'react-icons/io';
-import {
-  MdAddCircle,
-  MdChangeCircle,
-  MdOutlineTextsms,
-  MdRefresh,
-} from 'react-icons/md';
+import { IoMdSend, IoMdTrash, IoMdUnlock } from 'react-icons/io';
+import { MdAddCircle, MdChangeCircle, MdOutlineTextsms } from 'react-icons/md';
 import OtpInput from 'react-otp-input';
 import { useNavigate } from 'react-router-dom';
 
 import {
   CreatePreventaParamsBase,
   getSolicitudServicio,
+  RequestUnlockOtpCodeParams,
   useCreateOtpCode,
   useCreatePreventa,
   useFetchEntidadFinancieras,
@@ -31,6 +27,7 @@ import {
   useFetchTarjetas,
   useFetchZonas,
   useGetZoneByCoords,
+  useUpdateCodigoOtp,
   useValidateOtpCode,
 } from '@/actions/app';
 import { useSetCacheRedis, useUpdateCacheRedis } from '@/actions/shared';
@@ -151,10 +148,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     image4: documentoTarjetaCreditoImg,
     setImage4: setDocumentoTarjetaCreditoImg,
   } = useUploadImageGeneric();
+  const theme = useTheme();
 
   ///* local state -------------------
   const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
+  const [isSupervisorUnlockingSent, setIsSupervisorUnlockingSent] =
+    useState<boolean>(false);
 
   // otp ------
   const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
@@ -162,6 +162,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   const isComponentBlocked = usePreventaStore(s => s.isComponentBlocked);
   const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
+  const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
 
   const startTimer = useGenericCountdownStore(s => s.start);
   const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
@@ -359,7 +360,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       },
     });
   };
-  const onSuccessNewOtpGen = () => {
+  const onSuccessNewOtpGen = async (resData: CodigoOtp) => {
     startTimer(
       countdownIdNewOtpPreventa,
       TimerSolicitudServicioEnum.initialOtpRangeNewOtpSeconds,
@@ -368,7 +369,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     // opt cache
     const cachedOtpData = usePreventaStore.getState().cachedOtpData;
 
-    updateCache.mutateAsync({
+    await updateCache.mutateAsync({
       key: codigoOtpCacheLeyPreventa,
       value: {
         // to calculate limit time and reset counter after each refresh
@@ -379,11 +380,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             'minutes',
           )
           .format(),
+        otpData: resData, // set new otp
       },
     });
+
+    // allow send new unlock request to supervisor for the new otp
+    setIsSupervisorUnlockingSent(false);
   };
   const onSuccessOtpValidation = async () => {
-    const prevForm = form.getValues();
     clearAllTimers();
     setCanChangeCelular(false);
     setOtpValue('');
@@ -394,6 +398,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     });
 
     // reset form: no invalidate query 'cause invalidate doesn't return the updated data
+    safeResetForm();
+  };
+  const onSuccessSetCacheOtp = (resData: SetCodigoOtpInCacheData) => {
+    setCachedOtpData(resData);
+  };
+
+  const safeResetForm = async () => {
+    const prevForm = form.getValues();
     setIsGlobalLoading(true);
     const res = await getSolicitudServicio(solicitudServicio?.uuid!);
     setIsGlobalLoading(false);
@@ -402,8 +414,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     reset({
       ...prevForm,
       ...updatedSolServicio,
-      estadoOtp: updatedSolServicio?.codigo_otp_data?.estado_otp || null,
+      estadoOtp:
+        updatedSolServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
     });
+  };
+
+  const handleSafeRefresh = async () => {
+    await safeResetForm();
   };
 
   ///* mutations ---------------------
@@ -423,20 +440,33 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const resetOtp = useCreateOtpCode({
     enableNavigate: false,
     customMessageToast: 'Código OTP regenerado correctamente',
-    customOnSuccess() {
-      onSuccessNewOtpGen();
+    customOnSuccess(resData) {
+      onSuccessNewOtpGen(resData as unknown as CodigoOtp);
     },
   });
   const setCache = useSetCacheRedis<SetCodigoOtpInCacheData>({
     enableToast: false,
+    customOnSuccess: resData =>
+      onSuccessSetCacheOtp(resData as unknown as SetCodigoOtpInCacheData),
   });
   const updateCache = useUpdateCacheRedis<ResendOtpDataCache>({
     enableToast: false,
+    customOnSuccess: resData => {
+      setCachedOtpData(resData as unknown as SetCodigoOtpInCacheData);
+    },
   });
   const validateOtp = useValidateOtpCode({
     enableNavigate: false,
     customMessageToast: 'Código OTP validado correctamente',
     customOnSuccess: onSuccessOtpValidation,
+  });
+  const requestUnlockOtp = useUpdateCodigoOtp<RequestUnlockOtpCodeParams>({
+    enableNavigate: false,
+    customMessageToast:
+      'Solicitud de verificación de código OTP enviada al supervisor',
+    customOnSuccess: () => {
+      setIsSupervisorUnlockingSent(true);
+    },
   });
 
   ///* handlers ---------------------
@@ -469,7 +499,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       );
 
     ///* create
-    createPreventaMutation.mutate(data);
+    createPreventaMutation.mutate({
+      ...data,
+      solicitud_servicio: solicitudServicio?.id!,
+    });
   };
 
   const handleFetchClienteByCedula = async (value: string) => {
@@ -544,7 +577,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
     reset({
       ...solicitudServicio,
-      estadoOtp: solicitudServicio?.codigo_otp_data?.estado_otp || null,
+      estadoOtp:
+        solicitudServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
     });
   }, [solicitudServicio, reset]);
 
@@ -1395,6 +1429,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                   <CountDownOTPPReventa
                     celular={watchedCelular!}
                     countdownOtpId={countdownPreventaId}
+                    showRefresh
+                    onRefresh={handleSafeRefresh}
                   />
 
                   <Grid item xs={12} container spacing={3} alignItems="center">
@@ -1439,56 +1475,94 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                         width: '100%',
                       }}
                     >
-                      <Grid item xs={12}>
-                        <CustomSingleButton
-                          label="Verificar Código"
-                          startIcon={<BsSendCheckFill />}
-                          color="primary"
-                          variant="outlined"
-                          sxBtn={{
-                            width: '100%',
-                          }}
-                          onClick={async () => {
-                            if (!otpValue || otpValue.length < 6)
-                              return ToastWrapper.warning(
-                                'Ingrese un código OTP válido',
-                              );
+                      <Grid item xs={12} container>
+                        <Grid item xs={6}>
+                          <CustomSingleButton
+                            label="Verificar"
+                            startIcon={<BsSendCheckFill />}
+                            color="primary"
+                            variant="outlined"
+                            sxBtn={{}}
+                            onClick={async () => {
+                              if (!otpValue || otpValue.length < 6)
+                                return ToastWrapper.warning(
+                                  'Ingrese un código OTP válido',
+                                );
 
-                            await validateOtp.mutateAsync({
-                              identificacion: form.getValues().identificacion!,
-                              codigo_otp: otpValue!,
-                            });
-                          }}
-                        />
+                              await validateOtp.mutateAsync({
+                                identificacion:
+                                  form.getValues().identificacion!,
+                                codigo_otp: otpValue!,
+                              });
+                            }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={6}>
+                          <CustomSingleButton
+                            label={
+                              // if countdown is running show timer, else send new otp
+                              (countdownNewOtpValue || 0) > 0
+                                ? `${formatCountDownTimer(
+                                    countdownNewOtpValue || 0,
+                                  )}`
+                                : 'Reenviar'
+                            }
+                            startIcon={<IoMdSend />}
+                            color="info"
+                            variant="outlined"
+                            sxBtn={{
+                              width: '100%',
+                              textTransform: 'none',
+                            }}
+                            onClick={() => {
+                              if ((countdownNewOtpValue || 0) > 0)
+                                return ToastWrapper.warning(
+                                  'Espere un momento para volver a enviar el código',
+                                );
+
+                              handleNewOtp();
+                            }}
+                            // disabled if countdownNewotp is running else enable
+                            disabled={(countdownNewOtpValue || 0) > 0}
+                          />
+                        </Grid>
                       </Grid>
 
                       <Grid item xs={12}>
                         <CustomSingleButton
                           label={
-                            // if countdown is running show timer, else send new otp
-                            (countdownNewOtpValue || 0) > 0
-                              ? `Reenviar Código en ${formatCountDownTimer(
-                                  countdownNewOtpValue || 0,
-                                )}`
-                              : 'Reenviar Código'
+                            isSupervisorUnlockingSent
+                              ? 'Solicitud Enviada'
+                              : 'Solictar aprobación'
                           }
-                          startIcon={<MdRefresh />}
-                          color="info"
+                          startIcon={<IoMdUnlock />}
+                          color="warning"
                           variant="outlined"
+                          justifyContent="center"
                           sxBtn={{
+                            color: theme.palette.warning.dark,
+                            borderColor: theme.palette.warning.dark,
                             width: '100%',
-                            textTransform: 'none',
                           }}
-                          onClick={() => {
-                            if ((countdownNewOtpValue || 0) > 0)
+                          onClick={async () => {
+                            if (isSupervisorUnlockingSent)
                               return ToastWrapper.warning(
-                                'Espere un momento para volver a enviar el código',
+                                'Ya se ha enviado una solicitud de desbloqueo al supervisor',
                               );
 
-                            handleNewOtp();
+                            const otpCacheData =
+                              usePreventaStore.getState().cachedOtpData;
+
+                            requestUnlockOtp.mutate({
+                              id: otpCacheData?.otpData?.id!,
+                              data: {
+                                estado_otp:
+                                  OtpStatesEnumChoice.ESPERA_APROBACION,
+                              },
+                            });
                           }}
-                          // disabled if countdownNewotp is running else enable
-                          disabled={(countdownNewOtpValue || 0) > 0}
+                          disabled={isSupervisorUnlockingSent}
                         />
                       </Grid>
                     </Grid>

@@ -203,6 +203,7 @@ export enum OtpStatesEnumChoice {
   PENDIENTE = 'PENDIENTE',
   VERIFICADO = 'VERIFICADO',
   EXPIRADO = 'EXPIRADO',
+  ESPERA_APROBACION = 'ESPERA_APROBACION',
 }
 
 export enum ClasificacionPlanesScoreBuroEnumChoice {
@@ -226,6 +227,7 @@ export enum EstadoSolicitudServicioEnumChoice {
 
   ESPERA_DESBLOQUEO = 'ESPERA_DESBLOQUEO',
   DESBLOQUEADO = 'DESBLOQUEADO',
+  EN_PROCESO = 'EN_PROCESO', // hide ss while preventa is in progress
 }
 export const ESTADO_SOLICITUD_SERVICIO_ARRAY_CHOICES = [
   EstadoSolicitudServicioEnumChoice.INGRESADO,

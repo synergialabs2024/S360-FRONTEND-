@@ -360,6 +360,14 @@ const SolicitudsDesbloqueoVentasMainPage = Loadable(
       ),
   ),
 );
+const CodigosOtpSupervicionComercialMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/codigo-otp/pages/tables/CodigosOtpSupervicionComercialMainPage'
+      ),
+  ),
+);
 const CodigosOtpMainPage = Loadable(
   lazy(
     () => import('@/app/comercial/codigo-otp/pages/tables/CodigosOtpMainPage'),
@@ -832,6 +840,11 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoVentas,
             element: <SolicitudsDesbloqueoVentasMainPage />,
+          },
+          ///* codigos otp
+          {
+            path: ROUTER_PATHS.supervisionComercial.codigosOtp,
+            element: <CodigosOtpSupervicionComercialMainPage />,
           },
         ],
       },

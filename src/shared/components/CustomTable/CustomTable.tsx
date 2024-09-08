@@ -77,7 +77,7 @@ export interface CustomTableProps<T> {
 
   // to reuse colums actions with cusom buttons
   editIcon?: React.ReactNode;
-  toolTipTitleEditIcon?: string;
+  editIconToolTipTitle?: string;
   editIconColor?: ColorButtonType;
 }
 
@@ -133,7 +133,7 @@ function CustomTable<T>({
   columnFilterDisplayMode = enableManualFiltering ? 'subheader' : 'popover',
 
   editIcon,
-  toolTipTitleEditIcon = 'Editar',
+  editIconToolTipTitle = 'Editar',
   editIconColor,
 }: CustomTableProps<T>) {
   const theme = useTheme();
@@ -194,7 +194,7 @@ function CustomTable<T>({
         onEdit &&
         onConditionEdit &&
         onConditionEdit(row.original as T) ? (
-          <Tooltip title={toolTipTitleEditIcon}>
+          <Tooltip title={editIconToolTipTitle}>
             <IconButton
               onClick={() => {
                 onEdit(row.original as T);

@@ -1,8 +1,9 @@
 /* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
+import { MdCheckCircle } from 'react-icons/md';
 
-import { useFetchCodigoOtps } from '@/actions/app';
+import { useFetchCodigoOtps, useValidateOtpCode } from '@/actions/app';
 import {
   CodigoOtp,
   emptyCellNested,
@@ -10,7 +11,6 @@ import {
   formatDateWithTimeCell,
   OtpStatesEnumChoice,
   PermissionsEnum,
-  SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
   useTableFilter,
   useTableServerSideFiltering,
@@ -22,6 +22,7 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { useTheme } from '@mui/material';
 
 export type CodigosOtpByStatePageProps = {
@@ -34,12 +35,17 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   state,
 }) => {
   useCheckPermission(PermissionsEnum.administration_view_codigootp);
-
   const theme = useTheme();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* table
   const {
@@ -72,6 +78,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
     (estadoOtp: OtpStatesEnumChoice) => {
       switch (estadoOtp) {
         case OtpStatesEnumChoice.PENDIENTE:
+        case OtpStatesEnumChoice.ESPERA_APROBACION:
           return theme.palette.warning.dark;
         case OtpStatesEnumChoice.VERIFICADO:
           return theme.palette.success.dark;
@@ -88,20 +95,44 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
     ],
   );
 
+  ///* mutations
+  const validateOtp = useValidateOtpCode({
+    enableNavigate: false,
+    customMessageToast: 'Código OTP validado correctamente',
+  });
+
+  ///* handlers
+  const calcCanEdit = () => {
+    return state === OtpStatesEnumChoice.ESPERA_APROBACION;
+  };
+  const onApproveOtp = (otp: CodigoOtp) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Verificación manual de OTP',
+      subtitle: '¿Está seguro que desea verificar manualmente este código OTP?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        validateOtp.mutate({
+          identificacion: otp.solicitud_servicio_data?.at(-1)?.identificacion!,
+          codigo_otp: otp.codigo_otp,
+        });
+      },
+    });
+  };
+
   ///* columns
   const columns = useMemo<MRT_ColumnDef<CodigoOtp>[]>(
     () => [
       {
-        accessorKey: 'numero_referencia_solserv',
+        accessorKey: 'solicitudes_servicio__numero_referencia',
         header: '# REFERENCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, [
-            'solicitud_servicio_data',
-            'numero_referencia',
-          ]),
+        Cell: ({ row }) => {
+          const solService = row.original?.solicitud_servicio_data?.at(-1);
+          return solService?.numero_referencia || 'N/A';
+        },
       },
       {
         accessorKey: 'celular',
@@ -112,13 +143,15 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         Cell: ({ row }) => emptyCellOneLevel(row, 'celular'),
       },
       {
-        accessorKey: 'nombre_prospecto',
+        accessorKey: 'solicitudes_servicio__razon_social',
         header: 'NOMBRE SOLICITANTE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
+        Cell: ({ row }) => {
+          const solService = row.original?.solicitud_servicio_data?.at(-1);
+          return solService?.razon_social || 'N/A';
+        },
       },
 
       {
@@ -150,27 +183,11 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
 
       // Trazabilidad: the last one that has OTP_CREADO in model_state (SalesStatesActionsEnumChoice)
       {
-        accessorKey: 'usuario_solicita',
+        accessorKey: 'vendedor__razon_social',
         header: 'COLABORADOR SOLICITA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => {
-          const trazabilidadData = row.original?.trazabilidad_data || [];
-          let lastOtpCreated = null;
-
-          for (let i = trazabilidadData.length - 1; i >= 0; i--) {
-            if (
-              trazabilidadData[i].modelo_estado ===
-              SalesStatesActionsEnumChoice.OTP_CREADO
-            ) {
-              lastOtpCreated = trazabilidadData[i];
-              break;
-            }
-          }
-
-          return lastOtpCreated?.user_data?.razon_social || '';
-        },
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
 
       {
@@ -185,27 +202,11 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
       ...(state === OtpStatesEnumChoice.VERIFICADO
         ? [
             {
-              accessorKey: 'user_vaerifica_otp',
+              accessorKey: 'gestionado_by__razon_social',
               header: 'COLABORADOR VERIFICA OTP',
               size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: false,
-              enableSorting: false,
-              Cell: ({ row }: MRTSCodigoOTPType) => {
-                let firstOtpVerified = null;
-                const trazabilidadData = row.original?.trazabilidad_data || [];
-
-                for (let i = 0; i < trazabilidadData.length; i++) {
-                  if (
-                    trazabilidadData[i].modelo_estado ===
-                    SalesStatesActionsEnumChoice.OTP_VERIFICADO
-                  ) {
-                    firstOtpVerified = trazabilidadData[i];
-                    break;
-                  }
-                }
-
-                return firstOtpVerified?.user_data?.razon_social || '';
-              },
+              Cell: ({ row }: MRTSCodigoOTPType) =>
+                emptyCellNested(row, ['gestionado_by_data', 'razon_social']),
             },
             {
               accessorKey: 'aprobado_at',
@@ -263,9 +264,13 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         rowCount={codigosOtpPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={false}
+        enableActionsColumn={calcCanEdit()}
         // crud
-        canEdit={false}
+        canEdit={calcCanEdit()}
+        onEdit={onApproveOtp}
+        editIcon={<MdCheckCircle />}
+        editIconColor="warning"
+        editIconToolTipTitle="Verificar OTP"
         canDelete={false}
       />
     </GridTableTabsContainerOnly>

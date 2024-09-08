@@ -1,11 +1,15 @@
-import { formatCountDownTimer } from '@/shared';
-import { CustomCardAlert } from '@/shared/components';
-import { useGenericCountdownStore } from '@/store/ui';
 import { Grid, Typography } from '@mui/material';
+import { MdRefresh } from 'react-icons/md';
+
+import { formatCountDownTimer } from '@/shared';
+import { CustomCardAlert, SingleIconButton } from '@/shared/components';
+import { useGenericCountdownStore } from '@/store/ui';
 
 export type CountDownOTPPReventaProps = {
   celular: string;
   countdownOtpId: string;
+  showRefresh?: boolean;
+  onRefresh?: () => void;
 };
 
 const otpColorText = 'rgb(74, 76, 81)';
@@ -13,6 +17,8 @@ const otpColorText = 'rgb(74, 76, 81)';
 const CountDownOTPPReventa: React.FC<CountDownOTPPReventaProps> = ({
   celular,
   countdownOtpId,
+  showRefresh = false,
+  onRefresh,
 }) => {
   const count = useGenericCountdownStore(
     s => s.counters[countdownOtpId]?.count,
@@ -35,10 +41,25 @@ const CountDownOTPPReventa: React.FC<CountDownOTPPReventaProps> = ({
           </Typography>
         </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Typography variant="body1" textAlign="end">
-            Tiempo restante: <b>{formatCountDownTimer(count ?? 0)}</b>
-          </Typography>
+        <Grid item xs={12} md={6} container alignItems="center">
+          <Grid item xs={11}>
+            <Typography variant="body1" textAlign="end">
+              Tiempo restante: <b>{formatCountDownTimer(count ?? 0)}</b>
+            </Typography>
+          </Grid>
+
+          {showRefresh && (
+            <Grid item xs={1}>
+              <SingleIconButton
+                label="Refrescar"
+                startIcon={<MdRefresh />}
+                onClick={() => {
+                  onRefresh && onRefresh();
+                }}
+                color="info"
+              />
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </Grid>

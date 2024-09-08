@@ -115,7 +115,7 @@ const SolicitudServicioByStatePage: React.FC<
         canEdit={calcEnableActionsColumn()}
         onEdit={calcOnEdit}
         editIcon={<HiDocumentPlus />}
-        toolTipTitleEditIcon="Crear preventa"
+        editIconToolTipTitle="Crear preventa"
         canDelete={false}
       />
     </GridTableTabsContainerOnly>
