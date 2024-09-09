@@ -2,7 +2,7 @@ import { Backdrop, Box, LinearProgress } from '@mui/material';
 
 export type CustomScanLoadProps = {
   isOpen: boolean;
-  name?: 'rostro' | 'archivo' | 'cedula';
+  name: 'rostro' | 'archivo' | 'cedula';
 };
 
 const CustomScanLoad: React.FC<CustomScanLoadProps> = ({ isOpen, name }) => {

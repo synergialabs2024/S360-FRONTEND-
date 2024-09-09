@@ -4,10 +4,9 @@ import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BsSendCheckFill } from 'react-icons/bs';
+import { BsFileEarmarkCheck, BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
-import { GrValidate } from 'react-icons/gr';
 import { IoMdSend, IoMdTrash, IoMdUnlock } from 'react-icons/io';
 import { MdAddCircle, MdChangeCircle, MdOutlineTextsms } from 'react-icons/md';
 import OtpInput from 'react-otp-input';
@@ -66,6 +65,7 @@ import {
   CustomCoordsTextField,
   CustomIdentificacionTextField,
   CustomNumberTextField,
+  CustomScanLoad,
   CustomSingleButton,
   CustomTextArea,
   CustomTextField,
@@ -98,6 +98,7 @@ import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
+import ValidButton from './ValidButton';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -155,6 +156,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
   const [isSupervisorUnlockingSent, setIsSupervisorUnlockingSent] =
     useState<boolean>(false);
+  const [isCheckingCedula, setIsCheckingCedula] = useState<boolean>(false);
+  const [isValidCedula, setIsValidCedula] = useState<boolean>(false);
 
   // otp ------
   const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
@@ -497,6 +500,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.error(
         'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
       );
+    if (!isValidCedula)
+      return ToastWrapper.error(
+        'La foto frontal de la cédula no ha sido verificada',
+      );
 
     ///* create
     createPreventaMutation.mutate({
@@ -569,6 +576,20 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       celular: watchedCelular,
       identificacion: form.getValues().identificacion!,
     });
+  };
+
+  const handleCheckCedulaImg = async () => {
+    if (!cedulaFrontalImg)
+      return ToastWrapper.warning('La foto de la cédula frontal es requerida');
+
+    // TODO: use endpoint to check cedula img IA
+    setIsCheckingCedula(true);
+    // simulate loading
+    setTimeout(() => {
+      setIsCheckingCedula(false);
+      ToastWrapper.success('Foto de cédula verificada correctamente');
+      setIsValidCedula(true);
+    }, 1000);
   };
 
   ///* effects ---------------------
@@ -1356,22 +1377,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                     disabled={!canChangeCelular}
                   />
 
-                  <CustomSingleButton
-                    label="Número Verificado"
-                    startIcon={<GrValidate />}
-                    color="success"
-                    variant="outlined"
-                    disabled
-                    sxBtn={{
-                      width: '100%',
-                    }}
+                  <ValidButton
+                    label="Número verificado"
                     gridSizeBtn={gridSizeMdLg6}
-                    btnStyles={{
-                      borderRadius: '5px',
-                      border: '1px solid green',
-                      color: 'green',
-                      fontWeight: 600,
-                    }}
                   />
                 </>
               ) : !isComponentBlocked ? (
@@ -1579,11 +1587,49 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
 
-            <UploadImageDropZoneComponent
-              buttonLabel="Foto cédula frontal"
-              selectedImage={cedulaFrontalImg}
-              setSelectedImage={setCedulaFrontalImg}
-            />
+            <Grid xs={12} container alignItems="start" spacing={3}>
+              <Grid item xs={12} md={6}>
+                <UploadImageDropZoneComponent
+                  buttonLabel="Foto cédula frontal"
+                  selectedImage={cedulaFrontalImg}
+                  setSelectedImage={setCedulaFrontalImg}
+                  sizeContainer={gridSize}
+                  onClickTrash={() => {
+                    setIsValidCedula(false);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {cedulaFrontalImg && (
+                  <>
+                    {isValidCedula ? (
+                      <ValidButton label="Documento Verificado" />
+                    ) : (
+                      <CustomSingleButton
+                        label="Verificar Documento"
+                        startIcon={<BsFileEarmarkCheck />}
+                        color="primary"
+                        variant="outlined"
+                        justifyContent="center"
+                        sxBtn={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                        btnStyles={{
+                          borderRadius: '5px',
+                          fontWeight: 600,
+                          height: '52px',
+                        }}
+                        onClick={() => {
+                          handleCheckCedulaImg();
+                        }}
+                        disabled={isValidCedula}
+                      />
+                    )}
+                  </>
+                )}
+              </Grid>
+            </Grid>
             <UploadImageDropZoneComponent
               buttonLabel="Foto cédula trasera"
               selectedImage={cedulaPosteriorImg}
@@ -1621,6 +1667,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           />
         </>
       )}
+
+      {/* ============= loaders ============= */}
+      <CustomScanLoad isOpen={isCheckingCedula} name="cedula" />
     </StepperBoxScene>
   );
 };
