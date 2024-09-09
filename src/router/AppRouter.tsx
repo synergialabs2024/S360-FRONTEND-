@@ -890,7 +890,7 @@ const AppRouter = createBrowserRouter([
         ],
       },
       {
-        path: '/404',
+        path: '*',
         element: <Error404 />,
       },
     ],
