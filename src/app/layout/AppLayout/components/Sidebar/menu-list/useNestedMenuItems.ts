@@ -6,7 +6,6 @@ import {
   IconBroadcast,
   IconBuilding,
   IconBuildings,
-  IconDashboard,
   IconDeviceDesktopAnalytics,
   IconHeartHandshake,
   IconHierarchy3,
@@ -74,6 +73,7 @@ export const useNestedMenu = () => {
 
   // ==============================|| MENU ITEMS ||============================== //
   const menuItems: NestedMenuItem[] = useMemo(() => {
+    /*
     const dashboard = {
       id: 'dashboard',
       title: 'Dashboard',
@@ -89,6 +89,7 @@ export const useNestedMenu = () => {
         },
       ],
     };
+    */
 
     const pages = {
       id: 'pages',
@@ -1024,7 +1025,8 @@ export const useNestedMenu = () => {
       ],
     };
 
-    const cleanedMenu = cleanEmptyItems([dashboard, pages]);
+    //const cleanedMenu = cleanEmptyItems([dashboard, pages]);
+    const cleanedMenu = cleanEmptyItems([pages]);
 
     return cleanedMenu;
   }, [cleanEmptyItems, renderByModule]);
