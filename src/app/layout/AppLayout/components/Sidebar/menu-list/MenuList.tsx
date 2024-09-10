@@ -81,7 +81,7 @@ const MenuList: React.FC<MenuListProps> = () => {
         >
           <Typography variant="h6" color="textSecondary" align="center">
             <iframe
-              src="https://lottie.host/embed/9ce2c002-592d-4480-8240-93ec592080cc/JMZHkgyUDd.json"
+              src="https://lottie.host/embed/9d2ca7c4-7c34-48f7-91d2-e16d3416dad4/hY1PUviu39.json"
               style={{ border: 'none' }}
             ></iframe>
             Módulo no encontrado
