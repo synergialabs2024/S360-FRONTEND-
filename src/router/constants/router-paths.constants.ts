@@ -128,6 +128,10 @@ export const ROUTER_PATHS = {
     gruposCrear: 'grupos/crear',
     gruposEditar: 'grupos/editar/:uuid',
     gruposNav: '/parametrizacion/grupos',
+
+    ///* trazabilidad venta
+    trazabilidadesVenta: 'trazabilidades-venta',
+    trazabilidadesVentaNav: '/parametrizacion/trazabilidades-venta',
   },
 
   // // =================================

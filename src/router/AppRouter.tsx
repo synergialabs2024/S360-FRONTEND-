@@ -374,6 +374,15 @@ const CodigosOtpMainPage = Loadable(
   ),
 );
 
+const TrazabilidadVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/trazabilidad-venta/pages/tables/TrazabilidadVentasPage'
+      ),
+  ),
+);
+
 const PreventasMainPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/tables/PreventasMainPage')),
 );
@@ -655,6 +664,12 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracion.codigosOtp,
             element: <CodigosOtpMainPage />,
+          },
+
+          ///* Trazabilidad Venta
+          {
+            path: ROUTER_PATHS.administracion.trazabilidadesVenta,
+            element: <TrazabilidadVentasPage />,
           },
 
           ///* USER ----------
