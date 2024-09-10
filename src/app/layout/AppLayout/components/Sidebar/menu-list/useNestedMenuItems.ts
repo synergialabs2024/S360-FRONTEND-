@@ -204,6 +204,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(SidenavModulesEnum.ADMIN_TRAZABILIDAD_VENTA, {
+              id: 'trazabilidades-venta',
+              title: 'Trazabilidad Venta',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.trazabilidadesVentaNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Servicios ----------------
