@@ -30,7 +30,7 @@ export interface PlanInternet {
   permanencia: string;
   tipo_servicio: string;
   tipo_plan: string;
-  clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice;
+  clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice | string;
 }
 
 export type PlanInternetLimitData = Pick<PlanInternet, 'uuid' | 'name'>;

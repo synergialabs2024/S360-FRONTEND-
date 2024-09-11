@@ -207,12 +207,12 @@ export enum OtpStatesEnumChoice {
 }
 
 export enum ClasificacionPlanesScoreBuroEnumChoice {
-  BAJO = 'BAJO',
+  BASICO = 'BASICO',
   MEDIO = 'MEDIO',
   ALTO = 'ALTO',
 }
 export const CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES = [
-  ClasificacionPlanesScoreBuroEnumChoice.BAJO,
+  ClasificacionPlanesScoreBuroEnumChoice.BASICO,
   ClasificacionPlanesScoreBuroEnumChoice.MEDIO,
   ClasificacionPlanesScoreBuroEnumChoice.ALTO,
 ];

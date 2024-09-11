@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateSolicitudDesbloqueoVentasData,
   CreateSolicitudServicioParamsBase,
+  getPlanInternets,
   useConsultarEquifax,
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
@@ -22,8 +23,15 @@ import {
   ValidateIdentificacionParams,
 } from '@/actions/app';
 import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
-import { handleAxiosError, Sector, ToastWrapper, useLoaders } from '@/shared';
 import {
+  handleAxiosError,
+  PlanInternet,
+  Sector,
+  ToastWrapper,
+  useLoaders,
+} from '@/shared';
+import {
+  ChipModelState,
   CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCardAlert,
@@ -43,6 +51,7 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import {
+  ClasificacionPlanesScoreBuroEnumChoice,
   EquifaxEdentificationType,
   EstadoSolicitudServicioEnumChoice,
   GeneralModelStatesEnumChoice,
@@ -66,11 +75,11 @@ import {
   Pais,
   SolicitudServicio,
 } from '@/shared/interfaces';
+import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
-import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 
 export interface SaveSolicitudServicioProps {
   title: string;
@@ -97,6 +106,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   ///* local state -----------------
   const [openMapModal, setOpenMapModal] = useState(false);
+  const [suggestedPlans, setSuggestedPlans] = useState<PlanInternet[]>([]);
+  const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
+    [],
+  );
 
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -293,9 +306,40 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       },
     });
   };
-  const onSuccessEquifax = (data: EquifaxServicioCedula) => {
-    const suggestedPlans = data?.plan_sugerido?.map(plan => plan.planSugerido);
-    console.log('data', data, 'suggestedPlans', suggestedPlans);
+  const onSuccessEquifax = async (data: EquifaxServicioCedula) => {
+    const suggestedPlansKey = data?.plan_sugerido?.map(
+      plan => plan.planSugerido,
+    ) || [ClasificacionPlanesScoreBuroEnumChoice.BASICO];
+
+    const { data: planesDataPagingRes } = await getPlanInternets({
+      clasificacion_score_buro: suggestedPlansKey.join(','),
+    });
+
+    const actualSuggestedPlans = planesDataPagingRes?.items || [];
+
+    setSuggestedPlans(actualSuggestedPlans);
+    setSuggestedPlansBuroKey(suggestedPlansKey);
+    form.setValue('plan_sugerido_buro', suggestedPlansKey.join(','));
+  };
+  const onErrorEquifax = async (err: any) => {
+    if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
+      ToastWrapper.warning(
+        'Servicio de consulta de Equifax no disponible en este momento',
+      );
+    }
+    const suggestedPlansBuroKey = [
+      ClasificacionPlanesScoreBuroEnumChoice.BASICO,
+    ];
+
+    const { data: planesDataPagingRes } = await getPlanInternets({
+      clasificacion_score_buro: suggestedPlansBuroKey.join(','),
+    });
+
+    const actualSuggestedPlans = planesDataPagingRes?.items || [];
+
+    setSuggestedPlans(actualSuggestedPlans);
+    setSuggestedPlansBuroKey(suggestedPlansBuroKey);
+    form.setValue('plan_sugerido_buro', suggestedPlansBuroKey.join(','));
   };
   ///* mutations -----------------
   const createSolicitudServicioMutation = useCreateSolicitudServicio({
@@ -321,7 +365,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       onSuccessEquifax(data as EquifaxServicioCedula);
     },
     customOnError: err => {
-      console.log('err', err);
+      onErrorEquifax(err);
     },
   });
 
@@ -415,7 +459,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       valor_minimo: '',
       es_cliente: false,
       estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
-      plan_sugerido: undefined,
+      plan_sugerido_buro: undefined,
       isValidIdentificacion: false, // helper
 
       pais: undefined,
@@ -695,6 +739,43 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         size={gridSizeMdLg6}
       />
 
+      {/* ------------- Equifax ------------- */}
+      <CustomTypoLabel
+        text="Plan sugerido por buro de crédito"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
+
+      <CustomAutocomplete<PlanInternet>
+        label="Planes de internet"
+        name="plan"
+        // options
+        options={suggestedPlans || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().plan}
+        isLoadingData={false}
+        // vaidation
+        control={form.control}
+        error={errors.plan}
+        helperText={errors.plan?.message}
+        size={gridSizeMdLg6}
+        disabled={!suggestedPlans?.length}
+      />
+      <Grid
+        item
+        container
+        {...gridSizeMdLg6}
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+      >
+        {suggestedPlansBuroKey?.map((plan, index) => (
+          <Grid item key={index}>
+            <ChipModelState label={plan} color="info" />
+          </Grid>
+        ))}
+      </Grid>
+
       {/* ------------- location ------------- */}
       <>
         <CustomTypoLabel
@@ -859,8 +940,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         )}
       </>
 
-      {/* ------------- Equifax ------------- */}
-      <>
+      {/* <>
         <CustomTypoLabel
           text="Equifax"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
@@ -934,7 +1014,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           helperText={errors.rango_capacidad_pago?.message}
           disabled
         />
-      </>
+      </> */}
     </SingleFormBoxScene>
   );
 };

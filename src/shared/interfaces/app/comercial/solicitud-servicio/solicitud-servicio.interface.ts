@@ -51,7 +51,8 @@ export interface SolicitudServicio {
   modified_at?: string;
 
   ///* fk -----------
-  plan_sugerido?: number;
+  plan_sugerido_buro?: string; // clasificacion buro
+  plan?: number; // fk - based on buro
   pais?: number;
   nacionalidad?: string; // pais can upd
 
