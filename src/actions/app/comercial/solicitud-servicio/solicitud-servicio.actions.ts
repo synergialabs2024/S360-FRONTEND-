@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { handleAxiosError } from '@/shared/axios';
 
 import { CreateCedulaCitizenParams } from '@/actions/consultas-api';
-import { OtpStatesEnumChoice } from '@/shared';
+import { EquifaxEdentificationType, OtpStatesEnumChoice } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
   PagingPartialParamsOnly,
@@ -13,6 +13,7 @@ import {
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
+import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
 import { CodigoOtpTSQEnum } from '../codigo-otp';
@@ -232,6 +233,70 @@ export const validateCedulaSolService = async <T>(
   setIsGlobalLoading(true);
 
   return post('/solicitudservicio/validate/identificacion/', data, true);
+};
+
+/////* consulta equifax ---------------------
+export type ConsultarEquifaxParams = {
+  identificacion: string;
+  tipo_identificacion: EquifaxEdentificationType;
+};
+
+export const useConsultarEquifax = ({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+  customOnSuccess,
+  customOnError,
+}: UseMutationParams) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: ConsultarEquifaxParams) => consultaEquifax(params),
+    onSuccess: res => {
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      customOnSuccess && customOnSuccess(res);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Equifax consultado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      if (customOnError) {
+        customOnError(error);
+        return;
+      }
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const consultaEquifax = async (
+  data: ConsultarEquifaxParams,
+): Promise<EquifaxServicioCedula> => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  const { data: data2 } = await post<EquifaxServicioCedula>(
+    '/solicitudservicio/buro/identificacion/',
+    data,
+    true,
+  );
+
+  return data2;
 };
 
 /////* OPT code -------------------------------

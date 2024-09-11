@@ -17,6 +17,8 @@ export type UseMutationParams = {
   customOnError?: (error: unknown) => void;
   customMessageErrorSeverityToast?: ToastSeverityType;
   customMessageSuccessSeverityToast?: ToastSeverityType;
+
+  customOnSettled?: () => void;
 };
 
 export interface UseFetchEnabledParams<T> {

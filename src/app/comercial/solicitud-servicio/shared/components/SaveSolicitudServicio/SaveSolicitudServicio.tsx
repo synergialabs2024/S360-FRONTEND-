@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateSolicitudDesbloqueoVentasData,
   CreateSolicitudServicioParamsBase,
+  useConsultarEquifax,
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
   useFetchPaises,
@@ -42,6 +43,7 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import {
+  EquifaxEdentificationType,
   EstadoSolicitudServicioEnumChoice,
   GeneralModelStatesEnumChoice,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
@@ -68,6 +70,7 @@ import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
+import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 
 export interface SaveSolicitudServicioProps {
   title: string;
@@ -254,7 +257,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ¿Desea solicitar desbloqueo?`,
           onConfirm: () => {
             setConfirmDialogIsOpen(false);
-            useCreateSolUnblockSolServiceMutation.mutate({
+            createSolUnblockSolServiceMutation.mutate({
               modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
               modelo_id: data.solicitud_servicio_id,
               modelo_estado:
@@ -290,6 +293,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       },
     });
   };
+  const onSuccessEquifax = (data: EquifaxServicioCedula) => {
+    const suggestedPlans = data?.plan_sugerido?.map(plan => plan.planSugerido);
+    console.log('data', data, 'suggestedPlans', suggestedPlans);
+  };
   ///* mutations -----------------
   const createSolicitudServicioMutation = useCreateSolicitudServicio({
     // navigate,
@@ -299,7 +306,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       onSuccessCreateSolService(data as SolicitudServicio);
     },
   });
-  const useSearchCedulaMutation =
+  const searchCedulaMutation =
     useValidateCedulaSolService<ValidateIdentificacionParams>({
       enableErrorNavigate: false,
       customOnSuccess: data => {
@@ -309,8 +316,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         onErrorSearchCedula(err);
       },
     });
+  const consultarEquifax = useConsultarEquifax({
+    customOnSuccess: data => {
+      onSuccessEquifax(data as EquifaxServicioCedula);
+    },
+    customOnError: err => {
+      console.log('err', err);
+    },
+  });
 
-  const useCreateSolUnblockSolServiceMutation =
+  const createSolUnblockSolServiceMutation =
     useCreateSolicitudDesbloqueoVentas<CreateSolicitudDesbloqueoVentasData>({
       // navigate,
       // returnUrl: returnUrlSolicitudsServicioPage,
@@ -319,13 +334,25 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   const handleFetchCedulaRucInfo = async (value: string) => {
     if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
-      await useSearchCedulaMutation.mutateAsync({
-        identificacion: value,
-      });
+      Promise.all([
+        searchCedulaMutation.mutateAsync({
+          identificacion: value,
+        }),
+        consultarEquifax.mutateAsync({
+          identificacion: value,
+          tipo_identificacion: EquifaxEdentificationType.CEDULA,
+        }),
+      ]);
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
-      // await useSearchRucMutation.mutateAsync({
-      //   ruc: value,
-      // });
+      Promise.all([
+        consultarEquifax.mutateAsync({
+          identificacion: value,
+          tipo_identificacion: EquifaxEdentificationType.RUC,
+        }),
+        // await useSearchRucMutation.mutateAsync({
+        //   ruc: value,
+        // })
+      ]);
     }
   };
 

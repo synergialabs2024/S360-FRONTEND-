@@ -12,3 +12,9 @@ export const ALL_MONTHS_STRING: string[] = [
   'NOVIEMBRE',
   'DICIEMBRE',
 ];
+
+export enum EquifaxEdentificationType {
+  CEDULA = 'C',
+  RUC = 'R',
+  E = 'E',
+}

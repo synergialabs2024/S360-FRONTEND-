@@ -138,7 +138,7 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         size={gridSizeMdLg6}
       />
       <CustomTextField
-        label="Comparticion"
+        label="Compartición"
         name="comparticion"
         control={form.control}
         defaultValue={form.getValues().comparticion}
