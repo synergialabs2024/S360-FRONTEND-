@@ -40,6 +40,7 @@ import {
   CustomDatePicker,
   CustomIdentificacionTextField,
   CustomNumberTextField,
+  CustomScanLoad,
   CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
@@ -110,6 +111,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
     [],
   );
+  const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
+    useState<boolean>(false);
 
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -378,7 +381,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   const handleFetchCedulaRucInfo = async (value: string) => {
     if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
-      Promise.all([
+      setIsCheckingIdentificacion(true);
+      await Promise.all([
         searchCedulaMutation.mutateAsync({
           identificacion: value,
         }),
@@ -387,8 +391,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           tipo_identificacion: EquifaxEdentificationType.CEDULA,
         }),
       ]);
+
+      setIsCheckingIdentificacion(false);
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
-      Promise.all([
+      setIsCheckingIdentificacion(true);
+      await Promise.all([
         consultarEquifax.mutateAsync({
           identificacion: value,
           tipo_identificacion: EquifaxEdentificationType.RUC,
@@ -397,6 +404,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         //   ruc: value,
         // })
       ]);
+      setIsCheckingIdentificacion(false);
     }
   };
 
@@ -1015,6 +1023,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           disabled
         />
       </> */}
+
+      {/* ============= loaders ============= */}
+      <CustomScanLoad isOpen={isCheckingIdentificacion} name="cedula" />
     </SingleFormBoxScene>
   );
 };
