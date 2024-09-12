@@ -616,6 +616,12 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUsersGroup,
           children: [
+            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
+              id: 'servicios',
+              title: 'Servicios',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.clientes.serviciosNav,
+            }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'clientes-homes',
               title: 'Clientes Home',
