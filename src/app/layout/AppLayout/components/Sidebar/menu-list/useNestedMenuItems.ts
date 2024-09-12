@@ -258,7 +258,7 @@ export const useNestedMenu = () => {
               id: 'solicitud-servicio',
               title: 'Solicitud de servicio',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.comercial.solicitudServicioNav,
+              url: ROUTER_PATHS.comercial.solicitudServicioCrearNav,
               // target: true, // target blank
             }),
             renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {

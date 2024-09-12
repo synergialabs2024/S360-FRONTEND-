@@ -74,14 +74,14 @@ export const solicitudServicioFormSchema = yup.object({
     .max(200, 'El campo nacionalidad no debe exceder los 200 caracteres'),
 
   // EQUIFAX -----------
-  plan_sugerido_buro: yup
-    .string()
-    .required('El campo plan sugerido buro es requerido')
-    .max(200, 'El campo plan sugerido buro no debe exceder los 200 caracteres'),
-  plan: yup
-    .number()
-    .typeError('El campo plan es requerido')
-    .required('El campo plan es requerido'),
+  // plan_sugerido_buro: yup
+  //   .string()
+  //   .required('El campo plan sugerido buro es requerido')
+  //   .max(200, 'El campo plan sugerido buro no debe exceder los 200 caracteres'),
+  // plan: yup
+  //   .number()
+  //   .typeError('El campo plan es requerido')
+  //   .required('El campo plan es requerido'),
   // categoria_score_desicion: yup
   //   .string()
   //   .required('El campo categoria score desicion es requerido')

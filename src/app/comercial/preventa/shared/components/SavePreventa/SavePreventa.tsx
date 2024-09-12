@@ -16,6 +16,7 @@ import {
   CreatePreventaParamsBase,
   getSolicitudServicio,
   RequestUnlockOtpCodeParams,
+  useConsultarEquifax,
   useCreateOtpCode,
   useCreatePreventa,
   useFetchEntidadFinancieras,
@@ -35,9 +36,12 @@ import {
   SetCodigoOtpInCacheData,
 } from '@/actions/shared/cache-redis-types.interface';
 import {
+  ClasificacionPlanesScoreBuroEnumChoice,
   CodigoOtp,
   EntidadFinanciera,
+  EquifaxEdentificationType,
   Flota,
+  HTTPResStatusCodeEnum,
   IdentificationTypeEnumChoice,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
@@ -58,6 +62,7 @@ import {
   useUploadImageGeneric,
 } from '@/shared';
 import {
+  ChipModelState,
   CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCardAlert,
@@ -88,6 +93,7 @@ import {
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
+import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import {
   formatCountDownTimer,
   preventaFormSchema,
@@ -123,6 +129,9 @@ type SaveFormData = CreatePreventaParamsBase &
     rawPaymentMethod?: MetodoPago;
 
     estadoOtp?: Nullable<OtpStatesEnumChoice>;
+
+    // helpers
+    tipoIdentificacion?: string;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -158,6 +167,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     useState<boolean>(false);
   const [isCheckingCedula, setIsCheckingCedula] = useState<boolean>(false);
   const [isValidCedula, setIsValidCedula] = useState<boolean>(false);
+
+  // const [suggestedPlans, setSuggestedPlans] = useState<PlanInternet[]>([]);
+  const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
+    [],
+  );
+  const [isCheckingIdentificacionEquifax, setIsCheckingIdentificacionEquifax] =
+    useState<boolean>(false);
+  const [alreadyConsultedEquifax, setAlreadyConsultedEquifax] =
+    useState<boolean>(false);
 
   // otp ------
   const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
@@ -216,6 +234,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   const watchedCelular = form.watch('celular');
   const watchedEstadoOtp = form.watch('estadoOtp');
+
+  const watchedIdentificationType = form.watch('tipoIdentificacion');
+  const watchedIdentification = form.watch('identificacion');
+  const watchedSuggestedPlansBuro = form.watch('plan_sugerido_buro');
 
   // map ---------------
   const {
@@ -303,11 +325,16 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     isLoading: isLoadingPlanInternets,
     isRefetching: isRefetchingPlanInternets,
   } = useFetchPlanInternets({
-    enabled: !!watchedServiceType && !!watchedServicePlan,
+    enabled:
+      !!watchedServiceType &&
+      !!watchedServicePlan &&
+      !!watchedSuggestedPlansBuro &&
+      !!alreadyConsultedEquifax,
     params: {
       page_size: 900,
       tipo_servicio: watchedServiceType,
       tipo_plan: watchedServicePlan,
+      clasificacion_score_buro: watchedSuggestedPlansBuro,
     },
   });
 
@@ -419,6 +446,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...updatedSolServicio,
       estadoOtp:
         updatedSolServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
+
+      tipoIdentificacion: solicitudServicio?.tipo_identificacion,
     });
   };
 
@@ -592,6 +621,55 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     }, 1000);
   };
 
+  // // Equifax ------
+  const onSuccessEquifax = async (data: EquifaxServicioCedula) => {
+    const suggestedPlansKey = data?.plan_sugerido?.map(
+      plan => plan.planSugerido,
+    ) || [ClasificacionPlanesScoreBuroEnumChoice.BASICO];
+
+    setSuggestedPlansBuroKey(suggestedPlansKey);
+    form.setValue('plan_sugerido_buro', suggestedPlansKey.join(','));
+  };
+  const onErrorEquifax = async (err: any) => {
+    if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
+      ToastWrapper.warning(
+        'Servicio de consulta de Equifax no disponible en este momento',
+      );
+    }
+    const suggestedPlansBuroKey = [
+      ClasificacionPlanesScoreBuroEnumChoice.BASICO,
+    ];
+
+    setSuggestedPlansBuroKey(suggestedPlansBuroKey);
+    form.setValue('plan_sugerido_buro', suggestedPlansBuroKey.join(','));
+  };
+
+  const consultarEquifax = useConsultarEquifax({
+    customOnSuccess: data => {
+      onSuccessEquifax(data as EquifaxServicioCedula);
+    },
+    customOnError: err => {
+      onErrorEquifax(err);
+    },
+  });
+
+  const handleConsultaEquifax = async () => {
+    const identificationType =
+      watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA
+        ? EquifaxEdentificationType.CEDULA
+        : watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+          ? EquifaxEdentificationType.RUC
+          : EquifaxEdentificationType.CEDULA;
+
+    setIsCheckingIdentificacionEquifax(true);
+    await consultarEquifax.mutateAsync({
+      identificacion: watchedIdentification!,
+      tipo_identificacion: identificationType,
+    });
+    setIsCheckingIdentificacionEquifax(false);
+    setAlreadyConsultedEquifax(true);
+  };
+
   ///* effects ---------------------
   useEffect(() => {
     if (!solicitudServicio?.id) return;
@@ -600,6 +678,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...solicitudServicio,
       estadoOtp:
         solicitudServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
+
+      tipoIdentificacion: solicitudServicio?.tipo_identificacion,
     });
   }, [solicitudServicio, reset]);
 
@@ -675,10 +755,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return;
 
     !planInternetsPaging?.data?.items?.length &&
+      alreadyConsultedEquifax &&
       ToastWrapper.error(
         'No se encontraron planes de internet para la combinación de tipos de servicio y plan seleccionados',
       );
   }, [
+    alreadyConsultedEquifax,
     isLoadingPlanInternets,
     isRefetchingPlanInternets,
     planInternetsPaging?.data?.items?.length,
@@ -1199,7 +1281,50 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       {activeStep === 2 && (
         <>
           <>
-            <CustomTypoLabel text="Plan de Internet" />
+            <CustomTypoLabel
+              text="Consulta buró de crédito"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+
+            <CustomTextField
+              label="Tipo identificación"
+              name="tipo_identificacion"
+              control={form.control}
+              defaultValue={form.getValues().tipo_identificacion}
+              error={errors.tipo_identificacion}
+              helperText={errors.tipo_identificacion?.message}
+              disabled
+              size={gridSizeMdLg6}
+            />
+            <InputAndBtnGridSpace
+              inputNode={
+                <CustomTextField
+                  label="Identificación"
+                  name="identificacion"
+                  control={form.control}
+                  defaultValue={form.getValues().identificacion}
+                  error={errors.identificacion}
+                  helperText={errors.identificacion?.message}
+                  disabled
+                />
+              }
+              btnLabel="Buscar"
+              iconBtn={<CiSearch />}
+              disabledBtn={
+                watchedIdentificationType ===
+                IdentificationTypeEnumChoice.PASAPORTE
+              }
+              onClick={() => {
+                handleConsultaEquifax();
+              }}
+            />
+          </>
+
+          <>
+            <CustomTypoLabel
+              text="Plan de Internet"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
 
             <CustomAutocompleteArrString
               label="Tipo de servicio"
@@ -1211,6 +1336,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               error={errors.tipo_servicio}
               helperText={errors.tipo_servicio?.message}
               size={gridSizeMdLg6}
+              onChangeValue={() => {
+                // reset related fields
+                form.setValue('plan', '' as any);
+              }}
             />
             <CustomAutocompleteArrString
               label="Tipo de plan"
@@ -1222,23 +1351,45 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               error={errors.tipo_plan}
               helperText={errors.tipo_plan?.message}
               size={gridSizeMdLg6}
+              onChangeValue={() => {
+                // reset related fields
+                form.setValue('plan', '' as any);
+              }}
             />
             <CustomAutocomplete<PlanInternet>
-              label="Plan de internet"
+              label="Planes de internet"
               name="plan_internet"
               // options
               options={planInternetsPaging?.data?.items || []}
               valueKey="name"
               actualValueKey="id"
               defaultValue={form.getValues().plan_internet}
-              isLoadingData={
-                isLoadingPlanInternets || isRefetchingPlanInternets
-              }
+              isLoadingData={false}
               // vaidation
               control={form.control}
               error={errors.plan_internet}
               helperText={errors.plan_internet?.message}
+              size={gridSizeMdLg6}
+              disabled={
+                !watchedServicePlan ||
+                !watchedServiceType ||
+                !alreadyConsultedEquifax
+              }
             />
+            <Grid
+              item
+              container
+              {...gridSizeMdLg6}
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+            >
+              {suggestedPlansBuroKey?.map((plan, index) => (
+                <Grid item key={index}>
+                  <ChipModelState label={plan} color="info" />
+                </Grid>
+              ))}
+            </Grid>
           </>
 
           <>
@@ -1670,6 +1821,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       {/* ============= loaders ============= */}
       <CustomScanLoad isOpen={isCheckingCedula} name="cedula" />
+      <CustomScanLoad isOpen={isCheckingIdentificacionEquifax} name="archivo" />
     </StepperBoxScene>
   );
 };

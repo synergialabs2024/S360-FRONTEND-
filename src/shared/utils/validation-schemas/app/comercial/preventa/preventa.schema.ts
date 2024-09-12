@@ -29,6 +29,11 @@ export const preventaFormSchema = yup.object({
     .string()
     .required('El campo tipo plan es requerido')
     .max(200, 'El campo tipo plan no debe exceder los 200 caracteres'),
+  plan_internet: yup
+    .number()
+    .typeError('El campo plan internet es requerido')
+    .required('El campo plan internet es requerido'),
+
   metodo_pago: yup
     .number()
     .typeError('El campo metodo pago es requerido')

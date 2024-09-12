@@ -11,8 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateSolicitudDesbloqueoVentasData,
   CreateSolicitudServicioParamsBase,
-  getPlanInternets,
-  useConsultarEquifax,
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
   useFetchPaises,
@@ -23,15 +21,8 @@ import {
   ValidateIdentificacionParams,
 } from '@/actions/app';
 import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
+import { handleAxiosError, Sector, ToastWrapper, useLoaders } from '@/shared';
 import {
-  handleAxiosError,
-  PlanInternet,
-  Sector,
-  ToastWrapper,
-  useLoaders,
-} from '@/shared';
-import {
-  ChipModelState,
   CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCardAlert,
@@ -52,8 +43,6 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import {
-  ClasificacionPlanesScoreBuroEnumChoice,
-  EquifaxEdentificationType,
   EstadoSolicitudServicioEnumChoice,
   GeneralModelStatesEnumChoice,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
@@ -76,7 +65,6 @@ import {
   Pais,
   SolicitudServicio,
 } from '@/shared/interfaces';
-import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -107,10 +95,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   ///* local state -----------------
   const [openMapModal, setOpenMapModal] = useState(false);
-  const [suggestedPlans, setSuggestedPlans] = useState<PlanInternet[]>([]);
-  const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
-    [],
-  );
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
 
@@ -310,41 +294,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       },
     });
   };
-  const onSuccessEquifax = async (data: EquifaxServicioCedula) => {
-    const suggestedPlansKey = data?.plan_sugerido?.map(
-      plan => plan.planSugerido,
-    ) || [ClasificacionPlanesScoreBuroEnumChoice.BASICO];
 
-    const { data: planesDataPagingRes } = await getPlanInternets({
-      clasificacion_score_buro: suggestedPlansKey.join(','),
-    });
-
-    const actualSuggestedPlans = planesDataPagingRes?.items || [];
-
-    setSuggestedPlans(actualSuggestedPlans);
-    setSuggestedPlansBuroKey(suggestedPlansKey);
-    form.setValue('plan_sugerido_buro', suggestedPlansKey.join(','));
-  };
-  const onErrorEquifax = async (err: any) => {
-    if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
-      ToastWrapper.warning(
-        'Servicio de consulta de Equifax no disponible en este momento',
-      );
-    }
-    const suggestedPlansBuroKey = [
-      ClasificacionPlanesScoreBuroEnumChoice.BASICO,
-    ];
-
-    const { data: planesDataPagingRes } = await getPlanInternets({
-      clasificacion_score_buro: suggestedPlansBuroKey.join(','),
-    });
-
-    const actualSuggestedPlans = planesDataPagingRes?.items || [];
-
-    setSuggestedPlans(actualSuggestedPlans);
-    setSuggestedPlansBuroKey(suggestedPlansBuroKey);
-    form.setValue('plan_sugerido_buro', suggestedPlansBuroKey.join(','));
-  };
   ///* mutations -----------------
   const createSolicitudServicioMutation = useCreateSolicitudServicio({
     // navigate,
@@ -364,14 +314,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         onErrorSearchCedula(err);
       },
     });
-  const consultarEquifax = useConsultarEquifax({
-    customOnSuccess: data => {
-      onSuccessEquifax(data as EquifaxServicioCedula);
-    },
-    customOnError: err => {
-      onErrorEquifax(err);
-    },
-  });
 
   const createSolUnblockSolServiceMutation =
     useCreateSolicitudDesbloqueoVentas<CreateSolicitudDesbloqueoVentasData>({
@@ -387,20 +329,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         searchCedulaMutation.mutateAsync({
           identificacion: value,
         }),
-        consultarEquifax.mutateAsync({
-          identificacion: value,
-          tipo_identificacion: EquifaxEdentificationType.CEDULA,
-        }),
       ]);
 
       setIsCheckingIdentificacion(false);
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
       setIsCheckingIdentificacion(true);
       await Promise.all([
-        consultarEquifax.mutateAsync({
-          identificacion: value,
-          tipo_identificacion: EquifaxEdentificationType.RUC,
-        }),
+        // consultarEquifax.mutateAsync({
+        //   identificacion: value,
+        //   tipo_identificacion: EquifaxEdentificationType.RUC,
+        // }),
         // await useSearchRucMutation.mutateAsync({
         //   ruc: value,
         // })
@@ -747,43 +685,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         helperText={errors.celular?.message}
         size={gridSizeMdLg6}
       />
-
-      {/* ------------- Equifax ------------- */}
-      <CustomTypoLabel
-        text="Plan sugerido por buro de crédito"
-        pt={CustomTypoLabelEnum.ptMiddlePosition}
-      />
-
-      <CustomAutocomplete<PlanInternet>
-        label="Planes de internet"
-        name="plan"
-        // options
-        options={suggestedPlans || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().plan}
-        isLoadingData={false}
-        // vaidation
-        control={form.control}
-        error={errors.plan}
-        helperText={errors.plan?.message}
-        size={gridSizeMdLg6}
-        disabled={!suggestedPlans?.length}
-      />
-      <Grid
-        item
-        container
-        {...gridSizeMdLg6}
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-      >
-        {suggestedPlansBuroKey?.map((plan, index) => (
-          <Grid item key={index}>
-            <ChipModelState label={plan} color="info" />
-          </Grid>
-        ))}
-      </Grid>
 
       {/* ------------- location ------------- */}
       <>
