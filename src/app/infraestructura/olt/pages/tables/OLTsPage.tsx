@@ -180,12 +180,10 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
       },
 
       {
-        accessorKey: 'nodo',
+        accessorKey: 'nodo__name',
         header: 'NODO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nodo'),
+        Cell: ({ row }) => emptyCellNested(row, ['nodo_data', 'name']),
       },
       {
         accessorKey: 'pais__name',
@@ -194,37 +192,31 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name']),
       },
       {
-        accessorKey: 'provincia',
+        accessorKey: 'provincia__name',
         header: 'PROVINCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'provincia'),
+        Cell: ({ row }) => emptyCellNested(row, ['provincia_data', 'name']),
       },
 
       {
-        accessorKey: 'ciudad',
+        accessorKey: 'ciudad__name',
         header: 'CIUDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ciudad'),
+        Cell: ({ row }) => emptyCellNested(row, ['ciudad_data', 'name']),
       },
 
       {
-        accessorKey: 'zona',
+        accessorKey: 'zona__name',
         header: 'ZONA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'zona'),
+        Cell: ({ row }) => emptyCellNested(row, ['zona_data', 'name']),
       },
 
       {
-        accessorKey: 'sector',
+        accessorKey: 'sector__name',
         header: 'SECTOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'sector'),
+        Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
       },
 
       {
