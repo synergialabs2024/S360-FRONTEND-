@@ -1,4 +1,5 @@
 export * from './administration';
+export * from './cliente';
 export * from './cobranza';
 export * from './comercial';
 export * from './infraestructura';
