@@ -128,6 +128,14 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => formatCurrencyCell(row, 'valor'),
       },
+      {
+        accessorKey: 'clasificacion_score_buro',
+        header: 'CLASIFICACION SCORE BURO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'clasificacion_score_buro'),
+      },
 
       {
         accessorKey: 'velocidad_descarga_minima',

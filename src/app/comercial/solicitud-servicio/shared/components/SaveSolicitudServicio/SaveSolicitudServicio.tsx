@@ -291,6 +291,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       });
       handleAxiosError(err);
     }
+    setIsCheckingIdentificacion(false);
   };
   const onSuccessCreateSolService = (data: SolicitudServicio) => {
     setConfirmDialog({
