@@ -94,6 +94,14 @@ const CanalesVentaPage: React.FC<CanalesVentaPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
+        accessorKey: 'consultas_buro_user',
+        header: 'CONSULTAS BURO AL MES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'consultas_buro_user'),
+      },
+      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,

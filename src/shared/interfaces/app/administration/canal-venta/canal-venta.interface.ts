@@ -11,6 +11,7 @@ export interface CanalVenta {
   id?: number;
   uuid?: string;
   name: string;
+  consultas_buro_user: number;
 
   state: boolean;
   created_at?: string;

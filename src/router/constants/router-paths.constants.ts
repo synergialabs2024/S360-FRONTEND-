@@ -256,5 +256,9 @@ export const ROUTER_PATHS = {
     ///* codigos otp
     codigosOtp: 'codigos-otp',
     codigosOtpNav: '/supervision-comercial/codigos-otp',
+
+    ///* consulta buro
+    consultasBuro: 'consultas-buro',
+    consultasBuroNav: '/supervision-comercial/consultas-buro',
   },
 };

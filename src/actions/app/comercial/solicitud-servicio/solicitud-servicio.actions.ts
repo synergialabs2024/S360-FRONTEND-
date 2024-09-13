@@ -239,6 +239,7 @@ export const validateCedulaSolService = async <T>(
 export type ConsultarEquifaxParams = {
   identificacion: string;
   tipo_identificacion: EquifaxEdentificationType;
+  solicitud_servicio: number;
 };
 
 export const useConsultarEquifax = ({

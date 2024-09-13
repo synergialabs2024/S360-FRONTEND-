@@ -41,6 +41,7 @@ import {
   EntidadFinanciera,
   EquifaxEdentificationType,
   Flota,
+  handleAxiosError,
   HTTPResStatusCodeEnum,
   IdentificationTypeEnumChoice,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
@@ -635,13 +636,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ToastWrapper.warning(
         'Servicio de consulta de Equifax no disponible en este momento',
       );
+    } else {
+      handleAxiosError(err);
     }
     const suggestedPlansBuroKey = [
       ClasificacionPlanesScoreBuroEnumChoice.BASICO,
     ];
 
+    setAlreadyConsultedEquifax(true);
     setSuggestedPlansBuroKey(suggestedPlansBuroKey);
     form.setValue('plan_sugerido_buro', suggestedPlansBuroKey.join(','));
+    setIsCheckingIdentificacionEquifax(false);
   };
 
   const consultarEquifax = useConsultarEquifax({
@@ -665,6 +670,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     await consultarEquifax.mutateAsync({
       identificacion: watchedIdentification!,
       tipo_identificacion: identificationType,
+      solicitud_servicio: solicitudServicio?.id!,
     });
     setIsCheckingIdentificacionEquifax(false);
     setAlreadyConsultedEquifax(true);

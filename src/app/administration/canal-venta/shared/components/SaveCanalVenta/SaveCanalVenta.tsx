@@ -9,6 +9,7 @@ import {
   useUpdateCanalVenta,
 } from '@/actions/app';
 import {
+  CustomNumberTextField,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
@@ -92,7 +93,15 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
         error={errors.name}
         helperText={errors.name?.message}
       />
-
+      <CustomNumberTextField
+        label="Consultas Buro al mes por usuario"
+        name="consultas_buro_user"
+        control={form.control}
+        defaultValue={form.getValues().consultas_buro_user}
+        error={errors.consultas_buro_user}
+        helperText={errors.consultas_buro_user?.message}
+        size={gridSizeMdLg6}
+      />
       <SampleCheckbox
         label="state"
         name="state"

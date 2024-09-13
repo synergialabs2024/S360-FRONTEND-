@@ -341,6 +341,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.supervisionComercial.codigosOtpNav,
             }),
+            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
+              id: 'consultas-buro',
+              title: 'Consultas EQUIFAX',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Operaciones ----------------

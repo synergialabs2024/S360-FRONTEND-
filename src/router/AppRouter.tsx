@@ -449,6 +449,10 @@ const UpdateTarjetaPage = Loadable(
   lazy(() => import('@/app/cobranza/tarjeta/pages/forms/UpdateTarjetaPage')),
 );
 
+const ConsultasBuroPage = Loadable(
+  lazy(() => import('@/app/comercial/consultas-buro/pages/ConsultasBuroPage')),
+);
+
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -457,6 +461,7 @@ const ServiciosPage = Loadable(
 const UpdateServicioPage = Loadable(
   lazy(() => import('@/app/cliente/servicio/pages/forms/UpdateServicioPage')),
 );
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -868,6 +873,11 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.supervisionComercial.codigosOtp,
             element: <CodigosOtpSupervicionComercialMainPage />,
+          },
+          ///* consultas buro
+          {
+            path: ROUTER_PATHS.supervisionComercial.consultasBuro,
+            element: <ConsultasBuroPage />,
           },
         ],
       },

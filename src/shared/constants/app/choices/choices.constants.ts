@@ -10,10 +10,11 @@ export const IDENTIFICATION_TYPE_ARRAY_CHOICES = [
 ];
 
 export enum UserRolesEnumChoice {
-  GERENCIA = 'GERENCIA',
-  ADMINISTRADOR = 'ADMINISTRADOR',
-  SUPERVISOR = 'SUPERVISOR',
-  AGENTE = 'AGENTE',
+  GERENCIA = 'GERENCIA', // all business
+  ADMINISTRADOR = 'ADMINISTRADOR', // all area
+  COORDINADOR = 'COORDINADOR', // all department
+  SUPERVISOR = 'SUPERVISOR', // all sales channel
+  AGENTE = 'AGENTE', // all created by himself
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
