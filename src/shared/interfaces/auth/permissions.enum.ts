@@ -76,6 +76,7 @@ export enum PermissionsEnum {
   users_view_profile = 'users.view_profile',
   users_view_user = 'users.view_usuario',
   comecial_view_consultaburo = 'comercial.view_consultaburo',
+  operaciones_view_agendamiento = 'operaciones.view_agendamiento',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -148,6 +149,7 @@ export enum PermissionsEnum {
   users_add_profile = 'users.add_profile',
   users_add_user = 'users.add_usuario',
   comecial_add_consultaburo = 'comercial.add_consultaburo',
+  operaciones_add_agendamiento = 'operaciones.add_agendamiento',
 
   // // // // CHANGE ---------------------------
   admin_change_logentry = 'admin.change_logentry',
@@ -219,6 +221,7 @@ export enum PermissionsEnum {
   users_change_profile = 'users.change_profile',
   users_change_user = 'users.change_usuario',
   comecial_change_consultaburo = 'comercial.change_consultaburo',
+  operaciones_change_agendamiento = 'operaciones.change_agendamiento',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',
@@ -294,6 +297,7 @@ export enum PermissionsEnum {
   users_delete_profile = 'users.delete_profile',
   users_delete_user = 'users.delete_usuario',
   comecial_delete_consultaburo = 'comercial.delete_consultaburo',
+  operaciones_delete_agendamiento = 'operaciones.delete_agendamiento',
 
   // // // // PRINT ---------------------------
   billing_print_credit_note = 'billing.print_credit_note',
