@@ -335,7 +335,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       page_size: 900,
       tipo_servicio: watchedServiceType,
       tipo_plan: watchedServicePlan,
-      clasificacion_score_buro: watchedSuggestedPlansBuro,
+      clasificacion_score_buro: watchedSuggestedPlansBuro, // only filters
     },
   });
 
@@ -629,7 +629,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     ) || [ClasificacionPlanesScoreBuroEnumChoice.BASICO];
 
     setSuggestedPlansBuroKey(suggestedPlansKey);
-    form.setValue('plan_sugerido_buro', suggestedPlansKey.join(','));
+    form.reset({
+      ...form.getValues(),
+      rango_capacidad_pago: data.plan_sugerido?.[0]?.rangoCapacidadDePago || '',
+      score_servicios: data.plan_sugerido?.[0]?.scoreServicios || '',
+      plan_sugerido_buro: suggestedPlansKey.join(','),
+      score_sobreendeudamiento: data.score_sobreendeudamiento.decision || '',
+      planes_sugeridos_buro:
+        suggestedPlansKey as ClasificacionPlanesScoreBuroEnumChoice[],
+    });
   };
   const onErrorEquifax = async (err: any) => {
     if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
@@ -645,7 +653,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
     setAlreadyConsultedEquifax(true);
     setSuggestedPlansBuroKey(suggestedPlansBuroKey);
-    form.setValue('plan_sugerido_buro', suggestedPlansBuroKey.join(','));
+    // TODO: set default values
+    form.reset({
+      ...form.getValues(),
+      rango_capacidad_pago: '',
+      score_servicios: '',
+      plan_sugerido_buro: suggestedPlansBuroKey.join(','),
+      score_sobreendeudamiento: '',
+      planes_sugeridos_buro: suggestedPlansBuroKey,
+    });
     setIsCheckingIdentificacionEquifax(false);
   };
 
@@ -1344,7 +1360,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               size={gridSizeMdLg6}
               onChangeValue={() => {
                 // reset related fields
-                form.setValue('plan', '' as any);
+                form.setValue('plan_internet', '' as any);
               }}
             />
             <CustomAutocompleteArrString
@@ -1359,7 +1375,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               size={gridSizeMdLg6}
               onChangeValue={() => {
                 // reset related fields
-                form.setValue('plan', '' as any);
+                form.setValue('plan_internet', '' as any);
               }}
             />
             <CustomAutocomplete<PlanInternet>

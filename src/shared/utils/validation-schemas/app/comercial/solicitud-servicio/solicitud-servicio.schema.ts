@@ -73,53 +73,6 @@ export const solicitudServicioFormSchema = yup.object({
     .required('El campo nacionalidad es requerido')
     .max(200, 'El campo nacionalidad no debe exceder los 200 caracteres'),
 
-  // EQUIFAX -----------
-  // plan_sugerido_buro: yup
-  //   .string()
-  //   .required('El campo plan sugerido buro es requerido')
-  //   .max(200, 'El campo plan sugerido buro no debe exceder los 200 caracteres'),
-  // plan: yup
-  //   .number()
-  //   .typeError('El campo plan es requerido')
-  //   .required('El campo plan es requerido'),
-  // categoria_score_desicion: yup
-  //   .string()
-  //   .required('El campo categoria score desicion es requerido')
-  //   .max(
-  //     200,
-  //     'El campo categoria score desicion no debe exceder los 200 caracteres',
-  //   ),
-  // valor_maximo: yup
-  //   .string()
-  //   .required('El campo valor maximo es requerido')
-  //   .max(200, 'El campo valor maximo no debe exceder los 200 caracteres'),
-  // valor_minimo: yup
-  //   .string()
-  //   .required('El campo valor minimo es requerido')
-  //   .max(200, 'El campo valor minimo no debe exceder los 200 caracteres'),
-  // score_inclusion: yup
-  //   .string()
-  //   .required('El campo score inclusion es requerido')
-  //   .max(200, 'El campo score inclusion no debe exceder los 200 caracteres'),
-  // score_sobreendeudamiento: yup
-  //   .string()
-  //   .required('El campo score sobreendeudamiento es requerido')
-  //   .max(
-  //     200,
-  //     'El campo score sobreendeudamiento no debe exceder los 200 caracteres',
-  //   ),
-  // score_servicios: yup
-  //   .string()
-  //   .required('El campo score servicios es requerido')
-  //   .max(200, 'El campo score servicios no debe exceder los 200 caracteres'),
-  // rango_capacidad_pago: yup
-  //   .string()
-  //   .required('El campo rango capacidad pago es requerido')
-  //   .max(
-  //     200,
-  //     'El campo rango capacidad pago no debe exceder los 200 caracteres',
-  //   ),
-
   //  coverage
   thereIsCoverage: yup.boolean().optional().nullable(),
   sector: yup

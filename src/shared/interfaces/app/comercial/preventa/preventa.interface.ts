@@ -1,4 +1,5 @@
 import {
+  ClasificacionPlanesScoreBuroEnumChoice,
   EstadoPreventaEnumChoice,
   InternetPlanInternetTypeEnumChoice,
   InternetServiceTypeEnumChoice,
@@ -50,14 +51,20 @@ export interface Preventa {
   created_at?: string;
   modified_at?: string;
 
+  // equifax --------------
+  rango_capacidad_pago: string;
+  score_servicios: string;
+  score_sobreendeudamiento: string;
+  plan_sugerido_buro: string; // ClasificacionPlanesScoreBuroEnumChoice,
+  planes_sugeridos_buro?: ClasificacionPlanesScoreBuroEnumChoice[];
+  plan_internet?: number;
+
   ///* fk
   metodo_pago?: number;
   entidad_financiera?: number; // debito
   tipo_cuenta_bancaria?: TipoCuentaBancariaEnumChoice; // debito
   solicitud_servicio?: number;
   tarjeta?: number; // credito
-
-  plan_internet?: number;
 
   // sales filter logic
   area: number;

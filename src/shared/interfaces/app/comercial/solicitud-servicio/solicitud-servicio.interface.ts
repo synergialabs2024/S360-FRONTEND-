@@ -38,21 +38,10 @@ export interface SolicitudServicio {
 
   block_until?: string; // timestamp
 
-  // EQUIFAX
-  categoria_score_desicion: string;
-  valor_maximo: string;
-  valor_minimo: string;
-  score_inclusion: string;
-  score_sobreendeudamiento: string;
-  score_servicios: string;
-  rango_capacidad_pago: string;
-
   created_at?: string;
   modified_at?: string;
 
   ///* fk -----------
-  plan_sugerido_buro?: string; // clasificacion buro
-  plan?: number; // fk - based on buro
   pais?: number;
   nacionalidad?: string; // pais can upd
 

@@ -214,15 +214,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
       pais: currentCountry?.id,
       nacionalidad: cedulaCitizen?.nacionalidad,
-
-      // TODO: get data from equifax
-      categoria_score_desicion: 'A',
-      valor_maximo: '1000',
-      valor_minimo: '500',
-      score_inclusion: '600',
-      score_sobreendeudamiento: '9999',
-      score_servicios: '700',
-      rango_capacidad_pago: 'A',
     });
   };
   const onErrorSearchCedula = (err: any) => {
@@ -395,18 +386,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       direccion: '',
       identificacion: '',
       tiene_cobertura: false,
-      categoria_score_desicion: '',
       email: '',
       celular: '',
-      score_inclusion: '',
-      score_servicios: '',
-      score_sobreendeudamiento: '',
-      rango_capacidad_pago: '',
-      valor_maximo: '',
-      valor_minimo: '',
       es_cliente: false,
       estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
-      plan_sugerido_buro: undefined,
       isValidIdentificacion: false, // helper
 
       pais: undefined,

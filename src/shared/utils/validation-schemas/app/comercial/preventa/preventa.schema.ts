@@ -20,6 +20,40 @@ export const preventaFormSchema = yup.object({
     .required('El campo celular adicional es requerido')
     .max(200, 'El campo celular adicional no debe exceder los 200 caracteres'),
 
+  // EQUIFAX -----------
+  rango_capacidad_pago: yup
+    .string()
+    .required('El campo rango capacidad pago es requerido')
+    .max(
+      200,
+      'El campo rango capacidad pago no debe exceder los 200 caracteres',
+    ),
+  score_servicios: yup
+    .string()
+    .required('El campo score servicios es requerido')
+    .max(200, 'El campo score servicios no debe exceder los 200 caracteres'),
+  score_sobreendeudamiento: yup
+    .string()
+    .required('El campo score sobreendeudamiento es requerido')
+    .max(
+      200,
+      'El campo score sobreendeudamiento no debe exceder los 200 caracteres',
+    ),
+  plan_sugerido_buro: yup
+    .string()
+    .required('El campo plan sugerido buro es requerido')
+    .max(200, 'El campo plan sugerido buro no debe exceder los 200 caracteres'),
+  planes_sugeridos_buro: yup
+    .array()
+    .of(
+      yup
+        .string()
+        .max(
+          200,
+          'El campo planes sugeridos buro no debe exceder los 200 caracteres',
+        ),
+    ),
+
   ///* fk ---------------------------
   tipo_servicio: yup
     .string()
