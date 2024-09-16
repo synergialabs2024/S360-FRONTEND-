@@ -145,7 +145,7 @@ const ConsultasBuroPage: React.FC<ConsultasBuroPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Consultas Buró"
+      title="Consultas EQUIFAX"
       createPageUrl={`${returnUrlConsultasBuroPage}/crear`}
       showCreateBtn={false}
     >

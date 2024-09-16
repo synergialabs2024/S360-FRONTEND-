@@ -209,6 +209,15 @@ export const ROUTER_PATHS = {
     preventasNav: '/comercial/preventas',
   },
 
+  /////* Operaciones ----------------
+  operaciones: {
+    root: 'operaciones',
+
+    ///* agendamiento
+    agendamientos: 'agendamientos',
+    agendamientosNav: '/operaciones/agendamientos',
+  },
+
   /////* Infraestructura ----------------
   infraestructura: {
     root: 'infraestructura',

@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import PrivateRoutes from './PrivateRoutes';
 
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
+import OperacionesModule from '@/app/operaciones/OperacionesModule';
 import { Loadable } from '@/shared/components/common';
 import AuthRoutes from './AuthRoutes';
 import { ROUTER_PATHS } from './constants';
@@ -922,6 +923,14 @@ const AppRouter = createBrowserRouter([
           },
         ],
       },
+
+      //////////* Operaciones ------------
+      {
+        path: ROUTER_PATHS.operaciones.root,
+        element: <OperacionesModule />,
+        children: [],
+      },
+
       //////////* Cliente ------------
       {
         path: ROUTER_PATHS.clientes.root,

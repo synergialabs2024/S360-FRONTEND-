@@ -360,7 +360,7 @@ export const useNestedMenu = () => {
               id: 'coordinacion-agendas',
               title: 'Coordinación de agendas',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.operaciones.agendamientosNav,
               // target: true, // target blank
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
