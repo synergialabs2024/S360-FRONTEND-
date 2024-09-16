@@ -2,8 +2,10 @@ import { useSocket } from '@/context/SocketContext';
 import { MainCard } from '@/shared/components/template';
 import { useAuthStore } from '@/store/auth';
 import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
+import CircularProgress from '@mui/material/CircularProgress';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grid from '@mui/material/Grid';
 import Popover from '@mui/material/Popover';
@@ -19,8 +21,8 @@ const NotificationSection = () => {
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleToggle = (event: any) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setOpen(prevOpen => !prevOpen);
   };
@@ -36,8 +38,10 @@ const NotificationSection = () => {
     }
   }, [open]);
 
-  const [notificaciones, setNotificaciones] = useState([]);
+  // notificaciones ------------------------
+  const [notificaciones, setNotificaciones] = useState<any[]>([]);
   const [sinLeer, setSinLeer] = useState(0);
+  const [loading, setLoading] = useState(true);
   const user = useAuthStore(s => s.user);
   const token = useAuthStore(s => s.token);
 
@@ -46,8 +50,9 @@ const NotificationSection = () => {
 
   useEffect(() => {
     const fetchNotificaciones = async () => {
+      setLoading(true);
       const response = await fetch(
-        `http://yiga5.localhost:3333/api/v1/notificacion-usuario/?destinatario=${(user as any)?.id!}&page_size=55&leida=false`,
+        `http://yiga5.localhost:3333/api/v1/notificacion-usuario/?destinatario=${user?.id!}&page_size=55&leida=false`,
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -62,6 +67,7 @@ const NotificationSection = () => {
         (notif: any) => !notif.leida,
       ).length;
       setSinLeer(sinLeerCount);
+      setLoading(false);
     };
 
     fetchNotificaciones();
@@ -92,26 +98,42 @@ const NotificationSection = () => {
         }}
       >
         <ButtonBase sx={{ borderRadius: '12px' }}>
-          <Avatar
-            variant="rounded"
-            sx={{
-              ...(theme.typography as any).commonAvatar,
-              ...(theme.typography as any).mediumAvatar,
-              transition: 'all .2s ease-in-out',
-              background: theme.palette.secondary.light,
-              color: theme.palette.secondary.dark,
-              '&[aria-controls="menu-list-grow"],&:hover': {
-                background: theme.palette.secondary.dark,
-                color: theme.palette.secondary.light,
-              },
-            }}
-            aria-controls={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            onClick={handleToggle}
-            color="inherit"
+          <Badge
+            badgeContent={
+              loading ? (
+                <CircularProgress
+                  size={12}
+                  sx={{
+                    color: 'white',
+                  }}
+                />
+              ) : (
+                sinLeer
+              )
+            }
+            color="error"
           >
-            <IconBell stroke={1.5} size="1.3rem" />
-          </Avatar>
+            <Avatar
+              variant="rounded"
+              sx={{
+                ...(theme.typography as any).commonAvatar,
+                ...(theme.typography as any).mediumAvatar,
+                transition: 'all .2s ease-in-out',
+                background: theme.palette.secondary.light,
+                color: theme.palette.secondary.dark,
+                '&[aria-controls="menu-list-grow"],&:hover': {
+                  background: theme.palette.secondary.dark,
+                  color: theme.palette.secondary.light,
+                },
+              }}
+              aria-controls={open ? 'menu-list-grow' : undefined}
+              aria-haspopup="true"
+              onClick={handleToggle}
+              color="inherit"
+            >
+              <IconBell stroke={1.5} size="1.3rem" />
+            </Avatar>
+          </Badge>
         </ButtonBase>
       </Box>
       <Popover
