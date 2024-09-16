@@ -12,6 +12,7 @@ export const LOGIN_ERRORS = {
 };
 
 export interface UserLoginResponse {
+  id?: number;
   uuid?: string;
   username: string;
   email: string;

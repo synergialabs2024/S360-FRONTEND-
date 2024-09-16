@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import 'simplebar-react/dist/simplebar.min.css';
 
+import { SocketProvider } from './context/SocketContext';
+
 import AppRouter from './router/AppRouter';
 import { CustomBackdropLoader, CustomConfirmDialog } from './shared/components';
 import AppTheme from './themes/AppTheme';
@@ -16,34 +18,36 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AppTheme>
-        {/* ========= router ========= */}
-        <RouterProvider router={AppRouter} />
+    <SocketProvider>
+      <QueryClientProvider client={queryClient}>
+        <AppTheme>
+          {/* ========= router ========= */}
+          <RouterProvider router={AppRouter} />
 
-        {/* ----- modal ----- */}
-        <CustomConfirmDialog />
+          {/* ----- modal ----- */}
+          <CustomConfirmDialog />
 
-        {/* ----- loader ----- */}
-        <CustomBackdropLoader />
+          {/* ----- loader ----- */}
+          <CustomBackdropLoader />
 
-        {/* ----- Toaster alerts ----- */}
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          limit={3}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-        />
-      </AppTheme>
-    </QueryClientProvider>
+          {/* ----- Toaster alerts ----- */}
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            limit={3}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition={Bounce}
+          />
+        </AppTheme>
+      </QueryClientProvider>
+    </SocketProvider>
   );
 }
 

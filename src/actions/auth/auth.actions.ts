@@ -18,8 +18,6 @@ import {
 } from '@/store/auth';
 import { useUiConfirmModalStore, useUiStore } from '@/store/ui';
 
-const { post, get } = erpAPI();
-
 export type LoginData = {
   username: string;
   password: string;
@@ -157,6 +155,8 @@ export const useLogin = () => {
 };
 
 export const login = async (data: LoginData) => {
+  const { post } = erpAPI();
+
   const setAuthToken = useAuthStore.getState().setToken;
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
@@ -183,10 +183,14 @@ export const login = async (data: LoginData) => {
 };
 
 export const logOutAxios = async () => {
+  const { post } = erpAPI();
+
   return post('/auth/logout/', null, true);
 };
 
 export const unBlockUserInvalidPassword = async (id: number) => {
+  const { get } = erpAPI();
+
   try {
     return await get(`/desbloquear-usuario/${id}/`, true);
   } catch (error) {

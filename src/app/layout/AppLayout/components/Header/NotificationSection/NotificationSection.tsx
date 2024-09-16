@@ -1,47 +1,18 @@
+import { useSocket } from '@/context/SocketContext';
 import { MainCard } from '@/shared/components/template';
+import { useAuthStore } from '@/store/auth';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import CardActions from '@mui/material/CardActions';
-import Chip from '@mui/material/Chip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Popover from '@mui/material/Popover';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { IconBell } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from 'react-router-dom';
-
-import { Button } from '@mui/material';
-import NotificationList from './NotificationList';
-
-// notification status options
-const status = [
-  {
-    value: 'all',
-    label: 'All Notification',
-  },
-  {
-    value: 'new',
-    label: 'New',
-  },
-  {
-    value: 'unread',
-    label: 'Unread',
-  },
-  {
-    value: 'other',
-    label: 'Other',
-  },
-];
-
-// ==============================|| NOTIFICATION ||============================== //
 
 const NotificationSection = () => {
   const theme = useTheme();
@@ -49,8 +20,6 @@ const NotificationSection = () => {
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [value, setValue] = useState('');
-
   const handleToggle = (event: any) => {
     setAnchorEl(event.currentTarget);
     setOpen(prevOpen => !prevOpen);
@@ -67,9 +36,49 @@ const NotificationSection = () => {
     }
   }, [open]);
 
-  const handleChange = (event: any) => {
-    if (event?.target.value) setValue(event?.target.value);
-  };
+  const [notificaciones, setNotificaciones] = useState([]);
+  const [sinLeer, setSinLeer] = useState(0);
+  const user = useAuthStore(s => s.user);
+  const token = useAuthStore(s => s.token);
+
+  // socketio
+  const socket = useSocket();
+
+  useEffect(() => {
+    const fetchNotificaciones = async () => {
+      const response = await fetch(
+        `http://yiga5.localhost:3333/api/v1/notificacion-usuario/?destinatario=${(user as any)?.id!}&page_size=55&leida=false`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        },
+      );
+      const data = await response.json();
+      const items = data.data.items;
+      setNotificaciones(items);
+
+      const sinLeerCount = data.data.items.filter(
+        (notif: any) => !notif.leida,
+      ).length;
+      setSinLeer(sinLeerCount);
+    };
+
+    fetchNotificaciones();
+  }, [token, user]);
+
+  useEffect(() => {
+    if (!socket || !user) return;
+
+    socket.on('recibir_notificacion_ventas', data => {
+      console.log('data', data);
+      setSinLeer(prev => prev + 1);
+    });
+
+    return () => {
+      socket.off('recibir_notificacion_ventas');
+    };
+  }, [socket, user]);
 
   return (
     <>
@@ -135,19 +144,10 @@ const NotificationSection = () => {
                   sx={{ pt: 2, px: 2 }}
                 >
                   <Grid item>
-                    <Stack direction="row" spacing={2}>
-                      <Typography variant="subtitle1">
-                        All Notification
-                      </Typography>
-                      <Chip
-                        size="small"
-                        label="01"
-                        sx={{
-                          color: theme.palette.background.default,
-                          bgcolor: theme.palette.warning.dark,
-                        }}
-                      />
-                    </Stack>
+                    <h1>Sin leer: {sinLeer}</h1>
+                  </Grid>
+                  <Grid item>
+                    <h1>Notificaciones: {notificaciones?.length}</h1>
                   </Grid>
                   <Grid item>
                     <Typography
@@ -161,49 +161,7 @@ const NotificationSection = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <PerfectScrollbar
-                  style={{
-                    height: '100%',
-                    maxHeight: 'calc(100vh - 205px)',
-                    overflowX: 'hidden',
-                  }}
-                >
-                  <Grid container direction="column" spacing={2}>
-                    <Grid item xs={12}>
-                      <Box sx={{ px: 2, pt: 0.25 }}>
-                        <TextField
-                          id="outlined-select-currency-native"
-                          select
-                          fullWidth
-                          value={value}
-                          onChange={handleChange}
-                          SelectProps={{
-                            native: true,
-                          }}
-                        >
-                          {status.map(option => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </TextField>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12} p={0}>
-                      <Divider sx={{ my: 0 }} />
-                    </Grid>
-                  </Grid>
-                  <NotificationList />
-                </PerfectScrollbar>
-              </Grid>
             </Grid>
-            <Divider />
-            <CardActions sx={{ p: 1.25, justifyContent: 'center' }}>
-              <Button size="small" disableElevation>
-                View All
-              </Button>
-            </CardActions>
           </MainCard>
         </ClickAwayListener>
       </Popover>
