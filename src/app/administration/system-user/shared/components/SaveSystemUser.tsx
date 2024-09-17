@@ -9,11 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateUserProfileData,
   useCreateSystemUser,
-  useFetchAreas,
   useFetchCanalVentas,
   useFetchCargos,
   useFetchCiudades,
-  useFetchDepartamentos,
   useFetchPaises,
   useFetchProvincias,
   useFetchSectores,
@@ -44,17 +42,12 @@ import {
   EMPLOYEE_TYPE_ARRAY_CHOICES,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
   IdentificationTypeEnumChoice,
-  USER_ROLES_ARRAY_CHOICES,
-  UserRolesEnumChoice,
 } from '@/shared/constants/app';
 import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import {
-  Area,
-  CanalVenta,
   Cargo,
   Ciudad,
-  Departamento,
   Pais,
   Provincia,
   Sector,
@@ -67,21 +60,17 @@ import { systemUserFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSystemUserPage } from '../../pages/tables/SystemUserPage';
+import VentasAndOtrosScence from './VentasAndOtrosScence';
 
 export type SaveSystemUserProps = {
   title: string;
   systemUserItem?: SystemUserItem;
 };
 
-type SaveFormData = CreateUserProfileData & {
+export type SaveFormData = CreateUserProfileData & {
   create_employee?: boolean; // handle create employee
   isEdit: boolean; // yuo validation password
 };
-
-const AVAILABLE_VENETAS_ROLE = [
-  UserRolesEnumChoice.SUPERVISOR,
-  UserRolesEnumChoice.AGENTE,
-];
 
 const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   title,
@@ -95,8 +84,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
 
   ///* local state ----------------
   const [canWritePassword, setCanWritePassword] = useState<boolean>(true);
-  const [canSelectCanalVenta, setCanSelectCanalVenta] =
-    useState<boolean>(false);
 
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -124,26 +111,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   const whatchedIsEdit = form.watch('isEdit');
 
   ///* fetch data ----------------
-  const {
-    data: areaPagingRes,
-    isLoading: isLoadingAreas,
-    isRefetching: isRefetchingAreas,
-  } = useFetchAreas({
-    params: {
-      page_size: 726,
-    },
-  });
-  const {
-    data: departamentoPagingRes,
-    isLoading: isLoadingDepartamentos,
-    isRefetching: isRefetchingDepartamentos,
-  } = useFetchDepartamentos({
-    enabled: !!watchedArea,
-    params: {
-      area: watchedArea,
-      page_size: 1000,
-    },
-  });
+
   const {
     data: canalesVentaPagingRes,
     isLoading: isLoadingCanalesVenta,
@@ -297,7 +265,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     if (!systemUserItem) return;
     const { user, employee } = systemUserItem;
     const createEmployee = !!employee;
-    const userRole = user?.role; // choice
 
     form.reset({
       ...(employee && { ...employee }),
@@ -307,9 +274,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
       isEdit: true,
     });
 
-    setCanSelectCanalVenta(AVAILABLE_VENETAS_ROLE.includes(userRole!));
     setCanWritePassword(false);
-    form.setValue('canal_venta', user?.canal_venta);
   }, [form, systemUserItem]);
 
   // alerts no data | empty arr
@@ -351,10 +316,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
 
   // alerts no data | empty arr
   useEffect(() => {
-    if (isLoadingAreas) return;
-    !areaPagingRes?.data?.items?.length &&
-      ToastWrapper.warning('No se encontraron áreas disponibles');
-
     if ((isLoadingCargos || isRefetchingCargos) && !!watchedCreateEmployee)
       return;
     !cargosPagingRes?.data?.items?.length &&
@@ -367,10 +328,8 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     !canalesVentaPagingRes?.data?.items?.length &&
       ToastWrapper.warning('No se encontraron canales de venta disponibles');
   }, [
-    areaPagingRes?.data?.items?.length,
     canalesVentaPagingRes?.data?.items?.length,
     cargosPagingRes?.data?.items?.length,
-    isLoadingAreas,
     isLoadingCanalesVenta,
     isLoadingCargos,
     isRefetchingCanalesVenta,
@@ -380,10 +339,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   ]);
 
   const customLoader =
-    isLoadingAreas ||
-    isRefetchingAreas ||
-    isLoadingDepartamentos ||
-    isRefetchingDepartamentos ||
     isSystemGroupsLoading ||
     isSystemGroupsRefetching ||
     isRefetchingCanalesVenta ||
@@ -486,7 +441,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
               handleFetchCedulaRucInfo(watchedIdentification);
             }}
           />
-
           <CustomTextField
             label="Razón social"
             name="razon_social"
@@ -504,7 +458,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
             helperText={errors.email?.message}
             type="email"
           />
-
           <CustomTextField
             label="Username"
             name="username"
@@ -544,84 +497,17 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
                 });
             }}
           />
-
           {/* ---------- FK ---------- */}
-          <CustomAutocomplete<Area>
-            label="Area"
-            name="area"
-            // options
-            options={areaPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().area}
-            isLoadingData={isLoadingAreas}
-            // vaidation
-            control={form.control}
-            error={errors.area}
-            helperText={errors.area?.message}
-            size={gridSizeMdLg6}
-          />
-          <CustomAutocomplete<Departamento>
-            label="Departamento"
-            name="departamento"
-            // options
-            options={departamentoPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().departamento}
-            isLoadingData={isLoadingDepartamentos}
-            // vaidation
-            control={form.control}
-            error={errors.departamento}
-            helperText={errors.departamento?.message}
-            size={gridSizeMdLg6}
-          />
-          <CustomAutocompleteArrString
-            label="Rol de Usuario"
-            name="role"
-            control={form.control}
-            defaultValue={form.getValues('role')}
-            options={USER_ROLES_ARRAY_CHOICES}
-            isLoadingData={false}
-            error={errors.role}
-            helperText={errors.role?.message}
-            size={gridSizeMdLg6}
-            disableClearable
-            onChangeValue={role => {
-              const canSelectCanalVenta = AVAILABLE_VENETAS_ROLE.includes(role);
-              setCanSelectCanalVenta(canSelectCanalVenta);
-            }}
-          />
+          <VentasAndOtrosScence form={form} />
 
           {/* ----------- canal ventas ----------- */}
           <>
-            {canSelectCanalVenta && (
-              <CustomAutocomplete<CanalVenta>
-                label="Canal de Venta"
-                name="canal_venta"
-                // options
-                options={canalesVentaPagingRes?.data?.items || []}
-                valueKey="name"
-                actualValueKey="id"
-                defaultValue={form.getValues().canal_venta}
-                isLoadingData={
-                  isLoadingCanalesVenta || isRefetchingCanalesVenta
-                }
-                // vaidation
-                control={form.control}
-                error={errors.canal_venta}
-                helperText={errors.canal_venta?.message}
-                required={false}
-                size={gridSizeMdLg6}
-              />
-            )}
-
             <SampleCheckbox
               label="¿Crear Empleado?"
               name="create_employee"
               control={form.control}
               defaultValue={!!form.getValues().create_employee}
-              size={canSelectCanalVenta ? gridSizeMdLg6 : gridSize}
+              size={gridSize}
               onChangeValue={v => {
                 !!v && ToastWrapper.info('Complete los datos del empleado');
               }}

@@ -19,6 +19,7 @@ export enum UserRolesEnumChoice {
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
   UserRolesEnumChoice.ADMINISTRADOR,
+  UserRolesEnumChoice.COORDINADOR,
   UserRolesEnumChoice.SUPERVISOR,
   UserRolesEnumChoice.AGENTE,
 ];
@@ -292,3 +293,30 @@ export enum MetodoPagoEnumUUID {
   CREDITO = '9fea3665-bebd-4026-a64b-5cccf7d39de6',
   RECAUDACIONES = '4750cfb2-1f08-402f-b1f3-be11fcfcd8ef',
 }
+
+// -----------------------------------------------
+
+// examples
+export enum UserOtherRolesEnumChoice {
+  DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',
+  DISENO_PRODUCTO = 'DISEÑO DE PRODUCTO',
+  MARKETING_DIGITAL = 'MARKETING DIGITAL',
+  ATENCION_CLIENTE = 'ATENCIÓN AL CLIENTE',
+  RRHH = 'RRHH',
+  FINANZAS = 'FINANZAS',
+  OPERACIONES = 'OPERACIONES',
+  LEGAL = 'LEGAL',
+  GESTIÓN_PRODUCTO = 'GESTIÓN DE PRODUCTO',
+}
+
+export const USER_OTHER_ROLES_ARRAY_CHOICES = [
+  UserOtherRolesEnumChoice.DESARROLLO_SOFTWARE,
+  UserOtherRolesEnumChoice.DISENO_PRODUCTO,
+  UserOtherRolesEnumChoice.MARKETING_DIGITAL,
+  UserOtherRolesEnumChoice.ATENCION_CLIENTE,
+  UserOtherRolesEnumChoice.RRHH,
+  UserOtherRolesEnumChoice.FINANZAS,
+  UserOtherRolesEnumChoice.OPERACIONES,
+  UserOtherRolesEnumChoice.LEGAL,
+  UserOtherRolesEnumChoice.GESTIÓN_PRODUCTO,
+];

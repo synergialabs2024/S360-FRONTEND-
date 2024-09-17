@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { emailYupValidation } from '../../common';
+import { UserRolesEnumChoice } from '@/shared/constants';
 
 export const systemUserFormSchema = yup.object({
   username: yup
@@ -22,20 +23,44 @@ export const systemUserFormSchema = yup.object({
     .string()
     .required('El campo identificacion es requerido')
     .max(200, 'El campo identificacion no debe exceder los 200 caracteres'),
-  area: yup
-    .number()
-    .typeError('El campo area es requerido')
-    .required('El campo area es requerido'),
-  departamento: yup
-    .number()
-    .typeError('El campo departamento es requerido')
-    .required('El campo departamento es requerido'),
+  groups: yup.string().optional().nullable(),
+
+  //rol
   role: yup
     .string()
     .required('El campo role es requerido')
     .max(200, 'El campo role no debe exceder los 200 caracteres'),
-  groups: yup.string().optional().nullable(),
-  canal_venta: yup.number().optional().nullable(),
+  area: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('role', {
+      is:
+        UserRolesEnumChoice.ADMINISTRADOR ||
+        UserRolesEnumChoice.COORDINADOR ||
+        UserRolesEnumChoice.SUPERVISOR ||
+        UserRolesEnumChoice.AGENTE,
+      then: schema => schema.required('El campo area es requerido.'),
+    }),
+  departamento: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('role', {
+      is:
+        UserRolesEnumChoice.COORDINADOR ||
+        UserRolesEnumChoice.SUPERVISOR ||
+        UserRolesEnumChoice.AGENTE,
+      then: schema => schema.required('El campo departamento es requerido.'),
+    }),
+  canal_venta: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('role', {
+      is: UserRolesEnumChoice.SUPERVISOR || UserRolesEnumChoice.AGENTE,
+      then: schema => schema.required('El campo canal_venta es requerido.'),
+    }),
 
   // create_employee
   create_employee: yup.boolean().optional().nullable(),
