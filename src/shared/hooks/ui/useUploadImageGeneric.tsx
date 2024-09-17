@@ -11,6 +11,8 @@ export const useUploadImageGeneric = () => {
   const [image2, setImage2] = useState<File | null>(null);
   const [image3, setImage3] = useState<File | null>(null);
   const [image4, setImage4] = useState<File | null>(null);
+  const [image5, setImage5] = useState<File | null>(null);
+  const [image6, setImage6] = useState<File | null>(null);
 
   ///* upload component
   const UploadImageBtnComponent = useMemo(() => UploadImagePreviewBtn, []);
@@ -28,5 +30,9 @@ export const useUploadImageGeneric = () => {
     setImage3,
     image4,
     setImage4,
+    image5,
+    setImage5,
+    image6,
+    setImage6,
   };
 };

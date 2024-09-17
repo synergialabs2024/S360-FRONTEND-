@@ -1,11 +1,4 @@
-import {
-  Box,
-  CardMedia,
-  Grid,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Box, CardMedia, Grid, IconButton, Tooltip } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
 
@@ -52,7 +45,6 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
 }) => {
   const [imagenUrl, setImagenUrl] = useState<string | undefined>(imageUrl);
   const [dragActive, setDragActive] = useState(false);
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -87,16 +79,6 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
         onDragOver={e => handleDrag(e, true)}
         onDragEnter={e => handleDrag(e, true)}
         onDragLeave={e => handleDrag(e, false)}
-        sx={{
-          border: dragActive ? '2px dashed #00aaff' : '2px dashed #b8bdc1',
-          borderRadius: '4px',
-          padding: '16px',
-          textAlign: 'center',
-          cursor: 'pointer',
-          backgroundColor: disabledInputAndRemoveBtn
-            ? '#f5f5f5'
-            : 'transparent',
-        }}
       >
         <input
           type="file"
@@ -107,9 +89,20 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
           disabled={disabledInputAndRemoveBtn}
         />
         <label htmlFor={'image-upload-input-' + buttonLabel}>
-          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          <Box
+            sx={{
+              border: dragActive ? '2px dashed #00AAFF' : '2px dashed #B8BDC1',
+              borderRadius: '4px',
+              padding: '16px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              backgroundColor: disabledInputAndRemoveBtn
+                ? '#F5F5F5'
+                : 'transparent',
+            }}
+          >
             {buttonLabel}
-          </Typography>
+          </Box>
         </label>
       </Box>
       {(selectedImage || imagenUrl) && (
@@ -136,7 +129,6 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
               </IconButton>
             </Tooltip>
           )}
-
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CardMedia
               component="img"

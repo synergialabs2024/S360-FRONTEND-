@@ -2,6 +2,7 @@ import {
   GeneralModelStatesEnumChoice,
   SalesModelsEnumChoice,
   SalesStatesActionsEnumChoice,
+  SolicitudDesbloqueoTypeEnumChoice,
 } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
@@ -22,6 +23,7 @@ export interface SolicitudDesbloqueoVentas {
   state: boolean;
 
   motivo?: string;
+  tipo?: SolicitudDesbloqueoTypeEnumChoice;
 
   // model related
   modelo: SalesModelsEnumChoice; // choice

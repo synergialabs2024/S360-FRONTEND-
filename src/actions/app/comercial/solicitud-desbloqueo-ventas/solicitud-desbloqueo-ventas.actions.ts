@@ -206,6 +206,7 @@ export type CreateSolicitudDesbloqueoVentasData = Pick<
   | 'modelo_id'
   | 'modelo_estado'
   | 'solicitud_desbloqueo_estado' // first state created
+  | 'tipo'
 > & {};
 
 export type ApproveOrRejectSolicitudDesbloqueoVentasData = Pick<

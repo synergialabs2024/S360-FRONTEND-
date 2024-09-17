@@ -290,6 +290,14 @@ export enum SalesStatesActionsEnumChoice {
 
   // // PREVENTA =======================================
   PREVENTA_REASIGNACION_ESPERA = 'PREVENTA__REASIGNACION_ESPERA', // CREADA
+
+  SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_ESPERA = 'SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_ESPERA',
+  SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_APROBADO = 'SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_APROBADO',
+  SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_RECHAZADO = 'SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_RECHAZADO',
+}
+
+export enum SolicitudDesbloqueoTypeEnumChoice {
+  FOTO_PLANILLA_PREVENTA = 'FOTO_PLANILLA_PREVENTA',
 }
 
 // // UUID
@@ -311,6 +319,15 @@ export enum BucketTypeEnumChoice {
   IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
   IMAGES_ACEPTACION_CONTRATO = 'images/acaptacion-contrato',
   IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
+}
+
+export enum BucketKeyNameEnumChoice {
+  CEDULA_FRONTAL = 'cedula_frontal',
+  CEDULA_POSTERIOR = 'cedula_posterior',
+  VIVIENDA = 'vivienda',
+  PLANILLA_SERVICIOS = 'planilla_servicios',
+  ACEPTACION_CONTRATO = 'aceptacion_contrato',
+  COMPROBANTES_NO_PLANILLA = 'comprobantes_no_planilla',
 }
 
 // examples remove ------------------

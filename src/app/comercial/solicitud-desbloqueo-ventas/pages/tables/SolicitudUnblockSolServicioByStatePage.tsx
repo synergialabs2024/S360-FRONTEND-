@@ -4,7 +4,7 @@ import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo, useState } from 'react';
 
 import { useFetchSolicitudDesbloqueoVentass } from '@/actions/app';
-import { GeneralModelStatesEnumChoice } from '@/shared';
+import { GeneralModelStatesEnumChoice, SalesModelsEnumChoice } from '@/shared';
 import {
   ChipModelState,
   CustomSearch,
@@ -66,7 +66,9 @@ const SolicitudUnblockSolServicioByStatePage: React.FC<
       solicitud_servicio__identificacion: searchTerm,
       ...filterObject,
       filterByState: false,
+
       solicitud_desbloqueo_estado: state,
+      modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
     },
   });
 

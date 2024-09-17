@@ -14,11 +14,13 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   CreatePreventaParamsBase,
+  CreateSolicitudDesbloqueoVentasData,
   getSolicitudServicio,
   RequestUnlockOtpCodeParams,
   useConsultarEquifax,
   useCreateOtpCode,
   useCreatePreventa,
+  useCreateSolicitudDesbloqueoVentas,
   useFetchEntidadFinancieras,
   useFetchFlotas,
   useFetchMetodoPagos,
@@ -37,6 +39,7 @@ import {
 } from '@/actions/shared/cache-redis-types.interface';
 import { uploadFileToBucket } from '@/actions/statics-api';
 import {
+  BucketKeyNameEnumChoice,
   BucketTypeEnumChoice,
   ClasificacionPlanesScoreBuroEnumChoice,
   CodigoOtp,
@@ -108,6 +111,7 @@ import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage'
 import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
 import ValidButton from './ValidButton';
+import DocsSavePreventaStep from './DocsSavePreventaStep';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -150,6 +154,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   ///* hooks ---------------------
   const navigate = useNavigate();
+  const theme = useTheme();
+
   const {
     UploadImageDropZoneComponent,
     image1: cedulaFrontalImg,
@@ -160,8 +166,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setImage3: setDocumentoCuentaBancairaImg,
     image4: documentoTarjetaCreditoImg,
     setImage4: setDocumentoTarjetaCreditoImg,
+    image5: viviendaImg,
+    setImage5: setViviendaImg,
+    image6: planillaImg,
+    setImage6: setPlanillaImg,
   } = useUploadImageGeneric();
-  const theme = useTheme();
 
   ///* local state -------------------
   const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
@@ -170,7 +179,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     useState<boolean>(false);
   const [isCheckingCedula, setIsCheckingCedula] = useState<boolean>(false);
 
-  // const [suggestedPlans, setSuggestedPlans] = useState<PlanInternet[]>([]);
   const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
     [],
   );
@@ -531,14 +539,33 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.error(
         'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
       );
+    if (!viviendaImg)
+      return ToastWrapper.error('La foto de la vivienda es requerida');
+    if (!planillaImg)
+      return ToastWrapper.error('La foto de la planilla es requerida');
 
     // upload images ----
     setIsCheckingCedula(true);
     const [cedulaFrontalUrl] = await Promise.all([
       uploadFileToBucket({
         file: cedulaFrontalImg,
-        file_name: 'cedula_frontal',
+        file_name: BucketKeyNameEnumChoice.CEDULA_FRONTAL,
         bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+      }),
+      uploadFileToBucket({
+        file: cedulaPosteriorImg,
+        file_name: BucketKeyNameEnumChoice.CEDULA_POSTERIOR,
+        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+      }),
+      uploadFileToBucket({
+        file: viviendaImg,
+        file_name: BucketKeyNameEnumChoice.VIVIENDA,
+        bucketDir: BucketTypeEnumChoice.IMAGES_VIVIENDA,
+      }),
+      uploadFileToBucket({
+        file: planillaImg,
+        file_name: BucketKeyNameEnumChoice.PLANILLA_SERVICIOS,
+        bucketDir: BucketTypeEnumChoice.IMAGES_PLANILLA_SERVICIOS,
       }),
     ]);
     setIsCheckingCedula(false);
@@ -1751,38 +1778,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           </>
 
           {/* ============= Docs ============= */}
-          <>
-            <CustomTypoLabel
-              text="Documentos Adjuntos"
-              pt={CustomTypoLabelEnum.ptMiddlePosition}
-            />
-
-            <UploadImageDropZoneComponent
-              buttonLabel="Foto cédula frontal"
-              selectedImage={cedulaFrontalImg}
-              setSelectedImage={setCedulaFrontalImg}
-              sizeContainer={gridSize}
-            />
-            <UploadImageDropZoneComponent
-              buttonLabel="Foto cédula trasera"
-              selectedImage={cedulaPosteriorImg}
-              setSelectedImage={setCedulaPosteriorImg}
-            />
-
-            {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
-              <UploadImageDropZoneComponent
-                buttonLabel="Foto cuenta bancaria"
-                selectedImage={documentoCuentaBancariaImg}
-                setSelectedImage={setDocumentoCuentaBancairaImg}
-              />
-            ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
-              <UploadImageDropZoneComponent
-                buttonLabel="Foto tarjeta crédito"
-                selectedImage={documentoTarjetaCreditoImg}
-                setSelectedImage={setDocumentoTarjetaCreditoImg}
-              />
-            ) : null}
-          </>
+          <DocsSavePreventaStep
+            form={form}
+            solicitudServicioId={solicitudServicio?.id!}
+            UploadImageDropZoneComponent={UploadImageDropZoneComponent}
+            
+          />
         </>
       )}
 
