@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { handleAxiosError, ToastWrapper, UseMutationParams } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
-import { useUiStore } from '@/store/ui';
 
 ///* tanStack query ---------------
 export const useCreateTemporaryUploadLink = ({
@@ -18,7 +17,6 @@ export const useCreateTemporaryUploadLink = ({
   customOnError,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
-  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
     mutationFn: createTemporaryUploadLink,
@@ -43,30 +41,50 @@ export const useCreateTemporaryUploadLink = ({
       }
       handleAxiosError(error, customMessageErrorToast);
     },
-    onSettled: () => {
-      setIsGlobalLoading(false);
-    },
   });
 };
 
 ///* axios ---------------
 export type CreateTemporaryUploadLinkParams = {
-  file_name: string;
-  expiration: number; // in seconds
+  file_name: string; // no extension is required for minios
+  expiration?: number; // in seconds
 };
 
 export const createTemporaryUploadLink = async (
   params: CreateTemporaryUploadLinkParams,
 ) => {
-  const { post } = erpAPI();
-  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
-  setIsGlobalLoading(true);
+  const { get } = erpAPI();
 
   // Construir la URL de la query
-  let url = `auth/generate-temporary-upload-link/?file_name=${params?.file_name}`;
+  let url = `/auth/generate-temporary-upload-link/?file_name=${params?.file_name}`;
   if (params?.expiration) {
     url += `&expiration=${params.expiration}`;
   }
 
-  return post<string>(url, true, true);
+  return get<string>(url);
+};
+
+import axios, { AxiosRequestConfig } from 'axios';
+
+export type FileDataFormBucket = {
+  file: File;
+  bucketTempLink: string;
+};
+export const putFileBucket = async ({
+  file,
+  bucketTempLink,
+}: FileDataFormBucket) => {
+  const contentType = file.type;
+
+  const config: AxiosRequestConfig = {
+    method: 'PUT',
+    url: bucketTempLink,
+    data: file,
+    headers: {
+      'Content-Type': contentType,
+    },
+  };
+
+  const res = await axios(config);
+  return res;
 };

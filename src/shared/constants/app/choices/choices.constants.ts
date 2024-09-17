@@ -1,3 +1,5 @@
+import { getEnvs } from '@/shared/utils/get-evns';
+
 export enum IdentificationTypeEnumChoice {
   CEDULA = 'CEDULA',
   RUC = 'RUC',
@@ -294,4 +296,18 @@ export enum MetodoPagoEnumUUID {
   DEBITO = 'b59daf11-8214-439f-a3ab-11ee7ec38260',
   CREDITO = '9fea3665-bebd-4026-a64b-5cccf7d39de6',
   RECAUDACIONES = '4750cfb2-1f08-402f-b1f3-be11fcfcd8ef',
+}
+
+// // Bucket ==============================================
+const { VITE_MINIO_BUCKET_NAME } = getEnvs();
+
+export enum BucketTypeEnumChoice {
+  BUCKET_BASE = VITE_MINIO_BUCKET_NAME,
+
+  // preventa
+  IMAGES_IDENTIFICACION = 'images/identificacion',
+  IMAGES_VIVIENDA = 'images/vivienda',
+  IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
+  IMAGES_ACEPTACION_CONTRATO = 'images/acaptacion-contrato',
+  IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
 }
