@@ -1,4 +1,5 @@
 import { useSocket } from '@/context/SocketContext';
+import { getEnvs, UserRolesEnumChoice } from '@/shared';
 import { MainCard } from '@/shared/components/template';
 import { useAuthStore } from '@/store/auth';
 import Avatar from '@mui/material/Avatar';
@@ -15,6 +16,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { IconBell } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { NotificacionVentaUsuarioSocket } from './notification-sales.interface';
+
+const { VITE_ERPAPI_URL } = getEnvs();
+
+const notificationSound = 'src/assets/sounds/notification.mp3';
 
 const NotificationSection = () => {
   const theme = useTheme();
@@ -52,7 +58,7 @@ const NotificationSection = () => {
     const fetchNotificaciones = async () => {
       setLoading(true);
       const response = await fetch(
-        `http://yiga5.localhost:3333/api/v1/notificacion-usuario/?destinatario=${user?.id!}&page_size=55&leida=false`,
+        `${VITE_ERPAPI_URL}/notificacion-usuario/?destinatario=${user?.id!}&page_size=55&leida=false`,
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -76,10 +82,18 @@ const NotificationSection = () => {
   useEffect(() => {
     if (!socket || !user) return;
 
-    socket.on('recibir_notificacion_ventas', data => {
-      console.log('data', data);
-      setSinLeer(prev => prev + 1);
-    });
+    socket.on(
+      'recibir_notificacion_ventas',
+      (data: NotificacionVentaUsuarioSocket) => {
+        const sound = new Audio(notificationSound);
+        // TODO: remove 0
+        data?.destinatario_data?.role === UserRolesEnumChoice.SUPERVISOR &&
+          0 &&
+          sound.play();
+
+        setSinLeer(prev => prev + 1);
+      },
+    );
 
     return () => {
       socket.off('recibir_notificacion_ventas');

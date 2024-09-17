@@ -59,6 +59,10 @@ export const erpAPI = ({
 
       return dataResp;
     } catch (error) {
+      if ((error as any).code === 'ERR_NETWORK') {
+        ToastWrapper.error('Error de conexión, por favor verifica tu red');
+        throw error;
+      }
       if ((error as any)?.code === 'ECONNABORTED') {
         ToastWrapper.error(
           'El servidor no responde, por favor intenta más tarde',
@@ -88,7 +92,7 @@ export const erpAPI = ({
 
   const get = async function <T>(
     url: string,
-    auth: boolean,
+    auth: boolean = true,
     typeJson: boolean = true,
   ): Promise<ApiResponse<T>> {
     return sendRequest<T>('GET', url, auth, typeJson);
@@ -97,7 +101,7 @@ export const erpAPI = ({
   const post = async function <T>(
     url: string,
     data: any,
-    auth: boolean,
+    auth: boolean = true,
     typeJson: boolean = true,
   ): Promise<ApiResponse<T>> {
     return sendRequest<T>('POST', url, auth, typeJson, data);
@@ -106,7 +110,7 @@ export const erpAPI = ({
   const put = async function <T>(
     url: string,
     data: any,
-    auth: boolean,
+    auth: boolean = true,
     typeJson: boolean = true,
   ): Promise<ApiResponse<T>> {
     return sendRequest<T>('PUT', url, auth, typeJson, data);
@@ -115,7 +119,7 @@ export const erpAPI = ({
   const patch = async function <T>(
     url: string,
     data: any,
-    auth: boolean,
+    auth: boolean = true,
     typeJson: boolean = true,
   ): Promise<ApiResponse<T>> {
     return sendRequest<T>('PATCH', url, auth, typeJson, data);
@@ -123,7 +127,7 @@ export const erpAPI = ({
 
   const remove = async function <T>(
     url: string,
-    auth: boolean,
+    auth: boolean = true,
     typeJson: boolean = true,
   ): Promise<ApiResponse<T>> {
     return sendRequest<T>('DELETE', url, auth, typeJson);

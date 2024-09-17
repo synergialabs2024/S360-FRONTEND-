@@ -35,6 +35,7 @@ import {
   ResendOtpDataCache,
   SetCodigoOtpInCacheData,
 } from '@/actions/shared/cache-redis-types.interface';
+import { useUploadFileToBucket } from '@/actions/statics-api';
 import {
   ClasificacionPlanesScoreBuroEnumChoice,
   CodigoOtp,
@@ -608,11 +609,28 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     });
   };
 
+  // -----------
+  const onSuccessCedulaFrontal = (res: any) => {
+    console.log(
+      '------------------ onSuccessCedulaFrontal ------------------',
+      res,
+    );
+  };
+  const uploadFile = useUploadFileToBucket({
+    enableToast: false,
+    customOnSuccess: onSuccessCedulaFrontal,
+  });
+
   const handleCheckCedulaImg = async () => {
     if (!cedulaFrontalImg)
       return ToastWrapper.warning('La foto de la cédula frontal es requerida');
 
     // TODO: use endpoint to check cedula img IA
+    await uploadFile.mutateAsync({
+      file: cedulaFrontalImg,
+      file_name: 'cedula_frontal',
+    });
+
     setIsCheckingCedula(true);
     // simulate loading
     setTimeout(() => {
@@ -1760,7 +1778,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
 
-            <Grid xs={12} container alignItems="start" spacing={3}>
+            <Grid xs={12} item container alignItems="start" spacing={3}>
               <Grid item xs={12} md={6}>
                 <UploadImageDropZoneComponent
                   buttonLabel="Foto cédula frontal"

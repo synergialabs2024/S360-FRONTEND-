@@ -1,3 +1,5 @@
+import { getEnvs } from '@/shared/utils/get-evns';
+
 export enum IdentificationTypeEnumChoice {
   CEDULA = 'CEDULA',
   RUC = 'RUC',
@@ -285,6 +287,9 @@ export enum SalesStatesActionsEnumChoice {
   SOLICITUD_DESBLOQUEO_ESPERA = 'SOLICITUD_DESBLOQUEO_ESPERA', // CREADA
   SOLICITUD_DESBLOQUEO_APROBADO = 'SOLICITUD_DESBLOQUEO_APROBADO',
   SOLICITUD_DESBLOQUEO_RECHAZADO = 'SOLICITUD_DESBLOQUEO_RECHAZADO',
+
+  // // PREVENTA =======================================
+  PREVENTA_REASIGNACION_ESPERA = 'PREVENTA__REASIGNACION_ESPERA', // CREADA
 }
 
 // // UUID
@@ -294,9 +299,21 @@ export enum MetodoPagoEnumUUID {
   RECAUDACIONES = '4750cfb2-1f08-402f-b1f3-be11fcfcd8ef',
 }
 
-// -----------------------------------------------
+// // Bucket ==============================================
+const { VITE_MINIO_BUCKET_NAME } = getEnvs();
 
-// examples
+export enum BucketTypeEnumChoice {
+  BUCKET_BASE = VITE_MINIO_BUCKET_NAME,
+
+  // preventa
+  IMAGES_IDENTIFICACION = 'images/identificacion',
+  IMAGES_VIVIENDA = 'images/vivienda',
+  IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
+  IMAGES_ACEPTACION_CONTRATO = 'images/acaptacion-contrato',
+  IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
+}
+
+// examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',
   DISENO_PRODUCTO = 'DISEÑO DE PRODUCTO',
