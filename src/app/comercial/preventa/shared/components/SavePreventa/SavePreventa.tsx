@@ -37,6 +37,7 @@ import {
 } from '@/actions/shared/cache-redis-types.interface';
 import { useUploadFileToBucket } from '@/actions/statics-api';
 import {
+  BucketTypeEnumChoice,
   ClasificacionPlanesScoreBuroEnumChoice,
   CodigoOtp,
   EntidadFinanciera,
@@ -610,15 +611,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   };
 
   // -----------
-  const onSuccessCedulaFrontal = (res: any) => {
-    console.log(
-      '------------------ onSuccessCedulaFrontal ------------------',
-      res,
-    );
-  };
+
   const uploadFile = useUploadFileToBucket({
     enableToast: false,
-    customOnSuccess: onSuccessCedulaFrontal,
   });
 
   const handleCheckCedulaImg = async () => {
@@ -626,10 +621,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.warning('La foto de la cédula frontal es requerida');
 
     // TODO: use endpoint to check cedula img IA
-    await uploadFile.mutateAsync({
+    const res = await uploadFile.mutateAsync({
       file: cedulaFrontalImg,
       file_name: 'cedula_frontal',
+      bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
     });
+    console.log('handleCheckCedulaImg --------- res', res);
 
     setIsCheckingCedula(true);
     // simulate loading

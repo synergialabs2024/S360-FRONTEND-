@@ -7,5 +7,6 @@ export const getEnvs = () => ({
 
   VITE_SOCKETIO_URL: import.meta.env.VITE_SOCKETIO_URL,
 
+  VITE_MINIO_ENDPOINT: import.meta.env.VITE_MINIO_ENDPOINT,
   VITE_MINIO_BUCKET_NAME: import.meta.env.VITE_MINIO_BUCKET_NAME,
 });
