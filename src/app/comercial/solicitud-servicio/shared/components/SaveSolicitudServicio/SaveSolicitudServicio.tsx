@@ -219,6 +219,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const onErrorSearchCedula = (err: any) => {
     const status = err?.response?.status;
     const data = err?.response?.data?.data;
+    const isPreventaBlocked = !!data?.preventa_id;
+    const isSolictudServicioBlocked = !!data?.solicitud_servicio_id;
     const createdAt = dayjs(data?.created_at);
     const blockedUntil = dayjs(data?.block_until);
     const now = dayjs();
@@ -239,26 +241,52 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       // solicitud_servicio in process
     } else if (status === HTTPResStatusCodeEnum.CONFLICTS_OR_ACTIVE_SESSION) {
       if (blockedUntil) {
-        setConfirmDialog({
-          isOpen: true,
-          title: 'Prospecto existente',
-          subtitle: `Prospecto registrado hace ${timeBlocked} ${
-            minutesBlocked > 60 ? 'horas' : 'minutos'
-          }. Para poderlo ingresar en un nuevo proceso debe solicitar desbloqueo o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}. 
+        if (isSolictudServicioBlocked) {
+          setConfirmDialog({
+            isOpen: true,
+            title: 'Prospecto existente',
+            subtitle: `Prospecto registrado hace ${timeBlocked} ${
+              minutesBlocked > 60 ? 'horas' : 'minutos'
+            }. Para poderlo ingresar en un nuevo proceso debe solicitar desbloqueo o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}. 
         ¿Desea solicitar desbloqueo?`,
-          onConfirm: () => {
-            setConfirmDialogIsOpen(false);
-            createSolUnblockSolServiceMutation.mutate({
-              modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
-              modelo_id: data.solicitud_servicio_id,
-              modelo_estado:
-                SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
-              solicitud_desbloqueo_estado: GeneralModelStatesEnumChoice.ESPERA,
-            });
-          },
-          confirmTextBtn: 'Solicitar desbloqueo',
-          cancelTextBtn: 'Cerrar',
-        });
+            onConfirm: () => {
+              setConfirmDialogIsOpen(false);
+              createSolUnblockSolServiceMutation.mutate({
+                modelo: SalesModelsEnumChoice.SOLICITUD_SERVICIO,
+                modelo_id: data.solicitud_servicio_id,
+                modelo_estado:
+                  SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
+                solicitud_desbloqueo_estado:
+                  GeneralModelStatesEnumChoice.ESPERA,
+              });
+            },
+            confirmTextBtn: 'Solicitar desbloqueo',
+            cancelTextBtn: 'Cerrar',
+          });
+        } else if (isPreventaBlocked) {
+          // new sol_serv not required, just change vendedor q solicita reasignacion
+          setConfirmDialog({
+            isOpen: true,
+            title: 'Prospecto en preventa',
+            subtitle: `Preventa registrada hace ${timeBlocked} ${
+              minutesBlocked > 60 ? 'horas' : 'minutos'
+            }. Para poderlo ingresar en un nuevo proceso debe solicitar la reasignación de la preventa o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}.
+        ¿Desea solicitar la reasignación?`,
+            onConfirm: () => {
+              setConfirmDialogIsOpen(false);
+              createSolUnblockSolServiceMutation.mutate({
+                modelo: SalesModelsEnumChoice.PREVENTA,
+                modelo_id: data.preventa_id,
+                modelo_estado:
+                  SalesStatesActionsEnumChoice.PREVENTA_REASIGNACION_ESPERA,
+                solicitud_desbloqueo_estado:
+                  GeneralModelStatesEnumChoice.ESPERA,
+              });
+            },
+            confirmTextBtn: 'Solicitar reasignación',
+            cancelTextBtn: 'Cerrar',
+          });
+        }
       }
     } else {
       form.reset({

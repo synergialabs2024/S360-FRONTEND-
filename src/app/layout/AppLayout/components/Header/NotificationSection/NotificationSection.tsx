@@ -1,5 +1,5 @@
 import { useSocket } from '@/context/SocketContext';
-import { UserRolesEnumChoice } from '@/shared';
+import { getEnvs, UserRolesEnumChoice } from '@/shared';
 import { MainCard } from '@/shared/components/template';
 import { useAuthStore } from '@/store/auth';
 import Avatar from '@mui/material/Avatar';
@@ -17,6 +17,8 @@ import { IconBell } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NotificacionVentaUsuarioSocket } from './notification-sales.interface';
+
+const { VITE_ERPAPI_URL } = getEnvs();
 
 const notificationSound = 'src/assets/sounds/notification.mp3';
 
@@ -56,7 +58,7 @@ const NotificationSection = () => {
     const fetchNotificaciones = async () => {
       setLoading(true);
       const response = await fetch(
-        `http://yiga5.localhost:3333/api/v1/notificacion-usuario/?destinatario=${user?.id!}&page_size=55&leida=false`,
+        `${VITE_ERPAPI_URL}/notificacion-usuario/?destinatario=${user?.id!}&page_size=55&leida=false`,
         {
           headers: {
             Authorization: `Token ${token}`,
