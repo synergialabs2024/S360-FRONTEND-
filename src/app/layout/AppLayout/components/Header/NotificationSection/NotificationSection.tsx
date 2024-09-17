@@ -84,7 +84,9 @@ const NotificationSection = () => {
       'recibir_notificacion_ventas',
       (data: NotificacionVentaUsuarioSocket) => {
         const sound = new Audio(notificationSound);
+        // TODO: remove 0
         data?.destinatario_data?.role === UserRolesEnumChoice.SUPERVISOR &&
+          0 &&
           sound.play();
 
         setSinLeer(prev => prev + 1);
