@@ -2,6 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  BucketTypeEnumChoice,
+  getEnvs,
   handleAxiosError,
   HTTPResStatusCodeEnum,
   ToastWrapper,
@@ -10,7 +12,10 @@ import {
 import {
   createTemporaryUploadLink,
   CreateTemporaryUploadLinkParams,
+  putFileBucket,
 } from './bucket.actions';
+
+const { VITE_MINIO_ENDPOINT } = getEnvs();
 
 ///* tanStack query ---------------
 export const useUploadFileToBucket = ({
@@ -52,24 +57,51 @@ export const useUploadFileToBucket = ({
 
 export type UploadFileToBucketParams = CreateTemporaryUploadLinkParams & {
   file: File;
+  bucketDir: BucketTypeEnumChoice;
 };
 
-export const uploadFileToBucket = async (params: UploadFileToBucketParams) => {
-  const { file_name, expiration } = params;
-  const fileNameKey = file_name + '_' + uuidv4();
+type UploadFileToBucketReturn = {
+  streamUlr: string;
+};
+export const uploadFileToBucket = async (
+  params: UploadFileToBucketParams,
+): Promise<UploadFileToBucketReturn> => {
+  try {
+    const { file_name, expiration, bucketDir } = params;
+    const bucketBase = BucketTypeEnumChoice.BUCKET_BASE;
+    // no requiere bucketBase xq el back lo controla, solo lo uso para formar el stream url
+    const fileNameKey = bucketDir + '/' + file_name + '_' + uuidv4();
 
-  const tempLinkRes = await createTemporaryUploadLink({
-    file_name: fileNameKey,
-    expiration,
-  });
+    const tempLinkRes = await createTemporaryUploadLink({
+      file_name: fileNameKey,
+      expiration,
+    });
 
-  if (tempLinkRes.code !== HTTPResStatusCodeEnum.OK) {
-    throw new Error('Error al obtener el enlace temporal de carga');
+    if (tempLinkRes.code !== HTTPResStatusCodeEnum.OK) {
+      return {
+        streamUlr: '',
+      };
+    }
+
+    const { data: tempUrlBucket } = tempLinkRes;
+
+    const res = await putFileBucket({
+      bucketTempLink: tempUrlBucket,
+      file: params.file,
+    });
+
+    if (res.status !== HTTPResStatusCodeEnum.OK) {
+      return {
+        streamUlr: '',
+      };
+    }
+
+    return {
+      streamUlr: VITE_MINIO_ENDPOINT + '/' + bucketBase + '/' + fileNameKey,
+    };
+  } catch (error) {
+    return {
+      streamUlr: '',
+    };
   }
-
-  console.log('---------------- tempLink ----------------', tempLinkRes);
-
-  return {
-    fileNameKey,
-  };
 };

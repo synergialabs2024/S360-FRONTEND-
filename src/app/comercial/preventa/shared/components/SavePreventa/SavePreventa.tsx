@@ -4,7 +4,7 @@ import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BsFileEarmarkCheck, BsSendCheckFill } from 'react-icons/bs';
+import { BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoMdSend, IoMdTrash, IoMdUnlock } from 'react-icons/io';
@@ -35,8 +35,9 @@ import {
   ResendOtpDataCache,
   SetCodigoOtpInCacheData,
 } from '@/actions/shared/cache-redis-types.interface';
-import { useUploadFileToBucket } from '@/actions/statics-api';
+import { uploadFileToBucket } from '@/actions/statics-api';
 import {
+  BucketTypeEnumChoice,
   ClasificacionPlanesScoreBuroEnumChoice,
   CodigoOtp,
   EntidadFinanciera,
@@ -168,7 +169,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const [isSupervisorUnlockingSent, setIsSupervisorUnlockingSent] =
     useState<boolean>(false);
   const [isCheckingCedula, setIsCheckingCedula] = useState<boolean>(false);
-  const [isValidCedula, setIsValidCedula] = useState<boolean>(false);
 
   // const [suggestedPlans, setSuggestedPlans] = useState<PlanInternet[]>([]);
   const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
@@ -531,10 +531,20 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.error(
         'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
       );
-    if (!isValidCedula)
-      return ToastWrapper.error(
-        'La foto frontal de la cédula no ha sido verificada',
-      );
+
+    // upload images ----
+    setIsCheckingCedula(true);
+    const [cedulaFrontalUrl] = await Promise.all([
+      uploadFileToBucket({
+        file: cedulaFrontalImg,
+        file_name: 'cedula_frontal',
+        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+      }),
+    ]);
+    setIsCheckingCedula(false);
+
+    console.log('handleCheckCedulaImg --------- res', { cedulaFrontalUrl });
+    return;
 
     ///* create
     createPreventaMutation.mutate({
@@ -607,37 +617,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       celular: watchedCelular,
       identificacion: form.getValues().identificacion!,
     });
-  };
-
-  // -----------
-  const onSuccessCedulaFrontal = (res: any) => {
-    console.log(
-      '------------------ onSuccessCedulaFrontal ------------------',
-      res,
-    );
-  };
-  const uploadFile = useUploadFileToBucket({
-    enableToast: false,
-    customOnSuccess: onSuccessCedulaFrontal,
-  });
-
-  const handleCheckCedulaImg = async () => {
-    if (!cedulaFrontalImg)
-      return ToastWrapper.warning('La foto de la cédula frontal es requerida');
-
-    // TODO: use endpoint to check cedula img IA
-    await uploadFile.mutateAsync({
-      file: cedulaFrontalImg,
-      file_name: 'cedula_frontal',
-    });
-
-    setIsCheckingCedula(true);
-    // simulate loading
-    setTimeout(() => {
-      setIsCheckingCedula(false);
-      ToastWrapper.success('Foto de cédula verificada correctamente');
-      setIsValidCedula(true);
-    }, 1000);
   };
 
   // // Equifax ------
@@ -1778,49 +1757,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
 
-            <Grid xs={12} item container alignItems="start" spacing={3}>
-              <Grid item xs={12} md={6}>
-                <UploadImageDropZoneComponent
-                  buttonLabel="Foto cédula frontal"
-                  selectedImage={cedulaFrontalImg}
-                  setSelectedImage={setCedulaFrontalImg}
-                  sizeContainer={gridSize}
-                  onClickTrash={() => {
-                    setIsValidCedula(false);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {cedulaFrontalImg && (
-                  <>
-                    {isValidCedula ? (
-                      <ValidButton label="Documento Verificado" />
-                    ) : (
-                      <CustomSingleButton
-                        label="Verificar Documento"
-                        startIcon={<BsFileEarmarkCheck />}
-                        color="primary"
-                        variant="outlined"
-                        justifyContent="center"
-                        sxBtn={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                        btnStyles={{
-                          borderRadius: '5px',
-                          fontWeight: 600,
-                          height: '52px',
-                        }}
-                        onClick={() => {
-                          handleCheckCedulaImg();
-                        }}
-                        disabled={isValidCedula}
-                      />
-                    )}
-                  </>
-                )}
-              </Grid>
-            </Grid>
+            <UploadImageDropZoneComponent
+              buttonLabel="Foto cédula frontal"
+              selectedImage={cedulaFrontalImg}
+              setSelectedImage={setCedulaFrontalImg}
+              sizeContainer={gridSize}
+            />
             <UploadImageDropZoneComponent
               buttonLabel="Foto cédula trasera"
               selectedImage={cedulaPosteriorImg}
