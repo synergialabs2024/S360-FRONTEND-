@@ -1,4 +1,5 @@
 import { useSocket } from '@/context/SocketContext';
+import { UserRolesEnumChoice } from '@/shared';
 import { MainCard } from '@/shared/components/template';
 import { useAuthStore } from '@/store/auth';
 import Avatar from '@mui/material/Avatar';
@@ -15,6 +16,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { IconBell } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { NotificacionVentaUsuarioSocket } from './notification-sales.interface';
+
+const notificationSound = 'src/assets/sounds/notification.mp3';
 
 const NotificationSection = () => {
   const theme = useTheme();
@@ -76,10 +80,16 @@ const NotificationSection = () => {
   useEffect(() => {
     if (!socket || !user) return;
 
-    socket.on('recibir_notificacion_ventas', data => {
-      console.log('data', data);
-      setSinLeer(prev => prev + 1);
-    });
+    socket.on(
+      'recibir_notificacion_ventas',
+      (data: NotificacionVentaUsuarioSocket) => {
+        const sound = new Audio(notificationSound);
+        data?.destinatario_data?.role === UserRolesEnumChoice.SUPERVISOR &&
+          sound.play();
+
+        setSinLeer(prev => prev + 1);
+      },
+    );
 
     return () => {
       socket.off('recibir_notificacion_ventas');

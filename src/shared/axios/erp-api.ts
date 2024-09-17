@@ -59,6 +59,10 @@ export const erpAPI = ({
 
       return dataResp;
     } catch (error) {
+      if ((error as any).code === 'ERR_NETWORK') {
+        ToastWrapper.error('Error de conexión, por favor verifica tu red');
+        throw error;
+      }
       if ((error as any)?.code === 'ECONNABORTED') {
         ToastWrapper.error(
           'El servidor no responde, por favor intenta más tarde',
