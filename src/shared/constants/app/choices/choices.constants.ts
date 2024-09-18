@@ -330,6 +330,20 @@ export enum BucketKeyNameEnumChoice {
   COMPROBANTES_NO_PLANILLA = 'comprobantes_no_planilla',
 }
 
+// // Agendamiento ==========================================
+export enum EstadoAgendamientoEnumChoice {
+  ESPERA = 'ESPERA', // abre soporte tecnico para llamar
+  APROBADO = 'APROBADO', // x pyl?
+
+  RECHAZADO = 'RECHAZADO',
+  FINALIZADO = 'FINALIZADO',
+
+  PENDIENTE_PAGO = 'PENDIENTE_PAGO',
+  PAUSADO = 'PAUSADO',
+
+  CANCELADO = 'CANCELADO',
+}
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',

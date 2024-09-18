@@ -9,14 +9,16 @@ import {
 } from '@/shared/components';
 import { EstadoAgendamientoEnumChoice } from '@/shared/constants/app';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
-import AgendamientoByStatePage from './AgendamientoByStatePage';
+import AgendamientoVentasByStatePage from './AgendamientoVentasByStatePage';
 
-export const returnUrlAgendamientoPage =
-  ROUTER_PATHS.operaciones.agendamientosNav;
+export const returnUrlAgendamientoVentasPage =
+  ROUTER_PATHS.comercial.agendamientosNav;
 
-export type AgendamientosMainPageProps = {};
+export type AgendamientoVentasMainPageProps = {};
 
-const AgendamientosMainPage: React.FC<AgendamientosMainPageProps> = () => {
+const AgendamientoVentasMainPage: React.FC<
+  AgendamientoVentasMainPageProps
+> = () => {
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
@@ -30,17 +32,20 @@ const AgendamientosMainPage: React.FC<AgendamientosMainPageProps> = () => {
         handleTabChange={handleTabChange}
         isMainTableStates
       >
-        <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
+        <Tab label={'ESPERA VALIDACIÓN'} value={1} {...a11yProps(1)} />
+
         {/* <Tab label={'REALIZADAS'} value={2} {...a11yProps(2)} />
         <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
         <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} /> */}
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <AgendamientoByStatePage state={EstadoAgendamientoEnumChoice.ESPERA} />
+        <AgendamientoVentasByStatePage
+          state={EstadoAgendamientoEnumChoice.ESPERA}
+        />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );
 };
 
-export default AgendamientosMainPage;
+export default AgendamientoVentasMainPage;

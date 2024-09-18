@@ -139,12 +139,12 @@ export const getAgendamientos = async (params?: GetAgendamientosParams) => {
   delete stateParams.filterByState;
 
   const queryParams = getUrlParams(stateParams);
-  return get<AgendamientosPaginatedRes>(`/agedamiento/?${queryParams}`, true);
+  return get<AgendamientosPaginatedRes>(`/agendamiento/?${queryParams}`, true);
 };
 
 export const getAgendamiento = async (uuid: string) => {
   try {
-    return await get<Agendamiento>(`/agedamiento/${uuid}`, true);
+    return await get<Agendamiento>(`/agendamiento/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
@@ -156,7 +156,7 @@ export const createAgendamiento = async <T>(
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<Agendamiento>('/agedamiento/', data, true);
+  return post<Agendamiento>('/agendamiento/', data, true);
 };
 
 export const updateAgendamiento = async <T>({
@@ -166,5 +166,5 @@ export const updateAgendamiento = async <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<Agendamiento>(`/agedamiento/${id}/`, data, true);
+  return patch<Agendamiento>(`/agendamiento/${id}/`, data, true);
 };

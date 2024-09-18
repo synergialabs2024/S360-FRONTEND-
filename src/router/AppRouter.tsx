@@ -4,7 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import PrivateRoutes from './PrivateRoutes';
 
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
-import OperacionesModule from '@/app/operaciones/OperacionesModule';
+
 import { Loadable } from '@/shared/components/common';
 import AuthRoutes from './AuthRoutes';
 import { ROUTER_PATHS } from './constants';
@@ -390,6 +390,15 @@ const PreventasMainPage = Loadable(
 const CreatePreventaPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
 );
+const AgendamientoVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/agendamiento/pages/tables/AgendamientoVentasMainPage'
+      ),
+  ),
+);
+
 ///* Infraestructura ------------
 //Nodo
 const NodosPage = Loadable(
@@ -452,6 +461,16 @@ const UpdateTarjetaPage = Loadable(
 
 const ConsultasBuroPage = Loadable(
   lazy(() => import('@/app/comercial/consultas-buro/pages/ConsultasBuroPage')),
+);
+
+///* Operaciones ------------
+const AgendamientosMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/agedamiento/pages/tables/AgendamientosMainPage'
+      ),
+  ),
 );
 
 ///* Cliente ------------
@@ -921,14 +940,26 @@ const AppRouter = createBrowserRouter([
             path: ROUTER_PATHS.comercial.preventasCrear,
             element: <CreatePreventaPage />,
           },
+
+          ///* agendamiento
+          {
+            path: ROUTER_PATHS.comercial.agendamientos,
+            element: <AgendamientoVentasMainPage />,
+          },
         ],
       },
 
       //////////* Operaciones ------------
       {
         path: ROUTER_PATHS.operaciones.root,
-        element: <OperacionesModule />,
-        children: [],
+
+        children: [
+          ///* agendamientos
+          {
+            path: ROUTER_PATHS.operaciones.agendamientosNav,
+            element: <AgendamientosMainPage />,
+          },
+        ],
       },
 
       //////////* Cliente ------------

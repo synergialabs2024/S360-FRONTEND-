@@ -267,11 +267,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.preventasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'agendamientos',
+            renderByModule(SidenavModulesEnum.COMERCIAL_AGENDAMIENTO, {
+              id: 'agendamiento-ventas',
               title: 'Agendamiento',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.comercial.agendamientosNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'seguimiento-cliente',
