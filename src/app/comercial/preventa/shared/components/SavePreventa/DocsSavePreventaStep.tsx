@@ -97,13 +97,13 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
 
       {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
         <UploadImageDropZoneComponent
-          buttonLabel="Foto cuenta bancaria"
+          buttonLabel="Anexo cuenta bancaria"
           selectedImage={documentoCuentaBancariaImg}
           setSelectedImage={setDocumentoCuentaBancairaImg}
         />
       ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
         <UploadImageDropZoneComponent
-          buttonLabel="Foto tarjeta crédito"
+          buttonLabel="Anexo tarjeta crédito"
           selectedImage={documentoTarjetaCreditoImg}
           setSelectedImage={setDocumentoTarjetaCreditoImg}
         />

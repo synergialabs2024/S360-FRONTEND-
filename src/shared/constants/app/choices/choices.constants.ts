@@ -220,6 +220,11 @@ export const CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES = [
   ClasificacionPlanesScoreBuroEnumChoice.MEDIO,
   ClasificacionPlanesScoreBuroEnumChoice.ALTO,
 ];
+export enum EstadoPagoEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  PAGADO = 'PAGADO',
+  REVERSADO = 'REVERSADO',
+}
 
 // // // SALES ==============================================
 export enum EstadoSolicitudServicioEnumChoice {

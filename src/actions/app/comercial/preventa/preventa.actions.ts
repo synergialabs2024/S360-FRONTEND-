@@ -137,7 +137,7 @@ export const getPreventas = async (params?: GetPreventasParams) => {
 
 export const getPreventa = async (uuid: string) => {
   try {
-    return await get<Preventa>(`/preventa/uuid/${uuid}`, true);
+    return await get<Preventa>(`/preventa/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }

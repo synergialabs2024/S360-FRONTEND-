@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetSolicitudServicio } from '@/actions/app';
@@ -11,7 +12,6 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { SavePreventa } from '../../shared/components';
 import { returnUrlPreventasPage } from '../tables/PreventasMainPage';
-import { useEffect } from 'react';
 
 // // Preventa open Solicitud Servicio
 export type CreatePreventaPageProps = {};
@@ -20,7 +20,10 @@ const CreatePreventaPage: React.FC<CreatePreventaPageProps> = () => {
   useCheckPermission(PermissionsEnum.comercial_add_preventa);
 
   const { uuid } = useParams();
-  const { data, isLoading, isRefetching } = useGetSolicitudServicio(uuid!);
+  const { data, isLoading, isRefetching } = useGetSolicitudServicio(
+    uuid!,
+    false,
+  );
   useLoaders(isLoading || isRefetching);
 
   ///* effects ----------------

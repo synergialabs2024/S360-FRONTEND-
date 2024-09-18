@@ -2,6 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetPreventa } from '@/actions/app';
 import { useLoaders } from '@/shared';
+import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { SaveAgendamiento } from '../../shared/components';
@@ -22,7 +23,17 @@ const CreateAgendamientoPage: React.FC<CreateAgendamientoPageProps> = () => {
   if (isLoading || isRefetching) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlAgendamientosPage} />;
 
-  return <SaveAgendamiento title="Crear Preagenda" preventa={data.data} />;
+  return (
+    <SaveAgendamiento
+      title={
+        <CustomTitleRefNumber
+          initialText="Crear Agendamiento"
+          referenceNumber={data?.data?.numero_referencia}
+        />
+      }
+      preventa={data.data}
+    />
+  );
 };
 
 export default CreateAgendamientoPage;

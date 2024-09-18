@@ -39,11 +39,15 @@ export const useFetchSolicitudServicios = ({
   });
 };
 
-export const useGetSolicitudServicio = (uuid: string) => {
+export const useGetSolicitudServicio = (
+  uuid: string,
+  refetchOnWindowFocus = true,
+) => {
   return useQuery({
     queryKey: [SolicitudServicioTSQEnum.SOLICITUDSERVICIO, uuid],
     queryFn: () => getSolicitudServicio(uuid),
     retry: false,
+    refetchOnWindowFocus,
   });
 };
 

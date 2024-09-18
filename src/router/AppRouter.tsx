@@ -398,6 +398,14 @@ const AgendamientoVentasMainPage = Loadable(
       ),
   ),
 );
+const CreateAgendamientoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/agedamiento/pages/forms/CreateAgendamientoPage'
+      ),
+  ),
+);
 
 ///* Infraestructura ------------
 //Nodo
@@ -945,6 +953,10 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.comercial.agendamientos,
             element: <AgendamientoVentasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.createAgendamiento,
+            element: <CreateAgendamientoPage />,
           },
         ],
       },

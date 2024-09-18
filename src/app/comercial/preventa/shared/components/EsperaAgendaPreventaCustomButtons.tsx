@@ -1,8 +1,11 @@
+/* eslint-disable indent */
 import { Grid } from '@mui/material';
 import { HiDocumentPlus } from 'react-icons/hi2';
 import { MdCancel } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
-import { Preventa } from '@/shared';
+import { returnUrlAgendamientoVentasPage } from '@/app/comercial/agendamiento/pages/tables/AgendamientoVentasMainPage';
+import { EstadoPagoEnumChoice, Preventa } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 
 export type EsperaAgendaPreventaCustomButtonsProps = { preventa: Preventa };
@@ -11,18 +14,25 @@ const EsperaAgendaPreventaCustomButtons: React.FC<
   EsperaAgendaPreventaCustomButtonsProps
 > = ({ preventa }) => {
   ///* hooks ------------------------
-  console.log({ preventa });
+  const navigate = useNavigate();
 
   return (
     <Grid container item xs={12} spacing={4}>
-      <Grid item xs={2}>
-        <SingleIconButton
-          startIcon={<HiDocumentPlus />}
-          label="Crear agenda"
-          color="inherit"
-          onClick={() => {}}
-        />
-      </Grid>
+      {preventa?.requiere_pago_previo &&
+      preventa?.estado_pago === EstadoPagoEnumChoice.PENDIENTE ? null : (
+        <Grid item xs={2}>
+          <SingleIconButton
+            startIcon={<HiDocumentPlus />}
+            label="Crear agenda"
+            color="inherit"
+            onClick={() => {
+              navigate(
+                `${returnUrlAgendamientoVentasPage}/crear/${preventa?.uuid}`,
+              );
+            }}
+          />
+        </Grid>
+      )}
 
       <Grid item xs={2}>
         <SingleIconButton

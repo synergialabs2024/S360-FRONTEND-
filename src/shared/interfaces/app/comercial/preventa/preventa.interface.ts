@@ -1,5 +1,6 @@
 import {
   ClasificacionPlanesScoreBuroEnumChoice,
+  EstadoPagoEnumChoice,
   EstadoPreventaEnumChoice,
   InternetPlanInternetTypeEnumChoice,
   InternetServiceTypeEnumChoice,
@@ -64,6 +65,9 @@ export interface Preventa {
   plan_sugerido_buro: string; // ClasificacionPlanesScoreBuroEnumChoice,
   planes_sugeridos_buro?: ClasificacionPlanesScoreBuroEnumChoice[];
   plan_internet?: number;
+
+  requiere_pago_previo: boolean;
+  estado_pago?: EstadoPagoEnumChoice;
 
   ///* fk
   metodo_pago?: number;
