@@ -155,8 +155,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setImage4: setDocumentoTarjetaCreditoImg,
     image5: viviendaImg,
     setImage5: setViviendaImg,
-    image6: planillaImg,
-    setImage6: setPlanillaImg,
   } = useUploadImageGeneric();
 
   ///* local state -------------------
@@ -515,12 +513,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       );
     if (!viviendaImg)
       return ToastWrapper.error('La foto de la vivienda es requerida');
-    if (!planillaImg)
-      return ToastWrapper.error('La foto de la planilla es requerida');
 
     // upload images ----
     setIsCheckingCedula(true);
-    const [cedulaFrontalUrl, cedulaPosteriorUrl, viviendaUrl, planillaUrl] =
+    const [cedulaFrontalUrl, cedulaPosteriorUrl, viviendaUrl] =
       await Promise.all([
         uploadFileToBucket({
           file: cedulaFrontalImg,
@@ -537,11 +533,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           file_name: BucketKeyNameEnumChoice.VIVIENDA,
           bucketDir: BucketTypeEnumChoice.IMAGES_VIVIENDA,
         }),
-        uploadFileToBucket({
-          file: planillaImg,
-          file_name: BucketKeyNameEnumChoice.PLANILLA_SERVICIOS,
-          bucketDir: BucketTypeEnumChoice.IMAGES_PLANILLA_SERVICIOS,
-        }),
       ]);
 
     ///* create
@@ -551,7 +542,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       url_foto_cedula_frontal: cedulaFrontalUrl?.streamUlr || '',
       url_foto_cedula_trasera: cedulaPosteriorUrl?.streamUlr || '',
       url_foto_vivienda: viviendaUrl?.streamUlr || '',
-      url_foto_planilla: planillaUrl?.streamUlr || '',
     });
     setIsCheckingCedula(false);
   };
@@ -1461,7 +1451,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             UploadImageDropZoneComponent={UploadImageDropZoneComponent}
             cedulaFrontalImg={cedulaFrontalImg}
             cedulaPosteriorImg={cedulaPosteriorImg}
-            planillaImg={planillaImg}
             viviendaImg={viviendaImg}
             documentoCuentaBancariaImg={documentoCuentaBancariaImg}
             documentoTarjetaCreditoImg={documentoTarjetaCreditoImg}
@@ -1469,7 +1458,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             setCedulaPosteriorImg={setCedulaPosteriorImg}
             setDocumentoCuentaBancairaImg={setDocumentoCuentaBancairaImg}
             setDocumentoTarjetaCreditoImg={setDocumentoTarjetaCreditoImg}
-            setPlanillaImg={setPlanillaImg}
             setViviendaImg={setViviendaImg}
           />
         </>
