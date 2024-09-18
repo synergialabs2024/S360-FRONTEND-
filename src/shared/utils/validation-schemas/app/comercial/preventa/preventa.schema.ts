@@ -79,3 +79,10 @@ export const preventaFormSchema = yup.object({
     .optional()
     .nullable(),
 });
+
+export const unlockPlanillaPhotoSchema = yup.object({
+  motivo: yup
+    .string()
+    .required('El campo motivo es requerido')
+    .max(900, 'El campo motivo no debe exceder los 900 caracteres'),
+});

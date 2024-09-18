@@ -9,7 +9,7 @@ import {
   SxPropsType,
 } from '@/shared/interfaces';
 
-interface UploadImagePreviewBtnProps {
+export interface UploadImagePreviewBtnProps {
   buttonLabel: string;
   setSelectedImage: React.Dispatch<React.SetStateAction<File | null>>;
   selectedImage: File | null;
