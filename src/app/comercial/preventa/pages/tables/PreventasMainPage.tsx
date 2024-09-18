@@ -10,6 +10,7 @@ import {
 import { EstadoPreventaEnumChoice } from '@/shared/constants/app';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
 import PreventaByStatePage from './PreventaByStatePage';
+import PreventaEsperaAgendaPage from './PreventaEsperaAgendaPage';
 
 export const returnUrlPreventasPage = ROUTER_PATHS.comercial.preventasNav;
 
@@ -36,7 +37,7 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <PreventaByStatePage state={EstadoPreventaEnumChoice.ESPERA} />
+        <PreventaEsperaAgendaPage />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
