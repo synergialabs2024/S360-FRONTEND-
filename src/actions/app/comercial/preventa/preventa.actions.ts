@@ -49,6 +49,7 @@ export const useCreatePreventa = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnError,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
@@ -69,6 +70,10 @@ export const useCreatePreventa = <T>({
         returnUrl &&
         navigate(returnErrorUrl || returnUrl || '');
 
+      if (customOnError) {
+        customOnError(error);
+        return;
+      }
       handleAxiosError(error, customMessageErrorToast);
     },
     onSettled: () => {

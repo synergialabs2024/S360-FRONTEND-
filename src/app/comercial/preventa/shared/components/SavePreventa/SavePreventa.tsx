@@ -436,10 +436,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   };
 
   ///* mutations ---------------------
-  const createPreventaMutation = useCreatePreventa({
+  const createPreventaMutation = useCreatePreventa<CreatePreventaParamsBase>({
     navigate,
     returnUrl: returnUrlPreventasPage,
     enableErrorNavigate: false,
+    customOnError: err => {
+      setIsCheckingCedula(false);
+      handleAxiosError(err);
+    },
   });
 
   const createOTP = useCreateOtpCode({
@@ -516,38 +520,40 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
     // upload images ----
     setIsCheckingCedula(true);
-    const [cedulaFrontalUrl] = await Promise.all([
-      uploadFileToBucket({
-        file: cedulaFrontalImg,
-        file_name: BucketKeyNameEnumChoice.CEDULA_FRONTAL,
-        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
-      }),
-      uploadFileToBucket({
-        file: cedulaPosteriorImg,
-        file_name: BucketKeyNameEnumChoice.CEDULA_POSTERIOR,
-        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
-      }),
-      uploadFileToBucket({
-        file: viviendaImg,
-        file_name: BucketKeyNameEnumChoice.VIVIENDA,
-        bucketDir: BucketTypeEnumChoice.IMAGES_VIVIENDA,
-      }),
-      uploadFileToBucket({
-        file: planillaImg,
-        file_name: BucketKeyNameEnumChoice.PLANILLA_SERVICIOS,
-        bucketDir: BucketTypeEnumChoice.IMAGES_PLANILLA_SERVICIOS,
-      }),
-    ]);
-    setIsCheckingCedula(false);
-
-    console.log('handleCheckCedulaImg --------- res', { cedulaFrontalUrl });
-    return;
+    const [cedulaFrontalUrl, cedulaPosteriorUrl, viviendaUrl, planillaUrl] =
+      await Promise.all([
+        uploadFileToBucket({
+          file: cedulaFrontalImg,
+          file_name: BucketKeyNameEnumChoice.CEDULA_FRONTAL,
+          bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+        }),
+        uploadFileToBucket({
+          file: cedulaPosteriorImg,
+          file_name: BucketKeyNameEnumChoice.CEDULA_POSTERIOR,
+          bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+        }),
+        uploadFileToBucket({
+          file: viviendaImg,
+          file_name: BucketKeyNameEnumChoice.VIVIENDA,
+          bucketDir: BucketTypeEnumChoice.IMAGES_VIVIENDA,
+        }),
+        uploadFileToBucket({
+          file: planillaImg,
+          file_name: BucketKeyNameEnumChoice.PLANILLA_SERVICIOS,
+          bucketDir: BucketTypeEnumChoice.IMAGES_PLANILLA_SERVICIOS,
+        }),
+      ]);
 
     ///* create
-    createPreventaMutation.mutate({
+    await createPreventaMutation.mutateAsync({
       ...data,
       solicitud_servicio: solicitudServicio?.id!,
+      url_foto_cedula_frontal: cedulaFrontalUrl?.streamUlr || '',
+      url_foto_cedula_trasera: cedulaPosteriorUrl?.streamUlr || '',
+      url_foto_vivienda: viviendaUrl?.streamUlr || '',
+      url_foto_planilla: planillaUrl?.streamUlr || '',
     });
+    setIsCheckingCedula(false);
   };
 
   // // OPT ------
@@ -1485,8 +1491,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       )}
 
       {/* ============= loaders ============= */}
-      <CustomScanLoad isOpen={isCheckingCedula} name="cedula" />
-      <CustomScanLoad isOpen={isCheckingIdentificacionEquifax} name="archivo" />
+      <CustomScanLoad isOpen={isCheckingCedula} name="archivo" />
+      <CustomScanLoad isOpen={isCheckingIdentificacionEquifax} name="cedula" />
     </StepperBoxScene>
   );
 };

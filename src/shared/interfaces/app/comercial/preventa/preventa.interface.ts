@@ -47,8 +47,8 @@ export interface Preventa {
   url_foto_cedula_frontal: string;
   url_foto_cedula_trasera: string;
   url_foto_documento_cuenta?: string;
-  url_foto_vivienda?: string;
-  url_foto_planilla?: string;
+  url_foto_vivienda: string;
+  url_foto_planilla?: string; // unlock req is available
 
   url_foto_tarjeta?: string; // credito
 
