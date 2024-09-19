@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetPreventa } from '@/actions/app';
-import { useLoaders } from '@/shared';
+import { EstadoPagoEnumChoice, ToastWrapper, useLoaders } from '@/shared';
 import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
@@ -20,8 +21,26 @@ const CreateAgendamientoPage: React.FC<CreateAgendamientoPageProps> = () => {
   const { data, isLoading, isRefetching } = useGetPreventa(uuid!);
   useLoaders(isLoading || isRefetching);
 
+  // check state
+  useEffect(() => {
+    if (isLoading || isRefetching) return;
+
+    if (
+      !!data &&
+      data?.data?.requiere_pago_previo &&
+      data?.data?.estado_pago !== EstadoPagoEnumChoice.PAGADO
+    ) {
+      ToastWrapper.error('La preventa requiere pago previo al agendamiento');
+    }
+  }, [data, isLoading, isRefetching]);
+
   if (isLoading || isRefetching) return null;
-  if (!data?.data?.id) return <Navigate to={returnUrlAgendamientosPage} />;
+  if (
+    !data?.data?.id ||
+    (data?.data?.requiere_pago_previo &&
+      data?.data?.estado_pago !== EstadoPagoEnumChoice.PAGADO)
+  )
+    return <Navigate to={returnUrlAgendamientosPage} />;
 
   return (
     <SaveAgendamiento
