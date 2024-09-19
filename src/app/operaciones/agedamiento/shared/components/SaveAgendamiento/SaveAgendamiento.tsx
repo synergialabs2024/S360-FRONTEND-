@@ -9,18 +9,14 @@ import {
   useCreateAgendamiento,
   useUpdateAgendamiento,
 } from '@/actions/app';
-import {
-  CustomDatePicker,
-  CustomNumberTextField,
-  CustomTextField,
-  StepperBoxScene,
-  useCustomStepper,
-} from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
 import { returnUrlAgendamientosPage } from '../../../pages/tables/AgendamientosPage';
-import { GeneralDataSaveAgendaVentaStep } from './form';
+import {
+  AgendamientoSaveAgendaStep,
+  GeneralDataSaveAgendaVentaStep,
+} from './form';
 import ServiceSaveAgendaStep from './form/ServiceSaveAgendaStep';
 import UbicacionSaveAgendaStep from './form/UbicacionSaveAgendaStep';
 
@@ -43,7 +39,7 @@ export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
     paymentMethodName?: string;
   };
 
-const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
+const steps = ['Datos generales', 'Servicio y Ubicación', 'Agendamiento'];
 
 const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   title,
@@ -69,7 +65,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   const {
     handleSubmit,
     reset,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = form;
 
   ///* fetch data ---------------------
@@ -138,208 +134,18 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     >
       {activeStep === 0 && <GeneralDataSaveAgendaVentaStep form={form} />}
 
-      {/* ========================= Ubicación ========================= */}
+      {/* ========================= Ubicación & Service ========================= */}
       {activeStep === 1 && (
-        <UbicacionSaveAgendaStep form={form} preventa={preventa!} />
-      )}
-
-      {/* ========================= Service ========================= */}
-      {activeStep === 2 && (
-        <ServiceSaveAgendaStep form={form} preventa={preventa!} />
-      )}
-
-      {activeStep === 100 && (
         <>
-          <CustomDatePicker
-            label="Fecha instalacion"
-            name="fecha_instalacion"
-            control={form.control}
-            defaultValue={form.getValues().fecha_instalacion}
-            error={errors.fecha_instalacion}
-            helperText={errors.fecha_instalacion?.message}
-            size={gridSizeMdLg6}
-          />
+          <ServiceSaveAgendaStep form={form} preventa={preventa!} />
 
-          <CustomTextField
-            label="Hora instalacion"
-            name="hora_instalacion"
-            control={form.control}
-            defaultValue={form.getValues().hora_instalacion}
-            error={errors.hora_instalacion}
-            helperText={errors.hora_instalacion?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Distancia nap"
-            name="distancia_nap"
-            control={form.control}
-            defaultValue={form.getValues().distancia_nap}
-            error={errors.distancia_nap}
-            helperText={errors.distancia_nap?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Observacion rechazo"
-            name="observacion_rechazo"
-            control={form.control}
-            defaultValue={form.getValues().observacion_rechazo}
-            error={errors.observacion_rechazo}
-            helperText={errors.observacion_rechazo?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Numero comprobante"
-            name="numero_comprobante"
-            control={form.control}
-            defaultValue={form.getValues().numero_comprobante}
-            error={errors.numero_comprobante}
-            helperText={errors.numero_comprobante?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Url foto comprobante"
-            name="url_foto_comprobante"
-            control={form.control}
-            defaultValue={form.getValues().url_foto_comprobante}
-            error={errors.url_foto_comprobante}
-            helperText={errors.url_foto_comprobante?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Descripcion pago"
-            name="descripcion_pago"
-            control={form.control}
-            defaultValue={form.getValues().descripcion_pago}
-            error={errors.descripcion_pago}
-            helperText={errors.descripcion_pago?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomTextField
-            label="Estado pago"
-            name="estado_pago"
-            control={form.control}
-            defaultValue={form.getValues().estado_pago}
-            error={errors.estado_pago}
-            helperText={errors.estado_pago?.message}
-            size={gridSizeMdLg6}
-          />
-
-          <CustomNumberTextField
-            label="Linea servicio"
-            name="linea_servicio"
-            control={form.control}
-            defaultValue={form.getValues().linea_servicio}
-            error={errors.linea_servicio}
-            helperText={errors.linea_servicio?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Solicitud servicio"
-            name="solicitud_servicio"
-            control={form.control}
-            defaultValue={form.getValues().solicitud_servicio}
-            error={errors.solicitud_servicio}
-            helperText={errors.solicitud_servicio?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Preventa"
-            name="preventa"
-            control={form.control}
-            defaultValue={form.getValues().preventa}
-            error={errors.preventa}
-            helperText={errors.preventa?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Flota"
-            name="flota"
-            control={form.control}
-            defaultValue={form.getValues().flota}
-            error={errors.flota}
-            helperText={errors.flota?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Nap"
-            name="nap"
-            control={form.control}
-            defaultValue={form.getValues().nap}
-            error={errors.nap}
-            helperText={errors.nap?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="User gestiona"
-            name="user_gestiona"
-            control={form.control}
-            defaultValue={form.getValues().user_gestiona}
-            error={errors.user_gestiona}
-            helperText={errors.user_gestiona?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Area"
-            name="area"
-            control={form.control}
-            defaultValue={form.getValues().area}
-            error={errors.area}
-            helperText={errors.area?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Departamento"
-            name="departamento"
-            control={form.control}
-            defaultValue={form.getValues().departamento}
-            error={errors.departamento}
-            helperText={errors.departamento?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Canal venta"
-            name="canal_venta"
-            control={form.control}
-            defaultValue={form.getValues().canal_venta}
-            error={errors.canal_venta}
-            helperText={errors.canal_venta?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
-
-          <CustomNumberTextField
-            label="Vendedor"
-            name="vendedor"
-            control={form.control}
-            defaultValue={form.getValues().vendedor}
-            error={errors.vendedor}
-            helperText={errors.vendedor?.message}
-            size={gridSizeMdLg6}
-            min={0}
-          />
+          <UbicacionSaveAgendaStep form={form} preventa={preventa!} />
         </>
+      )}
+
+      {/* ========================= Agendam - Planificador ========================= */}
+      {activeStep === 2 && (
+        <AgendamientoSaveAgendaStep form={form} preventa={preventa!} />
       )}
     </StepperBoxScene>
   );

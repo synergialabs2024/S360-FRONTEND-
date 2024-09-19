@@ -70,14 +70,14 @@ export const preventaFormSchema = yup.object({
 
   metodo_pago: yup
     .number()
-    .typeError('El campo metodo pago es requerido')
     .optional()
-    .nullable(),
+    .nullable()
+    .typeError('El campo metodo pago es requerido'),
   entidad_financiera: yup
     .number()
-    .typeError('El campo entidad financiera es requerido')
     .optional()
-    .nullable(),
+    .nullable()
+    .typeError('El campo entidad financiera es requerido'),
 });
 
 export const unlockPlanillaPhotoSchema = yup.object({
