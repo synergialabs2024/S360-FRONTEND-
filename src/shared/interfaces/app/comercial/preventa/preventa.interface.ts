@@ -2,6 +2,7 @@ import {
   ClasificacionPlanesScoreBuroEnumChoice,
   EstadoPagoEnumChoice,
   EstadoPreventaEnumChoice,
+  EstadoValidacionAceptacionEnumChoice,
   InternetPlanInternetTypeEnumChoice,
   InternetServiceTypeEnumChoice,
   ReferidoTypeEnumChoice,
@@ -29,7 +30,7 @@ export interface Preventa {
   celular_adicional: string;
   parentesco_referencia: string;
 
-  // sistema referido
+  // sistema referido --------------
   tipo_referido?: ReferidoTypeEnumChoice;
   es_referido?: boolean;
   cliente_refiere?: number; // fk
@@ -53,7 +54,18 @@ export interface Preventa {
 
   url_foto_tarjeta?: string; // credito
 
+  // // factibilidad ------
+  flota?: number; // fk
+  nap?: number; // fk
+  distancia_nap: number;
+  puerto_nap?: number;
+
+  // // oficina virtual - aceptacion contrato ------
   url_foto_aceptacion?: string; // oficina virtual
+  contrato_aceptado: boolean;
+  // x eventualidad en validacion faces oficina virtual
+  estado_validacion_aceptacion?: EstadoValidacionAceptacionEnumChoice;
+  fecha_validacion_aceptacion?: string;
 
   created_at?: string;
   modified_at?: string;

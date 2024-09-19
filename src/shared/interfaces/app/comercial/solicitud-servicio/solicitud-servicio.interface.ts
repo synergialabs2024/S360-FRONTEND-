@@ -1,4 +1,4 @@
-import { CodigoOtpLimitData } from '@/shared';
+import { Ciudad, CodigoOtpLimitData, Provincia, Sector, Zona } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { TrazabilidadVentas } from '../trazabilidad';
 
@@ -63,6 +63,11 @@ export interface SolicitudServicio {
   trazabilidad_data?: TrazabilidadVentas[]; // JSON
   codigo_otp_data?: CodigoOtpLimitData;
   codigos_otp_data?: CodigoOtpLimitData[];
+
+  sector_data?: Sector;
+  zona_data?: Zona;
+  ciudad_data?: Ciudad;
+  provincia_data?: Provincia;
 }
 
 export type SolicitudServicioLimitData = Pick<

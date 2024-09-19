@@ -373,3 +373,12 @@ export const USER_OTHER_ROLES_ARRAY_CHOICES = [
   UserOtherRolesEnumChoice.LEGAL,
   UserOtherRolesEnumChoice.GESTIÓN_PRODUCTO,
 ];
+
+export enum EstadoValidacionAceptacionEnumChoice {
+  FOTOS_NO_COINCIDEN = 'FOTOS_NO_COINCIDEN', // 0
+  FOTO_FRONTAL_INVALIDA = 'FOTO_FRONTAL_INVALIDA', // 1
+  FOTO_POSTERIOR_INVALIDA = 'FOTO_POSTERIOR_INVALIDA', // 2
+
+  VALIDADO = 'VALIDADO', // 3 ok a la 1ra
+  CORREGIDO = 'CORREGIDO', // corrige ante eventualidad
+}

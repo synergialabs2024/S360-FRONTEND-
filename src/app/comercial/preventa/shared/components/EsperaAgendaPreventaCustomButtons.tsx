@@ -18,8 +18,9 @@ const EsperaAgendaPreventaCustomButtons: React.FC<
 
   return (
     <Grid container item xs={12} spacing={4}>
-      {preventa?.requiere_pago_previo &&
-      preventa?.estado_pago === EstadoPagoEnumChoice.PENDIENTE ? null : (
+      {(preventa?.requiere_pago_previo &&
+        preventa?.estado_pago === EstadoPagoEnumChoice.PENDIENTE) ||
+      preventa.contrato_aceptado ? null : (
         <Grid item xs={2}>
           <SingleIconButton
             startIcon={<HiDocumentPlus />}

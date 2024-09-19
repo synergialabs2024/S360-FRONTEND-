@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,6 +21,7 @@ import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
 import { returnUrlAgendamientosPage } from '../../../pages/tables/AgendamientosPage';
 import { GeneralDataSaveAgendaVentaStep } from './form';
+import UbicacionSaveAgendaStep from './form/UbicacionSaveAgendaStep';
 
 export interface SaveAgendamientoProps {
   title: React.ReactNode;
@@ -28,7 +30,13 @@ export interface SaveAgendamientoProps {
 
 export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
   Partial<SolicitudServicio> &
-  Partial<Preventa> & {};
+  Partial<Preventa> & {
+    // helpers
+    provinceName?: string;
+    cityName?: string;
+    zoneName?: string;
+    sectorName?: string;
+  };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
 
@@ -45,6 +53,8 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       steps,
     });
 
+  ///* local state -------------------
+
   ///* form ---------------------
   const form = useForm<SaveFormDataAgendaVentas>({
     resolver: yupResolver(agendamientoFormSchema) as any,
@@ -56,6 +66,8 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     reset,
     formState: { errors, isValid },
   } = form;
+
+  ///* fetch data ---------------------
 
   ///* mutations ---------------------
   const createAgendamientoMutation = useCreateAgendamiento({
@@ -91,8 +103,16 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     reset({
       ...rest,
       ...solicitud_servicio_data,
-    });
+
+      sectorName: solicitud_servicio_data?.sector_data?.name,
+      zoneName: solicitud_servicio_data?.zona_data?.name,
+      cityName: solicitud_servicio_data?.ciudad_data?.name,
+      provinceName: solicitud_servicio_data?.provincia_data?.name,
+    } as SaveFormDataAgendaVentas);
   }, [preventa, reset]);
+
+  // const isLoading = false;
+  // useLoaders(isLoading);
 
   return (
     <StepperBoxScene
@@ -110,7 +130,9 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       {activeStep === 0 && <GeneralDataSaveAgendaVentaStep form={form} />}
 
       {/* ========================= Ubicación ========================= */}
-      {activeStep === 1 && <></>}
+      {activeStep === 1 && (
+        <UbicacionSaveAgendaStep form={form} preventa={preventa!} />
+      )}
 
       {activeStep === 100 && (
         <>
