@@ -100,7 +100,10 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
                 inputProps={{ readOnly: disabled }}
                 sx={{
                   ...sxTextField,
-                  ...(disabled && { background: 'rgba(0, 0, 0, 0.04)' }),
+                  ...(disabled && {
+                    background: 'rgba(0, 0, 0, 0.04)',
+                    borderRadius: '13px',
+                  }),
                 }}
                 // text area
                 multiline

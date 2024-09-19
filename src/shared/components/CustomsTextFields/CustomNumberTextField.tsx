@@ -122,7 +122,7 @@ const CustomNumberTextField: React.FC<CustomNumberFieldProps> = ({
                   ...sxInputText,
                   ...(disabled && {
                     background: 'rgba(0, 0, 0, 0.04)',
-                    color: 'black',
+                    borderRadius: '13px',
                   }),
                 }}
               />

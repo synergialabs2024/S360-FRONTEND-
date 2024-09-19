@@ -77,9 +77,12 @@ function CustomAutocompleteArrString({
                   required={required}
                   disabled={disabled}
                   sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: 'rgba(0, 0, 0, 0.8)',
+                    },
                     ...(disabled && {
                       background: 'rgba(0, 0, 0, 0.04)',
-                      color: 'black',
+                      borderRadius: '13px',
                     }),
                   }}
                   className={disabled ? 'input-text__disabled' : ''}

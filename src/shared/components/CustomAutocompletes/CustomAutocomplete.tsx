@@ -99,7 +99,13 @@ function CustomAutocomplete<T>({
                     // // disabled style
                     disabled={disabled}
                     sx={{
-                      ...(disabled && { background: 'rgba(0, 0, 0, 0.04)' }),
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: 'rgba(0, 0, 0, 0.8)',
+                      },
+                      ...(disabled && {
+                        background: 'rgba(0, 0, 0, 0.04)',
+                        borderRadius: '13px',
+                      }),
                     }}
                   />
                 )}

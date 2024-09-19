@@ -156,14 +156,14 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
                 type={type}
                 onChange={onChange}
                 required={required}
-                inputProps={{
-                  readOnly: disabled,
-                  style: {
-                    ...(sxTextField as any),
-                    ...(disabled && { background: 'rgba(0, 0, 0, 0.03)' }),
-                  },
+                inputProps={{ readOnly: disabled }}
+                sx={{
+                  ...(sxTextField as any),
+                  ...(disabled && {
+                    background: 'rgba(0, 0, 0, 0.04)',
+                    borderRadius: '13px',
+                  }),
                 }}
-                sx={sxTextField}
                 placeholder={placeholder}
               />
             );

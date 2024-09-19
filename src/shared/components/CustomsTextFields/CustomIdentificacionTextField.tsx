@@ -124,7 +124,7 @@ const CustomIdentificacionTextField: React.FC<
                 sx={{
                   ...(disabled && {
                     background: 'rgba(0, 0, 0, 0.04)',
-                    color: 'black',
+                    borderRadius: '13px',
                   }),
                 }}
               />
