@@ -109,6 +109,7 @@ const CustomCellphoneTextField: React.FC<CustomTextFieldProps> = ({
                 inputProps={{ readOnly: disabled }}
                 sx={{
                   ...(disabled && { background: 'rgba(0, 0, 0, 0.04)' }),
+                  borderRadius: '13px',
                 }}
               />
             );
