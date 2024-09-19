@@ -17,6 +17,7 @@ import {
   CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
+  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
   MapModalComponent,
   SingleIconButton,
@@ -58,7 +59,10 @@ const UbicacionSaveAgendaStep: React.FC<UbicacionSaveAgendaStepProps> = ({
 
   return (
     <>
-      <CustomTypoLabel text="Ubicación" />
+      <CustomTypoLabel
+        text="Ubicación"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
 
       <InputAndBtnGridSpace
         mainGridSize={gridSize}

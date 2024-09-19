@@ -13,6 +13,7 @@ import { EntidadFinanciera, MetodoPago } from '../../administration';
 import { Tarjeta } from '../../cobranza';
 import { PlanInternetLimitData } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
+import { Nap } from '../../infraestructura';
 
 export interface PreventasPaginatedRes {
   status: number;
@@ -102,4 +103,5 @@ export interface Preventa {
   metodo_pago_data?: MetodoPago;
   entidad_financiera_data?: EntidadFinanciera;
   tarjeta_data?: Tarjeta;
+  nap_data?: Nap;
 }

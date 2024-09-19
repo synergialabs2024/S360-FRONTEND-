@@ -41,3 +41,15 @@ export interface Nap {
   ciudad_data?: CiudadLimitData;
   sector_data?: SectorLimitData;
 }
+
+export type NapLimitData = Pick<
+  Nap,
+  | 'uuid'
+  | 'name'
+  | 'id'
+  | 'state'
+  | 'coordenadas'
+  | 'es_soterrado'
+  | 'status_nap'
+  | 'proyecto_cod'
+>;

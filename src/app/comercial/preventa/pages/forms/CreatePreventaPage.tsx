@@ -43,7 +43,11 @@ const CreatePreventaPage: React.FC<CreatePreventaPageProps> = () => {
   }, [data, isLoading, isRefetching]);
 
   if (isLoading) return null; // no isRefetching commented 'cause opt
-  if (!data?.data?.id) return <Navigate to={returnUrlPreventasPage} />;
+  if (
+    !data?.data?.id ||
+    data?.data?.estado_solicitud !== EstadoSolicitudServicioEnumChoice.INGRESADO
+  )
+    return <Navigate to={returnUrlPreventasPage} />;
 
   return (
     <SavePreventa
