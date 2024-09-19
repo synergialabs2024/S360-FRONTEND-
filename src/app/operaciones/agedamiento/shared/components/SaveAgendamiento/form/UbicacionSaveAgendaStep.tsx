@@ -180,6 +180,7 @@ const UbicacionSaveAgendaStep: React.FC<UbicacionSaveAgendaStepProps> = ({
         defaultValue={form.getValues().direccion}
         error={errors.direccion}
         helperText={errors.direccion?.message}
+        disabled
       />
     </>
   );

@@ -9,6 +9,9 @@ import {
   TipoCuentaBancariaEnumChoice,
 } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { EntidadFinanciera, MetodoPago } from '../../administration';
+import { Tarjeta } from '../../cobranza';
+import { PlanInternetLimitData } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
 
 export interface PreventasPaginatedRes {
@@ -95,4 +98,8 @@ export interface Preventa {
   vendedor: number;
 
   solicitud_servicio_data?: SolicitudServicio;
+  plan_internet_data?: PlanInternetLimitData;
+  metodo_pago_data?: MetodoPago;
+  entidad_financiera_data?: EntidadFinanciera;
+  tarjeta_data?: Tarjeta;
 }

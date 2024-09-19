@@ -21,6 +21,7 @@ import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
 import { returnUrlAgendamientosPage } from '../../../pages/tables/AgendamientosPage';
 import { GeneralDataSaveAgendaVentaStep } from './form';
+import ServiceSaveAgendaStep from './form/ServiceSaveAgendaStep';
 import UbicacionSaveAgendaStep from './form/UbicacionSaveAgendaStep';
 
 export interface SaveAgendamientoProps {
@@ -36,6 +37,10 @@ export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
     cityName?: string;
     zoneName?: string;
     sectorName?: string;
+    planName?: string;
+    entidadFinancieraName?: string;
+    tarjetaName?: string;
+    paymentMethodName?: string;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -108,6 +113,10 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       zoneName: solicitud_servicio_data?.zona_data?.name,
       cityName: solicitud_servicio_data?.ciudad_data?.name,
       provinceName: solicitud_servicio_data?.provincia_data?.name,
+      planName: rest?.plan_internet_data?.name,
+      entidadFinancieraName: rest?.entidad_financiera_data?.name,
+      tarjetaName: rest?.tarjeta_data?.name,
+      paymentMethodName: rest?.metodo_pago_data?.name,
     } as SaveFormDataAgendaVentas);
   }, [preventa, reset]);
 
@@ -132,6 +141,11 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       {/* ========================= Ubicación ========================= */}
       {activeStep === 1 && (
         <UbicacionSaveAgendaStep form={form} preventa={preventa!} />
+      )}
+
+      {/* ========================= Service ========================= */}
+      {activeStep === 2 && (
+        <ServiceSaveAgendaStep form={form} preventa={preventa!} />
       )}
 
       {activeStep === 100 && (

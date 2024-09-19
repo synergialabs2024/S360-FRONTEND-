@@ -33,4 +33,4 @@ export interface PlanInternet {
   clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice | string;
 }
 
-export type PlanInternetLimitData = Pick<PlanInternet, 'uuid' | 'name'>;
+export type PlanInternetLimitData = Pick<PlanInternet, 'uuid' | 'name' | 'id'>;
