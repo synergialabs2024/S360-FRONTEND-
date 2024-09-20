@@ -70,9 +70,12 @@ const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
                 required={required}
                 onChange={onChange}
                 // // disabled style
-                disabled={disabled}
+                inputProps={{ readOnly: disabled }}
                 sx={{
-                  ...(disabled && { background: 'rgba(0, 0, 0, 0.04)' }),
+                  ...(disabled && {
+                    background: 'rgba(0, 0, 0, 0.04)',
+                    borderRadius: '13px',
+                  }),
                 }}
               >
                 {options.map(item => (
