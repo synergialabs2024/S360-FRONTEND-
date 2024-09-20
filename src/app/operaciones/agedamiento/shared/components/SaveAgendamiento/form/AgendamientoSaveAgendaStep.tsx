@@ -5,6 +5,8 @@ import {
   CustomDatePicker,
   CustomTextField,
   CustomTextFieldNoForm,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
 } from '@/shared/components';
 import { FormHelperText, Grid } from '@mui/material';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento';
@@ -22,25 +24,7 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
 
   return (
     <>
-      <CustomDatePicker
-        label="Fecha instalacion"
-        name="fecha_instalacion"
-        control={form.control}
-        defaultValue={form.getValues().fecha_instalacion}
-        error={errors.fecha_instalacion}
-        helperText={errors.fecha_instalacion?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomTextField
-        label="Hora instalacion"
-        name="hora_instalacion"
-        control={form.control}
-        defaultValue={form.getValues().hora_instalacion}
-        error={errors.hora_instalacion}
-        helperText={errors.hora_instalacion?.message}
-        size={gridSizeMdLg6}
-      />
+      <CustomTypoLabel text="Detalle Instalación" />
 
       <CustomTextFieldNoForm
         label="NAP"
@@ -64,6 +48,33 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
           coordenadas del usuario y la NAP asignada.
         </FormHelperText>
       </Grid>
+
+      <>
+        <CustomTypoLabel
+          text="Horarios disponibles"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+
+        <CustomDatePicker
+          label="Fecha instalacion"
+          name="fecha_instalacion"
+          control={form.control}
+          defaultValue={form.getValues().fecha_instalacion}
+          error={errors.fecha_instalacion}
+          helperText={errors.fecha_instalacion?.message}
+          size={gridSizeMdLg6}
+        />
+
+        <CustomTextField
+          label="Hora instalacion"
+          name="hora_instalacion"
+          control={form.control}
+          defaultValue={form.getValues().hora_instalacion}
+          error={errors.hora_instalacion}
+          helperText={errors.hora_instalacion?.message}
+          size={gridSizeMdLg6}
+        />
+      </>
     </>
   );
 };
