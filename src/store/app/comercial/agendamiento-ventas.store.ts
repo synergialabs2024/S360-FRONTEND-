@@ -8,6 +8,9 @@ interface AgendamientoVentasState {
 
   planificadoresArray: Planificador[];
   setPlanificadoresArray: (value: Planificador[]) => void;
+
+  availableFleetsByZonePks: number[];
+  setAvailableFleetsByZonePks: (value: number[]) => void;
 }
 
 export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
@@ -17,5 +20,9 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
 
     planificadoresArray: [],
     setPlanificadoresArray: value => set({ planificadoresArray: value }),
+
+    availableFleetsByZonePks: [],
+    setAvailableFleetsByZonePks: value =>
+      set({ availableFleetsByZonePks: value }),
   }),
 );

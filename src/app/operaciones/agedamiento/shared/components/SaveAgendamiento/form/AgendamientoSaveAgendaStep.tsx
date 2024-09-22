@@ -1,3 +1,4 @@
+import { FormHelperText, Grid } from '@mui/material';
 import { UseFormReturn } from 'react-hook-form';
 
 import { gridSizeMdLg6, Preventa } from '@/shared';
@@ -8,7 +9,6 @@ import {
   CustomTypoLabel,
   CustomTypoLabelEnum,
 } from '@/shared/components';
-import { FormHelperText, Grid } from '@mui/material';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento';
 
 export type AgendamientoSaveAgendaStepProps = {

@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { useFetchPlanificadors } from '@/actions/app';
+import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
+import { useSocket } from '@/context/SocketContext';
 import { Preventa, useLoaders } from '@/shared';
 import { useAgendamientoVentasStore } from '@/store/app';
-import { useSocket } from '@/context/SocketContext';
-
-// import { useSocket } from '@/context/SocketContext';
 
 export type UsePlanificadorAgendamientoParams = {
   cackeKey: string;
@@ -20,6 +18,9 @@ export const usePlanificadorAgendamiento = ({
   ///* global state ============================
   const setPlanificadoresArray = useAgendamientoVentasStore(
     s => s.setPlanificadoresArray,
+  );
+  const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
+    s => s.setAvailableFleetsByZonePks,
   );
 
   //* effects ------------------------
@@ -47,18 +48,39 @@ export const usePlanificadorAgendamiento = ({
       initial_date_month: '2024-09-20',
     },
   });
+  const {
+    data: flotasPagingRes,
+    isLoading: isLoadingFlotas,
+    isFetching: isFetchingFlotas,
+  } = useFetchFlotas({
+    enabled: isMounted && !!preventa?.solicitud_servicio_data?.zona,
+    params: {
+      zonas: preventa?.solicitud_servicio_data?.zona! as any, // filter by pk not [pk]
+    },
+  });
 
   useEffect(() => {
     if (!isMounted) return;
-    if (isLoadingPlanificadores || isFetchingPlanificadores) return;
 
+    if (isLoadingPlanificadores || isFetchingPlanificadores) return;
     setPlanificadoresArray(planificadoresPagingRes?.data?.items || []);
+
+    if (isLoadingFlotas || isFetchingFlotas) return;
+    setAvailableFleetsByZonePks(
+      flotasPagingRes?.data?.items
+        .map(item => item.id)
+        .filter((id): id is number => id !== undefined) || [],
+    );
   }, [
     isMounted,
     isLoadingPlanificadores,
     isFetchingPlanificadores,
     planificadoresPagingRes,
     setPlanificadoresArray,
+    isLoadingFlotas,
+    isFetchingFlotas,
+    flotasPagingRes,
+    setAvailableFleetsByZonePks,
   ]);
 
   useEffect(() => {
@@ -82,6 +104,10 @@ export const usePlanificadorAgendamiento = ({
     };
   }, [isMounted, preventa?.flota, setPlanificadoresArray, socket]);
 
-  const isCustomLoading = isLoadingPlanificadores || isFetchingPlanificadores;
+  const isCustomLoading =
+    isLoadingPlanificadores ||
+    isFetchingPlanificadores ||
+    isLoadingFlotas ||
+    isFetchingFlotas;
   useLoaders(isCustomLoading);
 };

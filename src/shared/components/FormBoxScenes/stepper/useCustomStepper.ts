@@ -2,9 +2,13 @@ import { useState } from 'react';
 
 type UseCustomStepperProps = {
   steps: string[];
+  initialStep?: number;
 };
-export const useCustomStepper = ({ steps }: UseCustomStepperProps) => {
-  const [activeStep, setActiveStep] = useState(0);
+export const useCustomStepper = ({
+  steps,
+  initialStep = 0,
+}: UseCustomStepperProps) => {
+  const [activeStep, setActiveStep] = useState(initialStep);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [disableNextStepBtn, setDisableNextStepBtn] = useState(false);
 
