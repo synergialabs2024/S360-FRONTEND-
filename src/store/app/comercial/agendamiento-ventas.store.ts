@@ -11,6 +11,12 @@ interface AgendamientoVentasState {
 
   availableFleetsByZonePks: number[];
   setAvailableFleetsByZonePks: (value: number[]) => void;
+
+  // schedule
+  selectedHour: string; // HH:MM:SS
+  setSelectedHour: (value: string) => void;
+  selectedDate: string; // YYYY-MM-DD
+  setSelectedDate: (value: string) => void;
 }
 
 export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
@@ -24,5 +30,12 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
     availableFleetsByZonePks: [],
     setAvailableFleetsByZonePks: value =>
       set({ availableFleetsByZonePks: value }),
+
+    // schedule
+    selectedHour: '',
+    setSelectedHour: value => set({ selectedHour: value }),
+
+    selectedDate: '',
+    setSelectedDate: value => set({ selectedDate: value }),
   }),
 );
