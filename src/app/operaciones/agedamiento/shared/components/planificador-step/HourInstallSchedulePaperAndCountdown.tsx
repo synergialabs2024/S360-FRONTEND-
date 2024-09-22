@@ -14,7 +14,7 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
   HourInstallSchedulePaperAndCountdownProps
 > = () => {
   ///* global state ============================
-  const availableTimeMap = useAgendamientoVentasStore(s => s.timeMap);
+  const availableTimeMap = useAgendamientoVentasStore(s => s.availableTimeMap);
 
   return (
     <>

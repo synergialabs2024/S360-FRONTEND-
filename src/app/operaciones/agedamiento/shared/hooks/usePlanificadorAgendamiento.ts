@@ -31,7 +31,7 @@ export const usePlanificadorAgendamiento = ({
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.setAvailableFleetsByZonePks,
   );
-  const setTimeMap = useAgendamientoVentasStore(s => s.setTimeMap);
+  const setTimeMap = useAgendamientoVentasStore(s => s.setAvailableTimeMap);
   const preventa = useAgendamientoVentasStore(s => s.activePreventa);
 
   //* effects ------------------------
@@ -106,7 +106,7 @@ export const usePlanificadorAgendamiento = ({
 
       // filter becoming time slots from time_map
       const currentAvailableTimeMap =
-        useAgendamientoVentasStore.getState().timeMap;
+        useAgendamientoVentasStore.getState().availableTimeMap;
       if (!currentAvailableTimeMap) return;
       const newTimeMap = currentAvailableTimeMap.filter(
         timeSlot =>

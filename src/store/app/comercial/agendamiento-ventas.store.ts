@@ -16,8 +16,8 @@ interface AgendamientoVentasState {
   setAvailableFleetsByZonePks: (value: number[]) => void;
 
   ///* schedule -------------
-  timeMap: TimeMapPlanificador[] | null;
-  setTimeMap: (value: TimeMapPlanificador[] | null) => void;
+  availableTimeMap: TimeMapPlanificador[] | null;
+  setAvailableTimeMap: (value: TimeMapPlanificador[] | null) => void;
 
   selectedHour: string; // HH:MM:SS
   setSelectedHour: (value: string) => void;
@@ -41,8 +41,8 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
       set({ availableFleetsByZonePks: value }),
 
     // schedule
-    timeMap: null,
-    setTimeMap: value => set({ timeMap: value }),
+    availableTimeMap: null,
+    setAvailableTimeMap: value => set({ availableTimeMap: value }),
 
     selectedHour: '',
     setSelectedHour: value => set({ selectedHour: value }),
