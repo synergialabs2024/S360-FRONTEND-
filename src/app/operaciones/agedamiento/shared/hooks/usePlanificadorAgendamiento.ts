@@ -1,9 +1,18 @@
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
 import { useSocket } from '@/context/SocketContext';
-import { useLoaders } from '@/shared';
-import { useAgendamientoVentasStore } from '@/store/app';
+import {
+  defaultSystemParamsValues,
+  Planificador,
+  SystemParamsSlugsEnum,
+  useLoaders,
+} from '@/shared';
+import {
+  useAgendamientoVentasStore,
+  useParametrosSistemaStore,
+} from '@/store/app';
 
 export type UsePlanificadorAgendamientoParams = {
   cackeKey: string;
@@ -22,6 +31,7 @@ export const usePlanificadorAgendamiento = ({
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.setAvailableFleetsByZonePks,
   );
+  const setTimeMap = useAgendamientoVentasStore(s => s.setTimeMap);
   const preventa = useAgendamientoVentasStore(s => s.activePreventa);
 
   //* effects ------------------------
@@ -87,23 +97,68 @@ export const usePlanificadorAgendamiento = ({
   useEffect(() => {
     if (!socket || !isMounted || !preventa?.flota) return;
 
-    // register fleet
+    // register fleet -------
     socket.emit('register_fleet', preventa.flota);
 
-    // listen fleet schedule
-    socket.on('receive_fleet_schedule', (data: any) => {
-      console.log('-------------- receive_fleet_schedule --------------', {
-        planificador: data,
-      });
-      if (data?.flota !== preventa?.flota) return;
+    // listen fleet schedule -------
+    socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
+      if (dayPlanificador?.flota !== preventa?.flota) return;
 
-      setPlanificadoresArray(data?.items || []);
+      // filter becoming time slots from time_map
+      const currentAvailableTimeMap =
+        useAgendamientoVentasStore.getState().timeMap;
+      if (!currentAvailableTimeMap) return;
+      const newTimeMap = currentAvailableTimeMap.filter(
+        timeSlot =>
+          !dayPlanificador.time_map?.find(
+            planificadorTimeSlot => planificadorTimeSlot.hora === timeSlot.hora,
+          ),
+      );
+      setTimeMap(newTimeMap || []);
+
+      // console.log('-------------- receive_fleet_schedule --------------', {
+      //   planificador: dayPlanificador,
+      // });
     });
 
     return () => {
       socket.off('receive_fleet_schedule');
     };
-  }, [isMounted, preventa?.flota, setPlanificadoresArray, socket]);
+  }, [isMounted, preventa?.flota, setPlanificadoresArray, socket, setTimeMap]);
+
+  ///* available time slots ============================
+  const startInstallHour =
+    useParametrosSistemaStore(s => s.systemParametersArray).find(
+      param => param?.slug === SystemParamsSlugsEnum.HORA_INICIO_INSTALACIONES,
+    )?.value || defaultSystemParamsValues.HORA_INICIO_INSTALACIONES;
+  const endInstallHour =
+    useParametrosSistemaStore(s => s.systemParametersArray).find(
+      param => param?.slug === SystemParamsSlugsEnum.HORA_FIN_INSTALACIONES,
+    )?.value || defaultSystemParamsValues.HORA_FIN_INSTALACIONES;
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    // create array of hours between start and end hour in 30 minutes intervals
+    const hoursArray: string[] = [];
+    for (
+      let i = parseInt(startInstallHour);
+      i < parseInt(endInstallHour);
+      i++
+    ) {
+      hoursArray.push(`${i}:00:00`);
+      hoursArray.push(`${i}:30:00`);
+    }
+    hoursArray.push(`${endInstallHour}`);
+
+    setTimeMap(
+      hoursArray.map(hour => ({
+        uuid: uuidv4(),
+        hora: hour,
+      })),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
 
   const isCustomLoading =
     isLoadingPlanificadores ||

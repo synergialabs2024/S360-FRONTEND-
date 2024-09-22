@@ -11,7 +11,9 @@ import {
 import { Outlet } from 'react-router-dom';
 
 import { drawerWidth } from '@/shared/constants';
+import { useParametrosSistemaStore } from '@/store/app';
 import { useUiStore } from '@/store/ui';
+import { useEffect } from 'react';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 
@@ -63,6 +65,17 @@ const AppLayout: React.FC<AppLayoutInterface> = () => {
   const theme = useTheme();
 
   const leftDrawerOpened = useUiStore(s => s.customization.opened);
+
+  ///* global state ============================
+  const fetchAllSystemParameters = useParametrosSistemaStore(
+    s => s.fetchAllSystemParameters,
+  );
+
+  ///* effects ============================
+  useEffect(() => {
+    fetchAllSystemParameters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box sx={{ display: 'block' }}>

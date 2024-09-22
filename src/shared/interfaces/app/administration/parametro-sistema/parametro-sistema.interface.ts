@@ -11,7 +11,7 @@ export interface ParametroSistema {
   id?: number;
   uuid?: string;
   name: string;
-  slug: string;
+  slug: string; // SystemParamsSlugsEnum
   value: string;
   description: string;
   type: string;

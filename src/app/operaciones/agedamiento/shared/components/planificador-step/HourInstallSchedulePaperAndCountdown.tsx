@@ -14,7 +14,7 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
   HourInstallSchedulePaperAndCountdownProps
 > = () => {
   ///* global state ============================
-  const planificadores = useAgendamientoVentasStore(s => s.planificadoresArray);
+  const availableTimeMap = useAgendamientoVentasStore(s => s.timeMap);
 
   return (
     <>
@@ -63,7 +63,20 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
                   textAlign: 'center',
                 }}
               >
-                {planificadores?.map(planificador => {
+                {availableTimeMap?.map(timeSlot => {
+                  return (
+                    <CustomInstallSchedulePaperSlot
+                      key={timeSlot.uuid}
+                      hour={timeSlot.hora}
+                      isClicked={false}
+                      onClick={() => {}}
+                    >
+                      {timeSlot.hora}
+                    </CustomInstallSchedulePaperSlot>
+                  );
+                })}
+
+                {/* {planificadores?.map(planificador => {
                   if (!planificador) return null;
 
                   if (planificador?.fecha === '2024-09-23') {
@@ -82,7 +95,7 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
                   }
 
                   return null;
-                })}
+                })} */}
               </Paper>
             </Grid>
           </Grid>

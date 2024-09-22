@@ -25,6 +25,9 @@ export interface Flota {
 
   es_bodega: boolean;
 
+  hora_inicio_instalacion?: string; // HH:MM:SS
+  hora_fin_instalacion?: string; // HH:MM:SS
+
   created_at?: string;
   modified_at?: string;
 
