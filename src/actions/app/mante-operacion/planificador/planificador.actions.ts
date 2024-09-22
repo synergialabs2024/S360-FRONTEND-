@@ -42,7 +42,7 @@ export const useGetPlanificador = (uuid: string) => {
   });
 };
 
-export const useCreatePlanificador = <T>({
+export const usePostPlanificador = <T>({
   navigate,
   returnUrl,
   returnErrorUrl,
@@ -51,17 +51,20 @@ export const useCreatePlanificador = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
+  customOnError,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
     mutationFn: (params: CreatePlanificadorParams<T>) =>
-      createPlanificador(params),
-    onSuccess: () => {
+      postPlanificador(params),
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
       });
+      customOnSuccess && customOnSuccess(res);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
@@ -74,6 +77,10 @@ export const useCreatePlanificador = <T>({
         returnUrl &&
         navigate(returnErrorUrl || returnUrl || '');
 
+      if (customOnError) {
+        customOnError(error);
+        return;
+      }
       handleAxiosError(error, customMessageErrorToast);
     },
     onSettled: () => {
@@ -91,6 +98,8 @@ export const useUpdatePlanificador = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
+  customOnError,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
@@ -98,10 +107,11 @@ export const useUpdatePlanificador = <T>({
   return useMutation({
     mutationFn: (params: UpdatePlanificadorParams<T>) =>
       updatePlanificador(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
       });
+      customOnSuccess && customOnSuccess(res);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
@@ -113,6 +123,11 @@ export const useUpdatePlanificador = <T>({
         navigate &&
         returnUrl &&
         navigate(returnErrorUrl || returnUrl || '');
+
+      if (customOnError) {
+        customOnError(error);
+        return;
+      }
 
       handleAxiosError(error, customMessageErrorToast);
     },
@@ -126,6 +141,7 @@ export const useUpdatePlanificador = <T>({
 export type GetPlanificadorsParams = Partial<Planificador> &
   PagingPartialParams & {
     initial_date?: string; // YYYY-MM-DD <- monday to filter by week
+    initial_date_month?: string; // YYYY-MM-DD <- monday to filter by month
   };
 export type CreatePlanificadorParams<T> = T;
 export type CreatePlanificadorParamsBase = Omit<Planificador, 'id'>;
@@ -150,13 +166,14 @@ export const getPlanificador = async (uuid: string) => {
   }
 };
 
-export const createPlanificador = async <T>(
+export const postPlanificador = async <T>(
   data: CreatePlanificadorParams<T>,
+  url: string = '/',
 ) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<Planificador>('/planificador/', data, true);
+  return post<Planificador>(`/planificador${url}`, data, true);
 };
 
 export const updatePlanificador = async <T>({

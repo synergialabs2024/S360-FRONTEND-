@@ -48,7 +48,10 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
 }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
-  usePlanificadorAgendamiento();
+  usePlanificadorAgendamiento({
+    preventa: preventa!,
+    cackeKey: 'planificadores',
+  });
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
