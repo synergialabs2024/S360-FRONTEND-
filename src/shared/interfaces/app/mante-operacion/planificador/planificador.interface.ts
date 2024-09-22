@@ -8,26 +8,26 @@ export interface PlanificadorPaginatedRes {
 }
 
 export interface Planificador {
-  id: number;
-  uuid: string;
+  id?: number;
+  uuid?: string;
 
   fecha: string; // YYYY-MM-DD
+  time_map?: TimeMap[];
 
-  created_at: string;
-  modified_at: string;
-  time_map: TimeMap[];
+  created_at?: string;
+  modified_at?: string;
 
   ///* fk
-  flota: number;
+  flota?: number;
 }
 
 export interface TimeMap {
-  hora: string;
-  user: number;
   uuid: string;
+  hora: string; // HH:MM:SS
 
-  estado: string;
+  estado?: string | null;
 
-  preventa: number;
-  block_until: string;
+  preventa?: number;
+  user?: number;
+  block_until?: string | null;
 }

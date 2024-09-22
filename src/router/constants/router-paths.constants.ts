@@ -255,6 +255,12 @@ export const ROUTER_PATHS = {
     flotasCrear: 'flotas/crear',
     flotasEditar: 'flotas/editar/:uuid',
     flotasNav: '/mantenimiento-operacion/flotas',
+
+    ///* planificadores
+    planificadores: 'planificadores',
+    planificadoresCrear: 'planificadores/crear',
+    planificadoresEditar: 'planificadores/editar/:uuid',
+    planificadoresNav: '/mantenimiento-operacion/planificadores',
   },
 
   /////* Supervision Comercial ----------------
