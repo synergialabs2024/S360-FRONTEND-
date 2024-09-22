@@ -1,22 +1,19 @@
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
-import { getCacheRedis, SetCodigoOtpInCacheData } from '@/actions/shared';
-import { HTTPResStatusCodeEnum, type CacheResponse } from '@/shared';
-import { usePreventaStore } from '@/store/app';
+import { getCacheRedis, SetSelectedScheduleData } from '@/actions/shared';
+import { CacheResponse, HTTPResStatusCodeEnum } from '@/shared';
+import { useAgendamientoVentasStore } from '@/store/app';
 import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 
-export type UsePreventaOtpCounterParams = {
+export type UsePlanificadorAgendaCountDownParams = {
   cackeKey: string;
-  counterIdOtp: string;
-  counterIdNewOtp: string;
+  counterIdSelectedHour: string;
 };
-
-export const usePreventaOtpCounter = ({
+export const usePlanificadorAgendaCountDown = ({
   cackeKey,
-  counterIdOtp,
-  counterIdNewOtp,
-}: UsePreventaOtpCounterParams) => {
+  counterIdSelectedHour,
+}: UsePlanificadorAgendaCountDownParams) => {
   ///* local state ============================
   const [isMounted, setIsMounted] = useState(false);
 
@@ -24,8 +21,10 @@ export const usePreventaOtpCounter = ({
   const setIsGLobalLoading = useUiStore(s => s.setIsGlobalLoading);
   const startTimer = useGenericCountdownStore(s => s.start);
   const clearAll = useGenericCountdownStore(s => s.clearAll);
-  const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
-  const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
+
+  const setIsComponentBlocked = useAgendamientoVentasStore(
+    s => s.setIsComponentBlocked,
+  );
 
   ///* effects ============================
   useEffect(() => {
@@ -43,35 +42,33 @@ export const usePreventaOtpCounter = ({
     // check cache
     (async () => {
       setIsGLobalLoading(true);
-      const res = await getCacheRedis<CacheResponse<SetCodigoOtpInCacheData>>({
+      const res = await getCacheRedis<CacheResponse<SetSelectedScheduleData>>({
         key: cackeKey,
         showErrorToast: false,
       });
       if (res?.status !== HTTPResStatusCodeEnum.OK || !res?.data) return;
 
-      const data = res?.data as unknown as SetCodigoOtpInCacheData;
+      const data = res?.data as unknown as SetSelectedScheduleData;
       setIsGLobalLoading(false);
       setIsComponentBlocked(true);
-      setCachedOtpData(data);
 
       // start timer -------
-      const timerOtp = dayjs(data?.limitTimeOtp).diff(dayjs(), 'second');
-      const timerNewOtp = dayjs(data?.limitTimeNewOtp).diff(dayjs(), 'second');
-      startTimer(counterIdOtp, timerOtp, () => {
+      const timerOtp = dayjs(data?.limitTimeSelectedHour).diff(
+        dayjs(),
+        'second',
+      );
+      startTimer(counterIdSelectedHour, timerOtp, () => {
         clearAll();
         setIsComponentBlocked(false);
       });
-      startTimer(counterIdNewOtp, timerNewOtp);
     })();
   }, [
     cackeKey,
-    counterIdNewOtp,
-    counterIdOtp,
-    isMounted,
-    setIsGLobalLoading,
-    setIsComponentBlocked,
-    startTimer,
-    setCachedOtpData,
     clearAll,
+    counterIdSelectedHour,
+    isMounted,
+    setIsComponentBlocked,
+    setIsGLobalLoading,
+    startTimer,
   ]);
 };

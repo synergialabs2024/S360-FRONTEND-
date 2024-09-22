@@ -1,14 +1,13 @@
 import { FormHelperText, Grid } from '@mui/material';
 import { UseFormReturn } from 'react-hook-form';
 
-import { gridSizeMdLg6, Preventa } from '@/shared';
+import { Preventa } from '@/shared';
 import {
-  CustomDatePicker,
-  CustomTextField,
   CustomTextFieldNoForm,
   CustomTypoLabel,
   CustomTypoLabelEnum,
 } from '@/shared/components';
+import { InstallationScheduleComponent } from '../../planificador-step';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento';
 
 export type AgendamientoSaveAgendaStepProps = {
@@ -20,8 +19,6 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
   form,
   preventa,
 }) => {
-  const { errors } = form.formState;
-
   return (
     <>
       <CustomTypoLabel text="Detalle Instalación" />
@@ -37,7 +34,6 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
         disabled
         endAdornment="m"
       />
-
       <Grid item xs={12} m={0} p={0}>
         <FormHelperText
           sx={{
@@ -49,31 +45,13 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
         </FormHelperText>
       </Grid>
 
+      {/* ============ planificador component ============ */}
       <>
         <CustomTypoLabel
           text="Horarios disponibles"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-
-        <CustomDatePicker
-          label="Fecha instalacion"
-          name="fecha_instalacion"
-          control={form.control}
-          defaultValue={form.getValues().fecha_instalacion}
-          error={errors.fecha_instalacion}
-          helperText={errors.fecha_instalacion?.message}
-          size={gridSizeMdLg6}
-        />
-
-        <CustomTextField
-          label="Hora instalacion"
-          name="hora_instalacion"
-          control={form.control}
-          defaultValue={form.getValues().hora_instalacion}
-          error={errors.hora_instalacion}
-          helperText={errors.hora_instalacion?.message}
-          size={gridSizeMdLg6}
-        />
+        <InstallationScheduleComponent form={form} />
       </>
     </>
   );

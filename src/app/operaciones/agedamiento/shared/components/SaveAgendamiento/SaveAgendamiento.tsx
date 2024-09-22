@@ -12,6 +12,7 @@ import {
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
+import { useAgendamientoVentasStore } from '@/store/app';
 import { returnUrlAgendamientosPage } from '../../../pages/tables/AgendamientosPage';
 import { usePlanificadorAgendamiento } from '../../hooks';
 import {
@@ -49,7 +50,6 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   ///* hooks ---------------------
   const navigate = useNavigate();
   usePlanificadorAgendamiento({
-    preventa: preventa!,
     cackeKey: 'planificadores',
   });
 
@@ -60,7 +60,10 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       initialStep: 2, // TODO: remove
     });
 
-  ///* local state -------------------
+  ///* global state ---------------------
+  const setActivePreventa = useAgendamientoVentasStore(
+    s => s.setActivePreventa,
+  );
 
   ///* form ---------------------
   const form = useForm<SaveFormDataAgendaVentas>({
@@ -106,6 +109,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   useEffect(() => {
     if (!preventa?.id) return;
     const { solicitud_servicio_data, ...rest } = preventa || {};
+    setActivePreventa(preventa);
 
     reset({
       ...rest,
@@ -120,7 +124,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       tarjetaName: rest?.tarjeta_data?.name,
       paymentMethodName: rest?.metodo_pago_data?.name,
     } as SaveFormDataAgendaVentas);
-  }, [preventa, reset]);
+  }, [preventa, reset, setActivePreventa]);
 
   // const isLoading = false;
   // useLoaders(isLoading);

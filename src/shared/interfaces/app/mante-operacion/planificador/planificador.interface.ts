@@ -12,7 +12,7 @@ export interface Planificador {
   uuid?: string;
 
   fecha: string; // YYYY-MM-DD
-  time_map?: TimeMap[];
+  time_map?: TimeMapPlanificador[];
 
   created_at?: string;
   modified_at?: string;
@@ -21,7 +21,7 @@ export interface Planificador {
   flota?: number;
 }
 
-export interface TimeMap {
+export interface TimeMapPlanificador {
   uuid: string;
   hora: string; // HH:MM:SS
 

@@ -13,3 +13,12 @@ export type ResendOtpDataCache = {
   limitTimeOtp: string; // timestamp to not override the previous timer
   otpData: CodigoOtp | null; // persist the data to resend the otp - id in supervisor unlock req
 };
+
+// // AGENDAMIENTO VENTAS ==================================
+export type SetSelectedScheduleData = {
+  selectedSchedule: string;
+  selectedHour: string;
+
+  // timestamp to calculate the time left
+  limitTimeSelectedHour: string; // timestamp
+} | null;

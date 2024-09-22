@@ -1,8 +1,11 @@
 import { create } from 'zustand';
 
-import { Planificador } from '@/shared';
+import { Planificador, Preventa, TimeMapPlanificador } from '@/shared';
 
 interface AgendamientoVentasState {
+  activePreventa: Preventa | null;
+  setActivePreventa: (value: Preventa | null) => void;
+
   isComponentBlocked: boolean;
   setIsComponentBlocked: (value: boolean) => void;
 
@@ -12,7 +15,10 @@ interface AgendamientoVentasState {
   availableFleetsByZonePks: number[];
   setAvailableFleetsByZonePks: (value: number[]) => void;
 
-  // schedule
+  ///* schedule -------------
+  timeMap: TimeMapPlanificador[] | null;
+  setTimeMap: (value: TimeMapPlanificador[] | null) => void;
+
   selectedHour: string; // HH:MM:SS
   setSelectedHour: (value: string) => void;
   selectedDate: string; // YYYY-MM-DD
@@ -21,6 +27,9 @@ interface AgendamientoVentasState {
 
 export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
   set => ({
+    activePreventa: null,
+    setActivePreventa: value => set({ activePreventa: value }),
+
     isComponentBlocked: false,
     setIsComponentBlocked: value => set({ isComponentBlocked: value }),
 
@@ -32,6 +41,9 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
       set({ availableFleetsByZonePks: value }),
 
     // schedule
+    timeMap: null,
+    setTimeMap: value => set({ timeMap: value }),
+
     selectedHour: '',
     setSelectedHour: value => set({ selectedHour: value }),
 

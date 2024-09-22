@@ -2,18 +2,18 @@ import { useEffect, useState } from 'react';
 
 import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
 import { useSocket } from '@/context/SocketContext';
-import { Preventa, useLoaders } from '@/shared';
+import { useLoaders } from '@/shared';
 import { useAgendamientoVentasStore } from '@/store/app';
 
 export type UsePlanificadorAgendamientoParams = {
   cackeKey: string;
-  preventa: Preventa;
 };
 export const usePlanificadorAgendamiento = ({
-  preventa,
+  cackeKey,
 }: UsePlanificadorAgendamientoParams) => {
   ///* local state ============================
   const [isMounted, setIsMounted] = useState<boolean>(false);
+  false && console.log('cackeKey', cackeKey);
 
   ///* global state ============================
   const setPlanificadoresArray = useAgendamientoVentasStore(
@@ -22,6 +22,7 @@ export const usePlanificadorAgendamiento = ({
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.setAvailableFleetsByZonePks,
   );
+  const preventa = useAgendamientoVentasStore(s => s.activePreventa);
 
   //* effects ------------------------
   useEffect(() => {
