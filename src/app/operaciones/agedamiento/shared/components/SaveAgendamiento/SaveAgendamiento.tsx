@@ -13,6 +13,7 @@ import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
 import { returnUrlAgendamientosPage } from '../../../pages/tables/AgendamientosPage';
+import { usePlanificadorAgendamiento } from '../../hooks';
 import {
   AgendamientoSaveAgendaStep,
   GeneralDataSaveAgendaVentaStep,
@@ -47,6 +48,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
 }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
+  usePlanificadorAgendamiento();
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =

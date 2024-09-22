@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// TODO: to save already saved images in s3 bucket
 interface PreventaLSState {
   tempLinks: string[];
 
