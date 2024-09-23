@@ -18,7 +18,7 @@ import {
 import type { SaveFormDataAgendaVentas } from '../components/SaveAgendamiento/SaveAgendamiento';
 
 export type UsePlanificadorAgendamientoParams = {
-  cackeKey: string;
+  cackeKey?: string;
   form: UseFormReturn<SaveFormDataAgendaVentas>;
 };
 export const usePlanificadorAgendamiento = ({
@@ -27,10 +27,12 @@ export const usePlanificadorAgendamiento = ({
 }: UsePlanificadorAgendamientoParams) => {
   ///* local state ============================
   const [isMounted, setIsMounted] = useState<boolean>(false);
+
   false && console.log('cackeKey', cackeKey);
 
   ///* form ---------------------
   const watchedFechaInstalacion = form.watch('fecha_instalacion');
+  const watchedFleet = form.watch('flota');
 
   ///* global state ============================
   const setPlanificadoresArray = useAgendamientoVentasStore(
@@ -60,12 +62,12 @@ export const usePlanificadorAgendamiento = ({
   const {
     data: planificadoresPagingRes,
     isLoading: isLoadingPlanificadores,
-    isFetching: isFetchingPlanificadores,
+    isFetching: isRefetchingPlanificadores,
   } = useFetchPlanificadors({
-    enabled: isMounted && !!preventa?.flota && !!watchedFechaInstalacion,
+    enabled: isMounted && !!watchedFleet && !!watchedFechaInstalacion,
     params: {
       page_size: 900,
-      flota: preventa?.flota,
+      flota: watchedFleet,
       fecha: watchedFechaInstalacion,
 
       // initial_date_month: dayjs(watchedFechaInstalacion)
@@ -77,11 +79,12 @@ export const usePlanificadorAgendamiento = ({
   const {
     data: flotasPagingRes,
     isLoading: isLoadingFlotas,
-    isFetching: isFetchingFlotas,
+    isRefetching: isRefetchingFlotas,
   } = useFetchFlotas({
     enabled: isMounted && !!preventa?.solicitud_servicio_data?.zona,
     params: {
       zonas: preventa?.solicitud_servicio_data?.zona! as any, // filter by pk not [pk]
+      page_size: 900,
     },
   });
 
@@ -96,7 +99,7 @@ export const usePlanificadorAgendamiento = ({
     )?.value || defaultSystemParamsValues.HORA_FIN_INSTALACIONES;
 
   useEffect(() => {
-    if (!isMounted || isLoadingPlanificadores || isFetchingPlanificadores)
+    if (!isMounted || isLoadingPlanificadores || isRefetchingPlanificadores)
       return;
 
     ///* set available time slots -------
@@ -134,7 +137,7 @@ export const usePlanificadorAgendamiento = ({
     );
 
     ///* available fleets by zone ------
-    if (isLoadingFlotas || isFetchingFlotas) return;
+    if (isLoadingFlotas || isRefetchingFlotas) return;
     setAvailableFleetsByZonePks(
       flotasPagingRes?.data?.items
         .map(item => item.id)
@@ -143,11 +146,11 @@ export const usePlanificadorAgendamiento = ({
   }, [
     isMounted,
     isLoadingPlanificadores,
-    isFetchingPlanificadores,
+    isRefetchingPlanificadores,
     planificadoresPagingRes,
     setPlanificadoresArray,
     isLoadingFlotas,
-    isFetchingFlotas,
+    isRefetchingFlotas,
     flotasPagingRes,
     setAvailableFleetsByZonePks,
     endInstallHour,
@@ -196,8 +199,18 @@ export const usePlanificadorAgendamiento = ({
 
   const isCustomLoading =
     isLoadingPlanificadores ||
-    isFetchingPlanificadores ||
+    isRefetchingPlanificadores ||
     isLoadingFlotas ||
-    isFetchingFlotas;
+    isRefetchingFlotas;
   useLoaders(isCustomLoading);
+
+  return {
+    isCustomLoading,
+
+    isLoadingFlotas,
+    isRefetchingFlotas,
+
+    isLoadingPlanificadores,
+    isRefetchingPlanificadores,
+  };
 };

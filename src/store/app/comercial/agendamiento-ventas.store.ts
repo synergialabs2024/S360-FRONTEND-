@@ -12,9 +12,6 @@ interface AgendamientoVentasState {
   planificadoresArray: Planificador[];
   setPlanificadoresArray: (value: Planificador[]) => void;
 
-  availableFleetsByZonePks: number[];
-  setAvailableFleetsByZonePks: (value: number[]) => void;
-
   ///* schedule -------------
   availableTimeMap: TimeMapPlanificador[] | null;
   setAvailableTimeMap: (value: TimeMapPlanificador[] | null) => void;
@@ -23,6 +20,9 @@ interface AgendamientoVentasState {
   setSelectedHour: (value: string) => void;
   selectedDate: string; // YYYY-MM-DD
   setSelectedDate: (value: string) => void;
+
+  availableFleetsByZonePks: number[];
+  setAvailableFleetsByZonePks: (value: number[]) => void;
 }
 
 export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
@@ -36,10 +36,6 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
     planificadoresArray: [],
     setPlanificadoresArray: value => set({ planificadoresArray: value }),
 
-    availableFleetsByZonePks: [],
-    setAvailableFleetsByZonePks: value =>
-      set({ availableFleetsByZonePks: value }),
-
     // schedule
     availableTimeMap: null,
     setAvailableTimeMap: value => set({ availableTimeMap: value }),
@@ -49,5 +45,9 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
 
     selectedDate: '',
     setSelectedDate: value => set({ selectedDate: value }),
+
+    availableFleetsByZonePks: [],
+    setAvailableFleetsByZonePks: value =>
+      set({ availableFleetsByZonePks: value }),
   }),
 );

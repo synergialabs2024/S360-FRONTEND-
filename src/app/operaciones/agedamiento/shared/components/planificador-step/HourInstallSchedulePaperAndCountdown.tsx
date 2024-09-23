@@ -40,17 +40,6 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
         mt={2}
       >
         <Grid item {...gridSizeMdLg6}>
-          {/* <img
-            src="/schedule-planificador.svg"
-            alt="select hour"
-            draggable="false"
-            style={{
-              width: '100%',
-              height: 'auto',
-              margin: 'auto',
-              objectFit: 'cover',
-            }}
-          /> */}
           <CustomDateCalendar
             name="fecha_instalacion"
             control={form.control}
