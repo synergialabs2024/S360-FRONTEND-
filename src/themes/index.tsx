@@ -1,4 +1,5 @@
 import { createTheme, Theme } from '@mui/material/styles';
+import { esES } from '@mui/x-date-pickers/locales';
 
 import colors from '@/assets/scss/_themes-vars.module.scss';
 import componentStyleOverrides from './compStyleOverride';
@@ -43,7 +44,12 @@ export const createAppTheme = (customization: CustomizationOptions): Theme => {
     typography: themeTypography(themeOption),
   };
 
-  const themes = createTheme(themeOptions as any);
+  const themes = createTheme(
+    themeOptions as any,
+
+    // locale
+    esES,
+  );
   themes.components = componentStyleOverrides(themeOption);
 
   return themes;

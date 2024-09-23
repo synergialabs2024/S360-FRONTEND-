@@ -1,7 +1,9 @@
 import { Grid, Paper } from '@mui/material';
+import dayjs from 'dayjs';
 import { UseFormReturn } from 'react-hook-form';
 
-import { gridSizeMdLg5, gridSizeMdLg6 } from '@/shared';
+import { formatHourTimeField, gridSizeMdLg5, gridSizeMdLg6 } from '@/shared';
+import { CustomDateCalendar } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
 import CustomInstallSchedulePaperSlot from './CustomInstallSchedulePaperSlot';
@@ -12,9 +14,17 @@ export type HourInstallSchedulePaperAndCountdownProps = {
 
 const HourInstallSchedulePaperAndCountdown: React.FC<
   HourInstallSchedulePaperAndCountdownProps
-> = () => {
+> = ({ form }) => {
   ///* global state ============================
   const availableTimeMap = useAgendamientoVentasStore(s => s.availableTimeMap);
+
+  ///* form ---------------------
+  const { errors } = form.formState;
+
+  ///* handlers ---------------------
+  const onChangeFechaInstalacion = (date: Date | null) => {
+    console.log('date', date);
+  };
 
   return (
     <>
@@ -28,8 +38,8 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
         mt={2}
       >
         <Grid item {...gridSizeMdLg6}>
-          <img
-            src="/calendar-planificador.svg"
+          {/* <img
+            src="/schedule-planificador.svg"
             alt="select hour"
             draggable="false"
             style={{
@@ -38,6 +48,26 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
               margin: 'auto',
               objectFit: 'cover',
             }}
+          /> */}
+          <CustomDateCalendar
+            name="fecha_instalacion"
+            control={form.control}
+            defaultValue={null}
+            error={errors.fecha_instalacion}
+            helperText={errors.fecha_instalacion?.message}
+            onChangeValue={onChangeFechaInstalacion}
+            minDate={dayjs()}
+            // maxDate={limitDates?.at(-1) || null}
+            size={gridSizeMdLg5}
+            // shouldDisableDate={day => {
+            //   const isBlockedDate = !allTimeMaps?.some(
+            //     tm =>
+            //       dayjs(tm.fecha).format('YYYY-MM-DD') ===
+            //         dayjs(day).format('YYYY-MM-DD') && tm.horas.length,
+            //   );
+
+            //   return isBlockedDate;
+            // }}
           />
         </Grid>
         <span className="spacer" />
@@ -71,7 +101,7 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
                       isClicked={false}
                       onClick={() => {}}
                     >
-                      {timeSlot.hora}
+                      {formatHourTimeField(timeSlot.hora)}
                     </CustomInstallSchedulePaperSlot>
                   );
                 })}

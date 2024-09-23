@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Paper, styled } from '@mui/material';
 
 export type CustomInstallSchedulePaperSlotProps = {
@@ -8,34 +9,36 @@ export type CustomInstallSchedulePaperSlotProps = {
 };
 
 interface StyledPaperProps {
-  isclicked: boolean;
+  isClicked: boolean;
   children?: React.ReactNode;
   onClick?: () => void;
 }
 
-const StyledPaper = styled(Paper)<StyledPaperProps>(({ isclicked, theme }) => ({
+const StyledPaper = styled(({ isClicked, ...other }: StyledPaperProps) => (
+  <Paper {...other} />
+))(({ isClicked, theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '5px',
   borderRadius: '5px',
-  color: isclicked ? 'white' : 'gray',
-  backgroundColor: isclicked ? theme.palette.primary.main : '#ffffff',
+  color: isClicked ? 'white' : 'gray',
+  backgroundColor: isClicked ? theme.palette.primary.main : '#ffffff',
   transition: 'background-color 0.3s',
-  cursor: isclicked ? 'default' : 'pointer',
+  cursor: isClicked ? 'default' : 'pointer',
   border: '1px solid #E0E0E0',
   margin: '10px 0px',
 }));
 
 const CustomInstallSchedulePaperSlot: React.FC<
   CustomInstallSchedulePaperSlotProps
-> = ({ hour, children, isClicked, onClick }) => {
+> = ({ hour, children, isClicked = false, onClick }) => {
   const handleClick = () => {
     onClick(hour);
   };
 
   return (
-    <StyledPaper onClick={handleClick} isclicked={isClicked}>
+    <StyledPaper onClick={handleClick} isClicked={isClicked}>
       {children}
     </StyledPaper>
   );

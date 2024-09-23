@@ -13,6 +13,7 @@ import {
   useAgendamientoVentasStore,
   useParametrosSistemaStore,
 } from '@/store/app';
+import dayjs from 'dayjs';
 
 export type UsePlanificadorAgendamientoParams = {
   cackeKey: string;
@@ -31,7 +32,9 @@ export const usePlanificadorAgendamiento = ({
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.setAvailableFleetsByZonePks,
   );
-  const setTimeMap = useAgendamientoVentasStore(s => s.setAvailableTimeMap);
+  const setAvailableTimeMap = useAgendamientoVentasStore(
+    s => s.setAvailableTimeMap,
+  );
   const preventa = useAgendamientoVentasStore(s => s.activePreventa);
 
   //* effects ------------------------
@@ -56,7 +59,11 @@ export const usePlanificadorAgendamiento = ({
     params: {
       page_size: 900,
       flota: preventa?.flota,
-      initial_date_month: '2024-09-20',
+      // TODO: filter selected day in calendar
+      initial_date_month: dayjs()
+        .startOf('week')
+        .add(1, 'day') // 'cause startOf('week') is sunday
+        .format('YYYY-MM-DD'),
     },
   });
   const {
@@ -114,7 +121,7 @@ export const usePlanificadorAgendamiento = ({
             planificadorTimeSlot => planificadorTimeSlot.hora === timeSlot.hora,
           ),
       );
-      setTimeMap(newTimeMap || []);
+      setAvailableTimeMap(newTimeMap || []);
 
       // console.log('-------------- receive_fleet_schedule --------------', {
       //   planificador: dayPlanificador,
@@ -124,7 +131,13 @@ export const usePlanificadorAgendamiento = ({
     return () => {
       socket.off('receive_fleet_schedule');
     };
-  }, [isMounted, preventa?.flota, setPlanificadoresArray, socket, setTimeMap]);
+  }, [
+    isMounted,
+    preventa?.flota,
+    setPlanificadoresArray,
+    socket,
+    setAvailableTimeMap,
+  ]);
 
   ///* available time slots ============================
   const startInstallHour =
@@ -151,7 +164,7 @@ export const usePlanificadorAgendamiento = ({
     }
     hoursArray.push(`${endInstallHour}`);
 
-    setTimeMap(
+    setAvailableTimeMap(
       hoursArray.map(hour => ({
         uuid: uuidv4(),
         hora: hour,

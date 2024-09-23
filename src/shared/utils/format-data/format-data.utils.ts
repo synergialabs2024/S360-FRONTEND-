@@ -35,6 +35,10 @@ export const formatHourByNumber = (hour: number): string => {
   return dayjs().hour(hour).minute(0).format('hh:mm A');
 };
 
+export const formatHourTimeField = (hour: string): string => {
+  return dayjs(hour, 'HH:mm').format('hh:mm A');
+};
+
 // // // Timers ========================================
 export const formatCountDownTimer = (timer: number): string => {
   const minutes = Math.floor(timer / 60);
