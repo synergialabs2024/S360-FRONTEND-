@@ -16,6 +16,7 @@ const CustomLineLoad: React.FC<CustomLineLoadProps> = ({
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
+            minHeight: '5cm',
             clipPath: 'inset(25% 0 25% 0)',
           }}
         >
