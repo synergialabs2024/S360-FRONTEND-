@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Grid, Paper } from '@mui/material';
 import dayjs from 'dayjs';
 import { UseFormReturn } from 'react-hook-form';
@@ -22,7 +23,8 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
   const { errors } = form.formState;
 
   ///* handlers ---------------------
-  const onChangeFechaInstalacion = (date: Date | null) => {
+  const onChangeFechaInstalacion = (date: string | null) => {
+    if (!date) return;
     console.log('date', date);
   };
 
@@ -52,12 +54,12 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
           <CustomDateCalendar
             name="fecha_instalacion"
             control={form.control}
-            defaultValue={null}
+            defaultValue={dayjs().format('YYYY-MM-DD')}
             error={errors.fecha_instalacion}
             helperText={errors.fecha_instalacion?.message}
             onChangeValue={onChangeFechaInstalacion}
             minDate={dayjs()}
-            // maxDate={limitDates?.at(-1) || null}
+            maxDate={dayjs().add(6, 'week').format('YYYY-MM-DD') || null}
             size={gridSizeMdLg5}
             // shouldDisableDate={day => {
             //   const isBlockedDate = !allTimeMaps?.some(
@@ -93,18 +95,34 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
                   textAlign: 'center',
                 }}
               >
-                {availableTimeMap?.map(timeSlot => {
-                  return (
-                    <CustomInstallSchedulePaperSlot
-                      key={timeSlot.uuid}
-                      hour={timeSlot.hora}
-                      isClicked={false}
-                      onClick={() => {}}
-                    >
-                      {formatHourTimeField(timeSlot.hora)}
-                    </CustomInstallSchedulePaperSlot>
-                  );
-                })}
+                {availableTimeMap && availableTimeMap?.length ? (
+                  availableTimeMap?.map(timeSlot => {
+                    return (
+                      <CustomInstallSchedulePaperSlot
+                        key={timeSlot.uuid}
+                        hour={timeSlot.hora}
+                        isClicked={false}
+                        onClick={() => {}}
+                      >
+                        {formatHourTimeField(timeSlot.hora)}
+                      </CustomInstallSchedulePaperSlot>
+                    );
+                  })
+                ) : (
+                  <Grid item xs={12}>
+                    <img
+                      src="/empty-schedule.svg"
+                      alt="Empty schedule"
+                      draggable="false"
+                      style={{
+                        width: '70%',
+                        height: 'auto',
+                        margin: 'auto',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </Grid>
+                )}
 
                 {/* {planificadores?.map(planificador => {
                   if (!planificador) return null;

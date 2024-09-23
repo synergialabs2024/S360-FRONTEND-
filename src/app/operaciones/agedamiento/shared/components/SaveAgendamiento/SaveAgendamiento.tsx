@@ -49,9 +49,6 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
 }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
-  usePlanificadorAgendamiento({
-    cackeKey: 'planificadores',
-  });
 
   ///* stepper ---------------------
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -76,6 +73,11 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     reset,
     formState: { isValid },
   } = form;
+
+  usePlanificadorAgendamiento({
+    cackeKey: 'planificadores',
+    form,
+  });
 
   ///* fetch data ---------------------
 

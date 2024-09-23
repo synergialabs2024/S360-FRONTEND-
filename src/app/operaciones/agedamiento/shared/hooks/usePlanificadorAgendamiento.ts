@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
@@ -13,17 +15,22 @@ import {
   useAgendamientoVentasStore,
   useParametrosSistemaStore,
 } from '@/store/app';
-import dayjs from 'dayjs';
+import type { SaveFormDataAgendaVentas } from '../components/SaveAgendamiento/SaveAgendamiento';
 
 export type UsePlanificadorAgendamientoParams = {
   cackeKey: string;
+  form: UseFormReturn<SaveFormDataAgendaVentas>;
 };
 export const usePlanificadorAgendamiento = ({
   cackeKey,
+  form,
 }: UsePlanificadorAgendamientoParams) => {
   ///* local state ============================
   const [isMounted, setIsMounted] = useState<boolean>(false);
   false && console.log('cackeKey', cackeKey);
+
+  ///* form ---------------------
+  const watchedFechaInstalacion = form.watch('fecha_instalacion');
 
   ///* global state ============================
   const setPlanificadoresArray = useAgendamientoVentasStore(
@@ -55,15 +62,16 @@ export const usePlanificadorAgendamiento = ({
     isLoading: isLoadingPlanificadores,
     isFetching: isFetchingPlanificadores,
   } = useFetchPlanificadors({
-    enabled: isMounted && !!preventa?.flota,
+    enabled: isMounted && !!preventa?.flota && !!watchedFechaInstalacion,
     params: {
       page_size: 900,
       flota: preventa?.flota,
-      // TODO: filter selected day in calendar
-      initial_date_month: dayjs()
-        .startOf('week')
-        .add(1, 'day') // 'cause startOf('week') is sunday
-        .format('YYYY-MM-DD'),
+      fecha: watchedFechaInstalacion,
+
+      // initial_date_month: dayjs(watchedFechaInstalacion)
+      //   .startOf('week')
+      //   .add(1, 'day') // 'cause startOf('week') is sunday
+      //   .format('YYYY-MM-DD'),
     },
   });
   const {
@@ -77,12 +85,58 @@ export const usePlanificadorAgendamiento = ({
     },
   });
 
+  ///* available time slots ------
+  const startInstallHour =
+    useParametrosSistemaStore(s => s.systemParametersArray).find(
+      param => param?.slug === SystemParamsSlugsEnum.HORA_INICIO_INSTALACIONES,
+    )?.value || defaultSystemParamsValues.HORA_INICIO_INSTALACIONES;
+  const endInstallHour =
+    useParametrosSistemaStore(s => s.systemParametersArray).find(
+      param => param?.slug === SystemParamsSlugsEnum.HORA_FIN_INSTALACIONES,
+    )?.value || defaultSystemParamsValues.HORA_FIN_INSTALACIONES;
+
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || isLoadingPlanificadores || isFetchingPlanificadores)
+      return;
 
-    if (isLoadingPlanificadores || isFetchingPlanificadores) return;
-    setPlanificadoresArray(planificadoresPagingRes?.data?.items || []);
+    ///* set available time slots -------
+    // Obtén los planificadores de la respuesta de paginación
+    const planificadores = planificadoresPagingRes?.data?.items || [];
+    setPlanificadoresArray(planificadores);
 
+    // Crea un array de horas entre la hora de inicio y la hora de fin en intervalos de 30 minutos
+    const hoursArray: string[] = [];
+    const startHour = parseInt(startInstallHour);
+    const endHour = parseInt(endInstallHour);
+
+    for (let i = startHour; i <= endHour; i++) {
+      const hourStr = i.toString().padStart(2, '0');
+      hoursArray.push(`${hourStr}:00:00`);
+      if (i < endHour) {
+        hoursArray.push(`${hourStr}:30:00`);
+      }
+    }
+
+    // Crea un mapa de tiempo disponible excluyendo las horas del time_map de los planificadores
+    const timeMapSet = new Set(
+      planificadores.flatMap(pl => pl.time_map || []).map(tm => tm.hora),
+    );
+    const availableTimeMap = hoursArray.filter(hour => !timeMapSet.has(hour));
+
+    // Filtra los slots disponibles entre la hora de inicio y la hora de fin considerando la fecha de instalación
+    const finalAvailableTimeMap = availableTimeMap.filter(
+      hora =>
+        dayjs(`${watchedFechaInstalacion} ${hora}`).isAfter(dayjs()) &&
+        dayjs(`${watchedFechaInstalacion} ${hora}`).isBefore(
+          dayjs(`${watchedFechaInstalacion} ${endInstallHour}`),
+        ),
+    );
+
+    setAvailableTimeMap(
+      finalAvailableTimeMap.map(hora => ({ hora, uuid: uuidv4() })),
+    );
+
+    ///* available fleets by zone ------
     if (isLoadingFlotas || isFetchingFlotas) return;
     setAvailableFleetsByZonePks(
       flotasPagingRes?.data?.items
@@ -99,6 +153,10 @@ export const usePlanificadorAgendamiento = ({
     isFetchingFlotas,
     flotasPagingRes,
     setAvailableFleetsByZonePks,
+    endInstallHour,
+    setAvailableTimeMap,
+    startInstallHour,
+    watchedFechaInstalacion,
   ]);
 
   useEffect(() => {
@@ -138,40 +196,6 @@ export const usePlanificadorAgendamiento = ({
     socket,
     setAvailableTimeMap,
   ]);
-
-  ///* available time slots ============================
-  const startInstallHour =
-    useParametrosSistemaStore(s => s.systemParametersArray).find(
-      param => param?.slug === SystemParamsSlugsEnum.HORA_INICIO_INSTALACIONES,
-    )?.value || defaultSystemParamsValues.HORA_INICIO_INSTALACIONES;
-  const endInstallHour =
-    useParametrosSistemaStore(s => s.systemParametersArray).find(
-      param => param?.slug === SystemParamsSlugsEnum.HORA_FIN_INSTALACIONES,
-    )?.value || defaultSystemParamsValues.HORA_FIN_INSTALACIONES;
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    // create array of hours between start and end hour in 30 minutes intervals
-    const hoursArray: string[] = [];
-    for (
-      let i = parseInt(startInstallHour);
-      i < parseInt(endInstallHour);
-      i++
-    ) {
-      hoursArray.push(`${i}:00:00`);
-      hoursArray.push(`${i}:30:00`);
-    }
-    hoursArray.push(`${endInstallHour}`);
-
-    setAvailableTimeMap(
-      hoursArray.map(hour => ({
-        uuid: uuidv4(),
-        hora: hour,
-      })),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted]);
 
   const isCustomLoading =
     isLoadingPlanificadores ||
