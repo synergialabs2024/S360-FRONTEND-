@@ -104,17 +104,14 @@ export const usePlanificadorAgendamiento = ({
     const planificadores = planificadoresPagingRes?.data?.items || [];
     setPlanificadoresArray(planificadores);
 
-    // Crea un array de horas entre la hora de inicio y la hora de fin en intervalos de 30 minutos
+    // Crea un array de horas entre la hora de inicio y la hora de fin en intervalos de 2h
     const hoursArray: string[] = [];
     const startHour = parseInt(startInstallHour);
     const endHour = parseInt(endInstallHour);
 
-    for (let i = startHour; i <= endHour; i++) {
+    for (let i = startHour; i <= endHour; i += 2) {
       const hourStr = i.toString().padStart(2, '0');
       hoursArray.push(`${hourStr}:00:00`);
-      if (i < endHour) {
-        hoursArray.push(`${hourStr}:30:00`);
-      }
     }
 
     // Crea un mapa de tiempo disponible excluyendo las horas del time_map de los planificadores
