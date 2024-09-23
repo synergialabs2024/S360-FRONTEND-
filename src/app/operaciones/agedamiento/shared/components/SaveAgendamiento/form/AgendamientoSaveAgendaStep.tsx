@@ -51,7 +51,7 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
           text="Horarios disponibles"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        <InstallationScheduleComponent form={form} />
+        <InstallationScheduleComponent form={form} preventa={preventa!} />
       </>
     </>
   );

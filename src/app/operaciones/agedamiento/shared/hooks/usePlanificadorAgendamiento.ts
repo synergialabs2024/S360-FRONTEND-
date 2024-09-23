@@ -11,6 +11,7 @@ import {
   SystemParamsSlugsEnum,
   useLoaders,
 } from '@/shared';
+import { reorderOptionsPks } from '@/shared/helpers';
 import {
   useAgendamientoVentasStore,
   useParametrosSistemaStore,
@@ -123,6 +124,8 @@ export const usePlanificadorAgendamiento = ({
     );
     const availableTimeMap = hoursArray.filter(hour => !timeMapSet.has(hour));
 
+    console.log({ planificadores, availableTimeMap, timeMapSet });
+
     // Filtra los slots disponibles entre la hora de inicio y la hora de fin considerando la fecha de instalación
     const finalAvailableTimeMap = availableTimeMap.filter(
       hora =>
@@ -139,9 +142,13 @@ export const usePlanificadorAgendamiento = ({
     ///* available fleets by zone ------
     if (isLoadingFlotas || isRefetchingFlotas) return;
     setAvailableFleetsByZonePks(
-      flotasPagingRes?.data?.items
-        .map(item => item.id)
-        .filter((id): id is number => id !== undefined) || [],
+      reorderOptionsPks({
+        optionsPks:
+          flotasPagingRes?.data?.items
+            .map(item => item.id)
+            .filter((id): id is number => id !== undefined) || [],
+        flotaPk: preventa?.flota || 0,
+      }),
     );
   }, [
     isMounted,
@@ -157,6 +164,8 @@ export const usePlanificadorAgendamiento = ({
     setAvailableTimeMap,
     startInstallHour,
     watchedFechaInstalacion,
+    watchedFleet,
+    preventa?.flota,
   ]);
 
   useEffect(() => {

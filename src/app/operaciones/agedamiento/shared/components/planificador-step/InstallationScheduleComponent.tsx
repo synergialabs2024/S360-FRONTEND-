@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 
+import { Preventa } from '@/shared';
 import { CustomCircularPorgress } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import { usePlanificadorAgendamiento } from '../../hooks';
@@ -11,11 +12,12 @@ import HourInstallSchedulePaperAndCountdown from './HourInstallSchedulePaperAndC
 
 export type InstallationScheduleComponentProps = {
   form: UseFormReturn<SaveFormDataAgendaVentas>;
+  preventa: Preventa;
 };
 
 const InstallationScheduleComponent: React.FC<
   InstallationScheduleComponentProps
-> = ({ form }) => {
+> = ({ form, preventa }) => {
   ///* hooks ---------------------
   const { isLoadingFlotas, isRefetchingFlotas } = usePlanificadorAgendamiento({
     form,
@@ -57,14 +59,15 @@ const InstallationScheduleComponent: React.FC<
     }
   }, [availableFleetsByZonePks]);
 
+  if (!preventa?.flota) return null;
   if (isLoadingFlotas || isRefetchingFlotas) return <CustomCircularPorgress />;
 
-  console.log({
-    availableFleetsByZonePks,
-    optionsPks,
-    currentOptionIdx,
-    currentPk: optionsPks[currentOptionIdx],
-  });
+  // console.log({
+  //   optionsPks,
+  //   currentOptionIdx,
+  //   currentPk: optionsPks[currentOptionIdx],
+  //   flotaPk: preventa?.flota,
+  // });
 
   return (
     <>
