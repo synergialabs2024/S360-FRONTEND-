@@ -2,7 +2,6 @@ import { Grid, IconButton, Tooltip } from '@mui/material';
 
 import { useIsMediaQuery } from '@/shared/hooks';
 import {
-  ButtonVariantType,
   ColorButtonType,
   GridSizeType,
   JustifyContentType,
@@ -19,7 +18,6 @@ export type SingleIconButtonProps = {
 
   // new
   newCustomButton?: boolean;
-  variant?: ButtonVariantType;
   size?: GridSizeType;
 
   noThemeColor?: boolean;

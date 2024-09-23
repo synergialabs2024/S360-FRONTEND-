@@ -1,9 +1,10 @@
+import { Box, Grid, IconButton } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 
-import { gridSizeMdLg6 } from '@/shared';
 import { CustomCircularPorgress } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
-import { Grid } from '@mui/material';
 import { usePlanificadorAgendamiento } from '../../hooks';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
 import HourInstallSchedulePaperAndCountdown from './HourInstallSchedulePaperAndCountdown';
@@ -20,33 +21,76 @@ const InstallationScheduleComponent: React.FC<
     form,
   });
 
-  ///* global state ============================
+  ///* global state ---------------------
   const availableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.availableFleetsByZonePks,
   );
 
+  ///* local state ---------------------
+  const [optionsPks, setOptionsPks] = useState<number[]>(
+    availableFleetsByZonePks || [],
+  );
+  const [currentOptionIdx, setCurrentOptionIdx] = useState<number>(0);
+
+  ///* handlers ---------------------
+  const handleNext = () => {
+    if (currentOptionIdx === optionsPks.length - 1) return;
+    setCurrentOptionIdx(prev => prev + 1);
+
+    // upd form flota pk
+    form.setValue('flota', optionsPks[currentOptionIdx + 1]);
+  };
+  const handlePrev = () => {
+    if (currentOptionIdx === 0) return;
+    setCurrentOptionIdx(prev => prev - 1);
+
+    // upd form flota pk
+    form.setValue('flota', optionsPks[currentOptionIdx - 1]);
+  };
+
+  ///* effects ---------------------
+  useEffect(() => {
+    if (availableFleetsByZonePks && availableFleetsByZonePks.length > 0) {
+      setOptionsPks(availableFleetsByZonePks);
+    } else {
+      setOptionsPks([]);
+    }
+  }, [availableFleetsByZonePks]);
+
   if (isLoadingFlotas || isRefetchingFlotas) return <CustomCircularPorgress />;
 
-  console.log('availableFleetsByZonePks', availableFleetsByZonePks);
+  console.log({
+    availableFleetsByZonePks,
+    optionsPks,
+    currentOptionIdx,
+    currentPk: optionsPks[currentOptionIdx],
+  });
 
   return (
     <>
-      <Grid
-        item
-        container
-        xs={12}
-        justifyContent="flex-end"
-        alignItems="center"
-      >
-        <Grid item {...gridSizeMdLg6}>
-          Paninador de flotas x zona
-        </Grid>
+      {/* ============= fleets paginator ============= */}
+      <Grid container>
+        <span className="spacer" />
+        <Box display="flex" justifyContent="flex-end">
+          <IconButton
+            color="primary"
+            onClick={handlePrev}
+            disabled={currentOptionIdx === 0}
+          >
+            <MdArrowBackIosNew fontSize="large" />
+          </IconButton>
 
-        <Grid item {...gridSizeMdLg6}>
-          Secondary
-        </Grid>
+          <IconButton
+            color="primary"
+            onClick={handleNext}
+            disabled={currentOptionIdx === optionsPks.length - 1}
+          >
+            <MdArrowForwardIos fontSize="large" />
+          </IconButton>
+        </Box>
       </Grid>
 
+      {/* ============= main component ============= */}
       <HourInstallSchedulePaperAndCountdown form={form} />
     </>
   );
