@@ -124,8 +124,6 @@ export const usePlanificadorAgendamiento = ({
     );
     const availableTimeMap = hoursArray.filter(hour => !timeMapSet.has(hour));
 
-    console.log({ planificadores, availableTimeMap, timeMapSet });
-
     // Filtra los slots disponibles entre la hora de inicio y la hora de fin considerando la fecha de instalación
     const finalAvailableTimeMap = availableTimeMap.filter(
       hora =>
@@ -169,14 +167,17 @@ export const usePlanificadorAgendamiento = ({
   ]);
 
   useEffect(() => {
-    if (!socket || !isMounted || !preventa?.flota) return;
+    if (!socket || !isMounted || !watchedFleet) return;
 
     // register fleet -------
-    socket.emit('register_fleet', preventa.flota);
+    socket.emit('register_fleet', watchedFleet);
+    console.log('-------------- register_fleet --------------', {
+      fleet: watchedFleet,
+    });
 
     // listen fleet schedule -------
     socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
-      if (dayPlanificador?.flota !== preventa?.flota) return;
+      if (dayPlanificador?.flota !== watchedFleet) return;
 
       // filter becoming time slots from time_map
       const currentAvailableTimeMap =
@@ -190,9 +191,9 @@ export const usePlanificadorAgendamiento = ({
       );
       setAvailableTimeMap(newTimeMap || []);
 
-      // console.log('-------------- receive_fleet_schedule --------------', {
-      //   planificador: dayPlanificador,
-      // });
+      console.log('-------------- receive_fleet_schedule --------------', {
+        planificador: dayPlanificador,
+      });
     });
 
     return () => {
@@ -200,10 +201,10 @@ export const usePlanificadorAgendamiento = ({
     };
   }, [
     isMounted,
-    preventa?.flota,
     setPlanificadoresArray,
     socket,
     setAvailableTimeMap,
+    watchedFleet,
   ]);
 
   const isCustomLoading =

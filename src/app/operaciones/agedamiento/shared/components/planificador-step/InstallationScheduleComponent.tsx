@@ -33,6 +33,7 @@ const InstallationScheduleComponent: React.FC<
     availableFleetsByZonePks || [],
   );
   const [currentOptionIdx, setCurrentOptionIdx] = useState<number>(0);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   ///* handlers ---------------------
   const handleNext = () => {
@@ -40,14 +41,14 @@ const InstallationScheduleComponent: React.FC<
     setCurrentOptionIdx(prev => prev + 1);
 
     // upd form flota pk
-    form.setValue('flota', optionsPks[currentOptionIdx + 1]);
+    // form.setValue('flota', optionsPks[currentOptionIdx + 1]);
   };
   const handlePrev = () => {
     if (currentOptionIdx === 0) return;
     setCurrentOptionIdx(prev => prev - 1);
 
     // upd form flota pk
-    form.setValue('flota', optionsPks[currentOptionIdx - 1]);
+    // form.setValue('flota', optionsPks[currentOptionIdx - 1]);
   };
 
   ///* effects ---------------------
@@ -58,6 +59,23 @@ const InstallationScheduleComponent: React.FC<
       setOptionsPks([]);
     }
   }, [availableFleetsByZonePks]);
+
+  useEffect(() => {
+    setIsMounted(true);
+
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+  // upd form flota pk on change
+  useEffect(() => {
+    if (!isMounted) return;
+
+    if (optionsPks.length > 0) {
+      form.setValue('flota', optionsPks[currentOptionIdx]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentOptionIdx, isMounted]);
 
   if (!preventa?.flota) return null;
   if (isLoadingFlotas || isRefetchingFlotas) return <CustomCircularPorgress />;
