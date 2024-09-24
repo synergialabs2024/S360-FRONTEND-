@@ -214,13 +214,5 @@ export const usePlanificadorAgendamiento = ({
     isRefetchingFlotas;
   useLoaders(isCustomLoading);
 
-  return {
-    isCustomLoading,
-
-    isLoadingFlotas,
-    isRefetchingFlotas,
-
-    isLoadingPlanificadores,
-    isRefetchingPlanificadores,
-  };
+  // no return anything 'cause each hook import is a side effect (2 registers fleet)
 };
