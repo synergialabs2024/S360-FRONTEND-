@@ -39,16 +39,10 @@ const InstallationScheduleComponent: React.FC<
   const handleNext = () => {
     if (currentOptionIdx === optionsPks.length - 1) return;
     setCurrentOptionIdx(prev => prev + 1);
-
-    // upd form flota pk
-    // form.setValue('flota', optionsPks[currentOptionIdx + 1]);
   };
   const handlePrev = () => {
     if (currentOptionIdx === 0) return;
     setCurrentOptionIdx(prev => prev - 1);
-
-    // upd form flota pk
-    // form.setValue('flota', optionsPks[currentOptionIdx - 1]);
   };
 
   ///* effects ---------------------

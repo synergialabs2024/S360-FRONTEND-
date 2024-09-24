@@ -3,6 +3,7 @@ import { Grid, Paper } from '@mui/material';
 import dayjs from 'dayjs';
 import { UseFormReturn } from 'react-hook-form';
 
+import { COUNTDOWN_AGENDA_VENTAS_ID } from '@/actions/app';
 import {
   formatHourTimeField,
   gridSizeMdLg5,
@@ -12,6 +13,7 @@ import {
 import { CustomDateCalendar } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
+import CountDownAgendaVenta from './CountDownAgendaVenta';
 import CustomInstallSchedulePaperSlot from './CustomInstallSchedulePaperSlot';
 
 export type HourInstallSchedulePaperAndCountdownProps = {
@@ -84,7 +86,7 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
         >
           <Grid item container xs={12} spacing={2}>
             {/* --------- timer --------- */}
-            <>COUNT DOWN</>
+            <CountDownAgendaVenta countDownId={COUNTDOWN_AGENDA_VENTAS_ID} />
 
             {/* --------- hours --------- */}
             <Grid item xs={12}>
