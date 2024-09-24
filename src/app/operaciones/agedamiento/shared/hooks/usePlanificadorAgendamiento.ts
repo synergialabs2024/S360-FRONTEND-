@@ -3,10 +3,17 @@ import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
-import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
+import {
+  InstallScheduleCacheData,
+  useFetchFlotas,
+  useFetchPlanificadors,
+} from '@/actions/app';
+import { getCacheRedis } from '@/actions/shared';
 import { useSocket } from '@/context/SocketContext';
 import {
+  CacheResponse,
   defaultSystemParamsValues,
+  HTTPResStatusCodeEnum,
   Planificador,
   SystemParamsSlugsEnum,
   useLoaders,
@@ -16,10 +23,11 @@ import {
   useAgendamientoVentasStore,
   useParametrosSistemaStore,
 } from '@/store/app';
+import { useAuthStore } from '@/store/auth';
 import type { SaveFormDataAgendaVentas } from '../components/SaveAgendamiento/SaveAgendamiento';
 
 export type UsePlanificadorAgendamientoParams = {
-  cackeKey?: string;
+  cackeKey: string;
   form: UseFormReturn<SaveFormDataAgendaVentas>;
 };
 export const usePlanificadorAgendamiento = ({
@@ -36,9 +44,6 @@ export const usePlanificadorAgendamiento = ({
   const watchedFleet = form.watch('flota');
 
   ///* global state ============================
-  const setPlanificadoresArray = useAgendamientoVentasStore(
-    s => s.setPlanificadoresArray,
-  );
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.setAvailableFleetsByZonePks,
   );
@@ -47,6 +52,11 @@ export const usePlanificadorAgendamiento = ({
   );
   const preventa = useAgendamientoVentasStore(s => s.activePreventa);
   const setSelectedDate = useAgendamientoVentasStore(s => s.setSelectedDate);
+  const userId = useAuthStore(s => s.user?.id);
+  const setIsComponentBlocked = useAgendamientoVentasStore(
+    s => s.setIsComponentBlocked,
+  );
+  const setSelectedHour = useAgendamientoVentasStore(s => s.setSelectedHour);
 
   //* effects ------------------------
   useEffect(() => {
@@ -56,6 +66,7 @@ export const usePlanificadorAgendamiento = ({
       setIsMounted(false);
     };
   }, []);
+  // upd selected date to have value in ConfirmInstallScheduleVentasModal
   useEffect(() => {
     if (!isMounted || !watchedFechaInstalacion) return;
 
@@ -106,60 +117,81 @@ export const usePlanificadorAgendamiento = ({
     )?.value || defaultSystemParamsValues.HORA_FIN_INSTALACIONES;
 
   useEffect(() => {
-    if (!isMounted || isLoadingPlanificadores || isRefetchingPlanificadores)
-      return;
+    (async () => {
+      if (!isMounted || isLoadingPlanificadores || isRefetchingPlanificadores)
+        return;
 
-    ///* set available time slots -------
-    // Obtén los planificadores de la respuesta de paginación
-    const planificadores = planificadoresPagingRes?.data?.items || [];
-    setPlanificadoresArray(planificadores);
+      ///* set available time slots -------
+      // Obtén los planificadores de la respuesta de paginación
+      const planificadores = planificadoresPagingRes?.data?.items || [];
+      // setPlanificadoresArray(planificadores);
 
-    // Crea un array de horas entre la hora de inicio y la hora de fin en intervalos de 2h
-    const hoursArray: string[] = [];
-    const startHour = parseInt(startInstallHour);
-    const endHour = parseInt(endInstallHour);
+      // Crea un array de horas entre la hora de inicio y la hora de fin en intervalos de 2h
+      const hoursArray: string[] = [];
+      const startHour = parseInt(startInstallHour);
+      const endHour = parseInt(endInstallHour);
 
-    for (let i = startHour; i <= endHour; i += 2) {
-      const hourStr = i.toString().padStart(2, '0');
-      hoursArray.push(`${hourStr}:00:00`);
-    }
+      for (let i = startHour; i <= endHour; i += 2) {
+        const hourStr = i.toString().padStart(2, '0');
+        hoursArray.push(`${hourStr}:00:00`);
+      }
 
-    // Crea un mapa de tiempo disponible excluyendo las horas del time_map de los planificadores
-    const timeMapSet = new Set(
-      planificadores.flatMap(pl => pl.time_map || []).map(tm => tm.hora),
-    );
-    const availableTimeMap = hoursArray.filter(hour => !timeMapSet.has(hour));
+      // check cache --------
+      let cacheData: InstallScheduleCacheData | null = null;
+      const res = await getCacheRedis<CacheResponse<InstallScheduleCacheData>>({
+        key: cackeKey!,
+        showErrorToast: false,
+      });
+      if (res?.status === HTTPResStatusCodeEnum.OK || res?.data) {
+        cacheData = res.data as unknown as InstallScheduleCacheData;
+        console.log('cacheData', cacheData);
+        setIsComponentBlocked(true);
+        setSelectedHour((res.data as any)?.selectedHour);
+      }
 
-    // Filtra los slots disponibles entre la hora de inicio y la hora de fin considerando la fecha de instalación
-    const finalAvailableTimeMap = availableTimeMap.filter(
-      hora =>
-        dayjs(`${watchedFechaInstalacion} ${hora}`).isAfter(dayjs()) &&
-        dayjs(`${watchedFechaInstalacion} ${hora}`).isBefore(
-          dayjs(`${watchedFechaInstalacion} ${endInstallHour}`),
-        ),
-    );
+      // Crea un mapa de tiempo disponible excluyendo las horas del time_map de los planificadores
+      const timeMapSet = new Set(
+        planificadores.flatMap(pl => pl.time_map || []).map(tm => tm.hora),
+      );
+      const availableTimeMap = hoursArray.filter(hour => {
+        // si el cacheData?.userId = userId, no se filtra la hora q sea igual al cacheData?.selectedHour aunque este en timeSet
+        if (cacheData?.userId === userId && cacheData?.selectedHour === hour) {
+          return true;
+        }
 
-    setAvailableTimeMap(
-      finalAvailableTimeMap.map(hora => ({ hora, uuid: uuidv4() })),
-    );
+        return !timeMapSet.has(hour);
+      });
 
-    ///* available fleets by zone ------
-    if (isLoadingFlotas || isRefetchingFlotas) return;
-    setAvailableFleetsByZonePks(
-      reorderOptionsPks({
-        optionsPks:
-          flotasPagingRes?.data?.items
-            .map(item => item.id)
-            .filter((id): id is number => id !== undefined) || [],
-        flotaPk: preventa?.flota || 0,
-      }),
-    );
+      // Filtra los slots disponibles entre la hora de inicio y la hora de fin considerando la fecha de instalación
+      const finalAvailableTimeMap = availableTimeMap.filter(
+        hora =>
+          dayjs(`${watchedFechaInstalacion} ${hora}`).isAfter(dayjs()) &&
+          dayjs(`${watchedFechaInstalacion} ${hora}`).isBefore(
+            dayjs(`${watchedFechaInstalacion} ${endInstallHour}`),
+          ),
+      );
+
+      setAvailableTimeMap(
+        finalAvailableTimeMap.map(hora => ({ hora, uuid: uuidv4() })),
+      );
+
+      ///* available fleets by zone ------
+      if (isLoadingFlotas || isRefetchingFlotas) return;
+      setAvailableFleetsByZonePks(
+        reorderOptionsPks({
+          optionsPks:
+            flotasPagingRes?.data?.items
+              .map(item => item.id)
+              .filter((id): id is number => id !== undefined) || [],
+          flotaPk: preventa?.flota || 0,
+        }),
+      );
+    })();
   }, [
     isMounted,
     isLoadingPlanificadores,
     isRefetchingPlanificadores,
     planificadoresPagingRes,
-    setPlanificadoresArray,
     isLoadingFlotas,
     isRefetchingFlotas,
     flotasPagingRes,
@@ -170,6 +202,10 @@ export const usePlanificadorAgendamiento = ({
     watchedFechaInstalacion,
     watchedFleet,
     preventa?.flota,
+    cackeKey,
+    userId,
+    setIsComponentBlocked,
+    setSelectedHour,
   ]);
 
   useEffect(() => {
@@ -205,13 +241,7 @@ export const usePlanificadorAgendamiento = ({
     return () => {
       socket.off('receive_fleet_schedule');
     };
-  }, [
-    isMounted,
-    setPlanificadoresArray,
-    socket,
-    setAvailableTimeMap,
-    watchedFleet,
-  ]);
+  }, [isMounted, socket, setAvailableTimeMap, watchedFleet]);
 
   const isCustomLoading =
     isLoadingPlanificadores ||

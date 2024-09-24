@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  CacheBaseKeysPreventaEnum,
   CreateAgendamientoParamsBase,
   useCreateAgendamiento,
   useUpdateAgendamiento,
@@ -75,7 +76,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   } = form;
 
   usePlanificadorAgendamiento({
-    cackeKey: 'planificadores',
+    cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventa?.uuid!}`,
     form,
   });
 
