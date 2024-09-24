@@ -9,7 +9,7 @@ import {
   usePostPlanificador,
 } from '@/actions/app';
 import { useSetCacheRedis } from '@/actions/shared';
-import { TimerAgendamientoCacheEnum } from '@/shared';
+import { Planificador, TimerAgendamientoCacheEnum } from '@/shared';
 import { CustomConfirmDialogProps } from '@/shared/components';
 import { ToastSeverityEnum } from '@/shared/interfaces/ui/alerts.interface';
 import { useAgendamientoVentasStore } from '@/store/app';
@@ -42,36 +42,13 @@ const ConfirmInstallScheduleVentasModal: React.FC<
     s => s.setIsComponentBlocked,
   );
 
-  ///* mutations ---------------------
-  const setCache = useSetCacheRedis<InstallScheduleCacheData>({
-    customMessageToast: 'Horario de instalación apartado durante 10 minutos',
-  });
-  const setCacheClear = useSetCacheRedis<null>({
-    customMessageToast: 'Tiempo agotado, seleccione nuevamente el horario',
-    customMessageSuccessSeverityToast: ToastSeverityEnum.info,
-  });
-  const tempBlockHourPlanificador =
-    usePostPlanificador<TempBlockPlanificadorData>(
-      {
-        enableToast: false,
-      },
-      '/slot/',
-    );
+  // handlers --------
+  const onSucessTempBlock = async (data: Planificador) => {
+    const selectedHourUUID = data.time_map?.find(
+      t => t.hora === selectedHour,
+    )?.uuid;
 
-  ///* handlers ---------------------
-  const onSave = async () => {
-    await tempBlockHourPlanificador.mutateAsync({
-      fecha: watchFechaInstalacion,
-      flota: watchFlota!,
-      time_map: [
-        {
-          hora: selectedHour!,
-          preventa: preventaId,
-          user: user?.id,
-          motivo: 'Bloqueo temporal de horario de instalación',
-        },
-      ],
-    });
+    console.log('selectedHourUUID', { selectedHourUUID });
 
     /// set cache ------------
     await setCache.mutateAsync({
@@ -79,6 +56,7 @@ const ConfirmInstallScheduleVentasModal: React.FC<
       value: {
         selectedDate: watchFechaInstalacion,
         selectedHour: selectedHour!,
+        selectedHourUUID,
 
         flotaId: watchFlota!,
         userId: user?.id!,
@@ -107,6 +85,42 @@ const ConfirmInstallScheduleVentasModal: React.FC<
 
     onClose();
     setIsComponentBlocked(true);
+  };
+
+  ///* mutations ---------------------
+  const setCache = useSetCacheRedis<InstallScheduleCacheData>({
+    customMessageToast: 'Horario de instalación apartado durante 10 minutos',
+  });
+  const setCacheClear = useSetCacheRedis<null>({
+    customMessageToast: 'Tiempo agotado, seleccione nuevamente el horario',
+    customMessageSuccessSeverityToast: ToastSeverityEnum.info,
+  });
+  const tempBlockHourPlanificador =
+    usePostPlanificador<TempBlockPlanificadorData>(
+      {
+        enableToast: false,
+        customOnSuccess: data => {
+          console.log('tempBlockHourPlanificador', { data });
+          onSucessTempBlock(data as Planificador);
+        },
+      },
+      '/slot/',
+    );
+
+  ///* handlers ---------------------
+  const onSave = async () => {
+    await tempBlockHourPlanificador.mutateAsync({
+      fecha: watchFechaInstalacion,
+      flota: watchFlota!,
+      time_map: [
+        {
+          hora: selectedHour!,
+          preventa: preventaId,
+          user: user?.id,
+          motivo: 'Bloqueo temporal de horario de instalación',
+        },
+      ],
+    });
   };
 
   const handleClose = () => {

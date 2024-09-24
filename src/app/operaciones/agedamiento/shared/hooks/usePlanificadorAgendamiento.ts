@@ -4,6 +4,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  COUNTDOWN_AGENDA_VENTAS_ID,
   InstallScheduleCacheData,
   useFetchFlotas,
   useFetchPlanificadors,
@@ -26,6 +27,7 @@ import {
   useParametrosSistemaStore,
 } from '@/store/app';
 import { useAuthStore } from '@/store/auth';
+import { useGenericCountdownStore } from '@/store/ui';
 import type { SaveFormDataAgendaVentas } from '../components/SaveAgendamiento/SaveAgendamiento';
 
 export type UsePlanificadorAgendamientoParams = {
@@ -58,6 +60,7 @@ export const usePlanificadorAgendamiento = ({
   );
   const setSelectedHour = useAgendamientoVentasStore(s => s.setSelectedHour);
   const setCachedData = useAgendamientoVentasStore(s => s.setCachedData);
+  const startTimer = useGenericCountdownStore(s => s.start);
 
   //* effects ------------------------
   useEffect(() => {
@@ -147,6 +150,27 @@ export const usePlanificadorAgendamiento = ({
         setCachedData(cacheData);
         setIsComponentBlocked(true);
         setSelectedHour((res.data as any)?.selectedHour);
+
+        form.setValue('fecha_instalacion', (res.data as any)?.selectedDate);
+        form.setValue('flota', (res.data as any)?.flotaId);
+        form.setValue('hora_instalacion', (res.data as any)?.selectedHour);
+
+        // start timer ------------
+        const timerOtp = dayjs((res.data as any)?.limitDate).diff(
+          dayjs(),
+          'second',
+        );
+
+        startTimer(
+          COUNTDOWN_AGENDA_VENTAS_ID,
+          timerOtp,
+          // custom clear cb
+          async () => {
+            useGenericCountdownStore.getState().clearAll();
+            useAgendamientoVentasStore.getState().setCachedData(null);
+            setIsComponentBlocked(false);
+          },
+        );
       }
 
       // Crea un mapa de tiempo disponible excluyendo las horas del time_map de los planificadores
@@ -206,6 +230,7 @@ export const usePlanificadorAgendamiento = ({
         }),
       );
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isMounted,
     isLoadingPlanificadores,
@@ -226,6 +251,7 @@ export const usePlanificadorAgendamiento = ({
     setIsComponentBlocked,
     setSelectedHour,
     setCachedData,
+    startTimer,
   ]);
 
   useEffect(() => {

@@ -9,6 +9,8 @@ export type InstallScheduleCacheData = {
   preventaId: number;
   flotaId: number;
 
+  selectedHourUUID?: string;
+
   // helpers
   flotaName?: string;
 } | null;

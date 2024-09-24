@@ -8,8 +8,8 @@ import {
   CacheBaseKeysPreventaEnum,
   CreateAgendamientoParamsBase,
   useCreateAgendamiento,
-  useUpdateAgendamiento,
 } from '@/actions/app';
+import { ToastWrapper } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
@@ -69,11 +69,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     defaultValues: {},
   });
 
-  const {
-    handleSubmit,
-    reset,
-    formState: { isValid },
-  } = form;
+  const { handleSubmit, reset } = form;
 
   usePlanificadorAgendamiento({
     cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventa?.uuid!}`,
@@ -88,24 +84,14 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     returnUrl: returnUrlAgendamientosPage,
     enableErrorNavigate: false,
   });
-  const updateAgendamientoMutation =
-    useUpdateAgendamiento<CreateAgendamientoParamsBase>({
-      navigate,
-      returnUrl: returnUrlAgendamientosPage,
-    });
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataAgendaVentas) => {
-    if (!isValid) return;
-
-    ///* upd
-    if (preventa?.id) {
-      updateAgendamientoMutation.mutate({ id: preventa.id!, data });
-      return;
-    }
-
     ///* create
-    createAgendamientoMutation.mutate(data);
+    createAgendamientoMutation.mutate({
+      ...data,
+      preventa: preventa?.id!,
+    });
   };
 
   ///* effects ---------------------
@@ -143,7 +129,10 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       disableNextStepBtn={disableNextStepBtn}
       // action btns
       onCancel={() => navigate(returnUrlAgendamientosPage)}
-      onSave={handleSubmit(onSave, () => {})}
+      onSave={handleSubmit(onSave, () => {
+        console.log({ errors: form.formState.errors });
+        ToastWrapper.error('Faltan campos requeridos');
+      })}
     >
       {activeStep === 0 && <GeneralDataSaveAgendaVentaStep form={form} />}
 
