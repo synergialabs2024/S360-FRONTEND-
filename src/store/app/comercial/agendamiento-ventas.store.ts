@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 
-import { Planificador, Preventa, TimeMapPlanificador } from '@/shared';
+import { InstallScheduleCacheData } from '@/actions/app';
+import {
+  Nullable,
+  Planificador,
+  Preventa,
+  TimeMapPlanificador,
+} from '@/shared';
 
 interface AgendamientoVentasState {
   activePreventa: Preventa | null;
@@ -25,6 +31,8 @@ interface AgendamientoVentasState {
   setAvailableFleetsByZonePks: (value: number[]) => void;
 
   //
+  cachedData: Nullable<InstallScheduleCacheData>;
+  setCachedData: (value: Nullable<InstallScheduleCacheData>) => void;
   // hasStartedTimer: boolean;
   // setHasStartedTimer: (value: boolean) => void;
 }
@@ -53,5 +61,8 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
     availableFleetsByZonePks: [],
     setAvailableFleetsByZonePks: value =>
       set({ availableFleetsByZonePks: value }),
+
+    cachedData: null,
+    setCachedData: value => set({ cachedData: value }),
   }),
 );
