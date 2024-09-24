@@ -30,5 +30,5 @@ export interface TimeMapPlanificador {
 
   preventa?: number;
   user?: number;
-  block_until?: string | null;
+  block_until?: string | null; // timestamp
 }

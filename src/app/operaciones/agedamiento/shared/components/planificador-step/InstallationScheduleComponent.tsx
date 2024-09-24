@@ -22,6 +22,9 @@ const InstallationScheduleComponent: React.FC<
   const availableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.availableFleetsByZonePks,
   );
+  const isComponentBlocked = useAgendamientoVentasStore(
+    s => s.isComponentBlocked,
+  );
 
   ///* local state ---------------------
   const [optionsPks, setOptionsPks] = useState<number[]>(
@@ -85,7 +88,7 @@ const InstallationScheduleComponent: React.FC<
           <IconButton
             color="primary"
             onClick={handlePrev}
-            disabled={currentOptionIdx === 0}
+            disabled={currentOptionIdx === 0 || isComponentBlocked}
           >
             <MdArrowBackIosNew fontSize="large" />
           </IconButton>
@@ -93,7 +96,9 @@ const InstallationScheduleComponent: React.FC<
           <IconButton
             color="primary"
             onClick={handleNext}
-            disabled={currentOptionIdx === optionsPks.length - 1}
+            disabled={
+              currentOptionIdx === optionsPks.length - 1 || isComponentBlocked
+            }
           >
             <MdArrowForwardIos fontSize="large" />
           </IconButton>

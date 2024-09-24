@@ -16,6 +16,7 @@ import {
   HTTPResStatusCodeEnum,
   Planificador,
   SystemParamsSlugsEnum,
+  TimeMapPlanificador,
   useLoaders,
 } from '@/shared';
 import { reorderOptionsPks } from '@/shared/helpers';
@@ -150,16 +151,35 @@ export const usePlanificadorAgendamiento = ({
       }
 
       // Crea un mapa de tiempo disponible excluyendo las horas del time_map de los planificadores
-      const timeMapSet = new Set(
-        planificadores.flatMap(pl => pl.time_map || []).map(tm => tm.hora),
+      const timeMapArray: TimeMapPlanificador[] = planificadores.flatMap(
+        pl => pl.time_map || [],
       );
+      const nownToValidate = dayjs().format();
       const availableTimeMap = hoursArray.filter(hour => {
-        // si el cacheData?.userId = userId, no se filtra la hora q sea igual al cacheData?.selectedHour aunque este en timeSet
+        // si el cacheData?.userId = userId, no se filtra la hora que sea igual al cacheData?.selectedHour aunque esté en timeMapArray
         if (cacheData?.userId === userId && cacheData?.selectedHour === hour) {
           return true;
         }
 
-        return !timeMapSet.has(hour);
+        // validar el block_until (timestamp). Si el block_until es mayor al timestamp actual, se bloquea la hora, es decir se filtra y no se muestra
+        const blockUntil = timeMapArray.find(
+          tm => tm.hora === hour,
+        )?.block_until;
+        if (blockUntil) {
+          const formattedBlockUntil = dayjs(blockUntil).format();
+          console.log('--------------blockUntil --------------', {
+            blockUntil: !!blockUntil && dayjs(blockUntil).format(),
+            formattedBlockUntil,
+            hour,
+            nownToValidate,
+          });
+
+          if (dayjs(nownToValidate).isBefore(formattedBlockUntil)) return false;
+
+          return true;
+        }
+
+        return !timeMapArray.find(tm => tm.hora === hour);
       });
 
       // Filtra los slots disponibles entre la hora de inicio y la hora de fin considerando la fecha de instalación

@@ -61,6 +61,7 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
             minDate={dayjs()}
             maxDate={dayjs().add(6, 'week').format('YYYY-MM-DD') || null}
             size={gridSizeMdLg5}
+            disabled={isComponentBlocked}
             // shouldDisableDate={day => {
             //   const isBlockedDate = !allTimeMaps?.some(
             //     tm =>
