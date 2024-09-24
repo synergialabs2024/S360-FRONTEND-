@@ -1275,7 +1275,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                           label="Cambiar Número"
                           startIcon={<MdChangeCircle />}
                           color="info"
-                          variant="outlined"
                           onClick={() => {
                             setCanChangeCelular(true);
                           }}

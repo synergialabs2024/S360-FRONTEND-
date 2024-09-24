@@ -26,6 +26,7 @@ export interface TimeMapPlanificador {
   hora: string; // HH:MM:SS
 
   estado?: string | null;
+  motivo?: string | null;
 
   preventa?: number;
   user?: number;

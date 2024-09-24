@@ -3,7 +3,12 @@ import { Grid, Paper } from '@mui/material';
 import dayjs from 'dayjs';
 import { UseFormReturn } from 'react-hook-form';
 
-import { formatHourTimeField, gridSizeMdLg5, gridSizeMdLg6 } from '@/shared';
+import {
+  formatHourTimeField,
+  gridSizeMdLg5,
+  gridSizeMdLg6,
+  ToastWrapper,
+} from '@/shared';
 import { CustomDateCalendar } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
@@ -11,13 +16,19 @@ import CustomInstallSchedulePaperSlot from './CustomInstallSchedulePaperSlot';
 
 export type HourInstallSchedulePaperAndCountdownProps = {
   form: UseFormReturn<SaveFormDataAgendaVentas>;
+  setIsOpenModal: (isOpen: boolean) => void;
 };
 
 const HourInstallSchedulePaperAndCountdown: React.FC<
   HourInstallSchedulePaperAndCountdownProps
-> = ({ form }) => {
+> = ({ form, setIsOpenModal }) => {
   ///* global state ============================
   const availableTimeMap = useAgendamientoVentasStore(s => s.availableTimeMap);
+  const selectedHour = useAgendamientoVentasStore(s => s.selectedHour);
+  const isComponentBlocked = useAgendamientoVentasStore(
+    s => s.isComponentBlocked,
+  );
+  const setSelectedHour = useAgendamientoVentasStore(s => s.setSelectedHour);
 
   ///* form ---------------------
   const { errors } = form.formState;
@@ -90,8 +101,21 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
                       <CustomInstallSchedulePaperSlot
                         key={timeSlot.uuid}
                         hour={timeSlot.hora}
-                        isClicked={false}
-                        onClick={() => {}}
+                        isClicked={
+                          selectedHour?.toString() ===
+                          timeSlot?.hora?.toString()
+                        }
+                        onClick={() => {
+                          if (isComponentBlocked) {
+                            ToastWrapper.warning(
+                              'Ya seleccionaste un horario, espera a que termine el tiempo de bloqueo.',
+                            );
+                            return;
+                          }
+
+                          setIsOpenModal(true);
+                          setSelectedHour(timeSlot.hora);
+                        }}
                       >
                         {formatHourTimeField(timeSlot.hora)}
                       </CustomInstallSchedulePaperSlot>
@@ -112,27 +136,6 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
                     />
                   </Grid>
                 )}
-
-                {/* {planificadores?.map(planificador => {
-                  if (!planificador) return null;
-
-                  if (planificador?.fecha === '2024-09-23') {
-                    return planificador?.time_map?.map(timeSlot => {
-                      return (
-                        <CustomInstallSchedulePaperSlot
-                          key={timeSlot.uuid}
-                          hour={timeSlot.hora}
-                          isClicked={false}
-                          onClick={() => {}}
-                        >
-                          {timeSlot.hora}
-                        </CustomInstallSchedulePaperSlot>
-                      );
-                    });
-                  }
-
-                  return null;
-                })} */}
               </Paper>
             </Grid>
           </Grid>

@@ -23,3 +23,8 @@ export enum TimerSolicitudServicioEnum {
   initialOtpRangeNewOtpMinutes = 2, // 2 minutes
   initialOtpRangeNewOtpSeconds = 120, // 2 minutes
 }
+
+export enum TimerAgendamientoCacheEnum {
+  initialAgendamientoMinutes = 10, // 10 minutes
+  initialAgendamientoSeconds = 600, // 10 minutes
+}

@@ -7,6 +7,7 @@ import {
   PagingPartialParams,
   Planificador,
   PlanificadorPaginatedRes,
+  TimeMapPlanificador,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
@@ -42,24 +43,27 @@ export const useGetPlanificador = (uuid: string) => {
   });
 };
 
-export const usePostPlanificador = <T>({
-  navigate,
-  returnUrl,
-  returnErrorUrl,
-  customMessageToast,
-  customMessageErrorToast,
-  enableNavigate = true,
-  enableErrorNavigate = false,
-  enableToast = true,
-  customOnSuccess,
-  customOnError,
-}: UseMutationParams) => {
+export const usePostPlanificador = <T>(
+  {
+    navigate,
+    returnUrl,
+    returnErrorUrl,
+    customMessageToast,
+    customMessageErrorToast,
+    enableNavigate = true,
+    enableErrorNavigate = false,
+    enableToast = true,
+    customOnSuccess,
+    customOnError,
+  }: UseMutationParams,
+  url?: string,
+) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: CreatePlanificadorParams<T>) =>
-      postPlanificador(params),
+    mutationFn: (data: CreatePlanificadorParams<T>) =>
+      postPlanificador(data, url),
     onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
@@ -184,4 +188,23 @@ export const updatePlanificador = async <T>({
   setIsGlobalLoading(true);
 
   return patch<Planificador>(`/planificador/${id}/`, data, true);
+};
+
+///* Action Types ===============================
+export type TempBlockPlanificadorData = {
+  fecha: string; // YYYY-MM-DD
+  time_map: Pick<
+    TimeMapPlanificador,
+    'hora' | 'user' | 'preventa' | 'motivo'
+  >[];
+  flota: number;
+};
+
+export const tempBlockPlanificador = async (
+  data: TempBlockPlanificadorData,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post('/planificador/slot/', data, true);
 };

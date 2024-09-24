@@ -23,6 +23,10 @@ interface AgendamientoVentasState {
 
   availableFleetsByZonePks: number[];
   setAvailableFleetsByZonePks: (value: number[]) => void;
+
+  //
+  // hasStartedTimer: boolean;
+  // setHasStartedTimer: (value: boolean) => void;
 }
 
 export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(

@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 
+import { CacheBaseKeysPreventaEnum } from '@/actions/app';
 import { Preventa } from '@/shared';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
+import ConfirmInstallScheduleVentasModal from './ConfirmInstallScheduleVentasModal';
 import HourInstallSchedulePaperAndCountdown from './HourInstallSchedulePaperAndCountdown';
 
 export type InstallationScheduleComponentProps = {
@@ -26,7 +28,9 @@ const InstallationScheduleComponent: React.FC<
     availableFleetsByZonePks || [],
   );
   const [currentOptionIdx, setCurrentOptionIdx] = useState<number>(0);
+
   const [isMounted, setIsMounted] = useState<boolean>(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   ///* handlers ---------------------
   const handleNext = () => {
@@ -74,7 +78,7 @@ const InstallationScheduleComponent: React.FC<
 
   return (
     <>
-      {/* ============= fleets paginator ============= */}
+      {/* ================fleets paginator ================ */}
       <Grid container>
         <span className="spacer" />
         <Box display="flex" justifyContent="flex-end">
@@ -96,8 +100,23 @@ const InstallationScheduleComponent: React.FC<
         </Box>
       </Grid>
 
-      {/* ============= main component ============= */}
-      <HourInstallSchedulePaperAndCountdown form={form} />
+      {/* ================ main component ================ */}
+      <HourInstallSchedulePaperAndCountdown
+        form={form}
+        setIsOpenModal={setIsOpenModal}
+      />
+
+      {/* ================ MODALS ================ */}
+      <ConfirmInstallScheduleVentasModal
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        preventaId={preventa?.id!}
+        preventaUUID={preventa?.uuid!}
+        form={form}
+        cackeKeyBase={
+          CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS
+        }
+      />
     </>
   );
 };

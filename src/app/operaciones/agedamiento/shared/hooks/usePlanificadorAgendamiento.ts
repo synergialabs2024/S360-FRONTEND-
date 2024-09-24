@@ -46,6 +46,7 @@ export const usePlanificadorAgendamiento = ({
     s => s.setAvailableTimeMap,
   );
   const preventa = useAgendamientoVentasStore(s => s.activePreventa);
+  const setSelectedDate = useAgendamientoVentasStore(s => s.setSelectedDate);
 
   //* effects ------------------------
   useEffect(() => {
@@ -55,6 +56,11 @@ export const usePlanificadorAgendamiento = ({
       setIsMounted(false);
     };
   }, []);
+  useEffect(() => {
+    if (!isMounted || !watchedFechaInstalacion) return;
+
+    setSelectedDate(watchedFechaInstalacion);
+  }, [isMounted, setSelectedDate, watchedFechaInstalacion]);
 
   ///* socket ============================
   const socket = useSocket();
@@ -171,9 +177,9 @@ export const usePlanificadorAgendamiento = ({
 
     // register fleet -------
     socket.emit('register_fleet', watchedFleet);
-    console.log('-------------- register_fleet --------------', {
-      fleet: watchedFleet,
-    });
+    // console.log('-------------- register_fleet --------------', {
+    //   fleet: watchedFleet,
+    // });
 
     // listen fleet schedule -------
     socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
@@ -191,9 +197,9 @@ export const usePlanificadorAgendamiento = ({
       );
       setAvailableTimeMap(newTimeMap || []);
 
-      console.log('-------------- receive_fleet_schedule --------------', {
-        planificador: dayPlanificador,
-      });
+      // console.log('-------------- receive_fleet_schedule --------------', {
+      //   planificador: dayPlanificador,
+      // });
     });
 
     return () => {
