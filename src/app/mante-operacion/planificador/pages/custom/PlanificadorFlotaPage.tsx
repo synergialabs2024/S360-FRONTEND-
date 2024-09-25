@@ -1,25 +1,86 @@
-import { Navigate, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { useGetFlota } from '@/actions/app';
+import { useFetchPlanificadors } from '@/actions/app';
 import { PermissionsEnum, useLoaders } from '@/shared';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
-import { returnUrlPlanificadorsPage } from '../tables/PlanificadorsPage';
+import { usePlanificadoresStore } from '@/store/app';
 
 export type PlanificadorFlotaPageProps = {};
 
 const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
+  ///* hooks ---------------------
   useCheckPermissionsArray([
     PermissionsEnum.mantenimientoope_change_planificador,
     PermissionsEnum.mantenimientoope_view_flota,
   ]);
 
   const { uuid } = useParams();
-  const { data, isLoading, isRefetching } = useGetFlota(uuid!);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const queryParams = new URLSearchParams(location.search);
+  const monday = queryParams.get('initial_date');
+
+  ///* global state ---------------------
+  const setPlanificadoresArray = usePlanificadoresStore(
+    s => s.setPlanificadoresArray,
+  );
+
+  ///* fetch data ---------------
+  const {
+    data: planificadoresPagingRes,
+    isLoading,
+    isRefetching,
+  } = useFetchPlanificadors({
+    enabled: !!uuid && !!monday,
+    params: {
+      initial_date: monday!,
+      flota_uuid: uuid!,
+    },
+  });
+
+  useEffect(() => {
+    if (!uuid || !monday || isLoading || isRefetching) return;
+
+    setPlanificadoresArray(planificadoresPagingRes?.data?.items || []);
+  }, [
+    planificadoresPagingRes,
+    isLoading,
+    isRefetching,
+    uuid,
+    monday,
+    setPlanificadoresArray,
+  ]);
+
   useLoaders(isLoading || isRefetching);
 
-  if (!data?.data?.id) return <Navigate to={returnUrlPlanificadorsPage} />;
+  ///* handler to change initial date -------------------
+  const handleChangeDate = () => {
+    if (!monday) return;
 
-  return <>PlanificadorFlotaPage</>;
+    const nextMonday = dayjs(monday)
+      .add(1, 'week')
+      .startOf('week')
+      .add(1, 'day') // 'cause startOf('week') is Sunday
+      .format('YYYY-MM-DD');
+
+    navigate(`${location.pathname}?initial_date=${nextMonday}`);
+  };
+
+  return (
+    <>
+      <h1>Planificador de Flota</h1>
+      <p>UUID: {uuid}</p>
+      <p>Initial Date: {monday}</p>
+
+      {/* Botón para cambiar la fecha */}
+      <button onClick={handleChangeDate}>Ir al siguiente lunes</button>
+
+      {/* Renderiza otros componentes o lógica según los parámetros de consulta */}
+    </>
+  );
 };
 
 export default PlanificadorFlotaPage;

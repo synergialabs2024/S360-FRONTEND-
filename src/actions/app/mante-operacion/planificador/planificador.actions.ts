@@ -146,6 +146,7 @@ export type GetPlanificadorsParams = Partial<Planificador> &
   PagingPartialParams & {
     initial_date?: string; // YYYY-MM-DD <- monday to filter by week
     initial_date_month?: string; // YYYY-MM-DD <- monday to filter by month
+    flota_uuid?: string;
   };
 export type CreatePlanificadorParams<T> = T;
 export type CreatePlanificadorParamsBase = Omit<Planificador, 'id'>;

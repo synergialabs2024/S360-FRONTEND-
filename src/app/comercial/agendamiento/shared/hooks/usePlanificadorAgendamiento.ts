@@ -91,11 +91,6 @@ export const usePlanificadorAgendamiento = ({
       page_size: 900,
       flota: watchedFleet,
       fecha: watchedFechaInstalacion,
-
-      // initial_date_month: dayjs(watchedFechaInstalacion)
-      //   .startOf('week')
-      //   .add(1, 'day') // 'cause startOf('week') is sunday
-      //   .format('YYYY-MM-DD'),
     },
   });
   const {

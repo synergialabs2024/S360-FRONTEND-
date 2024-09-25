@@ -80,8 +80,8 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
           .add(1, 'day')
           .format('YYYY-MM-DD');
 
-        const url = `${returnUrlPlanificadorsPage}/flota/${flota.uuid}?initial_date=${weekMonday}&`;
-        alert(url);
+        const url = `${returnUrlPlanificadorsPage}/flota/${flota.uuid}?initial_date=${weekMonday}`;
+
         navigate(url);
       },
     });
