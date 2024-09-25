@@ -79,7 +79,7 @@ export enum PermissionsEnum {
   users_view_customgroup = 'users.view_customgroup',
   users_view_profile = 'users.view_profile',
   users_view_user = 'users.view_usuario',
-  mantenimientoope_view_planificador = 'mantenimientoope_view_planificador',
+  mantenimientoope_view_planificador = 'mantenimientoope.view_planificador',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -155,7 +155,7 @@ export enum PermissionsEnum {
   users_add_customgroup = 'users.add_customgroup',
   users_add_profile = 'users.add_profile',
   users_add_user = 'users.add_usuario',
-  mantenimientoope_add_planificador = 'mantenimientoope_add_planificador',
+  mantenimientoope_add_planificador = 'mantenimientoope.add_planificador',
 
   // // // // CHANGE ---------------------------
   admin_change_logentry = 'admin.change_logentry',
@@ -230,7 +230,7 @@ export enum PermissionsEnum {
   users_change_customgroup = 'users.change_customgroup',
   users_change_profile = 'users.change_profile',
   users_change_user = 'users.change_usuario',
-  mantenimientoope_change_planificador = 'mantenimientoope_change_planificador',
+  mantenimientoope_change_planificador = 'mantenimientoope.change_planificador',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',
@@ -309,7 +309,7 @@ export enum PermissionsEnum {
   users_delete_customgroup = 'users.delete_customgroup',
   users_delete_profile = 'users.delete_profile',
   users_delete_user = 'users.delete_usuario',
-  mantenimientoope_delete_planificador = 'mantenimientoope_delete_planificador',
+  mantenimientoope_delete_planificador = 'mantenimientoope.delete_planificador',
 
   // // // // PRINT ---------------------------
   billing_print_credit_note = 'billing.print_credit_note',

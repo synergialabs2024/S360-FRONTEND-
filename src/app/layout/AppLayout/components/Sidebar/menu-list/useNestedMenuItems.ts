@@ -406,7 +406,7 @@ export const useNestedMenu = () => {
               id: 'planificaciones',
               title: 'Planificación',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.mantenimientoOperacion.planificadoresNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

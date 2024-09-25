@@ -480,6 +480,22 @@ const AgendamientosMainPage = Loadable(
       ),
   ),
 );
+const PlanificadorsPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/tables/PlanificadorsPage'
+      ),
+  ),
+);
+const PlanificadorFlotaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/custom/PlanificadorFlotaPage'
+      ),
+  ),
+);
 
 ///* Cliente ------------
 //Servicio
@@ -792,6 +808,16 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.mantenimientoOperacion.flotasEditar,
             element: <UpdateFlotaPage />,
+          },
+
+          ///* planificador
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.planificadoresNav,
+            element: <PlanificadorsPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.planificadorFlota,
+            element: <PlanificadorFlotaPage />,
           },
         ],
       },

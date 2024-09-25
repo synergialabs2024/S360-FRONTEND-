@@ -258,8 +258,7 @@ export const ROUTER_PATHS = {
 
     ///* planificadores
     planificadores: 'planificadores',
-    planificadoresCrear: 'planificadores/crear',
-    planificadoresEditar: 'planificadores/editar/:uuid',
+    planificadorFlota: 'planificadores/flota/:uuid',
     planificadoresNav: '/mantenimiento-operacion/planificadores',
   },
 

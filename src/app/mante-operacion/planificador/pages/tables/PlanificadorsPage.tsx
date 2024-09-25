@@ -1,8 +1,6 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchPlanificadors } from '@/actions/app';
+import { useFetchFlotas } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
@@ -10,12 +8,16 @@ import {
   SingleTableBoxScene,
 } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import {
+  useColumnsFlota,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum, Planificador } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import { Flota, PermissionsEnum } from '@/shared/interfaces';
+import { hasAllPermissions } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import dayjs from 'dayjs';
 
 export const returnUrlPlanificadorsPage =
   ROUTER_PATHS.mantenimientoOperacion.planificadoresNav;
@@ -49,101 +51,56 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
 
   ///* fetch data
   const {
-    data: PlanificadorsPagingRes,
+    data: flotasPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchPlanificadors({
+  } = useFetchFlotas({
     enabled: true,
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      filterByState: false,
     },
   });
 
   ///* handlers
-  const onEdit = (planificador: Planificador) => {
+  const onEdit = (flota: Flota) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Planificador',
-      subtitle: '¿Está seguro que desea editar este registro?',
+      title: 'Administrar el planificador de cuadrilla',
+      subtitle:
+        '¿Está seguro que desea gestionar el planificador de cuadrilla?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlPlanificadorsPage}/editar/${planificador.uuid}`);
+
+        // build url ----------
+        const weekMonday = dayjs()
+          .startOf('week')
+          .add(1, 'day')
+          .format('YYYY-MM-DD');
+
+        const url = `${returnUrlPlanificadorsPage}/flota/${flota.uuid}?initial_date=${weekMonday}&`;
+        alert(url);
+        navigate(url);
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<Planificador>[]>(
-    () => [
-      {
-        accessorKey: 'fecha',
-        header: 'FECHA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'fecha'),
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
-
-      {
-        accessorKey: 'time_map',
-        header: 'TIME MAP',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'time_map'),
-      },
-
-      {
-        accessorKey: 'flota',
-        header: 'FLOTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'flota'),
-      },
-    ],
-    [],
-  );
+  const { flotasColumns } = useColumnsFlota();
 
   return (
-    <SingleTableBoxScene
-      title="Planificadores"
-      createPageUrl={`${returnUrlPlanificadorsPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.mantenimientoope_add_planificador,
-      )}
-    >
+    <SingleTableBoxScene title="Planificador" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
       />
 
-      <CustomTable<Planificador>
-        columns={columns}
-        data={PlanificadorsPagingRes?.data?.items || []}
+      <CustomTable<Flota>
+        columns={flotasColumns}
+        data={flotasPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -155,16 +112,18 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={PlanificadorsPagingRes?.data?.meta?.count}
+        rowCount={flotasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
+        enableActionsColumn={hasAllPermissions([
           PermissionsEnum.mantenimientoope_change_planificador,
-        )}
+          PermissionsEnum.mantenimientoope_view_flota,
+        ])}
         // crud
-        canEdit={hasPermission(
+        canEdit={hasAllPermissions([
           PermissionsEnum.mantenimientoope_change_planificador,
-        )}
+          PermissionsEnum.mantenimientoope_view_flota,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />
