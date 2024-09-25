@@ -398,11 +398,11 @@ const AgendamientoVentasMainPage = Loadable(
       ),
   ),
 );
-const CreateAgendamientoPage = Loadable(
+const CreateAgendamientoVentasPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/operaciones/agedamiento/pages/forms/CreateAgendamientoPage'
+        '@/app/comercial/agendamiento/pages/forms/CreateAgendamientoVentasPage'
       ),
   ),
 );
@@ -956,7 +956,7 @@ const AppRouter = createBrowserRouter([
           },
           {
             path: ROUTER_PATHS.comercial.createAgendamiento,
-            element: <CreateAgendamientoPage />,
+            element: <CreateAgendamientoVentasPage />,
           },
         ],
       },

@@ -7,11 +7,13 @@ import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { SaveAgendamiento } from '../../shared/components';
-import { returnUrlAgendamientosPage } from '../tables/AgendamientosPage';
+import { returnUrlAgendamientoVentasPage } from '../tables/AgendamientoVentasMainPage';
 
-export type CreateAgendamientoPageProps = {};
+export type CreateAgendamientoVentasPageProps = {};
 
-const CreateAgendamientoPage: React.FC<CreateAgendamientoPageProps> = () => {
+const CreateAgendamientoVentasPage: React.FC<
+  CreateAgendamientoVentasPageProps
+> = () => {
   useCheckPermissionsArray([
     PermissionsEnum.operaciones_add_agendamiento,
     PermissionsEnum.comercial_view_preventa,
@@ -40,7 +42,7 @@ const CreateAgendamientoPage: React.FC<CreateAgendamientoPageProps> = () => {
     (data?.data?.requiere_pago_previo &&
       data?.data?.estado_pago !== EstadoPagoEnumChoice.PAGADO)
   )
-    return <Navigate to={returnUrlAgendamientosPage} />;
+    return <Navigate to={returnUrlAgendamientoVentasPage} />;
 
   return (
     <SaveAgendamiento
@@ -55,4 +57,4 @@ const CreateAgendamientoPage: React.FC<CreateAgendamientoPageProps> = () => {
   );
 };
 
-export default CreateAgendamientoPage;
+export default CreateAgendamientoVentasPage;
