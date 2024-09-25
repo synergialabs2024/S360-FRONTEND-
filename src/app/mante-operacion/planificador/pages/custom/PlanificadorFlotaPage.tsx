@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useFetchPlanificadors } from '@/actions/app';
 import { PermissionsEnum, useLoaders } from '@/shared';
+import { SingleFormBoxSceneNoActions } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { usePlanificadoresStore } from '@/store/app';
 
@@ -70,16 +71,20 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
   };
 
   return (
-    <>
-      <h1>Planificador de Flota</h1>
-      <p>UUID: {uuid}</p>
-      <p>Initial Date: {monday}</p>
+    <SingleFormBoxSceneNoActions
+      titlePage="Planificador de flotas"
+      maxWidth="xl"
+    >
+      <>
+        <p>UUID: {uuid}</p>
+        <p>Initial Date: {monday}</p>
 
-      {/* Botón para cambiar la fecha */}
-      <button onClick={handleChangeDate}>Ir al siguiente lunes</button>
+        {/* Botón para cambiar la fecha */}
+        <button onClick={handleChangeDate}>Ir al siguiente lunes</button>
 
-      {/* Renderiza otros componentes o lógica según los parámetros de consulta */}
-    </>
+        {/* Renderiza otros componentes o lógica según los parámetros de consulta */}
+      </>
+    </SingleFormBoxSceneNoActions>
   );
 };
 
