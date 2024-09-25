@@ -3,8 +3,11 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useFetchPlanificadors } from '@/actions/app';
-import { PermissionsEnum, useLoaders } from '@/shared';
-import { SingleFormBoxSceneNoActions } from '@/shared/components';
+import { PermissionsEnum } from '@/shared';
+import {
+  CustomLineLoad,
+  SingleFormBoxSceneNoActions,
+} from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { usePlanificadoresStore } from '@/store/app';
 
@@ -55,8 +58,6 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
     setPlanificadoresArray,
   ]);
 
-  useLoaders(isLoading || isRefetching);
-
   ///* handler to change initial date -------------------
   const handleChangeDate = () => {
     if (!monday) return;
@@ -70,9 +71,11 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
     navigate(`${location.pathname}?initial_date=${nextMonday}`);
   };
 
+  if (isLoading || isRefetching) return <CustomLineLoad />;
+
   return (
     <SingleFormBoxSceneNoActions
-      titlePage="Planificador de flotas"
+      titlePage={`Planificador de cuadrilla ${planificadoresPagingRes?.data?.items[0]?.flota_data?.name}`}
       maxWidth="xl"
     >
       <>
