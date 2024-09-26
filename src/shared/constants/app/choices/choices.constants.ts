@@ -349,6 +349,14 @@ export enum EstadoAgendamientoEnumChoice {
   CANCELADO = 'CANCELADO',
 }
 
+export enum SlotAgendamientoEstadosEnumChoice {
+  AGENDADO = 'AGENDADO',
+  EN_RUTA = 'EN_RUTA',
+  INICIO_INSTALACION = 'INICIO_INSTALACION',
+  INSTALADO = 'INSTALADO',
+  MANTEMIENTO = 'MANTEMIENTO',
+}
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',

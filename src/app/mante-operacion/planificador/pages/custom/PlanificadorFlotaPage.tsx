@@ -1,15 +1,15 @@
-import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { useFetchPlanificadors } from '@/actions/app';
-import { PermissionsEnum } from '@/shared';
+import { gridSize, PermissionsEnum } from '@/shared';
 import {
   CustomLineLoad,
   SingleFormBoxSceneNoActions,
 } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { usePlanificadoresStore } from '@/store/app';
+import PlanificadorCalendar from '../../shared/components/PlanificadorCalendar';
 
 export type PlanificadorFlotaPageProps = {};
 
@@ -22,7 +22,6 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
 
   const { uuid } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
   const monday = queryParams.get('initial_date');
@@ -59,17 +58,17 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
   ]);
 
   ///* handler to change initial date -------------------
-  const handleChangeDate = () => {
-    if (!monday) return;
+  // const handleChangeDate = () => {
+  //   if (!monday) return;
 
-    const nextMonday = dayjs(monday)
-      .add(1, 'week')
-      .startOf('week')
-      .add(1, 'day') // 'cause startOf('week') is Sunday
-      .format('YYYY-MM-DD');
+  //   const nextMonday = dayjs(monday)
+  //     .add(1, 'week')
+  //     .startOf('week')
+  //     .add(1, 'day') // 'cause startOf('week') is Sunday
+  //     .format('YYYY-MM-DD');
 
-    navigate(`${location.pathname}?initial_date=${nextMonday}`);
-  };
+  //   navigate(`${location.pathname}?initial_date=${nextMonday}`);
+  // };
 
   if (isLoading || isRefetching) return <CustomLineLoad />;
 
@@ -77,16 +76,9 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
     <SingleFormBoxSceneNoActions
       titlePage={`Planificador de cuadrilla ${planificadoresPagingRes?.data?.items[0]?.flota_data?.name}`}
       maxWidth="xl"
+      gridSizeForm={gridSize}
     >
-      <>
-        <p>UUID: {uuid}</p>
-        <p>Initial Date: {monday}</p>
-
-        {/* Botón para cambiar la fecha */}
-        <button onClick={handleChangeDate}>Ir al siguiente lunes</button>
-
-        {/* Renderiza otros componentes o lógica según los parámetros de consulta */}
-      </>
+      <PlanificadorCalendar />
     </SingleFormBoxSceneNoActions>
   );
 };

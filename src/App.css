@@ -7,3 +7,8 @@
 .sr-only {
   display: none;
 }
+
+/* calendar */
+.rbc-time-slot {
+  min-height: 72px !important;
+}
