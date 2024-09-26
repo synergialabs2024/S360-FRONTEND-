@@ -97,6 +97,8 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
   const watchedZona = form.watch('zona');
   const watchedIsEdit = form.watch('isEdit');
 
+  console.log(watchedIsEdit);
+
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
     initialCoords: olt?.id ? olt.coordenadas : '',

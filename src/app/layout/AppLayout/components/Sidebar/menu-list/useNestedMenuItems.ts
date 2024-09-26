@@ -505,6 +505,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_RADIOBASE, {
+              id: 'radiobases',
+              title: 'Radio Bases',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.infraestructura.radiobasesNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* NetConnect ----------------
