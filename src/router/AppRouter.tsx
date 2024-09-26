@@ -438,6 +438,24 @@ const CreateNapPage = Loadable(
 const UpdateNapPage = Loadable(
   lazy(() => import('@/app/infraestructura/nap/pages/forms/UpdateNapPage')),
 );
+// RADIOBASE
+const RadioBasesPage = Loadable(
+  lazy(
+    () => import('@/app/infraestructura/radiobase/pages/tables/RadioBasesPage'),
+  ),
+);
+const CreateRadioBasePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/radiobase/pages/forms/CreateRadioBasePage'),
+  ),
+);
+const UpdateRadioBasePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/radiobase/pages/forms/UpdateRadioBasePage'),
+  ),
+);
 
 ///* Mantenimiento Operaciones ------------
 const MantenimientoOperacionModule = Loadable(
@@ -888,6 +906,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.infraestructura.napsEditar,
             element: <UpdateNapPage />,
+          },
+
+          ///* RADIOBASE
+          {
+            path: ROUTER_PATHS.infraestructura.radiobases,
+            element: <RadioBasesPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.radiobasesCrear,
+            element: <CreateRadioBasePage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.radiobasesEditar,
+            element: <UpdateRadioBasePage />,
           },
         ],
       },
