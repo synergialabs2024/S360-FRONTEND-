@@ -27,7 +27,9 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const mondayParam = queryParams.get('initial_date');
-  console.log('mondayParam', mondayParam);
+  const startDate = mondayParam
+    ? dayjs(mondayParam).toDate()
+    : dayjs().toDate();
 
   ///* local state ---------------------
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -125,7 +127,7 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
         events={events}
         onSelectEvent={onSelectEvent}
         // // // Others ------
-        defaultDate={dayjs().toDate()}
+        defaultDate={startDate} // default date
         defaultView={isMobile ? Views.DAY : Views.WEEK}
         style={{ height: 'calc(100vh - 80px)', width: '100%' }}
         selectable

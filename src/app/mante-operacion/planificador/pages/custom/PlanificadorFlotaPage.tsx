@@ -1,10 +1,24 @@
+import { Grid, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
+import { FaArrowLeftLong } from 'react-icons/fa6';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
 import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
-import { gridSize, PermissionsEnum, ToastWrapper, useLoaders } from '@/shared';
+import {
+  gridSize,
+  PermissionsEnum,
+  ToastWrapper,
+  useIsMediaQuery,
+  useLoaders,
+} from '@/shared';
 import {
   CustomLineLoad,
+  CustomSingleButton,
   SingleFormBoxSceneNoActions,
 } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
@@ -23,6 +37,8 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
 
   const { uuid } = useParams();
   const location = useLocation();
+  const isMobile = useIsMediaQuery('sm');
+  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
   const monday = queryParams.get('initial_date');
@@ -101,7 +117,31 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
 
   return (
     <SingleFormBoxSceneNoActions
-      titlePage={`Planificador de cuadrilla ${selectedFleet?.name}`}
+      titleNode={
+        <>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
+              Planificador de cuadrilla {selectedFleet?.name}
+            </Typography>
+
+            <Grid item pb={isMobile ? 1 : 2}>
+              <CustomSingleButton
+                label="Volver"
+                startIcon={<FaArrowLeftLong />}
+                onClick={() => {
+                  setSelectedFleet(null);
+                  navigate(returnUrlPlanificadorsPage);
+                }}
+              />
+            </Grid>
+          </Grid>
+        </>
+      }
       maxWidth="xl"
       gridSizeForm={gridSize}
     >
