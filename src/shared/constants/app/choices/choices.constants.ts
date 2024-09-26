@@ -364,6 +364,7 @@ export const SLOT_AGENDAMIENTO_ESTADOS_ARRAY_CHOICES = [
   SlotAgendamientoEstadosEnumChoice.INICIO_INSTALACION,
   SlotAgendamientoEstadosEnumChoice.INSTALADO,
   SlotAgendamientoEstadosEnumChoice.MANTENIMIENTO,
+  SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO,
 ];
 
 // examples remove ------------------

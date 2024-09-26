@@ -205,6 +205,6 @@ export type TempBlockPlanificadorData = {
 export interface BlockManyHours {
   estado: SlotAgendamientoEstadosEnumChoice;
   flota: number;
-  fecha: Date;
+  fecha: string; // YYYY-MM-DD
   hours: string[]; //"09:30:00"
 }
