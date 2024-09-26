@@ -1,3 +1,18 @@
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek'; // import plugin
+// =============================================
+import { SlotAgendamientoEstadosEnumChoice } from '@/shared';
+import { Theme } from '@mui/material';
+import { dayjsLocalizer } from 'react-big-calendar';
+dayjs.extend(isoWeek);
+
+// Extiende dayjs con isoWeek para configurar la semana
+dayjs.extend(isoWeek);
+
+// El localizador de dayjs configurado para que empiece la semana en lunes
+export const djLocalizerCalendar = dayjsLocalizer(dayjs);
+
+// Obtener los mensajes en español
 export const getMessagesEs = () => ({
   allDay: 'Todo el día',
   previous: '<',
@@ -14,22 +29,26 @@ export const getMessagesEs = () => ({
   // showMore: total => `+ Ver más (${total})`,
 });
 
-// =============================================
-import { Theme } from '@mui/material';
-import dayjs from 'dayjs';
-import { dayjsLocalizer } from 'react-big-calendar';
-
-export const djLocalizerCalendar = dayjsLocalizer(dayjs);
-
+// Personalizar los estilos de los eventos en el calendario -------------
 export const eventStyleGetterCalendar = (event: any, theme: Theme) => {
-  const isFree = !event.estado; // default: false
+  const calcColorEvent = (estado: SlotAgendamientoEstadosEnumChoice | null) => {
+    switch (estado) {
+      case SlotAgendamientoEstadosEnumChoice.AGENDADO:
+        return theme.palette.primary.main;
+      case SlotAgendamientoEstadosEnumChoice.EN_RUTA:
+        return theme.palette.warning.main;
+      case SlotAgendamientoEstadosEnumChoice.INSTALADO:
+        return theme.palette.success.main;
+      case SlotAgendamientoEstadosEnumChoice.MANTENIMIENTO:
+        return theme.palette.error.main;
+    }
+  };
 
   const style = {
-    backgroundColor: isFree ? 'transparent' : theme.palette.primary.main,
-    color: isFree ? 'black' : 'white',
-    border: isFree ? 'none' : `1px solid ${theme.palette.primary.main}`,
+    backgroundColor: calcColorEvent(event.estado),
+    color: 'white',
+    border: 'none',
     borderRadius: '0px',
-    opacity: 'white',
   };
 
   return { style };

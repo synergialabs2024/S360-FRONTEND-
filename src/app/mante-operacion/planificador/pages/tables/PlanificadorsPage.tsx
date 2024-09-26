@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 import { useFetchFlotas } from '@/actions/app';
@@ -16,8 +17,8 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { Flota, PermissionsEnum } from '@/shared/interfaces';
 import { hasAllPermissions } from '@/shared/utils/auth';
+import { usePlanificadoresStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
-import dayjs from 'dayjs';
 
 export const returnUrlPlanificadorsPage =
   ROUTER_PATHS.mantenimientoOperacion.planificadoresNav;
@@ -33,13 +34,14 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
 
-  ///* global state
+  ///* global state ---------------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
+  const setSelectedFleet = usePlanificadoresStore(s => s.setSelectedFleet);
 
-  ///* table
+  ///* table ---------------------
   const {
     globalFilter,
     pagination,
@@ -49,7 +51,7 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
 
-  ///* fetch data
+  ///* fetch data ---------------
   const {
     data: flotasPagingRes,
     isLoading,
@@ -64,7 +66,7 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
     },
   });
 
-  ///* handlers
+  ///* handlers ---------------------
   const onEdit = (flota: Flota) => {
     setConfirmDialog({
       isOpen: true,
@@ -72,6 +74,7 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
       subtitle:
         '¿Está seguro que desea gestionar el planificador de cuadrilla?',
       onConfirm: () => {
+        setSelectedFleet(flota);
         setConfirmDialogIsOpen(false);
 
         // build url ----------
