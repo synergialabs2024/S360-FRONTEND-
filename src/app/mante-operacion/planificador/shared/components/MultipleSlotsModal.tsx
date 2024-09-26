@@ -71,6 +71,8 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
       await queryClient.invalidateQueries({
         queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
       });
+
+      handleClose();
       return;
     }
 
@@ -85,6 +87,8 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
     await queryClient.invalidateQueries({
       queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
     });
+
+    handleClose();
   };
 
   const handleClose = () => {
@@ -109,7 +113,7 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
   return (
     <>
       <ScrollableDialogProps
-        title={isUnblockRequest ? 'Desbloquear Horario' : 'Bloquear Horario'}
+        title="Gestionar Horarios"
         open={isOpen}
         onClose={handleClose}
         // minWidth="30%"
@@ -123,8 +127,8 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
             <Grid container spacing={3} pt={2} pb={3}>
               <Grid item xs={12} pb={1}>
                 <Typography variant="body1">
-                  Se {isUnblockRequest ? 'desbloquearán' : 'bloquearán'} los
-                  siguientes horarios para el día{' '}
+                  Se establecerá el estado deseado para los siguientes horarios
+                  del día{' '}
                   <b>
                     {selectedSlots &&
                       dayjs(selectedSlots[0]).format('DD/MM/YYYY')}

@@ -41,12 +41,27 @@ export const eventStyleGetterCalendar = (event: any, theme: Theme) => {
         return theme.palette.success.main;
       case SlotAgendamientoEstadosEnumChoice.MANTENIMIENTO:
         return theme.palette.error.main;
+      case SlotAgendamientoEstadosEnumChoice.NO_OPERATIVO:
+        return theme.palette.error.light;
+      case SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO:
+        return 'transparent';
+    }
+  };
+
+  const calcColorTextEvent = (
+    estado: SlotAgendamientoEstadosEnumChoice | null,
+  ) => {
+    switch (estado) {
+      case SlotAgendamientoEstadosEnumChoice.AGENDADO:
+        return 'white';
+      default:
+        return 'black';
     }
   };
 
   const style = {
     backgroundColor: calcColorEvent(event.estado),
-    color: 'white',
+    color: calcColorTextEvent(event.estado),
     border: 'none',
     borderRadius: '0px',
   };
