@@ -13,6 +13,7 @@ import {
   eventStyleGetterCalendar,
   getMessagesEs,
 } from '../utils';
+import MultipleSlotsModal from './MultipleSlotsModal';
 
 export type PlanificadorCalendarProps = {};
 
@@ -37,18 +38,47 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
     setIsMounted(true);
     return () => setIsMounted(false);
   }, []);
-
-  const [events, setEvents] = useState<PlanificadorEvent[]>([]);
+  const [isOpenMultiSelectModal, setIsOpenMultiSelectModal] =
+    useState<boolean>(false);
 
   ///* global state ---------------------
   const planificadoresArray = usePlanificadoresStore(
     s => s.planificadoresArray,
   );
-  // const setGlobalTimeMap = usePlanificadoresStore(s => s.setGlobalTimeMap);
+  const events = usePlanificadoresStore(s => s.events);
+  const setEvents = usePlanificadoresStore(s => s.setEvents);
+  const setSelectedEvents = usePlanificadoresStore(s => s.setSelectedEvents);
+  const setSelectedSlots = usePlanificadoresStore(s => s.setSelectedSlots);
 
   ///* handlers ---------------------
   const onSelectSlot = (slotInfo: SlotInfo) => {
-    console.log('slotInfo', slotInfo);
+    const slots: Date[] = slotInfo.slots.slice(0, -1);
+    setSelectedSlots(slots);
+
+    const events = usePlanificadoresStore.getState().events;
+
+    // only one slot selected -------------------------
+    if (slots.length === 1) {
+      const selectedEvent = events.find(event =>
+        dayjs(event.start).isSame(slots[0], 'minute'),
+      );
+      setSelectedEvents(selectedEvent ? [selectedEvent] : []);
+      setIsOpenMultiSelectModal(true);
+
+      return;
+    }
+
+    // multiple slots selected -------------------------
+    // find events that are included in the slots if exist
+    const selectedEvents = events.filter(event => {
+      const isEventIncluded = slots.some(slot =>
+        dayjs(event.start).isSame(slot, 'minute'),
+      );
+      return isEventIncluded;
+    });
+    setSelectedEvents(selectedEvents);
+
+    setIsOpenMultiSelectModal(true);
   };
   const onSelectEvent = (event: PlanificadorEvent) => {
     console.log('event', event);
@@ -90,7 +120,7 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
     }, [] as any[]);
     // console.log({ events, planificadoresArray });
     setEvents(events);
-  }, [isMounted, planificadoresArray]);
+  }, [isMounted, planificadoresArray, setEvents]);
 
   return (
     <>
@@ -135,6 +165,14 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
         // // limit visible hours ------
         min={dayjs().hour(7).minute(0).second(0).toDate()}
         max={dayjs().hour(20).minute(30).second(0).toDate()}
+      />
+
+      {/* ================= Modals ================= */}
+      <MultipleSlotsModal
+        isOpen={isOpenMultiSelectModal}
+        onClose={() => {
+          setIsOpenMultiSelectModal(false);
+        }}
       />
     </>
   );

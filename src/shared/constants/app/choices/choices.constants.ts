@@ -355,7 +355,16 @@ export enum SlotAgendamientoEstadosEnumChoice {
   INICIO_INSTALACION = 'INICIO_INSTALACION',
   INSTALADO = 'INSTALADO',
   MANTENIMIENTO = 'MANTENIMIENTO',
+
+  DESBLOQUEADO = 'DESBLOQUEADO', // desbloquean slot previamente bloqueado
 }
+export const SLOT_AGENDAMIENTO_ESTADOS_ARRAY_CHOICES = [
+  SlotAgendamientoEstadosEnumChoice.AGENDADO,
+  SlotAgendamientoEstadosEnumChoice.EN_RUTA,
+  SlotAgendamientoEstadosEnumChoice.INICIO_INSTALACION,
+  SlotAgendamientoEstadosEnumChoice.INSTALADO,
+  SlotAgendamientoEstadosEnumChoice.MANTENIMIENTO,
+];
 
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
