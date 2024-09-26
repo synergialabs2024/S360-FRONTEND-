@@ -26,7 +26,6 @@ const PlanificadorEventModal: React.FC<PlanificadorEventModalProps> = ({
 
   ///* global state ---------------------
   const selectedEvent = usePlanificadoresStore(s => s.selectedEvent);
-  console.log('selectedEvent', { selectedEvent });
 
   ///* fetch data ---------------------
   const {
