@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
-import { Calendar, Views } from 'react-big-calendar';
+import { Calendar, Event, SlotInfo, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import { TimeMapPlanificador, useIsMediaQuery } from '@/shared';
@@ -14,6 +14,8 @@ import {
 } from '../utils';
 
 export type PlanificadorCalendarProps = {};
+
+export interface PlanificadorEvent extends Event, TimeMapPlanificador {}
 
 const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   ///* hooks ---------------------
@@ -27,7 +29,7 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
     return () => setIsMounted(false);
   }, []);
 
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<PlanificadorEvent[]>([]);
 
   ///* global state ---------------------
   const planificadoresArray = usePlanificadoresStore(
@@ -36,10 +38,10 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   // const setGlobalTimeMap = usePlanificadoresStore(s => s.setGlobalTimeMap);
 
   ///* handlers ---------------------
-  const onSelectSlot = (slotInfo: any) => {
+  const onSelectSlot = (slotInfo: SlotInfo) => {
     console.log('slotInfo', slotInfo);
   };
-  const onSelectEvent = (event: any) => {
+  const onSelectEvent = (event: PlanificadorEvent) => {
     console.log('event', event);
   };
 
@@ -56,19 +58,22 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
       if (!time_map) return acc;
 
       const newEvents = time_map.map((timeMap: TimeMapPlanificador) => {
-        const { hora, estado, motivo, block_until } = timeMap;
-
         return {
-          start: dayjs(`${fecha} ${hora}`).toDate(),
-          end: dayjs(`${fecha} ${hora}`).add(30, 'minute').toDate(),
+          start: dayjs(`${fecha} ${timeMap?.hora}`).toDate(),
+          end: dayjs(`${fecha} ${timeMap?.hora}`).add(30, 'minute').toDate(),
           title:
-            estado ||
-            motivo ||
-            (dayjs(now).isBefore(dayjs(block_until))
+            timeMap?.estado ||
+            timeMap?.motivo ||
+            (dayjs(now).isBefore(dayjs(timeMap?.block_until))
               ? 'Bloqueado temporalmente'
               : 'Bloque temporal expirado'),
-          estado,
-          motivo,
+          estado: timeMap?.estado,
+          motivo: timeMap?.motivo,
+
+          preventa: timeMap?.preventa,
+          user: timeMap?.user,
+          block_until: timeMap?.block_until,
+          uuid: timeMap?.uuid,
         };
       });
 

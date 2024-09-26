@@ -354,7 +354,7 @@ export enum SlotAgendamientoEstadosEnumChoice {
   EN_RUTA = 'EN_RUTA',
   INICIO_INSTALACION = 'INICIO_INSTALACION',
   INSTALADO = 'INSTALADO',
-  MANTEMIENTO = 'MANTEMIENTO',
+  MANTENIMIENTO = 'MANTENIMIENTO',
 }
 
 // examples remove ------------------

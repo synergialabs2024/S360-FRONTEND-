@@ -39,7 +39,7 @@ export const eventStyleGetterCalendar = (event: any, theme: Theme) => {
         return theme.palette.warning.main;
       case SlotAgendamientoEstadosEnumChoice.INSTALADO:
         return theme.palette.success.main;
-      case SlotAgendamientoEstadosEnumChoice.MANTEMIENTO:
+      case SlotAgendamientoEstadosEnumChoice.MANTENIMIENTO:
         return theme.palette.error.main;
     }
   };
