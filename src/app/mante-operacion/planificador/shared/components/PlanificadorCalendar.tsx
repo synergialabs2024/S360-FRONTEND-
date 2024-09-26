@@ -1,6 +1,7 @@
 import { useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Calendar, Event, SlotInfo, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -21,6 +22,12 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   ///* hooks ---------------------
   const theme = useTheme();
   const isMobile = useIsMediaQuery('sm');
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const mondayParam = queryParams.get('initial_date');
+  console.log('mondayParam', mondayParam);
 
   ///* local state ---------------------
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -79,7 +86,7 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
 
       return [...acc, ...newEvents];
     }, [] as any[]);
-    console.log({ events, planificadoresArray });
+    // console.log({ events, planificadoresArray });
     setEvents(events);
   }, [isMounted, planificadoresArray]);
 
@@ -94,6 +101,22 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
         eventPropGetter={(event /* start, end, isSelected */) =>
           eventStyleGetterCalendar(event, theme)
         }
+        // // // Navigation ------
+        onNavigate={(date, view) => {
+          // only listen today,>,<
+          if (view === 'week') {
+            const monday = dayjs(date).startOf('isoWeek').format('YYYY-MM-DD');
+
+            console.log('onNavigate', { monday });
+
+            console.log('onNavigate', { date, view });
+            navigate(`${location.pathname}?initial_date=${monday}`);
+          }
+        }}
+        // onRangeChange={range => {
+        // listen month,week,day change
+        //   console.log('onRangeChange', { range });
+        // }}
         // // // time slot ------
         timeslots={1}
         step={30}

@@ -1,8 +1,11 @@
 import { create } from 'zustand';
 
-import { Planificador, TimeMapPlanificador } from '@/shared';
+import { Flota, Planificador, TimeMapPlanificador } from '@/shared';
 
 interface PlanificadoresState {
+  selectedFleet: Flota | null;
+  setSelectedFleet: (value: Flota | null) => void;
+
   planificadoresArray: Planificador[];
   setPlanificadoresArray: (value: Planificador[]) => void;
 
@@ -11,6 +14,9 @@ interface PlanificadoresState {
 }
 
 export const usePlanificadoresStore = create<PlanificadoresState>()(set => ({
+  selectedFleet: null,
+  setSelectedFleet: value => set({ selectedFleet: value }),
+
   planificadoresArray: [],
   setPlanificadoresArray: value => set({ planificadoresArray: value }),
 

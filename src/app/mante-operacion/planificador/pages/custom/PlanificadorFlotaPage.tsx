@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 
-import { useFetchPlanificadors } from '@/actions/app';
-import { gridSize, PermissionsEnum } from '@/shared';
+import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
+import { gridSize, PermissionsEnum, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomLineLoad,
   SingleFormBoxSceneNoActions,
@@ -10,6 +10,7 @@ import {
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { usePlanificadoresStore } from '@/store/app';
 import PlanificadorCalendar from '../../shared/components/PlanificadorCalendar';
+import { returnUrlPlanificadorsPage } from '../tables/PlanificadorsPage';
 
 export type PlanificadorFlotaPageProps = {};
 
@@ -30,6 +31,8 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
   const setPlanificadoresArray = usePlanificadoresStore(
     s => s.setPlanificadoresArray,
   );
+  const selectedFleet = usePlanificadoresStore(s => s.selectedFleet);
+  const setSelectedFleet = usePlanificadoresStore(s => s.setSelectedFleet);
 
   ///* fetch data ---------------
   const {
@@ -43,9 +46,42 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
       flota_uuid: uuid!,
     },
   });
+  const {
+    data: flotasPagingRes,
+    isLoading: isLoadingFlotas,
+    isRefetching: isRefetchingFlotas,
+  } = useFetchFlotas({
+    enabled: !!uuid,
+    params: {
+      uuid,
+      state: true,
+    },
+  });
+
+  ///* effects ---------------------
+  const isCustomLoading =
+    isLoading || isRefetching || isLoadingFlotas || isRefetchingFlotas;
 
   useEffect(() => {
-    if (!uuid || !monday || isLoading || isRefetching) return;
+    if (!uuid || isCustomLoading) return;
+
+    const flota = flotasPagingRes?.data?.items[0];
+    if (!flota) {
+      ToastWrapper.error('No se encontró la flota o no está activa');
+    } else {
+      setSelectedFleet(flota);
+    }
+  }, [
+    isLoadingFlotas,
+    isRefetchingFlotas,
+    flotasPagingRes,
+    uuid,
+    setSelectedFleet,
+    isCustomLoading,
+  ]);
+
+  useEffect(() => {
+    if (!uuid || !monday || isCustomLoading) return;
 
     setPlanificadoresArray(planificadoresPagingRes?.data?.items || []);
   }, [
@@ -55,26 +91,17 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
     uuid,
     monday,
     setPlanificadoresArray,
+    isCustomLoading,
   ]);
 
-  ///* handler to change initial date -------------------
-  // const handleChangeDate = () => {
-  //   if (!monday) return;
-
-  //   const nextMonday = dayjs(monday)
-  //     .add(1, 'week')
-  //     .startOf('week')
-  //     .add(1, 'day') // 'cause startOf('week') is Sunday
-  //     .format('YYYY-MM-DD');
-
-  //   navigate(`${location.pathname}?initial_date=${nextMonday}`);
-  // };
-
-  if (isLoading || isRefetching) return <CustomLineLoad />;
+  useLoaders(isCustomLoading);
+  if (isCustomLoading) return <CustomLineLoad />;
+  if (!flotasPagingRes?.data?.meta?.count)
+    return <Navigate to={returnUrlPlanificadorsPage} />;
 
   return (
     <SingleFormBoxSceneNoActions
-      titlePage={`Planificador de cuadrilla ${planificadoresPagingRes?.data?.items[0]?.flota_data?.name}`}
+      titlePage={`Planificador de cuadrilla ${selectedFleet?.name}`}
       maxWidth="xl"
       gridSizeForm={gridSize}
     >
