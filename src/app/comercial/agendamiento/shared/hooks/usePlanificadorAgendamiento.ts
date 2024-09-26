@@ -17,6 +17,7 @@ import {
   HTTPResStatusCodeEnum,
   Nullable,
   Planificador,
+  SlotAgendamientoEstadosEnumChoice,
   SystemParamsSlugsEnum,
   TimeMapPlanificador,
   useLoaders,
@@ -185,17 +186,15 @@ export const usePlanificadorAgendamiento = ({
         )?.block_until;
         if (blockUntil) {
           const formattedBlockUntil = dayjs(blockUntil).format();
-          // console.log('--------------blockUntil --------------', {
-          //   blockUntil: !!blockUntil && dayjs(blockUntil).format(),
-          //   formattedBlockUntil,
-          //   hour,
-          //   nownToValidate,
-          // });
-
           if (dayjs(nownToValidate).isBefore(formattedBlockUntil)) return false;
 
           return true;
         }
+
+        // if state is DESBLOQUEADO, no filter
+        const state = timeMapArray.find(tm => tm.hora === hour)?.estado;
+        if (state === SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO)
+          return true;
 
         return !timeMapArray.find(tm => tm.hora === hour);
       });
@@ -287,6 +286,13 @@ export const usePlanificadorAgendamiento = ({
 
           return true;
         }
+
+        // if state is DESBLOQUEADO, no filter
+        const state = dayPlanificador.time_map?.find(
+          tm => tm.hora === timeSlot.hora,
+        )?.estado;
+        if (state === SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO)
+          return true;
 
         return !dayPlanificador.time_map?.find(
           planificadorTimeSlot => planificadorTimeSlot.hora === timeSlot.hora,
