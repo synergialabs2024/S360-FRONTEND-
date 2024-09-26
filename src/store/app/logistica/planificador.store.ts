@@ -17,8 +17,8 @@ interface PlanificadoresState {
   setEvents: (value: PlanificadorEvent[]) => void;
 
   // modals
-  selectedEvents: PlanificadorEvent[];
-  setSelectedEvents: (value: PlanificadorEvent[]) => void;
+  // selectedEvents: PlanificadorEvent[];
+  // setSelectedEvents: (value: PlanificadorEvent[]) => void;
   selectedEvent: PlanificadorEvent | null;
   setSelectedEvent: (value: PlanificadorEvent | null) => void;
 
@@ -40,10 +40,10 @@ export const usePlanificadoresStore = create<PlanificadoresState>()(set => ({
   setEvents: value => set({ events: value }),
 
   // modals
-  selectedEvents: [],
-  setSelectedEvents: value => set({ selectedEvents: value }),
   selectedEvent: null,
   setSelectedEvent: value => set({ selectedEvent: value }),
+  // selectedEvents: [],
+  // setSelectedEvents: value => set({ selectedEvents: value }),
 
   selectedSlots: [],
   setSelectedSlots: value => set({ selectedSlots: value }),

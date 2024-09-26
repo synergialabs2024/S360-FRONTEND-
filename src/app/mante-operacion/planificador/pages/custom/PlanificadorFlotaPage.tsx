@@ -17,7 +17,6 @@ import {
   useLoaders,
 } from '@/shared';
 import {
-  CustomLineLoad,
   CustomSingleButton,
   SingleFormBoxSceneNoActions,
 } from '@/shared/components';
@@ -111,8 +110,8 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
   ]);
 
   useLoaders(isCustomLoading);
-  if (isCustomLoading) return <CustomLineLoad />;
-  if (!flotasPagingRes?.data?.meta?.count)
+  // if (isCustomLoading) return <CustomLineLoad />;
+  if (!isCustomLoading && !flotasPagingRes?.data?.meta?.count)
     return <Navigate to={returnUrlPlanificadorsPage} />;
 
   return (

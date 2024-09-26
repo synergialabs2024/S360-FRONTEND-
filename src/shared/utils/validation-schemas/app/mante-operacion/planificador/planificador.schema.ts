@@ -23,12 +23,12 @@ export const blockManyHoursSchema = yup.object({
     .max(200, 'El campo estado no debe exceder los 200 caracteres')
     .oneOf(SLOT_AGENDAMIENTO_ESTADOS_ARRAY_CHOICES, 'El estado no es válido'),
 
-  motivo: yup
-    .string()
-    .optional()
-    .when('isUnblockRequest', {
-      is: true,
-      then: schema => schema.required('Motivo es requerido'),
-    })
-    .max(255, 'El motivo no puede exceder los 255 caracteres'),
+  // motivo: yup
+  //   .string()
+  //   .optional()
+  //   .when('isUnblockRequest', {
+  //     is: true,
+  //     then: schema => schema.required('Motivo es requerido'),
+  //   })
+  //   .max(255, 'El motivo no puede exceder los 255 caracteres'),
 });

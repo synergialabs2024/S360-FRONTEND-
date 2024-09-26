@@ -41,6 +41,14 @@ export const useGetSystemUser = (uuid: string) => {
   });
 };
 
+export const useGetSystemUserByUserId = (userId: number) => {
+  return useQuery({
+    queryKey: [SystemUserTSQEnum.SYSTEMUSER, userId],
+    queryFn: () => getSystemUserByUserId(userId),
+    retry: false,
+  });
+};
+
 export const useCreateSystemUser = <T>({
   navigate,
   returnUrl,
@@ -143,6 +151,14 @@ export const getSystemUsers = async (params?: GetSystemUsersParams) => {
 export const getSystemUser = async (uuid: string) => {
   try {
     return await get<SystemUserItem>(`/usuario/uuid/${uuid}`, true);
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const getSystemUserByUserId = async (userId: number) => {
+  try {
+    return await get<SystemUserItem>(`/usuario/${userId}/`, true);
   } catch (error) {
     handleAxiosError(error);
   }
