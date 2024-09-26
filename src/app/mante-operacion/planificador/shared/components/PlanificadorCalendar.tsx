@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Calendar, Event, SlotInfo, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+dayjs.locale('es');
 
 import { TimeMapPlanificador, useIsMediaQuery } from '@/shared';
 import { usePlanificadoresStore } from '@/store/app';
@@ -14,10 +15,14 @@ import {
   getMessagesEs,
 } from '../utils';
 import MultipleSlotsModal from './MultipleSlotsModal';
+import PlanificadorEventModal from './PlanificadorEventModal';
 
 export type PlanificadorCalendarProps = {};
 
-export interface PlanificadorEvent extends Event, TimeMapPlanificador {}
+export interface PlanificadorEvent extends Event, TimeMapPlanificador {
+  // @override title type
+  title?: string;
+}
 
 const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   ///* hooks ---------------------
@@ -40,6 +45,7 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   }, []);
   const [isOpenMultiSelectModal, setIsOpenMultiSelectModal] =
     useState<boolean>(false);
+  const [isOpenEventModal, setIsOpenEventModal] = useState<boolean>(false);
 
   ///* global state ---------------------
   const planificadoresArray = usePlanificadoresStore(
@@ -47,41 +53,19 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   );
   const events = usePlanificadoresStore(s => s.events);
   const setEvents = usePlanificadoresStore(s => s.setEvents);
-  const setSelectedEvents = usePlanificadoresStore(s => s.setSelectedEvents);
   const setSelectedSlots = usePlanificadoresStore(s => s.setSelectedSlots);
+  const setSelectedEvent = usePlanificadoresStore(s => s.setSelectedEvent);
 
   ///* handlers ---------------------
   const onSelectSlot = (slotInfo: SlotInfo) => {
     const slots: Date[] = slotInfo.slots.slice(0, -1);
     setSelectedSlots(slots);
 
-    const events = usePlanificadoresStore.getState().events;
-
-    // only one slot selected -------------------------
-    if (slots.length === 1) {
-      const selectedEvent = events.find(event =>
-        dayjs(event.start).isSame(slots[0], 'minute'),
-      );
-      setSelectedEvents(selectedEvent ? [selectedEvent] : []);
-      setIsOpenMultiSelectModal(true);
-
-      return;
-    }
-
-    // multiple slots selected -------------------------
-    // find events that are included in the slots if exist
-    const selectedEvents = events.filter(event => {
-      const isEventIncluded = slots.some(slot =>
-        dayjs(event.start).isSame(slot, 'minute'),
-      );
-      return isEventIncluded;
-    });
-    setSelectedEvents(selectedEvents);
-
     setIsOpenMultiSelectModal(true);
   };
   const onSelectEvent = (event: PlanificadorEvent) => {
-    console.log('event', event);
+    setSelectedEvent(event);
+    setIsOpenEventModal(true);
   };
 
   ///* effects ---------------------
@@ -172,6 +156,13 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
         isOpen={isOpenMultiSelectModal}
         onClose={() => {
           setIsOpenMultiSelectModal(false);
+        }}
+      />
+
+      <PlanificadorEventModal
+        isOpen={isOpenEventModal}
+        onClose={() => {
+          setIsOpenEventModal(false);
         }}
       />
     </>

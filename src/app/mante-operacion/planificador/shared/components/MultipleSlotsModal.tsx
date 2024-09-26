@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -19,6 +18,7 @@ import {
   ScrollableDialogProps,
 } from '@/shared/components';
 import { usePlanificadoresStore } from '@/store/app';
+import { useUiStore } from '@/store/ui';
 import { useQueryClient } from '@tanstack/react-query';
 
 export type MultipleSlotsModalProps = {
@@ -36,15 +36,11 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
 }) => {
   const queryClient = useQueryClient();
 
-  ///* local state ---------------------
-  const [isUnblockRequest, setRequestUnblock] = useState<boolean>(false);
-
   ///* global state ---------------------
   const selectedSlots = usePlanificadoresStore(s => s.selectedSlots);
-  const selectedEvents = usePlanificadoresStore(s => s.selectedEvents);
   const setSelectedSlots = usePlanificadoresStore(s => s.setSelectedSlots);
-  const setSelectedEvents = usePlanificadoresStore(s => s.setSelectedEvents);
   const flota = usePlanificadoresStore(s => s.selectedFleet);
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   ///* form -----------------
   const form = useForm<BlockManyHoursForm>({
@@ -57,26 +53,15 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
   const tempBlockUnlockManyHoursPlanificador =
     usePostPlanificador<BlockManyHours>(
       {
-        customMessageToast: `Horario ${isUnblockRequest ? 'desbloqueado' : 'bloqueado'} correctamente`,
+        customMessageToast: 'Horario gestionado correctamente',
       },
       '/slot/block-many/',
     );
 
   ///* handlers ---------------------
   const onSubmit = async (data: BlockManyHoursForm) => {
-    console.log('onSubmit', { data });
-
-    // unblock ----------------
-    if (isUnblockRequest) {
-      await queryClient.invalidateQueries({
-        queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
-      });
-
-      handleClose();
-      return;
-    }
-
-    // block ----------------
+    // set state
+    setIsGlobalLoading(true);
     tempBlockUnlockManyHoursPlanificador.mutateAsync({
       estado: data.estado,
       fecha: dayjs(selectedSlots[0]).format('YYYY-MM-DD'),
@@ -87,6 +72,7 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
     await queryClient.invalidateQueries({
       queryKey: [PlanificadorTSQEnum.PLANIFICADORS],
     });
+    setIsGlobalLoading(false);
 
     handleClose();
   };
@@ -95,20 +81,9 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
     onClose();
     form.reset();
     setSelectedSlots([]);
-    setSelectedEvents([]);
   };
 
   ///* effects ---------------------
-  useEffect(() => {
-    if (!isOpen) return;
-
-    console.log({
-      selectedEvents,
-      selectedSlots,
-    });
-
-    setRequestUnblock(false);
-  }, [isOpen, selectedEvents, selectedSlots]);
 
   return (
     <>
@@ -117,7 +92,7 @@ const MultipleSlotsModal: React.FC<MultipleSlotsModalProps> = ({
         open={isOpen}
         onClose={handleClose}
         // minWidth="30%"
-        confirmTextBtn={isUnblockRequest ? 'Desbloquear' : 'Bloquear'}
+        confirmTextBtn="Establecer estado"
         onConfirm={form.handleSubmit(onSubmit, () => {})}
         confirmVariantBtn="outlined"
         disabledConfirmBtn={formState.isSubmitting}

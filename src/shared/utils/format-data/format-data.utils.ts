@@ -50,6 +50,8 @@ export const formatCountDownTimer = (timer: number): string => {
 };
 
 // // // Common ========================================
-export const humanizeStringArr = (arr: string[]): string[] => {
-  return arr.map(item => item.replace(/_/g, ' '));
+export const humanizeString = (str: string): string => {
+  return str.replace(/_/g, ' ');
 };
+export const humanizeStringArr = (arr: string[]): string[] =>
+  arr.map(humanizeString);
