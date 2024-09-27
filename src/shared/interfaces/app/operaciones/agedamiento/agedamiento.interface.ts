@@ -39,6 +39,7 @@ export interface Agendamiento {
 
   // pyl --------
   estado_llamada: EstadoLlamadaEnumChoice;
+  observacion_llamada: string;
   user_gestiona?: number;
 
   ///* fk

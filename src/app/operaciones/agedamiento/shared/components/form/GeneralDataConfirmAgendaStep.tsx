@@ -2,14 +2,17 @@ import { UseFormReturn } from 'react-hook-form';
 
 import {
   Agendamiento,
+  ESTADO_LLAMADA_ARRAY_CHOICES,
   gridSizeMdLg6,
   PARENTESCO_TYPE_ARRAY_CHOICES,
   useTabsOnly,
 } from '@/shared';
 import {
   a11yProps,
+  CustomAutocompleteArrString,
   CustomCellphoneTextField,
   CustomTabPanel,
+  CustomTextArea,
   CustomTextField,
   CustomTextFieldNoForm,
   CustomTypoLabel,
@@ -143,6 +146,47 @@ const GeneralDataConfirmAgendaStep: React.FC<
           label="Vendedor"
           value={agendamiento?.vendedor_data?.canal_venta_data?.name || 'N/A'}
           disabled
+        />
+      </>
+
+      {/* =================== Estado Llamada =================== */}
+      <>
+        <CustomTypoLabel
+          text="Estado Llamada"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+
+        <CustomCellphoneTextField
+          label="Celular"
+          name="celular"
+          control={form.control}
+          defaultValue={form.getValues().celular}
+          error={errors.celular}
+          helperText={errors.celular?.message}
+          size={gridSizeMdLg6}
+        />
+        <CustomAutocompleteArrString
+          label="Estado Llamada"
+          name="estado_llamada"
+          options={ESTADO_LLAMADA_ARRAY_CHOICES}
+          isLoadingData={false}
+          control={form.control}
+          defaultValue={form.getValues().estado_llamada}
+          error={errors.estado_llamada}
+          helperText={errors.estado_llamada?.message}
+          size={gridSizeMdLg6}
+          onChangeValue={() => {
+            // reset related fields
+            form.setValue('plan_internet', '' as any);
+          }}
+        />
+        <CustomTextArea
+          label="Observación Llamada"
+          name="observacion_llamada"
+          control={form.control}
+          defaultValue={form.getValues().observacion_llamada}
+          error={errors.observacion_llamada}
+          helperText={errors.observacion_llamada?.message}
         />
       </>
     </>
