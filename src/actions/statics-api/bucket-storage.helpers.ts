@@ -12,7 +12,7 @@ import {
 import {
   createTemporaryUploadLink,
   CreateTemporaryUploadLinkParams,
-  putFileBucket,
+  putFileBucketDataGuardian
 } from './bucket.actions';
 
 const { VITE_MINIO_ENDPOINT } = getEnvs();
@@ -83,9 +83,14 @@ export const uploadFileToBucket = async (
       };
     }
 
+    console.log({
+      tempLinkRes
+    })
+
     const { data: tempUrlBucket } = tempLinkRes;
 
-    const res = await putFileBucket({
+    // const res = await putFileBucket({
+    const res = await putFileBucketDataGuardian({
       bucketTempLink: tempUrlBucket,
       file: params.file,
     });

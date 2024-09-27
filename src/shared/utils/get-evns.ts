@@ -6,7 +6,7 @@ export const getEnvs = () => ({
   VITE_CONSULTAS_URL: import.meta.env.VITE_CONSULTAS_URL,
 
   VITE_SOCKETIO_URL: import.meta.env.VITE_SOCKETIO_URL,
-  SOCKET_PATH: import.meta.env.SOCKET_PATH,
+  VITE_SOCKET_PATH: import.meta.env.VITE_SOCKET_PATH,
 
   VITE_MINIO_ENDPOINT: import.meta.env.VITE_MINIO_ENDPOINT,
   VITE_MINIO_BUCKET_NAME: import.meta.env.VITE_MINIO_BUCKET_NAME,

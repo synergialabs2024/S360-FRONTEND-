@@ -8,7 +8,7 @@ interface SocketContextType {
   socket: Socket | null;
 }
 
-const { VITE_SOCKETIO_URL, SOCKET_PATH } = getEnvs();
+const { VITE_SOCKETIO_URL, VITE_SOCKET_PATH } = getEnvs();
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
@@ -18,9 +18,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (user) {
+      console.log('VITE_SOCKET_PATH', {VITE_SOCKET_PATH})
       const newSocket = io(VITE_SOCKETIO_URL, {
-        ...(SOCKET_PATH && {
-          path: SOCKET_PATH,
+        ...(VITE_SOCKET_PATH && {
+          path: VITE_SOCKET_PATH,
         }),
       });
       newSocket.emit('register', user?.id!);
