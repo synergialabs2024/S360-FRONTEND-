@@ -398,11 +398,11 @@ const AgendamientoVentasMainPage = Loadable(
       ),
   ),
 );
-const CreateAgendamientoPage = Loadable(
+const CreateAgendamientoVentasPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/operaciones/agedamiento/pages/forms/CreateAgendamientoPage'
+        '@/app/comercial/agendamiento/pages/forms/CreateAgendamientoVentasPage'
       ),
   ),
 );
@@ -437,6 +437,24 @@ const CreateNapPage = Loadable(
 );
 const UpdateNapPage = Loadable(
   lazy(() => import('@/app/infraestructura/nap/pages/forms/UpdateNapPage')),
+);
+// RADIOBASE
+const RadioBasesPage = Loadable(
+  lazy(
+    () => import('@/app/infraestructura/radiobase/pages/tables/RadioBasesPage'),
+  ),
+);
+const CreateRadioBasePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/radiobase/pages/forms/CreateRadioBasePage'),
+  ),
+);
+const UpdateRadioBasePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/radiobase/pages/forms/UpdateRadioBasePage'),
+  ),
 );
 
 ///* Mantenimiento Operaciones ------------
@@ -477,6 +495,22 @@ const AgendamientosMainPage = Loadable(
     () =>
       import(
         '@/app/operaciones/agedamiento/pages/tables/AgendamientosMainPage'
+      ),
+  ),
+);
+const PlanificadorsPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/tables/PlanificadorsPage'
+      ),
+  ),
+);
+const PlanificadorFlotaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/custom/PlanificadorFlotaPage'
       ),
   ),
 );
@@ -793,6 +827,16 @@ const AppRouter = createBrowserRouter([
             path: ROUTER_PATHS.mantenimientoOperacion.flotasEditar,
             element: <UpdateFlotaPage />,
           },
+
+          ///* planificador
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.planificadoresNav,
+            element: <PlanificadorsPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.planificadorFlota,
+            element: <PlanificadorFlotaPage />,
+          },
         ],
       },
 
@@ -862,6 +906,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.infraestructura.napsEditar,
             element: <UpdateNapPage />,
+          },
+
+          ///* RADIOBASE
+          {
+            path: ROUTER_PATHS.infraestructura.radiobases,
+            element: <RadioBasesPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.radiobasesCrear,
+            element: <CreateRadioBasePage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.radiobasesEditar,
+            element: <UpdateRadioBasePage />,
           },
         ],
       },
@@ -956,7 +1014,7 @@ const AppRouter = createBrowserRouter([
           },
           {
             path: ROUTER_PATHS.comercial.createAgendamiento,
-            element: <CreateAgendamientoPage />,
+            element: <CreateAgendamientoVentasPage />,
           },
         ],
       },

@@ -42,3 +42,5 @@ export interface Flota {
   ciudad?: number;
   zonas?: number[];
 }
+
+export type FlotaLimitData = Pick<Flota, 'uuid' | 'name' | 'id'>;

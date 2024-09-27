@@ -349,6 +349,27 @@ export enum EstadoAgendamientoEnumChoice {
   CANCELADO = 'CANCELADO',
 }
 
+export enum SlotAgendamientoEstadosEnumChoice {
+  AGENDADO = 'AGENDADO',
+  EN_RUTA = 'EN_RUTA',
+  INICIO_INSTALACION = 'INICIO_INSTALACION',
+  INSTALADO = 'INSTALADO',
+  MANTENIMIENTO = 'MANTENIMIENTO',
+  NO_OPERATIVO = 'NO_OPERATIVO',
+
+  DESBLOQUEADO = 'DESBLOQUEADO', // desbloquean slot previamente bloqueado
+}
+export const SLOT_AGENDAMIENTO_ESTADOS_ARRAY_CHOICES = [
+  SlotAgendamientoEstadosEnumChoice.NO_OPERATIVO,
+  SlotAgendamientoEstadosEnumChoice.MANTENIMIENTO,
+  SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO,
+
+  SlotAgendamientoEstadosEnumChoice.EN_RUTA,
+  SlotAgendamientoEstadosEnumChoice.INICIO_INSTALACION,
+  SlotAgendamientoEstadosEnumChoice.INSTALADO,
+  SlotAgendamientoEstadosEnumChoice.AGENDADO,
+];
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',

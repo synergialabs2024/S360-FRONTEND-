@@ -14,7 +14,7 @@ import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoFormSchema } from '@/shared/utils';
 import { useAgendamientoVentasStore } from '@/store/app';
-import { returnUrlAgendamientosPage } from '../../../pages/tables/AgendamientosPage';
+import { returnUrlAgendamientoVentasPage } from '../../../pages/tables/AgendamientoVentasMainPage';
 import { usePlanificadorAgendamiento } from '../../hooks';
 import {
   AgendamientoSaveAgendaStep,
@@ -55,7 +55,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
-      initialStep: 0, // TODO: remove
+      initialStep: 2,
     });
 
   ///* global state ---------------------
@@ -81,7 +81,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   ///* mutations ---------------------
   const createAgendamientoMutation = useCreateAgendamiento({
     navigate,
-    returnUrl: returnUrlAgendamientosPage,
+    returnUrl: returnUrlAgendamientoVentasPage,
     enableErrorNavigate: false,
   });
 
@@ -128,7 +128,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       handleBack={handleBack}
       disableNextStepBtn={disableNextStepBtn}
       // action btns
-      onCancel={() => navigate(returnUrlAgendamientosPage)}
+      onCancel={() => navigate(returnUrlAgendamientoVentasPage)}
       onSave={handleSubmit(onSave, () => {
         console.log({ errors: form.formState.errors });
         ToastWrapper.error('Faltan campos requeridos');

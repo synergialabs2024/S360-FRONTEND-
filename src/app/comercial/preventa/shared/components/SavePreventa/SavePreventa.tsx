@@ -485,6 +485,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataPreventa) => {
+    console.log({
+      msg: '============== 11111111111 ==========='
+    })
     if (!isValid) return;
     if (
       !watchedEstadoOtp ||
@@ -515,6 +518,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.error('La foto de la vivienda es requerida');
 
     // upload images ----
+    console.log({
+      msg: '============== aqqui ==========='
+    })
     setIsCheckingCedula(true);
     const [cedulaFrontalUrl, cedulaPosteriorUrl, viviendaUrl] =
       await Promise.all([

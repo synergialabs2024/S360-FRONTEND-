@@ -34,6 +34,8 @@ export interface ScrollableDialogPropsProps {
 
   showCustomTitleNode?: boolean;
   customTitleNode?: React.ReactNode;
+
+  disabledConfirmBtn?: boolean;
 }
 
 const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
@@ -60,6 +62,7 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
 
   showCustomTitleNode = false,
   customTitleNode,
+  disabledConfirmBtn = false,
 }) => {
   return (
     <>
@@ -110,6 +113,7 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
                   onClick={onConfirm}
                   variant={confirmVariantBtn}
                   color={confirmColorBtn}
+                  disabled={disabledConfirmBtn}
                 >
                   {confirmTextBtn}
                 </Button>

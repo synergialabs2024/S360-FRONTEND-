@@ -88,3 +88,26 @@ export const putFileBucket = async ({
   const res = await axios(config);
   return res;
 };
+
+
+export const putFileBucketDataGuardian = async ({
+  file,
+  bucketTempLink,
+}: FileDataFormBucket) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('url', bucketTempLink);
+  formData.append('contentType', file.type);
+
+  const config: AxiosRequestConfig = {
+    method: 'PUT',
+    url: 'https://dataguardian.intercommerce.com.ec/funcion/miniosImage/',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  const res = await axios(config);
+  return res;
+};

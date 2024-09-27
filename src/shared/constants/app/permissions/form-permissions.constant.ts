@@ -76,3 +76,11 @@ export const SAVE_NAP_PERMISSIONS = [
   PermissionsEnum.infraestructura_view_nodo,
   PermissionsEnum.infraestructura_view_olt,
 ];
+
+export const SAVE_RADIOBASE_PERMISSIONS = [
+  PermissionsEnum.administration_view_pais,
+  PermissionsEnum.administration_view_provincia,
+  PermissionsEnum.administration_view_ciudad,
+  PermissionsEnum.administration_view_zona,
+  PermissionsEnum.administration_view_sector,
+];

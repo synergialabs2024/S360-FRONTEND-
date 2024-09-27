@@ -1,6 +1,7 @@
 import { ToastWrapper } from '@/shared/wrappers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { SlotAgendamientoEstadosEnumChoice } from '@/shared';
 import { handleAxiosError } from '@/shared/axios';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
@@ -146,6 +147,7 @@ export type GetPlanificadorsParams = Partial<Planificador> &
   PagingPartialParams & {
     initial_date?: string; // YYYY-MM-DD <- monday to filter by week
     initial_date_month?: string; // YYYY-MM-DD <- monday to filter by month
+    flota_uuid?: string;
   };
 export type CreatePlanificadorParams<T> = T;
 export type CreatePlanificadorParamsBase = Omit<Planificador, 'id'>;
@@ -200,11 +202,9 @@ export type TempBlockPlanificadorData = {
   flota: number;
 };
 
-export const tempBlockPlanificador = async (
-  data: TempBlockPlanificadorData,
-) => {
-  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
-  setIsGlobalLoading(true);
-
-  return post('/planificador/slot/', data, true);
-};
+export interface BlockManyHours {
+  estado: SlotAgendamientoEstadosEnumChoice;
+  flota: number;
+  fecha: string; // YYYY-MM-DD
+  hours: string[]; //"09:30:00"
+}

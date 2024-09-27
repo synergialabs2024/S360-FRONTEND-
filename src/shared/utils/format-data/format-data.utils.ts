@@ -48,3 +48,10 @@ export const formatCountDownTimer = (timer: number): string => {
     minutes < 10 ? `0${minutes}` : minutes
   }:${seconds < 10 ? `0${seconds}` : seconds}`;
 };
+
+// // // Common ========================================
+export const humanizeString = (str: string): string => {
+  return str.replace(/_/g, ' ');
+};
+export const humanizeStringArr = (arr: string[]): string[] =>
+  arr.map(humanizeString);

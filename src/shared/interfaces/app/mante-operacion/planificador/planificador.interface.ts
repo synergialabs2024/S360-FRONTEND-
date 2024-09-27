@@ -1,4 +1,6 @@
+import { SlotAgendamientoEstadosEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { FlotaLimitData } from '../flota';
 
 export interface PlanificadorPaginatedRes {
   status: number;
@@ -19,13 +21,15 @@ export interface Planificador {
 
   ///* fk
   flota?: number;
+
+  flota_data?: FlotaLimitData;
 }
 
 export interface TimeMapPlanificador {
   uuid: string;
   hora: string; // HH:MM:SS
 
-  estado?: string | null;
+  estado?: SlotAgendamientoEstadosEnumChoice | null;
   motivo?: string | null;
 
   preventa?: number;

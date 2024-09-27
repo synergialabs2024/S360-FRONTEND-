@@ -244,6 +244,12 @@ export const ROUTER_PATHS = {
     napsCrear: 'naps/crear',
     napsEditar: 'naps/editar/:uuid',
     napsNav: '/infraestructura/naps',
+
+    ///* radiobase
+    radiobases: 'radiobases',
+    radiobasesCrear: 'radiobases/crear',
+    radiobasesEditar: 'radiobases/editar/:uuid',
+    radiobasesNav: '/infraestructura/radiobases',
   },
 
   /////* Mantenimiento y Operación ----------------
@@ -258,8 +264,7 @@ export const ROUTER_PATHS = {
 
     ///* planificadores
     planificadores: 'planificadores',
-    planificadoresCrear: 'planificadores/crear',
-    planificadoresEditar: 'planificadores/editar/:uuid',
+    planificadorFlota: 'planificadores/flota/:uuid',
     planificadoresNav: '/mantenimiento-operacion/planificadores',
   },
 
