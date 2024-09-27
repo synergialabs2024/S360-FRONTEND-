@@ -498,6 +498,14 @@ const AgendamientosMainPage = Loadable(
       ),
   ),
 );
+const ConfirmAgendaOperacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/agedamiento/pages/forms/ConfirmAgendaOperacionesPage'
+      ),
+  ),
+);
 const PlanificadorsPage = Loadable(
   lazy(
     () =>
@@ -1026,8 +1034,12 @@ const AppRouter = createBrowserRouter([
         children: [
           ///* agendamientos
           {
-            path: ROUTER_PATHS.operaciones.agendamientosNav,
+            path: ROUTER_PATHS.operaciones.agendamientos,
             element: <AgendamientosMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.agendamientosPending,
+            element: <ConfirmAgendaOperacionesPage />,
           },
         ],
       },

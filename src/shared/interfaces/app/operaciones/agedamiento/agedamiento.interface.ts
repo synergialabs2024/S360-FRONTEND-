@@ -1,4 +1,7 @@
+import { EstadoLlamadaEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { SystemUserLimitData } from '../../administration';
+import { Preventa, SolicitudServicio } from '../../comercial';
 
 export interface AgendamientosPaginatedRes {
   status: number;
@@ -10,6 +13,9 @@ export interface AgendamientosPaginatedRes {
 export interface Agendamiento {
   id?: number;
   uuid?: string;
+
+  numero_referencia: string;
+  codigo: string;
 
   created_at?: string;
   modified_at?: string;
@@ -31,17 +37,25 @@ export interface Agendamiento {
   descripcion_pago: string;
   estado_pago: string;
 
+  // pyl --------
+  estado_llamada: EstadoLlamadaEnumChoice;
+  observacion_llamada: string;
+  user_gestiona?: number;
+
   ///* fk
   linea_servicio?: number;
   solicitud_servicio?: number;
   preventa?: number;
   flota?: number;
   nap?: number;
-  user_gestiona?: number;
   area?: number;
   departamento?: number;
   canal_venta?: number;
   vendedor?: number;
+
+  solicitud_servicio_data?: SolicitudServicio;
+  preventa_data?: Preventa;
+  vendedor_data?: SystemUserLimitData;
 }
 
 export type EncuestaAgenda = {};

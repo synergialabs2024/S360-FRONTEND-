@@ -12,7 +12,7 @@ import {
 import { ToastWrapper } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Preventa, SolicitudServicio } from '@/shared/interfaces';
-import { agendamientoFormSchema } from '@/shared/utils';
+import { agendamientoVentasFormSchema } from '@/shared/utils';
 import { useAgendamientoVentasStore } from '@/store/app';
 import { returnUrlAgendamientoVentasPage } from '../../../pages/tables/AgendamientoVentasMainPage';
 import { usePlanificadorAgendamiento } from '../../hooks';
@@ -65,7 +65,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
 
   ///* form ---------------------
   const form = useForm<SaveFormDataAgendaVentas>({
-    resolver: yupResolver(agendamientoFormSchema) as any,
+    resolver: yupResolver(agendamientoVentasFormSchema) as any,
     defaultValues: {},
   });
 
@@ -75,8 +75,6 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventa?.uuid!}`,
     form,
   });
-
-  ///* fetch data ---------------------
 
   ///* mutations ---------------------
   const createAgendamientoMutation = useCreateAgendamiento({

@@ -102,7 +102,6 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
 
       return [...acc, ...newEvents];
     }, [] as any[]);
-    // console.log({ events, planificadoresArray });
     setEvents(events);
   }, [isMounted, planificadoresArray, setEvents]);
 
@@ -122,10 +121,6 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
           // only listen today,>,<
           if (view === 'week') {
             const monday = dayjs(date).startOf('isoWeek').format('YYYY-MM-DD');
-
-            console.log('onNavigate', { monday });
-
-            console.log('onNavigate', { date, view });
             navigate(`${location.pathname}?initial_date=${monday}`);
           }
         }}
