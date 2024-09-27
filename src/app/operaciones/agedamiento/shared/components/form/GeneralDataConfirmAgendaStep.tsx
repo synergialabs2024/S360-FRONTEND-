@@ -14,7 +14,7 @@ import {
   SelectTextFieldArrayString,
 } from '@/shared/components';
 import type { SaveConfirmAgendaOperaciones } from '../SaveConfirmAgendaOperaciones';
-import UbicacionPartAgendaOpe from './LocationZonePolygonFormPart';
+import LocationZonePolygonFormPart from './LocationZonePolygonFormPart';
 
 export type GeneralDataConfirmAgendaStepProps = {
   form: UseFormReturn<SaveConfirmAgendaOperaciones>;
@@ -95,7 +95,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
 
       {/* =================== Ubicación =================== */}
       <>
-        <UbicacionPartAgendaOpe
+        <LocationZonePolygonFormPart
           form={form}
           initialCoords={
             agendamiento?.solicitud_servicio_data?.coordenadas || ''
