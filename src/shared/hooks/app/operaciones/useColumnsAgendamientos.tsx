@@ -3,11 +3,62 @@ import { useMemo } from 'react';
 
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Agendamiento } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 
 export const useColumnsAgendamientos = () => {
   const agendaBase01 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
     () => [
+      {
+        accessorKey: 'numero_referencia',
+        header: 'NUMERO REFERENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
+      },
+      {
+        accessorKey: 'solicitud_servicio__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
+      },
+      {
+        accessorKey: 'solicitud_servicio__tipo_identificacion',
+        header: 'TIPO IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'solicitud_servicio_data',
+            'tipo_identificacion',
+          ]),
+      },
+      {
+        accessorKey: 'solicitud_servicio__razon_social',
+        header: 'NOMBRES',
+        size: 312,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+
       {
         accessorKey: 'estado_agendamiento',
         header: 'ESTADO AGENDAMIENTO',
@@ -16,7 +67,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_agendamiento'),
       },
-
       {
         accessorKey: 'fecha_instalacion',
         header: 'FECHA INSTALACION',
