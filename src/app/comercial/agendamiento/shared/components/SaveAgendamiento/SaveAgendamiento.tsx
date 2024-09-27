@@ -55,7 +55,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
-      initialStep: 2,
+      initialStep: 0,
     });
 
   ///* global state ---------------------
