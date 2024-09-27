@@ -7,8 +7,7 @@ import { Calendar, Event, SlotInfo, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 dayjs.locale('es');
 
-import { useSocket } from '@/context/SocketContext';
-import { Planificador, TimeMapPlanificador, useIsMediaQuery } from '@/shared';
+import { TimeMapPlanificador, useIsMediaQuery } from '@/shared';
 import { usePlanificadoresStore } from '@/store/app';
 import {
   djLocalizerCalendar,
@@ -51,9 +50,6 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
   ///* global state ---------------------
   const planificadoresArray = usePlanificadoresStore(
     s => s.planificadoresArray,
-  );
-  const setPlanificadoresArray = usePlanificadoresStore(
-    s => s.setPlanificadoresArray,
   );
   const events = usePlanificadoresStore(s => s.events);
   const setEvents = usePlanificadoresStore(s => s.setEvents);
@@ -108,25 +104,6 @@ const PlanificadorCalendar: React.FC<PlanificadorCalendarProps> = () => {
     }, [] as any[]);
     setEvents(events);
   }, [isMounted, planificadoresArray, setEvents]);
-
-  ///* socket ============================
-  const socket = useSocket();
-  useEffect(() => {
-    if (!socket) return;
-    socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
-      // update planificadoresArray with new data for the same day
-      const newPlanificadoresArray = planificadoresArray.map(planificador =>
-        planificador.fecha === dayPlanificador.fecha
-          ? dayPlanificador
-          : planificador,
-      );
-      setPlanificadoresArray(newPlanificadoresArray);
-    });
-
-    return () => {
-      socket.off('receive_fleet_schedule');
-    };
-  }, [planificadoresArray, setPlanificadoresArray, socket]);
 
   return (
     <>

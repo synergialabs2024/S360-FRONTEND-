@@ -13,6 +13,7 @@ import { useSocket } from '@/context/SocketContext';
 import {
   gridSize,
   PermissionsEnum,
+  Planificador,
   ToastWrapper,
   useIsMediaQuery,
   useLoaders,
@@ -121,10 +122,22 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
     if (!selectedFleet) return;
     socket.emit('register_fleet', selectedFleet?.id!);
 
+    socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
+      // update planificadoresArray with new data for the same day
+      const newPlanificadoresArray = usePlanificadoresStore
+        .getState()
+        .planificadoresArray.map(planificador =>
+          planificador.fecha === dayPlanificador.fecha
+            ? dayPlanificador
+            : planificador,
+        );
+      setPlanificadoresArray(newPlanificadoresArray);
+    });
+
     return () => {
-      socket.off('register_fleet');
+      socket.off('receive_fleet_schedule');
     };
-  }, [socket, selectedFleet]);
+  }, [socket, selectedFleet, setPlanificadoresArray]);
 
   useLoaders(isCustomLoading);
   // if (isCustomLoading) return <CustomLineLoad />;
