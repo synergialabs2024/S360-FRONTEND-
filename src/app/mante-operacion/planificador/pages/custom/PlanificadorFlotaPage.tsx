@@ -9,9 +9,11 @@ import {
 } from 'react-router-dom';
 
 import { useFetchFlotas, useFetchPlanificadors } from '@/actions/app';
+import { useSocket } from '@/context/SocketContext';
 import {
   gridSize,
   PermissionsEnum,
+  Planificador,
   ToastWrapper,
   useIsMediaQuery,
   useLoaders,
@@ -24,7 +26,6 @@ import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { usePlanificadoresStore } from '@/store/app';
 import PlanificadorCalendar from '../../shared/components/PlanificadorCalendar';
 import { returnUrlPlanificadorsPage } from '../tables/PlanificadorsPage';
-import { useSocket } from '@/context/SocketContext';
 
 export type PlanificadorFlotaPageProps = {};
 
@@ -113,12 +114,30 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
   ///* socket ============================
   const socket = useSocket();
   useEffect(() => {
-    if (!uuid || !socket || isCustomLoading) return;
+    if (!socket) return;
 
     // register fleet -------
-    const selectedFleet = flotasPagingRes?.data?.items[0];
+    // using global state to prevent re-registering ✅
+    const selectedFleet = usePlanificadoresStore.getState().selectedFleet;
+    if (!selectedFleet) return;
     socket.emit('register_fleet', selectedFleet?.id!);
-  }, [flotasPagingRes?.data?.items, socket, uuid, isCustomLoading]);
+
+    socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
+      // update planificadoresArray with new data for the same day
+      const newPlanificadoresArray = usePlanificadoresStore
+        .getState()
+        .planificadoresArray.map(planificador =>
+          planificador.fecha === dayPlanificador.fecha
+            ? dayPlanificador
+            : planificador,
+        );
+      setPlanificadoresArray(newPlanificadoresArray);
+    });
+
+    return () => {
+      socket.off('receive_fleet_schedule');
+    };
+  }, [socket, selectedFleet, setPlanificadoresArray]);
 
   useLoaders(isCustomLoading);
   // if (isCustomLoading) return <CustomLineLoad />;

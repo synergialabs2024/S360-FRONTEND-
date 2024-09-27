@@ -17,7 +17,6 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { Flota, PermissionsEnum } from '@/shared/interfaces';
 import { hasAllPermissions } from '@/shared/utils/auth';
-import { usePlanificadoresStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlPlanificadorsPage =
@@ -39,7 +38,6 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
-  const setSelectedFleet = usePlanificadoresStore(s => s.setSelectedFleet);
 
   ///* table ---------------------
   const {
@@ -74,7 +72,6 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
       subtitle:
         '¿Está seguro que desea gestionar el planificador de cuadrilla?',
       onConfirm: () => {
-        setSelectedFleet(flota);
         setConfirmDialogIsOpen(false);
 
         // build url ----------

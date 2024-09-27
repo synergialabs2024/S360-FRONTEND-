@@ -1,4 +1,4 @@
-import { HiDocumentPlus } from 'react-icons/hi2';
+import { MdArrowRightAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import { useFetchAgendamientos } from '@/actions/app';
@@ -17,15 +17,14 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlAgendamientoOperacionesPage } from './AgendamientosMainPage';
 
-export type AgendamientoByStatePageProps = {
-  state: EstadoAgendamientoEnumChoice;
-};
+export type AgendamientoEsperaOperacionesPageProps = {};
 
-const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
-  state,
-}) => {
+const AgendamientoEsperaOperacionesPage: React.FC<
+  AgendamientoEsperaOperacionesPageProps
+> = () => {
   useCheckPermission(PermissionsEnum.operaciones_view_agendamiento);
 
   const navigate = useNavigate();
@@ -33,6 +32,12 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* table
   const {
@@ -57,25 +62,25 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
       name: searchTerm,
       ...filterObject,
       filterByState: false,
-
-      estado_agendamiento: state,
+      estado_agendamiento: EstadoAgendamientoEnumChoice.ESPERA,
     },
   });
 
   ///* handlers
-  const calcEnableActionsColumn = (): boolean => {
-    return false;
-
-    if (state === EstadoAgendamientoEnumChoice.ESPERA) {
-      return true;
-    }
-
-    return false;
-  };
-  const calcOnEdit = (data: Agendamiento) => {
-    if (state === EstadoAgendamientoEnumChoice.ESPERA) {
-      navigate(`${returnUrlAgendamientoOperacionesPage}/crear/${data.uuid}`);
-    }
+  const onEdit = (agenda: Agendamiento) => {
+    // navigate(`${returnUrlAgendamientoOperacionesPage}/${agenda?.id!}`);
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Gestionar Agendamiento',
+      subtitle:
+        'Al acceder a la gestión del agendamiento, este registro se bloqueará para otros usuarios hasta que finalice la gestión o salga de la misma. ¿Desea continuar?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(
+          `${returnUrlAgendamientoOperacionesPage}/pendientes/${agenda?.uuid!}`,
+        );
+      },
+    });
   };
 
   ///* columns
@@ -93,10 +98,7 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
       />
 
       <CustomTable<Agendamiento>
-        columns={
-          // solicitudServicioBase
-          state === EstadoAgendamientoEnumChoice.ESPERA ? agendaBase01 : []
-        }
+        columns={agendaBase01}
         data={agendamientosPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -112,16 +114,17 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
         rowCount={agendamientosPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={calcEnableActionsColumn()}
+        enableActionsColumn={true}
         // crud
-        canEdit={calcEnableActionsColumn()}
-        onEdit={calcOnEdit}
-        editIcon={<HiDocumentPlus />}
-        // editIconToolTipTitle="Crear preventa"
+        canEdit={true}
+        onEdit={onEdit}
+        editIcon={<MdArrowRightAlt />}
         canDelete={false}
+        editIconToolTipTitle="Gestionar"
+        editIconTooltipPlacement="left"
       />
     </GridTableTabsContainerOnly>
   );
 };
 
-export default AgendamientoByStatePage;
+export default AgendamientoEsperaOperacionesPage;

@@ -370,6 +370,17 @@ export const SLOT_AGENDAMIENTO_ESTADOS_ARRAY_CHOICES = [
   SlotAgendamientoEstadosEnumChoice.AGENDADO,
 ];
 
+export enum EstadoLlamadaEnumChoice {
+  REALIZADA = 'REALIZADA',
+  NO_REALIZADA = 'NO REALIZADA',
+  NO_CONTESTA = 'NO CONTESTA',
+}
+export const ESTADO_LLAMADA_ARRAY_CHOICES = [
+  EstadoLlamadaEnumChoice.REALIZADA,
+  EstadoLlamadaEnumChoice.NO_REALIZADA,
+  EstadoLlamadaEnumChoice.NO_CONTESTA,
+];
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',

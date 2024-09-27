@@ -4,6 +4,7 @@ import {
   Card,
   IconButton,
   Tooltip,
+  TooltipProps,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -79,6 +80,7 @@ export interface CustomTableProps<T> {
   editIcon?: React.ReactNode;
   editIconToolTipTitle?: string;
   editIconColor?: ColorButtonType;
+  editIconTooltipPlacement?: TooltipProps['placement'];
 }
 
 function CustomTable<T>({
@@ -135,6 +137,7 @@ function CustomTable<T>({
   editIcon,
   editIconToolTipTitle = 'Editar',
   editIconColor,
+  editIconTooltipPlacement = 'bottom',
 }: CustomTableProps<T>) {
   const theme = useTheme();
 
@@ -194,7 +197,10 @@ function CustomTable<T>({
         onEdit &&
         onConditionEdit &&
         onConditionEdit(row.original as T) ? (
-          <Tooltip title={editIconToolTipTitle}>
+          <Tooltip
+            title={editIconToolTipTitle}
+            placement={editIconTooltipPlacement}
+          >
             <IconButton
               onClick={() => {
                 onEdit(row.original as T);

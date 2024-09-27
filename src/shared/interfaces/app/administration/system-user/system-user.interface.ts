@@ -1,6 +1,7 @@
 import { UserRolesEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { Empleado } from '../../nomina';
+import { CanalVenta } from '../canal-venta';
 
 export interface SystemUsersPaginatedRes {
   status: number;
@@ -35,5 +36,7 @@ export interface SystemUser {
 
 export type SystemUserLimitData = Pick<
   SystemUser,
-  'username' | 'email' | 'razon_social' | 'uuid'
->;
+  'username' | 'email' | 'razon_social' | 'uuid' | 'id'
+> & {
+  canal_venta_data?: CanalVenta;
+};
