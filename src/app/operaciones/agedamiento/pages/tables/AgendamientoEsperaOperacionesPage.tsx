@@ -76,7 +76,9 @@ const AgendamientoEsperaOperacionesPage: React.FC<
         'Al acceder a la gestión del agendamiento, este registro se bloqueará para otros usuarios hasta que finalice la gestión o salga de la misma. ¿Desea continuar?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlAgendamientoOperacionesPage}/${agenda?.uuid!}`);
+        navigate(
+          `${returnUrlAgendamientoOperacionesPage}/pendientes/${agenda?.uuid!}`,
+        );
       },
     });
   };

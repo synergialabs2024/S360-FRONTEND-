@@ -220,6 +220,7 @@ export const ROUTER_PATHS = {
 
     ///* agendamiento
     agendamientos: 'agendamientos',
+    agendamientosPending: 'agendamientos/pendientes/:uuid',
     agendamientosNav: '/operaciones/agendamientos',
   },
 
