@@ -67,6 +67,26 @@ export const useColumnsSolicitusService = (
         Cell: ({ row }: MRTSServiceType) =>
           emptyCellOneLevel(row, 'razon_social'),
       },
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'vendedor_ingresa',
+        header: 'VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidadData = row.original.trazabilidad_data;
+          const created = trazabilidadData?.at(0);
+
+          return created ? created?.user_data?.razon_social : 'N/A';
+        },
+      },
 
       // only supervisor to top
       ...(isSalesman
@@ -146,7 +166,6 @@ export const useColumnsSolicitusService = (
         Cell: ({ row }: MRTSServiceType) =>
           formatBooleanCell(row, 'tiene_cobertura'),
       },
-
       {
         accessorKey: 'linea_servicio',
         header: 'LINEA SERVICIO',
@@ -227,28 +246,6 @@ export const useColumnsSolicitusService = (
                 emptyCellOneLevel(row, 'valor_minimo'),
             },
           ]),
-
-      {
-        accessorKey: 'codigo',
-        header: 'CODIGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'codigo'),
-      },
-
-      {
-        accessorKey: 'vendedor_ingresa',
-        header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        enableColumnFilter: false,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidadData = row.original.trazabilidad_data;
-          const created = trazabilidadData?.at(0);
-
-          return created ? created?.user_data?.razon_social : 'N/A';
-        },
-      },
     ],
     [isSalesman],
   );
