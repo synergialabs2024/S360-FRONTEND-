@@ -23,7 +23,10 @@ const steps = ['Datos generales', 'Servicio y Coordinación'];
 
 export type SaveConfirmAgendaOperaciones = Partial<SolicitudServicio> &
   Partial<Preventa> &
-  Partial<Agendamiento> & {};
+  Partial<Agendamiento> & {
+    thereIsCoverage?: boolean;
+    thereAreNaps?: boolean;
+  };
 
 const SaveConfirmAgendaOperaciones: React.FC<
   SaveConfirmAgendaOperacionesProps
@@ -60,7 +63,8 @@ const SaveConfirmAgendaOperaciones: React.FC<
       ...rest,
       ...solicitud_servicio_data,
       ...preventa_data,
-    } as SaveConfirmAgendaOperaciones);
+      // zona: solicitud_servicio_data?.zona_data?.id!,
+    } as unknown as SaveConfirmAgendaOperaciones);
   }, [agendamiento, reset]);
 
   return (
