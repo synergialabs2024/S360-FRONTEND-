@@ -32,17 +32,15 @@ import {
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 
-export type UbicacionPartAgendaOpeProps = {
+export type LocationZonePolygonFormPartProps = {
   form: UseFormReturn<any>;
   isEdit?: boolean;
   initialCoords?: string;
 };
 
-const UbicacionPartAgendaOpe: React.FC<UbicacionPartAgendaOpeProps> = ({
-  form,
-  initialCoords,
-  isEdit = false,
-}) => {
+const LocationZonePolygonFormPart: React.FC<
+  LocationZonePolygonFormPartProps
+> = ({ form, initialCoords, isEdit = false }) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
 
@@ -333,4 +331,4 @@ const UbicacionPartAgendaOpe: React.FC<UbicacionPartAgendaOpeProps> = ({
   );
 };
 
-export default UbicacionPartAgendaOpe;
+export default LocationZonePolygonFormPart;

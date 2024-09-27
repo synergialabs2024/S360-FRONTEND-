@@ -14,7 +14,7 @@ import {
   SelectTextFieldArrayString,
 } from '@/shared/components';
 import type { SaveConfirmAgendaOperaciones } from '../SaveConfirmAgendaOperaciones';
-import UbicacionPartAgendaOpe from './UbicacionPartAgendaOpe';
+import UbicacionPartAgendaOpe from './LocationZonePolygonFormPart';
 
 export type GeneralDataConfirmAgendaStepProps = {
   form: UseFormReturn<SaveConfirmAgendaOperaciones>;

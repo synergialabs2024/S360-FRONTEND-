@@ -1,2 +1,2 @@
 export { default as GeneralDataConfirmAgendaStep } from './GeneralDataConfirmAgendaStep';
-export { default as UbicacionPartAgendaOpe } from './UbicacionPartAgendaOpe';
+export { default as LocationZonePolygonFormPart } from './LocationZonePolygonFormPart';
