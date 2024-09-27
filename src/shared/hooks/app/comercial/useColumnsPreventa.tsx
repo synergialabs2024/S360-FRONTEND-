@@ -1,12 +1,16 @@
-import type { MRT_ColumnDef } from 'material-react-table';
+import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { TABLE_CONSTANTS, UserRolesEnumChoice } from '@/shared/constants';
 import { Preventa } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 import { useAuthStore } from '@/store/auth';
 
-// type MRTSServiceType = { row: MRT_Row<Preventa> };
+type MRTSServiceType = { row: MRT_Row<Preventa> };
 
 export const useColumnsPreventa = () => {
   const isSalesman =
@@ -23,7 +27,36 @@ export const useColumnsPreventa = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
       },
-
+      {
+        accessorKey: 'solicitud_servicio__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
+      },
+      {
+        accessorKey: 'solicitud_servicio__tipo_identificacion',
+        header: 'TIPO IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'solicitud_servicio_data',
+            'tipo_identificacion',
+          ]),
+      },
+      {
+        accessorKey: 'solicitud_servicio__razon_social',
+        header: 'NOMBRES',
+        size: 312,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
+      },
       {
         accessorKey: 'codigo',
         header: 'CODIGO',
@@ -31,6 +64,20 @@ export const useColumnsPreventa = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'vendedor',
+        header: 'VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidadData =
+            row.original.solicitud_servicio_data?.trazabilidad_data;
+          const created = trazabilidadData?.at(0);
+
+          return created ? created?.user_data?.razon_social : 'N/A';
+        },
       },
 
       {
@@ -175,15 +222,6 @@ export const useColumnsPreventa = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'canal_venta'),
-      },
-
-      {
-        accessorKey: 'vendedor',
-        header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
       },
 
       {
