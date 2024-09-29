@@ -1,11 +1,9 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
-import { FaMapLocationDot } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -14,33 +12,25 @@ import {
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
   useFetchPaises,
-  useFetchSectores,
-  useFetchZonas,
-  useGetZoneByCoords,
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
 } from '@/actions/app';
 import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
-import { handleAxiosError, Sector, ToastWrapper, useLoaders } from '@/shared';
+import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
+import { handleAxiosError, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomAutocomplete,
   CustomAutocompleteArrString,
-  CustomCardAlert,
   CustomCellphoneTextField,
-  CustomCoordsTextField,
   CustomDatePicker,
   CustomIdentificacionTextField,
   CustomNumberTextField,
   CustomScanLoad,
-  CustomTextArea,
   CustomTextField,
-  CustomTypoLabel,
   CustomTypoLabelEnum,
   InputAndBtnGridSpace,
-  MapModalComponent,
   SampleCheckbox,
   SingleFormBoxScene,
-  SingleIconButton,
 } from '@/shared/components';
 import {
   EstadoSolicitudServicioEnumChoice,
@@ -50,16 +40,8 @@ import {
   SalesModelsEnumChoice,
   SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
-import {
-  gridSize,
-  gridSizeMdLg1,
-  gridSizeMdLg11,
-  gridSizeMdLg4,
-  gridSizeMdLg6,
-} from '@/shared/constants/ui';
+import { gridSizeMdLg4, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { calcAge } from '@/shared/helpers';
-import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
-import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
   HTTPResStatusCodeEnum,
   Pais,
@@ -94,7 +76,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const navigate = useNavigate();
 
   ///* local state -----------------
-  const [openMapModal, setOpenMapModal] = useState(false);
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
 
@@ -128,27 +109,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedIdentification = form.watch('identificacion');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
   const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
-  const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
-
-  const {
-    Map,
-    latLng,
-    napsByCoords,
-    isLoadingNaps,
-    isRefetchingNaps,
-    setLatLng,
-  } = useMapComponent({
-    form,
-    initialCoords: solicitudservicio?.id ? solicitudservicio.coordenadas : '',
-    enableFetchNaps: true,
-  });
-  useLocationCoords({
-    isEditting: !!solicitudservicio?.id,
-    form,
-    setLatLng,
-  });
 
   ///* fetch data -----------------
   const {
@@ -158,36 +120,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   } = useFetchPaises({
     params: {
       page_size: 200,
-    },
-  });
-  const {
-    data: zonasPaging,
-    isLoading: isLoadingZonas,
-    isRefetching: isRefetchingZonas,
-  } = useFetchZonas({
-    params: {
-      page_size: 1200,
-    },
-  });
-  const {
-    data: zonaByCoordsRes,
-    isLoading: isLoadingZonaByCoords,
-    isRefetching: isRefetchingZonaByCoords,
-  } = useGetZoneByCoords(
-    {
-      coords: `${latLng?.lat},${latLng?.lng}`,
-    },
-    !!latLng?.lat && !!latLng?.lng,
-  );
-  const {
-    data: sectoresPaging,
-    isLoading: isLoadingSectores,
-    isRefetching: isRefetchingSectores,
-  } = useFetchSectores({
-    enabled: !!watchedZone,
-    params: {
-      page_size: 900,
-      zona: watchedZone,
     },
   });
 
@@ -431,80 +363,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     reset(solicitudservicio);
   }, [solicitudservicio, reset]);
 
-  // set zone to up
-  useEffect(() => {
-    if (!latLng?.lat || !latLng?.lng) return;
-
-    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
-    const zone = zonaByCoordsRes?.data;
-    if (!zone) {
-      ToastWrapper.warning(
-        `No se encontraron zonas con cobertura para las coordenadas ${
-          latLng?.lat
-        }, ${latLng?.lng}`,
-      );
-      form.reset({
-        ...form.getValues(),
-        thereIsCoverage: false,
-      });
-      return;
-    }
-    form.reset({
-      ...form.getValues(),
-      zona: zone?.id,
-      ciudad: zone?.ciudad_data?.id!,
-      provincia: zone?.provincia_data?.id!,
-      cityName: zone?.ciudad_data?.name,
-      provinceName: zone?.provincia_data?.name,
-      zoneName: zone?.name,
-      thereIsCoverage: true,
-    });
-  }, [
-    zonaByCoordsRes,
-    isLoadingZonaByCoords,
-    isRefetchingZonaByCoords,
-    form,
-    latLng?.lat,
-    latLng?.lng,
-  ]);
-  // naps available
-  useEffect(() => {
-    if (!latLng?.lat || !latLng?.lng) return;
-    if (isLoadingNaps || isRefetchingNaps) return;
-    const thereAreNaps = !!napsByCoords?.length;
-    if (!thereAreNaps) {
-      form.reset({
-        ...form.getValues(),
-        thereAreNaps: false,
-      });
-      ToastWrapper.warning(
-        'No se encontraron NAPs disponibles para las coordenadas ingresadas',
-      );
-    }
-    form.reset({
-      ...form.getValues(),
-      thereAreNaps,
-    });
-  }, [
-    napsByCoords,
-    isLoadingNaps,
-    isRefetchingNaps,
-    form,
-    latLng?.lat,
-    latLng?.lng,
-  ]);
-
-  const isCustomLoading =
-    isLoadingPaises ||
-    isRefetchingPaises ||
-    isLoadingZonas ||
-    isRefetchingZonas ||
-    isLoadingZonaByCoords ||
-    isRefetchingZonaByCoords ||
-    isLoadingSectores ||
-    isRefetchingSectores ||
-    isLoadingNaps ||
-    isRefetchingNaps;
+  const isCustomLoading = isLoadingPaises || isRefetchingPaises;
   useLoaders(isCustomLoading);
 
   return (
@@ -698,244 +557,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       />
 
       {/* ------------- location ------------- */}
-      <>
-        <CustomTypoLabel
-          text="Ubicación"
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
-        />
-
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputGridSize={gridSizeMdLg11}
-          inputNode={
-            <CustomCoordsTextField
-              label="Coordenadas"
-              name="coordenadas"
-              control={form.control}
-              defaultValue={form.getValues().coordenadas}
-              error={errors.coordenadas}
-              helperText={errors.coordenadas?.message}
-              onChangeValue={(value, isValidCoords) => {
-                if (isValidCoords) {
-                  const s = value.split(',');
-                  setLatLng({ lat: s[0], lng: s[1] });
-                }
-              }}
-            />
-          }
-          btnLabel="Ver mapa"
-          overrideBtnNode
-          customBtnNode={
-            <>
-              <SingleIconButton
-                startIcon={<FaMapLocationDot />}
-                label={'Ver mapa'}
-                color={'primary'}
-                onClick={() => {
-                  setOpenMapModal(true);
-                }}
-              />
-
-              <MapModalComponent
-                open={openMapModal}
-                onClose={() => {
-                  setOpenMapModal(false);
-                }}
-                //
-                showCustomTitleNode
-                customTitleNode={
-                  <Grid item container xs={12}>
-                    <Typography variant="h4">
-                      Ubicación | Coordenadas:{' '}
-                      <span
-                        style={{
-                          fontSize: '0.93rem',
-                          fontWeight: 400,
-                        }}
-                      >
-                        {latLng?.lat}, {latLng?.lng}
-                      </span>
-                    </Typography>
-                  </Grid>
-                }
-                minWidthModal="70%"
-                contentNodeOverride={
-                  <Map
-                    coordenadas={
-                      latLng
-                        ? {
-                            lat: latLng.lat,
-                            lng: latLng.lng,
-                          }
-                        : { lat: 0, lng: 0 }
-                    }
-                    canDragMarker={true}
-                    setLatLng={setLatLng}
-                    showCoverage
-                    coverageZones={zonasPaging?.data?.items || []}
-                  />
-                }
-              />
-            </>
-          }
-          btnGridSize={gridSizeMdLg1}
-        />
-
-        {watchedThereIsCoverage ? (
-          <>
-            <CustomAutocomplete<Sector>
-              label="Sector"
-              name="sector"
-              // options
-              options={sectoresPaging?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().sector}
-              isLoadingData={isLoadingSectores || isRefetchingSectores}
-              // vaidation
-              control={form.control}
-              error={errors.sector}
-              helperText={errors.sector?.message}
-            />
-            <CustomTextField
-              label="Zona"
-              name="zoneName"
-              control={form.control}
-              defaultValue={form.getValues().zoneName}
-              error={errors.zoneName}
-              helperText={errors.zoneName?.message}
-              disabled
-            />
-            <CustomTextField
-              label="Ciudad"
-              name="cityName"
-              control={form.control}
-              defaultValue={form.getValues().cityName}
-              error={errors.cityName}
-              helperText={errors.cityName?.message}
-              size={gridSizeMdLg6}
-              disabled
-            />
-            <CustomTextField
-              label="Provincia"
-              name="provinceName"
-              control={form.control}
-              defaultValue={form.getValues().provinceName}
-              error={errors.provinceName}
-              helperText={errors.provinceName?.message}
-              size={gridSizeMdLg6}
-              disabled
-            />
-          </>
-        ) : (
-          <>
-            <CustomCardAlert
-              sizeType="small"
-              alertMessage="Ubicación sin cobertura"
-              alertSeverity="error"
-            />
-          </>
-        )}
-
-        <CustomTextArea
-          label="Dirección"
-          name="direccion"
-          control={form.control}
-          defaultValue={form.getValues().direccion}
-          error={errors.direccion}
-          helperText={errors.direccion?.message}
-        />
-
-        {watchedThereAreNaps ? (
-          <CustomCardAlert
-            sizeType="small"
-            alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsByCoords?.at(0)?.distance}m`}
-            alertSeverity="success"
-          />
-        ) : (
-          <CustomCardAlert
-            sizeType="small"
-            alertMessage="No se encontraron cajas disponibles"
-            alertSeverity="error"
-          />
-        )}
-      </>
-
-      {/* <>
-        <CustomTypoLabel
-          text="Equifax"
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
-        />
-        <CustomTextField
-          label="Categoria score desicion"
-          name="categoria_score_desicion"
-          control={form.control}
-          defaultValue={form.getValues().categoria_score_desicion}
-          error={errors.categoria_score_desicion}
-          helperText={errors.categoria_score_desicion?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Valor maximo"
-          name="valor_maximo"
-          control={form.control}
-          defaultValue={form.getValues().valor_maximo}
-          error={errors.valor_maximo}
-          helperText={errors.valor_maximo?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Valor minimo"
-          name="valor_minimo"
-          control={form.control}
-          defaultValue={form.getValues().valor_minimo}
-          error={errors.valor_minimo}
-          helperText={errors.valor_minimo?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Score inclusion"
-          name="score_inclusion"
-          control={form.control}
-          defaultValue={form.getValues().score_inclusion}
-          error={errors.score_inclusion}
-          helperText={errors.score_inclusion?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Score sobreendeudamiento"
-          name="score_sobreendeudamiento"
-          control={form.control}
-          defaultValue={form.getValues().score_sobreendeudamiento}
-          error={errors.score_sobreendeudamiento}
-          helperText={errors.score_sobreendeudamiento?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Score servicios"
-          name="score_servicios"
-          control={form.control}
-          defaultValue={form.getValues().score_servicios}
-          error={errors.score_servicios}
-          helperText={errors.score_servicios?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Rango capacidad pago"
-          name="rango_capacidad_pago"
-          control={form.control}
-          defaultValue={form.getValues().rango_capacidad_pago}
-          error={errors.rango_capacidad_pago}
-          helperText={errors.rango_capacidad_pago?.message}
-          disabled
-        />
-      </> */}
+      <LocationZonePolygonFormPart
+        form={form}
+        initialCoords={''}
+        isEdit={false}
+        ptLabel={CustomTypoLabelEnum.ptMiddlePosition}
+      />
 
       {/* ============= loaders ============= */}
       <CustomScanLoad isOpen={isCheckingIdentificacion} name="cedula" />

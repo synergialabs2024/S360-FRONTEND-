@@ -300,13 +300,17 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBuildings,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'desbloque-prosperos',
-              title: 'Desbloqueo de prospectos',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-              // target: true, // target blank
-            }),
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_DESBLOQUEO_VENTAS,
+              {
+                id: 'desbloque-prosperos',
+                title: 'Desbloqueo de prospectos',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial
+                  .solicitudDesbloqueoVentasNav,
+                // target: true, // target blank
+              },
+            ),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-preventas',
               title: 'Desbloqueo de preventas',
@@ -325,16 +329,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(
-              SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_DESBLOQUEO_VENTAS,
-              {
-                id: 'solicitud-desbloqueo-ventas',
-                title: 'Solicitud de liberación de ventas',
-                type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.supervisionComercial
-                  .solicitudDesbloqueoVentasNav,
-              },
-            ),
             renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
               id: 'codigos-otp',
               title: 'Códigos OTP',

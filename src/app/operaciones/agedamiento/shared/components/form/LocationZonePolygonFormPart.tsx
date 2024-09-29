@@ -36,11 +36,13 @@ export type LocationZonePolygonFormPartProps = {
   form: UseFormReturn<any>;
   isEdit?: boolean;
   initialCoords?: string;
+
+  ptLabel?: string;
 };
 
 const LocationZonePolygonFormPart: React.FC<
   LocationZonePolygonFormPartProps
-> = ({ form, initialCoords, isEdit = false }) => {
+> = ({ form, initialCoords, isEdit = false, ptLabel = '0px' }) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
 
@@ -109,12 +111,13 @@ const LocationZonePolygonFormPart: React.FC<
     if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
     const zone = zonaByCoordsRes?.data;
     if (!zone) {
-      ToastWrapper.error(
+      ToastWrapper.warning(
         'No se encontraron zonas con cobertura para las coordenadas proporcionadas',
       );
       form.reset({
         ...form.getValues(),
         thereIsCoverage: false,
+        tiene_cobertura: false,
       });
       return;
     }
@@ -127,6 +130,7 @@ const LocationZonePolygonFormPart: React.FC<
       provinceName: zone?.provincia_data?.name,
       zoneName: zone?.name,
       thereIsCoverage: true,
+      tiene_cobertura: true,
     });
   }, [
     zonaByCoordsRes,
@@ -143,11 +147,7 @@ const LocationZonePolygonFormPart: React.FC<
     if (isLoadingNaps || isRefetchingNaps) return;
     const thereAreNaps = !!napsByCoords?.length;
     if (!thereAreNaps) {
-      form.reset({
-        ...form.getValues(),
-        thereAreNaps: false,
-      });
-      ToastWrapper.error(
+      ToastWrapper.warning(
         'No se encontraron cajas disponibles para las coordenadas ingresadas',
       );
     }
@@ -170,7 +170,7 @@ const LocationZonePolygonFormPart: React.FC<
 
   return (
     <>
-      <CustomTypoLabel text="Ubicación" />
+      <CustomTypoLabel text="Ubicación" pt={ptLabel} />
 
       <InputAndBtnGridSpace
         mainGridSize={gridSize}
