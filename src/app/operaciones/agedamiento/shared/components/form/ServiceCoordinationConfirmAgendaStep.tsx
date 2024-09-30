@@ -51,9 +51,6 @@ const ServiceCoordinationConfirmAgendaStep: React.FC<
       <>
         <ScheduleInstallAgendaOpe form={form} agendamiento={agendamiento!} />
       </>
-
-      {/* ------------------ NAP ------------------ */}
-      <>NAP</>
     </>
   );
 };

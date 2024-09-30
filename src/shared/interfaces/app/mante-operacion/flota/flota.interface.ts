@@ -1,4 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { SystemUserLimitData } from '../../administration';
 
 export interface FlotasPaginatedRes {
   status: number;
@@ -41,6 +42,12 @@ export interface Flota {
   provincia?: number;
   ciudad?: number;
   zonas?: number[];
+
+  auxiliar_data?: SystemUserLimitData;
+  lider_data?: SystemUserLimitData;
 }
 
-export type FlotaLimitData = Pick<Flota, 'uuid' | 'name' | 'id'>;
+export type FlotaLimitData = Pick<
+  Flota,
+  'uuid' | 'name' | 'id' | 'auxiliar_data' | 'lider_data' | 'state' | 'zonas'
+>;

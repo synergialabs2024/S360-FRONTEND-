@@ -38,11 +38,20 @@ export type LocationZonePolygonFormPartProps = {
   initialCoords?: string;
 
   ptLabel?: string;
+  showSectionTitle?: boolean;
+  onChangeCoordsInput?: (value: string) => void;
 };
 
 const LocationZonePolygonFormPart: React.FC<
   LocationZonePolygonFormPartProps
-> = ({ form, initialCoords, isEdit = false, ptLabel = '0px' }) => {
+> = ({
+  form,
+  initialCoords,
+  isEdit = false,
+  ptLabel = '0px',
+  showSectionTitle = true,
+  onChangeCoordsInput,
+}) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
 
@@ -170,7 +179,7 @@ const LocationZonePolygonFormPart: React.FC<
 
   return (
     <>
-      <CustomTypoLabel text="Ubicación" pt={ptLabel} />
+      {showSectionTitle && <CustomTypoLabel text="Ubicación" pt={ptLabel} />}
 
       <InputAndBtnGridSpace
         mainGridSize={gridSize}
@@ -187,6 +196,8 @@ const LocationZonePolygonFormPart: React.FC<
               if (isValidCoords) {
                 const s = value.split(',');
                 setLatLng({ lat: s[0], lng: s[1] });
+
+                onChangeCoordsInput && onChangeCoordsInput(value);
               }
             }}
           />

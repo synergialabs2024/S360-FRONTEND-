@@ -51,7 +51,9 @@ export const formatCountDownTimer = (timer: number): string => {
 
 // // // Common ========================================
 export const humanizeString = (str: string): string => {
-  return str.replace(/_/g, ' ');
+  const re1 = str.replace(/_/g, ' ');
+
+  return re1.charAt(0).toUpperCase() + re1.slice(1);
 };
 export const humanizeStringArr = (arr: string[]): string[] =>
   arr.map(humanizeString);

@@ -32,6 +32,7 @@ const ConfirmInstallScheduleVentasModal: React.FC<
   ///* form ---------------------
   const watchFechaInstalacion = form.watch('fecha_instalacion');
   const watchFlota = form.watch('flota');
+  const watchedRawFleet = form.watch('rawFlota');
 
   ///* global state ---------------------
   const selectedHour = useAgendamientoVentasStore(s => s.selectedHour);
@@ -61,6 +62,8 @@ const ConfirmInstallScheduleVentasModal: React.FC<
         limitDate: dayjs()
           .add(TimerAgendamientoCacheEnum.initialAgendamientoMinutes, 'minutes')
           .format(),
+
+        rawFlota: watchedRawFleet,
       },
     });
 

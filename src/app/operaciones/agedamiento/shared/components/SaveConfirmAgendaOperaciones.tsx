@@ -9,6 +9,7 @@ import {
   Agendamiento,
   agendamientoOperacionesConfirmFormSchema,
   Flota,
+  humanizeStringArr,
   Preventa,
   SolicitudServicio,
   ToastWrapper,
@@ -50,7 +51,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
     useCustomStepper({
       steps,
       // TODO: remove this
-      initialStep: 1,
+      // initialStep: 1,
     });
 
   ///* global state ---------------------
@@ -93,6 +94,9 @@ const SaveConfirmAgendaOperaciones: React.FC<
       preventa: preventa_data?.id!,
       flota: agendamiento?.flota_data?.id!,
       rawFlota: agendamiento?.flota_data,
+      nap: agendamiento?.nap!,
+
+      observacion_llamada: agendamiento?.observacion_llamada || '',
 
       // zona: solicitud_servicio_data?.zona_data?.id!, // rome todo y nose xq
     } as unknown as SaveConfirmAgendaOperaciones);
@@ -109,9 +113,12 @@ const SaveConfirmAgendaOperaciones: React.FC<
       disableNextStepBtn={disableNextStepBtn}
       // action btns
       onCancel={() => navigate(returnUrlAgendamientoOperacionesPage)}
-      onSave={handleSubmit(onSave, () => {
-        console.log({ errors: form.formState.errors });
-        ToastWrapper.error('Faltan campos requeridos');
+      onSave={handleSubmit(onSave, errors => {
+        console.log({ errors });
+
+        const keys = humanizeStringArr(Object.keys(errors)).join(', ');
+
+        ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
     >
       {/* ========================= Datos Generales ========================= */}

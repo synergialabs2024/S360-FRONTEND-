@@ -27,6 +27,9 @@ const InstallationScheduleComponent: React.FC<
   const isComponentBlocked = useAgendamientoVentasStore(
     s => s.isComponentBlocked,
   );
+  const fleetsByZoneLimitData = useAgendamientoVentasStore(
+    s => s.fleetsByZoneLimitData,
+  );
 
   ///* form ---------------------
   const watchedRawFleet = form.watch('rawFlota');
@@ -72,6 +75,11 @@ const InstallationScheduleComponent: React.FC<
 
     if (optionsPks.length > 0) {
       form.setValue('flota', optionsPks[currentOptionIdx]);
+
+      const rawFleet = fleetsByZoneLimitData.find(
+        fleet => fleet?.id === optionsPks[currentOptionIdx],
+      );
+      form.setValue('rawFlota', rawFleet as any);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOptionIdx, isMounted]);

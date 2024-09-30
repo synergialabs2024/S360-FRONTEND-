@@ -11,7 +11,7 @@ import {
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { EntidadFinanciera, MetodoPago } from '../../administration';
 import { Tarjeta } from '../../cobranza';
-import { Nap } from '../../infraestructura';
+import { NapLimitData } from '../../infraestructura';
 import { PlanInternet } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
 
@@ -103,5 +103,5 @@ export interface Preventa {
   metodo_pago_data?: MetodoPago;
   entidad_financiera_data?: EntidadFinanciera;
   tarjeta_data?: Tarjeta;
-  nap_data?: Nap;
+  nap_data?: NapLimitData;
 }

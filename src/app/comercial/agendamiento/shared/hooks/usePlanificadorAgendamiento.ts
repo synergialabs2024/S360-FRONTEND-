@@ -52,6 +52,9 @@ export const usePlanificadorAgendamiento = ({
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.setAvailableFleetsByZonePks,
   );
+  const setFleetsByZoneLimitData = useAgendamientoVentasStore(
+    s => s.setFleetsByZoneLimitData,
+  );
   const setAvailableTimeMap = useAgendamientoVentasStore(
     s => s.setAvailableTimeMap,
   );
@@ -159,6 +162,7 @@ export const usePlanificadorAgendamiento = ({
         form.setValue('fecha_instalacion', (res.data as any)?.selectedDate);
         form.setValue('flota', (res.data as any)?.flotaId);
         form.setValue('hora_instalacion', (res.data as any)?.selectedHour);
+        form.setValue('rawFlota', (res.data as any)?.rawFlota);
 
         // start timer ------------
         const timerOtp = dayjs((res.data as any)?.limitDate).diff(
@@ -260,6 +264,19 @@ export const usePlanificadorAgendamiento = ({
               .filter((id): id is number => id !== undefined) || [],
           flotaPk: preventa?.flota || 0,
         }),
+      );
+      setFleetsByZoneLimitData(
+        flotasPagingRes?.data?.items
+          ?.map(fleet => ({
+            name: fleet?.name,
+            id: fleet?.id,
+            state: fleet?.state,
+            auxiliar_data: fleet?.auxiliar_data,
+            lider_data: fleet?.lider_data,
+            uuid: fleet?.uuid,
+            zonas: fleet?.zonas,
+          }))
+          .filter(Boolean) || [],
       );
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,3 +1,5 @@
+import { FlotaLimitData } from '@/shared';
+
 ///* CACHE - Install schedule --------------------
 export type InstallScheduleCacheData = {
   selectedHour: string; // HH:MM:SS
@@ -12,7 +14,7 @@ export type InstallScheduleCacheData = {
   selectedHourUUID?: string;
 
   // helpers
-  flotaName?: string;
+  rawFlota?: FlotaLimitData;
 } | null;
 
 export enum CacheBaseKeysPreventaEnum {
