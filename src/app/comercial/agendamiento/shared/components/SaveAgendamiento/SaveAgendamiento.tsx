@@ -11,7 +11,7 @@ import {
 } from '@/actions/app';
 import { ToastWrapper } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
-import { Preventa, SolicitudServicio } from '@/shared/interfaces';
+import { Flota, Preventa, SolicitudServicio } from '@/shared/interfaces';
 import { agendamientoVentasFormSchema } from '@/shared/utils';
 import { useAgendamientoVentasStore } from '@/store/app';
 import { returnUrlAgendamientoVentasPage } from '../../../pages/tables/AgendamientoVentasMainPage';
@@ -40,6 +40,8 @@ export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
     entidadFinancieraName?: string;
     tarjetaName?: string;
     paymentMethodName?: string;
+
+    rawFlota?: Flota;
   };
 
 const steps = ['Datos generales', 'Servicio y Ubicación', 'Agendamiento'];

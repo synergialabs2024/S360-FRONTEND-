@@ -47,16 +47,17 @@ const ScheduleInstallAgendaOpe: React.FC<ScheduleInstallAgendaOpeProps> = ({
               color={!isEdittingSchedule ? 'primary' : 'secondary'}
               label={!isEdittingSchedule ? 'Actualizar' : 'Horarios'}
               onClick={() => {
-                const isEditting =
-                  useAgendamientoOperacionesStore.getState().isEdittingSchedule;
-                if (!isEditting) {
-                  setEdittingSchedule(true);
+                // const isEditting =
+                //   useAgendamientoOperacionesStore.getState().isEdittingSchedule;
+                if (!isComponentBlocked) {
+                  setEdittingSchedule(!isEdittingSchedule);
                   return;
                 }
 
-                ToastWrapper.warning(
-                  'Horario ya seleccionado, debe esperar a que se completen los 10 minutos antes de poder editar de nuevo',
-                );
+                isComponentBlocked &&
+                  ToastWrapper.warning(
+                    'Horario ya seleccionado, debe esperar a que se completen los 10 minutos antes de poder editar de nuevo',
+                  );
               }}
             />
           </>
@@ -89,6 +90,7 @@ const ScheduleInstallAgendaOpe: React.FC<ScheduleInstallAgendaOpeProps> = ({
               form={form as any}
               preventa={agendamiento.preventa_data!}
               cacheKey={`${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`}
+              showFleetName
             />
           </>
         )}

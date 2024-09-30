@@ -8,6 +8,7 @@ import { usePlanificadorAgendamiento } from '@/app/comercial/agendamiento/shared
 import {
   Agendamiento,
   agendamientoOperacionesConfirmFormSchema,
+  Flota,
   Preventa,
   SolicitudServicio,
   ToastWrapper,
@@ -34,6 +35,8 @@ export type SaveConfirmAgendaOperaciones = Partial<SolicitudServicio> &
     thereAreNaps?: boolean;
 
     planName?: string;
+
+    rawFlota?: Flota;
   };
 
 const SaveConfirmAgendaOperaciones: React.FC<
@@ -89,6 +92,8 @@ const SaveConfirmAgendaOperaciones: React.FC<
 
       preventa: preventa_data?.id!,
       flota: agendamiento?.flota_data?.id!,
+      rawFlota: agendamiento?.flota_data,
+
       // zona: solicitud_servicio_data?.zona_data?.id!, // rome todo y nose xq
     } as unknown as SaveConfirmAgendaOperaciones);
   }, [agendamiento, reset, setActivePreventa]);
