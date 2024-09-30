@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 
-import { CacheBaseKeysPreventaEnum } from '@/actions/app';
 import { Preventa } from '@/shared';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
@@ -13,11 +12,12 @@ import HourInstallSchedulePaperAndCountdown from './HourInstallSchedulePaperAndC
 export type InstallationScheduleComponentProps = {
   form: UseFormReturn<SaveFormDataAgendaVentas>;
   preventa: Preventa;
+  cacheKey: string;
 };
 
 const InstallationScheduleComponent: React.FC<
   InstallationScheduleComponentProps
-> = ({ form, preventa }) => {
+> = ({ form, preventa, cacheKey }) => {
   ///* global state ---------------------
   const availableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.availableFleetsByZonePks,
@@ -110,11 +110,8 @@ const InstallationScheduleComponent: React.FC<
         isOpen={isOpenModal}
         onClose={() => setIsOpenModal(false)}
         preventaId={preventa?.id!}
-        preventaUUID={preventa?.uuid!}
         form={form}
-        cackeKeyBase={
-          CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS
-        }
+        cacheKey={cacheKey}
       />
     </>
   );

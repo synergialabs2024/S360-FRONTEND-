@@ -89,7 +89,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
 
       preventa: preventa_data?.id!,
       flota: agendamiento?.flota_data?.id!,
-      zona: solicitud_servicio_data?.zona_data?.id!,
+      // zona: solicitud_servicio_data?.zona_data?.id!, // rome todo y nose xq
     } as unknown as SaveConfirmAgendaOperaciones);
   }, [agendamiento, reset, setActivePreventa]);
 

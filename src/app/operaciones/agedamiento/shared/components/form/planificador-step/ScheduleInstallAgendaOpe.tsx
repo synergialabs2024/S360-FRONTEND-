@@ -2,8 +2,9 @@ import { UseFormReturn } from 'react-hook-form';
 import { LuCalendarSearch } from 'react-icons/lu';
 import { MdEditCalendar } from 'react-icons/md';
 
+import { CacheBaseKeysPreventaEnum } from '@/actions/app';
 import { InstallationScheduleComponent } from '@/app/comercial/agendamiento/shared/components/planificador-step';
-import { Agendamiento, gridSize } from '@/shared';
+import { Agendamiento, gridSize, ToastWrapper } from '@/shared';
 import {
   CustomTextFieldNoForm,
   SingleIconButton,
@@ -45,7 +46,18 @@ const ScheduleInstallAgendaOpe: React.FC<ScheduleInstallAgendaOpeProps> = ({
               }
               color={!isEdittingSchedule ? 'primary' : 'secondary'}
               label={!isEdittingSchedule ? 'Actualizar' : 'Horarios'}
-              onClick={() => setEdittingSchedule(!isEdittingSchedule)}
+              onClick={() => {
+                const isEditting =
+                  useAgendamientoOperacionesStore.getState().isEdittingSchedule;
+                if (!isEditting) {
+                  setEdittingSchedule(true);
+                  return;
+                }
+
+                ToastWrapper.warning(
+                  'Horario ya seleccionado, debe esperar a que se completen los 10 minutos antes de poder editar de nuevo',
+                );
+              }}
             />
           </>
         }
@@ -76,6 +88,7 @@ const ScheduleInstallAgendaOpe: React.FC<ScheduleInstallAgendaOpeProps> = ({
             <InstallationScheduleComponent
               form={form as any}
               preventa={agendamiento.preventa_data!}
+              cacheKey={`${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`}
             />
           </>
         )}

@@ -24,6 +24,7 @@ import {
 } from '@/shared';
 import { reorderOptionsPks } from '@/shared/helpers';
 import {
+  useAgendamientoOperacionesStore,
   useAgendamientoVentasStore,
   useParametrosSistemaStore,
 } from '@/store/app';
@@ -63,6 +64,11 @@ export const usePlanificadorAgendamiento = ({
   const setSelectedHour = useAgendamientoVentasStore(s => s.setSelectedHour);
   const setCachedData = useAgendamientoVentasStore(s => s.setCachedData);
   const startTimer = useGenericCountdownStore(s => s.start);
+
+  // agenda pyl
+  const setEdittingSchedule = useAgendamientoOperacionesStore(
+    s => s.setIsEdittingSchedule,
+  );
 
   //* effects ------------------------
   useEffect(() => {
@@ -147,6 +153,8 @@ export const usePlanificadorAgendamiento = ({
         setCachedData(cacheData);
         setIsComponentBlocked(true);
         setSelectedHour((res.data as any)?.selectedHour);
+
+        setEdittingSchedule(true); // agenda pyl
 
         form.setValue('fecha_instalacion', (res.data as any)?.selectedDate);
         form.setValue('flota', (res.data as any)?.flotaId);

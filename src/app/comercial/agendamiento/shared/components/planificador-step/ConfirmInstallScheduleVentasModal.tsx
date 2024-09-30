@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import { UseFormReturn } from 'react-hook-form';
 
 import {
-  CacheBaseKeysPreventaEnum,
   COUNTDOWN_AGENDA_VENTAS_ID,
   InstallScheduleCacheData,
   TempBlockPlanificadorData,
@@ -22,14 +21,14 @@ export type ConfirmInstallScheduleVentasModalProps = {
   onClose: () => void;
 
   preventaId: number;
-  preventaUUID: string;
-  cackeKeyBase: CacheBaseKeysPreventaEnum;
   form: UseFormReturn<SaveFormDataAgendaVentas>;
+
+  cacheKey: string;
 };
 
 const ConfirmInstallScheduleVentasModal: React.FC<
   ConfirmInstallScheduleVentasModalProps
-> = ({ isOpen, onClose, form, preventaId, preventaUUID }) => {
+> = ({ isOpen, onClose, form, preventaId, cacheKey }) => {
   ///* form ---------------------
   const watchFechaInstalacion = form.watch('fecha_instalacion');
   const watchFlota = form.watch('flota');
@@ -50,7 +49,7 @@ const ConfirmInstallScheduleVentasModal: React.FC<
 
     /// set cache ------------
     await setCache.mutateAsync({
-      key: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventaUUID}`,
+      key: cacheKey,
       value: {
         selectedDate: watchFechaInstalacion,
         selectedHour: selectedHour!,
@@ -75,7 +74,7 @@ const ConfirmInstallScheduleVentasModal: React.FC<
         useGenericCountdownStore.getState().clearAll();
         setIsComponentBlocked(false);
         await setCacheClear.mutateAsync({
-          key: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventaUUID}`,
+          key: cacheKey,
           value: null,
         });
       },
@@ -98,7 +97,6 @@ const ConfirmInstallScheduleVentasModal: React.FC<
       {
         enableToast: false,
         customOnSuccess: data => {
-          console.log('tempBlockHourPlanificador', { data });
           onSucessTempBlock(data as Planificador);
         },
       },
