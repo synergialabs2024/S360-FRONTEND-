@@ -48,8 +48,6 @@ const ConfirmInstallScheduleVentasModal: React.FC<
       t => t.hora === selectedHour,
     )?.uuid;
 
-    console.log('selectedHourUUID', { selectedHourUUID });
-
     /// set cache ------------
     await setCache.mutateAsync({
       key: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventaUUID}`,

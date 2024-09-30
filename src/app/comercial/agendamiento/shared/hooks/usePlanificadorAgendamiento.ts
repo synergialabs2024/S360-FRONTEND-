@@ -45,6 +45,7 @@ export const usePlanificadorAgendamiento = ({
   ///* form ---------------------
   const watchedFechaInstalacion = form.watch('fecha_instalacion');
   const watchedFleet = form.watch('flota');
+  const watchedZone = form.watch('zona');
 
   ///* global state ============================
   const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
@@ -99,9 +100,9 @@ export const usePlanificadorAgendamiento = ({
     isLoading: isLoadingFlotas,
     isRefetching: isRefetchingFlotas,
   } = useFetchFlotas({
-    enabled: isMounted && !!preventa?.solicitud_servicio_data?.zona,
+    enabled: isMounted && !!watchedZone,
     params: {
-      zonas: preventa?.solicitud_servicio_data?.zona! as any, // filter by pk not [pk]
+      zonas: watchedZone! as any, // filter by pk not [pk]
       page_size: 900,
     },
   });

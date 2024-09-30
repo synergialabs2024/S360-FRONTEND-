@@ -4,6 +4,7 @@ import { InternetPlanPartSaveAgendaForm } from '@/app/comercial/agendamiento/sha
 import type { Agendamiento } from '@/shared';
 import { CustomTextFieldNoForm } from '@/shared/components';
 import type { SaveConfirmAgendaOperaciones } from '../SaveConfirmAgendaOperaciones';
+import { ScheduleInstallAgendaOpe } from './planificador-step';
 
 export type ServiceCoordinationConfirmAgendaStepProps = {
   form: UseFormReturn<SaveConfirmAgendaOperaciones>;
@@ -13,8 +14,6 @@ export type ServiceCoordinationConfirmAgendaStepProps = {
 const ServiceCoordinationConfirmAgendaStep: React.FC<
   ServiceCoordinationConfirmAgendaStepProps
 > = ({ agendamiento, form }) => {
-  console.log('ServiceCoordinationConfirmAgendaStep', agendamiento);
-
   return (
     <>
       {/* ------------------ plan ------------------ */}
@@ -47,6 +46,14 @@ const ServiceCoordinationConfirmAgendaStep: React.FC<
           disabled
         />
       </>
+
+      {/* ------------------ Schedule ------------------ */}
+      <>
+        <ScheduleInstallAgendaOpe form={form} agendamiento={agendamiento!} />
+      </>
+
+      {/* ------------------ NAP ------------------ */}
+      <>NAP</>
     </>
   );
 };

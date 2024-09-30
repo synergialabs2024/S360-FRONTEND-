@@ -2,6 +2,7 @@ import { EstadoLlamadaEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
 import { Preventa, SolicitudServicio } from '../../comercial';
+import { FlotaLimitData } from '../../mante-operacion';
 
 export interface AgendamientosPaginatedRes {
   status: number;
@@ -56,6 +57,7 @@ export interface Agendamiento {
   solicitud_servicio_data?: SolicitudServicio;
   preventa_data?: Preventa;
   vendedor_data?: SystemUserLimitData;
+  flota_data?: FlotaLimitData;
 }
 
 export type EncuestaAgenda = {};

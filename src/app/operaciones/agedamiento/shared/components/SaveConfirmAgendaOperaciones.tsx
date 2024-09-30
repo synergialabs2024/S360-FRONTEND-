@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { CacheBaseKeysPreventaEnum } from '@/actions/app';
+import { usePlanificadorAgendamiento } from '@/app/comercial/agendamiento/shared/hooks';
 import {
   Agendamiento,
   agendamientoOperacionesConfirmFormSchema,
@@ -11,6 +13,7 @@ import {
   ToastWrapper,
 } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
+import { useAgendamientoVentasStore } from '@/store/app';
 import { returnUrlAgendamientoOperacionesPage } from '../../pages/tables/AgendamientosMainPage';
 import {
   GeneralDataConfirmAgendaStep,
@@ -43,7 +46,14 @@ const SaveConfirmAgendaOperaciones: React.FC<
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
+      // TODO: remove this
+      initialStep: 1,
     });
+
+  ///* global state ---------------------
+  const setActivePreventa = useAgendamientoVentasStore(
+    s => s.setActivePreventa,
+  );
 
   ///* form ---------------------
   const form = useForm<SaveConfirmAgendaOperaciones>({
@@ -51,6 +61,11 @@ const SaveConfirmAgendaOperaciones: React.FC<
     defaultValues: {},
   });
   const { handleSubmit, reset } = form;
+
+  usePlanificadorAgendamiento({
+    cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`,
+    form: form as any,
+  });
 
   ///* handlers ---------------------
   const onSave = (data: SaveConfirmAgendaOperaciones) => {
@@ -64,15 +79,19 @@ const SaveConfirmAgendaOperaciones: React.FC<
     const { solicitud_servicio_data, preventa_data, ...rest } =
       agendamiento || {};
 
+    setActivePreventa(preventa_data!); // usePlanificadorAgendamiento
+
     reset({
       ...rest,
       ...solicitud_servicio_data,
       ...preventa_data,
       planName: preventa_data?.plan_internet_data?.name,
 
-      // zona: solicitud_servicio_data?.zona_data?.id!,
+      preventa: preventa_data?.id!,
+      flota: agendamiento?.flota_data?.id!,
+      zona: solicitud_servicio_data?.zona_data?.id!,
     } as unknown as SaveConfirmAgendaOperaciones);
-  }, [agendamiento, reset]);
+  }, [agendamiento, reset, setActivePreventa]);
 
   return (
     <StepperBoxScene
