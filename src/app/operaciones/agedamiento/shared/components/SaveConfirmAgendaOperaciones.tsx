@@ -12,7 +12,10 @@ import {
 } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { returnUrlAgendamientoOperacionesPage } from '../../pages/tables/AgendamientosMainPage';
-import { GeneralDataConfirmAgendaStep } from './form';
+import {
+  GeneralDataConfirmAgendaStep,
+  ServiceCoordinationConfirmAgendaStep,
+} from './form';
 
 export type SaveConfirmAgendaOperacionesProps = {
   agendamiento: Agendamiento;
@@ -26,6 +29,8 @@ export type SaveConfirmAgendaOperaciones = Partial<SolicitudServicio> &
   Partial<Agendamiento> & {
     thereIsCoverage?: boolean;
     thereAreNaps?: boolean;
+
+    planName?: string;
   };
 
 const SaveConfirmAgendaOperaciones: React.FC<
@@ -63,6 +68,8 @@ const SaveConfirmAgendaOperaciones: React.FC<
       ...rest,
       ...solicitud_servicio_data,
       ...preventa_data,
+      planName: preventa_data?.plan_internet_data?.name,
+
       // zona: solicitud_servicio_data?.zona_data?.id!,
     } as unknown as SaveConfirmAgendaOperaciones);
   }, [agendamiento, reset]);
@@ -92,6 +99,12 @@ const SaveConfirmAgendaOperaciones: React.FC<
       )}
 
       {/* ========================= Servicio y Coordinacion ========================= */}
+      {activeStep === 1 && (
+        <ServiceCoordinationConfirmAgendaStep
+          form={form}
+          agendamiento={agendamiento!}
+        />
+      )}
     </StepperBoxScene>
   );
 };
