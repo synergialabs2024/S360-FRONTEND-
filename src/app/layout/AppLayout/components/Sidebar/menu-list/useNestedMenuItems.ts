@@ -571,11 +571,11 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_ROUTER, {
               id: 'routers',
               title: 'Router',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.routersNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'traficos',

@@ -28,11 +28,11 @@ export interface Router {
   tipo_router: string;
 
   ///* fk
-  nodo: number;
-  olt: number;
-  pais: number;
-  provincia: number;
-  ciudad: number;
-  zona: number;
-  sector: number;
+  nodo?: number;
+  olt?: number;
+  pais?: number;
+  provincia?: number;
+  ciudad?: number;
+  zona?: number;
+  sector?: number;
 }

@@ -287,4 +287,15 @@ export const ROUTER_PATHS = {
     consultasBuro: 'consultas-buro',
     consultasBuroNav: '/supervision-comercial/consultas-buro',
   },
+
+  /////* Administración de Red ----------------
+  administracionRed: {
+    root: 'administracion-red',
+
+    ///* routers
+    routers: 'routers',
+    routersCrear: 'routers/crear',
+    routersEditar: 'routers/editar/:uuid',
+    routersNav: '/administracion-red/routers',
+  },
 };

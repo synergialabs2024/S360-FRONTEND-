@@ -523,6 +523,27 @@ const PlanificadorFlotaPage = Loadable(
   ),
 );
 
+///* Administracion red ------------
+const AdministracionRedModule = Loadable(
+  lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
+);
+const RoutersPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/router/pages/tables/RoutersPage'),
+  ),
+);
+const CreateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/CreateRouterPage'),
+  ),
+);
+const UpdateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
+  ),
+);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -1060,6 +1081,28 @@ const AppRouter = createBrowserRouter([
           },
         ],
       },
+
+      //////////* Administracion Red ------------
+      {
+        path: ROUTER_PATHS.administracionRed.root,
+        element: <AdministracionRedModule />,
+        children: [
+          ///* router
+          {
+            path: ROUTER_PATHS.administracionRed.routers,
+            element: <RoutersPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.routersCrear,
+            element: <CreateRouterPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.routersEditar,
+            element: <UpdateRouterPage />,
+          },
+        ],
+      },
+
       {
         path: '*',
         element: <Error404 />,
