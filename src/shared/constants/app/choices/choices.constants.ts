@@ -414,3 +414,8 @@ export enum EstadoValidacionAceptacionEnumChoice {
   VALIDADO = 'VALIDADO', // 3 ok a la 1ra
   CORREGIDO = 'CORREGIDO', // corrige ante eventualidad
 }
+
+export enum RouterEnumChoice {
+  MIKROTIK = 'MIKROTIK',
+}
+export const ROUTER_ARRAY_CHOICES = [RouterEnumChoice.MIKROTIK];

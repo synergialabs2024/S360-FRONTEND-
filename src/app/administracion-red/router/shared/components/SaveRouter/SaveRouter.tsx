@@ -1,17 +1,28 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
   CreateRouterParamsBase,
   useCreateRouter,
+  useFetchCiudades,
+  useFetchNodos,
+  useFetchOLTs,
+  useFetchPaises,
+  useFetchProvincias,
+  useFetchSectores,
+  useFetchZonas,
   useUpdateRouter,
 } from '@/actions/app';
 import {
   CustomAutocomplete,
+  CustomAutocompleteArrString,
+  CustomCoordsTextField,
   CustomNumberTextField,
+  CustomPasswordTextField,
   CustomTextField,
+  InputAndBtnGridSpace,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
@@ -28,6 +39,17 @@ import {
 } from '@/shared/interfaces';
 import { routerFormSchema } from '@/shared/utils';
 import { returnUrlRoutersPage } from '../../../pages/tables/RoutersPage';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import {
+  ROUTER_ARRAY_CHOICES,
+  SAVE_ROUTER_PERMISSIONS,
+  ToastWrapper,
+  useLoaders,
+} from '@/shared';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { MdEdit } from 'react-icons/md';
+import { useUiConfirmModalStore } from '@/store/ui';
 
 export interface SaveRouterProps {
   title: string;
@@ -37,7 +59,19 @@ export interface SaveRouterProps {
 type SaveFormData = CreateRouterParamsBase & {};
 
 const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
+  useCheckPermissionsArray(SAVE_ROUTER_PERMISSIONS);
+
+  ///* local state -----------------
+  const [canWritePassword, setCanWritePassword] = useState<boolean>(true);
+
+  ///* hooks -----------------------
   const navigate = useNavigate();
+
+  ///* global state ----------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* form
   const form = useForm<SaveFormData>({
@@ -52,6 +86,99 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
     reset,
     formState: { errors, isValid },
   } = form;
+
+  const watchedPais = form.watch('pais');
+  const watchedProvincia = form.watch('provincia');
+  const watchedCiudad = form.watch('ciudad');
+  const watchedZona = form.watch('zona');
+  const watchedNodo = form.watch('nodo');
+
+  const { Map, latLng, napsByCoords, setLatLng } = useMapComponent({
+    form,
+    initialCoords: router?.id ? router?.coordenadas : '',
+  });
+  useLocationCoords({
+    isEditting: !!router?.id,
+    form,
+    setLatLng,
+  });
+
+  ///* fetch data
+  const {
+    data: paisesPagingRes,
+    isLoading: isLoadingPaises,
+    isRefetching: isRefetchingPaises,
+  } = useFetchPaises({
+    params: {
+      page_size: 1000,
+    },
+  });
+  const {
+    data: provinciasPagingRes,
+    isLoading: isLoadingProvincias,
+    isRefetching: isRefetchingProvincias,
+  } = useFetchProvincias({
+    enabled: !!watchedPais,
+    params: {
+      pais: watchedPais,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: ciudadesPagingRes,
+    isLoading: isLoadingCiudades,
+    isRefetching: isRefetchingCiudades,
+  } = useFetchCiudades({
+    enabled: !!watchedProvincia,
+    params: {
+      provincia: watchedProvincia,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: zonasPagingRes,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    enabled: !!watchedCiudad,
+    params: {
+      ciudad: watchedCiudad,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: sectoresPagingRes,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
+  } = useFetchSectores({
+    enabled: !!watchedZona,
+    params: {
+      zona: watchedZona,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: nodosPagingRes,
+    isLoading: isLoadingNodos,
+    isRefetching: isRefetchingNodos,
+  } = useFetchNodos({
+    enabled: !!watchedCiudad,
+    params: {
+      page_size: 900,
+      ciudad: watchedCiudad,
+    },
+  });
+  const {
+    data: oltsPagingRes,
+    isLoading: isLoadingOlts,
+    isRefetching: isRefetchingOlts,
+  } = useFetchOLTs({
+    enabled: !!watchedNodo,
+    params: {
+      page_size: 900,
+      nodo: watchedNodo,
+    },
+  });
 
   ///* mutations
   const createRouterMutation = useCreateRouter({
@@ -83,6 +210,73 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
     if (!router?.id) return;
     reset(router);
   }, [router, reset]);
+  // alerts
+  useEffect(() => {
+    if (isLoadingProvincias || isRefetchingProvincias || !watchedPais) return;
+    !provinciasPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron provincias para el país seleccionado',
+      );
+    if (isLoadingCiudades || isRefetchingCiudades || !watchedProvincia) return;
+    !ciudadesPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron ciudades para la provincia seleccionada',
+      );
+    if (isLoadingZonas || isRefetchingZonas || !watchedCiudad) return;
+    !zonasPagingRes?.data?.items?.length &&
+      ToastWrapper.error('No se encontraron zonas para la ciudad seleccionada');
+    if (isLoadingSectores || isRefetchingSectores || !watchedZona) return;
+    !sectoresPagingRes?.data?.items?.length &&
+      ToastWrapper.error('No se encontraron sector para la zona seleccionada');
+    if (isLoadingNodos || isRefetchingNodos || !watchedCiudad) return;
+    !nodosPagingRes?.data?.items?.length &&
+      ToastWrapper.error('No se encontraron nodos para la ciudad seleccionada');
+    if (isLoadingOlts || isRefetchingOlts || !watchedNodo) return;
+    !oltsPagingRes?.data?.items?.length &&
+      ToastWrapper.error('No se encontraron olt para el nodo seleccionado');
+  }, [
+    watchedPais,
+    watchedProvincia,
+    watchedCiudad,
+    watchedZona,
+    watchedNodo,
+    provinciasPagingRes,
+    ciudadesPagingRes,
+    zonasPagingRes,
+    sectoresPagingRes,
+    nodosPagingRes,
+    oltsPagingRes,
+    isLoadingProvincias,
+    isLoadingCiudades,
+    isLoadingZonas,
+    isLoadingSectores,
+    isLoadingNodos,
+    isLoadingOlts,
+    isRefetchingProvincias,
+    isRefetchingCiudades,
+    isRefetchingZonas,
+    isRefetchingSectores,
+    isRefetchingNodos,
+    isRefetchingOlts,
+  ]);
+
+  const customLoader =
+    isLoadingPaises ||
+    isRefetchingPaises ||
+    isLoadingProvincias ||
+    isRefetchingProvincias ||
+    isLoadingCiudades ||
+    isRefetchingCiudades ||
+    isLoadingZonas ||
+    isRefetchingZonas ||
+    isLoadingSectores ||
+    isRefetchingSectores ||
+    isLoadingNodos ||
+    isRefetchingNodos ||
+    isLoadingOlts ||
+    isRefetchingOlts;
+
+  useLoaders(customLoader);
 
   return (
     <SingleFormBoxScene
@@ -108,8 +302,8 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         error={errors.ip}
         helperText={errors.ip?.message}
         size={gridSizeMdLg6}
+        ignoreTransform
       />
-
       <CustomTextField
         label="Username"
         name="username"
@@ -118,18 +312,37 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         error={errors.username}
         helperText={errors.username?.message}
         size={gridSizeMdLg6}
+        ignoreTransform
       />
-
-      <CustomTextField
-        label="Password"
-        name="password"
-        control={form.control}
-        defaultValue={form.getValues().password}
-        error={errors.password}
-        helperText={errors.password?.message}
-        size={gridSizeMdLg6}
+      <InputAndBtnGridSpace
+        inputNode={
+          <CustomPasswordTextField
+            label="Password"
+            name="password"
+            defaultValue={form.getValues().password}
+            control={form.control}
+            errors={errors?.password}
+            helperText={errors?.password?.message}
+            disabled={!canWritePassword}
+          />
+        }
+        showIconBtn={!!router?.id}
+        btnLabel="Cambiar Contraseña"
+        iconBtn={<MdEdit />}
+        onClick={() => {
+          !canWritePassword &&
+            setConfirmDialog({
+              isOpen: true,
+              title: 'Cambiar Contraseña',
+              subtitle:
+                '¿Está seguro que desea cambiar la contraseña de este usuario?',
+              onConfirm: () => {
+                setCanWritePassword(true);
+                setConfirmDialogIsOpen(false);
+              },
+            });
+        }}
       />
-
       <CustomTextField
         label="Usuario api"
         name="usuario_api"
@@ -138,8 +351,8 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         error={errors.usuario_api}
         helperText={errors.usuario_api?.message}
         size={gridSizeMdLg6}
+        ignoreTransform
       />
-
       <CustomNumberTextField
         label="Puerto api"
         name="puerto_api"
@@ -150,7 +363,6 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         size={gridSizeMdLg6}
         min={0}
       />
-
       <CustomTextField
         label="Clave api"
         name="clave_api"
@@ -159,8 +371,8 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         error={errors.clave_api}
         helperText={errors.clave_api?.message}
         size={gridSizeMdLg6}
+        ignoreTransform
       />
-
       <CustomTextField
         label="Direccion"
         name="direccion"
@@ -170,27 +382,18 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         helperText={errors.direccion?.message}
         size={gridSizeMdLg6}
       />
-
-      <CustomTextField
-        label="Coordenadas"
-        name="coordenadas"
-        control={form.control}
-        defaultValue={form.getValues().coordenadas}
-        error={errors.coordenadas}
-        helperText={errors.coordenadas?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomTextField
+      <CustomAutocompleteArrString
         label="Tipo router"
         name="tipo_router"
         control={form.control}
-        defaultValue={form.getValues().tipo_router}
+        defaultValue={form.getValues('tipo_router')}
+        options={ROUTER_ARRAY_CHOICES}
+        isLoadingData={false}
         error={errors.tipo_router}
         helperText={errors.tipo_router?.message}
         size={gridSizeMdLg6}
+        disableClearable
       />
-
       <SampleCheckbox
         label="state"
         name="state"
@@ -199,117 +402,128 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
         size={gridSizeMdLg6}
         isState
       />
-
-      <CustomAutocomplete<Nodo>
-        label="Nodo"
-        name="nodo"
-        // options
-        options={[] || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().nodo}
-        isLoadingData={false} // TODO: add loading
-        // vaidation
-        control={form.control}
-        error={errors.nodo}
-        helperText={errors.nodo?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomAutocomplete<OLT>
-        label="Olt"
-        name="olt"
-        // options
-        options={[] || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().olt}
-        isLoadingData={false} // TODO: add loading
-        // vaidation
-        control={form.control}
-        error={errors.olt}
-        helperText={errors.olt?.message}
-        size={gridSizeMdLg6}
-      />
-
       <CustomAutocomplete<Pais>
         label="Pais"
         name="pais"
         // options
-        options={[] || []}
+        options={paisesPagingRes?.data?.items || []}
         valueKey="name"
         actualValueKey="id"
         defaultValue={form.getValues().pais}
-        isLoadingData={false} // TODO: add loading
+        isLoadingData={isLoadingPaises || isRefetchingPaises}
         // vaidation
         control={form.control}
         error={errors.pais}
         helperText={errors.pais?.message}
-        size={gridSizeMdLg6}
       />
-
       <CustomAutocomplete<Provincia>
         label="Provincia"
         name="provincia"
         // options
-        options={[] || []}
+        options={provinciasPagingRes?.data?.items || []}
         valueKey="name"
         actualValueKey="id"
         defaultValue={form.getValues().provincia}
-        isLoadingData={false} // TODO: add loading
+        isLoadingData={isLoadingProvincias || isRefetchingProvincias}
         // vaidation
         control={form.control}
         error={errors.provincia}
         helperText={errors.provincia?.message}
         size={gridSizeMdLg6}
       />
-
       <CustomAutocomplete<Ciudad>
         label="Ciudad"
         name="ciudad"
         // options
-        options={[] || []}
+        options={ciudadesPagingRes?.data?.items || []}
         valueKey="name"
         actualValueKey="id"
         defaultValue={form.getValues().ciudad}
-        isLoadingData={false} // TODO: add loading
+        isLoadingData={isLoadingCiudades || isRefetchingCiudades}
         // vaidation
         control={form.control}
         error={errors.ciudad}
         helperText={errors.ciudad?.message}
         size={gridSizeMdLg6}
       />
-
       <CustomAutocomplete<Zona>
         label="Zona"
         name="zona"
         // options
-        options={[] || []}
+        options={zonasPagingRes?.data?.items || []}
         valueKey="name"
         actualValueKey="id"
         defaultValue={form.getValues().zona}
-        isLoadingData={false} // TODO: add loading
-        // vaidation
-        control={form.control}
-        error={errors.zona}
-        helperText={errors.zona?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomAutocomplete<Sector>
-        label="Sector"
-        name="sector"
-        // options
-        options={[] || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().sector}
-        isLoadingData={false} // TODO: add loading
+        isLoadingData={isLoadingZonas || isRefetchingZonas}
         // vaidation
         control={form.control}
         error={errors.sector}
         helperText={errors.sector?.message}
         size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<Sector>
+        label="Sector"
+        name="sector"
+        // options
+        options={sectoresPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().sector}
+        isLoadingData={isLoadingSectores || isRefetchingSectores}
+        // vaidation
+        control={form.control}
+        error={errors.sector}
+        helperText={errors.sector?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<Nodo>
+        label="Nodo"
+        name="nodo"
+        // options
+        options={nodosPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().nodo}
+        isLoadingData={isLoadingNodos || isRefetchingNodos}
+        // vaidation
+        control={form.control}
+        error={errors.nodo}
+        helperText={errors.nodo?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<OLT>
+        label="OLT"
+        name="olt"
+        // options
+        options={oltsPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().olt}
+        isLoadingData={isLoadingOlts || isRefetchingOlts}
+        // vaidation
+        control={form.control}
+        error={errors.olt}
+        helperText={errors.olt?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomCoordsTextField
+        label="Coordenadas"
+        name="coordenadas"
+        control={form.control}
+        defaultValue={form.getValues().coordenadas}
+        error={errors.coordenadas}
+        helperText={errors.coordenadas?.message}
+        onChangeValue={(value, isValidCoords) => {
+          if (!isValidCoords) return;
+          const s = value.split(',');
+          setLatLng({ lat: s[0], lng: s[1] });
+        }}
+      />
+      <Map
+        coordenadas={latLng}
+        setLatLng={setLatLng}
+        showNaps
+        naps={napsByCoords || []}
       />
     </SingleFormBoxScene>
   );
