@@ -37,11 +37,6 @@ export const oLTFormSchema = yup.object({
     .string()
     .required('El campo user es requerido')
     .max(255, 'El campo user no debe exceder los 255 caracteres'),
-  pppoe: yup
-    .string()
-    .required('El campo pppoe es requerido')
-    .max(100, 'El campo pppoe no debe exceder los 100 caracteres'),
-  ip_pppoe: yup.string().required('El campo ip pppoe es requerido'),
 
   nodo: yup
     .number()

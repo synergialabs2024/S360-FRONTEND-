@@ -303,26 +303,6 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         ignoreTransform
       />
       <CustomTextField
-        label="Pppoe"
-        name="pppoe"
-        control={form.control}
-        defaultValue={form.getValues().pppoe}
-        error={errors.pppoe}
-        helperText={errors.pppoe?.message}
-        size={gridSizeMdLg6}
-        ignoreTransform
-      />
-      <CustomTextField
-        label="Ip pppoe"
-        name="ip_pppoe"
-        control={form.control}
-        defaultValue={form.getValues().ip_pppoe}
-        error={errors.ip_pppoe}
-        helperText={errors.ip_pppoe?.message}
-        size={gridSizeMdLg6}
-        ignoreTransform
-      />
-      <CustomTextField
         label="User"
         name="user"
         control={form.control}

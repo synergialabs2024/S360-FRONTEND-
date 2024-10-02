@@ -22,8 +22,6 @@ export interface OLT {
   hostname: string;
   password: string;
   user: string;
-  pppoe: string;
-  ip_pppoe: string;
 
   created_at?: string;
   modified_at?: string;
