@@ -9,12 +9,17 @@ import {
   CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
+  ViewMoreTextModalTableCell,
 } from '@/shared/components';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Router } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
@@ -92,7 +97,6 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
-
       {
         accessorKey: 'ip',
         header: 'IP',
@@ -101,7 +105,6 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'ip'),
       },
-
       {
         accessorKey: 'username',
         header: 'USERNAME',
@@ -110,16 +113,6 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'username'),
       },
-
-      {
-        accessorKey: 'password',
-        header: 'PASSWORD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'password'),
-      },
-
       {
         accessorKey: 'usuario_api',
         header: 'USUARIO API',
@@ -128,7 +121,6 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'usuario_api'),
       },
-
       {
         accessorKey: 'puerto_api',
         header: 'PUERTO API',
@@ -153,18 +145,36 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'direccion'),
+        Cell: ({ row }) => {
+          const str = row?.original?.direccion ? row.original.direccion : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Direccion de ${row?.original?.name}`}
+            />
+          );
+        },
       },
-
       {
         accessorKey: 'coordenadas',
         header: 'COORDENADAS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'coordenadas'),
+        Cell: ({ row }) => {
+          const str = row?.original?.coordenadas
+            ? row.original.coordenadas
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Coordenadas de ${row?.original?.name}`}
+            />
+          );
+        },
       },
-
       {
         accessorKey: 'tipo_router',
         header: 'TIPO ROUTER',
@@ -173,70 +183,63 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_router'),
       },
-
       {
-        accessorKey: 'nodo',
+        accessorKey: 'nodo__name',
         header: 'NODO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nodo'),
+        Cell: ({ row }) => emptyCellNested(row, ['nodo_data', 'name']),
       },
-
       {
-        accessorKey: 'olt',
+        accessorKey: 'olt__name',
         header: 'OLT',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'olt'),
+        Cell: ({ row }) => emptyCellNested(row, ['olt_data', 'name']),
       },
-
       {
-        accessorKey: 'pais',
+        accessorKey: 'pais__name',
         header: 'PAIS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'pais'),
+        Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name']),
       },
-
       {
-        accessorKey: 'provincia',
+        accessorKey: 'provincia__name',
         header: 'PROVINCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'provincia'),
+        Cell: ({ row }) => emptyCellNested(row, ['provincia_data', 'name']),
       },
-
       {
-        accessorKey: 'ciudad',
+        accessorKey: 'ciudad__name',
         header: 'CIUDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ciudad'),
+        Cell: ({ row }) => emptyCellNested(row, ['ciudad_data', 'name']),
       },
 
       {
-        accessorKey: 'zona',
+        accessorKey: 'zona__name',
         header: 'ZONA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'zona'),
+        Cell: ({ row }) => emptyCellNested(row, ['zona_data', 'name']),
       },
-
       {
-        accessorKey: 'sector',
+        accessorKey: 'sector__name',
         header: 'SECTOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'sector'),
+        Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
       },
-
       {
         accessorKey: 'state',
         header: 'ESTADO',
