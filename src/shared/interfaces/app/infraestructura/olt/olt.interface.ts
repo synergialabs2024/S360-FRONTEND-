@@ -22,6 +22,8 @@ export interface OLT {
   hostname: string;
   password: string;
   user: string;
+  puerto_ssh: string;
+  puerto_snmp: string;
 
   created_at?: string;
   modified_at?: string;

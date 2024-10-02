@@ -37,6 +37,14 @@ export const oLTFormSchema = yup.object({
     .string()
     .required('El campo user es requerido')
     .max(255, 'El campo user no debe exceder los 255 caracteres'),
+  puerto_ssh: yup
+    .string()
+    .required('El campo puerto_ssh es requerido')
+    .max(255, 'El campo puerto_ssh no debe exceder los 255 caracteres'),
+  puerto_snmp: yup
+    .string()
+    .required('El campo puerto_snmp es requerido')
+    .max(255, 'El campo puerto_snmp no debe exceder los 255 caracteres'),
 
   nodo: yup
     .number()

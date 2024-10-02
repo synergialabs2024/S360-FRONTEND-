@@ -125,7 +125,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'direccion'),
       },
-
       {
         accessorKey: 'coordenadas',
         header: 'COORDENADAS',
@@ -134,7 +133,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'coordenadas'),
       },
-
       {
         accessorKey: 'puerto',
         header: 'PUERTO',
@@ -160,23 +158,21 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'user'),
       },
-
       {
-        accessorKey: 'pppoe',
-        header: 'PPPOE',
+        accessorKey: 'puerto_ssh',
+        header: 'Puerto SSH',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'pppoe'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'puerto_ssh'),
       },
-
       {
-        accessorKey: 'ip_pppoe',
-        header: 'IP PPPOE',
+        accessorKey: 'puerto_snmp',
+        header: 'Puerto SNMP',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ip_pppoe'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'puerto_snmp'),
       },
 
       {
