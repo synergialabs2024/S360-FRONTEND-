@@ -102,18 +102,17 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUserShield,
           children: [
-            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
-              id: 'paises',
-              title: 'Países',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.administracion.paisNav,
-              // target: true, // target blank
-            }),
             renderByModule(SidenavModulesEnum.ADMIN_PROVINCIAS, {
               id: 'provincias',
               title: 'Provincias',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.provinciasNav,
+            }),
+            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
+              id: 'paises',
+              title: 'Países',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.paisNav,
             }),
             renderByModule(SidenavModulesEnum.ADMIN_CIUDADES, {
               id: 'ciudades',
@@ -187,6 +186,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'tipo-comprobantes',
+              title: 'Tipo de comprobante',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {
               id: 'empresas',
@@ -226,6 +231,12 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBuilding,
           children: [
+            renderByModule(SidenavModulesEnum.COMERCIAL_SOLICITUD_SERVICIO, {
+              id: 'solicitud-servicio',
+              title: 'Solicitud de servicio',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.comercial.solicitudServicioCrearNav,
+            }),
             renderByModule(SidenavModulesEnum.COMERCIAL_PREVENTA, {
               id: 'preventas',
               title: 'Preventas',
@@ -237,12 +248,6 @@ export const useNestedMenu = () => {
               title: 'Agendamiento',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.agendamientosNav,
-            }),
-            renderByModule(SidenavModulesEnum.COMERCIAL_SOLICITUD_SERVICIO, {
-              id: 'solicitud-servicio',
-              title: 'Solicitud de servicio',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.comercial.solicitudServicioCrearNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'seguimiento-cliente',
@@ -625,46 +630,6 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
-        /////* Finanzas ----------------
-        {
-          id: 'finanzas',
-          title: 'Finanzas',
-          type: MenuItemType.COLLAPSE,
-          icon: IconRouter,
-          children: [
-            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
-              id: 'rubros-finanza',
-              title: 'Rubros financieros',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
-            }),
-            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
-              id: 'transacciones',
-              title: 'Transacciones',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
-            }),
-            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
-              id: 'saldos',
-              title: 'Saldos',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
-            }),
-            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
-              id: 'conciliacion-bancaria',
-              title: 'Conciliación bancaria',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
-            }),
-            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
-              id: 'debitos-bancarios',
-              title: 'Débitos bancarios',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
-            }),
-          ].filter(item => !!item) as NestedMenuItem[],
-        },
-
         /////* Administracion de Red ----------------
         {
           id: 'adminitracion-red',
@@ -837,6 +802,45 @@ export const useNestedMenu = () => {
               title: 'Cargos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.nomina.cargosNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+        /////* Finanzas ----------------
+        {
+          id: 'finanzas',
+          title: 'Finanzas',
+          type: MenuItemType.COLLAPSE,
+          icon: IconRouter,
+          children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'rubros-finanza',
+              title: 'Rubros financieros',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'transacciones',
+              title: 'Transacciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'saldos',
+              title: 'Saldos',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'conciliacion-bancaria',
+              title: 'Conciliación bancaria',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'debitos-bancarios',
+              title: 'Débitos bancarios',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
