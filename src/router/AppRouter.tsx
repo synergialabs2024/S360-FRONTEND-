@@ -456,6 +456,16 @@ const UpdateRadioBasePage = Loadable(
       import('@/app/infraestructura/radiobase/pages/forms/UpdateRadioBasePage'),
   ),
 );
+// RUTA
+const RutasPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/tables/RutasPage')),
+);
+const CreateRutaPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/forms/CreateRutaPage')),
+);
+const UpdateRutaPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/forms/UpdateRutaPage')),
+);
 
 ///* Mantenimiento Operaciones ------------
 const MantenimientoOperacionModule = Loadable(
@@ -949,6 +959,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.infraestructura.radiobasesEditar,
             element: <UpdateRadioBasePage />,
+          },
+
+          ///* RUTA
+          {
+            path: ROUTER_PATHS.infraestructura.rutas,
+            element: <RutasPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.rutasCrear,
+            element: <CreateRutaPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.rutasEditar,
+            element: <UpdateRutaPage />,
           },
         ],
       },

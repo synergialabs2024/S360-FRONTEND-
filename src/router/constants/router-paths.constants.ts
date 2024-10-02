@@ -251,6 +251,12 @@ export const ROUTER_PATHS = {
     radiobasesCrear: 'radiobases/crear',
     radiobasesEditar: 'radiobases/editar/:uuid',
     radiobasesNav: '/infraestructura/radiobases',
+
+    ///* ruta
+    rutas: 'rutas',
+    rutasCrear: 'rutas/crear',
+    rutasEditar: 'rutas/editar/:uuid',
+    rutasNav: '/infraestructura/rutas',
   },
 
   /////* Mantenimiento y Operación ----------------

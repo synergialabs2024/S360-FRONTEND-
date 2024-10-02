@@ -526,11 +526,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.napsNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_RUTA, {
               id: 'rutas',
               title: 'Rutas',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.infraestructura.rutasNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
