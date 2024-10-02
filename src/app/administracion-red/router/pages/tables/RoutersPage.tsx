@@ -8,6 +8,7 @@ import {
   CustomSearch,
   CustomSwitch,
   CustomTable,
+  PasswordTableCell,
   SingleTableBoxScene,
   ViewMoreTextModalTableCell,
 } from '@/shared/components';
@@ -112,6 +113,18 @@ const RoutersPage: React.FC<RoutersPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'username'),
+      },
+      {
+        accessorKey: 'password',
+        header: 'Password',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <PasswordTableCell password={row.original?.password || 'N/A'} />
+          );
+        },
       },
       {
         accessorKey: 'usuario_api',
