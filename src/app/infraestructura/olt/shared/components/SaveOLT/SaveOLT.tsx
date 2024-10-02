@@ -303,6 +303,27 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         ignoreTransform
       />
       <CustomTextField
+        label="Puerto SSH"
+        name="puerto_ssh"
+        control={form.control}
+        defaultValue={form.getValues().puerto_ssh}
+        error={errors.puerto_ssh}
+        helperText={errors.puerto_ssh?.message}
+        size={gridSizeMdLg6}
+        ignoreTransform
+      />
+      <CustomTextField
+        label="Comunidad SNMP"
+        name="comunidad_snmp"
+        control={form.control}
+        defaultValue={form.getValues().comunidad_snmp}
+        error={errors.comunidad_snmp}
+        helperText={errors.comunidad_snmp?.message}
+        size={gridSizeMdLg6}
+        ignoreTransform
+      />
+
+      <CustomTextField
         label="User"
         name="user"
         control={form.control}
