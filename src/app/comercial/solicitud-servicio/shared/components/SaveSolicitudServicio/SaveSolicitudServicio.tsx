@@ -118,6 +118,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
   const watchedIsTerceraEdad = form.watch('es_tercera_edad');
+  const watchedIsCliente = form.watch('es_cliente');
 
   ///* fetch data -----------------
   const {
@@ -227,6 +228,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           });
         }
       }
+    } else if (status === HTTPResStatusCodeEnum.CLIENTE_EXISTS_IN_DB) {
+      ToastWrapper.info(err?.response?.data?.message);
+      form.reset({
+        ...form.getValues(),
+        es_cliente: true,
+      });
     } else {
       form.reset({
         isFormBlocked: true,
@@ -383,6 +390,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       })}
       disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
     >
+      <>
+        {watchedIsCliente && (
+          <CustomCardAlert
+            sizeType="small"
+            alertMessage={'El cliente ya existe'}
+            alertSeverity="info"
+          />
+        )}
+      </>
+
       <CustomAutocompleteArrString
         label="Tipo de identificación"
         name="tipo_identificacion"
