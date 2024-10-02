@@ -8,7 +8,7 @@ export enum IdentificationTypeEnumChoice {
 export const IDENTIFICATION_TYPE_ARRAY_CHOICES = [
   IdentificationTypeEnumChoice.CEDULA,
   IdentificationTypeEnumChoice.RUC,
-  IdentificationTypeEnumChoice.PASAPORTE,
+  // IdentificationTypeEnumChoice.PASAPORTE,
 ];
 
 export enum UserRolesEnumChoice {

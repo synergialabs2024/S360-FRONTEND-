@@ -7,3 +7,9 @@ export const calcAge = (birthDate: string) => {
   const age = today.diff(formattedBirthDate, 'year');
   return age;
 };
+
+export const calcIsTerceraEdad = (birthDate: string) => {
+  const age = calcAge(birthDate);
+
+  return age >= 65;
+};

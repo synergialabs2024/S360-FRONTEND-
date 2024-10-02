@@ -21,6 +21,7 @@ import { handleAxiosError, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomAutocomplete,
   CustomAutocompleteArrString,
+  CustomCardAlert,
   CustomCellphoneTextField,
   CustomDatePicker,
   CustomIdentificacionTextField,
@@ -40,8 +41,12 @@ import {
   SalesModelsEnumChoice,
   SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
-import { gridSizeMdLg4, gridSizeMdLg6 } from '@/shared/constants/ui';
-import { calcAge } from '@/shared/helpers';
+import {
+  gridSizeMdLg4,
+  gridSizeMdLg6,
+  gridSizeMdLg8,
+} from '@/shared/constants/ui';
+import { calcAge, calcIsTerceraEdad } from '@/shared/helpers';
 import {
   HTTPResStatusCodeEnum,
   Pais,
@@ -50,6 +55,7 @@ import {
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { Grid } from '@mui/material';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
 
 export interface SaveSolicitudServicioProps {
@@ -111,6 +117,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
+  const watchedIsTerceraEdad = form.watch('es_tercera_edad');
 
   ///* fetch data -----------------
   const {
@@ -462,6 +469,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           // 1997-05-10
           const age = calcAge(value);
           form.setValue('edad', age);
+          form.setValue('es_tercera_edad', calcIsTerceraEdad(value));
+
           // apply logic (planes,promos 3era edad, etc)
         }}
       />
@@ -507,31 +516,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         size={gridSizeMdLg6}
       />
 
-      <SampleCheckbox
-        label="Es tercera edad"
-        name="es_tercera_edad"
-        control={form.control}
-        defaultValue={form.getValues().es_tercera_edad}
-        size={gridSizeMdLg4}
-        disabled
-      />
-      <SampleCheckbox
-        label="Es discapacitado"
-        name="es_discapacitado"
-        control={form.control}
-        defaultValue={form.getValues().es_discapacitado}
-        size={gridSizeMdLg4}
-        disabled
-      />
-      <SampleCheckbox
-        label="Es cliente"
-        name="es_cliente"
-        control={form.control}
-        defaultValue={form.getValues().es_cliente}
-        size={gridSizeMdLg4}
-        disabled
-      />
-
       <CustomTextField
         label="Email"
         name="email"
@@ -555,6 +539,27 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         helperText={errors.celular?.message}
         size={gridSizeMdLg6}
       />
+
+      <Grid item container xs={12} justifyContent="flex-end">
+        <Grid item {...gridSizeMdLg8}>
+          {!!watchedIsTerceraEdad && (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage={'El cliente es de tercera edad'}
+              alertSeverity="info"
+            />
+          )}
+        </Grid>
+
+        <SampleCheckbox
+          label="Es discapacitado"
+          name="es_discapacitado"
+          control={form.control}
+          defaultValue={form.getValues().es_discapacitado}
+          size={gridSizeMdLg4}
+          justifyContent="flex-end"
+        />
+      </Grid>
 
       {/* ------------- location ------------- */}
       <LocationZonePolygonFormPart
