@@ -44,3 +44,5 @@ export interface SolicitudDesbloqueoPreventa {
   gestionado_by_data?: SystemUserLimitData;
   modelo_data?: Preventa;
 }
+
+// bun ./__ts__/main.ts --ts_file="src/shared/interfaces/app/supervision-comercial/desbloqueo-preventa/desbloqueo-preventa.interface.ts" --iname=SolicitudDesbloqueoPreventa --pm=app --fcm=supervision-comercial/desbloqueo-preventa --ep="solicituddesbloqueoventas" --idmk="id" --pcn="comercial___solicituddesbloqueoventas"
