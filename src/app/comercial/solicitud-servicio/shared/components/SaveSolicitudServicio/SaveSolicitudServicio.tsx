@@ -234,9 +234,34 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       }
     } else if (status === HTTPResStatusCodeEnum.CLIENTE_EXISTS_IN_DB) {
       ToastWrapper.info(err?.response?.data?.message);
+      data?.sri_down &&
+        ToastWrapper.warning(
+          'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos manualmente',
+        );
+
+      const correctFechaNacimiento = dayjs(
+        data?.fechaNacimiento,
+        'DD/MM/YYYY',
+      ).format('YYYY-MM-DD');
+      const currentCountry = paisesPaging?.data.items.find(
+        country => country.nationality === data?.nacionalidad,
+      );
+
       form.reset({
         ...form.getValues(),
         es_cliente: true,
+
+        razon_social: data?.fullName,
+        es_discapacitado: data?.esDiscapacitado,
+        es_tercera_edad: data?.esTerceraEdad,
+        fecha_nacimiento: correctFechaNacimiento,
+        edad: data?.edad,
+        direccion: data?.domicilio,
+        isFormBlocked: false,
+        isValidIdentificacion: true,
+
+        pais: currentCountry?.id,
+        nacionalidad: data?.nacionalidad,
       });
       setClientData(data);
     } else {
