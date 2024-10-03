@@ -29,7 +29,7 @@ import {
   CustomNumberTextField,
   CustomScanLoad,
   CustomTextField,
-  CustomTypoLabelEnum,
+  CustomTypoLabel,
   InputAndBtnGridSpace,
   SampleCheckbox,
   SingleFormBoxScene,
@@ -43,7 +43,7 @@ import {
   SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
 import {
-  gridSize,
+  gridSizeMdLg12,
   gridSizeMdLg4,
   gridSizeMdLg6,
   gridSizeMdLg8,
@@ -59,6 +59,7 @@ import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
+import ServicesAlertModal from './ServicesAlertModal';
 
 export interface SaveSolicitudServicioProps {
   title: string;
@@ -237,7 +238,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ...form.getValues(),
         es_cliente: true,
       });
-      console.log('data', data);
       setClientData(data);
     } else {
       form.reset({
@@ -394,226 +394,208 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ToastWrapper.error('Faltan campos requeridos');
       })}
       disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
+      maxWidth="xl"
+      gridSizeForm={gridSizeMdLg12}
     >
-      <>
-        {watchedIsCliente && (
-          <CustomCardAlert
-            sizeType="medium"
-            alertSeverity="info"
-            alertTitle="Cliente existente"
-            alertContentNode={
-              <>
-                <Grid item container {...gridSize}>
-                  <Grid item xs={12}>
-                    <span>{`${clientData?.name} es cliente de Yiga5`}</span>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    Servicios:{' '}
-                    {clientData?.services
-                      ?.at(-1)
-                      ?.servicios?.map(servicio => (
-                        <span key={servicio.id}>
-                          {`Plan: ${servicio.perfil} - Estado: ${servicio.status_user} - `}
-                        </span>
-                      ))}
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <span>{`Línea a activar: #${clientData?.nexgt_line} `}</span>
-                  </Grid>
-                </Grid>
-              </>
-            }
-          />
-        )}
-      </>
-
-      <CustomAutocompleteArrString
-        label="Tipo de identificación"
-        name="tipo_identificacion"
-        control={form.control}
-        defaultValue={form.getValues('tipo_identificacion')}
-        options={IDENTIFICATION_TYPE_ARRAY_CHOICES}
-        isLoadingData={false}
-        error={errors.tipo_identificacion}
-        helperText={errors.tipo_identificacion?.message}
-        size={gridSizeMdLg6}
-        disableClearable
-        onChangeValue={() => {
-          clearForm();
-        }}
-      />
-      <InputAndBtnGridSpace
-        inputNode={
-          <CustomIdentificacionTextField
-            label="Identificación"
-            name="identificacion"
-            control={form.control}
-            selectedDocumentType={watchedIdentificationType}
-            defaultValue={form.getValues('identificacion')}
-            error={errors.identificacion}
-            helperText={errors.identificacion?.message}
-            onFetchCedulaRucInfo={async value => {
-              await handleFetchCedulaRucInfo(value);
-            }}
-            disabled={!watchedIdentificationType}
-            onChangeValue={value => {
-              if (!value?.length) {
-                clearForm();
-              }
-            }}
-          />
-        }
-        btnLabel="Buscar"
-        iconBtn={<CiSearch />}
-        disabledBtn={
-          watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
-        }
-        onClick={() => {
-          if (!watchedIdentification)
-            return ToastWrapper.warning(
-              'Ingrese un número de identificación válido',
-            );
-
-          if (
-            watchedIdentificationType == IdentificationTypeEnumChoice.CEDULA &&
-            watchedIdentification?.length < 10
-          )
-            return ToastWrapper.warning('Ingrese una cécula válida');
-          if (
-            watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
-            watchedIdentification?.length < 13
-          )
-            return ToastWrapper.warning('Ingrese RUC válido');
-
-          handleFetchCedulaRucInfo(watchedIdentification);
-        }}
-      />
-
-      <CustomTextField
-        label={
-          watchedIdentificationType === IdentificationTypeEnumChoice.RUC
-            ? 'Razón social'
-            : 'Nombre y Apellido'
-        }
-        name="razon_social"
-        control={form.control}
-        defaultValue={form.getValues().razon_social}
-        error={errors.razon_social}
-        helperText={errors.razon_social?.message}
-      />
-      <CustomDatePicker
-        label="Fecha nacimiento"
-        name="fecha_nacimiento"
-        control={form.control}
-        defaultValue={form.getValues().fecha_nacimiento}
-        error={errors.fecha_nacimiento}
-        helperText={errors.fecha_nacimiento?.message}
-        size={gridSizeMdLg6}
-        onChangeValue={value => {
-          // 1997-05-10
-          const age = calcAge(value);
-          form.setValue('edad', age);
-          form.setValue('es_tercera_edad', calcIsTerceraEdad(value));
-
-          // apply logic (planes,promos 3era edad, etc)
-        }}
-      />
-      <CustomNumberTextField
-        label="Edad"
-        name="edad"
-        control={form.control}
-        defaultValue={form.getValues().edad}
-        error={errors.edad}
-        helperText={errors.edad?.message}
-        size={gridSizeMdLg6}
-        min={0}
-        disabled
-      />
-      <CustomAutocomplete<Pais>
-        label="Pais"
-        name="pais"
-        valueKey="name"
-        actualValueKey="id"
-        control={form.control}
-        defaultValue={form.getValues().pais}
-        options={paisesPaging?.data.items || []}
-        isLoadingData={isCustomLoading}
-        error={errors.pais}
-        helperText={errors.pais?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomAutocomplete<any>
-        label="Nacionalidad"
-        name="nacionalidad"
-        valueKey="name"
-        actualValueKey="name"
-        control={form.control}
-        defaultValue={form.getValues().pais}
-        options={
-          paisesPaging?.data?.items?.map(country => ({
-            name: country.nationality,
-          })) || []
-        }
-        isLoadingData={isCustomLoading}
-        error={errors.pais}
-        helperText={errors.pais?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <CustomTextField
-        label="Email"
-        name="email"
-        type="email"
-        control={form.control}
-        defaultValue={form.getValues().email}
-        error={errors.email}
-        helperText={
-          errors.email
-            ? errors.email?.message
-            : 'Ingrese un correo válido al que se enviará el contrato'
-        }
-        size={gridSizeMdLg6}
-      />
-      <CustomCellphoneTextField
-        label="Celular"
-        name="celular"
-        control={form.control}
-        defaultValue={form.getValues().celular}
-        error={errors.celular}
-        helperText={errors.celular?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <Grid item container xs={12} justifyContent="flex-end">
-        <Grid item {...gridSizeMdLg8}>
-          {!!watchedIsTerceraEdad && (
-            <CustomCardAlert
-              sizeType="small"
-              alertMessage={'El cliente es de tercera edad'}
-              alertSeverity="info"
-            />
-          )}
-        </Grid>
-
-        <SampleCheckbox
-          label="Es discapacitado"
-          name="es_discapacitado"
-          control={form.control}
-          defaultValue={form.getValues().es_discapacitado}
-          size={gridSizeMdLg4}
-          justifyContent="flex-end"
+      <Grid item container>
+        <ServicesAlertModal
+          clientData={clientData}
+          watchedIsCliente={watchedIsCliente}
         />
       </Grid>
 
+      <Grid item container {...gridSizeMdLg6} spacing={2}>
+        <CustomTypoLabel text="Datos personales" />
+
+        <CustomAutocompleteArrString
+          label="Tipo de identificación"
+          name="tipo_identificacion"
+          control={form.control}
+          defaultValue={form.getValues('tipo_identificacion')}
+          options={IDENTIFICATION_TYPE_ARRAY_CHOICES}
+          isLoadingData={false}
+          error={errors.tipo_identificacion}
+          helperText={errors.tipo_identificacion?.message}
+          size={gridSizeMdLg6}
+          disableClearable
+          onChangeValue={() => {
+            clearForm();
+          }}
+        />
+        <InputAndBtnGridSpace
+          inputNode={
+            <CustomIdentificacionTextField
+              label="Identificación"
+              name="identificacion"
+              control={form.control}
+              selectedDocumentType={watchedIdentificationType}
+              defaultValue={form.getValues('identificacion')}
+              error={errors.identificacion}
+              helperText={errors.identificacion?.message}
+              onFetchCedulaRucInfo={async value => {
+                await handleFetchCedulaRucInfo(value);
+              }}
+              disabled={!watchedIdentificationType}
+              onChangeValue={value => {
+                if (!value?.length) {
+                  clearForm();
+                }
+              }}
+            />
+          }
+          btnLabel="Buscar"
+          iconBtn={<CiSearch />}
+          disabledBtn={
+            watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
+          }
+          onClick={() => {
+            if (!watchedIdentification)
+              return ToastWrapper.warning(
+                'Ingrese un número de identificación válido',
+              );
+
+            if (
+              watchedIdentificationType ==
+                IdentificationTypeEnumChoice.CEDULA &&
+              watchedIdentification?.length < 10
+            )
+              return ToastWrapper.warning('Ingrese una cécula válida');
+            if (
+              watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
+              watchedIdentification?.length < 13
+            )
+              return ToastWrapper.warning('Ingrese RUC válido');
+
+            handleFetchCedulaRucInfo(watchedIdentification);
+          }}
+        />
+
+        <CustomTextField
+          label={
+            watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+              ? 'Razón social'
+              : 'Nombre y Apellido'
+          }
+          name="razon_social"
+          control={form.control}
+          defaultValue={form.getValues().razon_social}
+          error={errors.razon_social}
+          helperText={errors.razon_social?.message}
+        />
+        <CustomDatePicker
+          label="Fecha nacimiento"
+          name="fecha_nacimiento"
+          control={form.control}
+          defaultValue={form.getValues().fecha_nacimiento}
+          error={errors.fecha_nacimiento}
+          helperText={errors.fecha_nacimiento?.message}
+          size={gridSizeMdLg6}
+          onChangeValue={value => {
+            // 1997-05-10
+            const age = calcAge(value);
+            form.setValue('edad', age);
+            form.setValue('es_tercera_edad', calcIsTerceraEdad(value));
+
+            // apply logic (planes,promos 3era edad, etc)
+          }}
+        />
+        <CustomNumberTextField
+          label="Edad"
+          name="edad"
+          control={form.control}
+          defaultValue={form.getValues().edad}
+          error={errors.edad}
+          helperText={errors.edad?.message}
+          size={gridSizeMdLg6}
+          min={0}
+          disabled
+        />
+        <CustomAutocomplete<Pais>
+          label="Pais"
+          name="pais"
+          valueKey="name"
+          actualValueKey="id"
+          control={form.control}
+          defaultValue={form.getValues().pais}
+          options={paisesPaging?.data.items || []}
+          isLoadingData={isCustomLoading}
+          error={errors.pais}
+          helperText={errors.pais?.message}
+          size={gridSizeMdLg6}
+        />
+        <CustomAutocomplete<any>
+          label="Nacionalidad"
+          name="nacionalidad"
+          valueKey="name"
+          actualValueKey="name"
+          control={form.control}
+          defaultValue={form.getValues().pais}
+          options={
+            paisesPaging?.data?.items?.map(country => ({
+              name: country.nationality,
+            })) || []
+          }
+          isLoadingData={isCustomLoading}
+          error={errors.pais}
+          helperText={errors.pais?.message}
+          size={gridSizeMdLg6}
+        />
+
+        <CustomTextField
+          label="Email"
+          name="email"
+          type="email"
+          control={form.control}
+          defaultValue={form.getValues().email}
+          error={errors.email}
+          helperText={
+            errors.email
+              ? errors.email?.message
+              : 'Ingrese un correo válido al que se enviará el contrato'
+          }
+          size={gridSizeMdLg6}
+        />
+        <CustomCellphoneTextField
+          label="Celular"
+          name="celular"
+          control={form.control}
+          defaultValue={form.getValues().celular}
+          error={errors.celular}
+          helperText={errors.celular?.message}
+          size={gridSizeMdLg6}
+        />
+
+        <Grid item container xs={12} justifyContent="flex-end">
+          <Grid item {...gridSizeMdLg8}>
+            {!!watchedIsTerceraEdad && (
+              <CustomCardAlert
+                sizeType="small"
+                alertMessage={'El cliente es de tercera edad'}
+                alertSeverity="info"
+              />
+            )}
+          </Grid>
+
+          <SampleCheckbox
+            label="¿Tiene discapacidad?"
+            name="es_discapacitado"
+            control={form.control}
+            defaultValue={form.getValues().es_discapacitado}
+            size={gridSizeMdLg4}
+            justifyContent="flex-end"
+          />
+        </Grid>
+      </Grid>
+
       {/* ------------- location ------------- */}
-      <LocationZonePolygonFormPart
-        form={form}
-        initialCoords={''}
-        isEdit={false}
-        ptLabel={CustomTypoLabelEnum.ptMiddlePosition}
-      />
+      <Grid item container {...gridSizeMdLg6} spacing={2}>
+        <LocationZonePolygonFormPart
+          form={form}
+          initialCoords={''}
+          isEdit={false}
+          // ptLabel={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+      </Grid>
 
       {/* ============= loaders ============= */}
       <CustomScanLoad isOpen={isCheckingIdentificacion} name="cedula" />

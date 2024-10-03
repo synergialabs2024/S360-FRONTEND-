@@ -22,6 +22,8 @@ export type CustomSingleButtonProps = {
   sxGrid?: SxPropsThemeType;
   justifyContent?: JustifyContentType;
   btnStyles?: BtnStylesType;
+
+  noGrid?: boolean;
 };
 
 const CustomSingleButton: React.FC<CustomSingleButtonProps> = ({
@@ -36,29 +38,49 @@ const CustomSingleButton: React.FC<CustomSingleButtonProps> = ({
   gridSizeBtn = gridSize,
   justifyContent = 'flex-start', // Default to 'flex-start'
   btnStyles,
+
+  noGrid = false,
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
   return (
-    <Grid
-      item
-      container
-      {...gridSizeBtn}
-      sx={sxGrid}
-      justifyContent={isMobile ? 'start' : justifyContent}
-    >
-      <Button
-        sx={sxBtn}
-        color={color}
-        startIcon={startIcon || null}
-        variant={variant}
-        onClick={onClick}
-        disabled={disabled}
-        style={btnStyles}
-      >
-        {label}
-      </Button>
-    </Grid>
+    <>
+      {noGrid ? (
+        <>
+          <Button
+            sx={sxBtn}
+            color={color}
+            startIcon={startIcon || null}
+            variant={variant}
+            onClick={onClick}
+            disabled={disabled}
+            style={btnStyles}
+          >
+            {label}
+          </Button>
+        </>
+      ) : (
+        <Grid
+          item
+          container
+          {...gridSizeBtn}
+          sx={sxGrid}
+          justifyContent={isMobile ? 'start' : justifyContent}
+        >
+          <Button
+            sx={sxBtn}
+            color={color}
+            startIcon={startIcon || null}
+            variant={variant}
+            onClick={onClick}
+            disabled={disabled}
+            style={btnStyles}
+          >
+            {label}
+          </Button>
+        </Grid>
+      )}
+    </>
   );
 };
 
