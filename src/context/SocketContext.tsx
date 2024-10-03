@@ -8,7 +8,7 @@ interface SocketContextType {
   socket: Socket | null;
 }
 
-const { VITE_SOCKETIO_URL, SOCKET_PATH } = getEnvs();
+const { VITE_SOCKETIO_URL, VITE_SOCKET_PATH: SOCKET_PATH } = getEnvs();
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 

@@ -8,6 +8,7 @@ import {
   ScrollableDialogProps,
 } from '@/shared/components';
 import { ClienteExist } from '@/shared/interfaces/app/comercial/solicitud-servicio/client-mikrowisp.interface';
+import { formatDataClienteMikro } from '../utils/sol-service.utils';
 
 export type ServicesAlertModalProps = {
   clientData?: ClienteExist | null;
@@ -70,18 +71,20 @@ const ServicesAlertModal: React.FC<ServicesAlertModalProps> = ({
                 Servicios:
               </Typography>
 
-              {clientData?.services
-                ?.at(-1)
+              {formatDataClienteMikro(clientData as any)
+                ?.services?.at(-1)
                 ?.servicios?.map((servicio, index) => (
                   <Box key={servicio?.id} my={1}>
                     <Typography variant="body2">
                       {`${servicio?.perfil}`}{' '}
                       <Chip
-                        label={servicio?.status_user}
+                        label={servicio?.estado}
                         color={
-                          servicio?.status_user === 'ONLINE'
+                          servicio?.estado === 'ACTIVO'
                             ? 'success'
-                            : 'error'
+                            : servicio?.estado === 'SUSPENDIDO'
+                              ? 'warning'
+                              : 'error'
                         }
                         variant="outlined"
                       />
@@ -97,7 +100,7 @@ const ServicesAlertModal: React.FC<ServicesAlertModalProps> = ({
             {/* Línea a activar */}
             <Grid item xs={12}>
               <Typography variant="body2" fontWeight="bold">
-                {`Línea a activar: #${clientData?.nexgt_line}`}
+                {`Línea a contratar: #${clientData?.nexgt_line}`}
               </Typography>
             </Grid>
           </Grid>

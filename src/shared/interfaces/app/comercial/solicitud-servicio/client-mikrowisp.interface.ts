@@ -75,4 +75,7 @@ export interface Servicio {
   ipv6_duid: string;
   last_connected: string;
   perfil: string;
+
+  // helper
+  estado?: string;
 }
