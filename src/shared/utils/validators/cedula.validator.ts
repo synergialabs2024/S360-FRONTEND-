@@ -16,7 +16,6 @@
 
 export const validarCedulaEcuador = (cedula: string): boolean => {
   if (cedula.length !== 10) {
-    console.log('Esta cédula tiene menos o más de 10 dígitos');
     return false;
   }
 

@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -42,6 +43,7 @@ import {
   SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
 import {
+  gridSize,
   gridSizeMdLg4,
   gridSizeMdLg6,
   gridSizeMdLg8,
@@ -52,10 +54,10 @@ import {
   Pais,
   SolicitudServicio,
 } from '@/shared/interfaces';
+import { ClienteExist } from '@/shared/interfaces/app/comercial/solicitud-servicio/client-mikrowisp.interface';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { Grid } from '@mui/material';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
 
 export interface SaveSolicitudServicioProps {
@@ -84,6 +86,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   ///* local state -----------------
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
+  const [clientData, setClientData] = useState<ClienteExist | null>(null);
 
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -234,6 +237,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ...form.getValues(),
         es_cliente: true,
       });
+      console.log('data', data);
+      setClientData(data);
     } else {
       form.reset({
         isFormBlocked: true,
@@ -393,9 +398,33 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       <>
         {watchedIsCliente && (
           <CustomCardAlert
-            sizeType="small"
-            alertMessage={'El cliente ya existe'}
+            sizeType="medium"
             alertSeverity="info"
+            alertTitle="Cliente existente"
+            alertContentNode={
+              <>
+                <Grid item container {...gridSize}>
+                  <Grid item xs={12}>
+                    <span>{`${clientData?.name} es cliente de Yiga5`}</span>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    Servicios:{' '}
+                    {clientData?.services
+                      ?.at(-1)
+                      ?.servicios?.map(servicio => (
+                        <span key={servicio.id}>
+                          {`Plan: ${servicio.perfil} - Estado: ${servicio.status_user} - `}
+                        </span>
+                      ))}
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <span>{`Línea a activar: #${clientData?.nexgt_line} `}</span>
+                  </Grid>
+                </Grid>
+              </>
+            }
           />
         )}
       </>

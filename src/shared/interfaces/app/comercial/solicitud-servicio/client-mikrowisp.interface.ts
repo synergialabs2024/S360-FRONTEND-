@@ -1,9 +1,17 @@
-export interface ClienteMikro {
-  estado: string; // exito
-  datos: ClienteData[];
+export interface ClienteExistResponse {
+  status: number;
+  message: string;
+  invalid_fields: null;
+  data: ClienteExist;
 }
 
-export interface ClienteData {
+export interface ClienteExist {
+  name: string;
+  nexgt_line: number;
+  services: Service[];
+}
+
+export interface Service {
   id: number;
   nombre: string;
   estado: string;
@@ -25,9 +33,13 @@ export interface ClienteData {
   FORMA_DE_PAGO: string;
   mantenimiento: boolean;
   fecha_suspendido: string;
-
   servicios: Servicio[];
   facturacion: Facturacion;
+}
+
+export interface Facturacion {
+  facturas_nopagadas: number;
+  total_facturas: string;
 }
 
 export interface Servicio {
@@ -63,9 +75,4 @@ export interface Servicio {
   ipv6_duid: string;
   last_connected: string;
   perfil: string;
-}
-
-export interface Facturacion {
-  facturas_nopagadas: number;
-  total_facturas: string;
 }
