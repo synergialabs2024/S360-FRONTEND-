@@ -280,12 +280,16 @@ export const useNestedMenu = () => {
                   .solicitudDesbloqueoVentasNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'desbloqueo-cliente-preventa',
-              title: 'Desbloqueo de clientes preventa',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_DESBLOQUEO_PREVENTAS,
+              {
+                id: 'desbloqueo-cliente-preventa',
+                title: 'Desbloqueo de clientes preventa',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial
+                  .solicitudDesbloqueoPreventaNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-cliente-agendas',
               title: 'Desbloqueo de clientes agendas',

@@ -6,16 +6,16 @@ import {
 } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
-import { SolicitudServicioLimitData } from '../solicitud-servicio';
+import { Preventa } from '../../comercial';
 
-export interface SolicitudDesbloqueoVentasPaginatedRes {
+export interface SolicitudDesbloqueoPreventasPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: SolicitudDesbloqueoVentas;
+  items: SolicitudDesbloqueoPreventa;
 }
 
-export interface SolicitudDesbloqueoVentas {
+export interface SolicitudDesbloqueoPreventa {
   id?: number;
   uuid?: string;
 
@@ -28,7 +28,7 @@ export interface SolicitudDesbloqueoVentas {
   // model related
   modelo: SalesModelsEnumChoice; // choice
   modelo_id: number;
-  modelo_estado: SalesStatesActionsEnumChoice; // choice
+  modelo_estado: SalesStatesActionsEnumChoice; // choice --- ACTIONS
 
   created_at?: string;
   modified_at?: string;
@@ -42,5 +42,5 @@ export interface SolicitudDesbloqueoVentas {
 
   vendedor_data?: SystemUserLimitData;
   gestionado_by_data?: SystemUserLimitData;
-  modelo_data?: SolicitudServicioLimitData;
+  modelo_data?: Preventa;
 }

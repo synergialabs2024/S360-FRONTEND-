@@ -214,15 +214,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             title: 'Prospecto en preventa',
             subtitle: `Preventa registrada hace ${timeBlocked} ${
               minutesBlocked > 60 ? 'horas' : 'minutos'
-            }. Para poderlo ingresar en un nuevo proceso debe solicitar la reasignación de la preventa o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}.
-        ¿Desea solicitar la reasignación?`,
+            }. Para poderlo ingresar en un nuevo proceso debe solicitar la liberación de la preventa o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}.
+        ¿Desea solicitar la liberación?`,
             onConfirm: () => {
               setConfirmDialogIsOpen(false);
               createSolUnblockSolServiceMutation.mutate({
                 modelo: SalesModelsEnumChoice.PREVENTA,
                 modelo_id: data.preventa_id,
                 modelo_estado:
-                  SalesStatesActionsEnumChoice.PREVENTA_REASIGNACION_ESPERA,
+                  SalesStatesActionsEnumChoice.PREVENTA_SOLICITUD_DESBLOQUEO_ESPERA,
                 solicitud_desbloqueo_estado:
                   GeneralModelStatesEnumChoice.ESPERA,
               });
