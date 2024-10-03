@@ -281,9 +281,13 @@ export const ROUTER_PATHS = {
 
     ///* solicitud desbloqueo ventas - administración area/supervisor ventas
     solicitudDesbloqueoVentas: 'solicitud-desbloqueo-ventas',
-    solicitudDesbloqueoVentasEditar: 'solicitud-desbloqueo-ventas/editar/:uuid',
     solicitudDesbloqueoVentasNav:
       '/supervision-comercial/solicitud-desbloqueo-ventas',
+
+    ///* desbloqueo preventa
+    solicitudDesbloqueoPreventa: 'solicitud-desbloqueo-preventa',
+    solicitudDesbloqueoPreventaNav:
+      '/supervision-comercial/solicitud-desbloqueo-preventa',
 
     ///* codigos otp
     codigosOtp: 'codigos-otp',

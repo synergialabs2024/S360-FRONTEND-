@@ -353,6 +353,19 @@ const CreateSolicitudServicioPage = Loadable(
       ),
   ),
 );
+
+///* Supervision Comercial ------------
+const SupervisionComercialModule = Loadable(
+  lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
+);
+const SolicitudsDesbloqueoPreventasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/desbloqueo-preventa/pages/tables/SolicitudsDesbloqueoPreventasMainPage'
+      ),
+  ),
+);
 const SolicitudsDesbloqueoVentasMainPage = Loadable(
   lazy(
     () =>
@@ -1001,7 +1014,7 @@ const AppRouter = createBrowserRouter([
       //////////* Supervision Comercial ------------
       {
         path: ROUTER_PATHS.supervisionComercial.root,
-        element: <AdministrationModule />,
+        element: <SupervisionComercialModule />,
         children: [
           ///* solicitud liberacion
           {
@@ -1017,6 +1030,11 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.supervisionComercial.consultasBuro,
             element: <ConsultasBuroPage />,
+          },
+          ///* desbloqueo preventa
+          {
+            path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoPreventa,
+            element: <SolicitudsDesbloqueoPreventasMainPage />,
           },
         ],
       },
