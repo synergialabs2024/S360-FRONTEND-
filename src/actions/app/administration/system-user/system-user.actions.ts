@@ -192,6 +192,7 @@ export type CreateUserProfileData = Pick<
   | 'tipo_identificacion'
   | 'identificacion'
   | 'role'
+  | 'centro_costo'
   | 'area'
   | 'departamento'
   | 'canal_venta'

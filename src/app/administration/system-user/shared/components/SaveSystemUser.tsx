@@ -11,6 +11,7 @@ import {
   useCreateSystemUser,
   useFetchCanalVentas,
   useFetchCargos,
+  useFetchCentroCostos,
   useFetchCiudades,
   useFetchPaises,
   useFetchProvincias,
@@ -47,6 +48,7 @@ import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import {
   Cargo,
+  CentroCosto,
   Ciudad,
   Pais,
   Provincia,
@@ -135,6 +137,16 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isLoading: isLoadingCargos,
     isRefetching: isRefetchingCargos,
   } = useFetchCargos({
+    enabled: !!watchedCreateEmployee,
+    params: {
+      page_size: 1000,
+    },
+  });
+  const {
+    data: centroCostosPagingRes,
+    isLoading: isLoadingCentroCostos,
+    isRefetching: isRefetchingCentroCostos,
+  } = useFetchCentroCostos({
     enabled: !!watchedCreateEmployee,
     params: {
       page_size: 1000,
@@ -354,7 +366,9 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isLoadingZonas ||
     isRefetchingZonas ||
     isLoadingSectores ||
-    isRefetchingSectores;
+    isRefetchingSectores ||
+    isLoadingCentroCostos ||
+    isRefetchingCentroCostos;
   useLoaders(customLoader);
 
   return (
@@ -592,6 +606,24 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
             disabled={watchedIsEdit}
             customType="currency"
             min={0}
+          />
+
+          <CustomAutocomplete<CentroCosto>
+            label="Centro de Costo"
+            name="centro_costo"
+            // options
+            options={centroCostosPagingRes?.data?.items || []}
+            valueKey="name"
+            actualValueKey="id"
+            defaultValue={form.getValues().centro_costo}
+            isLoadingData={isLoadingCentroCostos || isRefetchingCentroCostos}
+            // vaidation
+            control={form.control}
+            error={errors.centro_costo}
+            helperText={errors.centro_costo?.message}
+            size={gridSizeMdLg6}
+            disabled={watchedIsEdit}
+            required={false}
           />
         </>
         <>
