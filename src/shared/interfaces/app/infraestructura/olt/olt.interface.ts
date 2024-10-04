@@ -23,6 +23,10 @@ export interface OLT {
   password: string;
   user: string;
 
+  snmp_community: string;
+  snmp_version: number;
+  snmp_port: number;
+
   created_at?: string;
   modified_at?: string;
 

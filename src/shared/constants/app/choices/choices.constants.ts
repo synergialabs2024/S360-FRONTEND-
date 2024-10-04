@@ -421,3 +421,14 @@ export enum RouterEnumChoice {
   MIKROTIK = 'MIKROTIK',
 }
 export const ROUTER_ARRAY_CHOICES = [RouterEnumChoice.MIKROTIK];
+
+export enum OltTypeEnumChoice {
+  UNO = '1',
+  DOS = '2',
+  TRES = '3',
+}
+export const OLT_TYPE_ARRAY_CHOICES = [
+  OltTypeEnumChoice.UNO,
+  OltTypeEnumChoice.DOS,
+  OltTypeEnumChoice.TRES,
+];
