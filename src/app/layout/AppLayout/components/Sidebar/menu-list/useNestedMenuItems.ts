@@ -156,11 +156,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.promocionesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
               id: 'centro-costo',
               title: 'Centro de costo',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracion.centrocostosNav,
             }),
             renderByModule(SidenavModulesEnum.ADMIN_CANAL_VENTA, {
               id: 'canales-venta',
