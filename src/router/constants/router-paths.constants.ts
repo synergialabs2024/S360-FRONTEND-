@@ -106,6 +106,12 @@ export const ROUTER_PATHS = {
     sectoresEditar: 'sectores/editar/:uuid',
     sectoresNav: '/parametrizacion/sectores',
 
+    ///* centro costos
+    centrocostos: 'centro-costos',
+    centrocostosCrear: 'centro-costos/crear',
+    centrocostosEditar: 'centro-costos/editar/:uuid',
+    centrocostosNav: '/parametrizacion/centro-costos',
+
     ///* parametro sistema
     parametrosSistemas: 'parametros-sistemas',
     parametrosSistemasCrear: 'parametros-sistemas/crear',

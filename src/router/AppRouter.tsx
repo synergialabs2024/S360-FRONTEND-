@@ -97,6 +97,29 @@ const UpdateAreaPage = Loadable(
   lazy(() => import('@/app/administration/area/pages/forms/UpdateAreaPage')),
 );
 
+const CentroCostosPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administration/centro-costo/pages/tables/CentroCostosPage'),
+  ),
+);
+const CreateCentroCostoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/centro-costo/pages/forms/CreateCentroCostoPage'
+      ),
+  ),
+);
+const UpdateCentroCostoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/centro-costo/pages/forms/UpdateCentroCostoPage'
+      ),
+  ),
+);
+
 const SystemUserPage = Loadable(
   lazy(
     () =>
@@ -785,6 +808,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracion.parametrosSistemasEditar,
             element: <UpdateParametroSistemaPage />,
+          },
+
+          ///* Centro de Costo
+          {
+            path: ROUTER_PATHS.administracion.centrocostos,
+            element: <CentroCostosPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.centrocostosCrear,
+            element: <CreateCentroCostoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.centrocostosEditar,
+            element: <UpdateCentroCostoPage />,
           },
 
           ///* Codigo OTP
