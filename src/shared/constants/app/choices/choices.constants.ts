@@ -313,6 +313,11 @@ export enum MetodoPagoEnumUUID {
   CREDITO = '9fea3665-bebd-4026-a64b-5cccf7d39de6',
   RECAUDACIONES = '4750cfb2-1f08-402f-b1f3-be11fcfcd8ef',
 }
+export enum InventarioEnumUUID {
+  CATEGORIA_PRODUCTO_VENTAS = 'a52776bb-873f-45d9-af56-feddcc87f819',
+  CATEGORIA_PRODUCTO_EQUIPOS = '6ced3805-393c-419c-bd77-f785bf1ec4ac',
+  CATEGORIA_PRODUCTO_MATERIALES = '36af6681-eb5d-4a05-ada4-0f3cc3c568cb',
+}
 
 // // Bucket ==============================================
 const { VITE_MINIO_BUCKET_NAME } = getEnvs();
