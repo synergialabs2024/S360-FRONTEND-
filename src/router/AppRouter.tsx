@@ -599,6 +599,18 @@ const UpdateServicioPage = Loadable(
   lazy(() => import('@/app/cliente/servicio/pages/forms/UpdateServicioPage')),
 );
 
+///* Inventario ------------
+//Bodega
+const BodegasPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/tables/BodegasPage')),
+);
+const CreateBodegaPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/forms/CreateBodegaPage')),
+);
+const UpdateBodegaPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
+);
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -1157,6 +1169,27 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.clientes.serviciosEditar,
             element: <UpdateServicioPage />,
+          },
+        ],
+      },
+
+      //////////* Inventario ------------
+      {
+        path: ROUTER_PATHS.inventario.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* bodega
+          {
+            path: ROUTER_PATHS.inventario.bodegas,
+            element: <BodegasPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.bodegasCrear,
+            element: <CreateBodegaPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.bodegasEditar,
+            element: <UpdateBodegaPage />,
           },
         ],
       },
