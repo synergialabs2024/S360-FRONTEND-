@@ -1,14 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import {
-  CacheResponse,
-  handleAxiosError,
-  ToastWrapper,
-  UseMutationParams,
-} from '@/shared';
+import { CacheResponse, ToastWrapper, UseMutationParams } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
 import { ToastSeverityEnum } from '@/shared/interfaces/ui/alerts.interface';
 import { useUiStore } from '@/store/ui';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 const { get, post, patch } = erpAPI();
 

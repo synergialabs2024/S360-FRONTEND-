@@ -18,11 +18,13 @@ import {
   useFetchZonas,
   useUpdateFlota,
 } from '@/actions/app';
+import { useFetchBodegas } from '@/actions/app/inventario';
 import {
   EmployeeTypeEnumChoice,
   emptyCellNested,
   emptyCellOneLevel,
   flotaFormSchema,
+  gridSize,
   gridSizeMdLg11,
   gridSizeMdLg6,
   gridSizeMdLg8,
@@ -52,6 +54,7 @@ import {
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import {
   Area,
+  Bodega,
   Ciudad,
   Departamento,
   Empleado,
@@ -86,6 +89,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     resolver: yupResolver(flotaFormSchema) as any,
     defaultValues: {
       state: true,
+      es_bodega: false,
     },
   });
 
@@ -120,6 +124,17 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
   } = useFetchAreas({
     params: {
       page_size: 200,
+    },
+  });
+  const {
+    data: bodegasDataPagingRes,
+    isLoading: isLoadingBodegas,
+    isRefetching: isRefetchingBodegas,
+  } = useFetchBodegas({
+    enabled: !!watchedIsBodega,
+    params: {
+      page_size: 300,
+      es_externa: true,
     },
   });
   const {
@@ -325,7 +340,9 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     isLoadingCiudades ||
     isRefetchingCiudades ||
     isLoadingZonas ||
-    isRefetchingZonas;
+    isRefetchingZonas ||
+    isLoadingBodegas ||
+    isRefetchingBodegas;
   useLoaders(customLoader);
 
   return (
@@ -495,17 +512,6 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             size={gridSizeMdLg6}
             isState
           />
-
-          <>
-            <SampleCheckbox
-              label="Es bodega externa"
-              name="es_bodega"
-              control={form.control}
-              defaultValue={form.getValues().state}
-              // size={gridSizeMdLg6}
-            />
-            {watchedIsBodega && <>BODEGA AUTOCOMPLETE</>}
-          </>
         </>
       </CustomTabPanel>
 
@@ -590,6 +596,37 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             helperText={errors.ciudad?.message}
             size={gridSizeMdLg6}
           />
+
+          <>
+            <>
+              <SampleCheckbox
+                label="Es bodega externa"
+                name="es_bodega"
+                control={form.control}
+                defaultValue={form.getValues().state}
+                size={gridSizeMdLg6}
+              />
+              {watchedIsBodega && (
+                <>
+                  <CustomAutocomplete<Bodega>
+                    label="Bodega Externa"
+                    name="bodega"
+                    // options
+                    options={bodegasDataPagingRes?.data?.items || []}
+                    valueKey="nombre"
+                    actualValueKey="id"
+                    defaultValue={form.getValues().bodega}
+                    isLoadingData={isLoadingAreas || isRefetchingAreas}
+                    // vaidation
+                    control={form.control}
+                    error={errors.bodega}
+                    helperText={errors.bodega?.message}
+                    size={gridSize}
+                  />
+                </>
+              )}
+            </>
+          </>
 
           <>
             <CustomTypoLabel

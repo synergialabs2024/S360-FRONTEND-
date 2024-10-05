@@ -1,6 +1,5 @@
 import {
   getUrlParams,
-  handleAxiosError,
   ToastWrapper,
   UseFetchEnabledParams,
   UseMutationParams,
@@ -12,6 +11,7 @@ import {
 } from '@/shared/interfaces/app/infraestructura';
 import { useUiStore } from '@/store/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 const { get, post, patch } = erpAPI();
 

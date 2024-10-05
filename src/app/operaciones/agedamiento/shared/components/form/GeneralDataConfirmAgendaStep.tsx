@@ -1,14 +1,18 @@
+import { Tab } from '@mui/material';
 import { UseFormReturn } from 'react-hook-form';
 
 import {
   Agendamiento,
   ESTADO_LLAMADA_ARRAY_CHOICES,
+  gridSizeMdLg3,
   gridSizeMdLg6,
+  Nap,
   PARENTESCO_TYPE_ARRAY_CHOICES,
   useTabsOnly,
 } from '@/shared';
 import {
   a11yProps,
+  CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCellphoneTextField,
   CustomTabPanel,
@@ -21,7 +25,7 @@ import {
   NestedTabsScene,
   SelectTextFieldArrayString,
 } from '@/shared/components';
-import { Tab } from '@mui/material';
+import { useMapStore } from '@/store/app';
 import type { SaveConfirmAgendaOperaciones } from '../SaveConfirmAgendaOperaciones';
 import LocationZonePolygonFormPart from './LocationZonePolygonFormPart';
 
@@ -36,6 +40,10 @@ const GeneralDataConfirmAgendaStep: React.FC<
   ///* hooks ---------------------
   const { tabValue, handleTabChange } = useTabsOnly();
 
+  ///* global state ---------------------
+  const napsByCoords = useMapStore(s => s.napsByCoords);
+  const isLoadingNaps = useMapStore(s => s.isLoadingNaps);
+
   ///* form ---------------------
   const { errors } = form.formState;
 
@@ -45,7 +53,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
         tabs={
           <FormTabsOnly value={tabValue} onChange={handleTabChange}>
             <Tab label="Datos Cliente" value={1} {...a11yProps(1)} />
-            <Tab label="Ubicadión Cliente" value={2} {...a11yProps(2)} />
+            <Tab label="Ubicadión cliente y NAP" value={2} {...a11yProps(2)} />
           </FormTabsOnly>
         }
         sxContainer={{
@@ -125,7 +133,67 @@ const GeneralDataConfirmAgendaStep: React.FC<
               agendamiento?.solicitud_servicio_data?.coordenadas || ''
             }
             isEdit={true}
+            ptLabel="0px"
+            showSectionTitle={false}
+            onChangeCoordsInput={coords => {
+              form.reset({
+                ...form.getValues(),
+                coordenadas: coords,
+                nap: '' as any,
+                distancia_nap: '' as any,
+                puerto_nap: '' as any,
+              });
+            }}
           />
+
+          {/* ---------- NAP ---------- */}
+          <>
+            <CustomAutocomplete<Nap>
+              label="NAP"
+              name="nap"
+              // options
+              options={napsByCoords || []}
+              valueKey="name"
+              actualValueKey="id"
+              defaultValue={form.getValues().nap}
+              isLoadingData={isLoadingNaps}
+              // vaidation
+              control={form.control}
+              error={errors.nap}
+              helperText={errors.nap?.message}
+              size={gridSizeMdLg6}
+              onChangeRawValue={nap => {
+                if (!nap) {
+                  form.setValue('distancia_nap', '' as any);
+                  form.setValue('puerto_nap', '' as any);
+                  return;
+                }
+                form.setValue('distancia_nap', nap?.distance as any);
+                form.setValue('puerto_nap', '' as any);
+              }}
+            />
+            <CustomTextField
+              label="Distancia NAP"
+              name="distancia_nap"
+              control={form.control}
+              defaultValue={form.getValues().distancia_nap}
+              error={errors.distancia_nap}
+              helperText={errors.distancia_nap?.message}
+              size={gridSizeMdLg3}
+              disabled
+              endAdornmentInput="m"
+            />
+            <CustomTextField
+              label="Puerto designado"
+              name="puerto_nap"
+              control={form.control}
+              defaultValue={(form.getValues().puerto_nap as any) || ''}
+              error={errors.puerto_nap}
+              helperText={errors.puerto_nap?.message}
+              size={gridSizeMdLg3}
+              disabled
+            />
+          </>
         </CustomTabPanel>
       </NestedTabsScene>
 

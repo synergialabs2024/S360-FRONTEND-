@@ -3,16 +3,16 @@ import { toast } from 'react-toastify';
 
 import {
   getUrlParams,
-  handleAxiosError,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
+import { erpAPI } from '@/shared/axios/erp-api';
 import {
   Servicio,
   serviciosPaginatedRes,
 } from '@/shared/interfaces/app/cliente';
 import { useUiStore } from '@/store/ui';
-import { erpAPI } from '@/shared/axios/erp-api';
 
 const { get, patch } = erpAPI();
 

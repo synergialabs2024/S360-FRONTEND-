@@ -22,8 +22,10 @@ export interface OLT {
   hostname: string;
   password: string;
   user: string;
-  pppoe: string;
-  ip_pppoe: string;
+
+  snmp_community: string;
+  snmp_version: number;
+  snmp_port: number;
 
   created_at?: string;
   modified_at?: string;

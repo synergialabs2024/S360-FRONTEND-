@@ -1,7 +1,7 @@
 import { ToastWrapper } from '@/shared/wrappers';
 import { useMutation } from '@tanstack/react-query';
 
-import { handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
 import { UseMutationParams } from '@/shared/interfaces';
 import { useUiStore } from '@/store/ui';

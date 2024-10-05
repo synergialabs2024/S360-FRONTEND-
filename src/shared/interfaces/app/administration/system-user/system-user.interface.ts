@@ -28,6 +28,7 @@ export interface SystemUser {
 
   ///* fk
   groups: number[];
+  centro_costo?: number;
   area?: number;
   departamento?: number;
   canal_venta?: number;

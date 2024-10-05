@@ -1,7 +1,7 @@
 import { ToastWrapper } from '@/shared/wrappers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
@@ -192,6 +192,7 @@ export type CreateUserProfileData = Pick<
   | 'tipo_identificacion'
   | 'identificacion'
   | 'role'
+  | 'centro_costo'
   | 'area'
   | 'departamento'
   | 'canal_venta'

@@ -174,7 +174,6 @@ const GeneralDataSavePreventaStep: React.FC<
               color={!showReferidosPart ? 'primary' : 'error'}
               startIcon={showReferidosPart ? <IoMdTrash /> : <MdAddCircle />}
               label={showReferidosPart ? 'REMOVER' : 'AGREGAR'}
-              variant="text"
               onClick={() => {
                 setShowReferidosPart(prev => !prev);
                 if (!showReferidosPart) {

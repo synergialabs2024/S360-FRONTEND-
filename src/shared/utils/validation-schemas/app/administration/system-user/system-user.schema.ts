@@ -1,6 +1,6 @@
+import { UserRolesEnumChoice } from '@/shared/constants';
 import * as yup from 'yup';
 import { emailYupValidation } from '../../common';
-import { UserRolesEnumChoice } from '@/shared/constants';
 
 export const systemUserFormSchema = yup.object({
   username: yup
@@ -30,6 +30,7 @@ export const systemUserFormSchema = yup.object({
     .string()
     .required('El campo role es requerido')
     .max(200, 'El campo role no debe exceder los 200 caracteres'),
+  centro_costo: yup.number().optional().nullable(),
   area: yup
     .number()
     .optional()

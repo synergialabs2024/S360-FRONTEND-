@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   BucketTypeEnumChoice,
   getEnvs,
-  handleAxiosError,
   HTTPResStatusCodeEnum,
   ToastWrapper,
   UseMutationParams,
@@ -14,6 +13,7 @@ import {
   CreateTemporaryUploadLinkParams,
   putFileBucketDataGuardian
 } from './bucket.actions';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 const { VITE_MINIO_ENDPOINT } = getEnvs();
 

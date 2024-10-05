@@ -44,10 +44,3 @@ export interface SolicitudDesbloqueoVentas {
   gestionado_by_data?: SystemUserLimitData;
   modelo_data?: SolicitudServicioLimitData;
 }
-
-export interface Meta {
-  next: null;
-  previous: null;
-  count: number;
-  total_pages: number;
-}

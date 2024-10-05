@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -14,10 +14,17 @@ import {
   useFetchZonas,
   useUpdateOLT,
 } from '@/actions/app';
-import { SAVE_OLT_PERMISSIONS, ToastWrapper, useLoaders } from '@/shared';
+import {
+  OLT_TYPE_ARRAY_CHOICES,
+  SAVE_OLT_PERMISSIONS,
+  ToastWrapper,
+  useLoaders,
+} from '@/shared';
 import {
   CustomAutocomplete,
+  CustomAutocompleteArrString,
   CustomCoordsTextField,
+  CustomNumberTextField,
   CustomPasswordTextField,
   CustomTextArea,
   CustomTextField,
@@ -96,8 +103,6 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
   const watchedCiudad = form.watch('ciudad');
   const watchedZona = form.watch('zona');
   const watchedIsEdit = form.watch('isEdit');
-
-  console.log(watchedIsEdit);
 
   const { Map, latLng, setLatLng } = useMapComponent({
     form,
@@ -284,45 +289,6 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         helperText={errors.name?.message}
       />
       <CustomTextField
-        label="Puerto"
-        name="puerto"
-        control={form.control}
-        defaultValue={form.getValues().puerto}
-        error={errors.puerto}
-        helperText={errors.puerto?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomTextField
-        label="Hostname"
-        name="hostname"
-        control={form.control}
-        defaultValue={form.getValues().hostname}
-        error={errors.hostname}
-        helperText={errors.hostname?.message}
-        size={gridSizeMdLg6}
-        ignoreTransform
-      />
-      <CustomTextField
-        label="Pppoe"
-        name="pppoe"
-        control={form.control}
-        defaultValue={form.getValues().pppoe}
-        error={errors.pppoe}
-        helperText={errors.pppoe?.message}
-        size={gridSizeMdLg6}
-        ignoreTransform
-      />
-      <CustomTextField
-        label="Ip pppoe"
-        name="ip_pppoe"
-        control={form.control}
-        defaultValue={form.getValues().ip_pppoe}
-        error={errors.ip_pppoe}
-        helperText={errors.ip_pppoe?.message}
-        size={gridSizeMdLg6}
-        ignoreTransform
-      />
-      <CustomTextField
         label="User"
         name="user"
         control={form.control}
@@ -361,14 +327,80 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
             });
         }}
       />
-
       <CustomTextField
-        label="Direccion"
-        name="direccion"
+        label="Puerto"
+        name="puerto"
         control={form.control}
-        defaultValue={form.getValues().direccion}
-        error={errors.direccion}
-        helperText={errors.direccion?.message}
+        defaultValue={form.getValues().puerto}
+        error={errors.puerto}
+        helperText={errors.puerto?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Hostname"
+        name="hostname"
+        control={form.control}
+        defaultValue={form.getValues().hostname}
+        error={errors.hostname}
+        helperText={errors.hostname?.message}
+        size={gridSizeMdLg6}
+        ignoreTransform
+      />
+      <CustomTextField
+        label="Comunidad SNMP"
+        name="snmp_community"
+        control={form.control}
+        defaultValue={form.getValues().snmp_community}
+        error={errors.snmp_community}
+        helperText={errors.snmp_community?.message}
+        size={gridSizeMdLg6}
+      />
+      <Controller
+        name="snmp_version"
+        control={form.control}
+        defaultValue={form.getValues('snmp_version')}
+        render={({ field: { onChange, value, ...field } }) => (
+          <CustomAutocompleteArrString
+            {...field}
+            label="Tipo de identificación"
+            options={OLT_TYPE_ARRAY_CHOICES}
+            defaultValue={value}
+            isLoadingData={false}
+            onChangeValue={onChange} // Solo pasamos el valor convertido
+            control={form.control}
+            error={errors.snmp_version}
+            helperText={errors.snmp_version?.message}
+            size={gridSizeMdLg6}
+            disableClearable
+          />
+        )}
+      />
+      <CustomNumberTextField
+        label="Puerto SNMP"
+        name="snmp_port"
+        control={form.control}
+        defaultValue={form.getValues().snmp_port}
+        error={errors.snmp_port}
+        helperText={errors.snmp_port?.message}
+        size={gridSizeMdLg6}
+        min={0}
+      />
+      <SampleCheckbox
+        label="state"
+        name="state"
+        control={form.control}
+        defaultValue={form.getValues().state}
+        isState
+        size={gridSizeMdLg6}
+      />
+
+      <CustomTextArea
+        label="Descripcion"
+        name="descripcion"
+        control={form.control}
+        defaultValue={form.getValues().descripcion}
+        error={errors.descripcion}
+        helperText={errors.descripcion?.message}
       />
 
       <CustomAutocomplete<Pais>
@@ -532,21 +564,13 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         }
         btnGridSize={gridSizeMdLg1}
       />
-      <CustomTextArea
-        label="Descripcion"
-        name="descripcion"
+      <CustomTextField
+        label="Direccion"
+        name="direccion"
         control={form.control}
-        defaultValue={form.getValues().descripcion}
-        error={errors.descripcion}
-        helperText={errors.descripcion?.message}
-      />
-
-      <SampleCheckbox
-        label="state"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
+        defaultValue={form.getValues().direccion}
+        error={errors.direccion}
+        helperText={errors.direccion?.message}
       />
     </SingleFormBoxScene>
   );

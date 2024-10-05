@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsSendCheckFill } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
+import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoMdSend, IoMdUnlock } from 'react-icons/io';
 import { MdChangeCircle, MdOutlineTextsms } from 'react-icons/md';
 import OtpInput from 'react-otp-input';
@@ -21,7 +23,10 @@ import {
   useFetchEntidadFinancieras,
   useFetchMetodoPagos,
   useFetchPlanInternets,
+  useFetchSectores,
   useFetchTarjetas,
+  useFetchZonas,
+  useGetZoneByCoords,
   useUpdateCodigoOtp,
   useValidateOtpCode,
 } from '@/actions/app';
@@ -31,7 +36,6 @@ import {
   SetCodigoOtpInCacheData,
 } from '@/actions/shared/cache-redis-types.interface';
 import { uploadFileToBucket } from '@/actions/statics-api';
-import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
 import {
   BucketKeyNameEnumChoice,
   BucketTypeEnumChoice,
@@ -39,7 +43,6 @@ import {
   CodigoOtp,
   EntidadFinanciera,
   EquifaxEdentificationType,
-  handleAxiosError,
   HTTPResStatusCodeEnum,
   IdentificationTypeEnumChoice,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
@@ -49,6 +52,7 @@ import {
   Nullable,
   OtpStatesEnumChoice,
   PlanInternet,
+  Sector,
   Tarjeta,
   TimerSolicitudServicioEnum,
   TIPO_CUENTA_BANCARIA_ARRAY_CHOICES,
@@ -56,23 +60,35 @@ import {
   useLoaders,
   useUploadImageGeneric,
 } from '@/shared';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   ChipModelState,
   CustomAutocomplete,
   CustomAutocompleteArrString,
+  CustomCardAlert,
   CustomCellphoneTextField,
+  CustomCoordsTextField,
   CustomScanLoad,
   CustomSingleButton,
+  CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
   InputAndBtnGridSpace,
+  MapModalComponent,
   SelectTextFieldArrayString,
   SingleIconButton,
   StepperBoxScene,
   useCustomStepper,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSize,
+  gridSizeMdLg1,
+  gridSizeMdLg11,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import { formatCountDownTimer, preventaFormSchema } from '@/shared/utils';
@@ -84,6 +100,7 @@ import CountDownOTPPReventa from './CountDownOTPPReventa';
 import DocsSavePreventaStep from './DocsSavePreventaStep';
 import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
+import { EquiposVentaPreventaPartStep } from './form';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -143,6 +160,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   } = useUploadImageGeneric();
 
   ///* local state -------------------
+  const [openMapModal, setOpenMapModal] = useState<boolean>(false);
   const [isSupervisorUnlockingSent, setIsSupervisorUnlockingSent] =
     useState<boolean>(false);
   const [isCheckingCedula, setIsCheckingCedula] = useState<boolean>(false);
@@ -199,6 +217,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   } = form;
   const watchedTipoReferido = form.watch('tipo_referido');
 
+  const watchedZone = form.watch('zona');
+  const watchedThereIsCoverage = form.watch('thereIsCoverage');
+  const watchedThereAreNaps = form.watch('thereAreNaps');
+
   const watchedRawPaymentMethod = form.watch('rawPaymentMethod');
 
   const watchedServiceType = form.watch('tipo_servicio');
@@ -211,7 +233,57 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedIdentification = form.watch('identificacion');
   const watchedSuggestedPlansBuro = form.watch('plan_sugerido_buro');
 
+  // map ---------------
+  const {
+    Map,
+    latLng,
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    setLatLng,
+  } = useMapComponent({
+    form,
+    initialCoords: solicitudServicio?.id ? solicitudServicio.coordenadas : '',
+    enableFetchNaps: true,
+  });
+  useLocationCoords({
+    isEditting: !!solicitudServicio?.id,
+    form,
+    setLatLng,
+  });
+
   ///* fetch data ---------------------
+  const {
+    data: zonasPaging,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    params: {
+      page_size: 1200,
+    },
+  });
+  const {
+    data: zonaByCoordsRes,
+    isLoading: isLoadingZonaByCoords,
+    isRefetching: isRefetchingZonaByCoords,
+  } = useGetZoneByCoords(
+    {
+      coords: `${latLng?.lat},${latLng?.lng}`,
+    },
+    !!latLng?.lat && !!latLng?.lng,
+  );
+  const {
+    data: sectoresPaging,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
+  } = useFetchSectores({
+    enabled: !!watchedZone,
+    params: {
+      page_size: 900,
+      zona: watchedZone,
+    },
+  });
+
   // payment methods
   const {
     data: metodoPagosPaging,
@@ -348,10 +420,20 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     const res = await getSolicitudServicio(solicitudServicio?.uuid!);
     setIsGlobalLoading(false);
     const updatedSolServicio = res?.data;
+    const {
+      provincia,
+      ciudad,
+      zona,
+      sector,
+      coordenadas,
+      direccion,
+      tiene_cobertura,
+      ...rest
+    } = updatedSolServicio || {};
 
     reset({
       ...prevForm,
-      ...updatedSolServicio,
+      ...rest,
       estadoOtp:
         updatedSolServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
 
@@ -595,7 +677,69 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     });
   }, [solicitudServicio, reset]);
 
+  // set zone to up
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+
+    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
+    const zone = zonaByCoordsRes?.data;
+    if (!zone) {
+      ToastWrapper.error(
+        'No se encontraron zonas con cobertura para las coordenadas proporcionadas',
+      );
+      form.reset({
+        ...form.getValues(),
+        thereIsCoverage: false,
+        tiene_cobertura: false,
+      });
+      return;
+    }
+    form.reset({
+      ...form.getValues(),
+      zona: zone?.id,
+      ciudad: zone?.ciudad_data?.id!,
+      provincia: zone?.provincia_data?.id!,
+      cityName: zone?.ciudad_data?.name,
+      provinceName: zone?.provincia_data?.name,
+      zoneName: zone?.name,
+      thereIsCoverage: true,
+      tiene_cobertura: true,
+    });
+  }, [
+    zonaByCoordsRes,
+    isLoadingZonaByCoords,
+    isRefetchingZonaByCoords,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
   //// alerts
+  // naps available
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+    if (isLoadingNaps || isRefetchingNaps) return;
+    const thereAreNaps = !!napsByCoords?.length;
+    if (!thereAreNaps) {
+      form.reset({
+        ...form.getValues(),
+        thereAreNaps: false,
+      });
+      ToastWrapper.error(
+        'No se encontraron cajas disponibles para las coordenadas ingresadas',
+      );
+    }
+    form.reset({
+      ...form.getValues(),
+      thereAreNaps,
+    });
+  }, [
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
   // internet service
   useEffect(() => {
     if (
@@ -663,6 +807,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   }, [clearAllTimers, setIsComponentBlocked]);
 
   const isCustomLoading =
+    isRefetchingNaps ||
+    isLoadingNaps ||
+    isLoadingZonas ||
+    isRefetchingZonas ||
+    isLoadingZonaByCoords ||
+    isRefetchingZonaByCoords ||
+    isLoadingSectores ||
+    isRefetchingSectores ||
     isLoadingMetodoPagos ||
     isRefetchingMetodoPagos ||
     isLoadingEntidadFinancieras ||
@@ -697,11 +849,165 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       {/* ========================= Ubicación ========================= */}
       {activeStep === 1 && (
-        <LocationZonePolygonFormPart
-          form={form}
-          initialCoords={solicitudServicio?.coordenadas || ''}
-          isEdit={true}
-        />
+        <>
+          <CustomTypoLabel text="Ubicación" />
+
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputGridSize={gridSizeMdLg11}
+            inputNode={
+              <CustomCoordsTextField
+                label="Coordenadas"
+                name="coordenadas"
+                control={form.control}
+                defaultValue={form.getValues().coordenadas || ''}
+                error={errors.coordenadas}
+                helperText={errors.coordenadas?.message}
+                onChangeValue={(value, isValidCoords) => {
+                  if (isValidCoords) {
+                    const s = value.split(',');
+                    setLatLng({ lat: s[0], lng: s[1] });
+                  }
+                }}
+              />
+            }
+            btnLabel="Ver mapa"
+            overrideBtnNode
+            customBtnNode={
+              <>
+                <SingleIconButton
+                  startIcon={<FaMapLocationDot />}
+                  label={'Ver mapa'}
+                  color={'primary'}
+                  onClick={() => {
+                    setOpenMapModal(true);
+                  }}
+                />
+
+                <MapModalComponent
+                  open={openMapModal}
+                  onClose={() => {
+                    setOpenMapModal(false);
+                  }}
+                  //
+                  showCustomTitleNode
+                  customTitleNode={
+                    <Grid item container xs={12}>
+                      <Typography variant="h4">
+                        Ubicación | Coordenadas:{' '}
+                        <span
+                          style={{
+                            fontSize: '0.93rem',
+                            fontWeight: 400,
+                          }}
+                        >
+                          {latLng?.lat}, {latLng?.lng}
+                        </span>
+                      </Typography>
+                    </Grid>
+                  }
+                  minWidthModal="70%"
+                  contentNodeOverride={
+                    <Map
+                      coordenadas={
+                        latLng
+                          ? {
+                              lat: latLng.lat,
+                              lng: latLng.lng,
+                            }
+                          : { lat: 0, lng: 0 }
+                      }
+                      canDragMarker={true}
+                      setLatLng={setLatLng}
+                      showCoverage
+                      coverageZones={zonasPaging?.data?.items || []}
+                    />
+                  }
+                />
+              </>
+            }
+            btnGridSize={gridSizeMdLg1}
+          />
+
+          {watchedThereIsCoverage ? (
+            <>
+              <CustomAutocomplete<Sector>
+                label="Sector"
+                name="sector"
+                // options
+                options={sectoresPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().sector}
+                isLoadingData={isLoadingSectores || isRefetchingSectores}
+                // vaidation
+                control={form.control}
+                error={errors.sector}
+                helperText={errors.sector?.message}
+              />
+              <CustomTextField
+                label="Zona"
+                name="zoneName"
+                control={form.control}
+                defaultValue={form.getValues().zoneName}
+                error={errors.zoneName}
+                helperText={errors.zoneName?.message}
+                disabled
+              />
+              <CustomTextField
+                label="Ciudad"
+                name="cityName"
+                control={form.control}
+                defaultValue={form.getValues().cityName}
+                error={errors.cityName}
+                helperText={errors.cityName?.message}
+                size={gridSizeMdLg6}
+                disabled
+              />
+              <CustomTextField
+                label="Provincia"
+                name="provinceName"
+                control={form.control}
+                defaultValue={form.getValues().provinceName}
+                error={errors.provinceName}
+                helperText={errors.provinceName?.message}
+                size={gridSizeMdLg6}
+                disabled
+              />
+            </>
+          ) : (
+            <>
+              <CustomCardAlert
+                sizeType="small"
+                alertMessage="Ubicación sin cobertura"
+                alertSeverity="error"
+              />
+            </>
+          )}
+
+          <CustomTextArea
+            label="Dirección"
+            name="direccion"
+            control={form.control}
+            defaultValue={form.getValues().direccion}
+            error={errors.direccion}
+            helperText={errors.direccion?.message}
+          />
+
+          {watchedThereAreNaps ? (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsByCoords?.at(0)?.distance}m`}
+              alertSeverity="success"
+            />
+          ) : (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage="No se encontraron cajas disponibles"
+              alertSeverity="error"
+            />
+          )}
+        </>
       )}
 
       {/* ========================= Service ========================= */}
@@ -817,6 +1123,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 </Grid>
               ))}
             </Grid>
+          </>
+
+          <>
+            <EquiposVentaPreventaPartStep
+              solicitudServicio={solicitudServicio!}
+            />
           </>
 
           <>

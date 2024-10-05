@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 import { InstallScheduleCacheData } from '@/actions/app';
 import {
+  FlotaLimitData,
   Nullable,
   Planificador,
   Preventa,
@@ -17,6 +18,10 @@ interface AgendamientoVentasState {
 
   planificadoresArray: Planificador[];
   setPlanificadoresArray: (value: Planificador[]) => void;
+
+  // fleets
+  fleetsByZoneLimitData: FlotaLimitData[];
+  setFleetsByZoneLimitData: (value: FlotaLimitData[]) => void;
 
   ///* schedule -------------
   availableTimeMap: TimeMapPlanificador[] | null;
@@ -64,5 +69,8 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
 
     cachedData: null,
     setCachedData: value => set({ cachedData: value }),
+
+    fleetsByZoneLimitData: [],
+    setFleetsByZoneLimitData: value => set({ fleetsByZoneLimitData: value }),
   }),
 );
