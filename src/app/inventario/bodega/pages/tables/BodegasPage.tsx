@@ -15,7 +15,11 @@ import {
   ChangeModelStateData,
   PermissionsEnum,
 } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 import {
   MODEL_BOOLEAN,
   MODEL_STATE_BOOLEAN,
@@ -123,12 +127,10 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
         },
       },
       {
-        accessorKey: 'centro_costo',
+        accessorKey: 'centro_costo__name',
         header: 'CENTRO COSTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'centro_costo'),
+        Cell: ({ row }) => emptyCellNested(row, ['centro_costo_data', 'name']),
       },
       {
         accessorKey: 'state',
