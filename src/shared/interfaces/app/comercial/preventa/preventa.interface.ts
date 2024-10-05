@@ -11,9 +11,9 @@ import {
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { EntidadFinanciera, MetodoPago } from '../../administration';
 import { Tarjeta } from '../../cobranza';
-import { PlanInternetLimitData } from '../../servicios';
+import { NapLimitData } from '../../infraestructura';
+import { PlanInternet } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
-import { Nap } from '../../infraestructura';
 
 export interface PreventasPaginatedRes {
   status: number;
@@ -99,9 +99,9 @@ export interface Preventa {
   vendedor: number;
 
   solicitud_servicio_data?: SolicitudServicio;
-  plan_internet_data?: PlanInternetLimitData;
+  plan_internet_data?: PlanInternet;
   metodo_pago_data?: MetodoPago;
   entidad_financiera_data?: EntidadFinanciera;
   tarjeta_data?: Tarjeta;
-  nap_data?: Nap;
+  nap_data?: NapLimitData;
 }

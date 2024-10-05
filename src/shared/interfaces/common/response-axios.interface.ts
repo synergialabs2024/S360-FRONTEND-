@@ -23,6 +23,7 @@ export enum HTTPResStatusCodeEnum {
   UNAUTHORIZED = 401,
 
   CONFLICTS_OR_ACTIVE_SESSION = 409, // active session
+  CLIENTE_EXISTS_IN_DB = 412, // new line
 
   USER_BLOCKED = 423, // fail login more than 3 times
 

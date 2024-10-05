@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { handleAxiosError, ToastWrapper, UseMutationParams } from '@/shared';
+import { ToastWrapper, UseMutationParams } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
 
 ///* tanStack query ---------------
@@ -64,6 +64,7 @@ export const createTemporaryUploadLink = async (
   return get<string>(url);
 };
 
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import axios, { AxiosRequestConfig } from 'axios';
 
 export type FileDataFormBucket = {

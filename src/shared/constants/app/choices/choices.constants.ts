@@ -8,7 +8,7 @@ export enum IdentificationTypeEnumChoice {
 export const IDENTIFICATION_TYPE_ARRAY_CHOICES = [
   IdentificationTypeEnumChoice.CEDULA,
   IdentificationTypeEnumChoice.RUC,
-  IdentificationTypeEnumChoice.PASAPORTE,
+  // IdentificationTypeEnumChoice.PASAPORTE,
 ];
 
 export enum UserRolesEnumChoice {
@@ -294,7 +294,9 @@ export enum SalesStatesActionsEnumChoice {
   SOLICITUD_DESBLOQUEO_RECHAZADO = 'SOLICITUD_DESBLOQUEO_RECHAZADO',
 
   // // PREVENTA =======================================
-  PREVENTA_REASIGNACION_ESPERA = 'PREVENTA__REASIGNACION_ESPERA', // CREADA
+  PREVENTA_SOLICITUD_DESBLOQUEO_ESPERA = 'PREVENTA__SOLICITUD_DESBLOQUEO_ESPERA', // CREADA
+  PREVENTA_SOLICITUD_DESBLOQUEO_APROBADO = 'PREVENTA__SOLICITUD_DESBLOQUEO_APROBADO',
+  PREVENTA_SOLICITUD_DESBLOQUEO_RECHAZADO = 'PREVENTA__SOLICITUD_DESBLOQUEO_RECHAZADO',
 
   SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_ESPERA = 'SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_ESPERA',
   SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_APROBADO = 'SOLICITUD_DESBLOQUEO__FOTO_PLANILLA_APROBADO',
@@ -310,6 +312,11 @@ export enum MetodoPagoEnumUUID {
   DEBITO = 'b59daf11-8214-439f-a3ab-11ee7ec38260',
   CREDITO = '9fea3665-bebd-4026-a64b-5cccf7d39de6',
   RECAUDACIONES = '4750cfb2-1f08-402f-b1f3-be11fcfcd8ef',
+}
+export enum InventarioEnumUUID {
+  CATEGORIA_PRODUCTO_VENTAS = 'a52776bb-873f-45d9-af56-feddcc87f819',
+  CATEGORIA_PRODUCTO_EQUIPOS = '6ced3805-393c-419c-bd77-f785bf1ec4ac',
+  CATEGORIA_PRODUCTO_MATERIALES = '36af6681-eb5d-4a05-ada4-0f3cc3c568cb',
 }
 
 // // Bucket ==============================================
@@ -414,3 +421,28 @@ export enum EstadoValidacionAceptacionEnumChoice {
   VALIDADO = 'VALIDADO', // 3 ok a la 1ra
   CORREGIDO = 'CORREGIDO', // corrige ante eventualidad
 }
+
+export enum RouterEnumChoice {
+  MIKROTIK = 'MIKROTIK',
+}
+export const ROUTER_ARRAY_CHOICES = [RouterEnumChoice.MIKROTIK];
+
+export enum OltTypeEnumChoice {
+  UNO = '1',
+  DOS = '2',
+  TRES = '3',
+}
+export const OLT_TYPE_ARRAY_CHOICES = [
+  OltTypeEnumChoice.UNO,
+  OltTypeEnumChoice.DOS,
+  OltTypeEnumChoice.TRES,
+];
+
+export enum RutaTypeEnumChoice {
+  OPERATIVO = 'OPERATIVO',
+  AFECTACION = 'AFECTACION',
+}
+export const RUTA_TYPE_ARRAY_CHOICES = [
+  RutaTypeEnumChoice.OPERATIVO,
+  RutaTypeEnumChoice.AFECTACION,
+];

@@ -97,6 +97,29 @@ const UpdateAreaPage = Loadable(
   lazy(() => import('@/app/administration/area/pages/forms/UpdateAreaPage')),
 );
 
+const CentroCostosPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administration/centro-costo/pages/tables/CentroCostosPage'),
+  ),
+);
+const CreateCentroCostoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/centro-costo/pages/forms/CreateCentroCostoPage'
+      ),
+  ),
+);
+const UpdateCentroCostoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/centro-costo/pages/forms/UpdateCentroCostoPage'
+      ),
+  ),
+);
+
 const SystemUserPage = Loadable(
   lazy(
     () =>
@@ -353,6 +376,19 @@ const CreateSolicitudServicioPage = Loadable(
       ),
   ),
 );
+
+///* Supervision Comercial ------------
+const SupervisionComercialModule = Loadable(
+  lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
+);
+const SolicitudsDesbloqueoPreventasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/desbloqueo-preventa/pages/tables/SolicitudsDesbloqueoPreventasMainPage'
+      ),
+  ),
+);
 const SolicitudsDesbloqueoVentasMainPage = Loadable(
   lazy(
     () =>
@@ -456,6 +492,16 @@ const UpdateRadioBasePage = Loadable(
       import('@/app/infraestructura/radiobase/pages/forms/UpdateRadioBasePage'),
   ),
 );
+// RUTA
+const RutasPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/tables/RutasPage')),
+);
+const CreateRutaPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/forms/CreateRutaPage')),
+);
+const UpdateRutaPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/forms/UpdateRutaPage')),
+);
 
 ///* Mantenimiento Operaciones ------------
 const MantenimientoOperacionModule = Loadable(
@@ -523,6 +569,27 @@ const PlanificadorFlotaPage = Loadable(
   ),
 );
 
+///* Administracion red ------------
+const AdministracionRedModule = Loadable(
+  lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
+);
+const RoutersPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/router/pages/tables/RoutersPage'),
+  ),
+);
+const CreateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/CreateRouterPage'),
+  ),
+);
+const UpdateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
+  ),
+);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -530,6 +597,45 @@ const ServiciosPage = Loadable(
 );
 const UpdateServicioPage = Loadable(
   lazy(() => import('@/app/cliente/servicio/pages/forms/UpdateServicioPage')),
+);
+
+///* Inventario ------------
+//Bodega
+const BodegasPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/tables/BodegasPage')),
+);
+const CreateBodegaPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/forms/CreateBodegaPage')),
+);
+const UpdateBodegaPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
+);
+
+///* Logistica ------------
+//TipoInstalacion
+const TipoInstalacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/tables/TipoInstalacionesPage'
+      ),
+  ),
+);
+const CreateTipoInstalacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/forms/CreateTipoInstalacionPage'
+      ),
+  ),
+);
+const UpdateTipoInstalacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/forms/UpdateTipoInstalacionPage'
+      ),
+  ),
 );
 
 const AppRouter = createBrowserRouter([
@@ -743,6 +849,20 @@ const AppRouter = createBrowserRouter([
             element: <UpdateParametroSistemaPage />,
           },
 
+          ///* Centro de Costo
+          {
+            path: ROUTER_PATHS.administracion.centrocostos,
+            element: <CentroCostosPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.centrocostosCrear,
+            element: <CreateCentroCostoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.centrocostosEditar,
+            element: <UpdateCentroCostoPage />,
+          },
+
           ///* Codigo OTP
           {
             path: ROUTER_PATHS.administracion.codigosOtp,
@@ -929,6 +1049,20 @@ const AppRouter = createBrowserRouter([
             path: ROUTER_PATHS.infraestructura.radiobasesEditar,
             element: <UpdateRadioBasePage />,
           },
+
+          ///* RUTA
+          {
+            path: ROUTER_PATHS.infraestructura.rutas,
+            element: <RutasPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.rutasCrear,
+            element: <CreateRutaPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.rutasEditar,
+            element: <UpdateRutaPage />,
+          },
         ],
       },
 
@@ -956,7 +1090,7 @@ const AppRouter = createBrowserRouter([
       //////////* Supervision Comercial ------------
       {
         path: ROUTER_PATHS.supervisionComercial.root,
-        element: <AdministrationModule />,
+        element: <SupervisionComercialModule />,
         children: [
           ///* solicitud liberacion
           {
@@ -972,6 +1106,11 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.supervisionComercial.consultasBuro,
             element: <ConsultasBuroPage />,
+          },
+          ///* desbloqueo preventa
+          {
+            path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoPreventa,
+            element: <SolicitudsDesbloqueoPreventasMainPage />,
           },
         ],
       },
@@ -1060,6 +1199,70 @@ const AppRouter = createBrowserRouter([
           },
         ],
       },
+
+      //////////* Inventario ------------
+      {
+        path: ROUTER_PATHS.inventario.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* bodega
+          {
+            path: ROUTER_PATHS.inventario.bodegas,
+            element: <BodegasPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.bodegasCrear,
+            element: <CreateBodegaPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.bodegasEditar,
+            element: <UpdateBodegaPage />,
+          },
+        ],
+      },
+
+      //////////* Logistica ------------
+      {
+        path: ROUTER_PATHS.logistica.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* tipo instalacion
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalaciones,
+            element: <TipoInstalacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalacionesCrear,
+            element: <CreateTipoInstalacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalacionesEditar,
+            element: <UpdateTipoInstalacionPage />,
+          },
+        ],
+      },
+
+      //////////* Administracion Red ------------
+      {
+        path: ROUTER_PATHS.administracionRed.root,
+        element: <AdministracionRedModule />,
+        children: [
+          ///* router
+          {
+            path: ROUTER_PATHS.administracionRed.routers,
+            element: <RoutersPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.routersCrear,
+            element: <CreateRouterPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.routersEditar,
+            element: <UpdateRouterPage />,
+          },
+        ],
+      },
+
       {
         path: '*',
         element: <Error404 />,

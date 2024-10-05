@@ -1,6 +1,5 @@
 import {
   getUrlParams,
-  handleAxiosError,
   MetodoPago,
   MetodoPagosPaginatedRes,
   ToastWrapper,
@@ -10,6 +9,7 @@ import {
 import { erpAPI } from '@/shared/axios/erp-api';
 import { useUiStore } from '@/store/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 const { get, post, patch } = erpAPI();
 

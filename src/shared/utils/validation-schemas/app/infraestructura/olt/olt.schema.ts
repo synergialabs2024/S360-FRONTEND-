@@ -37,11 +37,19 @@ export const oLTFormSchema = yup.object({
     .string()
     .required('El campo user es requerido')
     .max(255, 'El campo user no debe exceder los 255 caracteres'),
-  pppoe: yup
+  snmp_community: yup
     .string()
-    .required('El campo pppoe es requerido')
-    .max(100, 'El campo pppoe no debe exceder los 100 caracteres'),
-  ip_pppoe: yup.string().required('El campo ip pppoe es requerido'),
+    .required('El campo snmp_community es requerido')
+    .max(50, 'El campo snmp_community no debe exceder los 50 caracteres'),
+  snmp_version: yup
+    .number()
+    .oneOf([1, 2, 3], 'El campo snmp_version solo puede ser 1, 2 o 3')
+    .typeError('El campo snmp_version es requerido')
+    .required('El campo snmp_version es requerido'),
+  snmp_port: yup
+    .number()
+    .typeError('El campo snmp_port es requerido')
+    .required('El campo snmp_port es requerido'),
 
   nodo: yup
     .number()

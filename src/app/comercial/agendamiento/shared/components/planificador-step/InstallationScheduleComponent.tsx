@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 
-import { CacheBaseKeysPreventaEnum } from '@/actions/app';
-import { Preventa } from '@/shared';
+import { gridSize, Preventa } from '@/shared';
+import { CustomTextFieldNoForm } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
 import ConfirmInstallScheduleVentasModal from './ConfirmInstallScheduleVentasModal';
@@ -13,11 +13,13 @@ import HourInstallSchedulePaperAndCountdown from './HourInstallSchedulePaperAndC
 export type InstallationScheduleComponentProps = {
   form: UseFormReturn<SaveFormDataAgendaVentas>;
   preventa: Preventa;
+  cacheKey: string;
+  showFleetName?: boolean;
 };
 
 const InstallationScheduleComponent: React.FC<
   InstallationScheduleComponentProps
-> = ({ form, preventa }) => {
+> = ({ form, preventa, cacheKey, showFleetName = false }) => {
   ///* global state ---------------------
   const availableFleetsByZonePks = useAgendamientoVentasStore(
     s => s.availableFleetsByZonePks,
@@ -25,6 +27,12 @@ const InstallationScheduleComponent: React.FC<
   const isComponentBlocked = useAgendamientoVentasStore(
     s => s.isComponentBlocked,
   );
+  const fleetsByZoneLimitData = useAgendamientoVentasStore(
+    s => s.fleetsByZoneLimitData,
+  );
+
+  ///* form ---------------------
+  const watchedRawFleet = form.watch('rawFlota');
 
   ///* local state ---------------------
   const [optionsPks, setOptionsPks] = useState<number[]>(
@@ -67,6 +75,11 @@ const InstallationScheduleComponent: React.FC<
 
     if (optionsPks.length > 0) {
       form.setValue('flota', optionsPks[currentOptionIdx]);
+
+      const rawFleet = fleetsByZoneLimitData.find(
+        fleet => fleet?.id === optionsPks[currentOptionIdx],
+      );
+      form.setValue('rawFlota', rawFleet as any);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOptionIdx, isMounted]);
@@ -75,28 +88,41 @@ const InstallationScheduleComponent: React.FC<
 
   return (
     <>
-      {/* ================fleets paginator ================ */}
-      <Grid container>
-        <span className="spacer" />
-        <Box display="flex" justifyContent="flex-end">
-          <IconButton
-            color="primary"
-            onClick={handlePrev}
-            disabled={currentOptionIdx === 0 || isComponentBlocked}
-          >
-            <MdArrowBackIosNew fontSize="large" />
-          </IconButton>
+      {/* ================ fleets paginator ================ */}
+      <Grid item container xs={12} direction="column">
+        {showFleetName && (
+          <Grid item xs={12} m={0} p={0}>
+            <CustomTextFieldNoForm
+              label="Flota asignada"
+              value={watchedRawFleet?.name || ''}
+              disabled
+              size={gridSize}
+            />
+          </Grid>
+        )}
 
-          <IconButton
-            color="primary"
-            onClick={handleNext}
-            disabled={
-              currentOptionIdx === optionsPks.length - 1 || isComponentBlocked
-            }
-          >
-            <MdArrowForwardIos fontSize="large" />
-          </IconButton>
-        </Box>
+        <span className="spacer" />
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="flex-end">
+            <IconButton
+              color="primary"
+              onClick={handlePrev}
+              disabled={currentOptionIdx === 0 || isComponentBlocked}
+            >
+              <MdArrowBackIosNew fontSize="large" />
+            </IconButton>
+
+            <IconButton
+              color="primary"
+              onClick={handleNext}
+              disabled={
+                currentOptionIdx === optionsPks.length - 1 || isComponentBlocked
+              }
+            >
+              <MdArrowForwardIos fontSize="large" />
+            </IconButton>
+          </Box>
+        </Grid>
       </Grid>
 
       {/* ================ main component ================ */}
@@ -110,11 +136,8 @@ const InstallationScheduleComponent: React.FC<
         isOpen={isOpenModal}
         onClose={() => setIsOpenModal(false)}
         preventaId={preventa?.id!}
-        preventaUUID={preventa?.uuid!}
         form={form}
-        cackeKeyBase={
-          CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS
-        }
+        cacheKey={cacheKey}
       />
     </>
   );

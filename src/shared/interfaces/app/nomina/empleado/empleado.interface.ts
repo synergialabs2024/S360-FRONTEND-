@@ -2,6 +2,7 @@ import { PagingMetaResponse } from '@/shared/interfaces/common';
 import {
   AreaLimitData,
   CanalVentaLimitData,
+  CentroCosto,
   CiudadLimitData,
   DepartamentoLimitData,
   EmpresaLimitData,
@@ -41,6 +42,7 @@ export interface Empleado {
 
   ///* fk
   empresa?: number;
+  centro_costo?: number;
   area?: number;
   departamento?: number;
   canal_venta?: number;
@@ -53,6 +55,7 @@ export interface Empleado {
   user?: number; // only to sign in erp system
 
   empresa_data?: EmpresaLimitData;
+  centro_costo_data?: CentroCosto;
   area_data?: AreaLimitData;
   departamento_data?: DepartamentoLimitData;
   canal_venta_data?: CanalVentaLimitData;

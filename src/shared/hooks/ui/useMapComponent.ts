@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useFetchNaps } from '@/actions/app';
 import { CustomMap } from '@/shared/components/CustomMaps';
+import { useMapStore } from '@/store/app';
 
 type CoordenadasType = {
   lat: number;
@@ -31,6 +32,7 @@ export const useMapComponent = ({
   }, [initialCoords]);
 
   const [latLng, setLatLng] = useState<CoordenadasType>(initialLatLng);
+  const setNapsByCoords = useMapStore(s => s.setNapsByCoords);
 
   // Memoized Map component to avoid unnecessary re-renders
   const Map = useMemo(() => CustomMap, []);
@@ -58,6 +60,14 @@ export const useMapComponent = ({
       form.setValue(coordsFormKey, `${latLng.lat},${latLng.lng}`);
     }
   }, [latLng, coordsFormKey, form]);
+
+  useEffect(() => {
+    useMapStore.getState().setIsLoadingNaps(isLoadingNaps || isRefetchingNaps);
+    if (isLoadingNaps || isRefetchingNaps) return;
+
+    const naps = napsByCoordsPagingRes?.data?.items || [];
+    setNapsByCoords(naps);
+  }, [napsByCoordsPagingRes, isLoadingNaps, isRefetchingNaps, setNapsByCoords]);
 
   return {
     Map,

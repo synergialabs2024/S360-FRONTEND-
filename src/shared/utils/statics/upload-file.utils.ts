@@ -1,5 +1,5 @@
 import { createFileDocument } from '@/actions/statics-api';
-import { handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { FileDocument, Nullable } from '@/shared/interfaces';
 import { useUiStore } from '@/store/ui';
 

@@ -1,11 +1,10 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
-import { FaMapLocationDot } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -14,33 +13,27 @@ import {
   useCreateSolicitudDesbloqueoVentas,
   useCreateSolicitudServicio,
   useFetchPaises,
-  useFetchSectores,
-  useFetchZonas,
-  useGetZoneByCoords,
   useValidateCedulaSolService,
   ValidateIdentificacionParams,
 } from '@/actions/app';
 import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
-import { handleAxiosError, Sector, ToastWrapper, useLoaders } from '@/shared';
+import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
+import { ToastWrapper, useLoaders } from '@/shared';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomCardAlert,
   CustomCellphoneTextField,
-  CustomCoordsTextField,
   CustomDatePicker,
   CustomIdentificacionTextField,
   CustomNumberTextField,
   CustomScanLoad,
-  CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
-  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
-  MapModalComponent,
   SampleCheckbox,
   SingleFormBoxScene,
-  SingleIconButton,
 } from '@/shared/components';
 import {
   EstadoSolicitudServicioEnumChoice,
@@ -51,24 +44,23 @@ import {
   SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
 import {
-  gridSize,
-  gridSizeMdLg1,
-  gridSizeMdLg11,
+  gridSizeMdLg12,
   gridSizeMdLg4,
   gridSizeMdLg6,
+  gridSizeMdLg8,
 } from '@/shared/constants/ui';
-import { calcAge } from '@/shared/helpers';
-import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
-import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import { calcAge, calcIsTerceraEdad } from '@/shared/helpers';
 import {
   HTTPResStatusCodeEnum,
   Pais,
   SolicitudServicio,
 } from '@/shared/interfaces';
+import { ClienteExist } from '@/shared/interfaces/app/comercial/solicitud-servicio/client-mikrowisp.interface';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
 import { solicitudServicioFormSchema } from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
+import ServicesAlertModal from './ServicesAlertModal';
 
 export interface SaveSolicitudServicioProps {
   title: string;
@@ -94,9 +86,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const navigate = useNavigate();
 
   ///* local state -----------------
-  const [openMapModal, setOpenMapModal] = useState(false);
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
+  const [clientData, setClientData] = useState<ClienteExist | null>(null);
 
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -128,27 +120,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const watchedIdentification = form.watch('identificacion');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
   const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
-  const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
-
-  const {
-    Map,
-    latLng,
-    napsByCoords,
-    isLoadingNaps,
-    isRefetchingNaps,
-    setLatLng,
-  } = useMapComponent({
-    form,
-    initialCoords: solicitudservicio?.id ? solicitudservicio.coordenadas : '',
-    enableFetchNaps: true,
-  });
-  useLocationCoords({
-    isEditting: !!solicitudservicio?.id,
-    form,
-    setLatLng,
-  });
+  const watchedIsTerceraEdad = form.watch('es_tercera_edad');
+  const watchedIsCliente = form.watch('es_cliente');
 
   ///* fetch data -----------------
   const {
@@ -158,36 +133,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   } = useFetchPaises({
     params: {
       page_size: 200,
-    },
-  });
-  const {
-    data: zonasPaging,
-    isLoading: isLoadingZonas,
-    isRefetching: isRefetchingZonas,
-  } = useFetchZonas({
-    params: {
-      page_size: 1200,
-    },
-  });
-  const {
-    data: zonaByCoordsRes,
-    isLoading: isLoadingZonaByCoords,
-    isRefetching: isRefetchingZonaByCoords,
-  } = useGetZoneByCoords(
-    {
-      coords: `${latLng?.lat},${latLng?.lng}`,
-    },
-    !!latLng?.lat && !!latLng?.lng,
-  );
-  const {
-    data: sectoresPaging,
-    isLoading: isLoadingSectores,
-    isRefetching: isRefetchingSectores,
-  } = useFetchSectores({
-    enabled: !!watchedZone,
-    params: {
-      page_size: 900,
-      zona: watchedZone,
     },
   });
 
@@ -270,15 +215,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             title: 'Prospecto en preventa',
             subtitle: `Preventa registrada hace ${timeBlocked} ${
               minutesBlocked > 60 ? 'horas' : 'minutos'
-            }. Para poderlo ingresar en un nuevo proceso debe solicitar la reasignación de la preventa o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}.
-        ¿Desea solicitar la reasignación?`,
+            }. Para poderlo ingresar en un nuevo proceso debe solicitar la liberación de la preventa o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}.
+        ¿Desea solicitar la liberación?`,
             onConfirm: () => {
               setConfirmDialogIsOpen(false);
               createSolUnblockSolServiceMutation.mutate({
                 modelo: SalesModelsEnumChoice.PREVENTA,
                 modelo_id: data.preventa_id,
                 modelo_estado:
-                  SalesStatesActionsEnumChoice.PREVENTA_REASIGNACION_ESPERA,
+                  SalesStatesActionsEnumChoice.PREVENTA_SOLICITUD_DESBLOQUEO_ESPERA,
                 solicitud_desbloqueo_estado:
                   GeneralModelStatesEnumChoice.ESPERA,
               });
@@ -288,6 +233,38 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           });
         }
       }
+    } else if (status === HTTPResStatusCodeEnum.CLIENTE_EXISTS_IN_DB) {
+      ToastWrapper.info(err?.response?.data?.message);
+      data?.sri_down &&
+        ToastWrapper.warning(
+          'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos manualmente',
+        );
+
+      const correctFechaNacimiento = dayjs(
+        data?.fechaNacimiento,
+        'DD/MM/YYYY',
+      ).format('YYYY-MM-DD');
+      const currentCountry = paisesPaging?.data.items.find(
+        country => country.nationality === data?.nacionalidad,
+      );
+
+      form.reset({
+        ...form.getValues(),
+        es_cliente: true,
+
+        razon_social: data?.fullName,
+        es_discapacitado: data?.esDiscapacitado,
+        es_tercera_edad: data?.esTerceraEdad,
+        fecha_nacimiento: correctFechaNacimiento,
+        edad: data?.edad,
+        direccion: data?.domicilio,
+        isFormBlocked: false,
+        isValidIdentificacion: true,
+
+        pais: currentCountry?.id,
+        nacionalidad: data?.nacionalidad,
+      });
+      setClientData(data);
     } else {
       form.reset({
         isFormBlocked: true,
@@ -431,80 +408,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     reset(solicitudservicio);
   }, [solicitudservicio, reset]);
 
-  // set zone to up
-  useEffect(() => {
-    if (!latLng?.lat || !latLng?.lng) return;
-
-    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
-    const zone = zonaByCoordsRes?.data;
-    if (!zone) {
-      ToastWrapper.warning(
-        `No se encontraron zonas con cobertura para las coordenadas ${
-          latLng?.lat
-        }, ${latLng?.lng}`,
-      );
-      form.reset({
-        ...form.getValues(),
-        thereIsCoverage: false,
-      });
-      return;
-    }
-    form.reset({
-      ...form.getValues(),
-      zona: zone?.id,
-      ciudad: zone?.ciudad_data?.id!,
-      provincia: zone?.provincia_data?.id!,
-      cityName: zone?.ciudad_data?.name,
-      provinceName: zone?.provincia_data?.name,
-      zoneName: zone?.name,
-      thereIsCoverage: true,
-    });
-  }, [
-    zonaByCoordsRes,
-    isLoadingZonaByCoords,
-    isRefetchingZonaByCoords,
-    form,
-    latLng?.lat,
-    latLng?.lng,
-  ]);
-  // naps available
-  useEffect(() => {
-    if (!latLng?.lat || !latLng?.lng) return;
-    if (isLoadingNaps || isRefetchingNaps) return;
-    const thereAreNaps = !!napsByCoords?.length;
-    if (!thereAreNaps) {
-      form.reset({
-        ...form.getValues(),
-        thereAreNaps: false,
-      });
-      ToastWrapper.warning(
-        'No se encontraron NAPs disponibles para las coordenadas ingresadas',
-      );
-    }
-    form.reset({
-      ...form.getValues(),
-      thereAreNaps,
-    });
-  }, [
-    napsByCoords,
-    isLoadingNaps,
-    isRefetchingNaps,
-    form,
-    latLng?.lat,
-    latLng?.lng,
-  ]);
-
-  const isCustomLoading =
-    isLoadingPaises ||
-    isRefetchingPaises ||
-    isLoadingZonas ||
-    isRefetchingZonas ||
-    isLoadingZonaByCoords ||
-    isRefetchingZonaByCoords ||
-    isLoadingSectores ||
-    isRefetchingSectores ||
-    isLoadingNaps ||
-    isRefetchingNaps;
+  const isCustomLoading = isLoadingPaises || isRefetchingPaises;
   useLoaders(isCustomLoading);
 
   return (
@@ -516,426 +420,208 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ToastWrapper.error('Faltan campos requeridos');
       })}
       disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
+      maxWidth="xl"
+      gridSizeForm={gridSizeMdLg12}
     >
-      <CustomAutocompleteArrString
-        label="Tipo de identificación"
-        name="tipo_identificacion"
-        control={form.control}
-        defaultValue={form.getValues('tipo_identificacion')}
-        options={IDENTIFICATION_TYPE_ARRAY_CHOICES}
-        isLoadingData={false}
-        error={errors.tipo_identificacion}
-        helperText={errors.tipo_identificacion?.message}
-        size={gridSizeMdLg6}
-        disableClearable
-        onChangeValue={() => {
-          clearForm();
-        }}
-      />
-      <InputAndBtnGridSpace
-        inputNode={
-          <CustomIdentificacionTextField
-            label="Identificación"
-            name="identificacion"
-            control={form.control}
-            selectedDocumentType={watchedIdentificationType}
-            defaultValue={form.getValues('identificacion')}
-            error={errors.identificacion}
-            helperText={errors.identificacion?.message}
-            onFetchCedulaRucInfo={async value => {
-              await handleFetchCedulaRucInfo(value);
-            }}
-            disabled={!watchedIdentificationType}
-            onChangeValue={value => {
-              if (!value?.length) {
-                clearForm();
-              }
-            }}
-          />
-        }
-        btnLabel="Buscar"
-        iconBtn={<CiSearch />}
-        disabledBtn={
-          watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
-        }
-        onClick={() => {
-          if (!watchedIdentification)
-            return ToastWrapper.warning(
-              'Ingrese un número de identificación válido',
-            );
-
-          if (
-            watchedIdentificationType == IdentificationTypeEnumChoice.CEDULA &&
-            watchedIdentification?.length < 10
-          )
-            return ToastWrapper.warning('Ingrese una cécula válida');
-          if (
-            watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
-            watchedIdentification?.length < 13
-          )
-            return ToastWrapper.warning('Ingrese RUC válido');
-
-          handleFetchCedulaRucInfo(watchedIdentification);
-        }}
-      />
-
-      <CustomTextField
-        label={
-          watchedIdentificationType === IdentificationTypeEnumChoice.RUC
-            ? 'Razón social'
-            : 'Nombre y Apellido'
-        }
-        name="razon_social"
-        control={form.control}
-        defaultValue={form.getValues().razon_social}
-        error={errors.razon_social}
-        helperText={errors.razon_social?.message}
-      />
-      <CustomDatePicker
-        label="Fecha nacimiento"
-        name="fecha_nacimiento"
-        control={form.control}
-        defaultValue={form.getValues().fecha_nacimiento}
-        error={errors.fecha_nacimiento}
-        helperText={errors.fecha_nacimiento?.message}
-        size={gridSizeMdLg6}
-        onChangeValue={value => {
-          // 1997-05-10
-          const age = calcAge(value);
-          form.setValue('edad', age);
-          // apply logic (planes,promos 3era edad, etc)
-        }}
-      />
-      <CustomNumberTextField
-        label="Edad"
-        name="edad"
-        control={form.control}
-        defaultValue={form.getValues().edad}
-        error={errors.edad}
-        helperText={errors.edad?.message}
-        size={gridSizeMdLg6}
-        min={0}
-        disabled
-      />
-      <CustomAutocomplete<Pais>
-        label="Pais"
-        name="pais"
-        valueKey="name"
-        actualValueKey="id"
-        control={form.control}
-        defaultValue={form.getValues().pais}
-        options={paisesPaging?.data.items || []}
-        isLoadingData={isCustomLoading}
-        error={errors.pais}
-        helperText={errors.pais?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomAutocomplete<any>
-        label="Nacionalidad"
-        name="nacionalidad"
-        valueKey="name"
-        actualValueKey="name"
-        control={form.control}
-        defaultValue={form.getValues().pais}
-        options={
-          paisesPaging?.data?.items?.map(country => ({
-            name: country.nationality,
-          })) || []
-        }
-        isLoadingData={isCustomLoading}
-        error={errors.pais}
-        helperText={errors.pais?.message}
-        size={gridSizeMdLg6}
-      />
-
-      <SampleCheckbox
-        label="Es tercera edad"
-        name="es_tercera_edad"
-        control={form.control}
-        defaultValue={form.getValues().es_tercera_edad}
-        size={gridSizeMdLg4}
-        disabled
-      />
-      <SampleCheckbox
-        label="Es discapacitado"
-        name="es_discapacitado"
-        control={form.control}
-        defaultValue={form.getValues().es_discapacitado}
-        size={gridSizeMdLg4}
-        disabled
-      />
-      <SampleCheckbox
-        label="Es cliente"
-        name="es_cliente"
-        control={form.control}
-        defaultValue={form.getValues().es_cliente}
-        size={gridSizeMdLg4}
-        disabled
-      />
-
-      <CustomTextField
-        label="Email"
-        name="email"
-        type="email"
-        control={form.control}
-        defaultValue={form.getValues().email}
-        error={errors.email}
-        helperText={
-          errors.email
-            ? errors.email?.message
-            : 'Ingrese un correo válido al que se enviará el contrato'
-        }
-        size={gridSizeMdLg6}
-      />
-      <CustomCellphoneTextField
-        label="Celular"
-        name="celular"
-        control={form.control}
-        defaultValue={form.getValues().celular}
-        error={errors.celular}
-        helperText={errors.celular?.message}
-        size={gridSizeMdLg6}
-      />
-
-      {/* ------------- location ------------- */}
-      <>
-        <CustomTypoLabel
-          text="Ubicación"
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
+      <Grid item container>
+        <ServicesAlertModal
+          clientData={clientData}
+          watchedIsCliente={watchedIsCliente}
         />
+      </Grid>
 
+      <Grid item container {...gridSizeMdLg6} spacing={2}>
+        <CustomTypoLabel text="Datos personales" />
+
+        <CustomAutocompleteArrString
+          label="Tipo de identificación"
+          name="tipo_identificacion"
+          control={form.control}
+          defaultValue={form.getValues('tipo_identificacion')}
+          options={IDENTIFICATION_TYPE_ARRAY_CHOICES}
+          isLoadingData={false}
+          error={errors.tipo_identificacion}
+          helperText={errors.tipo_identificacion?.message}
+          size={gridSizeMdLg6}
+          disableClearable
+          onChangeValue={() => {
+            clearForm();
+          }}
+        />
         <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputGridSize={gridSizeMdLg11}
           inputNode={
-            <CustomCoordsTextField
-              label="Coordenadas"
-              name="coordenadas"
+            <CustomIdentificacionTextField
+              label="Identificación"
+              name="identificacion"
               control={form.control}
-              defaultValue={form.getValues().coordenadas}
-              error={errors.coordenadas}
-              helperText={errors.coordenadas?.message}
-              onChangeValue={(value, isValidCoords) => {
-                if (isValidCoords) {
-                  const s = value.split(',');
-                  setLatLng({ lat: s[0], lng: s[1] });
+              selectedDocumentType={watchedIdentificationType}
+              defaultValue={form.getValues('identificacion')}
+              error={errors.identificacion}
+              helperText={errors.identificacion?.message}
+              onFetchCedulaRucInfo={async value => {
+                await handleFetchCedulaRucInfo(value);
+              }}
+              disabled={!watchedIdentificationType}
+              onChangeValue={value => {
+                if (!value?.length) {
+                  clearForm();
                 }
               }}
             />
           }
-          btnLabel="Ver mapa"
-          overrideBtnNode
-          customBtnNode={
-            <>
-              <SingleIconButton
-                startIcon={<FaMapLocationDot />}
-                label={'Ver mapa'}
-                color={'primary'}
-                onClick={() => {
-                  setOpenMapModal(true);
-                }}
-              />
-
-              <MapModalComponent
-                open={openMapModal}
-                onClose={() => {
-                  setOpenMapModal(false);
-                }}
-                //
-                showCustomTitleNode
-                customTitleNode={
-                  <Grid item container xs={12}>
-                    <Typography variant="h4">
-                      Ubicación | Coordenadas:{' '}
-                      <span
-                        style={{
-                          fontSize: '0.93rem',
-                          fontWeight: 400,
-                        }}
-                      >
-                        {latLng?.lat}, {latLng?.lng}
-                      </span>
-                    </Typography>
-                  </Grid>
-                }
-                minWidthModal="70%"
-                contentNodeOverride={
-                  <Map
-                    coordenadas={
-                      latLng
-                        ? {
-                            lat: latLng.lat,
-                            lng: latLng.lng,
-                          }
-                        : { lat: 0, lng: 0 }
-                    }
-                    canDragMarker={true}
-                    setLatLng={setLatLng}
-                    showCoverage
-                    coverageZones={zonasPaging?.data?.items || []}
-                  />
-                }
-              />
-            </>
+          btnLabel="Buscar"
+          iconBtn={<CiSearch />}
+          disabledBtn={
+            watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
           }
-          btnGridSize={gridSizeMdLg1}
+          onClick={() => {
+            if (!watchedIdentification)
+              return ToastWrapper.warning(
+                'Ingrese un número de identificación válido',
+              );
+
+            if (
+              watchedIdentificationType ==
+                IdentificationTypeEnumChoice.CEDULA &&
+              watchedIdentification?.length < 10
+            )
+              return ToastWrapper.warning('Ingrese una cécula válida');
+            if (
+              watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
+              watchedIdentification?.length < 13
+            )
+              return ToastWrapper.warning('Ingrese RUC válido');
+
+            handleFetchCedulaRucInfo(watchedIdentification);
+          }}
         />
 
-        {watchedThereIsCoverage ? (
-          <>
-            <CustomAutocomplete<Sector>
-              label="Sector"
-              name="sector"
-              // options
-              options={sectoresPaging?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().sector}
-              isLoadingData={isLoadingSectores || isRefetchingSectores}
-              // vaidation
-              control={form.control}
-              error={errors.sector}
-              helperText={errors.sector?.message}
-            />
-            <CustomTextField
-              label="Zona"
-              name="zoneName"
-              control={form.control}
-              defaultValue={form.getValues().zoneName}
-              error={errors.zoneName}
-              helperText={errors.zoneName?.message}
-              disabled
-            />
-            <CustomTextField
-              label="Ciudad"
-              name="cityName"
-              control={form.control}
-              defaultValue={form.getValues().cityName}
-              error={errors.cityName}
-              helperText={errors.cityName?.message}
-              size={gridSizeMdLg6}
-              disabled
-            />
-            <CustomTextField
-              label="Provincia"
-              name="provinceName"
-              control={form.control}
-              defaultValue={form.getValues().provinceName}
-              error={errors.provinceName}
-              helperText={errors.provinceName?.message}
-              size={gridSizeMdLg6}
-              disabled
-            />
-          </>
-        ) : (
-          <>
-            <CustomCardAlert
-              sizeType="small"
-              alertMessage="Ubicación sin cobertura"
-              alertSeverity="error"
-            />
-          </>
-        )}
-
-        <CustomTextArea
-          label="Dirección"
-          name="direccion"
+        <CustomTextField
+          label={
+            watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+              ? 'Razón social'
+              : 'Nombre y Apellido'
+          }
+          name="razon_social"
           control={form.control}
-          defaultValue={form.getValues().direccion}
-          error={errors.direccion}
-          helperText={errors.direccion?.message}
+          defaultValue={form.getValues().razon_social}
+          error={errors.razon_social}
+          helperText={errors.razon_social?.message}
+        />
+        <CustomDatePicker
+          label="Fecha nacimiento"
+          name="fecha_nacimiento"
+          control={form.control}
+          defaultValue={form.getValues().fecha_nacimiento}
+          error={errors.fecha_nacimiento}
+          helperText={errors.fecha_nacimiento?.message}
+          size={gridSizeMdLg6}
+          onChangeValue={value => {
+            // 1997-05-10
+            const age = calcAge(value);
+            form.setValue('edad', age);
+            form.setValue('es_tercera_edad', calcIsTerceraEdad(value));
+
+            // apply logic (planes,promos 3era edad, etc)
+          }}
+        />
+        <CustomNumberTextField
+          label="Edad"
+          name="edad"
+          control={form.control}
+          defaultValue={form.getValues().edad}
+          error={errors.edad}
+          helperText={errors.edad?.message}
+          size={gridSizeMdLg6}
+          min={0}
+          disabled
+        />
+        <CustomAutocomplete<Pais>
+          label="Pais"
+          name="pais"
+          valueKey="name"
+          actualValueKey="id"
+          control={form.control}
+          defaultValue={form.getValues().pais}
+          options={paisesPaging?.data.items || []}
+          isLoadingData={isCustomLoading}
+          error={errors.pais}
+          helperText={errors.pais?.message}
+          size={gridSizeMdLg6}
+        />
+        <CustomAutocomplete<any>
+          label="Nacionalidad"
+          name="nacionalidad"
+          valueKey="name"
+          actualValueKey="name"
+          control={form.control}
+          defaultValue={form.getValues().pais}
+          options={
+            paisesPaging?.data?.items?.map(country => ({
+              name: country.nationality,
+            })) || []
+          }
+          isLoadingData={isCustomLoading}
+          error={errors.pais}
+          helperText={errors.pais?.message}
+          size={gridSizeMdLg6}
         />
 
-        {watchedThereAreNaps ? (
-          <CustomCardAlert
-            sizeType="small"
-            alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsByCoords?.at(0)?.distance}m`}
-            alertSeverity="success"
+        <CustomTextField
+          label="Email"
+          name="email"
+          type="email"
+          control={form.control}
+          defaultValue={form.getValues().email}
+          error={errors.email}
+          helperText={
+            errors.email
+              ? errors.email?.message
+              : 'Ingrese un correo válido al que se enviará el contrato'
+          }
+          size={gridSizeMdLg6}
+        />
+        <CustomCellphoneTextField
+          label="Celular"
+          name="celular"
+          control={form.control}
+          defaultValue={form.getValues().celular}
+          error={errors.celular}
+          helperText={errors.celular?.message}
+          size={gridSizeMdLg6}
+        />
+
+        <Grid item container xs={12} justifyContent="flex-end">
+          <Grid item {...gridSizeMdLg8}>
+            {!!watchedIsTerceraEdad && (
+              <CustomCardAlert
+                sizeType="small"
+                alertMessage={'El cliente es de tercera edad'}
+                alertSeverity="info"
+              />
+            )}
+          </Grid>
+
+          <SampleCheckbox
+            label="¿Tiene discapacidad?"
+            name="es_discapacitado"
+            control={form.control}
+            defaultValue={form.getValues().es_discapacitado}
+            size={gridSizeMdLg4}
+            justifyContent="flex-end"
           />
-        ) : (
-          <CustomCardAlert
-            sizeType="small"
-            alertMessage="No se encontraron cajas disponibles"
-            alertSeverity="error"
-          />
-        )}
-      </>
+        </Grid>
+      </Grid>
 
-      {/* <>
-        <CustomTypoLabel
-          text="Equifax"
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
+      {/* ------------- location ------------- */}
+      <Grid item container {...gridSizeMdLg6} spacing={2}>
+        <LocationZonePolygonFormPart
+          form={form}
+          initialCoords={''}
+          isEdit={false}
+          // ptLabel={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        <CustomTextField
-          label="Categoria score desicion"
-          name="categoria_score_desicion"
-          control={form.control}
-          defaultValue={form.getValues().categoria_score_desicion}
-          error={errors.categoria_score_desicion}
-          helperText={errors.categoria_score_desicion?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Valor maximo"
-          name="valor_maximo"
-          control={form.control}
-          defaultValue={form.getValues().valor_maximo}
-          error={errors.valor_maximo}
-          helperText={errors.valor_maximo?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Valor minimo"
-          name="valor_minimo"
-          control={form.control}
-          defaultValue={form.getValues().valor_minimo}
-          error={errors.valor_minimo}
-          helperText={errors.valor_minimo?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Score inclusion"
-          name="score_inclusion"
-          control={form.control}
-          defaultValue={form.getValues().score_inclusion}
-          error={errors.score_inclusion}
-          helperText={errors.score_inclusion?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Score sobreendeudamiento"
-          name="score_sobreendeudamiento"
-          control={form.control}
-          defaultValue={form.getValues().score_sobreendeudamiento}
-          error={errors.score_sobreendeudamiento}
-          helperText={errors.score_sobreendeudamiento?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Score servicios"
-          name="score_servicios"
-          control={form.control}
-          defaultValue={form.getValues().score_servicios}
-          error={errors.score_servicios}
-          helperText={errors.score_servicios?.message}
-          size={gridSizeMdLg6}
-          disabled
-        />
-        <CustomTextField
-          label="Rango capacidad pago"
-          name="rango_capacidad_pago"
-          control={form.control}
-          defaultValue={form.getValues().rango_capacidad_pago}
-          error={errors.rango_capacidad_pago}
-          helperText={errors.rango_capacidad_pago?.message}
-          disabled
-        />
-      </> */}
+      </Grid>
 
       {/* ============= loaders ============= */}
       <CustomScanLoad isOpen={isCheckingIdentificacion} name="cedula" />

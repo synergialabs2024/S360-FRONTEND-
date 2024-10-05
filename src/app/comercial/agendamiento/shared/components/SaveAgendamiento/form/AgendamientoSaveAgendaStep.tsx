@@ -1,6 +1,7 @@
 import { FormHelperText, Grid } from '@mui/material';
 import { UseFormReturn } from 'react-hook-form';
 
+import { CacheBaseKeysPreventaEnum } from '@/actions/app';
 import { Preventa } from '@/shared';
 import {
   CustomTextFieldNoForm,
@@ -51,7 +52,11 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
           text="Horarios disponibles"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        <InstallationScheduleComponent form={form} preventa={preventa!} />
+        <InstallationScheduleComponent
+          form={form}
+          preventa={preventa!}
+          cacheKey={`${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventa?.uuid!}`}
+        />
       </>
     </>
   );

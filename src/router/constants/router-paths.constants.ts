@@ -106,6 +106,12 @@ export const ROUTER_PATHS = {
     sectoresEditar: 'sectores/editar/:uuid',
     sectoresNav: '/parametrizacion/sectores',
 
+    ///* centro costos
+    centrocostos: 'centro-costos',
+    centrocostosCrear: 'centro-costos/crear',
+    centrocostosEditar: 'centro-costos/editar/:uuid',
+    centrocostosNav: '/parametrizacion/centro-costos',
+
     ///* parametro sistema
     parametrosSistemas: 'parametros-sistemas',
     parametrosSistemasCrear: 'parametros-sistemas/crear',
@@ -251,6 +257,12 @@ export const ROUTER_PATHS = {
     radiobasesCrear: 'radiobases/crear',
     radiobasesEditar: 'radiobases/editar/:uuid',
     radiobasesNav: '/infraestructura/radiobases',
+
+    ///* ruta
+    rutas: 'rutas',
+    rutasCrear: 'rutas/crear',
+    rutasEditar: 'rutas/editar/:uuid',
+    rutasNav: '/infraestructura/rutas',
   },
 
   /////* Mantenimiento y Operación ----------------
@@ -275,9 +287,13 @@ export const ROUTER_PATHS = {
 
     ///* solicitud desbloqueo ventas - administración area/supervisor ventas
     solicitudDesbloqueoVentas: 'solicitud-desbloqueo-ventas',
-    solicitudDesbloqueoVentasEditar: 'solicitud-desbloqueo-ventas/editar/:uuid',
     solicitudDesbloqueoVentasNav:
       '/supervision-comercial/solicitud-desbloqueo-ventas',
+
+    ///* desbloqueo preventa
+    solicitudDesbloqueoPreventa: 'solicitud-desbloqueo-preventa',
+    solicitudDesbloqueoPreventaNav:
+      '/supervision-comercial/solicitud-desbloqueo-preventa',
 
     ///* codigos otp
     codigosOtp: 'codigos-otp',
@@ -286,5 +302,36 @@ export const ROUTER_PATHS = {
     ///* consulta buro
     consultasBuro: 'consultas-buro',
     consultasBuroNav: '/supervision-comercial/consultas-buro',
+  },
+
+  /////* Administración de Red ----------------
+  administracionRed: {
+    root: 'administracion-red',
+
+    ///* routers
+    routers: 'routers',
+    routersCrear: 'routers/crear',
+    routersEditar: 'routers/editar/:uuid',
+    routersNav: '/administracion-red/routers',
+  },
+  // // INVENTARIO =================================
+  inventario: {
+    root: 'inventario',
+
+    ///* bodega
+    bodegas: 'bodegas',
+    bodegasCrear: 'bodegas/crear',
+    bodegasEditar: 'bodegas/editar/:uuid',
+    bodegasNav: '/inventario/bodegas',
+  },
+  // // LOGISTICA =================================
+  logistica: {
+    root: 'logistica',
+
+    ///* tipoinstalaciones
+    tipoinstalaciones: 'tipoinstalaciones',
+    tipoinstalacionesCrear: 'tipoinstalaciones/crear',
+    tipoinstalacionesEditar: 'tipoinstalaciones/editar/:uuid',
+    tipoinstalacionesNav: '/logistica/tipoinstalaciones',
   },
 };

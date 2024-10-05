@@ -8,6 +8,7 @@ import {
   CustomSearch,
   CustomSwitch,
   CustomTable,
+  PasswordTableCell,
   SingleTableBoxScene,
   ViewMoreTextModalTableCell,
 } from '@/shared/components';
@@ -99,6 +100,58 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
+        accessorKey: 'user',
+        header: 'USER',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'user'),
+      },
+      {
+        accessorKey: 'password',
+        header: 'Password',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <PasswordTableCell password={row.original?.password || 'N/A'} />
+          );
+        },
+      },
+      {
+        accessorKey: 'puerto',
+        header: 'PUERTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'puerto'),
+      },
+      {
+        accessorKey: 'snmp_community',
+        header: 'Comunidad SNMP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'snmp_community'),
+      },
+      {
+        accessorKey: 'snmp_version',
+        header: 'Version SNMP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'snmp_version'),
+      },
+      {
+        accessorKey: 'snmp_port',
+        header: 'Puerto SNMP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'snmp_port'),
+      },
+      {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -125,7 +178,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'direccion'),
       },
-
       {
         accessorKey: 'coordenadas',
         header: 'COORDENADAS',
@@ -136,15 +188,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
       },
 
       {
-        accessorKey: 'puerto',
-        header: 'PUERTO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'puerto'),
-      },
-
-      {
         accessorKey: 'hostname',
         header: 'HOSTNAME',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -152,33 +195,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'hostname'),
       },
-      {
-        accessorKey: 'user',
-        header: 'USER',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'user'),
-      },
-
-      {
-        accessorKey: 'pppoe',
-        header: 'PPPOE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'pppoe'),
-      },
-
-      {
-        accessorKey: 'ip_pppoe',
-        header: 'IP PPPOE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ip_pppoe'),
-      },
-
       {
         accessorKey: 'nodo__name',
         header: 'NODO',
@@ -197,28 +213,24 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['provincia_data', 'name']),
       },
-
       {
         accessorKey: 'ciudad__name',
         header: 'CIUDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ciudad_data', 'name']),
       },
-
       {
         accessorKey: 'zona__name',
         header: 'ZONA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['zona_data', 'name']),
       },
-
       {
         accessorKey: 'sector__name',
         header: 'SECTOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
       },
-
       {
         accessorKey: 'state',
         header: 'ESTADO',

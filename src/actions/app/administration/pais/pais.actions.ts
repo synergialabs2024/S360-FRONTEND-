@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-import { handleAxiosError } from '@/shared/axios';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   Pais,
   PaisesPaginatedRes,
