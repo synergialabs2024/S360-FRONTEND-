@@ -497,11 +497,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.sectoresNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.LOGISTICA_TIPO_INSTALACION, {
               id: 'tipo-instalacion',
               title: 'Tipo de instalación',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.logistica.tipoinstalacionesNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
