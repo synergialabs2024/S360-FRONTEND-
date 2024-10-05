@@ -3,7 +3,12 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { Ruta, RUTA_TYPE_ARRAY_CHOICES, rutaFormSchema } from '@/shared';
+import {
+  PermissionsEnum,
+  Ruta,
+  RUTA_TYPE_ARRAY_CHOICES,
+  rutaFormSchema,
+} from '@/shared';
 import {
   CustomAutocompleteArrString,
   SampleCheckbox,
@@ -15,6 +20,7 @@ import {
   useUpdateRuta,
 } from '@/actions/app';
 import { returnUrlRutasPage } from '../../../pages/tables/RutasPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveRutaProps {
   title: string;
@@ -24,8 +30,7 @@ export interface SaveRutaProps {
 type SaveFormData = CreateRutaParamsBase & {};
 
 const SaveRuta: React.FC<SaveRutaProps> = ({ title, ruta }) => {
-  ///* Pendiente a cambio
-  //useCheckPermissionsArray();
+  useCheckPermission(PermissionsEnum.infraestructura_view_ruta);
 
   ///* hooks
   const navigate = useNavigate();

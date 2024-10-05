@@ -24,8 +24,7 @@ export const returnUrlCentroCostosPage =
 export type CentroCostosPageProps = {};
 
 const CentroCostosPage: React.FC<CentroCostosPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.administration_view_centrocosto);
 
   const navigate = useNavigate();
 
@@ -115,8 +114,11 @@ const CentroCostosPage: React.FC<CentroCostosPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
+                if (
+                  !hasPermission(
+                    PermissionsEnum.administration_change_centrocosto,
+                  )
+                )
                   return;
 
                 setConfirmDialog({
@@ -166,8 +168,9 @@ const CentroCostosPage: React.FC<CentroCostosPageProps> = () => {
     <SingleTableBoxScene
       title="Centros Costos"
       createPageUrl={`${returnUrlCentroCostosPage}/crear`}
-      //* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.administration_add_centrocosto,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -193,8 +196,9 @@ const CentroCostosPage: React.FC<CentroCostosPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
-        ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
+        canEdit={hasPermission(
+          PermissionsEnum.administration_change_centrocosto,
+        )}
         onEdit={onEdit}
         canDelete={false}
       />

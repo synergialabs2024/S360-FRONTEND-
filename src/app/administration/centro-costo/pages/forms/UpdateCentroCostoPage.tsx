@@ -4,12 +4,13 @@ import { useGetCentroCosto } from '@/actions/app';
 import { useLoaders } from '@/shared/hooks';
 import { SaveCentroCosto } from '../../shared/components';
 import { returnUrlCentroCostosPage } from '../tables/CentroCostosPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { PermissionsEnum } from '@/shared';
 
 export type UpdateCentroCostoPageProps = {};
 
 const UpdateCentroCostoPage: React.FC<UpdateCentroCostoPageProps> = () => {
-  ///* Pendiente a cambio
-  //useCheckPermission();
+  useCheckPermission(PermissionsEnum.administration_change_centrocosto);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetCentroCosto(uuid!);

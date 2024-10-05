@@ -4,12 +4,13 @@ import { useLoaders } from '@/shared/hooks';
 import { useGetRuta } from '@/actions/app';
 import { returnUrlRutasPage } from '../tables/RutasPage';
 import { SaveRuta } from '../../shared/components';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { PermissionsEnum } from '@/shared';
 
 export type UpdateRutaPageProps = {};
 
 const UpdateRutaPage: React.FC<UpdateRutaPageProps> = () => {
-  ///* Pendiente a cambio
-  //useCheckPermission();
+  useCheckPermission(PermissionsEnum.infraestructura_change_ruta);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetRuta(uuid!);
