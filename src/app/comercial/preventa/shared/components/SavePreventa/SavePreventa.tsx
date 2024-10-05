@@ -43,7 +43,6 @@ import {
   CodigoOtp,
   EntidadFinanciera,
   EquifaxEdentificationType,
-  handleAxiosError,
   HTTPResStatusCodeEnum,
   IdentificationTypeEnumChoice,
   INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
@@ -61,6 +60,7 @@ import {
   useLoaders,
   useUploadImageGeneric,
 } from '@/shared';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   ChipModelState,
   CustomAutocomplete,
