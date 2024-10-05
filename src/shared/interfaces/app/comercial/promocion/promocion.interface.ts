@@ -6,7 +6,7 @@ import {
   SectorLimitData,
   ZonaLimitData,
 } from '../../administration';
-import { PlanLimitData } from '../../servicios';
+import { PlanInternetLimitData } from '../../servicios';
 
 export interface PromocionesPaginatedRes {
   status: number;
@@ -40,7 +40,7 @@ export interface Promocion {
   meses_gratis?: number[] | string[];
   meses_descuento?: number[] | string[];
 
-  planes_data?: PlanLimitData[];
+  planes_data?: PlanInternetLimitData[];
   paises_data?: PaisLimitData[];
   provincias_data?: ProvinciaLimitData[];
   ciudades_data?: CiudadLimitData[];
