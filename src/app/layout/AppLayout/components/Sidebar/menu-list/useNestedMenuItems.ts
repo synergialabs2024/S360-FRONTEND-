@@ -156,7 +156,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.promocionesNav,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
+            renderByModule(SidenavModulesEnum.ADMIN_CENTRO_COSTO, {
               id: 'centro-costo',
               title: 'Centro de costo',
               type: MenuItemType.ITEM,
@@ -338,7 +338,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBuildingWarehouse,
           children: [
-            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_BODEGA, {
               id: 'bodegas',
               title: 'Bodegas',
               type: MenuItemType.ITEM,

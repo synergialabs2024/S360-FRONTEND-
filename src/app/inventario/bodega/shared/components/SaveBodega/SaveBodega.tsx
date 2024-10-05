@@ -1,11 +1,11 @@
 import {
-  CustomNumberTextField,
+  CustomAutocomplete,
   CustomTextArea,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { Bodega } from '@/shared/interfaces';
+import { Bodega, CentroCosto } from '@/shared/interfaces';
 import { bodegaFormSchema } from '@/shared/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
@@ -18,6 +18,7 @@ import {
 } from '@/actions/app/inventario';
 import { returnUrlBodegasPage } from '../../../pages/tables/BodegasPage';
 import { gridSizeMdLg6 } from '@/shared';
+import { useFetchCentroCostos } from '@/actions/app';
 
 export interface SaveBodegaProps {
   title: string;
@@ -43,6 +44,17 @@ const SaveBodega: React.FC<SaveBodegaProps> = ({ title, bodega }) => {
     reset,
     formState: { errors, isValid },
   } = form;
+
+  ///* fetch data
+  const {
+    data: centrocostosPagingRes,
+    isLoading: isLoadingCentroCosto,
+    isRefetching: isRefetchingCentroCosto,
+  } = useFetchCentroCostos({
+    params: {
+      page_size: 200,
+    },
+  });
 
   ///* mutations
   const createBodegaMutation = useCreateBodega({
@@ -90,15 +102,20 @@ const SaveBodega: React.FC<SaveBodegaProps> = ({ title, bodega }) => {
         helperText={errors.nombre?.message}
         size={gridSizeMdLg6}
       />
-      <CustomNumberTextField
+      <CustomAutocomplete<CentroCosto>
         label="Centro Costo"
         name="centro_costo"
-        control={form.control}
+        // options
+        options={centrocostosPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
         defaultValue={form.getValues().centro_costo}
+        isLoadingData={isLoadingCentroCosto || isRefetchingCentroCosto}
+        // vaidation
+        control={form.control}
         error={errors.centro_costo}
         helperText={errors.centro_costo?.message}
         size={gridSizeMdLg6}
-        min={0}
       />
       <CustomTextArea
         label="Direccion"
