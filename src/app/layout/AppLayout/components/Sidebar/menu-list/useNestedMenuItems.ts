@@ -186,7 +186,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMIN_TIPO_COMPROBANTE, {
               id: 'tipo-comprobantes',
               title: 'Tipo de comprobante',
               type: MenuItemType.ITEM,
@@ -497,7 +497,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.sectoresNav,
             }),
-            renderByModule(SidenavModulesEnum.LOGISTICA_TIPO_INSTALACION, {
+            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
               id: 'tipo-instalacion',
               title: 'Tipo de instalación',
               type: MenuItemType.ITEM,
