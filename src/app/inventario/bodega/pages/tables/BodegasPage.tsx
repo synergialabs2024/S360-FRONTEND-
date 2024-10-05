@@ -27,7 +27,7 @@ import {
 } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { hasPermission } from '@/shared/utils/auth';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useFetchBodegas, useUpdateBodega } from '@/actions/app/inventario';
 
@@ -36,8 +36,7 @@ export const returnUrlBodegasPage = ROUTER_PATHS.inventario.bodegasNav;
 export type BodegasPageProps = {};
 
 const BodegasPage: React.FC<BodegasPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.inventario_view_bodega);
 
   const navigate = useNavigate();
 
@@ -130,7 +129,7 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
         accessorKey: 'centro_costo__name',
         header: 'CENTRO COSTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['centro_costo_data', 'name']),
+        Cell: ({ row }) => emptyCellNested(row, ['centro_costo', 'name']),
       },
       {
         accessorKey: 'state',
@@ -143,8 +142,7 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
             title="Estado"
             checked={row.original?.state}
             onChangeChecked={() => {
-              ///* Pendiente a cambios
-              if (!hasPermission(PermissionsEnum.administration_change_pais))
+              if (!hasPermission(PermissionsEnum.inventario_change_bodega))
                 return;
 
               setConfirmDialog({
@@ -168,25 +166,24 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
       },
       {
         accessorKey: 'es_externa',
-        header: 'COBERTURA',
+        header: 'EXTERNA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         filterVariant: 'select',
         filterSelectOptions: MODEL_BOOLEAN,
         Cell: ({ row }) => (
           <CustomSwitch
-            title="Cobertura"
+            title="Externa"
             checked={row.original?.es_externa}
             isSimpleBoolean
             onChangeChecked={() => {
-              ///* Pendiente a cambio
-              if (!hasPermission(PermissionsEnum.administration_change_pais))
+              if (!hasPermission(PermissionsEnum.inventario_change_bodega))
                 return;
 
               setConfirmDialog({
                 isOpen: true,
-                title: 'Cambiar Cobertura',
+                title: 'Cambiar Externa',
                 subtitle:
-                  '¿Está seguro que desea cambiar la cobertura de este registro?',
+                  '¿Está seguro que desea cambiar la externa de este registro?',
                 onConfirm: () => {
                   setConfirmDialogIsOpen(false);
                   changeExterna.mutate({
@@ -226,8 +223,10 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
     <SingleTableBoxScene
       title="Bodegas"
       createPageUrl={`${returnUrlBodegasPage}/crear`}
-      ///* Pendiente a cambios
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.inventario_add_bodega,
+        PermissionsEnum.administration_view_centrocosto,
+      ])}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -252,13 +251,15 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
         rowCount={BodegasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        ///* Pendiente a cambio
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.administration_change_pais,
-        )}
+        enableActionsColumn={hasAllPermissions([
+          PermissionsEnum.inventario_add_bodega,
+          PermissionsEnum.administration_view_centrocosto,
+        ])}
         // crud
-        ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.inventario_add_bodega,
+          PermissionsEnum.administration_view_centrocosto,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />

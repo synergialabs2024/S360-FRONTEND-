@@ -132,7 +132,7 @@ const ServiciosPage: React.FC<ServiciosPageProps> = () => {
             title="Estado"
             checked={row.original?.state}
             onChangeChecked={() => {
-              if (!hasPermission(PermissionsEnum.administration_change_pais))
+              if (!hasPermission(PermissionsEnum.servicios_change_servicio))
                 return;
 
               setConfirmDialog({

@@ -18,14 +18,12 @@ import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-///* Pendiente a cambio
 export const returnUrlRutasPage = ROUTER_PATHS.infraestructura.rutasNav;
 
 export type RutasPageProps = {};
 
 const RutasPage: React.FC<RutasPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_view_ruta);
 
   const navigate = useNavigate();
 
@@ -107,8 +105,7 @@ const RutasPage: React.FC<RutasPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
+                if (!hasPermission(PermissionsEnum.infraestructura_change_ruta))
                   return;
 
                 setConfirmDialog({
@@ -157,9 +154,8 @@ const RutasPage: React.FC<RutasPageProps> = () => {
     <SingleTableBoxScene
       title="Ruta"
       createPageUrl={`${returnUrlRutasPage}/crear`}
-      ///* Pendiente a cambio
       showCreateBtn={hasAllPermissions([
-        PermissionsEnum.administration_add_pais,
+        PermissionsEnum.infraestructura_add_ruta,
       ])}
     >
       <CustomSearch
@@ -186,13 +182,11 @@ const RutasPage: React.FC<RutasPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasAllPermissions([
-          ///* Pendiente a cambio
-          PermissionsEnum.administration_change_pais,
+          PermissionsEnum.infraestructura_change_ruta,
         ])}
         // crud
         canEdit={hasAllPermissions([
-          ///* Pendiente a cambio
-          PermissionsEnum.administration_change_pais,
+          PermissionsEnum.infraestructura_change_ruta,
         ])}
         onEdit={onEdit}
         canDelete={false}

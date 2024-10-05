@@ -3,12 +3,13 @@ import { Navigate, useParams } from 'react-router-dom';
 import { SaveBodega } from '../../shared/components';
 import { useGetBodega } from '@/actions/app/inventario';
 import { returnUrlBodegasPage } from '../tables/BodegasPage';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { PermissionsEnum } from '@/shared';
 
 export type UpdateBodegaPageProps = {};
 
 const UpdateBodegaPage: React.FC<UpdateBodegaPageProps> = () => {
-  ///* Pendiente a cambio
-  //useCheckPermission();
+  useCheckPermission(PermissionsEnum.inventario_change_bodega);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetBodega(uuid!);
