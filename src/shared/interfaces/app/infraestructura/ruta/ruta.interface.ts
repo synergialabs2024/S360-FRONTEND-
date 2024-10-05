@@ -13,7 +13,7 @@ export interface Ruta {
 
   state: boolean;
 
-  name: string;
+  status: string;
 
   created_at?: string;
   modified_at?: string;
@@ -21,4 +21,4 @@ export interface Ruta {
   ///* fk
 }
 
-export type RutaLimitData = Pick<Ruta, 'id' | 'uuid' | 'name'>;
+export type RutaLimitData = Pick<Ruta, 'id' | 'uuid' | 'status'>;
