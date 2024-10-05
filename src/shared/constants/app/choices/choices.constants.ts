@@ -437,3 +437,12 @@ export const OLT_TYPE_ARRAY_CHOICES = [
   OltTypeEnumChoice.DOS,
   OltTypeEnumChoice.TRES,
 ];
+
+export enum RutaTypeEnumChoice {
+  OPERATIVO = 'OPERATIVO',
+  AFECTACION = 'AFECTACION',
+}
+export const RUTA_TYPE_ARRAY_CHOICES = [
+  RutaTypeEnumChoice.OPERATIVO,
+  RutaTypeEnumChoice.AFECTACION,
+];

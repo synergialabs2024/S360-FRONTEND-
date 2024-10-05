@@ -64,7 +64,7 @@ const RutasPage: React.FC<RutasPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      status: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -87,12 +87,12 @@ const RutasPage: React.FC<RutasPageProps> = () => {
   const columns = useMemo<MRT_ColumnDef<Ruta>[]>(
     () => [
       {
-        accessorKey: 'name',
-        header: 'NAME',
+        accessorKey: 'status',
+        header: 'Estado',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'status'),
       },
       {
         accessorKey: 'state',
