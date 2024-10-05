@@ -611,6 +611,33 @@ const UpdateBodegaPage = Loadable(
   lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
 );
 
+///* Logistica ------------
+//TipoInstalacion
+const TipoInstalacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/tables/TipoInstalacionesPage'
+      ),
+  ),
+);
+const CreateTipoInstalacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/forms/CreateTipoInstalacionPage'
+      ),
+  ),
+);
+const UpdateTipoInstalacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/forms/UpdateTipoInstalacionPage'
+      ),
+  ),
+);
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -1190,6 +1217,27 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.inventario.bodegasEditar,
             element: <UpdateBodegaPage />,
+          },
+        ],
+      },
+
+      //////////* Logistica ------------
+      {
+        path: ROUTER_PATHS.logistica.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* tipo instalacion
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalaciones,
+            element: <TipoInstalacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalacionesCrear,
+            element: <CreateTipoInstalacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalacionesEditar,
+            element: <UpdateTipoInstalacionPage />,
           },
         ],
       },

@@ -6,6 +6,7 @@ export * from './comercial';
 export * from './common';
 export * from './infraestructura';
 export * from './inventario';
+export * from './logistica';
 export * from './mante-operacion';
 export * from './nomina';
 export * from './operaciones';
