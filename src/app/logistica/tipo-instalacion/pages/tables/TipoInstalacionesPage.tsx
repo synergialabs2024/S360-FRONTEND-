@@ -104,6 +104,22 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
       {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'descripcion',
+        header: 'DESCRIPCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
+      },
+      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
