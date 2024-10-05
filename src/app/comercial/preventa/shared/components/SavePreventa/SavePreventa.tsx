@@ -100,6 +100,7 @@ import CountDownOTPPReventa from './CountDownOTPPReventa';
 import DocsSavePreventaStep from './DocsSavePreventaStep';
 import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
+import { EquiposVentaPreventaPartStep } from './form';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -1116,6 +1117,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 </Grid>
               ))}
             </Grid>
+          </>
+
+          <>
+            <EquiposVentaPreventaPartStep
+              solicitudServicio={solicitudServicio!}
+            />
           </>
 
           <>
