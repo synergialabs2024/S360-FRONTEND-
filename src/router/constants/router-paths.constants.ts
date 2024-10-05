@@ -314,4 +314,14 @@ export const ROUTER_PATHS = {
     routersEditar: 'routers/editar/:uuid',
     routersNav: '/administracion-red/routers',
   },
+  // // INVENTARIO =================================
+  inventario: {
+    root: 'inventario',
+
+    ///* bodega
+    bodegas: 'bodegas',
+    bodegasCrear: 'bodegas/crear',
+    bodegasEditar: 'bodegas/editar/:uuid',
+    bodegasNav: '/inventario/bodegas',
+  },
 };

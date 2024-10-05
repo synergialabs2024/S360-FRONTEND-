@@ -338,11 +338,11 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBuildingWarehouse,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
               id: 'bodegas',
               title: 'Bodegas',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.bodegasNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'ubicaciones',
