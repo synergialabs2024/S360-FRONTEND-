@@ -18,7 +18,8 @@ import {
 } from '@/actions/app';
 import { returnUrlPreventasPage } from '@/app/comercial/preventa/pages/tables/PreventasMainPage';
 import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
-import { handleAxiosError, ToastWrapper, useLoaders } from '@/shared';
+import { ToastWrapper, useLoaders } from '@/shared';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   CustomAutocomplete,
   CustomAutocompleteArrString,
