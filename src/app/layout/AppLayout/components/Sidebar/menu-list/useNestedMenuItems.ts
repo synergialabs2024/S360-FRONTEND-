@@ -156,7 +156,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.promocionesNav,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
+            renderByModule(SidenavModulesEnum.ADMIN_CENTRO_COSTO, {
               id: 'centro-costo',
               title: 'Centro de costo',
               type: MenuItemType.ITEM,
