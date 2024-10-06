@@ -17,18 +17,21 @@ export interface Producto {
   codigo_auxiliar: string;
   state: boolean;
   descripcion: string;
-  es_para_venta: boolean;
-  precios: PrecioProducto[];
+
+  es_para_venta: boolean; // preventas
+
+  precios?: PrecioProducto[];
   tipo: string;
 
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
 
   ///* fk
-  iva: number;
-  categoria: number;
-  iva_data: IVA;
-  categoria_data: CategoriaData;
+  iva?: number;
+  categoria?: number;
+
+  iva_data?: IVA;
+  categoria_data?: CategoriaData;
 }
 
 export interface CategoriaData {
