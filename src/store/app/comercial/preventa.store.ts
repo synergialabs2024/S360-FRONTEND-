@@ -11,6 +11,14 @@ interface PreventaState {
 
   isComponentBlocked: boolean;
   setIsComponentBlocked: (isComponentBlocked: boolean) => void;
+
+  // equipos venta --------------------
+  scoreServicio: string | null;
+  setScoreServicio: (scoreServicio: string | null) => void;
+  selectedEquiposVenta: any[];
+  setSelectedEquiposVenta: (selectedEquiposVenta: any[]) => void;
+
+  clearAll: () => void;
 }
 
 export const usePreventaStore = create<PreventaState>(set => ({
@@ -26,4 +34,18 @@ export const usePreventaStore = create<PreventaState>(set => ({
   setCachedOtpData: cachedOtpData => set({ cachedOtpData }),
 
   setIsComponentBlocked: isComponentBlocked => set({ isComponentBlocked }),
+
+  // equipos venta --------------------
+  scoreServicio: null,
+  setScoreServicio: scoreServicio => set({ scoreServicio }),
+  selectedEquiposVenta: [],
+  setSelectedEquiposVenta: selectedEquiposVenta =>
+    set({ selectedEquiposVenta }),
+
+  clearAll: () =>
+    set({
+      isOTPVerified: false,
+      cachedOtpData: null,
+      isComponentBlocked: false,
+    }),
 }));

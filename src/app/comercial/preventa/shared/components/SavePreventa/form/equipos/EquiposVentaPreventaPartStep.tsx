@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { IoMdTrash } from 'react-icons/io';
 import { MdAddCircle } from 'react-icons/md';
 
-import { SolicitudServicio } from '@/shared';
+import { ToastWrapper, type SolicitudServicio } from '@/shared';
 import { SingleIconButton, TabTexLabelCustomSpace } from '@/shared/components';
+import { usePreventaStore } from '@/store/app';
+import EquiposSeleccionadosPreventa from './EquiposSeleccionadosPreventa';
 
 export type EquiposVentaPreventaPartStepProps = {
   solicitudServicio: SolicitudServicio;
@@ -14,6 +16,9 @@ const EquiposVentaPreventaPartStep: React.FC<
 > = () => {
   ///* local state ---------------------
   const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
+
+  ///* global state ---------------------
+  const serviceScore = usePreventaStore(s => s.scoreServicio);
 
   ///* fetch data ---------------------
 
@@ -34,21 +39,20 @@ const EquiposVentaPreventaPartStep: React.FC<
             startIcon={showEquiposPart ? <IoMdTrash /> : <MdAddCircle />}
             label={showEquiposPart ? 'CANCELAR' : 'AGREGAR'}
             onClick={() => {
+              if (!serviceScore)
+                return ToastWrapper.warning(
+                  'Antes debes realizar la consulta al servicio del buró de crédito',
+                );
+
               setShowEquiposPart(prev => !prev);
-              if (!showEquiposPart) {
+              if (showEquiposPart) {
                 onTrash();
               }
             }}
           />
         }
       />
-      <>
-        {showEquiposPart && (
-          <>
-            <p>Equipos de venta</p>
-          </>
-        )}
-      </>
+      <>{showEquiposPart && <EquiposSeleccionadosPreventa />}</>
     </>
   );
 };
