@@ -13,6 +13,8 @@ export interface TipoInstalacion {
 
   name: string;
   state: boolean;
+  codigo: string;
+  descripcion: string;
 
   created_at?: string;
   modified_at?: string;

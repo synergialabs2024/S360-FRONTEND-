@@ -149,14 +149,14 @@ export const getTipoInstalaciones = async (
 
   const queryParams = getUrlParams(stateParams);
   return get<TipoInstalacionesPaginatedRes>(
-    `/tipoinstalacion/?${queryParams}`,
+    `/tipo-instalacion/?${queryParams}`,
     true,
   );
 };
 
 export const getTipoInstalacion = async (uuid: string) => {
   try {
-    return await get<TipoInstalacion>(`/tipoinstalacion/${uuid}`, true);
+    return await get<TipoInstalacion>(`/tipo-instalacion/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
@@ -168,7 +168,7 @@ export const createTipoInstalacion = async (
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<TipoInstalacion>('/tipoinstalacion/', data, true);
+  return post<TipoInstalacion>('/tipo-instalacion/', data, true);
 };
 
 export const updateTipoInstalacion = async <T>({
@@ -178,5 +178,5 @@ export const updateTipoInstalacion = async <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<TipoInstalacion>(`/tipoinstalacion/${id}/`, data, true);
+  return patch<TipoInstalacion>(`/tipo-instalacion/${id}/`, data, true);
 };
