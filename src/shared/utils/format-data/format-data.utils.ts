@@ -1,3 +1,5 @@
+import { FieldErrors } from 'react-hook-form';
+
 // // // Numbers ========================================
 export const formatCurrency = (value: string | number): string => {
   return (+value).toLocaleString('en-US', {
@@ -57,3 +59,8 @@ export const humanizeString = (str: string): string => {
 };
 export const humanizeStringArr = (arr: string[]): string[] =>
   arr.map(humanizeString);
+export const getKeysFormErrorsMessage = (errors: FieldErrors<any>): string => {
+  const keys = humanizeStringArr(Object.keys(errors)).join(', ');
+
+  return keys.length > 12 ? `${keys.slice(0, 12)}...` : keys;
+};

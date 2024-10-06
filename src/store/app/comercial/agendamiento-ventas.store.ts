@@ -40,6 +40,8 @@ interface AgendamientoVentasState {
   setCachedData: (value: Nullable<InstallScheduleCacheData>) => void;
   // hasStartedTimer: boolean;
   // setHasStartedTimer: (value: boolean) => void;
+
+  clearAll: () => void;
 }
 
 export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
@@ -72,5 +74,18 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
 
     fleetsByZoneLimitData: [],
     setFleetsByZoneLimitData: value => set({ fleetsByZoneLimitData: value }),
+
+    clearAll: () =>
+      set({
+        activePreventa: null,
+        isComponentBlocked: false,
+        planificadoresArray: [],
+        availableTimeMap: null,
+        selectedHour: '',
+        selectedDate: '',
+        availableFleetsByZonePks: [],
+        cachedData: null,
+        fleetsByZoneLimitData: [],
+      }),
   }),
 );

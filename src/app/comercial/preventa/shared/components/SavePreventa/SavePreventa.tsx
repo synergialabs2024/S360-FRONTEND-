@@ -91,7 +91,11 @@ import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
-import { formatCountDownTimer, preventaFormSchema } from '@/shared/utils';
+import {
+  formatCountDownTimer,
+  getKeysFormErrorsMessage,
+  preventaFormSchema,
+} from '@/shared/utils';
 import { usePreventaStore } from '@/store/app';
 import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
@@ -834,8 +838,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         clearAllTimers();
       }}
       onSave={handleSubmit(onSave, () => {
-        ToastWrapper.error('Faltan campos por requeridos');
         console.log(errors);
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Faltan campos por requeridos: ${keys}`);
       })}
     >
       {/* ========================= Datos Generales ========================= */}
