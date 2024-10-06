@@ -62,5 +62,5 @@ export const humanizeStringArr = (arr: string[]): string[] =>
 export const getKeysFormErrorsMessage = (errors: FieldErrors<any>): string => {
   const keys = humanizeStringArr(Object.keys(errors)).join(', ');
 
-  return keys.length > 12 ? `${keys.slice(0, 12)}...` : keys;
+  return keys.length > 12 ? `${keys.slice(0, 90)}...` : keys;
 };

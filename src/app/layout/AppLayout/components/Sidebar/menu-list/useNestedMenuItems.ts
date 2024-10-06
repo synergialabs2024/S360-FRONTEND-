@@ -317,11 +317,11 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUserCog,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_PRODUCTO, {
               id: 'inventariables',
               title: 'Iventariables',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.productosNav,
             }),
             renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
               id: 'productos-ventas',

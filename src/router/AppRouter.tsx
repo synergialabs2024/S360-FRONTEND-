@@ -610,6 +610,19 @@ const CreateBodegaPage = Loadable(
 const UpdateBodegaPage = Loadable(
   lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
 );
+const ProductosPage = Loadable(
+  lazy(() => import('@/app/inventario/producto/pages/tables/ProductosPage')),
+);
+const CreateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/CreateProductoPage'),
+  ),
+);
+const UpdateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/UpdateProductoPage'),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -1217,6 +1230,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.inventario.bodegasEditar,
             element: <UpdateBodegaPage />,
+          },
+
+          ///* productos - inventariables
+          {
+            path: ROUTER_PATHS.inventario.productos,
+            element: <ProductosPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosCrear,
+            element: <CreateProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosEditar,
+            element: <UpdateProductoPage />,
           },
         ],
       },

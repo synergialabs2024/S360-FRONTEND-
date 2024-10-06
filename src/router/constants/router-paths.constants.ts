@@ -323,6 +323,12 @@ export const ROUTER_PATHS = {
     bodegasCrear: 'bodegas/crear',
     bodegasEditar: 'bodegas/editar/:uuid',
     bodegasNav: '/inventario/bodegas',
+
+    ///* producto
+    productos: 'productos',
+    productosCrear: 'productos/crear',
+    productosEditar: 'productos/editar/:uuid',
+    productosNav: '/inventario/productos',
   },
   // // LOGISTICA =================================
   logistica: {

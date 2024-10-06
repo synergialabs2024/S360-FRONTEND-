@@ -1,11 +1,11 @@
-import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { IVA } from '../../administration';
+import { PagingMetaResponse } from '../../common';
+import { IVA } from '../administration';
 
 export interface ProductosPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  data: Producto[];
+  items: Producto[];
 }
 
 export interface Producto {
