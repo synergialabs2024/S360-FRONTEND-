@@ -1,5 +1,6 @@
 import { PagingMetaResponse } from '../../common';
 import { IVA } from '../administration';
+import { CategoriaProducto } from './categoria-producto.interface';
 
 export interface ProductosPaginatedRes {
   status: number;
@@ -31,20 +32,11 @@ export interface Producto {
   categoria?: number;
 
   iva_data?: IVA;
-  categoria_data?: CategoriaData;
-}
-
-export interface CategoriaData {
-  id: number;
-  created_at: string;
-  modified_at: string;
-  uuid: string;
-  state: boolean;
-  nombre: string;
+  categoria_data?: CategoriaProducto;
 }
 
 export interface PrecioProducto {
-  estado: boolean;
   nombre: string;
   precio: number;
+  estado: boolean;
 }
