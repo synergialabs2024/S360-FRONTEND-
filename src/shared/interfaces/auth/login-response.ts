@@ -26,5 +26,6 @@ export interface UserLoginResponse {
   area?: string;
   departamento?: string;
   canal_venta?: string;
+  centro_costo?: number;
   role?: string; // choice
 }

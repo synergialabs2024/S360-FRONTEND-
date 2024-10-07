@@ -37,7 +37,7 @@ export interface SystemUser {
 
 export type SystemUserLimitData = Pick<
   SystemUser,
-  'username' | 'email' | 'razon_social' | 'uuid' | 'id'
+  'username' | 'email' | 'razon_social' | 'uuid' | 'id' | 'centro_costo'
 > & {
   canal_venta_data?: CanalVenta;
 };

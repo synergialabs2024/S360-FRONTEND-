@@ -26,13 +26,13 @@ export interface UbicacionProducto {
   modified_at?: string;
 
   ///* fk
-  bodega: number;
-  ubicacion: number;
-  producto: number;
+  bodega?: number;
+  ubicacion?: number;
+  producto?: number;
 
-  bodega_data: Bodega;
-  producto_data: Producto;
-  ubicacion_data: Ubicacion;
+  bodega_data?: Bodega;
+  producto_data?: Producto;
+  ubicacion_data?: Ubicacion;
 }
 
 export interface SerieProducto {

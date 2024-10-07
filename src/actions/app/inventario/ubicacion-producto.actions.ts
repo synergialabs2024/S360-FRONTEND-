@@ -124,7 +124,16 @@ export const useUpdateUbicacionProducto = <T>({
 
 ///* axios ---------------
 export type GetUbicacionProductosParams = Partial<UbicacionProducto> &
-  PagingPartialParams;
+  PagingPartialParams & {
+    producto__nombre?: string;
+    producto__codigo?: string;
+    producto__es_para_venta?: boolean;
+    producto__categoria__uuid?: string;
+    bodega__nombre?: string;
+    bodega__codigo?: string;
+    bodega__centro_costo__pk?: number;
+    bodega__centro_costo__nombre?: string;
+  };
 export type CreateUbicacionProductoParams<T> = T;
 export type CreateUbicacionProductoParamsBase = Omit<UbicacionProducto, 'id'>;
 export interface UpdateUbicacionProductoParams<T> {
