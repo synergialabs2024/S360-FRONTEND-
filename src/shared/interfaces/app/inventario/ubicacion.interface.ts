@@ -1,4 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { Bodega } from './bodega';
 
 export interface UbicacionesPaginatedRes {
   status: number;
@@ -18,6 +19,7 @@ export interface Ubicacion {
   modified_at?: string;
 
   ///* fk
-  bodega: number;
+  bodega?: number;
+
+  bodega_data?: Bodega;
 }
-// bodega_data: Bodega;

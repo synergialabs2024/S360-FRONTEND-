@@ -647,6 +647,19 @@ const UpdateCategoriaProductoPage = Loadable(
       ),
   ),
 );
+const UbicacionsPage = Loadable(
+  lazy(() => import('@/app/inventario/ubicacion/pages/tables/UbicacionsPage')),
+);
+const CreateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/CreateUbicacionPage'),
+  ),
+);
+const UpdateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/UpdateUbicacionPage'),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -1282,6 +1295,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.inventario.categoriaProductoEditar,
             element: <UpdateCategoriaProductoPage />,
+          },
+
+          ///* ubicaciones
+          {
+            path: ROUTER_PATHS.inventario.ubicaciones,
+            element: <UbicacionsPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesCrear,
+            element: <CreateUbicacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesEditar,
+            element: <UpdateUbicacionPage />,
           },
         ],
       },

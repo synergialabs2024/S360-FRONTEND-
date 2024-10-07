@@ -350,11 +350,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.bodegasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_UBICACION, {
               id: 'ubicaciones',
               title: 'Ubicaciones',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.ubicacionesNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-materiales-bodega',
