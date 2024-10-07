@@ -138,6 +138,12 @@ export const ROUTER_PATHS = {
     ///* trazabilidad venta
     trazabilidadesVenta: 'trazabilidades-venta',
     trazabilidadesVentaNav: '/parametrizacion/trazabilidades-venta',
+
+    ///* centro costos
+    tipocomprobantes: 'tipo-comprobantes',
+    tipocomprobantesCrear: 'tipo-comprobantes/crear',
+    tipocomprobantesEditar: 'tipo-comprobantes/editar/:uuid',
+    tipocomprobantesNav: '/parametrizacion/tipo-comprobantes',
   },
 
   // // =================================
