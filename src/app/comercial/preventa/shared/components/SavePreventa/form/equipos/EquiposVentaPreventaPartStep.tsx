@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { IoMdTrash } from 'react-icons/io';
-import { MdAddCircle } from 'react-icons/md';
+import { MdAddCircle, MdCancel } from 'react-icons/md';
 
 import { ToastWrapper, type SolicitudServicio } from '@/shared';
 import { SingleIconButton, TabTexLabelCustomSpace } from '@/shared/components';
@@ -44,7 +43,7 @@ const EquiposVentaPreventaPartStep: React.FC<
           <SingleIconButton
             newCustomButton
             color={!showEquiposPart ? 'primary' : 'error'}
-            startIcon={showEquiposPart ? <IoMdTrash /> : <MdAddCircle />}
+            startIcon={showEquiposPart ? <MdCancel /> : <MdAddCircle />}
             label={showEquiposPart ? 'CANCELAR' : 'AGREGAR'}
             onClick={() => {
               if (!serviceScore)
