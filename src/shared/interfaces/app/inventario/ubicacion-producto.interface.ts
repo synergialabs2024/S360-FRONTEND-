@@ -1,7 +1,7 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { Bodega } from '../bodega';
-import { Producto } from '../producto.interface';
-import { Ubicacion } from '../ubicacion.interface';
+import { Bodega } from './bodega';
+import { Producto } from './producto.interface';
+import { Ubicacion } from './ubicacion.interface';
 
 export interface UbicacionProductoPaginatedRes {
   status: number;
