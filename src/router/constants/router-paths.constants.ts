@@ -329,6 +329,12 @@ export const ROUTER_PATHS = {
     productosCrear: 'productos/crear',
     productosEditar: 'productos/editar/:uuid',
     productosNav: '/inventario/productos',
+
+    ///* categoria producto
+    categoriaProductos: 'categoria-productos',
+    categoriaProductoCrear: 'categoria-productos/crear',
+    categoriaProductoEditar: 'categoria-productos/editar/:uuid',
+    categoriaProductoNav: '/inventario/categoria-productos',
   },
   // // LOGISTICA =================================
   logistica: {

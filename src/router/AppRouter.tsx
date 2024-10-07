@@ -623,6 +623,30 @@ const UpdateProductoPage = Loadable(
     () => import('@/app/inventario/producto/pages/forms/UpdateProductoPage'),
   ),
 );
+const CategoriasProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/tables/CategoriasProductoPage'
+      ),
+  ),
+);
+const CreateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/CreateCategoriaProductoPage'
+      ),
+  ),
+);
+const UpdateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/UpdateCategoriaProductoPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -1244,6 +1268,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.inventario.productosEditar,
             element: <UpdateProductoPage />,
+          },
+
+          ///* categorias producto
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductos,
+            element: <CategoriasProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <CreateCategoriaProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <UpdateCategoriaProductoPage />,
           },
         ],
       },

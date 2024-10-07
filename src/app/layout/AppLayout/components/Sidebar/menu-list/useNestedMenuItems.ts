@@ -329,6 +329,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.servicios.planesinternetNav,
             }),
+            renderByModule(SidenavModulesEnum.INVENTARIO_CATEGORIA_PRODUCTO, {
+              id: 'categorias-producto',
+              title: 'Categoría de Producto',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.categoriaProductoNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Gestion de Inventarios ----------------

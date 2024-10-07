@@ -1,6 +1,6 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
-export interface CategoriaProductosPaginatedRes {
+export interface CategoriasProductoPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
