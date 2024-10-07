@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateProductoParamsBase,
   useCreateProducto,
+  useFetchCategoriaProductos,
   useFetchIVAs,
   useUpdateProducto,
 } from '@/actions/app';
@@ -22,8 +23,8 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { IVA, Producto } from '@/shared/interfaces';
+import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { CategoriaProducto, IVA, Producto } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
 import { returnUrlProductosPage } from '../../../pages/tables/ProductosPage';
 
@@ -62,6 +63,15 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       page_size: 300,
     },
   });
+  const {
+    data: categoriasPaginatedRes,
+    isLoading: isLoadingCategorias,
+    isRefetching: isRefetchingCategorias,
+  } = useFetchCategoriaProductos({
+    params: {
+      page_size: 300,
+    },
+  });
 
   ///* mutations ---------------------
   const createProductoMutation = useCreateProducto({
@@ -93,7 +103,11 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     if (!producto?.id) return;
     reset(producto);
   }, [producto, reset]);
-  const isCustomLoading = isLoadingIVAs || isRefetchingIVAs;
+  const isCustomLoading =
+    isLoadingIVAs ||
+    isRefetchingIVAs ||
+    isLoadingCategorias ||
+    isRefetchingCategorias;
   useLoaders(isCustomLoading);
 
   return (
@@ -153,7 +167,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         name="tipo"
         textFieldKey="tipo"
         // options
-        options={['', ...TIPO_PRODUCTO_ARRAY_CHOICES]}
+        options={TIPO_PRODUCTO_ARRAY_CHOICES}
         defaultValue={form.getValues()?.tipo || ''}
         // errors
         control={form.control}
@@ -161,6 +175,20 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         helperText={form.formState.errors.tipo?.message}
         gridSize={gridSizeMdLg6}
       />
+      <CustomAutocomplete<CategoriaProducto>
+        label="Categoría"
+        name="categoria"
+        options={categoriasPaginatedRes?.data?.items || []}
+        valueKey="nombre"
+        actualValueKey="id"
+        defaultValue={form.getValues().categoria}
+        isLoadingData={isLoadingCategorias || isRefetchingCategorias}
+        control={form.control}
+        error={errors.categoria}
+        helperText={errors.categoria?.message}
+        size={gridSizeMdLg6}
+      />
+
       <CustomAutocomplete<IVA>
         label="Iva"
         name="iva"
@@ -176,20 +204,19 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         helperText={errors.iva?.message}
         size={gridSizeMdLg6}
       />
-
       <SampleCheckbox
         label="Es para venta"
         name="es_para_venta"
         control={form.control}
         defaultValue={form.getValues().es_para_venta}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg3}
       />
       <SampleCheckbox
         label="Estado"
         name="state"
         control={form.control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg3}
       />
     </SingleFormBoxScene>
   );

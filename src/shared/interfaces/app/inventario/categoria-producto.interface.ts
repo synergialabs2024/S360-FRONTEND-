@@ -4,7 +4,7 @@ export interface CategoriasProductoPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: CategoriaProducto;
+  items: CategoriaProducto[];
 }
 
 export interface CategoriaProducto {

@@ -396,6 +396,7 @@ export enum TipoProductoEnumChoice {
   ONT = 'ONT',
 }
 export const TIPO_PRODUCTO_ARRAY_CHOICES = [
+  TipoProductoEnumChoice.PRODUCTO,
   TipoProductoEnumChoice.FIBRA,
   TipoProductoEnumChoice.UTP,
   TipoProductoEnumChoice.ONT,
