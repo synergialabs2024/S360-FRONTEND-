@@ -4,7 +4,7 @@ export interface IVAPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: IVA;
+  items: IVA[];
 }
 
 export interface IVA {

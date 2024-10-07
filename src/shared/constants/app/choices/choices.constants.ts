@@ -388,6 +388,20 @@ export const ESTADO_LLAMADA_ARRAY_CHOICES = [
   EstadoLlamadaEnumChoice.NO_CONTESTA,
 ];
 
+///* INVENTARIO ==========================================
+export enum TipoProductoEnumChoice {
+  PRODUCTO = 'PRODUCTO',
+  FIBRA = 'FIBRA',
+  UTP = 'UTP',
+  ONT = 'ONT',
+}
+export const TIPO_PRODUCTO_ARRAY_CHOICES = [
+  TipoProductoEnumChoice.PRODUCTO,
+  TipoProductoEnumChoice.FIBRA,
+  TipoProductoEnumChoice.UTP,
+  TipoProductoEnumChoice.ONT,
+];
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',

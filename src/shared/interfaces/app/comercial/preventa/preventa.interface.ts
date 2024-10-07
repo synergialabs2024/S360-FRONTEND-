@@ -1,3 +1,4 @@
+import { EquipoVentasDetalle } from '@/app/comercial/preventa/shared/components';
 import {
   ClasificacionPlanesScoreBuroEnumChoice,
   EstadoPagoEnumChoice,
@@ -84,6 +85,9 @@ export interface Preventa {
 
   requiere_pago_previo: boolean;
   estado_pago?: EstadoPagoEnumChoice;
+
+  // equipos venta --------------------
+  equipos_venta_detalle: EquipoVentasDetalle[];
 
   ///* fk
   metodo_pago?: number;

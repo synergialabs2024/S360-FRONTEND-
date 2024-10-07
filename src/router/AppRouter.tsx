@@ -635,6 +635,56 @@ const CreateBodegaPage = Loadable(
 const UpdateBodegaPage = Loadable(
   lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
 );
+const ProductosPage = Loadable(
+  lazy(() => import('@/app/inventario/producto/pages/tables/ProductosPage')),
+);
+const CreateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/CreateProductoPage'),
+  ),
+);
+const UpdateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/UpdateProductoPage'),
+  ),
+);
+const CategoriasProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/tables/CategoriasProductoPage'
+      ),
+  ),
+);
+const CreateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/CreateCategoriaProductoPage'
+      ),
+  ),
+);
+const UpdateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/UpdateCategoriaProductoPage'
+      ),
+  ),
+);
+const UbicacionsPage = Loadable(
+  lazy(() => import('@/app/inventario/ubicacion/pages/tables/UbicacionsPage')),
+);
+const CreateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/CreateUbicacionPage'),
+  ),
+);
+const UpdateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/UpdateUbicacionPage'),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -1256,6 +1306,48 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.inventario.bodegasEditar,
             element: <UpdateBodegaPage />,
+          },
+
+          ///* productos - inventariables
+          {
+            path: ROUTER_PATHS.inventario.productos,
+            element: <ProductosPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosCrear,
+            element: <CreateProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosEditar,
+            element: <UpdateProductoPage />,
+          },
+
+          ///* categorias producto
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductos,
+            element: <CategoriasProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <CreateCategoriaProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <UpdateCategoriaProductoPage />,
+          },
+
+          ///* ubicaciones
+          {
+            path: ROUTER_PATHS.inventario.ubicaciones,
+            element: <UbicacionsPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesCrear,
+            element: <CreateUbicacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesEditar,
+            element: <UpdateUbicacionPage />,
           },
         ],
       },

@@ -12,6 +12,8 @@ interface AgendamientoOperacionesState {
   // also used with cache if slot is selected
   isEdittingSchedule: boolean;
   setIsEdittingSchedule: (value: boolean) => void;
+
+  clearAll: () => void;
 }
 
 export const useAgendamientoOperacionesStore =
@@ -24,4 +26,11 @@ export const useAgendamientoOperacionesStore =
 
     isEdittingSchedule: false,
     setIsEdittingSchedule: value => set({ isEdittingSchedule: value }),
+
+    clearAll: () =>
+      set({
+        activeAgendamiento: null,
+        isComponentBlocked: false,
+        isEdittingSchedule: false,
+      }),
   }));

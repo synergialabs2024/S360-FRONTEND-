@@ -9,7 +9,7 @@ import {
   Agendamiento,
   agendamientoOperacionesConfirmFormSchema,
   Flota,
-  humanizeStringArr,
+  getKeysFormErrorsMessage,
   Preventa,
   SolicitudServicio,
   ToastWrapper,
@@ -116,8 +116,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
       onSave={handleSubmit(onSave, errors => {
         console.log({ errors });
 
-        const keys = humanizeStringArr(Object.keys(errors)).join(', ');
-
+        const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
     >

@@ -317,17 +317,23 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUserCog,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_PRODUCTO, {
               id: 'inventariables',
               title: 'Iventariables',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.productosNav,
             }),
             renderByModule(SidenavModulesEnum.SERVICIOS_PLAN, {
               id: 'productos-ventas',
               title: 'Ventas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.servicios.planesinternetNav,
+            }),
+            renderByModule(SidenavModulesEnum.INVENTARIO_CATEGORIA_PRODUCTO, {
+              id: 'categorias-producto',
+              title: 'Categoría de Producto',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.categoriaProductoNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
@@ -344,11 +350,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.bodegasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_UBICACION, {
               id: 'ubicaciones',
               title: 'Ubicaciones',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.ubicacionesNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-materiales-bodega',

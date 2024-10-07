@@ -16,6 +16,12 @@ export type TableWithoutActionsProps<T> = {
   enableGlobalFilter?: boolean;
   onGlobalFilterChange?: (value: any) => void;
 
+  // server side filters - colums table
+  enableManualFiltering?: boolean;
+  onColumnFiltersChange?: (filters: any) => void;
+  columnFilters?: any;
+  columnFilterDisplayMode?: 'custom' | 'subheader' | 'popover';
+
   ///* paging
   pagination: any;
   onPaging: any;
@@ -37,6 +43,12 @@ function TableWithoutActions<T>({
   enableGlobalFilter = true,
   onGlobalFilterChange,
 
+  // server side filters - colums table
+  enableManualFiltering = false,
+  onColumnFiltersChange,
+  columnFilters,
+  columnFilterDisplayMode = enableManualFiltering ? 'subheader' : 'popover',
+
   ///* paging
   pagination,
   onPaging,
@@ -55,9 +67,10 @@ function TableWithoutActions<T>({
     ///* search
     enableGlobalFilter: enableGlobalFilter,
     positionGlobalFilter: 'left',
+
     // manualFiltering: true,
     onGlobalFilterChange: onGlobalFilterChange,
-    columnFilterDisplayMode: 'popover',
+    columnFilterDisplayMode: columnFilterDisplayMode,
     enableDensityToggle: false, // 'cause density is passed as prop
     enableFullScreenToggle: enableFullScreenToggle,
 
@@ -82,9 +95,18 @@ function TableWithoutActions<T>({
       // search bar
       showProgressBars: isRefetching,
 
+      ///* filtering - server side filters
+      ...(enableManualFiltering && { columnFilters }),
+
       // other
       density,
     },
+
+    ///* filtering - server side filters
+    ...(enableManualFiltering && {
+      manualFiltering: enableManualFiltering, // server-side filtering by columns
+      onColumnFiltersChange: onColumnFiltersChange,
+    }),
   });
 
   return (
