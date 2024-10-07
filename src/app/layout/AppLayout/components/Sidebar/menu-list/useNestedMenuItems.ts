@@ -190,7 +190,7 @@ export const useNestedMenu = () => {
               id: 'tipo-comprobantes',
               title: 'Tipo de comprobante',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracion.tipocomprobantesNav,
             }),
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {

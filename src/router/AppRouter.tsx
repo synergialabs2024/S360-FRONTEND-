@@ -120,6 +120,31 @@ const UpdateCentroCostoPage = Loadable(
   ),
 );
 
+const TipoComprobantesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/tipo-comprobante/pages/tables/TipoComprobantesPage'
+      ),
+  ),
+);
+const CreateTipoComprobantePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/tipo-comprobante/pages/forms/CreateTipoComprobantePage'
+      ),
+  ),
+);
+const UpdateTipocomprobantePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/tipo-comprobante/pages/forms/UpdateTipocomprobantePage'
+      ),
+  ),
+);
+
 const SystemUserPage = Loadable(
   lazy(
     () =>
@@ -873,6 +898,20 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracion.trazabilidadesVenta,
             element: <TrazabilidadVentasPage />,
+          },
+
+          ///* Tipo de Comprobante
+          {
+            path: ROUTER_PATHS.administracion.tipocomprobantes,
+            element: <TipoComprobantesPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.tipocomprobantesCrear,
+            element: <CreateTipoComprobantePage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.tipocomprobantesEditar,
+            element: <UpdateTipocomprobantePage />,
           },
 
           ///* USER ----------
