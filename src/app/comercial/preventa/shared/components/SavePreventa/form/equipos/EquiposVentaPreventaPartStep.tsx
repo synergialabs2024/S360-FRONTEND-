@@ -4,7 +4,11 @@ import { MdAddCircle } from 'react-icons/md';
 
 import { ToastWrapper, type SolicitudServicio } from '@/shared';
 import { SingleIconButton, TabTexLabelCustomSpace } from '@/shared/components';
-import { usePreventaStore } from '@/store/app';
+import {
+  GenericInventoryStoreKey,
+  usePreventaStore,
+  useTypedGenericInventoryStore,
+} from '@/store/app';
 import EquiposSeleccionadosPreventa from './EquiposSeleccionadosPreventa';
 
 export type EquiposVentaPreventaPartStepProps = {
@@ -19,11 +23,15 @@ const EquiposVentaPreventaPartStep: React.FC<
 
   ///* global state ---------------------
   const serviceScore = usePreventaStore(s => s.scoreServicio);
+  const { clearOneRecord } = useTypedGenericInventoryStore(
+    GenericInventoryStoreKey.equiposVentaPreventa,
+  );
 
   ///* fetch data ---------------------
 
   ///* handlers ---------------------
   const onTrash = () => {
+    clearOneRecord();
     console.log('onTrash');
   };
 

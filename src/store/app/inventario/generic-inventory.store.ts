@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 import { ToastWrapper } from '@/shared/wrappers';
 
@@ -34,79 +33,83 @@ export interface GenericInventoryStoreState {
   }) => void;
 
   clearAll: () => void;
+  clearOneRecord: (keyStore: string) => void;
 }
 
 export const useGenericInventoryStore = create<GenericInventoryStoreState>()(
-  persist(
-    (set, get) => ({
-      items: {},
+  (set, get) => ({
+    items: {},
 
-      selectedRow: null,
+    selectedRow: null,
 
-      setItems: (keyStore, items) =>
-        set(state => ({
-          items: {
-            ...state.items,
-            [keyStore]: items,
-          },
-        })),
+    setItems: (keyStore, items) =>
+      set(state => ({
+        items: {
+          ...state.items,
+          [keyStore]: items,
+        },
+      })),
 
-      setSelectedRow: item => set({ selectedRow: item }),
+    setSelectedRow: item => set({ selectedRow: item }),
 
-      addSelectedItem: ({ item, keyStore, idKey, showToast = true }) => {
-        const currentItems = get().items[keyStore] || [];
-        const itemExists = currentItems.find(
-          (i: any) => i[idKey] === item[idKey],
-        );
-        if (itemExists) {
-          ToastWrapper.info('El item ya ha sido agregado.');
-          return;
-        }
+    addSelectedItem: ({ item, keyStore, idKey, showToast = true }) => {
+      const currentItems = get().items[keyStore] || [];
+      const itemExists = currentItems.find(
+        (i: any) => i[idKey] === item[idKey],
+      );
+      if (itemExists) {
+        ToastWrapper.warning('El item ya ha sido agregado.');
+        return;
+      }
 
-        set(state => ({
-          items: {
-            ...state.items,
-            [keyStore]: [...currentItems, item],
-          },
-        }));
+      set(state => ({
+        items: {
+          ...state.items,
+          [keyStore]: [...currentItems, item],
+        },
+      }));
 
-        showToast && ToastWrapper.success('Item agregado correctamente.');
-      },
-
-      updateSelectedItemValue: ({ keyStore, idKey, updatedItem }) => {
-        const currentItems = get().items[keyStore] || [];
-        const updatedItems = currentItems.map((i: any) =>
-          i[idKey] === updatedItem[idKey] ? { ...i, ...updatedItem } : i,
-        );
-
-        set(state => ({
-          items: {
-            ...state.items,
-            [keyStore]: updatedItems,
-          },
-        }));
-      },
-
-      removeSelectedItem: ({ item, keyStore, idKey }) => {
-        const currentItems = get().items[keyStore] || [];
-        const updatedItems = currentItems.filter(
-          (i: any) => i[idKey] !== item[idKey],
-        );
-
-        set(state => ({
-          items: {
-            ...state.items,
-            [keyStore]: updatedItems,
-          },
-        }));
-      },
-
-      clearAll: () => {
-        set({ items: {} });
-      },
-    }),
-    {
-      name: 'tecnicos-store',
+      showToast && ToastWrapper.info('Item agregado correctamente.');
     },
-  ),
+
+    updateSelectedItemValue: ({ keyStore, idKey, updatedItem }) => {
+      const currentItems = get().items[keyStore] || [];
+      const updatedItems = currentItems.map((i: any) =>
+        i[idKey] === updatedItem[idKey] ? { ...i, ...updatedItem } : i,
+      );
+
+      set(state => ({
+        items: {
+          ...state.items,
+          [keyStore]: updatedItems,
+        },
+      }));
+    },
+
+    removeSelectedItem: ({ item, keyStore, idKey }) => {
+      const currentItems = get().items[keyStore] || [];
+      const updatedItems = currentItems.filter(
+        (i: any) => i[idKey] !== item[idKey],
+      );
+
+      set(state => ({
+        items: {
+          ...state.items,
+          [keyStore]: updatedItems,
+        },
+      }));
+    },
+
+    clearAll: () => {
+      set({ items: {} });
+    },
+
+    clearOneRecord: keyStore => {
+      set(state => {
+        const newItems = { ...state.items };
+        delete newItems[keyStore];
+        return { items: newItems };
+      });
+    },
+  }),
 );

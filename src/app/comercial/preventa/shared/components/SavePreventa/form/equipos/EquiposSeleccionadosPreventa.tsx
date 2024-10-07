@@ -63,6 +63,18 @@ const EquiposSeleccionadosPreventa: React.FC<
     },
     [updateSelectedItemValue],
   );
+  const onChangeCuotas = useCallback(
+    (value: string, item: EquiposSeleccionadosTableType) => {
+      updateSelectedItemValue({
+        idKey: 'id',
+        updatedItem: {
+          ...item,
+          selectedCuotas: +value,
+        },
+      });
+    },
+    [updateSelectedItemValue],
+  );
 
   ///* columns ---------------------
   const { baseColumnsPreventa01 } = useColumnsEquiposPreventa({
@@ -132,7 +144,7 @@ const EquiposSeleccionadosPreventa: React.FC<
                   const value = e.target.value;
                   const intValue = parseInt(value, 10);
 
-                  console.log('onChangeCuotas', intValue);
+                  onChangeCuotas(intValue.toString(), row.original);
                 }}
                 type="number"
                 inputProps={{
@@ -173,6 +185,7 @@ const EquiposSeleccionadosPreventa: React.FC<
     ],
     [
       baseColumnsPreventa01,
+      onChangeCuotas,
       onChangeQuantity,
       removeSelectedItem,
       scoreServicio,

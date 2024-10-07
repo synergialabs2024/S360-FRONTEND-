@@ -44,6 +44,10 @@ export const useTypedGenericInventoryStore = <T>(
     useGenericInventoryStore.getState().setSelectedRow(item);
   };
 
+  const clearOneRecord = () => {
+    useGenericInventoryStore.getState().clearOneRecord(keyStore);
+  };
+
   const selectedRow = useGenericInventoryStore(
     state => state.selectedRow,
   ) as T | null;
@@ -55,5 +59,7 @@ export const useTypedGenericInventoryStore = <T>(
     removeSelectedItem,
     setSelectedRow,
     selectedRow,
+
+    clearOneRecord, // clear all of the keyStore
   };
 };
