@@ -78,7 +78,7 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
   };
 
   ///* columns ---------------------
-  const { baseColumns01 } = useColumnsEquiposPreventa({
+  const { baseColumnsPreventa01 } = useColumnsEquiposPreventa({
     onActionRowNode(item) {
       return (
         <CustomSingleButton
@@ -86,7 +86,15 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
           variant="text"
           color="primary"
           onClick={() => {
-            addSelectedItem({ idKey: 'id', item, showToast: true });
+            addSelectedItem({
+              idKey: 'id',
+              item: {
+                ...item,
+                usedQuantity: 1,
+                selectedCuotas: 1,
+              },
+              showToast: true,
+            });
           }}
         />
       );
@@ -131,7 +139,7 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
             />
 
             <TableWithoutActions<UbicacionProducto>
-              columns={baseColumns01}
+              columns={baseColumnsPreventa01}
               data={itemsDisponiblesPaging?.data?.items || []}
               isLoading={isLoadingItemsDisponibles}
               isRefetching={isRefetchingItemsDisponibles}
