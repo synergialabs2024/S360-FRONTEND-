@@ -1,7 +1,7 @@
 export interface EquipoVentasDetalle {
   code: string;
-  quiantity: string;
-  series: SerieVentas[];
+  cantidad: string;
+  series?: SerieVentas[];
 
   cuotas: number; // depends on the score buro - Bueno max 12, malo max 1
 }

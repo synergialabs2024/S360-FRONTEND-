@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -91,12 +90,12 @@ import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
+import { formatCountDownTimer, getKeysFormErrorsMessage } from '@/shared/utils';
 import {
-  formatCountDownTimer,
-  getKeysFormErrorsMessage,
-  preventaFormSchema,
-} from '@/shared/utils';
-import { usePreventaStore } from '@/store/app';
+  GenericInventoryStoreKey,
+  usePreventaStore,
+  useTypedGenericInventoryStore,
+} from '@/store/app';
 import { useGenericCountdownStore, useUiStore } from '@/store/ui';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
@@ -104,7 +103,8 @@ import CountDownOTPPReventa from './CountDownOTPPReventa';
 import DocsSavePreventaStep from './DocsSavePreventaStep';
 import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
-import { EquiposVentaPreventaPartStep } from './form';
+import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
+import { EquiposSeleccionadosTableType } from './form/equipos/EquiposSeleccionadosPreventa';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -193,6 +193,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     s => s.counters[countdownIdNewOtpPreventa]?.count,
   );
 
+  // equipos venta -----------------
+  const { items: equiposSeleccionados } =
+    useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
+      GenericInventoryStoreKey.equiposVentaPreventa,
+    );
+
   usePreventaOtpCounter({
     cackeKey: codigoOtpCacheLeyPreventa,
     counterIdOtp: countdownPreventaId,
@@ -210,7 +216,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   ///* form --------------------------
   const form = useForm<SaveFormDataPreventa>({
-    resolver: yupResolver(preventaFormSchema) as any,
+    // resolver: yupResolver(preventaFormSchema) as any,
     defaultValues: {
       thereAreClientRefiere: false,
       es_referido: false,
@@ -560,13 +566,25 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         }),
       ]);
 
-    ///* create
+    // equipos venta ------------
+    const detalleEquipos: EquipoVentasDetalle[] = equiposSeleccionados?.map(
+      equipo =>
+        ({
+          cantidad: equipo?.usedQuantity!,
+          code: equipo?.producto_data?.codigo!,
+          cuotas: equipo?.selectedCuotas!,
+          series: [],
+        }) as unknown as EquipoVentasDetalle,
+    );
+
+    // create
     await createPreventaMutation.mutateAsync({
       ...data,
       solicitud_servicio: solicitudServicio?.id!,
       url_foto_cedula_frontal: cedulaFrontalUrl?.streamUlr || '',
       url_foto_cedula_trasera: cedulaPosteriorUrl?.streamUlr || '',
       url_foto_vivienda: viviendaUrl?.streamUlr || '',
+      equipos_venta_detalle: detalleEquipos,
     });
     setIsCheckingCedula(false);
   };
