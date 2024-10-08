@@ -25,6 +25,7 @@ import {
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { PricesModalTableCell } from '../../shared/table';
 
 export const returnUrlProductosPage = ROUTER_PATHS.inventario.productosNav;
 
@@ -175,7 +176,9 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'precios'),
+        Cell: ({ row }) => (
+          <PricesModalTableCell precios={row.original?.precios || []} />
+        ),
       },
 
       {
