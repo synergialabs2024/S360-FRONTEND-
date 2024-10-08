@@ -37,6 +37,7 @@ export interface Producto {
 
 export interface PrecioProducto {
   nombre: string;
-  precio: number;
-  estado: boolean;
+  valor: number;
+  default: boolean;
+  descripcion?: string;
 }

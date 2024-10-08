@@ -27,6 +27,7 @@ import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { CategoriaProducto, IVA, Producto } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
 import { returnUrlProductosPage } from '../../../pages/tables/ProductosPage';
+import { PricesForm } from './PricesForm'; // Asegúrate de importar correctamente
 
 export interface SaveProductoProps {
   title: string;
@@ -44,6 +45,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     defaultValues: {
       state: true,
       es_para_venta: false,
+      precios: [], // Inicializamos el arreglo de precios
     },
   });
 
@@ -51,6 +53,9 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
+    control,
+    watch,
+    setValue,
   } = form;
 
   ///* fetch data ---------------------
@@ -103,6 +108,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     if (!producto?.id) return;
     reset(producto);
   }, [producto, reset]);
+
   const isCustomLoading =
     isLoadingIVAs ||
     isRefetchingIVAs ||
@@ -123,7 +129,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       <CustomTextField
         label="Nombre"
         name="nombre"
-        control={form.control}
+        control={control}
         defaultValue={form.getValues().nombre}
         error={errors.nombre}
         helperText={errors.nombre?.message}
@@ -132,7 +138,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       <CustomTextField
         label="Código"
         name="codigo"
-        control={form.control}
+        control={control}
         defaultValue={form.getValues().codigo}
         error={errors.codigo}
         helperText={errors.codigo?.message}
@@ -143,7 +149,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       <CustomTextField
         label="Código Auxiliar"
         name="codigo_auxiliar"
-        control={form.control}
+        control={control}
         defaultValue={form.getValues().codigo_auxiliar}
         error={errors.codigo_auxiliar}
         helperText={errors.codigo_auxiliar?.message}
@@ -155,7 +161,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       <CustomTextArea
         label="Descripción"
         name="descripcion"
-        control={form.control}
+        control={control}
         defaultValue={form.getValues().descripcion}
         error={errors.descripcion}
         helperText={errors.descripcion?.message}
@@ -170,9 +176,9 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         options={TIPO_PRODUCTO_ARRAY_CHOICES}
         defaultValue={form.getValues()?.tipo || ''}
         // errors
-        control={form.control}
-        error={form.formState.errors.tipo}
-        helperText={form.formState.errors.tipo?.message}
+        control={control}
+        error={errors.tipo}
+        helperText={errors.tipo?.message}
         gridSize={gridSizeMdLg6}
       />
       <CustomAutocomplete<CategoriaProducto>
@@ -183,7 +189,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         actualValueKey="id"
         defaultValue={form.getValues().categoria}
         isLoadingData={isLoadingCategorias || isRefetchingCategorias}
-        control={form.control}
+        control={control}
         error={errors.categoria}
         helperText={errors.categoria?.message}
         size={gridSizeMdLg6}
@@ -198,8 +204,8 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         actualValueKey="id"
         defaultValue={form.getValues().iva}
         isLoadingData={isLoadingIVAs || isRefetchingIVAs}
-        // vaidation
-        control={form.control}
+        // validation
+        control={control}
         error={errors.iva}
         helperText={errors.iva?.message}
         size={gridSizeMdLg6}
@@ -207,16 +213,24 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       <SampleCheckbox
         label="Es para venta"
         name="es_para_venta"
-        control={form.control}
+        control={control}
         defaultValue={form.getValues().es_para_venta}
         size={gridSizeMdLg3}
       />
       <SampleCheckbox
         label="Estado"
         name="state"
-        control={form.control}
+        control={control}
         defaultValue={form.getValues().state}
         size={gridSizeMdLg3}
+      />
+
+      {/* Agregamos el componente PricesForm y pasamos el formulario mediante props */}
+      <PricesForm
+        control={control}
+        watch={watch}
+        setValue={setValue}
+        formState={{ errors }}
       />
     </SingleFormBoxScene>
   );
