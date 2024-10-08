@@ -45,7 +45,15 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     defaultValues: {
       state: true,
       es_para_venta: false,
-      precios: [], // Inicializamos el arreglo de precios
+      // init with 1 default price
+      precios: [
+        {
+          nombre: '',
+          valor: 0,
+          default: true,
+          descripcion: '',
+        },
+      ],
     },
   });
 

@@ -78,7 +78,10 @@ export const PricesForm: React.FC<PricesFormProps> = ({
                 variant="outlined"
                 fullWidth
                 type="number"
-                inputProps={{ step: 'any' }}
+                inputProps={{
+                  min: 0,
+                  step: 1,
+                }}
                 {...control.register(`precios.${index}.valor`, {
                   valueAsNumber: true,
                 })}
