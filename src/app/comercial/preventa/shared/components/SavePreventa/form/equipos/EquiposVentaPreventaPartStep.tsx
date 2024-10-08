@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { MdAddCircle, MdCancel } from 'react-icons/md';
 
 import { ToastWrapper, type SolicitudServicio } from '@/shared';
@@ -12,14 +11,15 @@ import EquiposSeleccionadosPreventa from './EquiposSeleccionadosPreventa';
 
 export type EquiposVentaPreventaPartStepProps = {
   solicitudServicio: SolicitudServicio;
+
+  // to persist state when step changes
+  showEquiposPart: boolean;
+  setShowEquiposPart: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const EquiposVentaPreventaPartStep: React.FC<
   EquiposVentaPreventaPartStepProps
-> = () => {
-  ///* local state ---------------------
-  const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
-
+> = ({ showEquiposPart, setShowEquiposPart }) => {
   ///* global state ---------------------
   const serviceScore = usePreventaStore(s => s.scoreServicio);
   const { clearOneRecord } = useTypedGenericInventoryStore(

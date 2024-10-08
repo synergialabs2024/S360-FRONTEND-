@@ -194,6 +194,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   );
 
   // equipos venta -----------------
+  const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
   const { items: equiposSeleccionados } =
     useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
       GenericInventoryStoreKey.equiposVentaPreventa,
@@ -1157,6 +1158,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           <>
             <EquiposVentaPreventaPartStep
               solicitudServicio={solicitudServicio!}
+              showEquiposPart={showEquiposPart}
+              setShowEquiposPart={setShowEquiposPart}
             />
           </>
 
