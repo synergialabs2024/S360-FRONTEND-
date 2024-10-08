@@ -308,6 +308,10 @@ export const ROUTER_PATHS = {
     ///* consulta buro
     consultasBuro: 'consultas-buro',
     consultasBuroNav: '/supervision-comercial/consultas-buro',
+
+    ///* reasignacion de ventas (sol servicio)
+    reasignacionVentas: 'reasignacion-ventas',
+    reasignacionVentasNav: '/supervision-comercial/reasignacion-ventas',
   },
 
   /////* Administración de Red ----------------

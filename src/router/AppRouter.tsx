@@ -435,6 +435,14 @@ const CodigosOtpMainPage = Loadable(
     () => import('@/app/comercial/codigo-otp/pages/tables/CodigosOtpMainPage'),
   ),
 );
+const ReasignacionVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/reasignacion-ventas/pages/tables/ReasignacionVentasPage'
+      ),
+  ),
+);
 
 const TrazabilidadVentasPage = Loadable(
   lazy(
@@ -1200,6 +1208,11 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoPreventa,
             element: <SolicitudsDesbloqueoPreventasMainPage />,
+          },
+          ///* reasignacion ventas
+          {
+            path: ROUTER_PATHS.supervisionComercial.reasignacionVentas,
+            element: <ReasignacionVentasPage />,
           },
         ],
       },

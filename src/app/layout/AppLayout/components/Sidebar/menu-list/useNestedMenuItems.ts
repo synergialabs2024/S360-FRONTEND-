@@ -296,12 +296,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'reasignacion-ventas-vendedores',
-              title: 'Reasignación de ventas de vendedores',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_REASIGNACION_VENTAS,
+              {
+                id: 'reasignacion-ventas-vendedores',
+                title: 'Reasignación de ventas de vendedores',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial.reasignacionVentasNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
               id: 'codigos-otp',
               title: 'Libreacion de Código OTP',
