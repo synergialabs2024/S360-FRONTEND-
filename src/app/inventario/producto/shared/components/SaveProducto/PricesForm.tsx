@@ -1,9 +1,14 @@
-import { Checkbox, Grid, IconButton, TextField } from '@mui/material';
+import { Checkbox, Grid, IconButton } from '@mui/material';
 import { useEffect } from 'react';
-import { Controller, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
 
-import { CustomSingleButton, CustomTypoLabel } from '@/shared/components';
+import { gridSizeMdLg2, gridSizeMdLg3, gridSizeMdLg4 } from '@/shared';
+import {
+  CustomSingleButton,
+  CustomTextField,
+  CustomTypoLabel,
+} from '@/shared/components';
 
 type PricesFormProps = {
   control: any;
@@ -30,7 +35,7 @@ export const PricesForm: React.FC<PricesFormProps> = ({
         (precio: any) => precio.default,
       ).length;
       if (defaultCount > 1) {
-        // validate that only one default is selected
+        // Validar que solo un precio esté seleccionado como default
         const firstDefaultIndex = precios.findIndex(
           (precio: any) => precio.default,
         );
@@ -63,71 +68,40 @@ export const PricesForm: React.FC<PricesFormProps> = ({
             spacing={1}
             sx={{ pt: index !== 0 ? '12px' : 0 }}
           >
-            {/* Campo Nombre con transformación a mayúsculas */}
-            <Grid item xs={3}>
-              <Controller
-                control={control}
-                name={`precios.${index}.nombre`}
-                render={({ field: { onChange, onBlur, value, ref } }) => (
-                  <TextField
-                    label="Nombre"
-                    variant="outlined"
-                    fullWidth
-                    value={value || ''}
-                    onChange={e => {
-                      const upperValue = e.target.value.toUpperCase();
-                      onChange(upperValue);
-                    }}
-                    inputRef={ref}
-                    onBlur={onBlur}
-                    error={!!errors?.precios?.[index]?.nombre}
-                    helperText={errors?.precios?.[index]?.nombre?.message}
-                  />
-                )}
-              />
-            </Grid>
+            <CustomTextField
+              label="Nombre"
+              control={control}
+              name={`precios.${index}.nombre`}
+              error={errors?.precios?.[index]?.nombre}
+              helperText={errors?.precios?.[index]?.nombre?.message}
+              size={gridSizeMdLg4}
+            />
 
-            <Grid item xs={2}>
-              <TextField
-                label="Valor"
-                variant="outlined"
-                fullWidth
-                type="number"
-                inputProps={{
+            <CustomTextField
+              label="Valor"
+              control={control}
+              name={`precios.${index}.valor`}
+              error={errors?.precios?.[index]?.valor}
+              helperText={errors?.precios?.[index]?.valor?.message}
+              type="number"
+              onlyNumbers={true}
+              InputProps={{
+                inputProps: {
                   min: 0,
                   step: 1,
-                }}
-                {...control.register(`precios.${index}.valor`, {
-                  valueAsNumber: true,
-                })}
-                error={!!errors?.precios?.[index]?.valor}
-                helperText={errors?.precios?.[index]?.valor?.message}
-              />
-            </Grid>
-
-            {/* Campo Descripción con transformación a mayúsculas */}
-            <Grid item xs={4}>
-              <Controller
-                control={control}
-                name={`precios.${index}.descripcion`}
-                render={({ field: { onChange, onBlur, value, ref } }) => (
-                  <TextField
-                    label="Descripción"
-                    variant="outlined"
-                    fullWidth
-                    value={value || ''}
-                    onChange={e => {
-                      const upperValue = e.target.value.toUpperCase();
-                      onChange(upperValue);
-                    }}
-                    inputRef={ref}
-                    onBlur={onBlur}
-                    error={!!errors?.precios?.[index]?.descripcion}
-                    helperText={errors?.precios?.[index]?.descripcion?.message}
-                  />
-                )}
-              />
-            </Grid>
+                },
+              }}
+              size={gridSizeMdLg2}
+            />
+            <CustomTextField
+              label="Descripción"
+              control={control}
+              name={`precios.${index}.descripcion`}
+              error={errors?.precios?.[index]?.descripcion}
+              helperText={errors?.precios?.[index]?.descripcion?.message}
+              required={false}
+              size={gridSizeMdLg3}
+            />
 
             <Grid item xs={2}>
               <Checkbox
