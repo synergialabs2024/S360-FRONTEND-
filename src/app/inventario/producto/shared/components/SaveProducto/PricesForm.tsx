@@ -1,8 +1,9 @@
-import { CustomSingleButton, CustomTypoLabel } from '@/shared/components';
 import { Checkbox, Grid, IconButton, TextField } from '@mui/material';
 import { useEffect } from 'react';
-import { useFieldArray } from 'react-hook-form';
+import { Controller, useFieldArray } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
+
+import { CustomSingleButton, CustomTypoLabel } from '@/shared/components';
 
 type PricesFormProps = {
   control: any;
@@ -62,16 +63,30 @@ export const PricesForm: React.FC<PricesFormProps> = ({
             spacing={1}
             sx={{ pt: index !== 0 ? '12px' : 0 }}
           >
+            {/* Campo Nombre con transformación a mayúsculas */}
             <Grid item xs={3}>
-              <TextField
-                label="Nombre"
-                variant="outlined"
-                fullWidth
-                {...control.register(`precios.${index}.nombre`)}
-                error={!!errors?.precios?.[index]?.nombre}
-                helperText={errors?.precios?.[index]?.nombre?.message}
+              <Controller
+                control={control}
+                name={`precios.${index}.nombre`}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <TextField
+                    label="Nombre"
+                    variant="outlined"
+                    fullWidth
+                    value={value || ''}
+                    onChange={e => {
+                      const upperValue = e.target.value.toUpperCase();
+                      onChange(upperValue);
+                    }}
+                    inputRef={ref}
+                    onBlur={onBlur}
+                    error={!!errors?.precios?.[index]?.nombre}
+                    helperText={errors?.precios?.[index]?.nombre?.message}
+                  />
+                )}
               />
             </Grid>
+
             <Grid item xs={2}>
               <TextField
                 label="Valor"
@@ -90,14 +105,27 @@ export const PricesForm: React.FC<PricesFormProps> = ({
               />
             </Grid>
 
+            {/* Campo Descripción con transformación a mayúsculas */}
             <Grid item xs={4}>
-              <TextField
-                label="Descripción"
-                variant="outlined"
-                fullWidth
-                {...control.register(`precios.${index}.descripcion`)}
-                error={!!errors?.precios?.[index]?.descripcion}
-                helperText={errors?.precios?.[index]?.descripcion?.message}
+              <Controller
+                control={control}
+                name={`precios.${index}.descripcion`}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <TextField
+                    label="Descripción"
+                    variant="outlined"
+                    fullWidth
+                    value={value || ''}
+                    onChange={e => {
+                      const upperValue = e.target.value.toUpperCase();
+                      onChange(upperValue);
+                    }}
+                    inputRef={ref}
+                    onBlur={onBlur}
+                    error={!!errors?.precios?.[index]?.descripcion}
+                    helperText={errors?.precios?.[index]?.descripcion?.message}
+                  />
+                )}
               />
             </Grid>
 

@@ -48,7 +48,7 @@ export const productoFormSchema = yup.object().shape({
           .number()
           .typeError('El valor debe ser un número')
           .required('El valor es requerido')
-          .positive('El valor debe ser un número positivo'),
+          .min(0, 'El valor no debe ser negativo'),
         default: yup.boolean().required(),
         descripcion: yup
           .string()
