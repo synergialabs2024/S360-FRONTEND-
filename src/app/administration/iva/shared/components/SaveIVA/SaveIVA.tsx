@@ -11,10 +11,10 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { useCheckPermission } from '@/shared/hooks/auth';
 import { IVA, PermissionsEnum } from '@/shared/interfaces';
 import { iVAFormSchema } from '@/shared/utils';
 import { returnUrlIVAsPage } from '../../../pages/tables/IVAsPage';
-import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveIVAProps {
   title: string;
@@ -32,6 +32,7 @@ const SaveIVA: React.FC<SaveIVAProps> = ({ title, iva }) => {
     resolver: yupResolver(iVAFormSchema),
     defaultValues: {
       state: true,
+      iva_defecto: false,
     },
   });
 

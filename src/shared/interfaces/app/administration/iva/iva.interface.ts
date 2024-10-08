@@ -10,11 +10,14 @@ export interface IVAPaginatedRes {
 export interface IVA {
   id?: number;
   uuid?: string;
+  state: boolean;
+
   name: string;
   sri_code: string;
   percentage: string;
 
-  state: boolean;
+  iva_defecto: boolean;
+
   created_at?: string;
   modified_at?: string;
 }

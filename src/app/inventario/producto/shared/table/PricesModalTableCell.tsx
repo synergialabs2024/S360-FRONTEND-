@@ -38,6 +38,7 @@ const PricesModalTableCell: React.FC<PricesModalTableCellProps> = ({
         tooltipPlacement="right"
         startIcon={<IoMdEye />}
         onClick={handleOpen}
+        color={`${'none'}` as any}
       />
 
       {open && (
