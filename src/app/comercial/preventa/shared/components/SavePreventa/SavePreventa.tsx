@@ -90,13 +90,18 @@ import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
-import { formatCountDownTimer, getKeysFormErrorsMessage } from '@/shared/utils';
+import {
+  formatCountDownTimer,
+  getKeysFormErrorsMessage,
+  preventaFormSchema,
+} from '@/shared/utils';
 import {
   GenericInventoryStoreKey,
   usePreventaStore,
   useTypedGenericInventoryStore,
 } from '@/store/app';
 import { useGenericCountdownStore, useUiStore } from '@/store/ui';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
@@ -211,13 +216,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
-      // TODO: remove this
-      initialStep: 2,
+      // initialStep: 2,
     });
 
   ///* form --------------------------
   const form = useForm<SaveFormDataPreventa>({
-    // resolver: yupResolver(preventaFormSchema) as any,
+    resolver: yupResolver(preventaFormSchema) as any,
     defaultValues: {
       thereAreClientRefiere: false,
       es_referido: false,
@@ -569,13 +573,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
     // equipos venta ------------
     const detalleEquipos: EquipoVentasDetalle[] = equiposSeleccionados?.map(
-      equipo =>
-        ({
-          cantidad: equipo?.usedQuantity!,
-          code: equipo?.producto_data?.codigo!,
-          cuotas: equipo?.selectedCuotas!,
-          series: [],
-        }) as unknown as EquipoVentasDetalle,
+      equipo => ({
+        cantidad: equipo?.usedQuantity?.toFixed(2),
+        code: equipo?.producto_data?.codigo!,
+        cuotas: equipo?.selectedCuotas!,
+        series: [],
+      }),
     );
 
     // create
