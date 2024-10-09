@@ -731,11 +731,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.NETCONNECT_VLANS, {
               id: 'vlans',
               title: 'VLANS',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.netconnect.vlansNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'profiles',
