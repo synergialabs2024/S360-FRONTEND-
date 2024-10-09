@@ -323,6 +323,12 @@ export const ROUTER_PATHS = {
     routersCrear: 'routers/crear',
     routersEditar: 'routers/editar/:uuid',
     routersNav: '/administracion-red/routers',
+
+    ///* monitoreos
+    monitoreos: 'monitoreos',
+    monitoreosCrear: 'monitoreos/crear',
+    monitoreosEditar: 'monitoreos/editar/:uuid',
+    monitoreosNav: '/administracion-red/monitoreos',
   },
   // // INVENTARIO =================================
   inventario: {

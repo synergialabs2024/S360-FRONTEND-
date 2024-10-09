@@ -674,11 +674,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_MONITOREO, {
               id: 'monitoreos',
               title: 'Monitoreo',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.monitoreosNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'traficos',
