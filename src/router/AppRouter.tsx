@@ -623,6 +623,28 @@ const UpdateRouterPage = Loadable(
       import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
   ),
 );
+const MonitoreosPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/monitoreo/pages/tables/MonitoreosPage'),
+  ),
+);
+const CreateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/CreateMonitoreoPage'
+      ),
+  ),
+);
+const UpdateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/UpdateMonitoreoPage'
+      ),
+  ),
+);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -1403,6 +1425,19 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracionRed.routersEditar,
             element: <UpdateRouterPage />,
+          },
+          ///* monitoreo
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreos,
+            element: <MonitoreosPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreosCrear,
+            element: <CreateMonitoreoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreosEditar,
+            element: <UpdateMonitoreoPage />,
           },
         ],
       },
