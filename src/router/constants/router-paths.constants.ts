@@ -368,4 +368,14 @@ export const ROUTER_PATHS = {
     tipoinstalacionesEditar: 'tipoinstalaciones/editar/:uuid',
     tipoinstalacionesNav: '/logistica/tipoinstalaciones',
   },
+  /////* NetConnect ----------------
+  netconnect: {
+    root: 'netconnect',
+
+    ///* vlans
+    vlans: 'vlans',
+    vlansCrear: 'vlans/crear',
+    vlansEditar: 'vlans/editar/:uuid',
+    vlansNav: '/netconnect/vlans',
+  },
 };
