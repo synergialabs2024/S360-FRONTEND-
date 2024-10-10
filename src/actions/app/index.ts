@@ -7,6 +7,7 @@ export * from './infraestructura';
 export * from './inventario';
 export * from './logistica';
 export * from './mante-operacion';
+export * from './netconnect';
 export * from './nomina';
 export * from './operaciones';
 export * from './servicios';
