@@ -743,6 +743,18 @@ const UpdateTipoInstalacionPage = Loadable(
   ),
 );
 
+///* Netconnect ------------
+//TipoInstalacion
+const VlansPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/tables/VlansPage')),
+);
+const CreateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/CreateVlanPage')),
+);
+const UpdateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/UpdateVlanPage')),
+);
+
 const AppRouter = createBrowserRouter([
   ////* Auth
   {
@@ -1438,6 +1450,27 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracionRed.monitoreosEditar,
             element: <UpdateMonitoreoPage />,
+          },
+        ],
+      },
+
+      //////////* Netconnect ------------
+      {
+        path: ROUTER_PATHS.netconnect.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* tipo instalacion
+          {
+            path: ROUTER_PATHS.netconnect.vlans,
+            element: <VlansPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.vlansCrear,
+            element: <CreateVlanPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.vlansEditar,
+            element: <UpdateVlanPage />,
           },
         ],
       },
