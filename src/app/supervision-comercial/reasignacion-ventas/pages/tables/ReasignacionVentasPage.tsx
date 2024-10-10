@@ -14,7 +14,7 @@ import {
   SingleTableBoxScene,
 } from '@/shared/components';
 import CustomAutocompletSearchNoForm from '@/shared/components/CustomAutocompletes/CustomAutocompletSearchNoForm';
-import { gridSize, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { gridSizeMdLg6, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import {
   useColumnsSolicitusService,
   useLoaders,
@@ -31,6 +31,7 @@ import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useAuthStore } from '@/store/auth';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { ReassignSellerModal } from '../../shared/components';
 import { useFetchSystemUsersWithDebounce } from '../../shared/hooks/useFetchSystemUsersWithDebounce';
 
 export type ReasignacionVentasPageProps = {};
@@ -39,6 +40,11 @@ const returnUrl = ROUTER_PATHS.supervisionComercial.reasignacionVentasNav;
 
 const ReasignacionVentasPage: React.FC<ReasignacionVentasPageProps> = () => {
   useCheckPermission(PermissionsEnum.comercial_view_solicitudservicio);
+
+  ///* local state
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [selectedSolService, setSelectedSolService] =
+    useState<SolicitudServicio | null>(null);
 
   ///* global state
   const user = useAuthStore(s => s.user);
@@ -60,13 +66,8 @@ const ReasignacionVentasPage: React.FC<ReasignacionVentasPageProps> = () => {
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
 
-  const {
-    users,
-    isLoadingUsers,
-    selectedUser,
-    onChangeUser,
-    onChangeFilterUser,
-  } = useFetchSystemUsersWithDebounce();
+  const { users, isLoadingUsers, selectedUser, onChangeFilterUser } =
+    useFetchSystemUsersWithDebounce();
 
   ///* fetch data
   const {
@@ -87,7 +88,8 @@ const ReasignacionVentasPage: React.FC<ReasignacionVentasPageProps> = () => {
 
   ///* handlers
   const onEdit = (row: SolicitudServicio) => {
-    console.log('onEdit', row);
+    setSelectedSolService(row);
+    setOpenModal(true);
   };
 
   ///* columns
@@ -118,32 +120,31 @@ const ReasignacionVentasPage: React.FC<ReasignacionVentasPageProps> = () => {
         <CustomSearch
           onChange={onChangeFilter}
           value={globalFilter}
-          text="por identificación"
+          text="por identificación del cliente"
           sxContainer={{
             mb: 5,
           }}
           customSpaceNode={
             <>
-              {/* TODO: FIX */}
               <CustomAutocompletSearchNoForm<SystemUser>
-                label="Vendedor"
+                label="Buscar por nombre de vendedor"
                 options={
                   (users.map(u => ({
                     id: u.user?.id || 0,
                     razon_social: u.user?.razon_social || '',
-                  })) as any) || []
+                  })) as unknown as SystemUser[]) || []
                 }
                 valueKey="razon_social"
                 actualValueKey="id"
                 defaultValue={selectedUser?.id?.toString() || ''}
                 optionLabelForEdit={selectedUser?.username || ''}
                 isLoadingData={isLoadingUsers}
-                onChangeValue={onChangeUser}
                 onChangeInputText={onChangeFilterUser}
                 onChangeRawValue={user => {
                   setSelectedVendedor(user);
                 }}
-                size={gridSize}
+                size={gridSizeMdLg6}
+                required={false}
               />
             </>
           }
@@ -179,6 +180,13 @@ const ReasignacionVentasPage: React.FC<ReasignacionVentasPageProps> = () => {
           canDelete={false}
         />
       </GridTableTabsContainerOnly>
+
+      {/* ============== modals ============== */}
+      <ReassignSellerModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        solicitudServicio={selectedSolService!}
+      />
     </SingleTableBoxScene>
   );
 };

@@ -1,4 +1,11 @@
-import { Ciudad, CodigoOtpLimitData, Provincia, Sector, Zona } from '@/shared';
+import {
+  Ciudad,
+  CodigoOtpLimitData,
+  Provincia,
+  Sector,
+  SystemUserLimitData,
+  Zona,
+} from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { TrazabilidadVentas } from '../trazabilidad';
 
@@ -68,6 +75,8 @@ export interface SolicitudServicio {
   zona_data?: Zona;
   ciudad_data?: Ciudad;
   provincia_data?: Provincia;
+
+  vendedor_data?: SystemUserLimitData;
 }
 
 export type SolicitudServicioLimitData = Pick<
