@@ -91,7 +91,7 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
               item: {
                 ...item,
                 usedQuantity: 1,
-                selectedCuotas: 1,
+                // selectedCuotas: 1,
               },
               showToast: true,
             });

@@ -11,6 +11,7 @@ export const useCheckPermission = (permision: PermissionsEnum) => {
 
   useEffect(() => {
     if (!hasPermission(permision)) {
+      // console.log({ permision });
       ToastWrapper.error('No tienes permisos para ver esta página');
       navigate('/404', { replace: true });
       // logOut();
@@ -24,6 +25,8 @@ export const useCheckPermissionsArray = (permissions: PermissionsEnum[]) => {
 
   useEffect(() => {
     if (!hasAllPermissions(permissions)) {
+      // console.log({ permissions });
+
       ToastWrapper.error('No tienes permisos para ver esta página');
       navigate('/404', { replace: true });
     }

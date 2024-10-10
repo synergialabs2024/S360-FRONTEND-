@@ -204,6 +204,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
       GenericInventoryStoreKey.equiposVentaPreventa,
     );
+  const selectedCuotas = usePreventaStore(s => s.selectedCuotas);
 
   usePreventaOtpCounter({
     cackeKey: codigoOtpCacheLeyPreventa,
@@ -576,7 +577,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       equipo => ({
         cantidad: equipo?.usedQuantity?.toFixed(2),
         codigo: equipo?.producto_data?.codigo!,
-        cuotas: equipo?.selectedCuotas!,
+        cuotas: selectedCuotas,
         series: [],
       }),
     );

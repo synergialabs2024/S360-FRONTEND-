@@ -25,7 +25,6 @@ export type EquiposSeleccionadosPreventaProps = {};
 
 export type EquiposSeleccionadosTableType = UbicacionProducto & {
   usedQuantity: number;
-  selectedCuotas: number;
 };
 
 const EquiposSeleccionadosPreventa: React.FC<
@@ -44,6 +43,8 @@ const EquiposSeleccionadosPreventa: React.FC<
     GenericInventoryStoreKey.equiposVentaPreventa,
   );
   const scoreServicio = usePreventaStore(s => s.scoreServicio);
+  const selectedCuotas = usePreventaStore(s => s.selectedCuotas);
+  const setSelectedCuotas = usePreventaStore(s => s.setSelectedCuotas);
 
   ///* handlers ---------------------
   const onChangeQuantity = useCallback(
@@ -63,18 +64,24 @@ const EquiposSeleccionadosPreventa: React.FC<
     },
     [updateSelectedItemValue],
   );
-  const onChangeCuotas = useCallback(
-    (value: string, item: EquiposSeleccionadosTableType) => {
-      updateSelectedItemValue({
-        idKey: 'id',
-        updatedItem: {
-          ...item,
-          selectedCuotas: +value,
-        },
-      });
-    },
-    [updateSelectedItemValue],
-  );
+
+  const getAvailableCoutasRange = () => {
+    const scoresFreeCoutas = JSON.parse(
+      useParametrosSistemaStore
+        .getState()
+        .systemParametersArray.find(
+          sp =>
+            sp?.slug ===
+            SystemParamsSlugsEnum.SCORE_BURO_LIBRE_CUOTAS_EQUIPO_VENTA,
+        )?.value || '[]',
+    );
+
+    const availableCoutasRange = scoresFreeCoutas?.includes(scoreServicio)
+      ? 12
+      : 1;
+
+    return availableCoutasRange;
+  };
 
   ///* columns ---------------------
   const { baseColumnsPreventa01 } = useColumnsEquiposPreventa({
@@ -114,58 +121,6 @@ const EquiposSeleccionadosPreventa: React.FC<
           );
         },
       },
-      {
-        accessorKey: 'cuotas',
-        header: 'CUOTAS',
-        enableColumnFilter: false,
-        Cell: ({ row }) => {
-          const selectedCouta = row.original?.selectedCuotas || 1;
-          const scoresFreeCoutas = JSON.parse(
-            useParametrosSistemaStore
-              .getState()
-              .systemParametersArray.find(
-                sp =>
-                  sp?.slug ===
-                  SystemParamsSlugsEnum.SCORE_BURO_LIBRE_CUOTAS_EQUIPO_VENTA,
-              )?.value || '[]',
-          );
-
-          const availableCoutasRange = scoresFreeCoutas?.includes(scoreServicio)
-            ? 12
-            : 1;
-
-          return (
-            <>
-              <TextField
-                select
-                variant="outlined"
-                value={selectedCouta?.toString() || ''}
-                onChange={e => {
-                  const value = e.target.value;
-                  const intValue = parseInt(value, 10);
-
-                  onChangeCuotas(intValue.toString(), row.original);
-                }}
-                type="number"
-                inputProps={{
-                  min: 1,
-                  step: 1,
-                  max: 12,
-                }}
-              >
-                {Array.from(
-                  { length: availableCoutasRange },
-                  (_, i) => i + 1,
-                ).map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </>
-          );
-        },
-      },
 
       {
         accessorKey: 'action',
@@ -185,7 +140,6 @@ const EquiposSeleccionadosPreventa: React.FC<
     ],
     [
       baseColumnsPreventa01,
-      onChangeCuotas,
       onChangeQuantity,
       removeSelectedItem,
       scoreServicio,
@@ -194,17 +148,57 @@ const EquiposSeleccionadosPreventa: React.FC<
 
   return (
     <Grid item container xs={12} spacing={1}>
-      <Grid item xs={12} justifySelf="end" alignSelf="flex-end">
-        <CustomSingleButton
-          label="AGREGAR EQUIPO"
-          color="primary"
-          variant="text"
-          startIcon={<MdOutlineAddShoppingCart />}
-          onClick={() => {
-            setOpenAvailableEquipmentsModal(true);
-          }}
-          justifyContent="flex-end"
-        />
+      <Grid
+        item
+        container
+        xs={12}
+        spacing={1}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Grid item xs={3}>
+          <TextField
+            select
+            label="Cuotas"
+            variant="outlined"
+            size="medium"
+            fullWidth
+            value={selectedCuotas?.toString() || ''}
+            onChange={e => {
+              const value = e.target.value;
+              const intValue = parseInt(value, 10);
+
+              setSelectedCuotas(intValue);
+            }}
+            type="number"
+            inputProps={{
+              min: 1,
+              step: 1,
+              max: 12,
+            }}
+          >
+            {Array.from(
+              { length: getAvailableCoutasRange() },
+              (_, i) => i + 1,
+            ).map((item, index) => (
+              <MenuItem key={index} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid item>
+          <CustomSingleButton
+            label="AGREGAR EQUIPO"
+            color="primary"
+            variant="text"
+            startIcon={<MdOutlineAddShoppingCart />}
+            onClick={() => {
+              setOpenAvailableEquipmentsModal(true);
+            }}
+          />
+        </Grid>
       </Grid>
 
       <Grid item xs={12}>
