@@ -1,5 +1,5 @@
 export interface EquipoVentasDetalle {
-  code: string;
+  codigo: string;
   cantidad: string;
   series?: SerieVentas[];
 

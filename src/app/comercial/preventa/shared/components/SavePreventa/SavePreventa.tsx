@@ -575,7 +575,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     const detalleEquipos: EquipoVentasDetalle[] = equiposSeleccionados?.map(
       equipo => ({
         cantidad: equipo?.usedQuantity?.toFixed(2),
-        code: equipo?.producto_data?.codigo!,
+        codigo: equipo?.producto_data?.codigo!,
         cuotas: equipo?.selectedCuotas!,
         series: [],
       }),
