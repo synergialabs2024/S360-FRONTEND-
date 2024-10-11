@@ -2,6 +2,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useFetchPlanInternets, useUpdatePlanInternet } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
@@ -22,7 +23,6 @@ import {
 } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { useFetchPlanInternets, useUpdatePlanInternet } from '@/actions/app';
 
 export const returnUrlPlanInternetsPage =
   ROUTER_PATHS.servicios.planesinternetNav;
@@ -98,6 +98,14 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+      },
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
 
       {
