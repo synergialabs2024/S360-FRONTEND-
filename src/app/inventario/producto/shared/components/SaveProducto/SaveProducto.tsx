@@ -108,7 +108,13 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     }
 
     ///* create
-    createProductoMutation.mutate(data);
+    createProductoMutation.mutate({
+      ...data,
+      precios: data.precios?.map(precio => ({
+        ...precio,
+        valor: precio.valor.toFixed(2),
+      })),
+    });
   };
 
   ///* effects ---------------------
