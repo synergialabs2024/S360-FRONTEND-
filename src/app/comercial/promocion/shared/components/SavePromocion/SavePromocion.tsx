@@ -220,8 +220,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     const allSectores = (promocion.sectores as any[])?.includes('*');
     const allPlanes = (promocion.planes as any[])?.includes('*');
 
-    console.log('meses_gratis', promocion.facturas_gratis);
-
     reset({
       ...promocion,
       allProvincias,
@@ -342,16 +340,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           actualValueKey="value"
           // options
           options={FACTURAS_CUOTAS_ARRAY_OBJECT}
-          defaultValue={
-            form.getValues().facturas_gratis?.length
-              ? FACTURAS_CUOTAS_ARRAY_OBJECT.filter(
-                  (item: FacturasCuotasObjArray) =>
-                    (form.getValues().facturas_gratis as any[])?.includes(
-                      item.value,
-                    ),
-                )
-              : []
-          }
           isLoadingData={false}
           // errors
           control={form.control}
@@ -371,16 +359,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           actualValueKey="value"
           // options
           options={FACTURAS_CUOTAS_ARRAY_OBJECT}
-          defaultValue={
-            form.getValues().facturas_descuento?.length
-              ? FACTURAS_CUOTAS_ARRAY_OBJECT.filter(
-                  (item: FacturasCuotasObjArray) =>
-                    (form.getValues().facturas_descuento as any[])?.includes(
-                      item.value,
-                    ),
-                )
-              : []
-          }
           isLoadingData={false}
           // errors
           control={form.control}
@@ -435,16 +413,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={provinciasPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().provincias?.length
-                  ? provinciasPaging?.data?.items?.filter(
-                      (provincia: Provincia) =>
-                        (form.getValues().provincias as any[])?.includes(
-                          provincia?.id!,
-                        ),
-                    )
-                  : []
-              }
               isLoadingData={isLoadingProvincias || isRefetchingProvincias}
               // errors
               control={form.control}
@@ -489,15 +457,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={ciudadesPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().ciudades?.length
-                  ? ciudadesPaging?.data?.items?.filter((ciudad: Ciudad) =>
-                      (form.getValues().ciudades as any[])?.includes(
-                        ciudad?.id!,
-                      ),
-                    )
-                  : []
-              }
               isLoadingData={isLoadingCiudades || isRefetchingCiudades}
               // errors
               control={form.control}
@@ -550,13 +509,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={zonasPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().zonas?.length
-                  ? zonasPaging?.data?.items?.filter((zona: Zona) =>
-                      (form.getValues().zonas as any[])?.includes(zona?.id!),
-                    )
-                  : []
-              }
               isLoadingData={isLoadingZonas || isRefetchingZonas}
               // errors
               control={form.control}
@@ -606,15 +558,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={sectoresPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().sectores?.length
-                  ? sectoresPaging?.data?.items?.filter((sector: Sector) =>
-                      (form.getValues().sectores as any[])?.includes(
-                        sector?.id!,
-                      ),
-                    )
-                  : []
-              }
               isLoadingData={isLoadingSectores || isRefetchingSectores}
               // errors
               control={form.control}
@@ -664,13 +607,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={planesPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().planes?.length
-                  ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
-                      (form.getValues().planes as any[])?.includes(plan?.id!),
-                    )
-                  : []
-              }
               isLoadingData={isLoadingPlanes || isRefetchingPlanes}
               // errors
               control={form.control}
