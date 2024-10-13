@@ -19,7 +19,6 @@ import {
   a11yProps,
   CustomAutocompleteArrString,
   CustomAutocompleteMultiple,
-  CustomAutocompleteMultipleArrString,
   CustomDatePicker,
   CustomNumberTextField,
   CustomRadioButtonGroup,
@@ -31,8 +30,9 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import {
-  ALL_MONTHS_STRING,
   DiscountTypeEnumChoice,
+  FACTURAS_CUOTAS_ARRAY_OBJECT,
+  FacturasCuotasObjArray,
   RECURRENCE_ARRAY_CHOICES,
   SAVE_PROMOCION_PERMISSIONS,
 } from '@/shared/constants/app';
@@ -123,7 +123,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       has_coverage: true,
       page_size: 600,
       provinces: watchedAllProvincias
-        ? undefined
+        ? watchedProvincias?.join(',')
         : watchedProvincias?.length
           ? watchedProvincias.join(',')
           : undefined,
@@ -139,7 +139,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       has_coverage: true,
       page_size: 600,
       cities: watchedAllCities
-        ? undefined
+        ? watchedCiudades?.join(',')
         : watchedCiudades?.length
           ? watchedCiudades.join(',')
           : undefined,
@@ -156,7 +156,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       page_size: 600,
 
       zones: watchedAllZones
-        ? undefined
+        ? watchedZonas?.join(',')
         : watchedZonas?.length
           ? watchedZonas.join(',')
           : undefined,
@@ -219,6 +219,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     const allZones = (promocion.zonas as any[])?.includes('*');
     const allSectores = (promocion.sectores as any[])?.includes('*');
     const allPlanes = (promocion.planes as any[])?.includes('*');
+
+    console.log('meses_gratis', promocion.facturas_gratis);
 
     reset({
       ...promocion,
@@ -332,51 +334,61 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
         />
 
         {/* ----- Meses Gratuitos ----- */}
-        <CustomAutocompleteMultipleArrString
-          label="Meses Gratuitos"
-          name="meses_gratis"
-          textFieldKey="meses_gratis"
-          control={form.control}
+        <CustomAutocompleteMultiple<FacturasCuotasObjArray>
+          label="Facturas gratuitas"
+          name="facturas_gratis"
+          textFieldKey="nombre"
+          valueKey="label"
+          actualValueKey="value"
+          // options
+          options={FACTURAS_CUOTAS_ARRAY_OBJECT}
           defaultValue={
-            form.getValues().meses_gratis?.length
-              ? ALL_MONTHS_STRING.filter(month =>
-                  (form.getValues().meses_gratis as any[])?.includes(month),
+            form.getValues().facturas_gratis?.length
+              ? FACTURAS_CUOTAS_ARRAY_OBJECT.filter(
+                  (item: FacturasCuotasObjArray) =>
+                    (form.getValues().facturas_gratis as any[])?.includes(
+                      item.value,
+                    ),
                 )
               : []
           }
-          // options
-          options={ALL_MONTHS_STRING}
           isLoadingData={false}
           // errors
-          error={!!errors.meses_gratis?.length}
-          helperText={errors.meses_gratis?.message}
-          size={gridSizeMdLg6}
-          enableStringify={false}
+          control={form.control}
+          error={errors.facturas_gratis as any}
+          helperText={errors.facturas_gratis?.message}
+          onlyActualValueKey
           required={false}
+          size={gridSizeMdLg6}
         />
 
         {/* ----- Meses Descuento ----- */}
-        <CustomAutocompleteMultipleArrString
+        <CustomAutocompleteMultiple<FacturasCuotasObjArray>
           label="Facturas con descuento"
-          name="meses_descuento"
-          textFieldKey="meses_descuento"
-          control={form.control}
+          name="facturas_descuento"
+          textFieldKey="nombre"
+          valueKey="label"
+          actualValueKey="value"
+          // options
+          options={FACTURAS_CUOTAS_ARRAY_OBJECT}
           defaultValue={
-            form.getValues().meses_descuento?.length
-              ? ALL_MONTHS_STRING.filter(month =>
-                  (form.getValues().meses_descuento as any[])?.includes(month),
+            form.getValues().facturas_descuento?.length
+              ? FACTURAS_CUOTAS_ARRAY_OBJECT.filter(
+                  (item: FacturasCuotasObjArray) =>
+                    (form.getValues().facturas_descuento as any[])?.includes(
+                      item.value,
+                    ),
                 )
               : []
           }
-          // options
-          options={ALL_MONTHS_STRING}
           isLoadingData={false}
           // errors
-          error={!!errors.meses_descuento?.length}
-          helperText={errors.meses_descuento?.message}
-          size={gridSizeMdLg6}
-          enableStringify={false}
+          control={form.control}
+          error={errors.facturas_descuento as any}
+          helperText={errors.facturas_descuento?.message}
+          onlyActualValueKey
           required={false}
+          size={gridSizeMdLg6}
         />
 
         <CustomDatePicker
@@ -508,8 +520,16 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 form.setValue('ciudades', []);
               }}
               // disabled
-              disabled={!provinciasPaging?.data?.items?.length}
+              disabled={
+                !provinciasPaging?.data?.items?.length ||
+                !watchedProvincias?.length
+              }
               onClickDisabled={() => {
+                if (!watchedProvincias?.length)
+                  return ToastWrapper.warning(
+                    'Seleccione al menos una provincia',
+                  );
+
                 ToastWrapper.warning(
                   'No se puede seleccionar todas las ciudades ya que no se tienen registros disponibles',
                 );
@@ -542,7 +562,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.zonas?.message}
-              disabled={watchedAllZones}
+              disabled={watchedAllZones || !watchedCiudades?.length}
               onlyActualValueKey
               required={false}
             />
@@ -559,8 +579,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 form.setValue('zonas', []);
               }}
               // disabled
-              disabled={!ciudadesPaging?.data?.items?.length}
+              disabled={
+                !ciudadesPaging?.data?.items?.length || !watchedCiudades?.length
+              }
               onClickDisabled={() => {
+                if (!watchedCiudades?.length)
+                  return ToastWrapper.warning('Seleccione al menos una ciudad');
+
                 ToastWrapper.warning(
                   'No se puede seleccionar todas las zonas ya que no se tienen registros disponibles',
                 );
@@ -595,7 +620,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.sectores?.message}
-              disabled={watchedAllSectores}
+              disabled={watchedAllSectores || !watchedZonas?.length}
               onlyActualValueKey
               required={false}
             />
@@ -612,8 +637,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 form.setValue('sectores', []);
               }}
               // disabled
-              disabled={!zonasPaging?.data?.items?.length}
+              disabled={
+                !zonasPaging?.data?.items?.length || !watchedZonas?.length
+              }
               onClickDisabled={() => {
+                if (!watchedZonas?.length)
+                  return ToastWrapper.warning('Seleccione al menos una zona');
+
                 ToastWrapper.warning(
                   'No se puede seleccionar todos los sectores ya que no se tienen registros disponibles',
                 );
