@@ -98,6 +98,10 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const watchedAllPlanes = form.watch('allPlanes');
   const watchedFechaInicio = form.watch('fecha_inicio');
 
+  const watchedProvincias = form.watch('provincias');
+  const watchedCiudades = form.watch('ciudades');
+  const watchedZonas = form.watch('zonas');
+
   ///* fetch data ----------------
   const {
     data: provinciasPaging,
@@ -114,9 +118,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoading: isLoadingCiudades,
     isRefetching: isRefetchingCiudades,
   } = useFetchCiudades({
+    enabled: !!watchedProvincias,
     params: {
       has_coverage: true,
       page_size: 600,
+      provinces: watchedAllProvincias
+        ? undefined
+        : watchedProvincias?.length
+          ? watchedProvincias.join(',')
+          : undefined,
     },
   });
   const {
@@ -124,9 +134,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoading: isLoadingZonas,
     isRefetching: isRefetchingZonas,
   } = useFetchZonas({
+    enabled: !!watchedCiudades,
     params: {
       has_coverage: true,
       page_size: 600,
+      cities: watchedAllCities
+        ? undefined
+        : watchedCiudades?.length
+          ? watchedCiudades.join(',')
+          : undefined,
     },
   });
   const {
@@ -134,9 +150,16 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoading: isLoadingSectores,
     isRefetching: isRefetchingSectores,
   } = useFetchSectores({
+    enabled: !!watchedZonas,
     params: {
       has_coverage: true,
       page_size: 600,
+
+      zones: watchedAllZones
+        ? undefined
+        : watchedZonas?.length
+          ? watchedZonas.join(',')
+          : undefined,
     },
   });
   const {
@@ -308,6 +331,54 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           disableClearable
         />
 
+        {/* ----- Meses Gratuitos ----- */}
+        <CustomAutocompleteMultipleArrString
+          label="Meses Gratuitos"
+          name="meses_gratis"
+          textFieldKey="meses_gratis"
+          control={form.control}
+          defaultValue={
+            form.getValues().meses_gratis?.length
+              ? ALL_MONTHS_STRING.filter(month =>
+                  (form.getValues().meses_gratis as any[])?.includes(month),
+                )
+              : []
+          }
+          // options
+          options={ALL_MONTHS_STRING}
+          isLoadingData={false}
+          // errors
+          error={!!errors.meses_gratis?.length}
+          helperText={errors.meses_gratis?.message}
+          size={gridSizeMdLg6}
+          enableStringify={false}
+          required={false}
+        />
+
+        {/* ----- Meses Descuento ----- */}
+        <CustomAutocompleteMultipleArrString
+          label="Facturas con descuento"
+          name="meses_descuento"
+          textFieldKey="meses_descuento"
+          control={form.control}
+          defaultValue={
+            form.getValues().meses_descuento?.length
+              ? ALL_MONTHS_STRING.filter(month =>
+                  (form.getValues().meses_descuento as any[])?.includes(month),
+                )
+              : []
+          }
+          // options
+          options={ALL_MONTHS_STRING}
+          isLoadingData={false}
+          // errors
+          error={!!errors.meses_descuento?.length}
+          helperText={errors.meses_descuento?.message}
+          size={gridSizeMdLg6}
+          enableStringify={false}
+          required={false}
+        />
+
         <CustomDatePicker
           label="Fecha inicio"
           name="fecha_inicio"
@@ -340,57 +411,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
       {/* ======================== Select ======================== */}
       <CustomTabPanel index={2} value={tabValue}>
-        {/* --------- plans --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<PlanInternet>
-              label="Planes"
-              name="planes"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={planesPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().planes?.length
-                  ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
-                      (form.getValues().planes as any[])?.includes(plan?.id!),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingPlanes || isRefetchingPlanes}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.planes?.message}
-              disabled={watchedAllPlanes}
-              onlyActualValueKey
-              required={false}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allPlanes"
-              control={form.control}
-              defaultValue={!!form.getValues().allPlanes}
-              onChangeValue={value => {
-                if (value) return form.setValue('planes', ['*']);
-                form.setValue('planes', []);
-              }}
-              // disabled
-              disabled={!planesPaging?.data?.items?.length}
-              onClickDisabled={() => {
-                ToastWrapper.warning(
-                  'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
-
         {/* --------- provinces --------- */}
         <InputAndBtnGridSpace
           mainGridSize={gridSize}
@@ -471,7 +491,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.ciudades?.message}
-              disabled={watchedAllCities}
+              disabled={watchedAllCities || !watchedProvincias?.length}
               onlyActualValueKey
               required={false}
             />
@@ -602,52 +622,55 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           }
         />
 
-        {/* ----- Meses Gratuitos ----- */}
-        <CustomAutocompleteMultipleArrString
-          label="Meses Gratuitos"
-          name="meses_gratis"
-          textFieldKey="meses_gratis"
-          control={form.control}
-          defaultValue={
-            form.getValues().meses_gratis?.length
-              ? ALL_MONTHS_STRING.filter(month =>
-                  (form.getValues().meses_gratis as any[])?.includes(month),
-                )
-              : []
+        {/* --------- PLANES --------- */}
+        <InputAndBtnGridSpace
+          mainGridSize={gridSize}
+          inputNode={
+            <CustomAutocompleteMultiple<PlanInternet>
+              label="Planes"
+              name="planes"
+              textFieldKey="nombre"
+              valueKey="name"
+              actualValueKey="id"
+              // options
+              options={planesPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().planes?.length
+                  ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
+                      (form.getValues().planes as any[])?.includes(plan?.id!),
+                    )
+                  : []
+              }
+              isLoadingData={isLoadingPlanes || isRefetchingPlanes}
+              // errors
+              control={form.control}
+              error={undefined}
+              helperText={errors.planes?.message}
+              disabled={watchedAllPlanes}
+              onlyActualValueKey
+              required={false}
+            />
           }
-          // options
-          options={ALL_MONTHS_STRING}
-          isLoadingData={false}
-          // errors
-          error={!!errors.meses_gratis?.length}
-          helperText={errors.meses_gratis?.message}
-          size={gridSizeMdLg6}
-          enableStringify={false}
-          required={false}
-        />
-
-        {/* ----- Meses Descuento ----- */}
-        <CustomAutocompleteMultipleArrString
-          label="Meses Descuento"
-          name="meses_descuento"
-          textFieldKey="meses_descuento"
-          control={form.control}
-          defaultValue={
-            form.getValues().meses_descuento?.length
-              ? ALL_MONTHS_STRING.filter(month =>
-                  (form.getValues().meses_descuento as any[])?.includes(month),
-                )
-              : []
+          overrideBtnNode
+          customBtnNode={
+            <SampleCheckbox
+              label="TODOS"
+              name="allPlanes"
+              control={form.control}
+              defaultValue={!!form.getValues().allPlanes}
+              onChangeValue={value => {
+                if (value) return form.setValue('planes', ['*']);
+                form.setValue('planes', []);
+              }}
+              // disabled
+              disabled={!planesPaging?.data?.items?.length}
+              onClickDisabled={() => {
+                ToastWrapper.warning(
+                  'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
+                );
+              }}
+            />
           }
-          // options
-          options={ALL_MONTHS_STRING}
-          isLoadingData={false}
-          // errors
-          error={!!errors.meses_descuento?.length}
-          helperText={errors.meses_descuento?.message}
-          size={gridSizeMdLg6}
-          enableStringify={false}
-          required={false}
         />
       </CustomTabPanel>
     </TabsFormBoxScene>

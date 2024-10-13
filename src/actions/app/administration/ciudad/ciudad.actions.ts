@@ -119,6 +119,8 @@ export type GetCiudadsParams = Partial<Ciudad> & {
   page_size?: number;
 
   filterByState?: boolean;
+
+  provinces?: string; // "1,2,3"
 };
 export type CreateCiudadParams = Omit<Ciudad, 'id'>;
 export interface UpdateCiudadParams<T> {
