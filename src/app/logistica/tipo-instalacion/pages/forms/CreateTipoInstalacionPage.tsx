@@ -7,8 +7,7 @@ export type CreateTipoInstalacionPageProps = {};
 const CreateTipoInstalacionPage: React.FC<
   CreateTipoInstalacionPageProps
 > = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_add_pais);
+  useCheckPermission(PermissionsEnum.mantenimientoope_add_tipoinstalacion);
 
   return <SaveTipoInstalacion title="Crear Tipo Instalacion" />;
 };

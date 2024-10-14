@@ -27,8 +27,7 @@ export const returnUrlTipoComprobantesPage =
 export type TipoComprobantesPageProps = {};
 
 const TipoComprobantesPage: React.FC<TipoComprobantesPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.administration_view_tipocomprobante);
 
   const navigate = useNavigate();
 
@@ -120,8 +119,11 @@ const TipoComprobantesPage: React.FC<TipoComprobantesPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
+                if (
+                  !hasPermission(
+                    PermissionsEnum.administration_change_tipocomprobante,
+                  )
+                )
                   return;
 
                 setConfirmDialog({
@@ -171,8 +173,9 @@ const TipoComprobantesPage: React.FC<TipoComprobantesPageProps> = () => {
     <SingleTableBoxScene
       title="Tipos Comprobantes"
       createPageUrl={`${returnUrlTipoComprobantesPage}/crear`}
-      ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.administration_add_tipocomprobante,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -198,8 +201,9 @@ const TipoComprobantesPage: React.FC<TipoComprobantesPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
-        ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
+        canEdit={hasPermission(
+          PermissionsEnum.administration_change_tipocomprobante,
+        )}
         onEdit={onEdit}
         canDelete={false}
       />
