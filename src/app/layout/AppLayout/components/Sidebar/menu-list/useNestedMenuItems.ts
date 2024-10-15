@@ -6,6 +6,7 @@ import {
   IconBuilding,
   IconBuildings,
   IconBuildingWarehouse,
+  IconCashRegister,
   IconHeartHandshake,
   IconHierarchy3,
   IconPigMoney,
@@ -261,6 +262,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'venta-orporativas',
+              title: 'Ventas Corporativas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Supervision Comercial ----------------
@@ -425,12 +432,6 @@ export const useNestedMenu = () => {
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-detalle-devolucion',
               title: 'Solicitud de devolución de materiales',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solicitud-materiales',
-              title: 'Solicitud de materiales',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
@@ -600,7 +601,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'transacciones',
+              id: 'transacciones-cobranzas',
               title: 'Transacciones',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
@@ -635,11 +636,26 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.SUPERVISIONCOMERCIAL_CODIGO_OTP, {
-              id: 'consultas-buro',
-              title: 'Reporte de consultas EQUIFAX',
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_CONSULTA_BURO,
+              {
+                id: 'consultas-buro',
+                title: 'Reporte de consultas EQUIFAX',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
+              },
+            ),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'activacion-clientes-temporales',
+              title: 'Activación de clientes temporales',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'suspesion-temporales',
+              title: 'Suspensión temporal',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
@@ -820,6 +836,33 @@ export const useNestedMenu = () => {
         },
         /////* Finanzas ----------------
         {
+          id: 'monitor-transaccional',
+          title: 'Monitor Transaccional',
+          type: MenuItemType.COLLAPSE,
+          icon: IconCashRegister,
+          children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'metodo-transaccionar',
+              title: 'Método de Transaccionar',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'conciliacion-bancaria',
+              title: 'Conciliación Bancaria',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'generacion-malla-compensacion',
+              title: 'Generación de Malla de Compensación',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+        /////* Finanzas ----------------
+        {
           id: 'finanzas',
           title: 'Finanzas',
           type: MenuItemType.COLLAPSE,
@@ -832,7 +875,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'transacciones',
+              id: 'transacciones-finanzas',
               title: 'Transacciones',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
