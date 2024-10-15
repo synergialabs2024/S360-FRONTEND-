@@ -200,10 +200,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   // equipos venta -----------------
   const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
-  const { items: equiposSeleccionados } =
-    useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
-      GenericInventoryStoreKey.equiposVentaPreventa,
-    );
+  const {
+    items: equiposSeleccionados,
+    clearOneRecord: clearAllEquiposSelecStore,
+  } = useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
+    GenericInventoryStoreKey.equiposVentaPreventa,
+  );
   const selectedCuotas = usePreventaStore(s => s.selectedCuotas);
 
   usePreventaOtpCounter({
@@ -474,6 +476,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       clearAllTimers();
       setIsComponentBlocked(false);
       clearAllPreventaStore();
+      clearAllEquiposSelecStore();
     },
     customOnError: err => {
       setIsCheckingCedula(false);
@@ -871,6 +874,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       onCancel={() => {
         navigate(returnUrlPreventasPage);
         clearAllTimers();
+        clearAllEquiposSelecStore();
       }}
       onSave={handleSubmit(onSave, () => {
         console.log(errors);

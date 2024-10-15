@@ -20,6 +20,11 @@ export const preventaFormSchema = yup.object({
     .required('El campo celular adicional es requerido')
     .max(200, 'El campo celular adicional no debe exceder los 200 caracteres'),
 
+  direccion: yup
+    .string()
+    .required('El campo direccion es requerido')
+    .max(38, 'El campo direccion no debe exceder los 38 caracteres'),
+
   // EQUIFAX -----------
   rango_capacidad_pago: yup
     .string()
