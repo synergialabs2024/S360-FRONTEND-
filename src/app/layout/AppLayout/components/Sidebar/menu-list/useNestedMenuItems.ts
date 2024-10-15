@@ -696,44 +696,44 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracionRed.monitoreosNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_TRAFICO, {
               id: 'traficos',
               title: 'Tráfico',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.traficosNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_RADIUS, {
               id: 'radius',
               title: 'Radius',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.radiusNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_AUTHCLIENTES, {
               id: 'autenticacion-cliente',
               title: 'Autenticación del cliente',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.autenticacionClientesNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* NetConnect ----------------
         {
-          id: 'notconnect',
+          id: 'netconnect',
           title: 'NetConnect',
           type: MenuItemType.COLLAPSE,
           icon: IconAccessPoint,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.NETCONNECT_AUTORIZACION_ONUS, {
               id: 'autorizacion-onus',
               title: 'Autorización de ONUs',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.netconnect.autorizacionOnusNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.NETCONNECT_GESTION_ONUS, {
               id: 'gestion-onus',
               title: 'Gestión de ONUs',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.netconnect.gestionOnusNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'estado-caidas',
@@ -741,11 +741,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.NETCONNECT_ONUS_CONFIGURADA, {
               id: 'registro-onus-configuracion',
               title: 'Registro de ONUs configuradas',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.netconnect.onusConfiguradasNav,
             }),
             renderByModule(SidenavModulesEnum.NETCONNECT_VLANS, {
               id: 'vlans',
@@ -756,12 +756,6 @@ export const useNestedMenu = () => {
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'profiles',
               title: 'Profiles',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'configuracion-snmp',
-              title: 'Configuración de SNMP',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),

@@ -645,6 +645,62 @@ const UpdateMonitoreoPage = Loadable(
       ),
   ),
 );
+const TraficosPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/trafico/pages/tables/TraficosPage'),
+  ),
+);
+const CreateTraficoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/trafico/pages/forms/CreateTraficoPage'),
+  ),
+);
+const UpdateTraficoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/trafico/pages/forms/UpdateTraficoPage'),
+  ),
+);
+const RadiusPage = Loadable(
+  lazy(() => import('@/app/administracion-red/radius/pages/tables/RadiusPage')),
+);
+const CreateRadiusPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/radius/pages/forms/CreateRadiusPage'),
+  ),
+);
+const UpdateRadiusPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/radius/pages/forms/UpdateRadiusPage'),
+  ),
+);
+const AutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/tables/AutenticacionClientePage'
+      ),
+  ),
+);
+const CreateAutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/forms/CreateAutenticacionClientePage'
+      ),
+  ),
+);
+const UpdateAutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/forms/UpdateAutenticacionClientePage'
+      ),
+  ),
+);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -744,7 +800,49 @@ const UpdateTipoInstalacionPage = Loadable(
 );
 
 ///* Netconnect ------------
-//TipoInstalacion
+//Autorizacion de ONUs
+const AutorizacionOnusPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/autorizacion-onus/pages/tables/AutorizacionOnusPage'
+      ),
+  ),
+);
+const CreateAutorizacionOnusPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/autorizacion-onus/pages/forms/CreateAutorizacionOnusPage'
+      ),
+  ),
+);
+const UpdateAutorizacionOnusPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/autorizacion-onus/pages/forms/UpdateAutorizacionOnusPage'
+      ),
+  ),
+);
+const GestionOnusPage = Loadable(
+  lazy(
+    () => import('@/app/netconnect/gestion-onus/pages/tables/GestionOnusPage'),
+  ),
+);
+const CreateGestionOnusPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/netconnect/gestion-onus/pages/forms/CreateGestionOnusPage'),
+  ),
+);
+const UpdateGestionOnusPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/netconnect/gestion-onus/pages/forms/UpdateGestionOnusPage'),
+  ),
+);
+//Vlan
 const VlansPage = Loadable(
   lazy(() => import('@/app/netconnect/vlan/pages/tables/VlansPage')),
 );
@@ -753,6 +851,31 @@ const CreateVlanPage = Loadable(
 );
 const UpdateVlanPage = Loadable(
   lazy(() => import('@/app/netconnect/vlan/pages/forms/UpdateVlanPage')),
+);
+//Vlan
+const OnusConfiguradasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/onus-configurada/pages/tables/OnusConfiguradasPage'
+      ),
+  ),
+);
+const CreateOnusConfiguradaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/onus-configurada/pages/forms/CreateOnusConfiguradaPage'
+      ),
+  ),
+);
+const UpdateOnusConfiguradaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/onus-configurada/pages/forms/UpdateOnusConfiguradaPage'
+      ),
+  ),
 );
 
 const AppRouter = createBrowserRouter([
@@ -1451,6 +1574,45 @@ const AppRouter = createBrowserRouter([
             path: ROUTER_PATHS.administracionRed.monitoreosEditar,
             element: <UpdateMonitoreoPage />,
           },
+          ///* trafico
+          {
+            path: ROUTER_PATHS.administracionRed.traficos,
+            element: <TraficosPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.traficosCrear,
+            element: <CreateTraficoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.traficosEditar,
+            element: <UpdateTraficoPage />,
+          },
+          ///* radius
+          {
+            path: ROUTER_PATHS.administracionRed.radius,
+            element: <RadiusPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.radiusCrear,
+            element: <CreateRadiusPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.radiusEditar,
+            element: <UpdateRadiusPage />,
+          },
+          ///* Autenticacion de Cliente
+          {
+            path: ROUTER_PATHS.administracionRed.autenticacionClientes,
+            element: <AutenticacionClientePage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.autenticacionClientesCrear,
+            element: <CreateAutenticacionClientePage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.autenticacionClientesEditar,
+            element: <UpdateAutenticacionClientePage />,
+          },
         ],
       },
 
@@ -1459,7 +1621,33 @@ const AppRouter = createBrowserRouter([
         path: ROUTER_PATHS.netconnect.root,
         element: <AdministrationModule />,
         children: [
-          ///* tipo instalacion
+          ///* Autorizacion de ONUs
+          {
+            path: ROUTER_PATHS.netconnect.autorizacionOnus,
+            element: <AutorizacionOnusPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.autorizacionOnusCrear,
+            element: <CreateAutorizacionOnusPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.autorizacionOnusEditar,
+            element: <UpdateAutorizacionOnusPage />,
+          },
+          ///* Gestion de ONUs
+          {
+            path: ROUTER_PATHS.netconnect.gestionOnus,
+            element: <GestionOnusPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.gestionOnusCrear,
+            element: <CreateGestionOnusPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.gestionOnusEditar,
+            element: <UpdateGestionOnusPage />,
+          },
+          ///* Vlan
           {
             path: ROUTER_PATHS.netconnect.vlans,
             element: <VlansPage />,
@@ -1471,6 +1659,19 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.netconnect.vlansEditar,
             element: <UpdateVlanPage />,
+          },
+          ///* Registro de ONUs Configuradas
+          {
+            path: ROUTER_PATHS.netconnect.onusConfiguradas,
+            element: <OnusConfiguradasPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.onusConfiguradasCrear,
+            element: <CreateOnusConfiguradaPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.onusConfiguradasEditar,
+            element: <UpdateOnusConfiguradaPage />,
           },
         ],
       },

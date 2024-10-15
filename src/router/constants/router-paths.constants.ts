@@ -329,6 +329,24 @@ export const ROUTER_PATHS = {
     monitoreosCrear: 'monitoreos/crear',
     monitoreosEditar: 'monitoreos/editar/:uuid',
     monitoreosNav: '/administracion-red/monitoreos',
+
+    ///* radius
+    radius: 'radius',
+    radiusCrear: 'radius/crear',
+    radiusEditar: 'radius/editar/:uuid',
+    radiusNav: '/administracion-red/radius',
+
+    ///* Autenticacion de Clientes
+    autenticacionClientes: 'autenticacionClientes',
+    autenticacionClientesCrear: 'autenticacionClientes/crear',
+    autenticacionClientesEditar: 'autenticacionClientes/editar/:uuid',
+    autenticacionClientesNav: '/administracion-red/autenticacionClientes',
+
+    ///* Autenticacion de Clientes
+    traficos: 'traficos',
+    traficosCrear: 'traficos/crear',
+    traficosEditar: 'traficos/editar/:uuid',
+    traficosNav: '/administracion-red/traficos',
   },
   // // INVENTARIO =================================
   inventario: {
@@ -372,10 +390,28 @@ export const ROUTER_PATHS = {
   netconnect: {
     root: 'netconnect',
 
+    ///* Autorizacion de ONUs
+    autorizacionOnus: 'autorizacionOnus',
+    autorizacionOnusCrear: 'autorizacionOnus/crear',
+    autorizacionOnusEditar: 'autorizacionOnus/editar/:uuid',
+    autorizacionOnusNav: '/netconnect/autorizacionOnus',
+
+    ///* Gestion de ONUs
+    gestionOnus: 'gestionOnus',
+    gestionOnusCrear: 'gestionOnus/crear',
+    gestionOnusEditar: 'gestionOnus/editar/:uuid',
+    gestionOnusNav: '/netconnect/gestionOnus',
+
     ///* vlans
     vlans: 'vlans',
     vlansCrear: 'vlans/crear',
     vlansEditar: 'vlans/editar/:uuid',
     vlansNav: '/netconnect/vlans',
+
+    ///* vlans
+    onusConfiguradas: 'onusConfiguradas',
+    onusConfiguradasCrear: 'onusConfiguradas/crear',
+    onusConfiguradasEditar: 'onusConfiguradas/editar/:uuid',
+    onusConfiguradasNav: '/netconnect/onusConfiguradas',
   },
 };
