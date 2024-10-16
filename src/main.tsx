@@ -4,6 +4,7 @@ import App from './App.tsx'
 import { store } from './store/Store';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css'
+import './utils/i18n';
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
