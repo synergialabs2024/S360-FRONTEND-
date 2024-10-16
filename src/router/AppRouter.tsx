@@ -22,7 +22,6 @@ const Login = Loadable(
 );
 
 /* ***Layouts**** */
-const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 
 /* ****Pages***** */
 // const ModernDash = Loadable(lazy(() => import('../views/dashboard/Modern')));
@@ -50,7 +49,7 @@ const AppRouter = [
     path: '/',
     element: (
       <PrivateRoutes>
-        <FullLayout />
+        <PaginaTabs />
       </PrivateRoutes>
     ),
     children: [
