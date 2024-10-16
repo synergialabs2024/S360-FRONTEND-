@@ -1,3 +1,5 @@
+import { MetodoPagoEnumUUID } from '@/shared/constants';
+import { MetodoPago } from '@/shared/interfaces';
 import * as yup from 'yup';
 
 export const preventaFormSchema = yup.object({
@@ -75,14 +77,62 @@ export const preventaFormSchema = yup.object({
 
   metodo_pago: yup
     .number()
-    .optional()
-    .nullable()
+    .required('El campo metodo pago es requerido')
     .typeError('El campo metodo pago es requerido'),
+
+  rawPaymentMethod: yup.object().nullable().optional(),
+
+  // DEBITO ----
   entidad_financiera: yup
     .number()
     .optional()
     .nullable()
-    .typeError('El campo entidad financiera es requerido'),
+    .when('rawPaymentMethod', {
+      is: (rawPaymentMethod: MetodoPago) =>
+        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO,
+      then: schema =>
+        schema
+          .required('El campo entidad financiera es requerido')
+          .typeError('El campo entidad financiera es requerido'),
+    }),
+  tipo_cuenta_bancaria: yup
+    .string()
+    .optional()
+    .nullable()
+    .when('rawPaymentMethod', {
+      is: (rawPaymentMethod: MetodoPago) =>
+        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO,
+      then: schema =>
+        schema
+          .required('El campo tipo cuenta bancaria es requerido')
+          .typeError('El campo tipo cuenta bancaria es requerido'),
+    }),
+  numero_cuenta_bancaria: yup
+    .string()
+    .optional()
+    .nullable()
+    .when('rawPaymentMethod', {
+      is: (rawPaymentMethod: MetodoPago) =>
+        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO,
+      then: schema =>
+        schema
+          .required('El campo numero cuenta bancaria es requerido')
+          .typeError('El campo numero cuenta bancaria es requerido'),
+    }),
+
+  // CREDITO ----
+  numero_tarjeta_credito: yup
+    .string()
+    .optional()
+    .nullable()
+    .when('rawPaymentMethod', {
+      is: (rawPaymentMethod: MetodoPago) =>
+        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO,
+      then: schema =>
+        schema
+          .required('El campo numero tarjeta credito es requerido')
+          .typeError('El campo numero tarjeta credito es requerido'),
+    }),
 });
 
 export const unlockPlanillaPhotoSchema = yup.object({
