@@ -11,9 +11,10 @@ import PaginaTabs from './PaginaTabs';
 
 // import PaginaTabs from './PaginaTabs';
 
-// const AuthLayout = Loadable(
-//   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
-// );
+const AuthLayout = Loadable(
+  lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
+);
+const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 
 // authentication
 const Login = Loadable(
@@ -40,7 +41,7 @@ const AppRouter = [
     path: '/auth',
     element: (
       <AuthRoutes>
-        <PaginaTabs />
+        <AuthLayout />
       </AuthRoutes>
     ),
     children: [{ path: 'login', element: <Login /> }],
@@ -49,7 +50,7 @@ const AppRouter = [
     path: '/',
     element: (
       <PrivateRoutes>
-        <PaginaTabs />
+        <FullLayout />
       </PrivateRoutes>
     ),
     children: [
