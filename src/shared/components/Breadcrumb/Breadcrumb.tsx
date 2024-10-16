@@ -29,6 +29,7 @@ interface BreadCrumbType {
   children?: JSX.Element;
   createPageUrl?: string;
   onClickCreateBtn?: () => void;
+  showCreateBtn?: boolean;
 }
 
 const Breadcrumb = ({
@@ -37,6 +38,7 @@ const Breadcrumb = ({
   children,
   createPageUrl,
   onClickCreateBtn,
+  showCreateBtn
 }: BreadCrumbType) => {
   const navigate = useNavigate();
   const BCrumb = [
@@ -86,21 +88,21 @@ const Breadcrumb = ({
           >
             {BCrumb
               ? BCrumb.map(item => (
-                  <div key={item.title}>
-                    {item.to ? (
-                      <Link
-                        underline="none"
-                        color="inherit"
-                        component={NavLink}
-                        to={item.to}
-                      >
-                        {item.title}
-                      </Link>
-                    ) : (
-                      <Typography color="textPrimary">{item.title}</Typography>
-                    )}
-                  </div>
-                ))
+                <div key={item.title}>
+                  {item.to ? (
+                    <Link
+                      underline="none"
+                      color="inherit"
+                      component={NavLink}
+                      to={item.to}
+                    >
+                      {item.title}
+                    </Link>
+                  ) : (
+                    <Typography color="textPrimary">{item.title}</Typography>
+                  )}
+                </div>
+              ))
               : ''}
           </Breadcrumbs>
         </Grid>
@@ -119,25 +121,23 @@ const Breadcrumb = ({
               <>
                 {/* <imgrelative src={breadcrumbImg} alt={breadcrumbImg} width={'165px'} /> */}
                 <Stack spacing={1} direction="row" justifyContent="center">
-                  <Tooltip title="Nuevo">
-                    <Fab
-                      color="secondary"
-                      aria-label="plus"
-                      onClick={
-                        onClickCreateBtn ||
-                        (() => createPageUrl && navigate(createPageUrl))
-                      }
-                    >
-                      <IconPlus width={20} />
-                    </Fab>
-                  </Tooltip>
-                  {/* <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<IconPlus width={18} />}
-                  >
-                    Crear
-                  </Button> */}
+                  {
+                    showCreateBtn &&
+                    (
+                      <Tooltip title="Nuevo">
+                        <Fab
+                          color="secondary"
+                          aria-label="plus"
+                          onClick={
+                            onClickCreateBtn ||
+                            (() => createPageUrl && navigate(createPageUrl))
+                          }
+                        >
+                          <IconPlus width={20} />
+                        </Fab>
+                      </Tooltip>
+                    )
+                  }
                 </Stack>
               </>
             )}

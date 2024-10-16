@@ -26,7 +26,7 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
   title,
   createPageUrl,
   children,
-  // showCreateBtn = true,
+  showCreateBtn = true,
   // createBtnText = 'Crear',
   onClickCreateBtn,
 
@@ -50,6 +50,7 @@ const SingleTableBoxScene: React.FC<SingleTableBoxSceneProps> = ({
             title={title}
             onClickCreateBtn={onClickCreateBtn}
             createPageUrl={createPageUrl}
+            showCreateBtn={showCreateBtn}
           />
           <AppCard>
             <>{children}</>

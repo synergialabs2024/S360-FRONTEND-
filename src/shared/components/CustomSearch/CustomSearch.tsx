@@ -1,4 +1,7 @@
 import {
+  IconSearch
+} from '@tabler/icons-react';
+import {
   Card,
   Grid,
   InputAdornment,
@@ -18,6 +21,8 @@ export interface CustomSearchInterface {
   sxContainer?: SxPropsType;
 
   customSpaceNode?: React.ReactNode;
+
+  hideMenu?: any;
 }
 
 const CustomSearch: React.FC<CustomSearchInterface> = ({
@@ -28,54 +33,59 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
   sxContainer,
 
   customSpaceNode = null,
+  hideMenu
 }) => {
   return (
     <>
       {/* <Card sx={{ p: 2 }}> */}
-      <Stack spacing={2} direction="row" sx={sxContainer}>
-        <Card
-          sx={{
-            width: '100%',
-            maxWidth: 500,
-            margin: 'auto',
-            padding: 1.3,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // bgcolor: '#F9FAFB',
-          }}
-        >
-          <OutlinedInput
-            fullWidth
-            placeholder={`Buscar ${text}`}
-            startAdornment={
-              <InputAdornment position="start">
-                <SvgIcon color="action" fontSize="small">
-                  <HiMiniMagnifyingGlass />
-                </SvgIcon>
-              </InputAdornment>
-            }
-            sx={{ maxWidth: 500 }}
-            className="custom-search-form__input"
-            value={value}
-            onChange={e => {
-              onChange(e.target.value);
+
+
+      {
+        hideMenu ? <IconSearch size={16} style={{marginLeft: '12'}}/> : (<Stack spacing={2} direction="row" sx={sxContainer}>
+          <Card
+            sx={{
+              width: '100%',
+              maxWidth: 500,
+              margin: 'auto',
+              padding: 1.3,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              // bgcolor: '#F9FAFB',
             }}
-          />
-        </Card>
-        <span className="spacer"></span>
+          >
+            <OutlinedInput
+              fullWidth
+              placeholder={`Buscar ${text}`}
+              startAdornment={
+                <InputAdornment position="start">
+                  <SvgIcon color="action" fontSize="small">
+                    <HiMiniMagnifyingGlass />
+                  </SvgIcon>
+                </InputAdornment>
+              }
+              sx={{ maxWidth: 500 }}
+              className="custom-search-form__input"
+              value={value}
+              onChange={e => {
+                onChange(e.target.value);
+              }}
+            />
+          </Card>
+          <span className="spacer"></span>
 
-        {/* ------ custom space ------ */}
+          {/* ------ custom space ------ */}
 
-        {customSpaceNode && (
-          <>
-            <Grid item container justifyContent="flex-end" alignItems="center">
-              {customSpaceNode}
-            </Grid>
-          </>
-        )}
-        {/* ------ Filter Date ------ */}
-      </Stack>
+          {customSpaceNode && (
+            <>
+              <Grid item container justifyContent="flex-end" alignItems="center">
+                {customSpaceNode}
+              </Grid>
+            </>
+          )}
+          {/* ------ Filter Date ------ */}
+        </Stack>)
+      }
     </>
   );
 };
