@@ -1,15 +1,22 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import React, { Suspense } from 'react';
 import { Provider } from 'react-redux';
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import { store } from './store/Store';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css'
-import './utils/i18n';
 
-createRoot(document.getElementById('root')!).render(
+import App from './App';
+import { store } from './store/Store';
+import Spinner from './views/spinner/Spinner';
+import './utils/i18n';
+import './_mockApis';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
+    <Suspense fallback={<Spinner />}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-  </Provider>
-)
+    </Suspense>
+  </Provider>,
+);
