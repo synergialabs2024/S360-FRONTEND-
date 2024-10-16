@@ -8,7 +8,18 @@ import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
 import AdministrationModule from '@/app/administration/AdministrationModule';
 import { Navigate } from 'react-router-dom';
+import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
+import BlankLayout from '@/layouts/blank/BlankLayout';
 
+// landingpage
+const Landingpage = Loadable(
+  lazy(() => import('../views/pages/landingpage/Landingpage')),
+);
+
+const Error = Loadable(lazy(() => import('../views/authentication/Error')));
+const Maintenance = Loadable(
+  lazy(() => import('../views/authentication/Maintenance')),
+);
 // import PaginaTabs from './PaginaTabs';
 
 const AuthLayout = Loadable(
@@ -364,6 +375,430 @@ const UpdateSystemGroupPage = Loadable(
   ),
 );
 
+///* NOMINA
+//Cargo
+const CargosPage = Loadable(
+  lazy(() => import('@/app/nomina/cargo/pages/tables/CargosPage')),
+);
+const CreateCargoPage = Loadable(
+  lazy(() => import('@/app/nomina/cargo/pages/forms/CreateCargoPage')),
+);
+const UpdateCargoPage = Loadable(
+  lazy(() => import('@/app/nomina/cargo/pages/forms/UpdateCargoPage')),
+);
+
+const EmpleadosPage = Loadable(
+  lazy(() => import('@/app/nomina/empleado/pages/tables/EmpleadosPage')),
+);
+const CreateEmpleadoPage = Loadable(
+  lazy(() => import('@/app/nomina/empleado/pages/forms/CreateEmpleadoPage')),
+);
+const UpdateEmpleadoPage = Loadable(
+  lazy(() => import('@/app/nomina/empleado/pages/forms/UpdateEmpleadoPage')),
+);
+
+///* Mantenimiento Operaciones ------------
+const MantenimientoOperacionModule = Loadable(
+  lazy(() => import('@/app/mante-operacion/MantenimientoOperacionModule')),
+);
+const FlotasPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/tables/FlotasPage')),
+);
+const CreateFlotaPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/forms/CreateFlotaPage')),
+);
+const UpdateFlotaPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
+);
+
+const PlanificadorsPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/tables/PlanificadorsPage'
+      ),
+  ),
+);
+const PlanificadorFlotaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/custom/PlanificadorFlotaPage'
+      ),
+  ),
+);
+
+///* Cobranza ------------
+const CobranzaModule = Loadable(
+  lazy(() => import('@/app/cobranza/CobranzaModule')),
+);
+const TarjetasPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/tables/TarjetasPage')),
+);
+const CreateTarjetaPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/CreateTarjetaPage')),
+);
+const UpdateTarjetaPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/UpdateTarjetaPage')),
+);
+
+///* Infraestructura ------------
+//Nodo
+const NodosPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nodo/pages/tables/NodosPage')),
+);
+const CreateNodoPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nodo/pages/forms/CreateNodoPage')),
+);
+const UpdateNodoPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nodo/pages/forms/UpdateNodoPage')),
+);
+// OLT
+const OLTsPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/tables/OLTsPage')),
+);
+const CreateOLTPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/forms/CreateOLTPage')),
+);
+const UpdateOLTPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/forms/UpdateOLTPage')),
+);
+// NAP
+const NapsPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nap/pages/tables/NapsPage')),
+);
+const CreateNapPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nap/pages/forms/CreateNapPage')),
+);
+const UpdateNapPage = Loadable(
+  lazy(() => import('@/app/infraestructura/nap/pages/forms/UpdateNapPage')),
+);
+// RADIOBASE
+const RadioBasesPage = Loadable(
+  lazy(
+    () => import('@/app/infraestructura/radiobase/pages/tables/RadioBasesPage'),
+  ),
+);
+const CreateRadioBasePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/radiobase/pages/forms/CreateRadioBasePage'),
+  ),
+);
+const UpdateRadioBasePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/radiobase/pages/forms/UpdateRadioBasePage'),
+  ),
+);
+// RUTA
+const RutasPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/tables/RutasPage')),
+);
+const CreateRutaPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/forms/CreateRutaPage')),
+);
+const UpdateRutaPage = Loadable(
+  lazy(() => import('@/app/infraestructura/ruta/pages/forms/UpdateRutaPage')),
+);
+
+const PlanInternetsPage = Loadable(
+  lazy(
+    () => import('@/app/servicios/planinternet/pages/tables/PlanInternetsPage'),
+  ),
+);
+const CreatePlanInternetPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/servicios/planinternet/pages/forms/CreatePlanInternetPage'),
+  ),
+);
+const UpdatePlanInternetPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/servicios/planinternet/pages/forms/UpdatePlanInternetPage'),
+  ),
+);
+
+///* Supervision Comercial ------------
+const SupervisionComercialModule = Loadable(
+  lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
+);
+const SolicitudsDesbloqueoPreventasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/desbloqueo-preventa/pages/tables/SolicitudsDesbloqueoPreventasMainPage'
+      ),
+  ),
+);
+const SolicitudsDesbloqueoVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-desbloqueo-ventas/pages/tables/SolicitudsDesbloqueoVentasMainPage'
+      ),
+  ),
+);
+
+const CodigosOtpSupervicionComercialMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/codigo-otp/pages/tables/CodigosOtpSupervicionComercialMainPage'
+      ),
+  ),
+);
+
+const ConsultasBuroPage = Loadable(
+  lazy(() => import('@/app/comercial/consultas-buro/pages/ConsultasBuroPage')),
+);
+
+const ReasignacionVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/reasignacion-ventas/pages/tables/ReasignacionVentasPage'
+      ),
+  ),
+);
+
+const ComercialModule = Loadable(
+  lazy(() => import('@/app/comercial/ComercialModule')),
+);
+const PromocionesPage = Loadable(
+  lazy(() => import('@/app/comercial/promocion/pages/tables/PromocionsPage')),
+);
+const CreatePromocionPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/promocion/pages/forms/CreatePromocionPage'),
+  ),
+);
+
+const UpdatePromocionPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/promocion/pages/forms/UpdatePromocionPage'),
+  ),
+);
+
+///* Sales ---------------------
+const SolicitudesServicioMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-servicio/pages/tables/SolicitudesServicioMainPage'
+      ),
+  ),
+);
+const CreateSolicitudServicioPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-servicio/pages/forms/CreateSolicitudServicioPage'
+      ),
+  ),
+);
+
+const PreventasMainPage = Loadable(
+  lazy(() => import('@/app/comercial/preventa/pages/tables/PreventasMainPage')),
+);
+const CreatePreventaPage = Loadable(
+  lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
+);
+
+const AgendamientoVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/agendamiento/pages/tables/AgendamientoVentasMainPage'
+      ),
+  ),
+);
+const CreateAgendamientoVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/agendamiento/pages/forms/CreateAgendamientoVentasPage'
+      ),
+  ),
+);
+
+///* Operaciones ------------
+const AgendamientosMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/agedamiento/pages/tables/AgendamientosMainPage'
+      ),
+  ),
+);
+const ConfirmAgendaOperacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/agedamiento/pages/forms/ConfirmAgendaOperacionesPage'
+      ),
+  ),
+);
+
+///* Cliente ------------
+//Servicio
+const ServiciosPage = Loadable(
+  lazy(() => import('@/app/cliente/servicio/pages/tables/ServiciosPage')),
+);
+const UpdateServicioPage = Loadable(
+  lazy(() => import('@/app/cliente/servicio/pages/forms/UpdateServicioPage')),
+);
+
+///* Inventario ------------
+//Bodega
+const BodegasPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/tables/BodegasPage')),
+);
+const CreateBodegaPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/forms/CreateBodegaPage')),
+);
+const UpdateBodegaPage = Loadable(
+  lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
+);
+
+const ProductosPage = Loadable(
+  lazy(() => import('@/app/inventario/producto/pages/tables/ProductosPage')),
+);
+const CreateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/CreateProductoPage'),
+  ),
+);
+const UpdateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/UpdateProductoPage'),
+  ),
+);
+
+const CategoriasProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/tables/CategoriasProductoPage'
+      ),
+  ),
+);
+const CreateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/CreateCategoriaProductoPage'
+      ),
+  ),
+);
+const UpdateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/UpdateCategoriaProductoPage'
+      ),
+  ),
+);
+
+const UbicacionsPage = Loadable(
+  lazy(() => import('@/app/inventario/ubicacion/pages/tables/UbicacionsPage')),
+);
+const CreateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/CreateUbicacionPage'),
+  ),
+);
+const UpdateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/UpdateUbicacionPage'),
+  ),
+);
+
+///* Logistica ------------
+//TipoInstalacion
+const TipoInstalacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/tables/TipoInstalacionesPage'
+      ),
+  ),
+);
+const CreateTipoInstalacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/forms/CreateTipoInstalacionPage'
+      ),
+  ),
+);
+const UpdateTipoInstalacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/logistica/tipo-instalacion/pages/forms/UpdateTipoInstalacionPage'
+      ),
+  ),
+);
+
+///* Administracion red ------------
+const AdministracionRedModule = Loadable(
+  lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
+);
+const RoutersPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/router/pages/tables/RoutersPage'),
+  ),
+);
+const CreateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/CreateRouterPage'),
+  ),
+);
+const UpdateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
+  ),
+);
+
+const MonitoreosPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/monitoreo/pages/tables/MonitoreosPage'),
+  ),
+);
+const CreateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/CreateMonitoreoPage'
+      ),
+  ),
+);
+const UpdateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/UpdateMonitoreoPage'
+      ),
+  ),
+);
+
+///* Netconnect ------------
+//TipoInstalacion
+const VlansPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/tables/VlansPage')),
+);
+const CreateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/CreateVlanPage')),
+);
+const UpdateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/UpdateVlanPage')),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -627,6 +1062,461 @@ const AppRouter = [
           },
         ],
       },
+
+      //////////* Nomina ------------
+      {
+        path: ROUTER_PATHS.nomina.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* cargo
+          {
+            path: ROUTER_PATHS.nomina.cargos,
+            element: <CargosPage />,
+          },
+          {
+            path: ROUTER_PATHS.nomina.cargosCrear,
+            element: <CreateCargoPage />,
+          },
+          {
+            path: ROUTER_PATHS.nomina.cargosEditar,
+            element: <UpdateCargoPage />,
+          },
+          ///* empleado
+          {
+            path: ROUTER_PATHS.nomina.empleados,
+            element: <EmpleadosPage />,
+          },
+          {
+            path: ROUTER_PATHS.nomina.empleadosCrear,
+            element: <CreateEmpleadoPage />,
+          },
+          {
+            path: ROUTER_PATHS.nomina.empleadosEditar,
+            element: <UpdateEmpleadoPage />,
+          },
+        ],
+      },
+
+      //////////* Mantenimiento Operaciones ------------
+      {
+        path: ROUTER_PATHS.mantenimientoOperacion.root,
+        element: <MantenimientoOperacionModule />,
+        children: [
+          ///* flotas
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.flotas,
+            element: <FlotasPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.flotasCrear,
+            element: <CreateFlotaPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.flotasEditar,
+            element: <UpdateFlotaPage />,
+          },
+
+          ///* planificador
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.planificadoresNav,
+            element: <PlanificadorsPage />,
+          },
+          {
+            path: ROUTER_PATHS.mantenimientoOperacion.planificadorFlota,
+            element: <PlanificadorFlotaPage />,
+          },
+        ],
+      },
+
+      //////////* Cobranza ------------
+      {
+        path: ROUTER_PATHS.cobranza.root,
+        element: <CobranzaModule />,
+        children: [
+          ///* tarjetas
+          {
+            path: ROUTER_PATHS.cobranza.tarjetas,
+            element: <TarjetasPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.tarjetasCrear,
+            element: <CreateTarjetaPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.tarjetasEditar,
+            element: <UpdateTarjetaPage />,
+          },
+        ],
+      },
+
+      //////////* Infraestructura ------------
+      {
+        path: ROUTER_PATHS.infraestructura.root,
+        element: <InfraestructuraModule />,
+        children: [
+          ///* Nodo
+          {
+            path: ROUTER_PATHS.infraestructura.nodos,
+            element: <NodosPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.nodosCrear,
+            element: <CreateNodoPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.nodosEditar,
+            element: <UpdateNodoPage />,
+          },
+
+          ///* OLT
+          {
+            path: ROUTER_PATHS.infraestructura.olts,
+            element: <OLTsPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.oltsCrear,
+            element: <CreateOLTPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.oltsEditar,
+            element: <UpdateOLTPage />,
+          },
+
+          ///* NAP
+          {
+            path: ROUTER_PATHS.infraestructura.naps,
+            element: <NapsPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.napsCrear,
+            element: <CreateNapPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.napsEditar,
+            element: <UpdateNapPage />,
+          },
+
+          ///* RADIOBASE
+          {
+            path: ROUTER_PATHS.infraestructura.radiobases,
+            element: <RadioBasesPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.radiobasesCrear,
+            element: <CreateRadioBasePage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.radiobasesEditar,
+            element: <UpdateRadioBasePage />,
+          },
+
+          ///* RUTA
+          {
+            path: ROUTER_PATHS.infraestructura.rutas,
+            element: <RutasPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.rutasCrear,
+            element: <CreateRutaPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.rutasEditar,
+            element: <UpdateRutaPage />,
+          },
+        ],
+      },
+
+      //////////* Servicios ------------
+      {
+        path: ROUTER_PATHS.servicios.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* plan
+          {
+            path: ROUTER_PATHS.servicios.planesinternet,
+            element: <PlanInternetsPage />,
+          },
+          {
+            path: ROUTER_PATHS.servicios.planesinternetCrear,
+            element: <CreatePlanInternetPage />,
+          },
+          {
+            path: ROUTER_PATHS.servicios.planesinternetEditar,
+            element: <UpdatePlanInternetPage />,
+          },
+        ],
+      },
+
+      //////////* Supervision Comercial ------------
+      {
+        path: ROUTER_PATHS.supervisionComercial.root,
+        element: <SupervisionComercialModule />,
+        children: [
+          ///* solicitud liberacion
+          {
+            path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoVentas,
+            element: <SolicitudsDesbloqueoVentasMainPage />,
+          },
+          ///* codigos otp
+          {
+            path: ROUTER_PATHS.supervisionComercial.codigosOtp,
+            element: <CodigosOtpSupervicionComercialMainPage />,
+          },
+          ///* consultas buro
+          {
+            path: ROUTER_PATHS.supervisionComercial.consultasBuro,
+            element: <ConsultasBuroPage />,
+          },
+          ///* desbloqueo preventa
+          {
+            path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoPreventa,
+            element: <SolicitudsDesbloqueoPreventasMainPage />,
+          },
+          ///* reasignacion ventas
+          {
+            path: ROUTER_PATHS.supervisionComercial.reasignacionVentas,
+            element: <ReasignacionVentasPage />,
+          },
+        ],
+      },
+
+      //////////* Comercial ------------
+      {
+        path: ROUTER_PATHS.comercial.root,
+        element: <ComercialModule />,
+        children: [
+          ///* promocion
+          {
+            path: ROUTER_PATHS.comercial.promociones,
+            element: <PromocionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.promocionesCrear,
+            element: <CreatePromocionPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.promocionesEditar,
+            element: <UpdatePromocionPage />,
+          },
+
+          ///* solicitud de servicio
+          {
+            path: ROUTER_PATHS.comercial.solicitudServicio,
+            element: <SolicitudesServicioMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.solicitudServicioCrear,
+            element: <CreateSolicitudServicioPage />,
+          },
+
+          ///* preventas
+          {
+            path: ROUTER_PATHS.comercial.preventas,
+            element: <PreventasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.preventasCrear,
+            element: <CreatePreventaPage />,
+          },
+
+          ///* agendamiento
+          {
+            path: ROUTER_PATHS.comercial.agendamientos,
+            element: <AgendamientoVentasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.createAgendamiento,
+            element: <CreateAgendamientoVentasPage />,
+          },
+        ],
+      },
+
+      //////////* Operaciones ------------
+      {
+        path: ROUTER_PATHS.operaciones.root,
+
+        children: [
+          ///* agendamientos
+          {
+            path: ROUTER_PATHS.operaciones.agendamientos,
+            element: <AgendamientosMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.agendamientosPending,
+            element: <ConfirmAgendaOperacionesPage />,
+          },
+        ],
+      },
+
+      //////////* Cliente ------------
+      {
+        path: ROUTER_PATHS.clientes.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* servicio
+          {
+            path: ROUTER_PATHS.clientes.servicios,
+            element: <ServiciosPage />,
+          },
+          {
+            path: ROUTER_PATHS.clientes.serviciosEditar,
+            element: <UpdateServicioPage />,
+          },
+        ],
+      },
+
+      //////////* Inventario ------------
+      {
+        path: ROUTER_PATHS.inventario.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* bodega
+          {
+            path: ROUTER_PATHS.inventario.bodegas,
+            element: <BodegasPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.bodegasCrear,
+            element: <CreateBodegaPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.bodegasEditar,
+            element: <UpdateBodegaPage />,
+          },
+
+          ///* productos - inventariables
+          {
+            path: ROUTER_PATHS.inventario.productos,
+            element: <ProductosPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosCrear,
+            element: <CreateProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosEditar,
+            element: <UpdateProductoPage />,
+          },
+
+          ///* categorias producto
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductos,
+            element: <CategoriasProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <CreateCategoriaProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <UpdateCategoriaProductoPage />,
+          },
+
+          ///* ubicaciones
+          {
+            path: ROUTER_PATHS.inventario.ubicaciones,
+            element: <UbicacionsPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesCrear,
+            element: <CreateUbicacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesEditar,
+            element: <UpdateUbicacionPage />,
+          },
+        ],
+      },
+
+      //////////* Logistica ------------
+      {
+        path: ROUTER_PATHS.logistica.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* tipo instalacion
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalaciones,
+            element: <TipoInstalacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalacionesCrear,
+            element: <CreateTipoInstalacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.logistica.tipoinstalacionesEditar,
+            element: <UpdateTipoInstalacionPage />,
+          },
+        ],
+      },
+
+      //////////* Administracion Red ------------
+      {
+        path: ROUTER_PATHS.administracionRed.root,
+        element: <AdministracionRedModule />,
+        children: [
+          ///* router
+          {
+            path: ROUTER_PATHS.administracionRed.routers,
+            element: <RoutersPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.routersCrear,
+            element: <CreateRouterPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.routersEditar,
+            element: <UpdateRouterPage />,
+          },
+          ///* monitoreo
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreos,
+            element: <MonitoreosPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreosCrear,
+            element: <CreateMonitoreoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreosEditar,
+            element: <UpdateMonitoreoPage />,
+          },
+        ],
+      },
+
+      //////////* Netconnect ------------
+      {
+        path: ROUTER_PATHS.netconnect.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* tipo instalacion
+          {
+            path: ROUTER_PATHS.netconnect.vlans,
+            element: <VlansPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.vlansCrear,
+            element: <CreateVlanPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.vlansEditar,
+            element: <UpdateVlanPage />,
+          },
+        ],
+      },
+
+    ],
+  },
+  {
+    path: '/',
+    element: (
+      <BlankLayout />
+    ),
+    children: [
+      { path: '/auth/404', element: <Error /> },
+      { path: '/auth/login', element: <Login /> },
+      { path: '/auth/maintenance', element: <Maintenance /> },
+      { path: '/landingpage', element: <Landingpage /> },
+      { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
   // {
