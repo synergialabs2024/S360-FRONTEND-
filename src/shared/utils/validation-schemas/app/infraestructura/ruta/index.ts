@@ -1,0 +1,1 @@
+export * from './ruta.schema';

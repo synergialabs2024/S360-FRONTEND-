@@ -1,0 +1,63 @@
+import { AxiosError } from 'axios';
+
+import { ToastWrapper } from '@/shared/wrappers';
+import { ToastSeverityType } from '../interfaces';
+
+export interface ErrorResponse {
+  code: number;
+  status: string;
+  message: string;
+  data: ErrorData;
+}
+
+export interface ErrorData {
+  invalid_fields: string[];
+}
+
+export const handleAxiosError = (
+  error: any,
+  customMessageErrorToast?: string | null,
+  customMessageErrorSeverityToast: ToastSeverityType = 'error',
+) => {
+  ///* axios errror handler
+  if (error instanceof AxiosError) {
+    // custom message error
+    if (customMessageErrorToast) {
+      return ToastWrapper[customMessageErrorSeverityToast](
+        customMessageErrorToast,
+      );
+    }
+
+    // handle ErrorData from response
+    const respAxiosData = error.response?.data || {};
+    const { invalid_fields } = (respAxiosData as ErrorData) || {};
+
+    if (!invalid_fields) {
+      if (error?.response?.data?.message)
+        return ToastWrapper.error(
+          customMessageErrorToast || error.response?.data?.message,
+        );
+
+      // errors obj + arr
+      if ((error as any)?.response?.data?.errors?.length) {
+        return ToastWrapper.error((error as any)?.response?.data?.errors[0]);
+      }
+
+      return ToastWrapper.error(
+        error?.message ||
+          'Error no controlado, contacte al administrador del sistema',
+      );
+    }
+
+    // handle invalid fields
+    for (const field of invalid_fields) {
+      ToastWrapper.error(field);
+    }
+
+    return;
+  }
+
+  ToastWrapper.error(
+    'Error no controlado, contacte al administrador del sistema',
+  );
+};
