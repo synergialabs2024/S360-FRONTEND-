@@ -1,23 +1,15 @@
-import {
-  useFetchParametrosSistemas,
-  useUpdateParametroSistema,
-} from '@/actions/app';
+import { useFetchParametrosSistemas } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
-  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
   ViewMoreTextModalTableCell,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import {
-  ChangeModelStateData,
-  ParametroSistema,
-  PermissionsEnum,
-} from '@/shared/interfaces';
+import { ParametroSistema, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -44,11 +36,6 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
-
-  ///* mutations
-  const changeState = useUpdateParametroSistema<ChangeModelStateData>({
-    enableNavigate: false,
-  });
 
   ///* table
   const {
@@ -139,43 +126,43 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'type'),
       },
-      {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => (
-          <CustomSwitch
-            title="Estado"
-            checked={row.original?.state}
-            onChangeChecked={() => {
-              if (
-                !hasPermission(
-                  PermissionsEnum.administration_change_parametrosistema,
-                )
-              )
-                return;
+      // {
+      //   accessorKey: 'state',
+      //   header: 'ESTADO',
+      //   size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+      //   filterVariant: 'select',
+      //   filterSelectOptions: MODEL_STATE_BOOLEAN,
+      //   Cell: ({ row }) => (
+      //     <CustomSwitch
+      //       title="Estado"
+      //       checked={row.original?.state}
+      //       onChangeChecked={() => {
+      //         if (
+      //           !hasPermission(
+      //             PermissionsEnum.administration_change_parametrosistema,
+      //           )
+      //         )
+      //           return;
 
-              setConfirmDialog({
-                isOpen: true,
-                title: 'Cambiar Estado',
-                subtitle:
-                  '¿Está seguro que desea cambiar el estado de este registro?',
-                onConfirm: () => {
-                  setConfirmDialogIsOpen(false);
-                  changeState.mutate({
-                    id: row.original.id!,
-                    data: {
-                      state: !row.original?.state,
-                    },
-                  });
-                },
-              });
-            }}
-          />
-        ),
-      },
+      //         setConfirmDialog({
+      //           isOpen: true,
+      //           title: 'Cambiar Estado',
+      //           subtitle:
+      //             '¿Está seguro que desea cambiar el estado de este registro?',
+      //           onConfirm: () => {
+      //             setConfirmDialogIsOpen(false);
+      //             changeState.mutate({
+      //               id: row.original.id!,
+      //               data: {
+      //                 state: !row.original?.state,
+      //               },
+      //             });
+      //           },
+      //         });
+      //       }}
+      //     />
+      //   ),
+      // },
 
       {
         accessorKey: 'created_at',
@@ -194,7 +181,7 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [setConfirmDialog, setConfirmDialogIsOpen],
   );
 
   return (
