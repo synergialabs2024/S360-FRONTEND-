@@ -1,22 +1,19 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { useFetchRadiuss, useUpdateRadius } from '@/actions/app';
+import { useFetchRadiuss } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
-  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Radius } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { emptyCellOneLevel } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlRadiusPage = ROUTER_PATHS.administracionRed.radiusNav;
 
@@ -26,22 +23,9 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
 
-  const navigate = useNavigate();
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
-  ///* mutations
-  const changeState = useUpdateRadius({
-    enableNavigate: false,
-  });
 
   ///* table
   const {
@@ -53,7 +37,7 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
 
-  ///* fetch data
+  // Fetch data
   const {
     data: RadiusPagingRes,
     isLoading,
@@ -63,100 +47,53 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      username: searchTerm,
       ...filterObject,
-      filterByState: false,
     },
   });
 
-  ///* handlers
-  const onEdit = (radius: Radius) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Radius',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlRadiusPage}/editar/${radius.uuid}`);
-      },
-    });
-  };
-
-  ///* columns
+  // Define columns
   const columns = useMemo<MRT_ColumnDef<Radius>[]>(
     () => [
       {
-        accessorKey: 'name',
-        header: 'NOMBRE',
+        accessorKey: 'username',
+        header: 'PPP NAME',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'username'),
       },
       {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableSorting: false,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => {
-          return typeof row.original?.state === 'boolean' ? (
-            <CustomSwitch
-              title="state"
-              checked={row.original?.state}
-              onChangeChecked={() => {
-                ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar state',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el state de este registro?',
-                  onConfirm: () => {
-                    changeState.mutate({
-                      id: row.original.id!,
-                      data: {
-                        state: !row.original.state,
-                      },
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
-            />
-          ) : (
-            'N/A'
-          );
-        },
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: 180,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+        accessorKey: 'ppp_pass',
+        header: 'PPP PASS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ppp_pass'),
       },
       {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: 180,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+        accessorKey: 'ip_address',
+        header: 'PPP ADDRESS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ip_address'),
+      },
+      {
+        accessorKey: 'olt_name',
+        header: 'OLT NAME',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'olt_name'),
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [],
   );
 
   return (
     <SingleTableBoxScene
       title="Radius"
-      createPageUrl={`${returnUrlRadiusPage}/crear`}
       ///* Pendiente a cambio
       showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
     >
@@ -181,13 +118,7 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
         pagination={pagination}
         onPaging={setPagination}
         rowCount={RadiusPagingRes?.data?.meta?.count}
-        // // actions
-        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        // crud
-        ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
-        onEdit={onEdit}
-        canDelete={false}
+        enableActionsColumn={false}
       />
     </SingleTableBoxScene>
   );
