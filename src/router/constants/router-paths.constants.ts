@@ -332,8 +332,6 @@ export const ROUTER_PATHS = {
 
     ///* radius
     radius: 'radius',
-    radiusCrear: 'radius/crear',
-    radiusEditar: 'radius/editar/:uuid',
     radiusNav: '/administracion-red/radius',
 
     ///* Autenticacion de Clientes
@@ -342,10 +340,8 @@ export const ROUTER_PATHS = {
     autenticacionClientesEditar: 'autenticacionClientes/editar/:uuid',
     autenticacionClientesNav: '/administracion-red/autenticacionClientes',
 
-    ///* Autenticacion de Clientes
+    ///* Trafico
     traficos: 'traficos',
-    traficosCrear: 'traficos/crear',
-    traficosEditar: 'traficos/editar/:uuid',
     traficosNav: '/administracion-red/traficos',
   },
   // // INVENTARIO =================================
