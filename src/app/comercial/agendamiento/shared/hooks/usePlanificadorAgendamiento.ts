@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+dayjs.extend(isSameOrAfter);
+
 import {
   COUNTDOWN_AGENDA_VENTAS_ID,
   InstallScheduleCacheData,
@@ -126,7 +129,19 @@ export const usePlanificadorAgendamiento = ({
       param => param?.slug === SystemParamsSlugsEnum.HORA_FIN_INSTALACIONES,
     )?.value || defaultSystemParamsValues.HORA_FIN_INSTALACIONES;
 
-  // Función helper para calcular los slots disponibles
+  // //  calc available time slots --------------------
+  function timeStringToMinutes(timeString: string): number {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+  function minutesToTimeString(totalMinutes: number): string {
+    const hours = Math.floor(totalMinutes / 60)
+      .toString()
+      .padStart(2, '0');
+    const minutes = (totalMinutes % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:00`;
+  }
+
   const calculateAvailableTimeSlots = (
     cacheData: Nullable<InstallScheduleCacheData>,
     timeMapArray: TimeMapPlanificador[],
@@ -135,76 +150,103 @@ export const usePlanificadorAgendamiento = ({
     watchedFechaInstalacion: string,
     userId: number,
   ) => {
-    // Generación del array de horas
-    const hoursArray: string[] = [];
-    const startHour = parseInt(startInstallHour);
-    const endHour = parseInt(endInstallHour);
+    const isToday = dayjs(watchedFechaInstalacion).isSame(dayjs(), 'day');
 
-    for (let i = startHour; i <= endHour; i += 2) {
-      const hourStr = i.toString().padStart(2, '0');
-      hoursArray.push(`${hourStr}:00:00`);
+    const startMinutesDefault = timeStringToMinutes(startInstallHour);
+    const endMinutes = timeStringToMinutes(endInstallHour);
+
+    let adjustedStartMinutes = startMinutesDefault;
+
+    if (isToday) {
+      const now = dayjs();
+      const currentTimeMinutes = timeStringToMinutes(now.format('HH:mm:ss'));
+      const roundedCurrentMinutes = Math.ceil(currentTimeMinutes / 30) * 30;
+
+      let lastInstaladoMinutes = 0;
+      const lastInstaladoEntry = timeMapArray
+        .filter(tm => tm.estado === SlotAgendamientoEstadosEnumChoice.INSTALADO)
+        .sort(
+          (a, b) => timeStringToMinutes(a.hora) - timeStringToMinutes(b.hora),
+        )
+        .pop();
+
+      if (lastInstaladoEntry) {
+        lastInstaladoMinutes =
+          timeStringToMinutes(lastInstaladoEntry.hora) + 90;
+      }
+
+      adjustedStartMinutes = Math.max(
+        roundedCurrentMinutes,
+        lastInstaladoMinutes,
+        startMinutesDefault,
+      );
+
+      // Redondear adjustedStartMinutes al siguiente intervalo de 90 minutos
+      adjustedStartMinutes = Math.ceil(adjustedStartMinutes / 90) * 90;
+
+      if (adjustedStartMinutes >= endMinutes) {
+        // No hay slots disponibles
+        return [];
+      }
     }
 
-    // Obtenemos el tiempo actual para validaciones
-    const nowToValidate = dayjs().format();
+    // Generar los slots cada 90 minutos desde adjustedStartMinutes hasta endMinutes
+    const hoursArray: string[] = [];
+    for (let i = adjustedStartMinutes; i < endMinutes; i += 90) {
+      const timeString = minutesToTimeString(i);
+      hoursArray.push(timeString);
+    }
 
-    // Filtramos las horas disponibles
+    // Obtener la hora actual para validaciones
+    const now = dayjs();
+
+    // Filtrar los slots disponibles
     const availableTimeMap = hoursArray.filter(hour => {
-      // Validación del cacheData -> usuario y hora seleccionada
+      const slotDateTime = dayjs(`${watchedFechaInstalacion} ${hour}`);
+
+      // Excluir tiempos pasados si es hoy
+      if (isToday && slotDateTime.isBefore(now)) {
+        return false;
+      }
+
+      // Validación de cacheData
       if (cacheData?.userId === userId && cacheData?.selectedHour === hour) {
         return true;
       }
 
-      // Validación de block_until
-      const blockUntil = timeMapArray.find(tm => tm.hora === hour)?.block_until;
-      if (blockUntil) {
-        const formattedBlockUntil = dayjs(blockUntil).format();
-        if (dayjs(nowToValidate).isBefore(formattedBlockUntil)) return false;
-        return true;
-      }
-
-      // Validación del estado
-      const state = timeMapArray.find(tm => tm.hora === hour)?.estado;
-      if (state === SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO) return true;
-
-      // Si no está bloqueado, se incluye
-      return !timeMapArray.find(tm => tm.hora === hour);
-    });
-
-    // Filtrado basado en la fecha seleccionada y rango de horas
-    const finalAvailableTimeMap1 = availableTimeMap.filter(
-      hora =>
-        dayjs(`${watchedFechaInstalacion} ${hora}`).isAfter(dayjs()) &&
-        dayjs(`${watchedFechaInstalacion} ${hora}`).isBefore(
-          dayjs(`${watchedFechaInstalacion} ${endInstallHour}`),
-        ),
-    );
-
-    // Filtrado adicional para excluir slots sin espacio en las próximas 1h30min
-    const finalAvailableTimeMap2 = finalAvailableTimeMap1.filter(hora => {
-      const nextLimitHour = dayjs(`${watchedFechaInstalacion} ${hora}`)
-        .add(1, 'hour')
-        .add(30, 'minute')
-        .format('HH:mm:ss');
-
-      // Verificamos si no hay slots ocupados en el intervalo
+      // Excluir slots que ya están 'INSTALADO' o bloqueados
+      const tmEntry = timeMapArray.find(tm => tm.hora === hour);
       if (
-        !timeMapArray.find(
-          tm =>
-            tm.hora >= hora &&
-            tm.hora <= nextLimitHour &&
-            tm.estado &&
-            tm?.estado !== SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO,
-        )
+        tmEntry &&
+        tmEntry.estado !== SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO
       ) {
-        return true;
+        return false;
       }
 
-      return false;
+      return true;
     });
 
-    // Retornamos el array final de horas disponibles
-    return finalAvailableTimeMap2.map(hora => ({ hora, uuid: uuidv4() }));
+    // Filtrado adicional para excluir slots sin espacio en el próximo 1h30min
+    const finalAvailableTimeMap = availableTimeMap.filter(hora => {
+      const slotDateTime = dayjs(`${watchedFechaInstalacion} ${hora}`);
+      const nextLimitTime = slotDateTime.add(1, 'hour').add(30, 'minute');
+
+      // Verificar si no hay conflictos en el intervalo
+      const hasConflict = timeMapArray.some(tm => {
+        const tmDateTime = dayjs(`${watchedFechaInstalacion} ${tm.hora}`);
+        return (
+          tmDateTime.isSameOrAfter(slotDateTime) &&
+          tmDateTime.isBefore(nextLimitTime) &&
+          tm.estado &&
+          tm.estado !== SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO
+        );
+      });
+
+      return !hasConflict;
+    });
+
+    // Retornar los slots disponibles finales
+    return finalAvailableTimeMap.map(hora => ({ hora, uuid: uuidv4() }));
   };
 
   useEffect(() => {
