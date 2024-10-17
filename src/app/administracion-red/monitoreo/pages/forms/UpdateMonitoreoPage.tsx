@@ -19,9 +19,7 @@ const UpdateMonitoreoPage: React.FC<UpdateMonitoreoPageProps> = () => {
   if (isLoading || isRefetching) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlMonitoreosPage} />;
 
-  return (
-    <SaveMonitoreo title="Editar Tipo de Comprobante" monitoreo={data.data} />
-  );
+  return <SaveMonitoreo title="Editar Monitoreo" monitoreo={data.data} />;
 };
 
 export default UpdateMonitoreoPage;

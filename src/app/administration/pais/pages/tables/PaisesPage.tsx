@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFetchPaises, useUpdatePais } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
+  CustomSearch,
   CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
@@ -22,15 +23,11 @@ import {
   PermissionsEnum,
 } from '@/shared/interfaces';
 import { hasPermission } from '@/shared/utils/auth';
-// import {
-//   emptyCellOneLevel,
-//   formatDateWithTimeCell,
-// } from '@/shared/utils/format-data';
-import { useUiConfirmModalStore } from '@/store/ui';
 import {
-  emptyCellOneLevelCustom,
-  formatDateWithTimeCellCustom,
-} from '@/shared/utils/format-cell-tables/format-cell-tables.utils';
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils/format-data';
+import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlPaisesPage = ROUTER_PATHS.administracion.paisNav;
 
@@ -61,10 +58,10 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
 
   ///* table
   const {
-    // globalFilter,
+    globalFilter,
     pagination,
     searchTerm,
-    // onChangeFilter,
+    onChangeFilter,
     setPagination,
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
@@ -117,19 +114,19 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
         accessorKey: 'name',
         header: 'NOMBRE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevelCustom(row, 'name', 'h6'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
         accessorKey: 'iso_code',
         header: 'ISO CODE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => emptyCellOneLevelCustom(row, 'iso_code', 'h6'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'iso_code'),
       },
       {
         accessorKey: 'nationality',
         header: 'NACIONALIDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevelCustom(row, 'nationality', 'h6'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nationality'),
       },
       {
         accessorKey: 'has_coverage',
@@ -143,7 +140,6 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
             checked={row.original?.has_coverage}
             isSimpleBoolean
             onChangeChecked={() => {
-              console.log('Presionado');
               if (!hasPermission(PermissionsEnum.administration_change_pais))
                 return;
 
@@ -199,14 +195,14 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
           />
         ),
       },
+
       {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) =>
-          formatDateWithTimeCellCustom(row, 'created_at', 'h6'),
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
       {
         accessorKey: 'modified_at',
@@ -214,8 +210,7 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) =>
-          formatDateWithTimeCellCustom(row, 'modified_at', 'h6'),
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
     [changeHasCoverage, changeState, setConfirmDialog, setConfirmDialogIsOpen],
@@ -227,6 +222,12 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
       createPageUrl={`${returnUrlPaisesPage}/crear`}
       showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
     >
+      <CustomSearch
+        onChange={onChangeFilter}
+        value={globalFilter}
+        text="por nombre"
+      />
+
       <CustomTable<Pais>
         columns={columns}
         data={PaissPagingRes?.data?.items || []}

@@ -102,6 +102,7 @@ export const useUpdateSolicitudServicio = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
@@ -109,11 +110,12 @@ export const useUpdateSolicitudServicio = <T>({
   return useMutation({
     mutationFn: (params: UpdateSolicitudServicioParams<T>) =>
       updateSolicitudServicio(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [SolicitudServicioTSQEnum.SOLICITUDSERVICIOS],
       });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      customOnSuccess && customOnSuccess(res);
       enableToast &&
         ToastWrapper.success(
           customMessageToast || 'Solicitud Servicio actualizado correctamente',

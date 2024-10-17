@@ -151,7 +151,7 @@ const ProvinciasPage: React.FC<ProvinciasPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name'], 'h6'),
+        Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name']),
       },
 
       {

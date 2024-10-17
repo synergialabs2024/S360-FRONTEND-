@@ -14,8 +14,8 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { vlanFormSchema } from '@/shared/utils';
-import { Vlan } from '@/shared/interfaces/app/netconnect';
 import { returnUrlVlansPage } from '../../../pages/tables/VlansPage';
+import { Vlan } from '@/shared';
 
 export interface SaveVlanProps {
   title: string;

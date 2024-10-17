@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 
-import { erpAPI } from '@/axios/erp-api';
+import { erpAPI } from '@/shared/axios/erp-api';
 import {
   Area,
   AreasPaginatedRes,

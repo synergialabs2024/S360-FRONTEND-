@@ -104,6 +104,17 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Código"
+        name="codigo"
+        control={form.control}
+        defaultValue={form.getValues().codigo}
+        error={errors.codigo}
+        helperText={errors.codigo?.message || 'Código único'}
+        size={gridSizeMdLg6}
+        disabled={!!planinternet?.id}
       />
       <CustomTextArea
         label="Descripción"

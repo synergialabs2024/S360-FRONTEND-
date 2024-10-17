@@ -13,11 +13,10 @@ import {
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum } from '@/shared/interfaces';
+import { PermissionsEnum, Vlan } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { Vlan } from '@/shared/interfaces/app/netconnect';
 
 export const returnUrlVlansPage = ROUTER_PATHS.netconnect.vlansNav;
 

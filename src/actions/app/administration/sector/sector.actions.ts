@@ -119,6 +119,10 @@ export type GetSectorsParams = Partial<Sector> & {
   page_size?: number;
 
   filterByState?: boolean;
+
+  provinces?: string;
+  cities?: string;
+  zones?: string;
 };
 export type CreateSectorParams = Omit<Sector, 'id'>;
 export interface UpdateSectorParams<T> {

@@ -127,6 +127,9 @@ export type GetZonasParams = Partial<Zona> & {
   page_size?: number;
 
   filterByState?: boolean;
+
+  provinces?: string;
+  cities?: string;
 };
 export type CreateZonaParams = Omit<Zona, 'id'>;
 export interface UpdateZonaParams<T> {

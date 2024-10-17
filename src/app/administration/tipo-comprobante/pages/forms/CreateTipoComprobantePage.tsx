@@ -7,8 +7,7 @@ export type CreateTipoComprobantePageProps = {};
 const CreateTipoComprobantePage: React.FC<
   CreateTipoComprobantePageProps
 > = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_add_pais);
+  useCheckPermission(PermissionsEnum.administration_add_tipocomprobante);
 
   return <SaveTipoComprobante title="Crear Centro Costo" />;
 };

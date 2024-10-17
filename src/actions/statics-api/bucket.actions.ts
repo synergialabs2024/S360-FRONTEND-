@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { ToastWrapper, UseMutationParams } from '@/shared';
-import { erpAPI } from '@/axios/erp-api';
+import { erpAPI } from '@/shared/axios/erp-api';
 
 ///* tanStack query ---------------
 export const useCreateTemporaryUploadLink = ({

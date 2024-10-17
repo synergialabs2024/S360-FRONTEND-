@@ -121,7 +121,7 @@ const AgendamientoEsperaOperacionesPage: React.FC<
         editIcon={<MdArrowRightAlt />}
         canDelete={false}
         editIconToolTipTitle="Gestionar"
-        // editIconTooltipPlacement="left"
+        editIconTooltipPlacement="left"
       />
     </GridTableTabsContainerOnly>
   );

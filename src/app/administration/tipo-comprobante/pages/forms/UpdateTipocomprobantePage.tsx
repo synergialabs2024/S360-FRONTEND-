@@ -12,8 +12,7 @@ export type UpdateTipoComprobantePageProps = {};
 const UpdateTipoComprobantePage: React.FC<
   UpdateTipoComprobantePageProps
 > = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_change_pais);
+  useCheckPermission(PermissionsEnum.administration_change_tipocomprobante);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetTipoComprobante(uuid!);

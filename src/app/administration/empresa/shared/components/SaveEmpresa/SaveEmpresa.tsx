@@ -16,7 +16,7 @@ import {
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useUploadImageGeneric } from '@/shared/hooks';
 import { Empresa } from '@/shared/interfaces';
-// import { uploadFileUtils } from '@/shared/utils';
+import { uploadFileUtils } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlEmpresasPage } from '../../../pages/tables/EmpresasPage';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
@@ -102,17 +102,17 @@ const SaveEmpresa: React.FC<SaveEmpresaProps> = ({ title, empresa }) => {
 
     // upload images
     // set promise array to upload images
-    // const promisesImg = requiredImages.map(({ image, label }) =>
-    //   uploadFileUtils({
-    //     imageFile: image!,
-    //     fileName: label,
-    //   }),
-    // );
-    // const [logo1, logo2] = await Promise.all([...promisesImg]);
-    // console.log({
-    //   logo1,
-    //   logo2,
-    // });
+    const promisesImg = requiredImages.map(({ image, label }) =>
+      uploadFileUtils({
+        imageFile: image!,
+        fileName: label,
+      }),
+    );
+    const [logo1, logo2] = await Promise.all([...promisesImg]);
+    console.log({
+      logo1,
+      logo2,
+    });
 
     // return;
 

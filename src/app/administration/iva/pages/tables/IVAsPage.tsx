@@ -10,7 +10,11 @@ import {
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import {
+  MODEL_BOOLEAN,
+  MODEL_STATE_BOOLEAN,
+  TABLE_CONSTANTS,
+} from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { IVA, PermissionsEnum } from '@/shared/interfaces';
@@ -115,6 +119,45 @@ const IVAsPage: React.FC<IVAsPageProps> = () => {
         },
       },
 
+      {
+        accessorKey: 'iva_defecto',
+        header: 'PREDETERMINADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.iva_defecto === 'boolean' ? (
+            <CustomSwitch
+              title="iva_defecto"
+              checked={row.original?.iva_defecto}
+              isSimpleBoolean
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.administration_change_iva))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar iva_defecto',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el iva_defecto de este registro?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        iva_defecto: !row.original.iva_defecto,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
+      },
       {
         accessorKey: 'state',
         header: 'ESTADO',
