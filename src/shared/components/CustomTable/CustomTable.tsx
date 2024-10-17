@@ -218,16 +218,6 @@ function CustomTable<T>({
         onEdit &&
         onConditionEdit &&
         onConditionEdit(row.original as T) ? (
-          // <Tooltip title={editIconToolTipTitle}>
-          //   <IconButton
-          //     onClick={() => {
-          //       onEdit(row.original as T);
-          //     }}
-          //     color={editIconColor}
-          //   >
-          //     {editIcon || <MdEdit />}
-          //   </IconButton>
-          // </Tooltip>
           <>
             <Button
               id="basic-button"

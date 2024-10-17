@@ -11,6 +11,10 @@ import AppRouter from './router/AppRouter';
 import { CustomConfirmDialog } from './shared/components';
 import { CustomBackdropLoader } from './shared/components/Loaders';
 import { SocketProvider } from './context/SocketContext';
+import { Bounce, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import 'simplebar-react/dist/simplebar.min.css';
 
 const queryClient = new QueryClient();
 
@@ -31,7 +35,7 @@ function App() {
             <CustomBackdropLoader />
 
             {/* ----- Toaster alerts ----- */}
-            {/* <ToastContainer
+            <ToastContainer
               position="top-right"
               autoClose={5000}
               limit={3}
@@ -44,7 +48,7 @@ function App() {
               pauseOnHover
               theme="light"
               transition={Bounce}
-            /> */}
+            />
             <ScrollToTop>{routing}</ScrollToTop>
           </RTL>
         </ThemeProvider>
