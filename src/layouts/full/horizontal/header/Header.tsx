@@ -16,10 +16,8 @@ import { useSelector, useDispatch } from '@/store/Store';
 import { toggleMobileSidebar } from '@/store/customizer/CustomizerSlice';
 import { IconMenu2 } from '@tabler/icons-react';
 import Notifications from '@/layouts/full/vertical/header/Notification';
-import Cart from '@/layouts/full/vertical/header/Cart';
 import Profile from '@/layouts/full/vertical/header/Profile';
 import Search from '@/layouts/full/vertical/header/Search';
-import Language from '@/layouts/full/vertical/header/Language';
 import Navigation from '@/layouts/full/vertical/header/Navigation';
 import Logo from '@/layouts/full/shared/logo/Logo';
 import { AppState } from '@/store/Store';
@@ -82,11 +80,7 @@ const Header = () => {
         ) : null}
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          <Language />
-          {/* ------------------------------------------- */}
-          {/* Ecommerce Dropdown */}
-          {/* ------------------------------------------- */}
-          <Cart />
+
           {/* ------------------------------------------- */}
           {/* End Ecommerce Dropdown */}
           {/* ------------------------------------------- */}
