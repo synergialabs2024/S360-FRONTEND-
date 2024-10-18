@@ -39,7 +39,7 @@ export interface UserProfileLimit {
   identificacion: string;
   tipo_identificacion: string;
 
-  //* fk
+  ///* fk
   empresa?: number;
   empresa_name?: string;
 }

@@ -12,6 +12,8 @@ export const iVAFormSchema = yup.object({
     .required('El campo sri code es requerido')
     .max(200, 'El campo sri code no debe exceder los 200 caracteres'),
 
+  iva_defecto: yup.boolean().required('El campo iva defecto es requerido'),
+
   percentage: yup
     .string()
     .required('El campo percentage es requerido')

@@ -37,8 +37,10 @@ export interface Promocion {
   sectores?: number[] | string[];
   canales_venta?: number[] | string[];
   planes?: number[] | string[];
-  meses_gratis?: number[] | string[];
-  meses_descuento?: number[] | string[];
+  // meses_gratis?: number[] | string[];
+  // meses_descuento?: number[] | string[];
+  facturas_gratis?: number[];
+  facturas_descuento?: number[];
 
   planes_data?: PlanInternetLimitData[];
   paises_data?: PaisLimitData[];

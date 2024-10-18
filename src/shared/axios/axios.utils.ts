@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 
 import { ToastWrapper } from '@/shared/wrappers';
 import { ToastSeverityType } from '../interfaces';
@@ -20,7 +20,7 @@ export const handleAxiosError = (
   customMessageErrorSeverityToast: ToastSeverityType = 'error',
 ) => {
   ///* axios errror handler
-  if (error instanceof AxiosError) {
+  if (isAxiosError(error)) {
     // custom message error
     if (customMessageErrorToast) {
       return ToastWrapper[customMessageErrorSeverityToast](
@@ -32,6 +32,7 @@ export const handleAxiosError = (
     const respAxiosData = error.response?.data || {};
     const { invalid_fields } = (respAxiosData as ErrorData) || {};
 
+    // handle error as normal message
     if (!invalid_fields) {
       if (error?.response?.data?.message)
         return ToastWrapper.error(

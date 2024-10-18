@@ -28,6 +28,7 @@ export interface SystemUser {
 
   ///* fk
   groups: number[];
+  centro_costo?: number;
   area?: number;
   departamento?: number;
   canal_venta?: number;
@@ -36,7 +37,7 @@ export interface SystemUser {
 
 export type SystemUserLimitData = Pick<
   SystemUser,
-  'username' | 'email' | 'razon_social' | 'uuid' | 'id'
+  'username' | 'email' | 'razon_social' | 'uuid' | 'id' | 'centro_costo'
 > & {
   canal_venta_data?: CanalVenta;
 };

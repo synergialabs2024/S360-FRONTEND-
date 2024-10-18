@@ -1,5 +1,6 @@
 export * from './area';
 export * from './canal-venta';
+export * from './centro-costo';
 export * from './ciudad';
 export * from './departamento';
 export * from './empresa';
@@ -12,7 +13,6 @@ export * from './provincia';
 export * from './sector';
 export * from './system-group';
 export * from './system-user';
+export * from './tipo-comprobante';
 export * from './trazabilidad-venta';
 export * from './zona';
-export * from './centro-costo';
-export * from './tipo-comprobante';

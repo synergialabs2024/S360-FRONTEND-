@@ -13,6 +13,7 @@ export interface PlanInternet {
   uuid?: string;
 
   name: string;
+  codigo: string;
   description: string;
   valor: string;
   velocidad_descarga_minima: string;

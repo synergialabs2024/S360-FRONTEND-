@@ -1,3 +1,5 @@
+import { UserRolesEnumChoice } from '@/shared/constants';
+
 export interface LoginResponse {
   token: string;
   user: UserLoginResponse;
@@ -27,5 +29,5 @@ export interface UserLoginResponse {
   departamento?: string;
   canal_venta?: string;
   centro_costo?: number;
-  role?: string; // choice
+  role?: UserRolesEnumChoice; // choice
 }
