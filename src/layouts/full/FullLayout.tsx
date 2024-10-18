@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { styled, Container, Box, useTheme } from '@mui/material';
-import { useSelector } from '@/store/Store';
+import { useParametrosSistemaStore } from '@/store/app';
+import { AppState, useSelector } from '@/store/Store';
+import { Box, Container, styled, useTheme } from '@mui/material';
+import { FC, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { AppState } from '@/store/Store';
+import HorizontalHeader from '../full/horizontal/header/Header';
+import Navigation from '../full/horizontal/navbar/Navigation';
+import Customizer from './shared/customizer/Customizer';
 import Header from './vertical/header/Header';
 import Sidebar from './vertical/sidebar/Sidebar';
-import Customizer from './shared/customizer/Customizer';
-import Navigation from '../full/horizontal/navbar/Navigation';
-import HorizontalHeader from '../full/horizontal/header/Header';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -29,6 +29,17 @@ const FullLayout: FC = () => {
   const customizer = useSelector((state: AppState) => state.customizer);
 
   const theme = useTheme();
+
+  ///* global state ============================
+  const fetchAllSystemParameters = useParametrosSistemaStore(
+    s => s.fetchAllSystemParameters,
+  );
+
+  ///* effects ============================
+  useEffect(() => {
+    fetchAllSystemParameters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <MainWrapper>
