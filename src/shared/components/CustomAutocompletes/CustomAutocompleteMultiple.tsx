@@ -12,9 +12,8 @@ import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
 import { CustomCircularPorgress } from '../Loaders';
 
-export type CustomAutocompleteMultiplepleProps<T> = {
+export type CustomAutocompleteMultipleProps<T> = {
   options: T[];
-  defaultValue?: T[];
 
   valueKey: keyof T;
   actualValueKey?: keyof T;
@@ -57,11 +56,9 @@ export default function CustomAutocompleteMultiple<T>({
   loadingText = 'Cargando...',
 
   // form
-  // optionLabelForEdit,
   label,
   name,
   control,
-  defaultValue,
   error,
   helperText,
   required = true,
@@ -73,7 +70,7 @@ export default function CustomAutocompleteMultiple<T>({
   size = gridSize,
 
   limitTags = 2,
-}: CustomAutocompleteMultiplepleProps<T>) {
+}: CustomAutocompleteMultipleProps<T>) {
   return (
     <>
       <Grid item {...size}>
@@ -85,10 +82,8 @@ export default function CustomAutocompleteMultiple<T>({
               name={name}
               control={control}
               key={textFieldKey}
-              defaultValue={defaultValue}
-              // render
               render={({ field }) => {
-                const onChange = (_event: any, data: T[]) => {
+                const handleChange = (_event: any, data: T[]) => {
                   if (onlyActualValueKey && actualValueKey) {
                     const selectedValue: T[keyof T][] = data.map(
                       item => item[actualValueKey],
@@ -98,17 +93,13 @@ export default function CustomAutocompleteMultiple<T>({
                     return;
                   }
 
-                  // data is an valid array - parse to string
-                  const isThereAnyValue = !!data?.length;
-                  const selectedValue: string = isThereAnyValue
-                    ? JSON.stringify(data || '[]')
-                    : '[]';
-
-                  field.onChange(selectedValue);
-
-                  onChangeValue && onChangeValue(selectedValue); // string
-                  onChangeRawValue && onChangeRawValue(data); // T[]
+                  field.onChange(data);
+                  onChangeValue && onChangeValue(data as any);
+                  onChangeRawValue && onChangeRawValue(data);
                 };
+
+                // Asegurarse de que field.value sea un array
+                const value = field.value || [];
 
                 return (
                   <Autocomplete
@@ -116,7 +107,6 @@ export default function CustomAutocompleteMultiple<T>({
                     multiple
                     id="checkboxes-tags"
                     limitTags={limitTags}
-                    defaultValue={defaultValue}
                     // // options
                     options={options}
                     loading={isLoadingData}
@@ -139,8 +129,21 @@ export default function CustomAutocompleteMultiple<T>({
                         </li>
                       );
                     }}
-                    onChange={onChange}
+                    onChange={handleChange}
                     disabled={disabled}
+                    // // // New implementation to avoid default value in this component
+                    // // Pass the value from react-hook-form
+                    value={
+                      options.filter(option => {
+                        if (onlyActualValueKey && actualValueKey) {
+                          return (value as any[]).includes(
+                            option[actualValueKey],
+                          );
+                        } else {
+                          return (value as any[]).includes(option);
+                        }
+                      }) as T[]
+                    }
                     // // text field
                     renderInput={params => (
                       <TextField

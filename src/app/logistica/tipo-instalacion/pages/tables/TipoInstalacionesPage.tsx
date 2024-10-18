@@ -31,8 +31,7 @@ export const returnUrlTipoInstalacionesPage =
 export type TipoInstalacionesPageProps = {};
 
 const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.mantenimientoope_view_tipoinstalacion);
 
   const navigate = useNavigate();
 
@@ -104,6 +103,22 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
       {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'descripcion',
+        header: 'DESCRIPCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
+      },
+      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
@@ -114,7 +129,6 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
             title="Estado"
             checked={row.original?.state}
             onChangeChecked={() => {
-              ///* Pendiente a cambio
               if (!hasPermission(PermissionsEnum.administration_change_pais))
                 return;
 
@@ -162,9 +176,8 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
     <SingleTableBoxScene
       title="Tipo Instalacion"
       createPageUrl={`${returnUrlTipoInstalacionesPage}/crear`}
-      ///* Pendiente a cambio
       showCreateBtn={hasAllPermissions([
-        PermissionsEnum.administration_add_pais,
+        PermissionsEnum.mantenimientoope_add_tipoinstalacion,
       ])}
     >
       <CustomSearch
@@ -190,13 +203,13 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
         rowCount={TipoInstalacionesPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        ///* Pendiente a cambio
         enableActionsColumn={hasAllPermissions([
-          PermissionsEnum.administration_add_pais,
+          PermissionsEnum.mantenimientoope_add_tipoinstalacion,
         ])}
         // crud
-        ///* Pendiente a cambio
-        canEdit={hasAllPermissions([PermissionsEnum.administration_add_pais])}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.mantenimientoope_add_tipoinstalacion,
+        ])}
         onEdit={onEdit}
         canDelete={false}
       />

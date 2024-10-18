@@ -120,6 +120,31 @@ const UpdateCentroCostoPage = Loadable(
   ),
 );
 
+const TipoComprobantesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/tipo-comprobante/pages/tables/TipoComprobantesPage'
+      ),
+  ),
+);
+const CreateTipoComprobantePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/tipo-comprobante/pages/forms/CreateTipoComprobantePage'
+      ),
+  ),
+);
+const UpdateTipocomprobantePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/tipo-comprobante/pages/forms/UpdateTipocomprobantePage'
+      ),
+  ),
+);
+
 const SystemUserPage = Loadable(
   lazy(
     () =>
@@ -410,6 +435,14 @@ const CodigosOtpMainPage = Loadable(
     () => import('@/app/comercial/codigo-otp/pages/tables/CodigosOtpMainPage'),
   ),
 );
+const ReasignacionVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/reasignacion-ventas/pages/tables/ReasignacionVentasPage'
+      ),
+  ),
+);
 
 const TrazabilidadVentasPage = Loadable(
   lazy(
@@ -590,6 +623,61 @@ const UpdateRouterPage = Loadable(
       import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
   ),
 );
+const MonitoreosPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/monitoreo/pages/tables/MonitoreosPage'),
+  ),
+);
+const CreateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/CreateMonitoreoPage'
+      ),
+  ),
+);
+const UpdateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/UpdateMonitoreoPage'
+      ),
+  ),
+);
+const TraficosPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/trafico/pages/tables/TraficosPage'),
+  ),
+);
+
+const RadiusPage = Loadable(
+  lazy(() => import('@/app/administracion-red/radius/pages/tables/RadiusPage')),
+);
+const AutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/tables/AutenticacionClientePage'
+      ),
+  ),
+);
+const CreateAutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/forms/CreateAutenticacionClientePage'
+      ),
+  ),
+);
+const UpdateAutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/forms/UpdateAutenticacionClientePage'
+      ),
+  ),
+);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -609,6 +697,56 @@ const CreateBodegaPage = Loadable(
 );
 const UpdateBodegaPage = Loadable(
   lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
+);
+const ProductosPage = Loadable(
+  lazy(() => import('@/app/inventario/producto/pages/tables/ProductosPage')),
+);
+const CreateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/CreateProductoPage'),
+  ),
+);
+const UpdateProductoPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/producto/pages/forms/UpdateProductoPage'),
+  ),
+);
+const CategoriasProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/tables/CategoriasProductoPage'
+      ),
+  ),
+);
+const CreateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/CreateCategoriaProductoPage'
+      ),
+  ),
+);
+const UpdateCategoriaProductoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/categoria-producto/pages/forms/UpdateCategoriaProductoPage'
+      ),
+  ),
+);
+const UbicacionsPage = Loadable(
+  lazy(() => import('@/app/inventario/ubicacion/pages/tables/UbicacionsPage')),
+);
+const CreateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/CreateUbicacionPage'),
+  ),
+);
+const UpdateUbicacionPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/ubicacion/pages/forms/UpdateUbicacionPage'),
+  ),
 );
 
 ///* Logistica ------------
@@ -634,6 +772,70 @@ const UpdateTipoInstalacionPage = Loadable(
     () =>
       import(
         '@/app/logistica/tipo-instalacion/pages/forms/UpdateTipoInstalacionPage'
+      ),
+  ),
+);
+
+///* Netconnect ------------
+//Autorizacion de ONUs
+const AutorizacionOnusPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/autorizacion-onus/pages/tables/AutorizacionOnusPage'
+      ),
+  ),
+);
+
+const GestionOnusPage = Loadable(
+  lazy(
+    () => import('@/app/netconnect/gestion-onus/pages/tables/GestionOnusPage'),
+  ),
+);
+const CreateGestionOnusPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/netconnect/gestion-onus/pages/forms/CreateGestionOnusPage'),
+  ),
+);
+const UpdateGestionOnusPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/netconnect/gestion-onus/pages/forms/UpdateGestionOnusPage'),
+  ),
+);
+//Vlan
+const VlansPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/tables/VlansPage')),
+);
+const CreateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/CreateVlanPage')),
+);
+const UpdateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/UpdateVlanPage')),
+);
+//Vlan
+const OnusConfiguradasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/onus-configurada/pages/tables/OnusConfiguradasPage'
+      ),
+  ),
+);
+const CreateOnusConfiguradaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/onus-configurada/pages/forms/CreateOnusConfiguradaPage'
+      ),
+  ),
+);
+const UpdateOnusConfiguradaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/netconnect/onus-configurada/pages/forms/UpdateOnusConfiguradaPage'
       ),
   ),
 );
@@ -875,6 +1077,20 @@ const AppRouter = createBrowserRouter([
             element: <TrazabilidadVentasPage />,
           },
 
+          ///* Tipo de Comprobante
+          {
+            path: ROUTER_PATHS.administracion.tipocomprobantes,
+            element: <TipoComprobantesPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.tipocomprobantesCrear,
+            element: <CreateTipoComprobantePage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.tipocomprobantesEditar,
+            element: <UpdateTipocomprobantePage />,
+          },
+
           ///* USER ----------
           {
             path: ROUTER_PATHS.administracion.usuarios,
@@ -1112,6 +1328,11 @@ const AppRouter = createBrowserRouter([
             path: ROUTER_PATHS.supervisionComercial.solicitudDesbloqueoPreventa,
             element: <SolicitudsDesbloqueoPreventasMainPage />,
           },
+          ///* reasignacion ventas
+          {
+            path: ROUTER_PATHS.supervisionComercial.reasignacionVentas,
+            element: <ReasignacionVentasPage />,
+          },
         ],
       },
 
@@ -1218,6 +1439,48 @@ const AppRouter = createBrowserRouter([
             path: ROUTER_PATHS.inventario.bodegasEditar,
             element: <UpdateBodegaPage />,
           },
+
+          ///* productos - inventariables
+          {
+            path: ROUTER_PATHS.inventario.productos,
+            element: <ProductosPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosCrear,
+            element: <CreateProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.productosEditar,
+            element: <UpdateProductoPage />,
+          },
+
+          ///* categorias producto
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductos,
+            element: <CategoriasProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <CreateCategoriaProductoPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            element: <UpdateCategoriaProductoPage />,
+          },
+
+          ///* ubicaciones
+          {
+            path: ROUTER_PATHS.inventario.ubicaciones,
+            element: <UbicacionsPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesCrear,
+            element: <CreateUbicacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesEditar,
+            element: <UpdateUbicacionPage />,
+          },
         ],
       },
 
@@ -1259,6 +1522,95 @@ const AppRouter = createBrowserRouter([
           {
             path: ROUTER_PATHS.administracionRed.routersEditar,
             element: <UpdateRouterPage />,
+          },
+          ///* monitoreo
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreos,
+            element: <MonitoreosPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreosCrear,
+            element: <CreateMonitoreoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.monitoreosEditar,
+            element: <UpdateMonitoreoPage />,
+          },
+          ///* trafico
+          {
+            path: ROUTER_PATHS.administracionRed.traficos,
+            element: <TraficosPage />,
+          },
+          ///* radius
+          {
+            path: ROUTER_PATHS.administracionRed.radius,
+            element: <RadiusPage />,
+          },
+          ///* Autenticacion de Cliente
+          {
+            path: ROUTER_PATHS.administracionRed.autenticacionClientes,
+            element: <AutenticacionClientePage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.autenticacionClientesCrear,
+            element: <CreateAutenticacionClientePage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.autenticacionClientesEditar,
+            element: <UpdateAutenticacionClientePage />,
+          },
+        ],
+      },
+
+      //////////* Netconnect ------------
+      {
+        path: ROUTER_PATHS.netconnect.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* Autorizacion de ONUs
+          {
+            path: ROUTER_PATHS.netconnect.autorizacionOnus,
+            element: <AutorizacionOnusPage />,
+          },
+
+          ///* Gestion de ONUs
+          {
+            path: ROUTER_PATHS.netconnect.gestionOnus,
+            element: <GestionOnusPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.gestionOnusCrear,
+            element: <CreateGestionOnusPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.gestionOnusEditar,
+            element: <UpdateGestionOnusPage />,
+          },
+          ///* Vlan
+          {
+            path: ROUTER_PATHS.netconnect.vlans,
+            element: <VlansPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.vlansCrear,
+            element: <CreateVlanPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.vlansEditar,
+            element: <UpdateVlanPage />,
+          },
+          ///* Registro de ONUs Configuradas
+          {
+            path: ROUTER_PATHS.netconnect.onusConfiguradas,
+            element: <OnusConfiguradasPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.onusConfiguradasCrear,
+            element: <CreateOnusConfiguradaPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.onusConfiguradasEditar,
+            element: <UpdateOnusConfiguradaPage />,
           },
         ],
       },

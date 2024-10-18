@@ -41,7 +41,7 @@ export const solicitudServicioFormSchema = yup.object({
   direccion: yup
     .string()
     .required('El campo direccion es requerido')
-    .max(200, 'El campo direccion no debe exceder los 200 caracteres'),
+    .max(38, 'El campo direccion no debe exceder los 38 caracteres'),
   es_discapacitado: yup
     .boolean()
     .typeError('El campo es discapacitado es requerido')

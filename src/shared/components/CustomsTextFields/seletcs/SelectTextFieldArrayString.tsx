@@ -21,6 +21,8 @@ export interface SelectTextFieldArrayStringProps {
 
   gridSize?: GridSizeType;
   disabled?: boolean;
+
+  clearable?: boolean;
 }
 
 const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
@@ -40,6 +42,8 @@ const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
   gridSize = gridSizeMdLg6,
 
   disabled = false,
+
+  clearable = false,
 }) => {
   return (
     <Grid item {...gridSize}>
@@ -64,12 +68,12 @@ const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
                 variant="outlined"
                 fullWidth
                 {...field}
-                defaultValue={defaultValue || ''}
+                value={field.value || ''} // Aseguramos que el valor sea una cadena vacía si es null o undefined
                 error={!!error}
                 helperText={helperText}
                 required={required}
                 onChange={onChange}
-                // // disabled style
+                // Estilo deshabilitado
                 inputProps={{ readOnly: disabled }}
                 sx={{
                   ...(disabled && {
@@ -78,6 +82,11 @@ const SelectTextFieldArrayString: React.FC<SelectTextFieldArrayStringProps> = ({
                   }),
                 }}
               >
+                {clearable && (
+                  <MenuItem value={null as any}>
+                    <em>-- Sin Selección --</em>
+                  </MenuItem>
+                )}
                 {options.map(item => (
                   <MenuItem key={item} value={item}>
                     {item}

@@ -1,5 +1,6 @@
 import {
   Card,
+  Grid,
   InputAdornment,
   OutlinedInput,
   Stack,
@@ -15,6 +16,8 @@ export interface CustomSearchInterface {
   text: string; // debouncedValue
 
   sxContainer?: SxPropsType;
+
+  customSpaceNode?: React.ReactNode;
 }
 
 const CustomSearch: React.FC<CustomSearchInterface> = ({
@@ -23,6 +26,8 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
   text,
 
   sxContainer,
+
+  customSpaceNode = null,
 }) => {
   return (
     <>
@@ -60,6 +65,15 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
         </Card>
         <span className="spacer"></span>
 
+        {/* ------ custom space ------ */}
+
+        {customSpaceNode && (
+          <>
+            <Grid item container justifyContent="flex-end" alignItems="center">
+              {customSpaceNode}
+            </Grid>
+          </>
+        )}
         {/* ------ Filter Date ------ */}
       </Stack>
     </>

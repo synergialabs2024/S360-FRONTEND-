@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -91,16 +90,26 @@ import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { SolicitudServicio } from '@/shared/interfaces';
 import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
-import { formatCountDownTimer, preventaFormSchema } from '@/shared/utils';
-import { usePreventaStore } from '@/store/app';
+import {
+  formatCountDownTimer,
+  getKeysFormErrorsMessage,
+  preventaFormSchema,
+} from '@/shared/utils';
+import {
+  GenericInventoryStoreKey,
+  usePreventaStore,
+  useTypedGenericInventoryStore,
+} from '@/store/app';
 import { useGenericCountdownStore, useUiStore } from '@/store/ui';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlPreventasPage } from '../../../pages/tables/PreventasMainPage';
 import { usePreventaOtpCounter } from '../../hooks';
 import CountDownOTPPReventa from './CountDownOTPPReventa';
 import DocsSavePreventaStep from './DocsSavePreventaStep';
 import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
-import { EquiposVentaPreventaPartStep } from './form';
+import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
+import { EquiposSeleccionadosTableType } from './form/equipos/EquiposSeleccionadosPreventa';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -180,12 +189,24 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const isComponentBlocked = usePreventaStore(s => s.isComponentBlocked);
   const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
   const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
+  const clearAllPreventaStore = usePreventaStore(s => s.clearAll);
+  const setScoreServicio = usePreventaStore(s => s.setScoreServicio);
 
   const startTimer = useGenericCountdownStore(s => s.start);
   const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
   const countdownNewOtpValue = useGenericCountdownStore(
     s => s.counters[countdownIdNewOtpPreventa]?.count,
   );
+
+  // equipos venta -----------------
+  const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
+  const {
+    items: equiposSeleccionados,
+    clearOneRecord: clearAllEquiposSelecStore,
+  } = useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
+    GenericInventoryStoreKey.equiposVentaPreventa,
+  );
+  const selectedCuotas = usePreventaStore(s => s.selectedCuotas);
 
   usePreventaOtpCounter({
     cackeKey: codigoOtpCacheLeyPreventa,
@@ -198,6 +219,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
+      // initialStep: 2,
     });
 
   ///* form --------------------------
@@ -450,6 +472,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     navigate,
     returnUrl: returnUrlPreventasPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => {
+      clearAllTimers();
+      setIsComponentBlocked(false);
+      clearAllPreventaStore();
+      clearAllEquiposSelecStore();
+    },
     customOnError: err => {
       setIsCheckingCedula(false);
       handleAxiosError(err);
@@ -553,13 +581,24 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         }),
       ]);
 
-    ///* create
+    // equipos venta ------------
+    const detalleEquipos: EquipoVentasDetalle[] = equiposSeleccionados?.map(
+      equipo => ({
+        cantidad: equipo?.usedQuantity?.toFixed(2),
+        codigo: equipo?.producto_data?.codigo!,
+        cuotas: selectedCuotas,
+        series: [],
+      }),
+    );
+
+    // create
     await createPreventaMutation.mutateAsync({
       ...data,
       solicitud_servicio: solicitudServicio?.id!,
       url_foto_cedula_frontal: cedulaFrontalUrl?.streamUlr || '',
       url_foto_cedula_trasera: cedulaPosteriorUrl?.streamUlr || '',
       url_foto_vivienda: viviendaUrl?.streamUlr || '',
+      equipos_venta_detalle: detalleEquipos,
     });
     setIsCheckingCedula(false);
   };
@@ -601,15 +640,18 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     ) || [ClasificacionPlanesScoreBuroEnumChoice.BASICO];
 
     setSuggestedPlansBuroKey(suggestedPlansKey);
+    const scoreServicio = data.plan_sugerido?.[0]?.scoreServicios;
     form.reset({
       ...form.getValues(),
       rango_capacidad_pago: data.plan_sugerido?.[0]?.rangoCapacidadDePago || '',
-      score_servicios: data.plan_sugerido?.[0]?.scoreServicios || '',
+      score_servicios: scoreServicio || '',
       plan_sugerido_buro: suggestedPlansKey.join(','),
       score_sobreendeudamiento: data.score_sobreendeudamiento.decision || '',
       planes_sugeridos_buro:
         suggestedPlansKey as ClasificacionPlanesScoreBuroEnumChoice[],
     });
+    setIsCheckingIdentificacionEquifax(false);
+    setScoreServicio(scoreServicio);
   };
   const onErrorEquifax = async (err: any) => {
     if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
@@ -625,16 +667,16 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
     setAlreadyConsultedEquifax(true);
     setSuggestedPlansBuroKey(suggestedPlansBuroKey);
-    // TODO: set default values
     form.reset({
       ...form.getValues(),
-      rango_capacidad_pago: '',
-      score_servicios: '',
+      rango_capacidad_pago: '0-150',
+      score_servicios: 'E',
       plan_sugerido_buro: suggestedPlansBuroKey.join(','),
-      score_sobreendeudamiento: '',
+      score_sobreendeudamiento: 'E',
       planes_sugeridos_buro: suggestedPlansBuroKey,
     });
     setIsCheckingIdentificacionEquifax(false);
+    setScoreServicio('E');
   };
 
   const consultarEquifax = useConsultarEquifax({
@@ -838,10 +880,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       onCancel={() => {
         navigate(returnUrlPreventasPage);
         clearAllTimers();
+        clearAllEquiposSelecStore();
       }}
       onSave={handleSubmit(onSave, () => {
-        ToastWrapper.error('Faltan campos por requeridos');
         console.log(errors);
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Faltan campos por requeridos: ${keys}`);
       })}
     >
       {/* ========================= Datos Generales ========================= */}
@@ -1128,6 +1172,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           <>
             <EquiposVentaPreventaPartStep
               solicitudServicio={solicitudServicio!}
+              showEquiposPart={showEquiposPart}
+              setShowEquiposPart={setShowEquiposPart}
             />
           </>
 

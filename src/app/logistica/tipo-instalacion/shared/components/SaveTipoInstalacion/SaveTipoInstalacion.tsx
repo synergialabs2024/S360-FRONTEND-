@@ -89,6 +89,22 @@ const SaveTipoInstalacion: React.FC<SaveTipoInstalacionProps> = ({
         error={errors.name}
         helperText={errors.name?.message}
       />
+      <CustomTextField
+        label="Codigo"
+        name="codigo"
+        control={form.control}
+        defaultValue={form.getValues().codigo}
+        error={errors.codigo}
+        helperText={errors.codigo?.message}
+      />
+      <CustomTextField
+        label="Descripcion"
+        name="descripcion"
+        control={form.control}
+        defaultValue={form.getValues().descripcion}
+        error={errors.descripcion}
+        helperText={errors.descripcion?.message}
+      />
       <SampleCheckbox
         label="Estado"
         name="state"

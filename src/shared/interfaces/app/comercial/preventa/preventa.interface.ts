@@ -1,3 +1,4 @@
+import { EquipoVentasDetalle } from '@/app/comercial/preventa/shared/components';
 import {
   ClasificacionPlanesScoreBuroEnumChoice,
   EstadoPagoEnumChoice,
@@ -46,17 +47,16 @@ export interface Preventa {
   tipo_servicio: InternetServiceTypeEnumChoice;
   tipo_plan: InternetPlanInternetTypeEnumChoice;
 
-  numero_cuenta_bancaria?: string; // debito
   costo_instalacion: string;
+
   numero_tarjeta_credito?: string; // credito
+  url_foto_tarjeta?: string; // credito
 
   url_foto_cedula_frontal: string;
   url_foto_cedula_trasera: string;
   url_foto_documento_cuenta?: string;
   url_foto_vivienda: string;
   // url_foto_planilla?: string; // unlock req is available
-
-  url_foto_tarjeta?: string; // credito
 
   // // factibilidad ------
   flota?: number; // fk
@@ -85,11 +85,17 @@ export interface Preventa {
   requiere_pago_previo: boolean;
   estado_pago?: EstadoPagoEnumChoice;
 
+  // equipos venta --------------------
+  equipos_venta_detalle: EquipoVentasDetalle[];
+
+  numero_cuenta_bancaria?: string; // debito
+
   ///* fk
   metodo_pago?: number;
   entidad_financiera?: number; // debito
   tipo_cuenta_bancaria?: TipoCuentaBancariaEnumChoice; // debito
   solicitud_servicio?: number;
+
   tarjeta?: number; // credito
 
   // sales filter logic

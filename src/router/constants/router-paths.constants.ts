@@ -138,6 +138,12 @@ export const ROUTER_PATHS = {
     ///* trazabilidad venta
     trazabilidadesVenta: 'trazabilidades-venta',
     trazabilidadesVentaNav: '/parametrizacion/trazabilidades-venta',
+
+    ///* centro costos
+    tipocomprobantes: 'tipo-comprobantes',
+    tipocomprobantesCrear: 'tipo-comprobantes/crear',
+    tipocomprobantesEditar: 'tipo-comprobantes/editar/:uuid',
+    tipocomprobantesNav: '/parametrizacion/tipo-comprobantes',
   },
 
   // // =================================
@@ -302,6 +308,10 @@ export const ROUTER_PATHS = {
     ///* consulta buro
     consultasBuro: 'consultas-buro',
     consultasBuroNav: '/supervision-comercial/consultas-buro',
+
+    ///* reasignacion de ventas (sol servicio)
+    reasignacionVentas: 'reasignacion-ventas',
+    reasignacionVentasNav: '/supervision-comercial/reasignacion-ventas',
   },
 
   /////* Administración de Red ----------------
@@ -313,6 +323,26 @@ export const ROUTER_PATHS = {
     routersCrear: 'routers/crear',
     routersEditar: 'routers/editar/:uuid',
     routersNav: '/administracion-red/routers',
+
+    ///* monitoreos
+    monitoreos: 'monitoreos',
+    monitoreosCrear: 'monitoreos/crear',
+    monitoreosEditar: 'monitoreos/editar/:uuid',
+    monitoreosNav: '/administracion-red/monitoreos',
+
+    ///* radius
+    radius: 'radius',
+    radiusNav: '/administracion-red/radius',
+
+    ///* Autenticacion de Clientes
+    autenticacionClientes: 'autenticacionClientes',
+    autenticacionClientesCrear: 'autenticacionClientes/crear',
+    autenticacionClientesEditar: 'autenticacionClientes/editar/:uuid',
+    autenticacionClientesNav: '/administracion-red/autenticacionClientes',
+
+    ///* Trafico
+    traficos: 'traficos',
+    traficosNav: '/administracion-red/traficos',
   },
   // // INVENTARIO =================================
   inventario: {
@@ -323,6 +353,24 @@ export const ROUTER_PATHS = {
     bodegasCrear: 'bodegas/crear',
     bodegasEditar: 'bodegas/editar/:uuid',
     bodegasNav: '/inventario/bodegas',
+
+    ///* producto
+    productos: 'productos',
+    productosCrear: 'productos/crear',
+    productosEditar: 'productos/editar/:uuid',
+    productosNav: '/inventario/productos',
+
+    ///* categoria producto
+    categoriaProductos: 'categoria-productos',
+    categoriaProductoCrear: 'categoria-productos/crear',
+    categoriaProductoEditar: 'categoria-productos/editar/:uuid',
+    categoriaProductoNav: '/inventario/categoria-productos',
+
+    ///* ubicacion
+    ubicaciones: 'ubicaciones',
+    ubicacionesCrear: 'ubicaciones/crear',
+    ubicacionesEditar: 'ubicaciones/editar/:uuid',
+    ubicacionesNav: '/inventario/ubicaciones',
   },
   // // LOGISTICA =================================
   logistica: {
@@ -333,5 +381,33 @@ export const ROUTER_PATHS = {
     tipoinstalacionesCrear: 'tipoinstalaciones/crear',
     tipoinstalacionesEditar: 'tipoinstalaciones/editar/:uuid',
     tipoinstalacionesNav: '/logistica/tipoinstalaciones',
+  },
+  /////* NetConnect ----------------
+  netconnect: {
+    root: 'netconnect',
+
+    ///* Autorizacion de ONUs
+    autorizacionOnus: 'autorizacionOnus',
+    autorizacionOnusCrear: 'autorizacionOnus/crear',
+    autorizacionOnusEditar: 'autorizacionOnus/editar/:uuid',
+    autorizacionOnusNav: '/netconnect/autorizacionOnus',
+
+    ///* Gestion de ONUs
+    gestionOnus: 'gestionOnus',
+    gestionOnusCrear: 'gestionOnus/crear',
+    gestionOnusEditar: 'gestionOnus/editar/:uuid',
+    gestionOnusNav: '/netconnect/gestionOnus',
+
+    ///* vlans
+    vlans: 'vlans',
+    vlansCrear: 'vlans/crear',
+    vlansEditar: 'vlans/editar/:uuid',
+    vlansNav: '/netconnect/vlans',
+
+    ///* vlans
+    onusConfiguradas: 'onusConfiguradas',
+    onusConfiguradasCrear: 'onusConfiguradas/crear',
+    onusConfiguradasEditar: 'onusConfiguradas/editar/:uuid',
+    onusConfiguradasNav: '/netconnect/onusConfiguradas',
   },
 };

@@ -57,7 +57,10 @@ import {
 } from '@/shared/interfaces';
 import { ClienteExist } from '@/shared/interfaces/app/comercial/solicitud-servicio/client-mikrowisp.interface';
 import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
-import { solicitudServicioFormSchema } from '@/shared/utils';
+import {
+  getKeysFormErrorsMessage,
+  solicitudServicioFormSchema,
+} from '@/shared/utils';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlSolicitudsServicioPage } from '../../../pages/tables/SolicitudesServicioMainPage';
 import ServicesAlertModal from './ServicesAlertModal';
@@ -417,7 +420,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       onCancel={() => navigate(returnUrlSolicitudsServicioPage)}
       onSave={handleSubmit(onSave, () => {
         console.log('error', errors);
-        ToastWrapper.error('Faltan campos requeridos');
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
       disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
       maxWidth="xl"

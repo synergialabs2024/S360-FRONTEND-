@@ -12,8 +12,12 @@ import {
 import { ToastWrapper } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Flota, Preventa, SolicitudServicio } from '@/shared/interfaces';
-import { agendamientoVentasFormSchema } from '@/shared/utils';
+import {
+  agendamientoVentasFormSchema,
+  getKeysFormErrorsMessage,
+} from '@/shared/utils';
 import { useAgendamientoVentasStore } from '@/store/app';
+import { useGenericCountdownStore } from '@/store/ui';
 import { returnUrlAgendamientoVentasPage } from '../../../pages/tables/AgendamientoVentasMainPage';
 import { usePlanificadorAgendamiento } from '../../hooks';
 import {
@@ -64,6 +68,8 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   const setActivePreventa = useAgendamientoVentasStore(
     s => s.setActivePreventa,
   );
+  const clearAllAgendaVentaStore = useAgendamientoVentasStore(s => s.clearAll);
+  const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
 
   ///* form ---------------------
   const form = useForm<SaveFormDataAgendaVentas>({
@@ -78,11 +84,19 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     form,
   });
 
+  // hanlers helpers -----
+  const onClearAll = () => {
+    clearAllAgendaVentaStore();
+    clearAllTimers();
+  };
   ///* mutations ---------------------
   const createAgendamientoMutation = useCreateAgendamiento({
     navigate,
     returnUrl: returnUrlAgendamientoVentasPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => {
+      onClearAll();
+    },
   });
 
   ///* handlers ---------------------
@@ -129,9 +143,10 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       disableNextStepBtn={disableNextStepBtn}
       // action btns
       onCancel={() => navigate(returnUrlAgendamientoVentasPage)}
-      onSave={handleSubmit(onSave, () => {
-        console.log({ errors: form.formState.errors });
-        ToastWrapper.error('Faltan campos requeridos');
+      onSave={handleSubmit(onSave, errors => {
+        console.log(errors);
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
     >
       {activeStep === 0 && <GeneralDataSaveAgendaVentaStep form={form} />}

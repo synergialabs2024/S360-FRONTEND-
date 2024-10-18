@@ -388,6 +388,20 @@ export const ESTADO_LLAMADA_ARRAY_CHOICES = [
   EstadoLlamadaEnumChoice.NO_CONTESTA,
 ];
 
+///* INVENTARIO ==========================================
+export enum TipoProductoEnumChoice {
+  PRODUCTO = 'PRODUCTO',
+  FIBRA = 'FIBRA',
+  UTP = 'UTP',
+  ONT = 'ONT',
+}
+export const TIPO_PRODUCTO_ARRAY_CHOICES = [
+  TipoProductoEnumChoice.PRODUCTO,
+  TipoProductoEnumChoice.FIBRA,
+  TipoProductoEnumChoice.UTP,
+  TipoProductoEnumChoice.ONT,
+];
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',
@@ -445,4 +459,13 @@ export enum RutaTypeEnumChoice {
 export const RUTA_TYPE_ARRAY_CHOICES = [
   RutaTypeEnumChoice.OPERATIVO,
   RutaTypeEnumChoice.AFECTACION,
+];
+
+export enum TraficoTypeEnumChoice {
+  G_DIARIO = 'GRÁFICO DIARIO',
+  G_MENSUAL = 'GRÁFICO MENSUAL',
+}
+export const TRAFICO_TYPE_ARRAY_CHOICES = [
+  TraficoTypeEnumChoice.G_DIARIO,
+  TraficoTypeEnumChoice.G_MENSUAL,
 ];
