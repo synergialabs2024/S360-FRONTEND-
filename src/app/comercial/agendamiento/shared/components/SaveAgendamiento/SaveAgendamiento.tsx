@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+ 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -61,6 +61,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
+      initialStep: 0,
     });
 
   ///* global state ---------------------

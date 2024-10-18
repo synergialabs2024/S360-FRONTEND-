@@ -24,7 +24,7 @@ import {
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { SAVE_OLT_PERMISSIONS } from '@/shared';
-import { ViewConfiguracionModal, ViewNotificacionModal } from '../custom';
+import ViewNotificacionModal from '../custom/ViewNotificacionModal';
 
 export const returnUrlOLTsPage = ROUTER_PATHS.infraestructura.oltsNav;
 
@@ -257,8 +257,11 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         Cell: ({ row }) => {
           return (
             <>
-              <ViewNotificacionModal listItems={row.original} />
-              <ViewConfiguracionModal listItems={row.original} />
+              <ViewNotificacionModal
+                listItems={row.original}
+                descriptionInfo="¿Estas seguro de crear o actualizar la infraestructura de la
+                OLT?"
+              />
             </>
           );
         },

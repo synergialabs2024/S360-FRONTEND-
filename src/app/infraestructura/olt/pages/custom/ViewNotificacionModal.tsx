@@ -12,7 +12,7 @@ export type ViewNotificacionModalProps = {
   nameInfo?: string | undefined;
   listItems: Record<string, any>;
 
-  descriptionInfo?: string | undefined;
+  descriptionInfo: string;
 };
 
 type SaveFormData = CreateOLTConectParamsBase & {
@@ -21,8 +21,8 @@ type SaveFormData = CreateOLTConectParamsBase & {
 
 const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
   nameInfo = '',
-  descriptionInfo = '¿Estas seguro de crear o actualizar la infraestructura de la OLT?',
   listItems = {},
+  descriptionInfo,
 }) => {
   ///* global state
   const [open, setOpen] = useState(false);
