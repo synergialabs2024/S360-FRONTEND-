@@ -460,3 +460,12 @@ export const RUTA_TYPE_ARRAY_CHOICES = [
   RutaTypeEnumChoice.OPERATIVO,
   RutaTypeEnumChoice.AFECTACION,
 ];
+
+export enum TraficoTypeEnumChoice {
+  G_DIARIO = 'GRÁFICO DIARIO',
+  G_MENSUAL = 'GRÁFICO MENSUAL',
+}
+export const TRAFICO_TYPE_ARRAY_CHOICES = [
+  TraficoTypeEnumChoice.G_DIARIO,
+  TraficoTypeEnumChoice.G_MENSUAL,
+];

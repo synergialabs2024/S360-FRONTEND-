@@ -9,13 +9,11 @@ export interface RadiusSPaginatedRes {
 
 export interface Radius {
   id?: number;
-  uuid?: string;
 
-  state: boolean;
-  name: string;
-
-  created_at?: string;
-  modified_at?: string;
+  username: string;
+  ip_address: string;
+  ppp_pass: string;
+  olt_name: string;
 }
 
-export type RadiuLimitData = Pick<Radius, 'uuid' | 'name'>;
+export type RadiuLimitData = Pick<Radius, 'id' | 'username'>;

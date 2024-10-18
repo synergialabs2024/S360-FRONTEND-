@@ -9,13 +9,7 @@ export interface TraficosPaginatedRes {
 
 export interface Trafico {
   id?: number;
-  uuid?: string;
-
-  state: boolean;
-  name: string;
-
-  created_at?: string;
-  modified_at?: string;
+  username: string;
 }
 
-export type TraficoLimitData = Pick<Trafico, 'uuid' | 'name'>;
+export type TraficoLimitData = Pick<Trafico, 'id' | 'username'>;
