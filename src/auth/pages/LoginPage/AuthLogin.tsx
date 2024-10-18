@@ -1,4 +1,4 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Typography,
@@ -8,20 +8,21 @@ import {
   InputAdornment,
   IconButton,
   TextField,
-} from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from '@mui/material';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
-import CustomFormLabel from "../../../components/forms/theme-elements/CustomFormLabel";
-import { useLogin } from "@/actions/auth";
-import { useForm } from "react-hook-form";
 
-import { loginFormSchema } from "@/shared/utils";
-import { useAuthNoLSStore } from "@/store/auth";
+import { useLogin } from '@/actions/auth';
+import { useForm } from 'react-hook-form';
 
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { loginType } from "@/types/auth/auth";
+import { loginFormSchema } from '@/shared/utils';
+import { useAuthNoLSStore } from '@/store/auth';
+
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import { loginType } from '@/types/auth/auth';
+import { AuthSocialButtons, CustomFormLabel } from '@/shared/components';
 
 // import AuthSocialButtons from './AuthSocialButtons';
 
@@ -33,7 +34,7 @@ type LoginFormData = {
 
 const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   const [showPassword, setShowPassword] = useState(false);
-  const isBlocked = useAuthNoLSStore((s) => s.isBlocked);
+  const isBlocked = useAuthNoLSStore(s => s.isBlocked);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -56,7 +57,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   ///* handlers
   const onSubmit = (data: LoginFormData) => {
     if (!isValidLoginData || isBlocked) return;
-    console.log("data", data);
+    console.log('data', data);
 
     loginMutation.mutate(data);
   };
@@ -71,7 +72,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
 
       {subtext}
 
-      {/* <AuthSocialButtons title="Sign in with" /> */}
+      <AuthSocialButtons title="Sign in with" />
       <Box mt={3}>
         <Divider>
           <Typography
@@ -100,9 +101,9 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
               required
               autoFocus
               InputProps={{
-                style: { color: "black" },
+                style: { color: 'black' },
               }}
-              {...register("username")}
+              {...register('username')}
               error={!!usernameForm.formState.errors.username}
               helperText={usernameForm.formState.errors.username?.message}
             />
@@ -113,25 +114,25 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
               id="password"
               variant="outlined"
               autoComplete="current-password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               fullWidth
               required
               InputProps={{
-                style: { color: "black" },
+                style: { color: 'black' },
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       edge="end"
-                      sx={{ color: "blue" }}
+                      sx={{ color: 'blue' }}
                     >
                       {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              {...register("password")}
+              {...register('password')}
               error={!!usernameForm.formState.errors.password}
               helperText={usernameForm.formState.errors.password?.message}
             />
@@ -147,8 +148,8 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
               to="/auth/forgot-password"
               fontWeight="500"
               sx={{
-                textDecoration: "none",
-                color: "primary.main",
+                textDecoration: 'none',
+                color: 'primary.main',
               }}
             >
               Forgot Password ?

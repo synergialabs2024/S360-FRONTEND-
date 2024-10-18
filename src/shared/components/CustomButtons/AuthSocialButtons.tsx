@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+ 
 // @ts-ignore
 import React from 'react';
 import icon1 from '@/assets/images/svgs/google-icon.svg';

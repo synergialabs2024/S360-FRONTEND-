@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+ 
 // @ts-ignore
 import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import { lazy } from 'react';
@@ -6,29 +6,16 @@ import { lazy } from 'react';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
-import AdministrationModule from '@/app/administration/AdministrationModule';
-import { Navigate } from 'react-router-dom';
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
-import BlankLayout from '@/layouts/blank/BlankLayout';
-
-// landingpage
-const Landingpage = Loadable(
-  lazy(() => import('../views/pages/landingpage/Landingpage')),
-);
-
-const Error = Loadable(lazy(() => import('../views/authentication/Error')));
-const Maintenance = Loadable(
-  lazy(() => import('../views/authentication/Maintenance')),
-);
-// import PaginaTabs from './PaginaTabs';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
 );
-const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
+
+const Home1 = Loadable(lazy(() => import('../views/dashboard/Modern')));
 
 // authentication
-const Login = Loadable(
+const LoginPage = Loadable(
   // lazy(() => import('../views/authentication/auth1/Login')),
   lazy(() => import('../auth/pages/LoginPage/LoginPage')),
 );
@@ -36,20 +23,14 @@ const Login = Loadable(
 /* ***Layouts**** */
 
 /* ****Pages***** */
-// const ModernDash = Loadable(lazy(() => import('../views/dashboard/Modern')));
 
-// Codigos OTP
+const Error404 = Loadable(lazy(() => import('@/shared/pages/error/Error404')));
+// import PaginaTabs from './PaginaTabs';
+const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 
-const CodigosOtpMainPage = Loadable(
-  lazy(
-    () => import('@/app/comercial/codigo-otp/pages/tables/CodigosOtpMainPage'),
-  ),
+const AdministrationModule = Loadable(
+  lazy(() => import('@/app/administration/AdministrationModule')),
 );
-
-const ModernDash = Loadable(lazy(() => import('../views/dashboard/Modern')));
-
-// Paises
-
 const PaisesPage = Loadable(
   lazy(() => import('@/app/administration/pais/pages/tables/PaisesPage')),
 );
@@ -59,9 +40,6 @@ const UpdatePaisPage = Loadable(
 const CreatePaisPage = Loadable(
   lazy(() => import('@/app/administration/pais/pages/forms/CreatePaisPage')),
 );
-
-// Provincias
-
 const ProvinciasPage = Loadable(
   lazy(
     () => import('@/app/administration/provincia/pages/tables/ProvinciasPage'),
@@ -79,9 +57,6 @@ const UpdateProvinciaPage = Loadable(
       import('@/app/administration/provincia/pages/forms/UpdateProvinciaPage'),
   ),
 );
-
-// Ciudades
-
 const CiudadesPage = Loadable(
   lazy(() => import('@/app/administration/ciudad/pages/tables/CiudadesPage')),
 );
@@ -95,9 +70,6 @@ const UpdateCiudadPage = Loadable(
     () => import('@/app/administration/ciudad/pages/forms/UpdateCiudadPage'),
   ),
 );
-
-// Zonas
-
 const ZonasPage = Loadable(
   lazy(() => import('@/app/administration/zona/pages/tables/ZonasPage')),
 );
@@ -107,7 +79,6 @@ const CreateZonaPage = Loadable(
 const UpdateZonaPage = Loadable(
   lazy(() => import('@/app/administration/zona/pages/forms/UpdateZonaPage')),
 );
-
 const SectoresPage = Loadable(
   lazy(() => import('@/app/administration/sector/pages/tables/SectoresPage')),
 );
@@ -121,7 +92,6 @@ const UpdateSectorPage = Loadable(
     () => import('@/app/administration/sector/pages/forms/UpdateSectorPage'),
   ),
 );
-
 const AreasPage = Loadable(
   lazy(() => import('@/app/administration/area/pages/tables/AreasPage')),
 );
@@ -130,145 +100,6 @@ const CreateAreaPage = Loadable(
 );
 const UpdateAreaPage = Loadable(
   lazy(() => import('@/app/administration/area/pages/forms/UpdateAreaPage')),
-);
-
-const DepartamentosPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/departamento/pages/tables/DepartamentosPage'
-      ),
-  ),
-);
-const CreateDepartamentoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/departamento/pages/forms/CreateDepartamentoPage'
-      ),
-  ),
-);
-const UpdateDepartamentoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/departamento/pages/forms/UpdateDepartamentoPage'
-      ),
-  ),
-);
-
-const CanalesVentaPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administration/canal-venta/pages/tables/CanalesVentaPage'),
-  ),
-);
-const CreateCanalVentaPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/canal-venta/pages/forms/CreateCanalVentaPage'
-      ),
-  ),
-);
-const UpdateCanalVentaPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/canal-venta/pages/forms/UpdateCanalVentaPage'
-      ),
-  ),
-);
-
-// ENTIDADES FINANCIERAS
-
-const EntidadesFinancieraPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/entidad-financiera/pages/tables/EntidadesFinancieraPage'
-      ),
-  ),
-);
-const CreateEntidadFinancieraPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/entidad-financiera/pages/forms/CreateEntidadFinancieraPage'
-      ),
-  ),
-);
-const UpdateEntidadFinancieraPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/entidad-financiera/pages/forms/UpdateEntidadFinancieraPage'
-      ),
-  ),
-);
-
-// IVA
-
-const IVAsPage = Loadable(
-  lazy(() => import('@/app/administration/iva/pages/tables/IVAsPage')),
-);
-const CreateIVAPage = Loadable(
-  lazy(() => import('@/app/administration/iva/pages/forms/CreateIVAPage')),
-);
-const UpdateIVAPage = Loadable(
-  lazy(() => import('@/app/administration/iva/pages/forms/UpdateIVAPage')),
-);
-
-// Metodo de pago
-
-const MetodosPagoPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administration/metodo-pago/pages/tables/MetodosPagoPage'),
-  ),
-);
-const CreateMetodoPagoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/metodo-pago/pages/forms/CreateMetodoPagoPage'
-      ),
-  ),
-);
-const UpdateMetodoPagoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/metodo-pago/pages/forms/UpdateMetodoPagoPage'
-      ),
-  ),
-);
-
-// Parametro del sistema
-
-const ParametrosSistemasPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/parametro-sistema/pages/tables/ParametrosSistemasPage'
-      ),
-  ),
-);
-const CreateParametroSistemaPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/parametro-sistema/pages/forms/CreateParametroSistemaPage'
-      ),
-  ),
-);
-const UpdateParametroSistemaPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/parametro-sistema/pages/forms/UpdateParametroSistemaPage'
-      ),
-  ),
 );
 
 const CentroCostosPage = Loadable(
@@ -290,15 +121,6 @@ const UpdateCentroCostoPage = Loadable(
     () =>
       import(
         '@/app/administration/centro-costo/pages/forms/UpdateCentroCostoPage'
-      ),
-  ),
-);
-
-const TrazabilidadVentasPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/trazabilidad-venta/pages/tables/TrazabilidadVentasPage'
       ),
   ),
 );
@@ -334,24 +156,6 @@ const SystemUserPage = Loadable(
       import('@/app/administration/system-user/pages/tables/SystemUserPage'),
   ),
 );
-
-const CreateSystemUserPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/system-user/pages/forms/CreateSystemUserPage'
-      ),
-  ),
-);
-const UpdateSystemUserPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administration/system-user/pages/forms/UpdateSystemUserPage'
-      ),
-  ),
-);
-
 const SystemsGroupPage = Loadable(
   lazy(
     () =>
@@ -374,6 +178,160 @@ const UpdateSystemGroupPage = Loadable(
       ),
   ),
 );
+const CreateSystemUserPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/system-user/pages/forms/CreateSystemUserPage'
+      ),
+  ),
+);
+const UpdateSystemUserPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/system-user/pages/forms/UpdateSystemUserPage'
+      ),
+  ),
+);
+const DepartamentosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/departamento/pages/tables/DepartamentosPage'
+      ),
+  ),
+);
+const CreateDepartamentoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/departamento/pages/forms/CreateDepartamentoPage'
+      ),
+  ),
+);
+const UpdateDepartamentoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/departamento/pages/forms/UpdateDepartamentoPage'
+      ),
+  ),
+);
+const CanalesVentaPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administration/canal-venta/pages/tables/CanalesVentaPage'),
+  ),
+);
+const CreateCanalVentaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/canal-venta/pages/forms/CreateCanalVentaPage'
+      ),
+  ),
+);
+const UpdateCanalVentaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/canal-venta/pages/forms/UpdateCanalVentaPage'
+      ),
+  ),
+);
+// const EmpresasPage = Loadable(
+//   lazy(() => import('@/app/administration/empresa/pages/tables/EmpresasPage')),
+// );
+// const CreateEmpresaPage = Loadable(
+//   lazy(
+//     () => import('@/app/administration/empresa/pages/forms/CreateEmpresaPage'),
+//   ),
+// );
+// const UpdateEmpresaPage = Loadable(
+//   lazy(
+//     () => import('@/app/administration/empresa/pages/forms/UpdateEmpresaPage'),
+//   ),
+// );
+const EntidadesFinancieraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/entidad-financiera/pages/tables/EntidadesFinancieraPage'
+      ),
+  ),
+);
+const CreateEntidadFinancieraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/entidad-financiera/pages/forms/CreateEntidadFinancieraPage'
+      ),
+  ),
+);
+const UpdateEntidadFinancieraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/entidad-financiera/pages/forms/UpdateEntidadFinancieraPage'
+      ),
+  ),
+);
+const IVAsPage = Loadable(
+  lazy(() => import('@/app/administration/iva/pages/tables/IVAsPage')),
+);
+const CreateIVAPage = Loadable(
+  lazy(() => import('@/app/administration/iva/pages/forms/CreateIVAPage')),
+);
+const UpdateIVAPage = Loadable(
+  lazy(() => import('@/app/administration/iva/pages/forms/UpdateIVAPage')),
+);
+const MetodosPagoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administration/metodo-pago/pages/tables/MetodosPagoPage'),
+  ),
+);
+const CreateMetodoPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/metodo-pago/pages/forms/CreateMetodoPagoPage'
+      ),
+  ),
+);
+const UpdateMetodoPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/metodo-pago/pages/forms/UpdateMetodoPagoPage'
+      ),
+  ),
+);
+const ParametrosSistemasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/parametro-sistema/pages/tables/ParametrosSistemasPage'
+      ),
+  ),
+);
+const CreateParametroSistemaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/parametro-sistema/pages/forms/CreateParametroSistemaPage'
+      ),
+  ),
+);
+const UpdateParametroSistemaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/parametro-sistema/pages/forms/UpdateParametroSistemaPage'
+      ),
+  ),
+);
 
 ///* NOMINA
 //Cargo
@@ -386,7 +344,6 @@ const CreateCargoPage = Loadable(
 const UpdateCargoPage = Loadable(
   lazy(() => import('@/app/nomina/cargo/pages/forms/UpdateCargoPage')),
 );
-
 const EmpleadosPage = Loadable(
   lazy(() => import('@/app/nomina/empleado/pages/tables/EmpleadosPage')),
 );
@@ -397,49 +354,131 @@ const UpdateEmpleadoPage = Loadable(
   lazy(() => import('@/app/nomina/empleado/pages/forms/UpdateEmpleadoPage')),
 );
 
-///* Mantenimiento Operaciones ------------
-const MantenimientoOperacionModule = Loadable(
-  lazy(() => import('@/app/mante-operacion/MantenimientoOperacionModule')),
-);
-const FlotasPage = Loadable(
-  lazy(() => import('@/app/mante-operacion/flota/pages/tables/FlotasPage')),
-);
-const CreateFlotaPage = Loadable(
-  lazy(() => import('@/app/mante-operacion/flota/pages/forms/CreateFlotaPage')),
-);
-const UpdateFlotaPage = Loadable(
-  lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
-);
-
-const PlanificadorsPage = Loadable(
+const PlanInternetsPage = Loadable(
   lazy(
-    () =>
-      import(
-        '@/app/mante-operacion/planificador/pages/tables/PlanificadorsPage'
-      ),
+    () => import('@/app/servicios/planinternet/pages/tables/PlanInternetsPage'),
   ),
 );
-const PlanificadorFlotaPage = Loadable(
+const CreatePlanInternetPage = Loadable(
   lazy(
     () =>
-      import(
-        '@/app/mante-operacion/planificador/pages/custom/PlanificadorFlotaPage'
-      ),
+      import('@/app/servicios/planinternet/pages/forms/CreatePlanInternetPage'),
+  ),
+);
+const UpdatePlanInternetPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/servicios/planinternet/pages/forms/UpdatePlanInternetPage'),
   ),
 );
 
-///* Cobranza ------------
-const CobranzaModule = Loadable(
-  lazy(() => import('@/app/cobranza/CobranzaModule')),
+const ComercialModule = Loadable(
+  lazy(() => import('@/app/comercial/ComercialModule')),
 );
-const TarjetasPage = Loadable(
-  lazy(() => import('@/app/cobranza/tarjeta/pages/tables/TarjetasPage')),
+const PromocionesPage = Loadable(
+  lazy(() => import('@/app/comercial/promocion/pages/tables/PromocionsPage')),
 );
-const CreateTarjetaPage = Loadable(
-  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/CreateTarjetaPage')),
+const CreatePromocionPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/promocion/pages/forms/CreatePromocionPage'),
+  ),
 );
-const UpdateTarjetaPage = Loadable(
-  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/UpdateTarjetaPage')),
+const UpdatePromocionPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/promocion/pages/forms/UpdatePromocionPage'),
+  ),
+);
+
+///* Sales ---------------------
+const SolicitudesServicioMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-servicio/pages/tables/SolicitudesServicioMainPage'
+      ),
+  ),
+);
+const CreateSolicitudServicioPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-servicio/pages/forms/CreateSolicitudServicioPage'
+      ),
+  ),
+);
+
+///* Supervision Comercial ------------
+const SupervisionComercialModule = Loadable(
+  lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
+);
+const SolicitudsDesbloqueoPreventasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/desbloqueo-preventa/pages/tables/SolicitudsDesbloqueoPreventasMainPage'
+      ),
+  ),
+);
+const SolicitudsDesbloqueoVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/solicitud-desbloqueo-ventas/pages/tables/SolicitudsDesbloqueoVentasMainPage'
+      ),
+  ),
+);
+const CodigosOtpSupervicionComercialMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/codigo-otp/pages/tables/CodigosOtpSupervicionComercialMainPage'
+      ),
+  ),
+);
+const CodigosOtpMainPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/codigo-otp/pages/tables/CodigosOtpMainPage'),
+  ),
+);
+const ReasignacionVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/reasignacion-ventas/pages/tables/ReasignacionVentasPage'
+      ),
+  ),
+);
+
+const TrazabilidadVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/trazabilidad-venta/pages/tables/TrazabilidadVentasPage'
+      ),
+  ),
+);
+
+const PreventasMainPage = Loadable(
+  lazy(() => import('@/app/comercial/preventa/pages/tables/PreventasMainPage')),
+);
+const CreatePreventaPage = Loadable(
+  lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
+);
+const AgendamientoVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/agendamiento/pages/tables/AgendamientoVentasMainPage'
+      ),
+  ),
+);
+const CreateAgendamientoVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/agendamiento/pages/forms/CreateAgendamientoVentasPage'
+      ),
+  ),
 );
 
 ///* Infraestructura ------------
@@ -502,125 +541,36 @@ const UpdateRutaPage = Loadable(
   lazy(() => import('@/app/infraestructura/ruta/pages/forms/UpdateRutaPage')),
 );
 
-const PlanInternetsPage = Loadable(
-  lazy(
-    () => import('@/app/servicios/planinternet/pages/tables/PlanInternetsPage'),
-  ),
+///* Mantenimiento Operaciones ------------
+const MantenimientoOperacionModule = Loadable(
+  lazy(() => import('@/app/mante-operacion/MantenimientoOperacionModule')),
 );
-const CreatePlanInternetPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/servicios/planinternet/pages/forms/CreatePlanInternetPage'),
-  ),
+const FlotasPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/tables/FlotasPage')),
 );
-const UpdatePlanInternetPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/servicios/planinternet/pages/forms/UpdatePlanInternetPage'),
-  ),
+const CreateFlotaPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/forms/CreateFlotaPage')),
+);
+const UpdateFlotaPage = Loadable(
+  lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
 );
 
-///* Supervision Comercial ------------
-const SupervisionComercialModule = Loadable(
-  lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
+///* Cobranza ------------
+const CobranzaModule = Loadable(
+  lazy(() => import('@/app/cobranza/CobranzaModule')),
 );
-const SolicitudsDesbloqueoPreventasMainPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/supervision-comercial/desbloqueo-preventa/pages/tables/SolicitudsDesbloqueoPreventasMainPage'
-      ),
-  ),
+const TarjetasPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/tables/TarjetasPage')),
 );
-const SolicitudsDesbloqueoVentasMainPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/comercial/solicitud-desbloqueo-ventas/pages/tables/SolicitudsDesbloqueoVentasMainPage'
-      ),
-  ),
+const CreateTarjetaPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/CreateTarjetaPage')),
 );
-
-const CodigosOtpSupervicionComercialMainPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/comercial/codigo-otp/pages/tables/CodigosOtpSupervicionComercialMainPage'
-      ),
-  ),
+const UpdateTarjetaPage = Loadable(
+  lazy(() => import('@/app/cobranza/tarjeta/pages/forms/UpdateTarjetaPage')),
 );
 
 const ConsultasBuroPage = Loadable(
   lazy(() => import('@/app/comercial/consultas-buro/pages/ConsultasBuroPage')),
-);
-
-const ReasignacionVentasPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/supervision-comercial/reasignacion-ventas/pages/tables/ReasignacionVentasPage'
-      ),
-  ),
-);
-
-const ComercialModule = Loadable(
-  lazy(() => import('@/app/comercial/ComercialModule')),
-);
-const PromocionesPage = Loadable(
-  lazy(() => import('@/app/comercial/promocion/pages/tables/PromocionsPage')),
-);
-const CreatePromocionPage = Loadable(
-  lazy(
-    () => import('@/app/comercial/promocion/pages/forms/CreatePromocionPage'),
-  ),
-);
-
-const UpdatePromocionPage = Loadable(
-  lazy(
-    () => import('@/app/comercial/promocion/pages/forms/UpdatePromocionPage'),
-  ),
-);
-
-///* Sales ---------------------
-const SolicitudesServicioMainPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/comercial/solicitud-servicio/pages/tables/SolicitudesServicioMainPage'
-      ),
-  ),
-);
-const CreateSolicitudServicioPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/comercial/solicitud-servicio/pages/forms/CreateSolicitudServicioPage'
-      ),
-  ),
-);
-
-const PreventasMainPage = Loadable(
-  lazy(() => import('@/app/comercial/preventa/pages/tables/PreventasMainPage')),
-);
-const CreatePreventaPage = Loadable(
-  lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
-);
-
-const AgendamientoVentasMainPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/comercial/agendamiento/pages/tables/AgendamientoVentasMainPage'
-      ),
-  ),
-);
-const CreateAgendamientoVentasPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/comercial/agendamiento/pages/forms/CreateAgendamientoVentasPage'
-      ),
-  ),
 );
 
 ///* Operaciones ------------
@@ -640,7 +590,99 @@ const ConfirmAgendaOperacionesPage = Loadable(
       ),
   ),
 );
+const PlanificadorsPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/tables/PlanificadorsPage'
+      ),
+  ),
+);
+const PlanificadorFlotaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/mante-operacion/planificador/pages/custom/PlanificadorFlotaPage'
+      ),
+  ),
+);
 
+///* Administracion red ------------
+const AdministracionRedModule = Loadable(
+  lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
+);
+const RoutersPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/router/pages/tables/RoutersPage'),
+  ),
+);
+const CreateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/CreateRouterPage'),
+  ),
+);
+const UpdateRouterPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
+  ),
+);
+const MonitoreosPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/monitoreo/pages/tables/MonitoreosPage'),
+  ),
+);
+const CreateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/CreateMonitoreoPage'
+      ),
+  ),
+);
+const UpdateMonitoreoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/monitoreo/pages/forms/UpdateMonitoreoPage'
+      ),
+  ),
+);
+const TraficosPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/trafico/pages/tables/TraficosPage'),
+  ),
+);
+
+const RadiusPage = Loadable(
+  lazy(() => import('@/app/administracion-red/radius/pages/tables/RadiusPage')),
+);
+const AutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/tables/AutenticacionClientePage'
+      ),
+  ),
+);
+const CreateAutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/forms/CreateAutenticacionClientePage'
+      ),
+  ),
+);
+const UpdateAutenticacionClientePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/autenticacion-cliente/pages/forms/UpdateAutenticacionClientePage'
+      ),
+  ),
+);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -661,7 +703,6 @@ const CreateBodegaPage = Loadable(
 const UpdateBodegaPage = Loadable(
   lazy(() => import('@/app/inventario/bodega/pages/forms/UpdateBodegaPage')),
 );
-
 const ProductosPage = Loadable(
   lazy(() => import('@/app/inventario/producto/pages/tables/ProductosPage')),
 );
@@ -675,7 +716,6 @@ const UpdateProductoPage = Loadable(
     () => import('@/app/inventario/producto/pages/forms/UpdateProductoPage'),
   ),
 );
-
 const CategoriasProductoPage = Loadable(
   lazy(
     () =>
@@ -700,7 +740,6 @@ const UpdateCategoriaProductoPage = Loadable(
       ),
   ),
 );
-
 const UbicacionsPage = Loadable(
   lazy(() => import('@/app/inventario/ubicacion/pages/tables/UbicacionsPage')),
 );
@@ -742,85 +781,13 @@ const UpdateTipoInstalacionPage = Loadable(
   ),
 );
 
-///* Administracion red ------------
-const AdministracionRedModule = Loadable(
-  lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
-);
-const RoutersPage = Loadable(
-  lazy(
-    () => import('@/app/administracion-red/router/pages/tables/RoutersPage'),
-  ),
-);
-const CreateRouterPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/router/pages/forms/CreateRouterPage'),
-  ),
-);
-const UpdateRouterPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/router/pages/forms/UpdateRouterPage'),
-  ),
-);
-
-const MonitoreosPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/monitoreo/pages/tables/MonitoreosPage'),
-  ),
-);
-const CreateMonitoreoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/monitoreo/pages/forms/CreateMonitoreoPage'
-      ),
-  ),
-);
-const UpdateMonitoreoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/monitoreo/pages/forms/UpdateMonitoreoPage'
-      ),
-  ),
-);
-
 ///* Netconnect ------------
-//TipoInstalacion
-const VlansPage = Loadable(
-  lazy(() => import('@/app/netconnect/vlan/pages/tables/VlansPage')),
-);
-const CreateVlanPage = Loadable(
-  lazy(() => import('@/app/netconnect/vlan/pages/forms/CreateVlanPage')),
-);
-const UpdateVlanPage = Loadable(
-  lazy(() => import('@/app/netconnect/vlan/pages/forms/UpdateVlanPage')),
-);
-
 //Autorizacion de ONUs
 const AutorizacionOnusPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/netconnect/autorizacion-onus/pages/tables/AutorizacionOnusPage'
-      ),
-  ),
-);
-const CreateAutorizacionOnusPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/netconnect/autorizacion-onus/pages/forms/CreateAutorizacionOnusPage'
-      ),
-  ),
-);
-const UpdateAutorizacionOnusPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/netconnect/autorizacion-onus/pages/forms/UpdateAutorizacionOnusPage'
       ),
   ),
 );
@@ -842,7 +809,16 @@ const UpdateGestionOnusPage = Loadable(
       import('@/app/netconnect/gestion-onus/pages/forms/UpdateGestionOnusPage'),
   ),
 );
-
+//Vlan
+const VlansPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/tables/VlansPage')),
+);
+const CreateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/CreateVlanPage')),
+);
+const UpdateVlanPage = Loadable(
+  lazy(() => import('@/app/netconnect/vlan/pages/forms/UpdateVlanPage')),
+);
 //Vlan
 const OnusConfiguradasPage = Loadable(
   lazy(
@@ -869,65 +845,6 @@ const UpdateOnusConfiguradaPage = Loadable(
   ),
 );
 
-const TraficosPage = Loadable(
-  lazy(
-    () => import('@/app/administracion-red/trafico/pages/tables/TraficosPage'),
-  ),
-);
-const CreateTraficoPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/trafico/pages/forms/CreateTraficoPage'),
-  ),
-);
-const UpdateTraficoPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/trafico/pages/forms/UpdateTraficoPage'),
-  ),
-);
-
-const RadiusPage = Loadable(
-  lazy(() => import('@/app/administracion-red/radius/pages/tables/RadiusPage')),
-);
-const CreateRadiusPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/radius/pages/forms/CreateRadiusPage'),
-  ),
-);
-const UpdateRadiusPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/administracion-red/radius/pages/forms/UpdateRadiusPage'),
-  ),
-);
-
-const AutenticacionClientePage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/autenticacion-cliente/pages/tables/AutenticacionClientePage'
-      ),
-  ),
-);
-const CreateAutenticacionClientePage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/autenticacion-cliente/pages/forms/CreateAutenticacionClientePage'
-      ),
-  ),
-);
-const UpdateAutenticacionClientePage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/autenticacion-cliente/pages/forms/UpdateAutenticacionClientePage'
-      ),
-  ),
-);
-
 const AppRouter = [
   ////* Auth
   {
@@ -937,7 +854,7 @@ const AppRouter = [
         <AuthLayout />
       </AuthRoutes>
     ),
-    children: [{ path: 'login', element: <Login /> }],
+    children: [{ path: 'login', element: <LoginPage /> }],
   },
   {
     path: '/',
@@ -947,18 +864,16 @@ const AppRouter = [
       </PrivateRoutes>
     ),
     children: [
-      { path: '/', element: <Navigate to="/dashboards/modern" /> },
-      { path: '/dashboards/modern', exact: true, element: <ModernDash /> },
+      {
+        index: true,
+        element: <Home1 />,
+      },
 
-      //Administracion
-      // { path: '/parametrizacion/paises', element: <PaisesPage /> },
-
-      //////////* Administrat`ion ------------
+      //////////* Administration ------------
       {
         path: ROUTER_PATHS.administracion.root,
         element: <AdministrationModule />,
         children: [
-
           ///* pais
           {
             path: ROUTER_PATHS.administracion.pais,
@@ -1068,6 +983,20 @@ const AppRouter = [
             path: ROUTER_PATHS.administracion.canalesVentaEditar,
             element: <UpdateCanalVentaPage />,
           },
+
+          ///* empresa
+          // {
+          //   path: ROUTER_PATHS.administracion.empresas,
+          //   element: <EmpresasPage />,
+          // },
+          // {
+          //   path: ROUTER_PATHS.administracion.empresasCrear,
+          //   element: <CreateEmpresaPage />,
+          // },
+          // {
+          //   path: ROUTER_PATHS.administracion.empresasEditar,
+          //   element: <UpdateEmpresaPage />,
+          // },
 
           ///* entidad financiera
           {
@@ -1614,26 +1543,10 @@ const AppRouter = [
             path: ROUTER_PATHS.administracionRed.traficos,
             element: <TraficosPage />,
           },
-          {
-            path: ROUTER_PATHS.administracionRed.traficosCrear,
-            element: <CreateTraficoPage />,
-          },
-          {
-            path: ROUTER_PATHS.administracionRed.traficosEditar,
-            element: <UpdateTraficoPage />,
-          },
           ///* radius
           {
             path: ROUTER_PATHS.administracionRed.radius,
             element: <RadiusPage />,
-          },
-          {
-            path: ROUTER_PATHS.administracionRed.radiusCrear,
-            element: <CreateRadiusPage />,
-          },
-          {
-            path: ROUTER_PATHS.administracionRed.radiusEditar,
-            element: <UpdateRadiusPage />,
           },
           ///* Autenticacion de Cliente
           {
@@ -1661,14 +1574,7 @@ const AppRouter = [
             path: ROUTER_PATHS.netconnect.autorizacionOnus,
             element: <AutorizacionOnusPage />,
           },
-          {
-            path: ROUTER_PATHS.netconnect.autorizacionOnusCrear,
-            element: <CreateAutorizacionOnusPage />,
-          },
-          {
-            path: ROUTER_PATHS.netconnect.autorizacionOnusEditar,
-            element: <UpdateAutorizacionOnusPage />,
-          },
+
           ///* Gestion de ONUs
           {
             path: ROUTER_PATHS.netconnect.gestionOnus,
@@ -1710,49 +1616,12 @@ const AppRouter = [
           },
         ],
       },
-
     ],
   },
   {
-    path: '/',
-    element: (
-      <BlankLayout />
-    ),
-    children: [
-      { path: '/auth/404', element: <Error /> },
-      { path: '/auth/login', element: <Login /> },
-      { path: '/auth/maintenance', element: <Maintenance /> },
-      { path: '/landingpage', element: <Landingpage /> },
-      { path: '*', element: <Navigate to="/auth/404" /> },
-    ],
+    path: '*',
+    element: <Error404 />,
   },
-  // {
-  //   path: '/',
-  //   element: (
-  //       <PaginaTabs />
-  //   ),
-  // },
-  // {
-  //   path: '/',
-  //   element: (
-  //       <BlankLayout />
-  //   ),
-  //   children: [
-  //     { path: '/auth/404', element: <Error /> },
-  //     { path: '/auth/login', element: <Login /> },
-  //     { path: '/auth/login2', element: <Login2 /> },
-  //     { path: '/auth/register', element: <Register /> },
-  //     { path: '/auth/register2', element: <Register2 /> },
-  //     { path: '/auth/forgot-password', element: <ForgotPassword /> },
-  //     { path: '/auth/forgot-password2', element: <ForgotPassword2 /> },
-  //     { path: '/auth/two-steps', element: <TwoSteps /> },
-  //     { path: '/auth/two-steps2', element: <TwoSteps2 /> },
-  //     { path: '/auth/maintenance', element: <Maintenance /> },
-  //     { path: '/landingpage', element: <Landingpage /> },
-  //     { path: '*', element: <Navigate to="/auth/404" /> },
-  //   ],
-  // },
 ];
 
 export default AppRouter;
-

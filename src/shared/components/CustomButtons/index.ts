@@ -6,3 +6,4 @@ export { default as SingleImageAndBtnCell } from './SingleImageAndBtnCell';
 export { default as UploadImageDropZone } from './UploadImageDropZone';
 export { default as UploadImagePreviewBtn } from './UploadImagePreviewBtn';
 export { default as UploadUpdatedImagePreviewBtn } from './UploadUpdatedImagePreviewBtn';
+export { default as AuthSocialButtons } from './AuthSocialButtons';
