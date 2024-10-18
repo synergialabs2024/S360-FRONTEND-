@@ -24,6 +24,7 @@ import {
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { SAVE_OLT_PERMISSIONS } from '@/shared';
+import { ViewConfiguracionModal, ViewNotificacionModal } from '../custom';
 
 export const returnUrlOLTsPage = ROUTER_PATHS.infraestructura.oltsNav;
 
@@ -152,6 +153,22 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'snmp_port'),
       },
       {
+        accessorKey: 'version',
+        header: 'Version',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'version'),
+      },
+      {
+        accessorKey: 'location',
+        header: 'Location',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'location'),
+      },
+      {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -230,6 +247,21 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         header: 'SECTOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
+      },
+      {
+        accessorKey: 'envio',
+        header: 'ENVIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          return (
+            <>
+              <ViewNotificacionModal listItems={row.original} />
+              <ViewConfiguracionModal listItems={row.original} />
+            </>
+          );
+        },
       },
       {
         accessorKey: 'state',

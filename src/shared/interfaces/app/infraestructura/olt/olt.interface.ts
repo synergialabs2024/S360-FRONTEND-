@@ -16,13 +16,14 @@ export interface OLT {
   name: string;
   direccion: string;
   coordenadas: string;
-  descripcion: string;
+  version: string;
+  location: string;
 
-  puerto: string;
   hostname: string;
-  password: string;
+  puerto: number;
+  descripcion: string;
   user: string;
-
+  password: string;
   snmp_community: string;
   snmp_version: number;
   snmp_port: number;

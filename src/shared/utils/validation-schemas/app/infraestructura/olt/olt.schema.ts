@@ -17,26 +17,34 @@ export const oLTFormSchema = yup.object({
     .string()
     .required('El campo coordenadas es requerido')
     .max(255, 'El campo coordenadas no debe exceder los 255 caracteres'),
-  descripcion: yup
+  version: yup
     .string()
-    .required('El campo descripcion es requerido')
-    .max(700, 'El campo descripcion no debe exceder los 700 caracteres'),
-  puerto: yup
+    .required('El campo version es requerido')
+    .max(70, 'El campo version no debe exceder los 70 caracteres'),
+  location: yup
     .string()
-    .required('El campo puerto es requerido')
-    .max(100, 'El campo puerto no debe exceder los 100 caracteres'),
+    .required('El campo location es requerido')
+    .max(70, 'El campo location no debe exceder los 70 caracteres'),
   hostname: yup
     .string()
     .required('El campo hostname es requerido')
     .max(100, 'El campo hostname no debe exceder los 100 caracteres'),
-  password: yup
+  puerto: yup
+    .number()
+    .typeError('El campo puerto es requerido')
+    .required('El campo puerto es requerido'),
+  descripcion: yup
     .string()
-    .required('El campo password es requerido')
-    .max(100, 'El campo password no debe exceder los 100 caracteres'),
+    .required('El campo descripcion es requerido')
+    .max(700, 'El campo descripcion no debe exceder los 700 caracteres'),
   user: yup
     .string()
     .required('El campo user es requerido')
     .max(255, 'El campo user no debe exceder los 255 caracteres'),
+  password: yup
+    .string()
+    .required('El campo password es requerido')
+    .max(100, 'El campo password no debe exceder los 100 caracteres'),
   snmp_community: yup
     .string()
     .required('El campo snmp_community es requerido')
@@ -50,7 +58,6 @@ export const oLTFormSchema = yup.object({
     .number()
     .typeError('El campo snmp_port es requerido')
     .required('El campo snmp_port es requerido'),
-
   nodo: yup
     .number()
     .typeError('El campo nodo es requerido')

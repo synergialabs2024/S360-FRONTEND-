@@ -327,8 +327,8 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
             });
         }}
       />
-      <CustomTextField
-        label="Puerto"
+      <CustomNumberTextField
+        label="puerto"
         name="puerto"
         control={form.control}
         defaultValue={form.getValues().puerto}
@@ -362,7 +362,7 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         render={({ field: { onChange, value, ...field } }) => (
           <CustomAutocompleteArrString
             {...field}
-            label="Tipo de identificación"
+            label="Version SNMP"
             options={OLT_TYPE_ARRAY_CHOICES}
             defaultValue={value}
             isLoadingData={false}
@@ -385,6 +385,24 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         size={gridSizeMdLg6}
         min={0}
       />
+      <CustomTextField
+        label="version"
+        name="version"
+        control={form.control}
+        defaultValue={form.getValues().version}
+        error={errors.version}
+        helperText={errors.version?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="location"
+        name="location"
+        control={form.control}
+        defaultValue={form.getValues().location}
+        error={errors.location}
+        helperText={errors.location?.message}
+        size={gridSizeMdLg6}
+      />
       <SampleCheckbox
         label="state"
         name="state"
@@ -393,7 +411,6 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         isState
         size={gridSizeMdLg6}
       />
-
       <CustomTextArea
         label="Descripcion"
         name="descripcion"
@@ -402,7 +419,6 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         error={errors.descripcion}
         helperText={errors.descripcion?.message}
       />
-
       <CustomAutocomplete<Pais>
         label="Pais"
         name="pais"
