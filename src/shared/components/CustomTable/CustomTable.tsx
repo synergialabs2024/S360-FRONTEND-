@@ -1,11 +1,9 @@
 /* eslint-disable indent */
 import {
   Box,
-  Button,
   IconButton,
-  Menu,
-  MenuItem,
   Tooltip,
+  TooltipProps,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -13,7 +11,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { MdDelete /* MdEdit */ } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
 // server-side filtering by columns - date type
 import { ColorButtonType } from '@/shared/interfaces';
@@ -82,6 +80,7 @@ export interface CustomTableProps<T> {
   editIcon?: React.ReactNode;
   editIconToolTipTitle?: string;
   editIconColor?: ColorButtonType;
+  editIconTooltipPlacement?: TooltipProps['placement'];
 }
 
 function CustomTable<T>({
@@ -135,20 +134,11 @@ function CustomTable<T>({
   columnFilters,
   columnFilterDisplayMode = enableManualFiltering ? 'subheader' : 'popover',
 
-  // editIcon,
-  // editIconToolTipTitle = 'Editar',
-  // editIconColor,
+  editIcon,
+  editIconToolTipTitle = 'Editar',
+  editIconColor,
+  editIconTooltipPlacement = 'bottom',
 }: CustomTableProps<T>) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const theme = useTheme();
 
   ///* defining table
@@ -218,41 +208,20 @@ function CustomTable<T>({
         onEdit &&
         onConditionEdit &&
         onConditionEdit(row.original as T) ? (
-          <>
-            <Button
-              id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-              color="primary"
-              variant="outlined"
-            >
-              Acciones
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
+          <Tooltip
+            title={editIconToolTipTitle}
+            placement={editIconTooltipPlacement}
+          >
+            <IconButton
+              onClick={() => {
+                onEdit(row.original as T);
               }}
+              color={editIconColor}
             >
-              <MenuItem
-                onClick={() => {
-                  onEdit(row.original as T);
-                  setAnchorEl(null);
-                }}
-              >
-                Editar
-              </MenuItem>
-            </Menu>
-          </>
-        ) : /* 
-          <Chip label="Acciones" color="primary" size="small" variant='outlined'/>
-           */
-        null}
+              {editIcon || <MdEdit />}
+            </IconButton>
+          </Tooltip>
+        ) : null}
 
         {canDelete &&
         onConditionDelete &&
@@ -269,11 +238,11 @@ function CustomTable<T>({
         ) : null}
 
         {/* {showOneCustomButton &&
-          oneCustomButton &&
-          onConditionCustomButton &&
-          onConditionCustomButton(row.original as T)
-            ? oneCustomButton(row.original as T)
-            : null} */}
+        oneCustomButton &&
+        onConditionCustomButton &&
+        onConditionCustomButton(row.original as T)
+          ? oneCustomButton(row.original as T)
+          : null} */}
       </Box>
     ),
 
