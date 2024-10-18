@@ -7,22 +7,22 @@ import {
   Divider,
   Box,
   List,
-  ListItemText,
   Typography,
   TextField,
-  ListItemButton,
+  useMediaQuery,
 } from '@mui/material';
 import { IconSearch, IconX } from '@tabler/icons-react';
-import Menuitems from '../sidebar/MenuItems';
-import { Link } from 'react-router-dom';
+import { useNestedMenu } from '../sidebar/useNestedMenuItems';
+import { CustomSearch } from '@/shared/components';
+import { AppState, useSelector } from '@/store/Store';
+import NavGroup from '../sidebar/components/NavGroup';
 
-interface menuType {
-  title: string;
-  id: string;
-  subheader: string;
-  children: menuType[];
-  href: string;
-}
+const normalizeText = (text: string) => {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+};
 
 const Search = () => {
   // drawer top
@@ -33,17 +33,60 @@ const Search = () => {
     setShowDrawer2(false);
   };
 
-  const filterRoutes = (rotr: any, cSearch: string) => {
-    if (rotr.length > 1)
-      return rotr.filter((t: any) =>
-        t.title
-          ? t.href.toLocaleLowerCase().includes(cSearch.toLocaleLowerCase())
-          : '',
-      );
+  const { menuItems } = useNestedMenu();
+  const customizer = useSelector((state: AppState) => state.customizer);
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
+  const hideMenu: any = lgUp
+    ? customizer.isCollapse && !customizer.isSidebarHover
+    : '';
 
-    return rotr;
-  };
-  const searchData = filterRoutes(Menuitems, search);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredItems = menuItems
+    .map(item => {
+      if (searchTerm === '') {
+        return item;
+      }
+      if (item.type === 'group' && item.children) {
+        const filteredChildren = item.children
+          .map(child => {
+            if (child.children) {
+              const nestedFiltered = child.children.filter(nestedChild =>
+                normalizeText(nestedChild.title).includes(
+                  normalizeText(searchTerm),
+                ),
+              );
+              if (nestedFiltered.length > 0) {
+                return {
+                  ...child,
+                  children: nestedFiltered,
+                };
+              }
+            }
+            return null;
+          })
+          .filter(child => child !== null);
+        if (filteredChildren.length > 0) {
+          return {
+            ...item,
+            children: filteredChildren,
+          };
+        }
+      }
+      return null;
+    })
+    .filter(item => item !== null);
+
+  const navItems = filteredItems.map(item => {
+    if (item && item.type === 'group') {
+      return <NavGroup key={item.id} item={item as any} hideMenu={hideMenu} />;
+    }
+    return (
+      <Typography key={item?.id} variant="h6" color="error" align="center">
+        Menu Items Error
+      </Typography>
+    );
+  });
 
   return (
     <>
@@ -67,72 +110,35 @@ const Search = () => {
         PaperProps={{ sx: { position: 'fixed', top: 30, m: 0 } }}
       >
         <DialogContent className="testdialog">
-          <Stack direction="row" spacing={2} alignItems="center">
-            <TextField
-              id="tb-search"
-              placeholder="Search here"
-              fullWidth
-              onChange={e => setSerach(e.target.value)}
-              inputProps={{ 'aria-label': 'Search here' }}
+          <Box p={2} sx={{ maxHeight: '60vh', overflow: 'auto' }}>
+            <CustomSearch
+              onChange={e => setSearchTerm(e)}
+              value={searchTerm}
+              text="modulos"
+              hideMenu={hideMenu}
             />
-            <IconButton size="small" onClick={handleDrawerClose2}>
-              <IconX size="18" />
-            </IconButton>
-          </Stack>
-        </DialogContent>
-        <Divider />
-        <Box p={2} sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-          <Typography variant="h5" p={1}>
-            Quick Page Links
-          </Typography>
-          <Box>
-            <List component="nav">
-              {searchData.map((menu: menuType) => {
-                return (
-                  <Box key={menu.title ? menu.id : menu.subheader}>
-                    {menu.title && !menu.children ? (
-                      <ListItemButton
-                        sx={{ py: 0.5, px: 1 }}
-                        to={menu?.href}
-                        component={Link}
-                      >
-                        <ListItemText
-                          primary={menu.title}
-                          secondary={menu?.href}
-                          sx={{ my: 0, py: 0.5 }}
-                        />
-                      </ListItemButton>
-                    ) : (
-                      ''
-                    )}
-                    {menu.children ? (
-                      <>
-                        {menu.children.map((child: menuType) => {
-                          return (
-                            <ListItemButton
-                              sx={{ py: 0.5, px: 1 }}
-                              to={child.href}
-                              component={Link}
-                              key={child.title ? child.id : menu.subheader}
-                            >
-                              <ListItemText
-                                primary={child.title}
-                                secondary={child.href}
-                                sx={{ my: 0, py: 0.5 }}
-                              />
-                            </ListItemButton>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      ''
-                    )}
-                  </Box>
-                );
-              })}
+            <List sx={{ pt: 0 }} className="sidebarNav">
+              {navItems.length > 0 ? (
+                navItems
+              ) : (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  height="60vh"
+                >
+                  <Typography variant="h6" color="textSecondary" align="center">
+                    <iframe
+                      src="https://lottie.host/embed/9d2ca7c4-7c34-48f7-91d2-e16d3416dad4/hY1PUviu39.json"
+                      style={{ border: 'none' }}
+                    ></iframe>
+                    Módulo no encontrado
+                  </Typography>
+                </Box>
+              )}
             </List>
           </Box>
-        </Box>
+        </DialogContent>
       </Dialog>
     </>
   );
