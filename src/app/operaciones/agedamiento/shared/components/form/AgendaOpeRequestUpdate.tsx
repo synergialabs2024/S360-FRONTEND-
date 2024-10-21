@@ -10,6 +10,7 @@ import {
 import { useGenericPATCH } from '@/actions/shared';
 import {
   Agendamiento,
+  EstadoAgendamientoEnumChoice,
   MotivoActualizacion,
   MotivoActualizacionModuloEnumChoice,
   updAgendamientoOpSchema,
@@ -37,6 +38,9 @@ const AgendaOpeRequestUpdate: React.FC<AgendaOpeRequestUpdateProps> = ({
   ///* form ------------------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(updAgendamientoOpSchema) as any,
+    defaultValues: {
+      estado_agendamiento: EstadoAgendamientoEnumChoice.ACTUALIZACION_PENDIENTE,
+    },
   });
   const { errors } = form.formState;
 

@@ -1,4 +1,7 @@
-import { EstadoLlamadaEnumChoice } from '@/shared/constants';
+import {
+  EstadoAgendamientoEnumChoice,
+  EstadoLlamadaEnumChoice,
+} from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
 import { Preventa, SolicitudServicio } from '../../comercial';
@@ -22,7 +25,7 @@ export interface Agendamiento {
   created_at?: string;
   modified_at?: string;
 
-  estado_agendamiento: string;
+  estado_agendamiento: EstadoAgendamientoEnumChoice;
 
   fecha_instalacion: string;
   hora_instalacion: string;

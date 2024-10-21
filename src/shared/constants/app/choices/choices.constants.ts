@@ -384,10 +384,12 @@ export enum BucketKeyNameEnumChoice {
 // // Agendamiento ==========================================
 export enum EstadoAgendamientoEnumChoice {
   ESPERA = 'ESPERA', // abre soporte tecnico para llamar
+
   APROBADO = 'APROBADO', // x pyl?
+  ACTUALIZACION_PENDIENTE = 'ACTUALIZACION PENDIENTE', // x pyl
+  FINALIZADO = 'FINALIZADO', // x pyl
 
   RECHAZADO = 'RECHAZADO',
-  FINALIZADO = 'FINALIZADO',
 
   PENDIENTE_PAGO = 'PENDIENTE_PAGO',
   PAUSADO = 'PAUSADO',
