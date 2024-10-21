@@ -1,4 +1,4 @@
-import { FlotaLimitData } from '@/shared';
+import { Agendamiento, FlotaLimitData } from '@/shared';
 
 ///* CACHE - Install schedule --------------------
 export type InstallScheduleCacheData = {
@@ -23,3 +23,9 @@ export enum CacheBaseKeysPreventaEnum {
 }
 
 export const COUNTDOWN_AGENDA_VENTAS_ID = 'agendamientoVentasCountdown';
+
+///* form --------------------
+export type RequestUpdateAgendamientoOpe = Pick<
+  Agendamiento,
+  'estado_agendamiento' | 'motivo_actualizacion' | 'observacion_actualizacion'
+> & {};

@@ -107,6 +107,8 @@ export type StepperBoxSceneProps = {
   py?: number;
 
   maxWidth?: MaxWidthType;
+
+  customSpaceButton?: React.ReactNode;
 };
 
 const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
@@ -129,6 +131,8 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
   titleNode,
 
   maxWidth = 'lg',
+
+  customSpaceButton = null,
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -207,6 +211,8 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
                   >
                     Cancelar
                   </Button>
+
+                  {customSpaceButton ? customSpaceButton : null}
 
                   <span className="spacer"></span>
 

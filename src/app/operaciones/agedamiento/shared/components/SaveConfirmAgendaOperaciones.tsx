@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,10 +14,15 @@ import {
   SolicitudServicio,
   ToastWrapper,
 } from '@/shared';
-import { StepperBoxScene, useCustomStepper } from '@/shared/components';
+import {
+  CustomSingleButton,
+  StepperBoxScene,
+  useCustomStepper,
+} from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import { returnUrlAgendamientoOperacionesPage } from '../../pages/tables/AgendamientosMainPage';
 import {
+  AgendaOpeRequestUpdate,
   GeneralDataConfirmAgendaStep,
   ServiceCoordinationConfirmAgendaStep,
 } from './form';
@@ -45,6 +50,9 @@ const SaveConfirmAgendaOperaciones: React.FC<
 > = ({ agendamiento, title }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
+
+  ///* local state ---------------------
+  const [openModalUpd, setOpenModalUpd] = useState<boolean>(false);
 
   // stepper
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -119,6 +127,17 @@ const SaveConfirmAgendaOperaciones: React.FC<
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
+      // custom buttons
+      customSpaceButton={
+        <>
+          <CustomSingleButton
+            label="Solicitar actualización"
+            variant="text"
+            color="warning"
+            onClick={() => setOpenModalUpd(true)}
+          />
+        </>
+      }
     >
       {/* ========================= Datos Generales ========================= */}
       {activeStep === 0 && (
@@ -135,6 +154,13 @@ const SaveConfirmAgendaOperaciones: React.FC<
           agendamiento={agendamiento!}
         />
       )}
+
+      {/* =============== modals =============== */}
+      <AgendaOpeRequestUpdate
+        open={openModalUpd}
+        onClose={() => setOpenModalUpd(false)}
+        agendamiento={agendamiento!}
+      />
     </StepperBoxScene>
   );
 };

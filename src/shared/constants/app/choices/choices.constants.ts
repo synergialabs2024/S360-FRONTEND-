@@ -342,6 +342,9 @@ export enum InventarioEnumUUID {
   CATEGORIA_PRODUCTO_EQUIPOS = '6ced3805-393c-419c-bd77-f785bf1ec4ac',
   CATEGORIA_PRODUCTO_MATERIALES = '36af6681-eb5d-4a05-ada4-0f3cc3c568cb',
 }
+export enum enumAdministracionParamsUUID {
+  MOTIVO_UPD__NO_CONTESTA = 'c3bf752f-d1ee-4023-91b3-55ec4f56980b',
+}
 
 // // Bucket ==============================================
 const { VITE_MINIO_BUCKET_NAME } = getEnvs();

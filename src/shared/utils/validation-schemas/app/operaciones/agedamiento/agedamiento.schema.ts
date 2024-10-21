@@ -68,3 +68,27 @@ export const agendamientoOperacionesConfirmFormSchema = yup.object({
     .string()
     .required('El campo celular referencia es requerido'),
 });
+
+export const updAgendamientoOpSchema = yup.object({
+  estado_agendamiento: yup
+    .string()
+    .required('El campo estado agendamiento es requerido')
+    .max(
+      200,
+      'El campo estado agendamiento no debe exceder los 200 caracteres',
+    ),
+  motivo_actualizacion: yup
+    .string()
+    .required('El campo motivo actualizacion es requerido')
+    .max(
+      200,
+      'El campo motivo actualizacion no debe exceder los 200 caracteres',
+    ),
+  observacion_actualizacion: yup
+    .string()
+    .required('El campo observacion actualizacion es requerido')
+    .max(
+      200,
+      'El campo observacion actualizacion no debe exceder los 200 caracteres',
+    ),
+});

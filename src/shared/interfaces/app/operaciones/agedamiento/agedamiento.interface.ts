@@ -55,6 +55,9 @@ export interface Agendamiento {
   canal_venta?: number;
   vendedor?: number;
 
+  motivo_actualizacion?: number;
+  observacion_actualizacion?: string; // string
+
   solicitud_servicio_data?: SolicitudServicio;
   preventa_data?: Preventa;
   vendedor_data?: SystemUserLimitData;

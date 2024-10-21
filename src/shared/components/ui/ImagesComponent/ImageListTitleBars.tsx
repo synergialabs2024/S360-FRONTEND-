@@ -8,6 +8,7 @@ import {
   Modal,
   styled,
   Tooltip,
+  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import { FiZoomIn } from 'react-icons/fi';
@@ -54,7 +55,7 @@ const ZoomIcon = styled(FiZoomIn)(({ theme }) => ({
   bottom: theme.spacing(2),
   color: theme.palette.common.white,
   fontSize: '2rem',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: theme.palette.primary.main,
   borderRadius: '50%',
   padding: theme.spacing(1),
 }));
@@ -71,6 +72,7 @@ export interface ImageListTitleBarsProps {
 
 const ImageListTitleBars: React.FC<ImageListTitleBarsProps> = ({ images }) => {
   const isMobile = useIsMediaQuery('sm');
+  const theme = useTheme();
 
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
@@ -103,7 +105,7 @@ const ImageListTitleBars: React.FC<ImageListTitleBarsProps> = ({ images }) => {
                 title={item.title.toUpperCase()}
                 position="bottom"
                 sx={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.57)',
+                  backgroundColor: `rgba(${theme.palette.primary.main}, 0.5)`,
                   fontWeight: 'bold',
                 }}
               />

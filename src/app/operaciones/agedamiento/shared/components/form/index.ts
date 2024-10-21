@@ -3,4 +3,5 @@ export { default as LocationZonePolygonFormPart } from './LocationZonePolygonFor
 export { default as ScheduleInstallAgendaOpe } from './planificador-step/ScheduleInstallAgendaOpe';
 export { default as ServiceCoordinationConfirmAgendaStep } from './ServiceCoordinationConfirmAgendaStep';
 
+export { default as AgendaOpeRequestUpdate } from './AgendaOpeRequestUpdate';
 export { default as AgendaDocsOperaciones } from './docs-step/AgendaDocsOperaciones';
