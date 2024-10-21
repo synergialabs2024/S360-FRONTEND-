@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   Grid,
   Stack,
   Step,
@@ -21,6 +20,8 @@ import {
   MaxWidthType,
   useIsMediaQuery,
 } from '@/shared';
+import ParentCard from '../ParentCard';
+import React from 'react';
 
 ///* custom styles for stepper
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -126,52 +127,37 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
   size = gridSizeMdLg8,
 
   children,
-  py = 8,
+  py = 4,
 
   titleNode,
 
-  maxWidth = 'lg',
+  // maxWidth = 'lg',
 
   customSpaceButton = null,
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
+  // Asegúrate de que el title sea siempre un string o JSX.Element
+  const cardTitle: string | JSX.Element =
+    typeof titleNode === 'string' || React.isValidElement(titleNode) ? (
+      titleNode
+    ) : titlePage ? (
+      <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
+        {titlePage}
+      </Typography>
+    ) : (
+      <span />
+    );
+
   return (
-    <>
-      <Box
-        sx={{
-          flexGrow: 1,
-          pt: 2,
-
-          backgroundColor: '#fff',
-          borderRadius: '12px',
-        }}
-      >
-        <Container maxWidth={maxWidth}>
-          <Stack>
-            {titleNode ? (
-              titleNode
-            ) : (
-              <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
-                {titlePage}
-              </Typography>
-            )}
-          </Stack>
-        </Container>
-      </Box>
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: py,
-
-          mt: 3,
-          backgroundColor: '#fff',
-          borderRadius: '12px',
-        }}
-      >
-        <Container maxWidth={maxWidth}>
+    <ParentCard title={cardTitle}>
+      <>
+        <Box
+          component="main"
+          sx={{
+            py: py,
+          }}
+        >
           <Stack spacing={2}>
             {/* ================ main conent ================ */}
             <Grid container justifyContent="center" alignItems="center">
@@ -239,9 +225,9 @@ const StepperBoxScene: React.FC<StepperBoxSceneProps> = ({
               </Grid>
             </Grid>
           </Stack>
-        </Container>
-      </Box>
-    </>
+        </Box>
+      </>
+    </ParentCard>
   );
 };
 
