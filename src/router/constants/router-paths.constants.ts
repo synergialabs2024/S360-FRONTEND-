@@ -122,6 +122,12 @@ export const ROUTER_PATHS = {
     codigosOtp: 'codigos-otp',
     codigosOtpNav: '/parametrizacion/codigos-otp',
 
+    ///* motivos rechazo
+    motivosRechazo: 'motivos-rechazo',
+    motivosRechazoCrear: 'motivos-rechazo/crear',
+    motivosRechazoEditar: 'motivos-rechazo/editar/:uuid',
+    motivosRechazoNav: '/parametrizacion/motivos-rechazo',
+
     // // =================================
     ///* usuarios
     usuarios: 'usuarios',
@@ -347,6 +353,18 @@ export const ROUTER_PATHS = {
     traficosCrear: 'traficos/crear',
     traficosEditar: 'traficos/editar/:uuid',
     traficosNav: '/administracion-red/traficos',
+
+    ///* Grupo IPv4
+    gruposIPv4: 'redes-ipv4',
+    gruposIPv4Crear: 'redes-ipv4/crear',
+    gruposIPv4Editar: 'redes-ipv4/editar/:uuid',
+    gruposIPv4Nav: '/administracion-red/redes-ipv4',
+
+    ///* Grupo IPv6
+    gruposIPv6: 'redes-ipv6',
+    gruposIPv6Crear: 'redes-ipv6/crear',
+    gruposIPv6Editar: 'redes-ipv6/editar/:uuid',
+    gruposIPv6Nav: '/administracion-red/redes-ipv6',
   },
   // // INVENTARIO =================================
   inventario: {

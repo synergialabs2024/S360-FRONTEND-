@@ -48,6 +48,10 @@ export interface SolicitudServicio {
   created_at?: string;
   modified_at?: string;
 
+  // fallido
+  motivo_rechazo?: number; // fk
+  observacion_cancelacion?: string;
+
   ///* fk -----------
   pais?: number;
   nacionalidad?: string; // pais can upd

@@ -411,3 +411,8 @@ export const useValidateOtpCode = ({
 export type RequestUnlockOtpCodeParams = {
   estado_otp: OtpStatesEnumChoice;
 };
+
+export type CancelSolServiceData = Pick<
+  SolicitudServicio,
+  'motivo_rechazo' | 'observacion_cancelacion'
+>;

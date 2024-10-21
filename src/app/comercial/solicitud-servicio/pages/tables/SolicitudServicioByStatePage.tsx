@@ -16,6 +16,7 @@ import {
   useTableServerSideFiltering,
 } from '@/shared/hooks';
 import { SolicitudServicio } from '@/shared/interfaces';
+import { EsperaSolServiceCellButtons } from '../../shared/components';
 
 export type SolicitudServicioByStatePageProps = {
   state: string;
@@ -72,8 +73,11 @@ const SolicitudServicioByStatePage: React.FC<
   };
 
   ///* columns
-  const { solicitudServicioBase, solicitudServicioWithoutGestion } =
-    useColumnsSolicitusService();
+  const {
+    solicitudServicioBase,
+    solicitudServicioWithoutGestion,
+    solicitudServicioFallidas,
+  } = useColumnsSolicitusService();
 
   return (
     <GridTableTabsContainerOnly>
@@ -91,9 +95,11 @@ const SolicitudServicioByStatePage: React.FC<
           // solicitudServicioBase
           state === EstadoSolicitudServicioEnumChoice.INGRESADO
             ? solicitudServicioBase
-            : state === EstadoSolicitudServicioEnumChoice.SIN_GESTION
-              ? solicitudServicioWithoutGestion
-              : solicitudServicioBase
+            : state === EstadoSolicitudServicioEnumChoice.CANCELADO
+              ? solicitudServicioFallidas
+              : state === EstadoSolicitudServicioEnumChoice.SIN_GESTION
+                ? solicitudServicioWithoutGestion
+                : solicitudServicioBase
         }
         data={SolicitudsServicioPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -117,6 +123,10 @@ const SolicitudServicioByStatePage: React.FC<
         editIcon={<HiDocumentPlus />}
         editIconToolTipTitle="Crear preventa"
         canDelete={false}
+        showCustomButtonsSpaceEnd={calcEnableActionsColumn()}
+        customButtonsSpaceEnd={(solService: SolicitudServicio) => {
+          return <EsperaSolServiceCellButtons solService={solService} />;
+        }}
       />
     </GridTableTabsContainerOnly>
   );

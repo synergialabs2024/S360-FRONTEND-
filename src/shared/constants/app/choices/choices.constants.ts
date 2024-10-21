@@ -55,6 +55,15 @@ export const INTERNET_UNIT_VELOCITY_ARRAY_CHOICES = [
   InternetUnitVelocityEnumChoice.GB,
 ];
 
+export enum IpUsesTypeEnumChoice {
+  ESTATICO = 'ESTATICO',
+  DINAMICO = 'DINAMICO',
+}
+export const IP_USES_TYPE_ARRAY_CHOICES = [
+  IpUsesTypeEnumChoice.ESTATICO,
+  IpUsesTypeEnumChoice.DINAMICO,
+];
+
 export enum InternetPermanenceEnumChoice {
   DOCE_FACTURAS = '12 FACTURAS',
   VEINTICUATRO_FACTURAS = '24 FACTURAS',
@@ -120,6 +129,17 @@ export const EMPLOYEE_TYPE_ARRAY_CHOICES = [
   EmployeeTypeEnumChoice.EVENTUAL,
   EmployeeTypeEnumChoice.PASANTE,
   EmployeeTypeEnumChoice.OTRO,
+];
+
+export enum MotivoRechazoModuloEnumChoice {
+  SOLICITUD_SERVICIO = 'SOLICITUD DE SERVICIO',
+  PREVENTA = 'PREVENTA',
+  GENERICO = 'GENERICO',
+}
+export const MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES = [
+  MotivoRechazoModuloEnumChoice.SOLICITUD_SERVICIO,
+  MotivoRechazoModuloEnumChoice.PREVENTA,
+  MotivoRechazoModuloEnumChoice.GENERICO,
 ];
 
 export enum SystemParameterBooleanTypeEnumChoice {
@@ -231,8 +251,10 @@ export enum EstadoSolicitudServicioEnumChoice {
   INGRESADO = 'INGRESADO',
   GESTIONANDO = 'GESTIONANDO',
   RECHAZADO = 'RECHAZADO',
+  CANCELADO = 'CANCELADO', // cancela el vendedor x cliente
 
   SIN_GESTION = 'SIN_GESTION', // unblock sale approved
+  FINALIZADO = 'FINALIZADO',
 
   ESPERA_DESBLOQUEO = 'ESPERA_DESBLOQUEO',
   DESBLOQUEADO = 'DESBLOQUEADO',
@@ -251,6 +273,7 @@ export enum EstadoPreventaEnumChoice {
   ESPERA = 'ESPERA',
   REALIZADO = 'REALIZADO',
   RECHAZADO = 'RECHAZADO',
+  FALLIDO = 'CANCELADO', // cancela el vendedor x cliente
 
   SIN_GESTION = 'SIN_GESTION', // unblock sale approved
 }
@@ -292,6 +315,7 @@ export enum SalesStatesActionsEnumChoice {
   SOLICITUD_DESBLOQUEO_ESPERA = 'SOLICITUD_DESBLOQUEO_ESPERA', // CREADA
   SOLICITUD_DESBLOQUEO_APROBADO = 'SOLICITUD_DESBLOQUEO_APROBADO',
   SOLICITUD_DESBLOQUEO_RECHAZADO = 'SOLICITUD_DESBLOQUEO_RECHAZADO',
+  SOLICITUD_SERVICIO__CANCELADO = 'SOLICITUD_SERVICIO__CANCELADO',
 
   // // PREVENTA =======================================
   PREVENTA_SOLICITUD_DESBLOQUEO_ESPERA = 'PREVENTA__SOLICITUD_DESBLOQUEO_ESPERA', // CREADA

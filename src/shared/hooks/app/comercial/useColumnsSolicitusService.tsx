@@ -23,7 +23,6 @@ type UseColumnsSolicitusServiceProps = {
 type MRTSServiceType = { row: MRT_Row<SolicitudServicio> };
 
 export const useColumnsSolicitusService = (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _props?: UseColumnsSolicitusServiceProps,
 ) => {
   const isSalesman =
@@ -166,86 +165,6 @@ export const useColumnsSolicitusService = (
         Cell: ({ row }: MRTSServiceType) =>
           formatBooleanCell(row, 'tiene_cobertura'),
       },
-      {
-        accessorKey: 'linea_servicio',
-        header: 'LINEA SERVICIO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) =>
-          emptyCellOneLevel(row, 'linea_servicio'),
-      },
-
-      ...(isSalesman
-        ? []
-        : [
-            {
-              accessorKey: 'detalle_servicios_contratados',
-              header: 'DETALLE SERVICIOS CONTRATADOS',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'detalle_servicios_contratados'),
-            },
-
-            // EQUIFAX ------------
-            {
-              accessorKey: 'score_inclusion',
-              header: 'SCORE INCLUSION',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'score_inclusion'),
-            },
-            {
-              accessorKey: 'score_sobreendeudamiento',
-              header: 'SCORE SOBREENDEUDAMIENTO',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'score_sobreendeudamiento'),
-            },
-            {
-              accessorKey: 'score_servicios',
-              header: 'SCORE SERVICIOS',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'score_servicios'),
-            },
-            {
-              accessorKey: 'rango_capacidad_pago',
-              header: 'RANGO CAPACIDAD PAGO',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'rango_capacidad_pago'),
-            },
-
-            {
-              accessorKey: 'valor_maximo',
-              header: 'VALOR MAXIMO',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'valor_maximo'),
-            },
-            {
-              accessorKey: 'valor_minimo',
-              header: 'VALOR MINIMO',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'valor_minimo'),
-            },
-          ]),
     ],
     [isSalesman],
   );
@@ -355,5 +274,48 @@ export const useColumnsSolicitusService = (
     [solServiceCreatedAt, solServiceTrazoSinGestion, solicitudServicioBase01],
   );
 
-  return { solicitudServicioBase, solicitudServicioWithoutGestion };
+  const solicitudServicioFallidas = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
+    () => [
+      ...solicitudServicioBase01,
+      ...solServiceCreatedAt,
+      {
+        accessorKey: 'razon_social__cancela_sol_serv',
+        header: 'CANCELADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__CANCELADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_cancelado',
+        header: 'FECHA CANCELADO',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__CANCELADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
+      },
+    ],
+    [solServiceCreatedAt, solicitudServicioBase01],
+  );
+
+  return {
+    solicitudServicioBase,
+    solicitudServicioWithoutGestion,
+    solicitudServicioFallidas,
+  };
 };

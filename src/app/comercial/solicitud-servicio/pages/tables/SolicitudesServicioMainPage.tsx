@@ -38,8 +38,9 @@ const SolicitudesServicioMainPage: React.FC<
         isMainTableStates
       >
         <Tab label={'INGRESADAS'} value={1} {...a11yProps(1)} />
-        {/* <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} /> */}
+        <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
 
+        <Tab label={'FALLIDAS'} value={5} {...a11yProps(5)} />
         <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
 
         {/* desbloqueadas para crear un nuevo proceso desde sol_service: */}
@@ -62,6 +63,12 @@ const SolicitudesServicioMainPage: React.FC<
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <SolicitudServicioByStatePage
           state={EstadoSolicitudServicioEnumChoice.RECHAZADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.CANCELADO}
         />
       </CustomTabPanel>
 

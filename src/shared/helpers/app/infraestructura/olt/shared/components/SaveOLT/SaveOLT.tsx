@@ -281,7 +281,7 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
       onSave={handleSubmit(onSave, () => {})}
     >
       <CustomTextField
-        label="Name"
+        label="Nombre"
         name="name"
         control={form.control}
         defaultValue={form.getValues().name}

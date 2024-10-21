@@ -285,7 +285,7 @@ const SaveRouter: React.FC<SaveRouterProps> = ({ title, router }) => {
       onSave={handleSubmit(onSave, () => {})}
     >
       <CustomTextField
-        label="Name"
+        label="Nombre"
         name="name"
         control={form.control}
         defaultValue={form.getValues().name}

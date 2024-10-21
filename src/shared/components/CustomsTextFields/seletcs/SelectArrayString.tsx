@@ -20,6 +20,7 @@ export interface SelectArrayStringProps {
   clearable?: boolean;
 
   control: any; // Agregar control como prop requerido
+  required?: boolean;
 }
 
 const SelectArrayString: React.FC<SelectArrayStringProps> = ({
@@ -33,6 +34,7 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
   disabled = false,
   clearable = false,
   control,
+  required = true,
 }) => {
   // Establecer el primer valor de opciones como valor por defecto
   const defaultSelection = defaultValue || options[0];
@@ -57,19 +59,20 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
                     mt: 0,
                   }}
                   htmlFor={label}
+                  required={required}
                 >
                   {label}
                 </CustomFormLabel>
                 <TextField
                   key={textFieldKey || defaultValue || ''}
                   select
-                  label={label}
                   variant="outlined"
                   fullWidth
                   {...field}
                   value={field.value || defaultSelection}
                   onChange={onChange}
                   inputProps={{ readOnly: disabled }}
+                  required={required}
                   sx={{
                     ...(disabled && {
                       background: 'rgba(0, 0, 0, 0.04)',

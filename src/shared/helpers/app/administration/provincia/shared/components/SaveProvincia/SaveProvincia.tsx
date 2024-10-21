@@ -98,7 +98,7 @@ const SaveProvincia: React.FC<SaveProvinciaProps> = ({ title, provincia }) => {
       onSave={handleSubmit(onSave, () => {})}
     >
       <CustomTextField
-        label="Name"
+        label="Nombre"
         name="name"
         control={form.control}
         defaultValue={form.getValues().name}
