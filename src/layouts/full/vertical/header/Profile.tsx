@@ -1,6 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+ 
 // @ts-ignore
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -31,6 +31,8 @@ const Profile = () => {
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
+
+  const user = useAuthStore(s => s.user);
 
   return (
     <Box>
@@ -74,7 +76,7 @@ const Profile = () => {
           },
         }}
       >
-        <Typography variant="h5">User Profile</Typography>
+        <Typography variant="h5">Perfil de usuario</Typography>
         <Stack direction="row" py={3} spacing={2} alignItems="center">
           <Avatar
             src={ProfileImg}
@@ -87,10 +89,10 @@ const Profile = () => {
               color="textPrimary"
               fontWeight={600}
             >
-              Mathew Anderson
+              {user?.username}
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
-              Designer
+              {user?.role}
             </Typography>
             <Typography
               variant="subtitle2"
@@ -100,7 +102,7 @@ const Profile = () => {
               gap={1}
             >
               <IconMail width={15} height={15} />
-              info@modernize.com
+              {user?.email}
             </Typography>
           </Box>
         </Stack>
