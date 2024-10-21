@@ -302,7 +302,7 @@ export const usePlanificadorAgendamiento = ({
         setCachedData(null);
         setIsComponentBlocked(false);
         setSelectedHour('');
-        setEdittingSchedule(false); // agenda pyl
+        // setEdittingSchedule(false); // agenda pyl
       }
 
       // Calculamos las horas disponibles utilizando la función helper

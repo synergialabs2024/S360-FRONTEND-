@@ -56,6 +56,7 @@
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.6",
     "react-window": "^1.8.10",
+    "react-zoom-pan-pinch": "^3.6.1",
     "redux": "^5.0.1",
     "simplebar": "^6.2.7",
     "simplebar-react": "^3.2.6",

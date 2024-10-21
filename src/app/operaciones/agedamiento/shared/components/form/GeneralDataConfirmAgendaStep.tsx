@@ -171,6 +171,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
                 form.setValue('distancia_nap', nap?.distance as any);
                 form.setValue('puerto_nap', '' as any);
               }}
+              disabled
             />
             <CustomTextField
               label="Distancia NAP"

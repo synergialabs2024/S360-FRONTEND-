@@ -56,7 +56,6 @@ export interface Preventa {
   url_foto_cedula_trasera: string;
   url_foto_documento_cuenta?: string;
   url_foto_vivienda: string;
-  // url_foto_planilla?: string; // unlock req is available
 
   // // factibilidad ------
   flota?: number; // fk
