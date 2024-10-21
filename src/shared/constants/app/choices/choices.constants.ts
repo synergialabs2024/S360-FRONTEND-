@@ -144,11 +144,13 @@ export const MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES = [
 export enum MotivoActualizacionModuloEnumChoice {
   SOLICITUD_SERVICIO = 'SOLICITUD DE SERVICIO',
   PREVENTA = 'PREVENTA',
+  AGENDAMIENTO = 'AGENDAMIENTO',
   GENERICO = 'GENERICO',
 }
 export const MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES = [
   MotivoActualizacionModuloEnumChoice.SOLICITUD_SERVICIO,
   MotivoActualizacionModuloEnumChoice.PREVENTA,
+  MotivoActualizacionModuloEnumChoice.AGENDAMIENTO,
   MotivoActualizacionModuloEnumChoice.GENERICO,
 ];
 

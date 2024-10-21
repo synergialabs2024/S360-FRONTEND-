@@ -1,14 +1,25 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
 import {
   AgendamientoTSQEnum,
   RequestUpdateAgendamientoOpe,
+  useFetchMotivoActualizacions,
 } from '@/actions/app';
 import { useGenericPATCH } from '@/actions/shared';
-import { Agendamiento, updAgendamientoOpSchema } from '@/shared';
-import { ScrollableDialogProps } from '@/shared/components';
+import {
+  Agendamiento,
+  MotivoActualizacion,
+  MotivoActualizacionModuloEnumChoice,
+  updAgendamientoOpSchema,
+  useLoaders,
+} from '@/shared';
+import {
+  CustomAutocomplete,
+  CustomTextArea,
+  ScrollableDialogProps,
+} from '@/shared/components';
 
 export type AgendaOpeRequestUpdateProps = {
   open: boolean;
@@ -27,8 +38,21 @@ const AgendaOpeRequestUpdate: React.FC<AgendaOpeRequestUpdateProps> = ({
   const form = useForm<SaveFormData>({
     resolver: yupResolver(updAgendamientoOpSchema) as any,
   });
+  const { errors } = form.formState;
 
   ///* fetch data ------------------------
+  const {
+    data: motivosActualizacionPagingRes,
+    isLoading: isLoadingMotivoActualizacion,
+    isRefetching: isRefetchingMotivoActualizacion,
+  } = useFetchMotivoActualizacions({
+    params: {
+      page_size: 1090,
+      modulo: MotivoActualizacionModuloEnumChoice.AGENDAMIENTO,
+      order_by: 'name',
+      order_by_asc: true,
+    },
+  });
 
   ///* mutations ------------------------
   const requestUpdData = useGenericPATCH<
@@ -45,10 +69,13 @@ const AgendaOpeRequestUpdate: React.FC<AgendaOpeRequestUpdateProps> = ({
   const onSave = (data: SaveFormData) => {
     requestUpdData.mutate(data);
   };
-
   const handleClose = () => {
     onClose();
   };
+
+  const isLoading =
+    isLoadingMotivoActualizacion || isRefetchingMotivoActualizacion;
+  useLoaders(isLoading);
 
   return (
     <>
@@ -59,7 +86,41 @@ const AgendaOpeRequestUpdate: React.FC<AgendaOpeRequestUpdateProps> = ({
         cancelTextBtn="Cerrar"
         contentNode={
           <Grid item container spacing={3} xs={12}>
-            sss
+            <Grid item xs={12}>
+              <Typography variant="body1">
+                Para solicitar actualización de datos del cliente{' '}
+                <strong>
+                  {agendamiento?.solicitud_servicio_data?.razon_social}
+                </strong>
+                , deberá ingresar el motivo y una observación. ¿Desea continuar?
+              </Typography>
+            </Grid>
+
+            <CustomAutocomplete<MotivoActualizacion>
+              label="Motivo de actualización"
+              name="motivo_actualizacion"
+              // options
+              options={motivosActualizacionPagingRes?.data?.items || []}
+              valueKey="name"
+              actualValueKey="id"
+              defaultValue={form.getValues().motivo_actualizacion}
+              isLoadingData={
+                isLoadingMotivoActualizacion || isRefetchingMotivoActualizacion
+              }
+              // vaidation
+              control={form.control}
+              error={errors.motivo_actualizacion}
+              helperText={errors.motivo_actualizacion?.message}
+            />
+
+            <CustomTextArea
+              label="Observación"
+              name="observacion_actualizacion"
+              control={form.control}
+              defaultValue={form.getValues().observacion_actualizacion}
+              error={errors.observacion_actualizacion}
+              helperText={errors.observacion_actualizacion?.message}
+            />
           </Grid>
         }
         onConfirm={form.handleSubmit(onSave)}
