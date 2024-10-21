@@ -15,7 +15,7 @@ import { PermissionsEnum, Trafico } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { Button } from '@mui/material';
-import ModalDetalleConsumo from '../../Custom/ModalDetalleConsumo';
+import ModalDetalleConsumo from '../custom/ModalDetalleConsumo';
 
 export const returnUrlTraficosPage = ROUTER_PATHS.administracionRed.traficosNav;
 
@@ -91,11 +91,7 @@ const TraficosPage: React.FC<TraficosPageProps> = () => {
   );
 
   return (
-    <SingleTableBoxScene
-      title="Traficos"
-      ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
-    >
+    <SingleTableBoxScene title="Traficos" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}

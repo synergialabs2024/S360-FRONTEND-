@@ -6,7 +6,7 @@ type NumberOrBreakpoint = number | Breakpoint;
 export const useResponsive = (
   query: 'up' | 'down' | 'between' | 'only',
   start: NumberOrBreakpoint,
-  end?: NumberOrBreakpoint
+  end?: NumberOrBreakpoint,
 ): boolean => {
   const theme = useTheme();
 

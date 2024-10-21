@@ -7,6 +7,11 @@ export interface OltsPaginatedRes {
   items: OLT[];
 }
 
+export interface ConfigOLT {
+  id?: string;
+  text?: string;
+}
+
 export interface OLT {
   id?: number;
   uuid?: string;
@@ -38,6 +43,12 @@ export interface OLT {
   ciudad?: number;
   zona?: number;
   sector?: number;
+
+  ///* Configurar
+  line_profiles?: string[];
+  traffic_tables?: string[];
+  vlans?: string[];
+  srv_profiles?: string[];
 }
 
 export type OLTLimitData = Pick<OLT, 'id' | 'uuid' | 'name'>;
