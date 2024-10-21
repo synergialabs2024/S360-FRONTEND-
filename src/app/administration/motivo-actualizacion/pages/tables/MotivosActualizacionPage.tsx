@@ -2,9 +2,12 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchMotivoRechazos, useUpdateMotivoRechazo } from '@/actions/app';
+import {
+  useFetchMotivoActualizacions,
+  useUpdateMotivoActualizacion,
+} from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
-import { MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES } from '@/shared';
+import { MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES } from '@/shared';
 import {
   CustomSearch,
   CustomSwitch,
@@ -15,18 +18,20 @@ import {
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { MotivoRechazo, PermissionsEnum } from '@/shared/interfaces';
+import { MotivoActualizacion, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-export const returnUrlMotivosRechazoPage =
-  ROUTER_PATHS.administracion.motivosRechazoNav;
+export const returnUrlMotivosActualizacionPage =
+  ROUTER_PATHS.administracion.motivosActualizacionNav;
 
-export type MotivosRechazoPageProps = {};
+export type MotivosActualizacionPageProps = {};
 
-const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
-  useCheckPermission(PermissionsEnum.administration_view_motivorechazo);
+const MotivosActualizacionPage: React.FC<
+  MotivosActualizacionPageProps
+> = () => {
+  useCheckPermission(PermissionsEnum.administration_view_motivoactualizacion);
 
   const navigate = useNavigate();
 
@@ -41,7 +46,7 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
   );
 
   ///* mutations
-  const changeState = useUpdateMotivoRechazo({
+  const changeState = useUpdateMotivoActualizacion({
     enableNavigate: false,
   });
 
@@ -57,10 +62,10 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
 
   ///* fetch data
   const {
-    data: MotivosRechazoPagingRes,
+    data: MotivosActualizacionPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchMotivoRechazos({
+  } = useFetchMotivoActualizacions({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -72,42 +77,47 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (motivorechazo: MotivoRechazo) => {
+  const onEdit = (motivoactualizacion: MotivoActualizacion) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Motivo de Rechazo',
+      title: 'Editar MotivoActualizacion',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlMotivosRechazoPage}/editar/${motivorechazo.uuid}`);
+        navigate(
+          `${returnUrlMotivosActualizacionPage}/editar/${motivoactualizacion.uuid}`,
+        );
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<MotivoRechazo>[]>(
+  const columns = useMemo<MRT_ColumnDef<MotivoActualizacion>[]>(
     () => [
       {
         accessorKey: 'name',
         header: 'NAME',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
         accessorKey: 'description',
         header: 'DESCRIPTION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => (
           <ViewMoreTextModalTableCell longText={row.original?.description} />
         ),
       },
-
       {
         accessorKey: 'modulo',
         header: 'MODULO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         filterVariant: 'select',
-        filterSelectOptions: MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES,
+        filterSelectOptions: MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'modulo'),
       },
 
@@ -126,7 +136,7 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
               onChangeChecked={() => {
                 if (
                   !hasPermission(
-                    PermissionsEnum.administration_change_motivorechazo,
+                    PermissionsEnum.administration_change_motivoactualizacion,
                   )
                 )
                   return;
@@ -153,7 +163,6 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
           );
         },
       },
-
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -176,10 +185,10 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Motivos de Rechazo"
-      createPageUrl={`${returnUrlMotivosRechazoPage}/crear`}
+      title="Motivos de actualización"
+      createPageUrl={`${returnUrlMotivosActualizacionPage}/crear`}
       showCreateBtn={hasPermission(
-        PermissionsEnum.administration_add_motivorechazo,
+        PermissionsEnum.administration_add_motivoactualizacion,
       )}
     >
       <CustomSearch
@@ -188,9 +197,9 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
         text="por nombre"
       />
 
-      <CustomTable<MotivoRechazo>
+      <CustomTable<MotivoActualizacion>
         columns={columns}
-        data={MotivosRechazoPagingRes?.data?.items || []}
+        data={MotivosActualizacionPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -202,20 +211,21 @@ const MotivosRechazoPage: React.FC<MotivosRechazoPageProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={MotivosRechazoPagingRes?.data?.meta?.count}
+        rowCount={MotivosActualizacionPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
-          PermissionsEnum.administration_change_motivorechazo,
+          PermissionsEnum.administration_change_motivoactualizacion,
         )}
         // crud
         canEdit={hasPermission(
-          PermissionsEnum.administration_change_motivorechazo,
+          PermissionsEnum.administration_change_motivoactualizacion,
         )}
         onEdit={onEdit}
+        canDelete={false}
       />
     </SingleTableBoxScene>
   );
 };
 
-export default MotivosRechazoPage;
+export default MotivosActualizacionPage;

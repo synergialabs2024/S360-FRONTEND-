@@ -128,6 +128,12 @@ export const ROUTER_PATHS = {
     motivosRechazoEditar: 'motivos-rechazo/editar/:uuid',
     motivosRechazoNav: '/parametrizacion/motivos-rechazo',
 
+    ///* motivos actualizacion
+    motivosActualizacion: 'motivos-actualizacion',
+    motivosActualizacionCrear: 'motivos-actualizacion/crear',
+    motivosActualizacionEditar: 'motivos-actualizacion/editar/:uuid',
+    motivosActualizacionNav: '/parametrizacion/motivos-actualizacion',
+
     // // =================================
     ///* usuarios
     usuarios: 'usuarios',

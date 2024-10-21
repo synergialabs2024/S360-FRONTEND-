@@ -1,3 +1,4 @@
+import { MotivoActualizacionModuloEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface MotivosActualizacionPaginatedRes {
@@ -14,7 +15,7 @@ export interface MotivoActualizacion {
   name: string;
   description: string;
   state: boolean;
-  modulo: string;
+  modulo: MotivoActualizacionModuloEnumChoice;
 
   created_at?: string;
   modified_at?: string;

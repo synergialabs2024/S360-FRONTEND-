@@ -124,6 +124,30 @@ const UpdateMotivoRechazoPage = Loadable(
       ),
   ),
 );
+const MotivosActualizacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/motivo-actualizacion/pages/tables/MotivosActualizacionPage'
+      ),
+  ),
+);
+const CreateMotivoActualizacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/motivo-actualizacion/pages/forms/CreateMotivoActualizacionPage'
+      ),
+  ),
+);
+const UpdateMotivoActualizacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/motivo-actualizacion/pages/forms/UpdateMotivoActualizacionPage'
+      ),
+  ),
+);
 
 const CentroCostosPage = Loadable(
   lazy(
@@ -1081,6 +1105,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.motivosRechazoEditar,
             element: <UpdateMotivoRechazoPage />,
+          },
+          ///* motivo actualizacion
+          {
+            path: ROUTER_PATHS.administracion.motivosActualizacion,
+            element: <MotivosActualizacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.motivosActualizacionCrear,
+            element: <CreateMotivoActualizacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.motivosActualizacionEditar,
+            element: <UpdateMotivoActualizacionPage />,
           },
 
           ///* entidad financiera

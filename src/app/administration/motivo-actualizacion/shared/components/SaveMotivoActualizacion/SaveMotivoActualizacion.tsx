@@ -4,11 +4,14 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  CreateMotivoRechazoParamsBase,
-  useCreateMotivoRechazo,
-  useUpdateMotivoRechazo,
+  CreateMotivoActualizacionParamsBase,
+  useCreateMotivoActualizacion,
+  useUpdateMotivoActualizacion,
 } from '@/actions/app';
-import { MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES, ToastWrapper } from '@/shared';
+import {
+  MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES,
+  ToastWrapper,
+} from '@/shared';
 import {
   CustomTextArea,
   CustomTextField,
@@ -17,29 +20,29 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { MotivoRechazo } from '@/shared/interfaces';
+import { MotivoActualizacion } from '@/shared/interfaces';
 import {
   getKeysFormErrorsMessage,
-  motivoRechazoFormSchema,
+  motivoActualizacionFormSchema,
 } from '@/shared/utils';
-import { returnUrlMotivosRechazoPage } from '../../../pages/tables/MotivosRechazoPage';
+import { returnUrlMotivosActualizacionPage } from '../../../pages/tables/MotivosActualizacionPage';
 
-export interface SaveMotivoRechazoProps {
+export interface SaveMotivoActualizacionProps {
   title: string;
-  motivorechazo?: MotivoRechazo;
+  motivoactualizacion?: MotivoActualizacion;
 }
 
-type SaveFormData = CreateMotivoRechazoParamsBase & {};
+type SaveFormData = CreateMotivoActualizacionParamsBase & {};
 
-const SaveMotivoRechazo: React.FC<SaveMotivoRechazoProps> = ({
+const SaveMotivoActualizacion: React.FC<SaveMotivoActualizacionProps> = ({
   title,
-  motivorechazo,
+  motivoactualizacion,
 }) => {
   const navigate = useNavigate();
 
   ///* form ---------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(motivoRechazoFormSchema) as any,
+    resolver: yupResolver(motivoActualizacionFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -52,15 +55,15 @@ const SaveMotivoRechazo: React.FC<SaveMotivoRechazoProps> = ({
   } = form;
 
   ///* mutations ---------------------
-  const createMotivoRechazoMutation = useCreateMotivoRechazo({
+  const createMotivoActualizacionMutation = useCreateMotivoActualizacion({
     navigate,
-    returnUrl: returnUrlMotivosRechazoPage,
+    returnUrl: returnUrlMotivosActualizacionPage,
     enableErrorNavigate: false,
   });
-  const updateMotivoRechazoMutation =
-    useUpdateMotivoRechazo<CreateMotivoRechazoParamsBase>({
+  const updateMotivoActualizacionMutation =
+    useUpdateMotivoActualizacion<CreateMotivoActualizacionParamsBase>({
       navigate,
-      returnUrl: returnUrlMotivosRechazoPage,
+      returnUrl: returnUrlMotivosActualizacionPage,
     });
 
   ///* handlers ---------------------
@@ -68,25 +71,28 @@ const SaveMotivoRechazo: React.FC<SaveMotivoRechazoProps> = ({
     if (!isValid) return;
 
     ///* upd
-    if (motivorechazo?.id) {
-      updateMotivoRechazoMutation.mutate({ id: motivorechazo.id!, data });
+    if (motivoactualizacion?.id) {
+      updateMotivoActualizacionMutation.mutate({
+        id: motivoactualizacion.id!,
+        data,
+      });
       return;
     }
 
     ///* create
-    createMotivoRechazoMutation.mutate(data);
+    createMotivoActualizacionMutation.mutate(data);
   };
 
   ///* effects ---------------------
   useEffect(() => {
-    if (!motivorechazo?.id) return;
-    reset(motivorechazo);
-  }, [motivorechazo, reset]);
+    if (!motivoactualizacion?.id) return;
+    reset(motivoactualizacion);
+  }, [motivoactualizacion, reset]);
 
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlMotivosRechazoPage)}
+      onCancel={() => navigate(returnUrlMotivosActualizacionPage)}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(
           `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
@@ -115,7 +121,7 @@ const SaveMotivoRechazo: React.FC<SaveMotivoRechazoProps> = ({
         name="modulo"
         control={form.control}
         defaultValue={form.getValues('modulo')}
-        options={MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES}
+        options={MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES}
       />
 
       <SampleCheckbox
@@ -130,4 +136,4 @@ const SaveMotivoRechazo: React.FC<SaveMotivoRechazoProps> = ({
   );
 };
 
-export default SaveMotivoRechazo;
+export default SaveMotivoActualizacion;

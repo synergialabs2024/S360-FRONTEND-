@@ -198,6 +198,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.motivosRechazoNav,
             }),
+            renderByModule(SidenavModulesEnum.ADMIN_MOTIVO_ACTUALIZACION, {
+              id: 'motivos-actualizacion',
+              title: 'Motivos de actualización',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.motivosActualizacionNav,
+            }),
 
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {

@@ -141,6 +141,16 @@ export const MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES = [
   MotivoRechazoModuloEnumChoice.PREVENTA,
   MotivoRechazoModuloEnumChoice.GENERICO,
 ];
+export enum MotivoActualizacionModuloEnumChoice {
+  SOLICITUD_SERVICIO = 'SOLICITUD DE SERVICIO',
+  PREVENTA = 'PREVENTA',
+  GENERICO = 'GENERICO',
+}
+export const MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES = [
+  MotivoActualizacionModuloEnumChoice.SOLICITUD_SERVICIO,
+  MotivoActualizacionModuloEnumChoice.PREVENTA,
+  MotivoActualizacionModuloEnumChoice.GENERICO,
+];
 
 export enum SystemParameterBooleanTypeEnumChoice {
   VERDADERO = 'VERDADERO',
