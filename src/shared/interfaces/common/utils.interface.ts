@@ -43,4 +43,7 @@ export type PagingPartialParamsOnly = {
 
 export type PagingPartialParams = PagingPartialParamsOnly & {
   filterByState?: boolean;
+
+  order_by?: string;
+  order_by_asc?: boolean;
 };

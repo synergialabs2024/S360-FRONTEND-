@@ -27,6 +27,11 @@ export interface Router {
 
   tipo_router: string;
 
+  tiene_grupo_ipv4: boolean;
+  tiene_grupo_ipv6: boolean;
+  grupo_ipv4?: number;
+  grupo_ipv6?: number;
+
   ///* fk
   nodo?: number;
   olt?: number;

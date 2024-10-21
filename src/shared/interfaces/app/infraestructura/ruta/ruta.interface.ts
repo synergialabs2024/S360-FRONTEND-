@@ -11,6 +11,7 @@ export interface Ruta {
   id?: number;
   uuid?: string;
 
+  name: string;
   state: boolean;
 
   status: string;

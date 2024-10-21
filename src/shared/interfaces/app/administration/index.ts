@@ -7,6 +7,7 @@ export * from './empresa';
 export * from './entidad-financiera';
 export * from './iva';
 export * from './metodo-pago';
+export * from './motivo-rechazo.interface';
 export * from './pais';
 export * from './parametro-sistema';
 export * from './provincia';

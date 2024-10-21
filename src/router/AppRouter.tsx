@@ -1,12 +1,11 @@
- 
 // @ts-ignore
 import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import { lazy } from 'react';
 // import { Navigate } from 'react-router-dom';
+import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
-import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -100,6 +99,30 @@ const CreateAreaPage = Loadable(
 );
 const UpdateAreaPage = Loadable(
   lazy(() => import('@/app/administration/area/pages/forms/UpdateAreaPage')),
+);
+const MotivosRechazoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/motivo-rechazo/pages/tables/MotivosRechazoPage'
+      ),
+  ),
+);
+const CreateMotivoRechazoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/motivo-rechazo/pages/forms/CreateMotivoRechazoPage'
+      ),
+  ),
+);
+const UpdateMotivoRechazoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/motivo-rechazo/pages/forms/UpdateMotivoRechazoPage'
+      ),
+  ),
 );
 
 const CentroCostosPage = Loadable(
@@ -539,6 +562,51 @@ const CreateRutaPage = Loadable(
 );
 const UpdateRutaPage = Loadable(
   lazy(() => import('@/app/infraestructura/ruta/pages/forms/UpdateRutaPage')),
+);
+
+const GrupoIPv4sPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/grupoipv4/pages/tables/GruposIPv4Page'),
+  ),
+);
+const CreateGrupoIPv4Page = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/grupoipv4/pages/forms/CreateGrupoIPv4Page'
+      ),
+  ),
+);
+const UpdateGrupoIPv4Page = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/grupoipv4/pages/forms/UpdateGrupoIPv4Page'
+      ),
+  ),
+);
+const GrupoIPv6sPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/administracion-red/grupoipv6/pages/tables/GruposIPv6Page'),
+  ),
+);
+const CreateGrupoIPv6Page = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/grupoipv6/pages/forms/CreateGrupoIPv6Page'
+      ),
+  ),
+);
+const UpdateGrupoIPv6Page = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administracion-red/grupoipv6/pages/forms/UpdateGrupoIPv6Page'
+      ),
+  ),
 );
 
 ///* Mantenimiento Operaciones ------------
@@ -997,6 +1065,20 @@ const AppRouter = [
           //   path: ROUTER_PATHS.administracion.empresasEditar,
           //   element: <UpdateEmpresaPage />,
           // },
+
+          ///* motivo rechazo
+          {
+            path: ROUTER_PATHS.administracion.motivosRechazo,
+            element: <MotivosRechazoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.motivosRechazoCrear,
+            element: <CreateMotivoRechazoPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.motivosRechazoEditar,
+            element: <UpdateMotivoRechazoPage />,
+          },
 
           ///* entidad financiera
           {
@@ -1560,6 +1642,32 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracionRed.autenticacionClientesEditar,
             element: <UpdateAutenticacionClientePage />,
+          },
+          ///* Grupo IPv4
+          {
+            path: ROUTER_PATHS.administracionRed.gruposIPv4,
+            element: <GrupoIPv4sPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.gruposIPv4Crear,
+            element: <CreateGrupoIPv4Page />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.gruposIPv4Editar,
+            element: <UpdateGrupoIPv4Page />,
+          },
+          ///* Grupo IPv6
+          {
+            path: ROUTER_PATHS.administracionRed.gruposIPv6,
+            element: <GrupoIPv6sPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.gruposIPv6Crear,
+            element: <CreateGrupoIPv6Page />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.gruposIPv6Editar,
+            element: <UpdateGrupoIPv6Page />,
           },
         ],
       },

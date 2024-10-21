@@ -67,6 +67,8 @@ export interface CustomTableProps<T> {
   // custom buttons space
   showCustomButtonsSpace?: boolean;
   customButtonsSpace?: (original: T) => React.ReactNode;
+  showCustomButtonsSpaceEnd?: boolean;
+  customButtonsSpaceEnd?: (original: T) => React.ReactNode;
 
   renderTopToolbarCustomActions?: (data: any) => React.ReactNode;
 
@@ -125,6 +127,8 @@ function CustomTable<T>({
   // custom buttons space
   showCustomButtonsSpace = false,
   customButtonsSpace,
+  showCustomButtonsSpaceEnd = false,
+  customButtonsSpaceEnd,
 
   renderTopToolbarCustomActions = undefined,
 
@@ -197,13 +201,6 @@ function CustomTable<T>({
           customButtonsSpace &&
           customButtonsSpace(row.original as T)}
 
-        {showOneCustomButton &&
-        oneCustomButton &&
-        onConditionCustomButton &&
-        onConditionCustomButton(row.original as T)
-          ? oneCustomButton(row.original as T)
-          : null}
-
         {canEdit &&
         onEdit &&
         onConditionEdit &&
@@ -237,12 +234,16 @@ function CustomTable<T>({
           </Tooltip>
         ) : null}
 
-        {/* {showOneCustomButton &&
+        {showOneCustomButton &&
         oneCustomButton &&
         onConditionCustomButton &&
         onConditionCustomButton(row.original as T)
           ? oneCustomButton(row.original as T)
-          : null} */}
+          : null}
+
+        {showCustomButtonsSpaceEnd &&
+          customButtonsSpaceEnd &&
+          customButtonsSpaceEnd(row.original as T)}
       </Box>
     ),
 

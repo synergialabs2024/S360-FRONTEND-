@@ -4,7 +4,6 @@ import { useRoutes } from 'react-router-dom';
 import { useSelector } from '@/store/Store';
 import { ThemeSettings } from './theme/Theme';
 import RTL from './layouts/full/shared/customizer/RTL';
-import ScrollToTop from './components/shared/ScrollToTop';
 // import Router from './routes/Router';
 import { AppState } from './store/Store';
 import AppRouter from './router/AppRouter';
@@ -28,6 +27,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <RTL direction={customizer.activeDir}>
+            {routing}
             <CssBaseline />
             {/* ----- modal ----- */}
             <CustomConfirmDialog />
@@ -49,7 +49,8 @@ function App() {
               theme="light"
               transition={Bounce}
             />
-            <ScrollToTop>{routing}</ScrollToTop>
+
+            {/* <ScrollToTop>{routing}</ScrollToTop> */}
           </RTL>
         </ThemeProvider>
       </QueryClientProvider>

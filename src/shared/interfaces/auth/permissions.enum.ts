@@ -99,6 +99,7 @@ export enum PermissionsEnum {
   users_view_customgroup = 'users.view_customgroup',
   users_view_profile = 'users.view_profile',
   users_view_user = 'users.view_usuario',
+  administration_view_motivorechazo = 'administration.view_motivorechazo',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -194,6 +195,7 @@ export enum PermissionsEnum {
   users_add_customgroup = 'users.add_customgroup',
   users_add_profile = 'users.add_profile',
   users_add_user = 'users.add_usuario',
+  administration_add_motivorechazo = 'administration.add_motivorechazo',
 
   // // // // CHANGE ---------------------------
   admin_change_logentry = 'admin.change_logentry',
@@ -288,6 +290,7 @@ export enum PermissionsEnum {
   users_change_customgroup = 'users.change_customgroup',
   users_change_profile = 'users.change_profile',
   users_change_user = 'users.change_usuario',
+  administration_change_motivorechazo = 'administration.change_motivorechazo',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',
@@ -386,6 +389,7 @@ export enum PermissionsEnum {
   users_delete_customgroup = 'users.delete_customgroup',
   users_delete_profile = 'users.delete_profile',
   users_delete_user = 'users.delete_usuario',
+  administration_delete_motivorechazo = 'administration.delete_motivorechazo',
 
   // // // // PRINT ---------------------------
   billing_print_credit_note = 'billing.print_credit_note',

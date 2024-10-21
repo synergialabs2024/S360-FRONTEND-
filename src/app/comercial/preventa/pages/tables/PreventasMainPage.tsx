@@ -33,6 +33,7 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
         <Tab label={'PREVENTAS'} value={1} {...a11yProps(1)} />
         <Tab label={'REALIZADAS'} value={2} {...a11yProps(2)} />
         <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
+        <Tab label={'FALLIDAS'} value={5} {...a11yProps(5)} />
         <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 
@@ -50,6 +51,10 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
 
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <PreventaByStatePage state={EstadoPreventaEnumChoice.SIN_GESTION} />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <PreventaByStatePage state={EstadoPreventaEnumChoice.FALLIDO} />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );

@@ -192,6 +192,13 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.tipocomprobantesNav,
             }),
+            renderByModule(SidenavModulesEnum.ADMIN_MOTIVO_RECHAZO, {
+              id: 'motivos-rechazo',
+              title: 'Motivos de rechazo',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.motivosRechazoNav,
+            }),
+
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {
               id: 'empresas',
@@ -677,17 +684,17 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_GRUPO_IPV4, {
               id: 'ipv4s',
               title: 'Redes IPV4',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.gruposIPv4Nav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_GRUPO_IPV6, {
               id: 'ipv6s',
               title: 'Redes IPV6',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.gruposIPv6Nav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'monitoreos',

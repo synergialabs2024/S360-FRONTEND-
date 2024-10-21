@@ -11,6 +11,7 @@ import {
 } from '@/shared';
 import {
   CustomAutocompleteArrString,
+  CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
@@ -86,8 +87,16 @@ const SaveRuta: React.FC<SaveRutaProps> = ({ title, ruta }) => {
       onCancel={() => navigate(returnUrlRutasPage)}
       onSave={handleSubmit(onSave, () => {})}
     >
+      <CustomTextField
+        label="Nombre"
+        name="name"
+        control={form.control}
+        defaultValue={form.getValues().name}
+        error={errors.name}
+        helperText={errors.name?.message}
+      />
       <CustomAutocompleteArrString
-        label="Estado"
+        label="Status"
         name="status"
         options={RUTA_TYPE_ARRAY_CHOICES}
         isLoadingData={false}
@@ -98,7 +107,7 @@ const SaveRuta: React.FC<SaveRutaProps> = ({ title, ruta }) => {
       />
 
       <SampleCheckbox
-        label="state"
+        label="Estado"
         name="state"
         control={form.control}
         defaultValue={form.getValues().state}

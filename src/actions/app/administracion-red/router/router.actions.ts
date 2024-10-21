@@ -28,6 +28,7 @@ export const useFetchRouters = ({
     queryKey: [RouterTSQEnum.ROUTERS, ...Object.values(params || {})],
     queryFn: () => getRouters(params),
     enabled: enabled,
+    refetchOnWindowFocus: false,
   });
 };
 
