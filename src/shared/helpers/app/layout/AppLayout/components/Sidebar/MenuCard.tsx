@@ -40,7 +40,7 @@ const LinearProgressWithLabel: React.FC<LinearProgressWithLabelProps> = ({
           </Grid>
           <Grid item>
             <Typography variant="h6" color="inherit">{`${Math.round(
-              value,
+              value
             )}%`}</Typography>
           </Grid>
         </Grid>

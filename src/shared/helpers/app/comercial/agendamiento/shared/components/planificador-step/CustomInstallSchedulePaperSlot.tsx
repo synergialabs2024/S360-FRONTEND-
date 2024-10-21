@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Paper, styled } from '@mui/material';
 
 export type CustomInstallSchedulePaperSlotProps = {

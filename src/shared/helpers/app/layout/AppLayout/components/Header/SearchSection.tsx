@@ -46,11 +46,7 @@ interface MobileSearchProps {
   handleClose: () => void;
 }
 
-const MobileSearch: React.FC<MobileSearchProps> = ({
-  value,
-  setValue,
-  handleClose,
-}) => {
+const MobileSearch: React.FC<MobileSearchProps> = ({ value, setValue, handleClose }) => {
   const theme = useTheme();
 
   return (

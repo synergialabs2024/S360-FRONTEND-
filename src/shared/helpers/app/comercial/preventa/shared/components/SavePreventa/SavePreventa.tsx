@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
 import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
