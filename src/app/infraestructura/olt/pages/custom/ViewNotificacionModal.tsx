@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button, Typography } from '@mui/material';
 
 import { ScrollableDialogProps } from '@/shared/components';
-import { Button, Typography } from '@mui/material';
-import { IconServerCog } from '@tabler/icons-react';
-import { useForm } from 'react-hook-form';
 import { CreateOLTConectParamsBase, useCreateOLTConect } from '@/actions/app';
 import { oltConectFormSchema } from '@/shared/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,7 +11,7 @@ export type ViewNotificacionModalProps = {
   nameInfo?: string | undefined;
   listItems: Record<string, any>;
 
-  descriptionInfo: string;
+  descriptionInfo?: string | undefined;
 };
 
 type SaveFormData = CreateOLTConectParamsBase & {
@@ -21,8 +20,8 @@ type SaveFormData = CreateOLTConectParamsBase & {
 
 const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
   nameInfo = '',
+  descriptionInfo = '¿Estas seguro de crear o actualizar la infraestructura de la OLT?',
   listItems = {},
-  descriptionInfo,
 }) => {
   ///* global state
   const [open, setOpen] = useState(false);
@@ -31,13 +30,15 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
   const form = useForm<SaveFormData>({
     resolver: yupResolver(oltConectFormSchema) as any,
     defaultValues: {
-      uuid: listItems?.uuid || '', // Toma el UUID de listItems
+      uuid: listItems?.uuid || '',
     },
   });
+
   const {
     handleSubmit,
     formState: { isValid },
     register,
+    reset, // Importa el método reset
   } = form;
 
   ///* mutations
@@ -52,14 +53,17 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
     ///* create
     createOLTConectMutation.mutate(data, {
       onSuccess: () => {
-        setOpen(false); // Cierra el modal al completar el POST exitosamente
+        setOpen(false);
       },
     });
   };
 
+  ///* Effect to reset form when listItems.uuid changes
   useEffect(() => {
-    if (!listItems?.uuid) return;
-  }, [listItems]);
+    if (listItems?.uuid) {
+      reset({ uuid: listItems.uuid });
+    }
+  }, [listItems, reset]);
 
   return (
     <>
@@ -72,7 +76,7 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
           onClick={() => setOpen(!open)}
           style={{ cursor: 'pointer' }}
         >
-          <IconServerCog />
+          Crear / Actualizar
         </Button>
       </Typography>
 

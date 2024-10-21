@@ -519,6 +519,9 @@ const UpdateNodoPage = Loadable(
 const OLTsPage = Loadable(
   lazy(() => import('@/app/infraestructura/olt/pages/tables/OLTsPage')),
 );
+const ConfigOLTPage = Loadable(
+  lazy(() => import('@/app/infraestructura/olt/pages/forms/ConfigOLTPage')),
+);
 const CreateOLTPage = Loadable(
   lazy(() => import('@/app/infraestructura/olt/pages/forms/CreateOLTPage')),
 );
@@ -1312,6 +1315,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.infraestructura.olts,
             element: <OLTsPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.oltsConfigurar,
+            element: <ConfigOLTPage />,
           },
           {
             path: ROUTER_PATHS.infraestructura.oltsCrear,

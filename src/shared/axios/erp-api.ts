@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import axios, { AxiosRequestConfig, isAxiosError } from 'axios';
 
 import { useAuthStore } from '@/store/auth';

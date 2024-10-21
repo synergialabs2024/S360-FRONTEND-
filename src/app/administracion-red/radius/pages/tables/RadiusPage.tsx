@@ -13,7 +13,6 @@ import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Radius } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
 
 export const returnUrlRadiusPage = ROUTER_PATHS.administracionRed.radiusNav;
 
@@ -92,11 +91,7 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
   );
 
   return (
-    <SingleTableBoxScene
-      title="Radius"
-      ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
-    >
+    <SingleTableBoxScene title="Radius" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}

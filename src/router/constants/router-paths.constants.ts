@@ -254,6 +254,7 @@ export const ROUTER_PATHS = {
 
     ///* olt
     olts: 'olts',
+    oltsConfigurar: 'olts/configurar/:uuid',
     oltsCrear: 'olts/crear',
     oltsEditar: 'olts/editar/:uuid',
     oltsNav: '/infraestructura/olts',
@@ -338,8 +339,6 @@ export const ROUTER_PATHS = {
 
     ///* radius
     radius: 'radius',
-    radiusCrear: 'radius/crear',
-    radiusEditar: 'radius/editar/:uuid',
     radiusNav: '/administracion-red/radius',
 
     ///* Autenticacion de Clientes
@@ -348,10 +347,8 @@ export const ROUTER_PATHS = {
     autenticacionClientesEditar: 'autenticacionClientes/editar/:uuid',
     autenticacionClientesNav: '/administracion-red/autenticacionClientes',
 
-    ///* Autenticacion de Clientes
+    ///* Trafico
     traficos: 'traficos',
-    traficosCrear: 'traficos/crear',
-    traficosEditar: 'traficos/editar/:uuid',
     traficosNav: '/administracion-red/traficos',
 
     ///* Grupo IPv4

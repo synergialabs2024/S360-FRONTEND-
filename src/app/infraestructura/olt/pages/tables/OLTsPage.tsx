@@ -24,7 +24,7 @@ import {
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { SAVE_OLT_PERMISSIONS } from '@/shared';
-import ViewNotificacionModal from '../custom/ViewNotificacionModal';
+import { ConfigOLTCustomButtons } from '../../shared/components';
 
 export const returnUrlOLTsPage = ROUTER_PATHS.infraestructura.oltsNav;
 
@@ -249,24 +249,6 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
       },
       {
-        accessorKey: 'envio',
-        header: 'ENVIO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => {
-          return (
-            <>
-              <ViewNotificacionModal
-                listItems={row.original}
-                descriptionInfo="¿Estas seguro de crear o actualizar la infraestructura de la
-                OLT?"
-              />
-            </>
-          );
-        },
-      },
-      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
@@ -367,6 +349,14 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         ])}
         onEdit={onEdit}
         canDelete={false}
+        showCustomButtonsSpace
+        customButtonsSpace={olt => {
+          return (
+            <>
+              <ConfigOLTCustomButtons olt={olt!} />
+            </>
+          );
+        }}
       />
     </SingleTableBoxScene>
   );

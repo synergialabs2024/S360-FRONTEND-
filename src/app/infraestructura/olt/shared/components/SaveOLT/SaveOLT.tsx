@@ -281,14 +281,6 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
       onSave={handleSubmit(onSave, () => {})}
     >
       <CustomTextField
-        label="Nombre"
-        name="name"
-        control={form.control}
-        defaultValue={form.getValues().name}
-        error={errors.name}
-        helperText={errors.name?.message}
-      />
-      <CustomTextField
         label="User"
         name="user"
         control={form.control}
@@ -354,6 +346,7 @@ const SaveOLT: React.FC<SaveOLTProps> = ({ title, olt }) => {
         error={errors.snmp_community}
         helperText={errors.snmp_community?.message}
         size={gridSizeMdLg6}
+        ignoreTransform
       />
       <Controller
         name="snmp_version"

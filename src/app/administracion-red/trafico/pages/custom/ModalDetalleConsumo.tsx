@@ -2,8 +2,9 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 
 import { TRAFICO_TYPE_ARRAY_CHOICES } from '@/shared';
-import { ScrollableDialogProps, SelectArrayString } from '@/shared/components';
+import { ScrollableDialogProps } from '@/shared/components';
 import { Box, Button, Collapse, Grid, Typography } from '@mui/material';
+import SelectArrayString from './SelectArrayString';
 
 export type ModalDetalleConsumoProps = {
   modalTitle?: string;
