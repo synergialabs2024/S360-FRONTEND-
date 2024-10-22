@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+ 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
@@ -418,8 +418,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     <SingleFormBoxScene
       titlePage={title}
       onCancel={() => navigate(returnUrlSolicitudsServicioPage)}
-      onSave={handleSubmit(onSave, () => {
-        console.log('error', errors);
+      onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
