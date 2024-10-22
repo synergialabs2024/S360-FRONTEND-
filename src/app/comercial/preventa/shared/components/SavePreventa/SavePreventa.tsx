@@ -875,8 +875,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         clearAllTimers();
         clearAllEquiposSelecStore();
       }}
-      onSave={handleSubmit(onSave, () => {
-        console.log(errors);
+      onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos por requeridos: ${keys}`);
       })}
