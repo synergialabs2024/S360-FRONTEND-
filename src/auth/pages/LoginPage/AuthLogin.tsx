@@ -1,28 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
-  Typography,
   Button,
-  Stack,
   Divider,
-  InputAdornment,
   IconButton,
+  InputAdornment,
+  Stack,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-// import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
-
 import { useLogin } from '@/actions/auth';
 import { useForm } from 'react-hook-form';
 
 import { loginFormSchema } from '@/shared/utils';
 import { useAuthNoLSStore } from '@/store/auth';
 
-import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
-import { loginType } from '@/types/auth/auth';
 import { AuthSocialButtons, CustomFormLabel } from '@/shared/components';
+import { loginType } from '@/types/auth/auth';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 // import AuthSocialButtons from './AuthSocialButtons';
 
@@ -143,7 +139,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
             alignItems="center"
             my={2}
           >
-            <Typography
+            {/* <Typography
               component={Link}
               to="/auth/forgot-password"
               fontWeight="500"
@@ -152,8 +148,8 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
                 color: 'primary.main',
               }}
             >
-              Forgot Password ?
-            </Typography>
+              Olvidaste tu contraseña?
+            </Typography> */}
           </Stack>
         </Stack>
 
@@ -165,7 +161,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
           fullWidth
           disabled={loginMutation.isPending || isBlocked}
         >
-          Sign In
+          Iniciar sesión
         </Button>
       </Box>
       {subtitle}
