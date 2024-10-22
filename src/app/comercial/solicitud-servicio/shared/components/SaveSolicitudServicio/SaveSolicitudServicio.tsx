@@ -1,4 +1,3 @@
- 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
@@ -256,8 +255,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         es_cliente: true,
 
         razon_social: data?.fullName,
-        es_discapacitado: data?.esDiscapacitado,
-        es_tercera_edad: data?.esTerceraEdad,
+        es_discapacitado: !!data?.esDiscapacitado,
+        es_tercera_edad: !!data?.esTerceraEdad,
         fecha_nacimiento: correctFechaNacimiento,
         edad: data?.edad,
         direccion: data?.domicilio,
