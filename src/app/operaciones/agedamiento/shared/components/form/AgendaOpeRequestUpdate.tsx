@@ -21,7 +21,8 @@ import {
   CustomTextArea,
   ScrollableDialogProps,
 } from '@/shared/components';
-
+import { useNavigate } from 'react-router';
+import { returnUrlAgendamientoOperacionesPage } from '../../../pages/tables/AgendamientosMainPage';
 export type AgendaOpeRequestUpdateProps = {
   open: boolean;
   onClose: () => void;
@@ -35,6 +36,8 @@ const AgendaOpeRequestUpdate: React.FC<AgendaOpeRequestUpdateProps> = ({
   open,
   agendamiento,
 }) => {
+  const navigate = useNavigate();
+
   ///* form ------------------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(updAgendamientoOpSchema) as any,
@@ -65,12 +68,13 @@ const AgendaOpeRequestUpdate: React.FC<AgendaOpeRequestUpdateProps> = ({
   >(`/agendamiento/${agendamiento?.id!}/`, AgendamientoTSQEnum.AGENDAMIENTOS, {
     customMessageToast: 'Solictud de actualización enviada con éxito',
     customOnSuccess: () => {
-      handleClose();
+      navigate(returnUrlAgendamientoOperacionesPage, { replace: true });
     },
   });
 
   ///* handlers ------------------------
   const onSave = (data: SaveFormData) => {
+    onClose();
     requestUpdData.mutate(data);
   };
   const handleClose = () => {

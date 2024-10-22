@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   CacheBaseKeysPreventaEnum,
   CreateAgendamientoParamsBase,
+  CreateAgendamientoVentasFormData,
   useCreateAgendamiento,
 } from '@/actions/app';
 import { ToastWrapper } from '@/shared';
@@ -88,20 +89,25 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
     clearAllTimers();
   };
   ///* mutations ---------------------
-  const createAgendamientoMutation = useCreateAgendamiento({
-    navigate,
-    returnUrl: returnUrlAgendamientoVentasPage,
-    enableErrorNavigate: false,
-    customOnSuccess: () => {
-      onClearAll();
-    },
-  });
+  const createAgendamientoMutation =
+    useCreateAgendamiento<CreateAgendamientoVentasFormData>({
+      navigate,
+      returnUrl: returnUrlAgendamientoVentasPage,
+      enableErrorNavigate: false,
+      customOnSuccess: () => {
+        onClearAll();
+      },
+    });
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataAgendaVentas) => {
     ///* create
     createAgendamientoMutation.mutate({
-      ...data,
+      estado_llamada: data.estado_llamada,
+      observacion_llamada: data.observacion_llamada,
+      fecha_instalacion: data.fecha_instalacion,
+      hora_instalacion: data.hora_instalacion,
+      flota: data.flota,
       preventa: preventa?.id!,
     });
   };

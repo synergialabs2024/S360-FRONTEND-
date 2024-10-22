@@ -25,6 +25,17 @@ export enum CacheBaseKeysPreventaEnum {
 export const COUNTDOWN_AGENDA_VENTAS_ID = 'agendamientoVentasCountdown';
 
 ///* form --------------------
+export type CreateAgendamientoVentasFormData = Pick<
+  Agendamiento,
+  | 'hora_instalacion'
+  | 'fecha_instalacion'
+  | 'fecha_instalacion'
+  | 'flota'
+  | 'preventa'
+  | 'estado_llamada'
+  | 'observacion_llamada'
+> & {};
+
 export type RequestUpdateAgendamientoOpe = Pick<
   Agendamiento,
   'estado_agendamiento' | 'motivo_actualizacion' | 'observacion_actualizacion'
