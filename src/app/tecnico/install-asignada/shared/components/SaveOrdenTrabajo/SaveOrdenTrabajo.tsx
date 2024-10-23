@@ -93,7 +93,16 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   ///* effects ---------------------
   useEffect(() => {
     if (!ordentrabajo?.id) return;
-    reset(ordentrabajo);
+
+    const { solicitud_servicio_data, preventa_data, agendamiento_data } =
+      ordentrabajo;
+
+    reset({
+      ...ordentrabajo,
+      ...solicitud_servicio_data,
+      ...preventa_data,
+      ...agendamiento_data,
+    } as InstallAsignOTSaveFormData);
   }, [ordentrabajo, reset]);
 
   return (
