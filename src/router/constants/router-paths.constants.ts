@@ -300,6 +300,16 @@ export const ROUTER_PATHS = {
     planificadoresNav: '/mantenimiento-operacion/planificadores',
   },
 
+  /////* Tecnico ----------------
+  tecnico: {
+    root: 'tecnico',
+
+    ///* instalaciones asignadasta
+    instalacionesAsignadas: 'instalaciones-asignadas',
+    instalacionAsignadaOT: 'instalaciones-asignadas/orden-trabajo/:uuid',
+    instalacionesAsignadasNav: '/tecnico/instalaciones-asignadas',
+  },
+
   /////* Supervision Comercial ----------------
   supervisionComercial: {
     root: 'supervision-comercial',

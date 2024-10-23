@@ -417,11 +417,11 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconAugmentedReality2,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.TECNICO_INSTALL_ASIGNADA, {
               id: 'asignacion-orden-trabajo',
               title: 'Órdenes de trabajo asignadas',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.tecnico.instalacionesAsignadasNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-orden-trabajo',
@@ -867,6 +867,7 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
+
         /////* Finanzas ----------------
         {
           id: 'finanzas',

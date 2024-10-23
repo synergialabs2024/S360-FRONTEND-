@@ -443,6 +443,28 @@ export const TIPO_PRODUCTO_ARRAY_CHOICES = [
   TipoProductoEnumChoice.ONT,
 ];
 
+///* ORDEN TRABAJO ==========================================
+export enum EstadoOrdenTrabajoEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  EN_PROCESO = 'EN_PROCESO',
+  FINALIZADO = 'FINALIZADO',
+  CANCELADO = 'CANCELADO',
+  PRE_RECHAZADO = 'PRE_RECHAZADO',
+  RECHAZADO = 'RECHAZADO',
+}
+export enum TipoOrdenTrabajoEnumChoice {
+  INSTALACION = 'INSTALACION',
+  VISITA_TECNICA = 'VISITA TECNICA',
+  TRASLADO = 'TRASLADO',
+  RETIRO = 'RETIRO',
+}
+export enum EstadoActivacionEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  GESTIONADA = 'GESTIONADA',
+  RECHAZADO = 'RECHAZADO',
+  PENDIENTE_CAMBIO_PUERTO = 'PENDIENTE_CAMBIO_PUERTO',
+}
+
 // examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',

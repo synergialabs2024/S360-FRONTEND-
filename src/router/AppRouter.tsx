@@ -3,6 +3,7 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import { lazy } from 'react';
 // import { Navigate } from 'react-router-dom';
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
+import TecnicoModule from '@/app/tecnico/TecnicoModule';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
@@ -940,6 +941,16 @@ const UpdateOnusConfiguradaPage = Loadable(
   ),
 );
 
+///* tecnico ------------
+const InstalacionesAsignadasOTMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tecnico/install-asignada/pages/tables/InstalacionesAsignadasOTMainPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -1765,6 +1776,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.netconnect.onusConfiguradasEditar,
             element: <UpdateOnusConfiguradaPage />,
+          },
+        ],
+      },
+
+      //////////* Tecnico ------------
+      {
+        path: ROUTER_PATHS.tecnico.root,
+        element: <TecnicoModule />,
+        children: [
+          ///* Instalaciones Asignadas
+          {
+            path: ROUTER_PATHS.tecnico.instalacionesAsignadas,
+            element: <InstalacionesAsignadasOTMainPage />,
           },
         ],
       },

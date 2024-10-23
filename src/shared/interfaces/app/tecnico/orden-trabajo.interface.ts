@@ -1,4 +1,16 @@
+import { Agendamiento, Preventa, SolicitudServicio } from '@/shared';
+import { PagingMetaResponse } from '@/shared/interfaces/common';
+
+export interface OrdenesTrabajoPaginatedRes {
+  status: number;
+  message: string;
+  meta: PagingMetaResponse;
+  items: OrdenTrabajo[];
+}
+
 export interface OrdenTrabajo {
+  id?: number;
+  uuid?: string;
   estado_orden_trabajo: string; // choice
   tipo_orden_trabajo: string; // choice
 
@@ -39,23 +51,29 @@ export interface OrdenTrabajo {
   observacion_prerechazo: string;
 
   ///* fk
-  flota: number; // gestiona - user de flota
+  flota?: number;
+  usuario_flota?: number; // gestiona - user de flota
 
-  motivo_prerechazo: number;
+  motivo_prerechazo?: number;
 
-  linea_servicio: number; // cliente
-  solicitud_servicio: number;
-  preventa: number;
-  agendamiento: number;
+  linea_servicio?: number; // cliente
+  solicitud_servicio?: number;
+  preventa?: number;
+  agendamiento?: number;
 
-  nodo: number;
-  olt: number;
-  router: number;
-  pool_ipv4: number;
-  pool_ipv6: number;
+  nodo?: number;
+  olt?: number;
+  router?: number;
+  pool_ipv4?: number;
+  pool_ipv6?: number;
 
-  area: number;
-  departamento: number;
-  canal_venta: number;
-  vendedor: number;
+  // sales filters
+  area?: number;
+  departamento?: number;
+  canal_venta?: number;
+  vendedor?: number;
+
+  solicitud_servicio_data?: SolicitudServicio;
+  preventa_data?: Preventa;
+  agendamiento_data?: Agendamiento;
 }

@@ -12,3 +12,4 @@ export * from './netconnect';
 export * from './nomina';
 export * from './operaciones';
 export * from './servicios';
+export * from './tecnico';
