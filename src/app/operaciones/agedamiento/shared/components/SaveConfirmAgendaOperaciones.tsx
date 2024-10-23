@@ -58,8 +58,6 @@ const SaveConfirmAgendaOperaciones: React.FC<
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
-      // TODO: remove this
-      // initialStep: 1,
     });
 
   ///* global state ---------------------
@@ -106,7 +104,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
 
       observacion_llamada: agendamiento?.observacion_llamada || '',
 
-      // zona: solicitud_servicio_data?.zona_data?.id!, // rome todo y nose xq
+      // zona: solicitud_servicio_data?.zona_data?.id!, // rompe todo y nose xq
     } as unknown as SaveConfirmAgendaOperaciones);
   }, [agendamiento, reset, setActivePreventa]);
 
@@ -122,8 +120,6 @@ const SaveConfirmAgendaOperaciones: React.FC<
       // action btns
       onCancel={() => navigate(returnUrlAgendamientoOperacionesPage)}
       onSave={handleSubmit(onSave, errors => {
-        console.log({ errors });
-
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
