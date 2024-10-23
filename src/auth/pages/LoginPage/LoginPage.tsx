@@ -1,4 +1,3 @@
- 
 // @ts-ignore
 import img1 from '@/assets/images/backgrounds/login-bg.svg';
 import PageContainer from '@/components/container/PageContainer';

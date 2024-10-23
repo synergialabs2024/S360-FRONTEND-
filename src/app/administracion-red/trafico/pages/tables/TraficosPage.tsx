@@ -13,9 +13,11 @@ import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Trafico } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
-import { Button } from '@mui/material';
-import ModalDetalleConsumo from '../custom/ModalDetalleConsumo';
+import {
+  ModalDetalleConsumo,
+  ModalDetallePing,
+  ModalDetalleTrace,
+} from '../../custom';
 
 export const returnUrlTraficosPage = ROUTER_PATHS.administracionRed.traficosNav;
 
@@ -60,29 +62,47 @@ const TraficosPage: React.FC<TraficosPageProps> = () => {
       {
         accessorKey: 'username',
         header: 'PPP NAME',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'username'),
       },
       {
-        accessorKey: 'acciones',
-        header: 'ACCIONES',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
+        accessorKey: 'consumo',
+        header: '',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: false,
+        enableSorting: false,
         Cell: ({ row }) => {
           return (
-            <>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <ModalDetalleConsumo
-                  viewMoreText="CONSUMO"
-                  listItems={row.original}
-                />
-                <Button onClick={() => console.log(row.original)}>TRACE</Button>
-                <Button onClick={() => console.log(row.original)}>PING</Button>
-              </div>
-            </>
+            <ModalDetalleConsumo
+              viewMoreText="CONSUMO"
+              listItems={row.original}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'trace',
+        header: '',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <ModalDetalleTrace viewMoreText="TRACE" listItems={row.original} />
+          );
+        },
+      },
+      {
+        accessorKey: 'ping',
+        header: '',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <ModalDetallePing viewMoreText="PING" listItems={row.original} />
           );
         },
       },
