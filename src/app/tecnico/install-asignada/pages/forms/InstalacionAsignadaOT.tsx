@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetOrdenTrabajo } from '@/actions/app';
+import { EstadoOrdenTrabajoEnumChoice, ToastWrapper } from '@/shared';
 import { CustomTitleRefNumber } from '@/shared/components';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
@@ -17,8 +19,27 @@ const InstalacionAsignadaOT: React.FC<InstalacionAsignadaOTProps> = () => {
   const { data, isLoading, isRefetching } = useGetOrdenTrabajo(uuid!);
   useLoaders(isLoading || isRefetching);
 
-  if (isLoading || isRefetching) return null;
-  if (!data?.data?.id) return <Navigate to={returnUrlInstallAsignadasOT} />;
+  ///* effects ----------------
+  useEffect(() => {
+    if (isLoading || isRefetching) return;
+
+    if (
+      !!data &&
+      data?.data?.estado_orden_trabajo !==
+        EstadoOrdenTrabajoEnumChoice.PENDIENTE
+    ) {
+      ToastWrapper.error(
+        'La instalación asignada no se encuentra en estado pendiente',
+      );
+    }
+  }, []);
+
+  if (isLoading) return null;
+  if (
+    !data?.data?.id ||
+    data?.data?.estado_orden_trabajo !== EstadoOrdenTrabajoEnumChoice.PENDIENTE
+  )
+    return <Navigate to={returnUrlInstallAsignadasOT} />;
 
   return (
     <SaveOrdenTrabajo
