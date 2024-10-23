@@ -1,4 +1,9 @@
-import { Agendamiento, Preventa, SolicitudServicio } from '@/shared';
+import {
+  Agendamiento,
+  FlotaLimitData,
+  Preventa,
+  SolicitudServicio,
+} from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface OrdenesTrabajoPaginatedRes {
@@ -76,4 +81,5 @@ export interface OrdenTrabajo {
   solicitud_servicio_data?: SolicitudServicio;
   preventa_data?: Preventa;
   agendamiento_data?: Agendamiento;
+  flota_data?: FlotaLimitData;
 }
