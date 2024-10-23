@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Chart from 'react-apexcharts';
+import { useTheme } from '@mui/material/styles';
 
 export type DiagramaProps = {
   fecha?: Record<string, string>;
@@ -12,6 +13,8 @@ type ChartSeries = {
 };
 
 const Diagrama: React.FC<DiagramaProps> = ({ fecha, dataT }) => {
+  const theme = useTheme();
+
   useEffect(() => {
     if (!fecha || !dataT) return;
 
@@ -56,19 +59,32 @@ const Diagrama: React.FC<DiagramaProps> = ({ fecha, dataT }) => {
     chart: {
       height: 350,
       type: 'area',
+      fontFamily: "'Plus Jakarta Sans', sans-serif;",
+      foreColor: '#adb0bb',
       toolbar: {
-        tools: {
-          zoom: true,
-          pan: true,
-        },
-        autoSelected: 'zoom',
+        show: false,
       },
-    },
-    dataLabels: {
-      enabled: false,
     },
     stroke: {
       curve: 'smooth',
+      width: 2,
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 0,
+        inverseColors: false,
+        opacityFrom: 0.45,
+        opacityTo: 0,
+        stops: [20, 180],
+      },
+    },
+    markers: {
+      size: 0,
+    },
+
+    dataLabels: {
+      enabled: false,
     },
     grid: {
       padding: {
@@ -109,8 +125,9 @@ const Diagrama: React.FC<DiagramaProps> = ({ fecha, dataT }) => {
       },
     },
     tooltip: {
+      theme: theme.palette.mode === 'dark' ? 'dark' : 'light',
       x: {
-        format: 'dd MMM',
+        show: false,
       },
     },
   };
