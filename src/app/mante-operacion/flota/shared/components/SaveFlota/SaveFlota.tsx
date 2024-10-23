@@ -89,7 +89,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     resolver: yupResolver(flotaFormSchema) as any,
     defaultValues: {
       state: true,
-      es_bodega: false,
+      es_ubicacion: false,
     },
   });
 
@@ -98,7 +98,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     reset,
     formState: { errors, isValid },
   } = form;
-  const watchedIsBodega = form.watch('es_bodega');
+  const watchedIsBodega = form.watch('es_ubicacion');
   const watchedArea = form.watch('area');
   const watchedLider = form.watch('lider');
   const watchedAuxiliar = form.watch('auxiliar');
@@ -600,8 +600,8 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
           <>
             <>
               <SampleCheckbox
-                label="Es bodega externa"
-                name="es_bodega"
+                label="Es ubicación"
+                name="es_ubicacion"
                 control={form.control}
                 defaultValue={form.getValues().state}
                 size={gridSizeMdLg6}

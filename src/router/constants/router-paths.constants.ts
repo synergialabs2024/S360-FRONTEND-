@@ -306,7 +306,7 @@ export const ROUTER_PATHS = {
 
     ///* instalaciones asignadasta
     instalacionesAsignadas: 'instalaciones-asignadas',
-    instalacionAsignadaOT: 'instalaciones-asignadas/orden-trabajo/:uuid',
+    instalacionAsignadaOT: 'instalaciones-asignadas/:uuid',
     instalacionesAsignadasNav: '/tecnico/instalaciones-asignadas',
   },
 

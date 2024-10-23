@@ -3,15 +3,21 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { CacheBaseKeysPreventaEnum } from '@/actions/app';
+import {
+  CacheBaseKeysPreventaEnum,
+  useCreateOrdenTrabajo,
+} from '@/actions/app';
+import { CreateInstalacionAsignadaOTOperaciones } from '@/actions/app/tecnico/orden-trabajo-action-types.interface';
 import { usePlanificadorAgendamiento } from '@/app/comercial/agendamiento/shared/hooks';
 import {
   Agendamiento,
   agendamientoOperacionesConfirmFormSchema,
+  EstadoOrdenTrabajoEnumChoice,
   Flota,
   getKeysFormErrorsMessage,
   Preventa,
   SolicitudServicio,
+  TipoOrdenTrabajoEnumChoice,
   ToastWrapper,
 } from '@/shared';
 import {
@@ -71,15 +77,27 @@ const SaveConfirmAgendaOperaciones: React.FC<
     defaultValues: {},
   });
   const { handleSubmit, reset } = form;
-
   usePlanificadorAgendamiento({
     cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`,
     form: form as any,
   });
 
+  ///* mutations ---------------------
+  const approveAgendamiento =
+    useCreateOrdenTrabajo<CreateInstalacionAsignadaOTOperaciones>({
+      customMessageToast: 'Agendamiento aprobado con éxito',
+      navigate,
+      returnUrl: returnUrlAgendamientoOperacionesPage,
+    });
+
   ///* handlers ---------------------
   const onSave = (data: SaveConfirmAgendaOperaciones) => {
-    console.log(data);
+    approveAgendamiento.mutate({
+      estado_orden_trabajo: EstadoOrdenTrabajoEnumChoice.PENDIENTE,
+      tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice.INSTALACION,
+      agendamiento: agendamiento?.id!,
+      flota: data.flota!,
+    });
   };
 
   ///* effects ---------------------

@@ -64,7 +64,7 @@ const InstalacionAsignadaOTByState: React.FC<
     return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
   };
   const calcOnEdit = (row: OrdenTrabajo) => {
-    navigate(`/tecnico/instalacion-asignada/${row.uuid}`);
+    navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
   };
 
   ///* columns

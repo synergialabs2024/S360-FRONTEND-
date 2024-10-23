@@ -131,13 +131,13 @@ export const flotaFormSchema = yup.object({
     .nullable(),
 
   //
-  es_bodega: yup.boolean().required('El campo es bodega es requerido'),
+  es_ubicacion: yup.boolean().required('El campo es bodega es requerido'),
   bodega: yup
     .number()
     .typeError('El campo bodega debe ser un número')
     .optional()
     .nullable()
-    .when('es_bodega', {
+    .when('es_ubicacion', {
       is: true,
       then: schema =>
         schema.required(

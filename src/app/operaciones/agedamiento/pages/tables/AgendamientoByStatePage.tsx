@@ -95,7 +95,7 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
       <CustomTable<Agendamiento>
         columns={
           // solicitudServicioBase
-          state === EstadoAgendamientoEnumChoice.ESPERA ? agendaBase01 : []
+          state === EstadoAgendamientoEnumChoice.APROBADO ? agendaBase01 : []
         }
         data={agendamientosPagingRes?.data?.items || []}
         isLoading={isLoading}

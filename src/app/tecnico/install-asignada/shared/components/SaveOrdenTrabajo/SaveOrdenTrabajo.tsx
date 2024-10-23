@@ -27,7 +27,11 @@ import {
   ordenTrabajoFormSchema,
 } from '@/shared/utils';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
-import { InstallAsigTecnicoOTFormTab } from '../form';
+import {
+  InstallAsigOrdenTrabajoFormTab,
+  InstallAsigOTMaterialesFormTab,
+  InstallAsigTecnicoOTFormTab,
+} from '../form';
 
 export interface SaveOrdenTrabajoProps {
   titleNode: React.ReactNode;
@@ -105,13 +109,23 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
           <Tab label="Información general" value={1} {...a11yProps(1)} />
           <Tab label="Órden de trabajo" value={2} {...a11yProps(2)} />
-          <Tab label="Materiales" value={2} {...a11yProps(2)} />
+          <Tab label="Materiales" value={3} {...a11yProps(3)} />
         </FormTabsOnly>
       }
     >
       {/* ========================= Datos Generales ========================= */}
       <CustomTabPanel index={1} value={tabValue}>
         <InstallAsigTecnicoOTFormTab form={form} />
+      </CustomTabPanel>
+
+      {/* ========================= Orden de Trabajo ========================= */}
+      <CustomTabPanel index={2} value={tabValue}>
+        <InstallAsigOrdenTrabajoFormTab form={form} />
+      </CustomTabPanel>
+
+      {/* ========================= Materiales ========================= */}
+      <CustomTabPanel index={3} value={tabValue}>
+        <InstallAsigOTMaterialesFormTab form={form} />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

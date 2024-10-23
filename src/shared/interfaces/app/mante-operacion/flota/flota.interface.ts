@@ -25,7 +25,7 @@ export interface Flota {
   telefono_2: string;
   telefono_3: string;
 
-  es_bodega: boolean;
+  es_ubicacion: boolean;
 
   hora_inicio_instalacion?: string; // HH:MM:SS
   hora_fin_instalacion?: string; // HH:MM:SS

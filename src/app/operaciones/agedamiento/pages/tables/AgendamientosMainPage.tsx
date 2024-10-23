@@ -33,9 +33,6 @@ const AgendamientosMainPage: React.FC<AgendamientosMainPageProps> = () => {
       >
         <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
         <Tab label={'APROBADAS'} value={2} {...a11yProps(2)} />
-        {/* <Tab label={'REALIZADAS'} value={2} {...a11yProps(2)} />
-        <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
-        <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} /> */}
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
