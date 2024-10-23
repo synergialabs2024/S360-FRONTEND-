@@ -4,8 +4,8 @@ import { Controller } from 'react-hook-form';
 import { gridSizeMdLg6 } from '@/shared/constants';
 import { GridSizeType } from '@/shared/interfaces';
 
-export interface SelectArrayStringProps {
-  label: string;
+export interface SelectArrayStringSimpleProps {
+  label?: string;
 
   textFieldKey?: string;
   defaultValue?: string | number;
@@ -18,10 +18,10 @@ export interface SelectArrayStringProps {
   disabled?: boolean;
   clearable?: boolean;
 
-  control: any; // Agregar control como prop requerido
+  control?: any; // Agregar control como prop requerido
 }
 
-const SelectArrayString: React.FC<SelectArrayStringProps> = ({
+const SelectArrayStringSimple: React.FC<SelectArrayStringSimpleProps> = ({
   label,
   defaultValue,
   options,
@@ -86,4 +86,4 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
   );
 };
 
-export default SelectArrayString;
+export default SelectArrayStringSimple;

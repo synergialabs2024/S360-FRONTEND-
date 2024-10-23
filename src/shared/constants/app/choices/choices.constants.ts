@@ -532,3 +532,60 @@ export const TRAFICO_TYPE_ARRAY_CHOICES = [
   TraficoTypeEnumChoice.G_DIARIO,
   TraficoTypeEnumChoice.G_MENSUAL,
 ];
+
+export enum MesesTypeEnumChoice {
+  ENERO = 'Enero',
+  FEBRERO = 'Febrero',
+  MARZO = 'Marzo',
+  ABRIL = 'Abril',
+  MAYO = 'Mayo',
+  JUNIO = 'Junio',
+  JULIO = 'Julio',
+  AGOSTO = 'Agosto',
+  SEPTIEMBRE = 'Septiembre',
+  OCTUBRE = 'Octubre',
+  NOVIEMBRE = 'Noviembre',
+  DICIEMBRE = 'Diciembre',
+}
+export const MESES_TYPE_ARRAY_CHOICES = [
+  MesesTypeEnumChoice.ENERO,
+  MesesTypeEnumChoice.FEBRERO,
+  MesesTypeEnumChoice.MARZO,
+  MesesTypeEnumChoice.ABRIL,
+  MesesTypeEnumChoice.MAYO,
+  MesesTypeEnumChoice.JUNIO,
+  MesesTypeEnumChoice.JULIO,
+  MesesTypeEnumChoice.AGOSTO,
+  MesesTypeEnumChoice.SEPTIEMBRE,
+  MesesTypeEnumChoice.OCTUBRE,
+  MesesTypeEnumChoice.NOVIEMBRE,
+  MesesTypeEnumChoice.DICIEMBRE,
+];
+
+export const mesesMap: { [key in MesesTypeEnumChoice]: number } = {
+  [MesesTypeEnumChoice.ENERO]: 1,
+  [MesesTypeEnumChoice.FEBRERO]: 2,
+  [MesesTypeEnumChoice.MARZO]: 3,
+  [MesesTypeEnumChoice.ABRIL]: 4,
+  [MesesTypeEnumChoice.MAYO]: 5,
+  [MesesTypeEnumChoice.JUNIO]: 6,
+  [MesesTypeEnumChoice.JULIO]: 7,
+  [MesesTypeEnumChoice.AGOSTO]: 8,
+  [MesesTypeEnumChoice.SEPTIEMBRE]: 9,
+  [MesesTypeEnumChoice.OCTUBRE]: 10,
+  [MesesTypeEnumChoice.NOVIEMBRE]: 11,
+  [MesesTypeEnumChoice.DICIEMBRE]: 12,
+};
+
+export enum TraficoPingTypeEnumChoice {
+  DOS = '2',
+  CUATRO = '4',
+  OCHO = '8',
+  DIEZCISEIS = '16',
+}
+export const TRAFICO_PING_TYPE_ARRAY_CHOICES = [
+  TraficoPingTypeEnumChoice.DOS,
+  TraficoPingTypeEnumChoice.CUATRO,
+  TraficoPingTypeEnumChoice.OCHO,
+  TraficoPingTypeEnumChoice.DIEZCISEIS,
+];

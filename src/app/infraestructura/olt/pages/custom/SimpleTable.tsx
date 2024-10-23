@@ -23,7 +23,7 @@ function SimpleTable<T extends MRT_RowData>({
   const table = useMaterialReactTable({
     columns,
     data,
-    enableGlobalFilter, // Se habilita o deshabilita según lo que recibas como prop
+    enableGlobalFilter,
     enablePagination: true,
     muiTableHeadCellProps: {
       sx: {
