@@ -97,6 +97,8 @@ const SaveConfirmAgendaOperaciones: React.FC<
       tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice.INSTALACION,
       agendamiento: agendamiento?.id!,
       flota: data.flota!,
+      estado_llamada: data.estado_llamada!,
+      observacion_llamada: data.observacion_llamada!,
     });
   };
 

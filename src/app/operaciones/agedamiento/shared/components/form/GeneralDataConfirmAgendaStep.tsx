@@ -233,6 +233,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
           error={errors.celular}
           helperText={errors.celular?.message}
           size={gridSizeMdLg6}
+          disabled
         />
         <CustomAutocompleteArrString
           label="Estado Llamada"

@@ -14,6 +14,7 @@ import {
   FormTabsOnly,
   NestedTabsScene,
 } from '@/shared/components';
+import { SingleImageModal } from '@/shared/components/ui';
 import type { InstallAsignOTSaveFormData } from '../SaveOrdenTrabajo/SaveOrdenTrabajo';
 
 export type InstallAsigTecnicoOTFormTabProps = {
@@ -90,6 +91,22 @@ const InstallAsigTecnicoOTFormTab: React.FC<
               disabled
               size={gridSize}
             />
+
+            <>
+              <CustomTypoLabel
+                text="Vivienda del cliente"
+                pt={CustomTypoLabelEnum.ptMiddlePosition}
+              />
+
+              <SingleImageModal
+                image={{
+                  id: 1,
+                  imgUrl: ordenTrabajo?.preventa_data?.url_foto_vivienda!,
+                  title: 'Foto de la vivienda',
+                }}
+                widthPercentage="70%"
+              />
+            </>
           </CustomTabPanel>
 
           {/* ------------- Datos Cliente ------------- */}
