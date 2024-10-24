@@ -70,3 +70,18 @@ button:focus-visible {
 .spacer {
   flex: 1;
 }
+
+.page-title__small {
+  font-size: 16px !important;
+  color: #202326c3 !important;
+}
+
+/* Map Polygon */
+.sr-only {
+  display: none;
+}
+
+/* calendar */
+.rbc-time-slot {
+  min-height: 72px !important;
+}

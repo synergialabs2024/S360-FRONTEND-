@@ -2,8 +2,11 @@ import {
   Agendamiento,
   FlotaLimitData,
   LineaServicio,
+  Nodo,
+  OLT,
   Preventa,
   SolicitudServicio,
+  TipoActualizacionActivacionesEnumChoice,
 } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
@@ -56,6 +59,12 @@ export interface OrdenTrabajo {
 
   observacion_prerechazo: string;
 
+  // cambio puerto ---------------
+  tipo_actualizacion_puerto?: TipoActualizacionActivacionesEnumChoice;
+  observacion_cambio_puerto?: string;
+  fecha_actualizacion_puerto?: string; // timestamp
+  usuario_actualizacion_puerto?: number; // fk
+
   ///* fk
   flota?: number;
   usuario_flota?: number; // gestiona - user de flota
@@ -84,4 +93,6 @@ export interface OrdenTrabajo {
   agendamiento_data?: Agendamiento;
   flota_data?: FlotaLimitData;
   linea_servicio_data?: LineaServicio;
+  olt_data?: OLT;
+  nodo_data?: Nodo;
 }

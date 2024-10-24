@@ -2,6 +2,7 @@ import { Grid, IconButton, Tooltip } from '@mui/material';
 
 import { useIsMediaQuery } from '@/shared/hooks';
 import {
+  AlignItemsType,
   ColorButtonType,
   GridSizeType,
   JustifyContentType,
@@ -27,6 +28,7 @@ export type SingleIconButtonProps = {
   tooltipPlacement?: TooltipPlacementType;
 
   justifyContent?: JustifyContentType;
+  alignItems?: AlignItemsType;
 
   customColor?: string;
 
@@ -45,6 +47,7 @@ const SingleIconButton: React.FC<SingleIconButtonProps> = ({
   tooltipPlacement = 'top',
   justifyContent,
   sxIconBtn,
+  alignItems = 'center',
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -55,6 +58,7 @@ const SingleIconButton: React.FC<SingleIconButtonProps> = ({
         {...size}
         container
         justifyContent={isMobile ? 'start' : justifyContent}
+        alignItems={isMobile ? 'center' : alignItems}
       >
         <Tooltip title={label} placement={tooltipPlacement}>
           <span>

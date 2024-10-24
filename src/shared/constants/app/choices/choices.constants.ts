@@ -589,3 +589,12 @@ export const TRAFICO_PING_TYPE_ARRAY_CHOICES = [
   TraficoPingTypeEnumChoice.OCHO,
   TraficoPingTypeEnumChoice.DIEZCISEIS,
 ];
+
+export enum TipoActualizacionActivacionesEnumChoice {
+  PUERTO = 'PUERTO',
+  NAP_Y_PUERTO = 'NAP Y PUERTO',
+}
+export const TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES = [
+  TipoActualizacionActivacionesEnumChoice.PUERTO,
+  TipoActualizacionActivacionesEnumChoice.NAP_Y_PUERTO,
+];

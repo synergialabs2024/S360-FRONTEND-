@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import { TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES } from '@/shared/constants';
+
 export const ordenTrabajoFormSchema = yup.object({
   estado_orden_trabajo: yup
     .string()
@@ -137,4 +139,24 @@ export const ordenTrabajoFormSchema = yup.object({
     .number()
     .typeError('El campo pool ipv6 es requerido')
     .required('El campo pool ipv6 es requerido'),
+});
+
+// // --------------------
+export const requestChangePortSchema = yup.object({
+  tipo_actualizacion_puerto: yup
+    .string()
+    .required('El campo tipo actualizacion puerto es requerido')
+    .oneOf(
+      TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES,
+      'El campo tipo actualizacion puerto no es válido',
+    ),
+
+  observacion_cambio_puerto: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      200,
+      'El campo observacion cambio puerto no debe exceder los 200 caracteres',
+    ),
 });

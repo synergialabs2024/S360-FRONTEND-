@@ -91,6 +91,7 @@ export const useUpdateOrdenTrabajo = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
@@ -98,10 +99,11 @@ export const useUpdateOrdenTrabajo = <T>({
   return useMutation({
     mutationFn: (params: UpdateOrdenTrabajoParams<T>) =>
       updateOrdenTrabajo(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [OrdenTrabajoTSQEnum.ORDENTRABAJOS],
       });
+      customOnSuccess && customOnSuccess(res);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(

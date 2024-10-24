@@ -129,7 +129,10 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
 
       {/* ========================= Orden de Trabajo ========================= */}
       <CustomTabPanel index={2} value={tabValue}>
-        <InstallAsigOrdenTrabajoFormTab form={form} />
+        <InstallAsigOrdenTrabajoFormTab
+          form={form}
+          ordenTrabajo={ordentrabajo!}
+        />
       </CustomTabPanel>
 
       {/* ========================= Materiales ========================= */}

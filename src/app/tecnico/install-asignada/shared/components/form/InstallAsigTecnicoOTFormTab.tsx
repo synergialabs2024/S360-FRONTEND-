@@ -73,6 +73,15 @@ const InstallAsigTecnicoOTFormTab: React.FC<
           {/* ------------- Servicio ------------- */}
           <CustomTabPanel value={tabValue} index={1} ptGrid="0">
             <CustomTextFieldNoForm
+              label="N° de contrato"
+              value={
+                ordenTrabajo?.linea_servicio_data?.contrato_data
+                  ?.numero_contrato
+              }
+              disabled
+              size={gridSize}
+            />
+            <CustomTextFieldNoForm
               label="Tipo de servicio"
               value={ordenTrabajo?.preventa_data?.tipo_servicio}
               disabled
