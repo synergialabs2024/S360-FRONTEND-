@@ -103,7 +103,7 @@ export const useUpdateOrdenTrabajo = <T>({
       queryClient.invalidateQueries({
         queryKey: [OrdenTrabajoTSQEnum.ORDENTRABAJOS],
       });
-      customOnSuccess && customOnSuccess(res);
+      customOnSuccess && customOnSuccess(res?.data);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(

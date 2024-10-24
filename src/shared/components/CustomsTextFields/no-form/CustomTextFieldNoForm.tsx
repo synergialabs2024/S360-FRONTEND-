@@ -55,7 +55,7 @@ const CustomTextFieldNoForm: React.FC<CustomTextFieldNoFormProps> = ({
         <TextField
           fullWidth
           variant={variant}
-          value={value}
+          value={value || ''}
           defaultValue={defaultValue}
           required={required}
           InputLabelProps={{

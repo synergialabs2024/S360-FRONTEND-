@@ -37,7 +37,7 @@ export interface OrdenTrabajo {
   punta_final_fibra: string;
   metraje_utilizado_fibra: string;
   metraje_exedente_fibra: string;
-  serie_ont: string;
+  serie_ont?: string;
   potencia_ont: string;
 
   url_foto_ont: string;
