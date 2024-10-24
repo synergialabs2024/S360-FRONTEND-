@@ -64,3 +64,21 @@ export const getKeysFormErrorsMessage = (errors: FieldErrors<any>): string => {
 
   return keys.length > 12 ? `${keys.slice(0, 90)}...` : keys;
 };
+
+export const sanitizeDataResetForm = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizeDataResetForm);
+  } else if (obj !== null && typeof obj === 'object') {
+    const sanitizedObj: any = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        sanitizedObj[key] = sanitizeDataResetForm(obj[key]);
+      }
+    }
+    return sanitizedObj;
+  } else if (obj === null) {
+    return undefined;
+  } else {
+    return obj;
+  }
+};

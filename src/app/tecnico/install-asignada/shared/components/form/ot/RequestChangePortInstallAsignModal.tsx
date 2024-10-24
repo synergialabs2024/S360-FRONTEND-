@@ -19,6 +19,8 @@ export type RequestChangePortInstallAsignModalProps = {
   open: boolean;
   onClose: () => void;
   ordenTrabajo: OrdenTrabajo;
+
+  customOnSuccess?: (ot: OrdenTrabajo) => void;
 };
 
 type FormData = Pick<
@@ -28,7 +30,7 @@ type FormData = Pick<
 
 const RequestChangePortInstallAsignModal: React.FC<
   RequestChangePortInstallAsignModalProps
-> = ({ onClose, open, ordenTrabajo }) => {
+> = ({ onClose, open, ordenTrabajo, customOnSuccess }) => {
   ///* form ---------------------
   const form = useForm<FormData>({
     resolver: yupResolver(requestChangePortSchema) as any,
@@ -38,8 +40,9 @@ const RequestChangePortInstallAsignModal: React.FC<
   ///* mutations ---------------------
   const requestChangePort = useUpdateOrdenTrabajo<FormData>({
     customMessageToast: 'Se ha solicitado el cambio de puerto con éxito',
-    customOnSuccess: () => {
+    customOnSuccess: ot => {
       handleCloseModal();
+      customOnSuccess && customOnSuccess(ot as OrdenTrabajo);
     },
   });
 

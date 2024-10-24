@@ -25,6 +25,7 @@ import { OrdenTrabajo } from '@/shared/interfaces';
 import {
   getKeysFormErrorsMessage,
   ordenTrabajoFormSchema,
+  sanitizeDataResetForm,
 } from '@/shared/utils';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
 import {
@@ -97,11 +98,17 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     const { solicitud_servicio_data, preventa_data, agendamiento_data } =
       ordentrabajo;
 
-    reset({
+    const dataToReset = {
       ...ordentrabajo,
       ...solicitud_servicio_data,
       ...preventa_data,
       ...agendamiento_data,
+
+      serie_ont: ordentrabajo?.serie_ont || undefined,
+    };
+
+    reset({
+      ...sanitizeDataResetForm(dataToReset),
     } as InstallAsignOTSaveFormData);
   }, [ordentrabajo, reset]);
 

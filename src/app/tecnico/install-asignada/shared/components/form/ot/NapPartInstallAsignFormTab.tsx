@@ -33,7 +33,14 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
   form,
   ordenTrabajo,
 }) => {
+  ///* form ---------------------
   const { errors } = form.formState;
+  const watchedTipoActualizacionPuerto = form.watch(
+    'tipo_actualizacion_puerto',
+  );
+  const watchedUsuarioActualizacionPuerto = form.watch(
+    'usuario_actualizacion_puerto',
+  );
 
   ///* local state ---------------------
   const [openChangePortDialog, setOpenChangePortDialog] =
@@ -73,6 +80,15 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
 
         {/* ---------- NAP ---------- */}
         <>
+          <CustomTextField
+            label="Serie ONT"
+            name="serie_ont"
+            control={form.control}
+            defaultValue={form.getValues().serie_ont}
+            error={errors.serie_ont}
+            helperText={errors.serie_ont?.message}
+          />
+
           <CustomAutocomplete<Nap>
             label="NAP"
             name="nap"
@@ -131,8 +147,8 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
               label="Solicitar cambio puerto"
               onClick={() => {
                 if (
-                  !!ordenTrabajo?.tipo_actualizacion_puerto &&
-                  !ordenTrabajo?.usuario_actualizacion_puerto
+                  !!watchedTipoActualizacionPuerto &&
+                  !watchedUsuarioActualizacionPuerto
                 ) {
                   return ToastWrapper.warning(
                     'El cambio de puerto solicitado aún no ha sido atendido',
@@ -155,6 +171,24 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
         open={openChangePortDialog}
         onClose={() => setOpenChangePortDialog(false)}
         ordenTrabajo={ordenTrabajo!}
+        customOnSuccess={ot => {
+          form.setValue(
+            'tipo_actualizacion_puerto',
+            ot?.tipo_actualizacion_puerto,
+          );
+          form.setValue(
+            'observacion_cambio_puerto',
+            ot?.observacion_cambio_puerto,
+          );
+          form.setValue(
+            'fecha_actualizacion_puerto',
+            ot?.fecha_actualizacion_puerto,
+          );
+          form.setValue(
+            'usuario_actualizacion_puerto',
+            ot?.usuario_actualizacion_puerto,
+          );
+        }}
       />
     </>
   );
