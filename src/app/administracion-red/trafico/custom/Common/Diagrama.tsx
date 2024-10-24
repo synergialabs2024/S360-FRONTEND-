@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 
 export type DiagramaProps = {
   fecha?: Record<string, string>;
-  dataT?: string[];
+  dataT?: any[]; // Cambiar a any[] para que refleje correctamente el tipo de dataT
 };
 
 type ChartSeries = {
@@ -16,32 +16,34 @@ const Diagrama: React.FC<DiagramaProps> = ({ fecha, dataT }) => {
   const theme = useTheme();
 
   useEffect(() => {
-    if (!fecha || !dataT) return;
+    if (!dataT) return; // Si no hay datos, salir
 
-    const date1 = new Date(fecha?.date_1);
-    const date2 = new Date(fecha?.date_2);
-
-    const filteredData = dataT.filter((item: any) => {
-      const startTime = new Date(item?.acctstarttime);
-      const stopTime = new Date(item?.acctstoptime);
-      return (
-        (startTime >= date1 && startTime <= date2) ||
-        (stopTime >= date1 && stopTime <= date2)
-      );
-    });
+    const filteredData =
+      fecha && (fecha.date_1 || fecha.date_2)
+        ? dataT.filter((item: any) => {
+          const startTime = new Date(item?.acctstarttime);
+          const stopTime = new Date(item?.acctstoptime);
+          const date1 = new Date(fecha.date_1);
+          const date2 = new Date(fecha.date_2);
+          return (
+            (startTime >= date1 && startTime <= date2) ||
+              (stopTime >= date1 && stopTime <= date2)
+          );
+        })
+        : dataT; // Si no hay fecha, usar todos los datos
 
     const fechas = filteredData.map((item: any) => item.acctstarttime);
     const bajada = filteredData.map(
-      (item: any) => item.acctinputoctets / 1_000_000,
+      (item: any) => item.acctoutputoctets / 1_000_000,
     );
     const subida = filteredData.map(
-      (item: any) => item.acctoutputoctets / 1_000_000,
+      (item: any) => item.acctinputoctets / 1_000_000,
     );
 
     setChartData({
       series: [
-        { name: 'Consumo Bajada (MB)', data: bajada },
-        { name: 'Consumo Subida (MB)', data: subida },
+        { name: 'Consumo Subida', data: subida },
+        { name: 'Consumo Bajada', data: bajada },
       ],
       xAxisCategories: fechas,
     });
@@ -82,7 +84,6 @@ const Diagrama: React.FC<DiagramaProps> = ({ fecha, dataT }) => {
     markers: {
       size: 0,
     },
-
     dataLabels: {
       enabled: false,
     },
@@ -130,6 +131,7 @@ const Diagrama: React.FC<DiagramaProps> = ({ fecha, dataT }) => {
         show: false,
       },
     },
+    colors: [theme.palette.primary.main, theme.palette.secondary.main],
   };
 
   return (
