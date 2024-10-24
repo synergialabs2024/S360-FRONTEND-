@@ -6,6 +6,7 @@ import {
   SxPropsThemeType,
   TextFieldVariantType,
 } from '@/shared/interfaces';
+import { CustomFormLabel } from '../../Labels';
 
 export type CustomTextFieldNoFormProps = {
   label: string;
@@ -41,10 +42,19 @@ const CustomTextFieldNoForm: React.FC<CustomTextFieldNoFormProps> = ({
   return (
     <>
       <Grid item {...size}>
+        <CustomFormLabel
+          sx={{
+            mt: 0,
+          }}
+          htmlFor={label}
+          required={required}
+        >
+          {label}
+        </CustomFormLabel>
+
         <TextField
           fullWidth
           variant={variant}
-          label={label}
           value={value}
           defaultValue={defaultValue}
           required={required}

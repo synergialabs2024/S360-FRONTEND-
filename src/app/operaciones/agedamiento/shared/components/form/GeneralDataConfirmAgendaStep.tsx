@@ -212,7 +212,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
         />
 
         <CustomTextFieldNoForm
-          label="Vendedor"
+          label="Canal de ventas"
           value={agendamiento?.vendedor_data?.canal_venta_data?.name || 'N/A'}
           disabled
         />

@@ -6,6 +6,7 @@ import {
   SxPropsThemeType,
   TextFieldSizeType,
 } from '@/shared/interfaces';
+import { CustomFormLabel } from '../../Labels';
 
 type CustomTextAreaNoFormProps = {
   label: string;
@@ -61,11 +62,20 @@ const CustomTextAreaNoForm: React.FC<CustomTextAreaNoFormProps> = ({
 
   return (
     <Grid item {...size}>
+      <CustomFormLabel
+        sx={{
+          mt: 0,
+        }}
+        htmlFor={label}
+        required={required}
+      >
+        {label}
+      </CustomFormLabel>
+
       <TextField
         size={sizeTextField}
         fullWidth
         variant="outlined"
-        label={label}
         InputLabelProps={{
           ...(shrink && { shrink: true }),
           ...(startAdornment && { startAdornment }),

@@ -1,6 +1,7 @@
 import {
   Agendamiento,
   FlotaLimitData,
+  LineaServicio,
   Preventa,
   SolicitudServicio,
 } from '@/shared';
@@ -82,4 +83,5 @@ export interface OrdenTrabajo {
   preventa_data?: Preventa;
   agendamiento_data?: Agendamiento;
   flota_data?: FlotaLimitData;
+  linea_servicio_data?: LineaServicio;
 }

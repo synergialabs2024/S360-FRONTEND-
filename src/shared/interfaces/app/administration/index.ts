@@ -18,3 +18,6 @@ export * from './system-user';
 export * from './tipo-comprobante';
 export * from './trazabilidad-venta';
 export * from './zona';
+
+// TODO: move this
+export * from './configuracion-plantilla-cliente/configuracion-plantilla-cliente.interface';
