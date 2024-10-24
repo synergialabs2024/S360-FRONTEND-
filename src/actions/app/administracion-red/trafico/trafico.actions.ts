@@ -49,6 +49,9 @@ export const useGetTraficoConsulta = (username: string) => {
 
 ///* axios
 export const getTraficoConsulta = async (username: string) => {
+  if (!username) {
+    return null;
+  }
   try {
     const response = await axios.get(`${CONSULTA_API}${username}`);
     return response.data;

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React from 'react';
 import { Box, Grid } from '@mui/material';
@@ -15,6 +14,7 @@ import Social from '@/components/dashboards/modern/Social';
 import SellingProducts from '@/components/dashboards/modern/SellingProducts';
 import WeeklyStats from '@/components/dashboards/modern/WeeklyStats';
 import TopPerformers from '@/components/dashboards/modern/TopPerformers';
+import { SectionTrafico } from '@/components/dashboards/sections';
 
 const Modern = () => {
   return (
@@ -28,7 +28,11 @@ const Modern = () => {
           <Grid item xs={12} lg={12}>
             <TopCards />
           </Grid>
-          {/* column */}
+          {/*
+           */}
+          <Grid item xs={12} lg={8}>
+            <SectionTrafico />
+          </Grid>
           <Grid item xs={12} lg={8}>
             <RevenueUpdates />
           </Grid>
