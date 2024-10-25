@@ -84,7 +84,7 @@ const AgendamientoEsperaOperacionesPage: React.FC<
   };
 
   ///* columns
-  const { agendaBase01 } = useColumnsAgendamientos();
+  const { agendaEspera } = useColumnsAgendamientos();
 
   return (
     <GridTableTabsContainerOnly>
@@ -98,7 +98,7 @@ const AgendamientoEsperaOperacionesPage: React.FC<
       />
 
       <CustomTable<Agendamiento>
-        columns={agendaBase01}
+        columns={agendaEspera}
         data={agendamientosPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
