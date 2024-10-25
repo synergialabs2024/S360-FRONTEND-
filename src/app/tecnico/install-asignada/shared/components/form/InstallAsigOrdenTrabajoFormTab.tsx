@@ -1,7 +1,12 @@
 import { UseFormReturn } from 'react-hook-form';
 
 import { gridSize, OrdenTrabajo } from '@/shared';
-import { CustomTextFieldNoForm, CustomTypoLabel } from '@/shared/components';
+import {
+  CustomNumberTextField,
+  CustomTextArea,
+  CustomTextFieldNoForm,
+  CustomTypoLabel,
+} from '@/shared/components';
 import type { InstallAsignOTSaveFormData } from '../SaveOrdenTrabajo/SaveOrdenTrabajo';
 import NapPartInstallAsignFormTab from './ot/NapPartInstallAsignFormTab';
 
@@ -13,6 +18,9 @@ export type InstallAsigOrdenTrabajoFormTabProps = {
 const InstallAsigOrdenTrabajoFormTab: React.FC<
   InstallAsigOrdenTrabajoFormTabProps
 > = ({ form, ordenTrabajo }) => {
+  ///* form ---------------------
+  const { errors } = form.formState;
+
   return (
     <>
       <CustomTypoLabel text="Detalle de la orden de trabajo" />
@@ -44,6 +52,25 @@ const InstallAsigOrdenTrabajoFormTab: React.FC<
           value={ordenTrabajo?.olt_data?.name}
           disabled
           size={gridSize}
+        />
+
+        {/* ------------ to complete ------------ */}
+        <CustomNumberTextField
+          label="Potencia ONT"
+          name="potencia_ont"
+          control={form.control}
+          defaultValue={form.getValues().potencia_ont}
+          error={errors.potencia_ont}
+          helperText={errors.potencia_ont?.message}
+        />
+        <CustomTextArea
+          label="Observaciones adicionales"
+          name="observaciones_adicionales"
+          control={form.control}
+          defaultValue={form.getValues().observaciones_adicionales}
+          error={errors.observaciones_adicionales}
+          helperText={errors.observaciones_adicionales?.message}
+          required={false}
         />
       </>
 

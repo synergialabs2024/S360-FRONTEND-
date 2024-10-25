@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdChangeCircle } from 'react-icons/md';
 
@@ -20,7 +21,6 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { useMapStore } from '@/store/app';
-import { useState } from 'react';
 import { InstallAsignOTSaveFormData } from '../../SaveOrdenTrabajo/SaveOrdenTrabajo';
 import RequestChangePortInstallAsignModal from './RequestChangePortInstallAsignModal';
 
@@ -75,20 +75,13 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
                 puerto_nap: '' as any,
               });
             }}
+            canDragMarker={false}
+            disabledInputCoords={true}
           />
         </>
 
         {/* ---------- NAP ---------- */}
         <>
-          <CustomTextField
-            label="Serie ONT"
-            name="serie_ont"
-            control={form.control}
-            defaultValue={form.getValues().serie_ont}
-            error={errors.serie_ont}
-            helperText={errors.serie_ont?.message}
-          />
-
           <CustomAutocomplete<Nap>
             label="NAP"
             name="nap"
@@ -112,7 +105,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
               form.setValue('distancia_nap', nap?.distance as any);
               form.setValue('puerto_nap', '' as any);
             }}
-            // disabled
+            disabled
           />
           {/* <CustomTextFieldNoForm
             label="NAP"

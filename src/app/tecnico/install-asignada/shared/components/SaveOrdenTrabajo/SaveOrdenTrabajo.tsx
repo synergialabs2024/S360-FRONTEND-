@@ -53,6 +53,11 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     initialTabValue: 1,
   });
 
+  // ================== EQUIPOS ==================
+  // useEquiposDisponiblesFlotaOT({ ordenTrabajo: ordentrabajo! });
+
+  // ================== EQUIPOS --- END ==================
+
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
     resolver: yupResolver(ordenTrabajoFormSchema) as any,

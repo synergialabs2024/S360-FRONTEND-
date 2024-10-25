@@ -40,6 +40,9 @@ export type LocationZonePolygonFormPartProps = {
   ptLabel?: string;
   showSectionTitle?: boolean;
   onChangeCoordsInput?: (value: string) => void;
+
+  disabledInputCoords?: boolean;
+  canDragMarker?: boolean;
 };
 
 const LocationZonePolygonFormPart: React.FC<
@@ -51,6 +54,9 @@ const LocationZonePolygonFormPart: React.FC<
   ptLabel = '0px',
   showSectionTitle = true,
   onChangeCoordsInput,
+
+  disabledInputCoords = false,
+  canDragMarker = true,
 }) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
@@ -192,6 +198,7 @@ const LocationZonePolygonFormPart: React.FC<
             defaultValue={form.getValues().coordenadas || ''}
             error={errors.coordenadas as any}
             helperText={errors.coordenadas?.message as any}
+            disabled={disabledInputCoords}
             onChangeValue={(value, isValidCoords) => {
               if (isValidCoords) {
                 const s = value.split(',');
@@ -248,12 +255,13 @@ const LocationZonePolygonFormPart: React.FC<
                         }
                       : { lat: 0, lng: 0 }
                   }
-                  canDragMarker={true}
+                  canDragMarker={canDragMarker}
                   setLatLng={setLatLng}
                   showCoverage
                   coverageZones={zonasPaging?.data?.items || []}
                 />
               }
+              canDragMarker={canDragMarker}
             />
           </>
         }
@@ -275,6 +283,7 @@ const LocationZonePolygonFormPart: React.FC<
             control={form.control}
             error={errors.sector as any}
             helperText={errors.sector?.message as any}
+            disabled={disabledInputCoords}
           />
           <CustomTextField
             label="Zona"

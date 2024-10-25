@@ -79,7 +79,7 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
   };
 
   ///* columns
-  const { agendaBase01 } = useColumnsAgendamientos();
+  const { agendaEspera } = useColumnsAgendamientos();
 
   return (
     <GridTableTabsContainerOnly>
@@ -95,7 +95,7 @@ const AgendamientoByStatePage: React.FC<AgendamientoByStatePageProps> = ({
       <CustomTable<Agendamiento>
         columns={
           // solicitudServicioBase
-          state === EstadoAgendamientoEnumChoice.APROBADO ? agendaBase01 : []
+          state === EstadoAgendamientoEnumChoice.APROBADO ? agendaEspera : []
         }
         data={agendamientosPagingRes?.data?.items || []}
         isLoading={isLoading}

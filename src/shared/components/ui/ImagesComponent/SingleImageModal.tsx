@@ -1,10 +1,10 @@
-// SingleImageModal.tsx
-
 import { Fade, Grid, IconButton, Modal, styled, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { FiZoomIn } from 'react-icons/fi';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+
+import { CustomCardAlert } from '../../CustomAlerts';
 
 // Estilos personalizados
 const ImageContainer = styled('div')<{ width: string; height: string }>(
@@ -78,9 +78,11 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [imageError, setImageError] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
+    setImageError(false);
   };
 
   const handleImageClick = (imgSrc: string) => {
@@ -88,14 +90,35 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
     setOpen(true);
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <Grid item container justifyContent="center" alignItems="center">
       <ImageContainer width={widthPercentage} height={heightPercentage}>
-        <Img
-          src={image.imgUrl}
-          alt={image.title}
-          onClick={() => handleImageClick(image.imgUrl)}
-        />
+        {image.imgUrl ? (
+          imageError ? (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage="No se pudo cargar la imagen proporcionada."
+              alertSeverity="error"
+            />
+          ) : (
+            <Img
+              src={image.imgUrl}
+              alt={image.title}
+              onClick={() => handleImageClick(image.imgUrl)}
+              onError={handleImageError}
+            />
+          )
+        ) : (
+          <CustomCardAlert
+            sizeType="small"
+            alertMessage="No se ha proporcionado la URL de la imagen."
+            alertSeverity="warning"
+          />
+        )}
       </ImageContainer>
 
       <Modal
@@ -112,21 +135,23 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
         <Fade in={open} timeout={500}>
           <ModalContent>
             {/* ======== Image + Zoom ======== */}
-            <TransformWrapper
-              initialScale={1}
-              initialPositionX={0}
-              initialPositionY={0}
-              wheel={{ step: 0.1 }}
-            >
-              {({ zoomIn }) => (
-                <>
-                  <TransformComponent>
-                    <ModalImg src={selectedImage} alt="Imagen seleccionada" />
-                  </TransformComponent>
-                  <ZoomIcon onClick={() => zoomIn()} title="Acercar" />
-                </>
-              )}
-            </TransformWrapper>
+            {!imageError && (
+              <TransformWrapper
+                initialScale={1}
+                initialPositionX={0}
+                initialPositionY={0}
+                wheel={{ step: 0.1 }}
+              >
+                {({ zoomIn }) => (
+                  <>
+                    <TransformComponent>
+                      <ModalImg src={selectedImage} alt="Imagen seleccionada" />
+                    </TransformComponent>
+                    <ZoomIcon onClick={() => zoomIn()} title="Acercar" />
+                  </>
+                )}
+              </TransformWrapper>
+            )}
 
             {/* ======== Close Button ======== */}
             <Tooltip title="Cerrar" placement="right" arrow>
@@ -134,6 +159,15 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
                 <IoMdCloseCircleOutline />
               </CloseButton>
             </Tooltip>
+
+            {/* ======== Alerta en el Modal si la Imagen no se Puede Cargar ======== */}
+            {imageError && (
+              <CustomCardAlert
+                sizeType="small"
+                alertMessage="No se pudo cargar la imagen proporcionada."
+                alertSeverity="error"
+              />
+            )}
           </ModalContent>
         </Fade>
       </Modal>

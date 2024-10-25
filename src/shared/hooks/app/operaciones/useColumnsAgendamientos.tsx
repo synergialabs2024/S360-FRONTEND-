@@ -276,7 +276,12 @@ export const useColumnsAgendamientos = () => {
     [],
   );
 
+  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+    () => [...agendaBase01],
+    [],
+  );
+
   return {
-    agendaBase01,
+    agendaEspera,
   };
 };
