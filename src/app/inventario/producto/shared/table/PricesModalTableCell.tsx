@@ -68,7 +68,7 @@ const PricesModalTableCell: React.FC<PricesModalTableCellProps> = ({
 
                   <CustomTextFieldNoForm
                     label="Valor"
-                    value={precio.valor.toString()}
+                    value={precio?.valor?.toString()}
                     disabled
                     type="number"
                     size={{ xs: 12, sm: 6, md: 2, lg: 2 }}

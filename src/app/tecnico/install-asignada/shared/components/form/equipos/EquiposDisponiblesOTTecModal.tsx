@@ -1,16 +1,22 @@
+import { useEffect } from 'react';
+
 import { useFetchUbicacionProductos } from '@/actions/app';
 import {
   InventarioEnumUUID,
   OrdenTrabajo,
+  ToastWrapper,
   UbicacionProducto,
+  useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
 import {
   CustomSearch,
+  CustomSingleButton,
   ScrollableDialogProps,
   TableWithoutActions,
 } from '@/shared/components';
+import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
 import { useColumnsEquiposMaterialesInstallOT } from '../../../hooks';
 
 export type EquiposDisponiblesOTTecModalProps = {
@@ -36,10 +42,11 @@ const EquiposDisponiblesOTTecModal: React.FC<
   const { pageIndex, pageSize } = pagination;
 
   ///* global state ---------------------
+  const addSelectedItem = useInstalacionesStore(s => s.addSelectedItem);
 
   ///* fetch data ---------------------
   const {
-    data: itemsDisponiblesPaging,
+    data: equiposDisponiblesPaging,
     isLoading: isLoadingItemsDisponibles,
     isRefetching: isRefetchingItemsDisponibles,
   } = useFetchUbicacionProductos({
@@ -52,8 +59,6 @@ const EquiposDisponiblesOTTecModal: React.FC<
       producto__codigo: searchTerm,
 
       ubicacion: ordenTrabajo?.flota_data?.ubicacion_data?.id,
-
-      producto__es_para_venta: true,
       producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
     },
   });
@@ -65,7 +70,46 @@ const EquiposDisponiblesOTTecModal: React.FC<
 
   ///* columns ---------------------
   const { baseColumnsEquiposMaterialesInstallOT01 } =
-    useColumnsEquiposMaterialesInstallOT();
+    useColumnsEquiposMaterialesInstallOT({
+      showActionColumn: true,
+      onActionEquiposRowNode(item) {
+        return (
+          <CustomSingleButton
+            label="AGREGAR"
+            variant="text"
+            color="primary"
+            onClick={() => {
+              addSelectedItem({
+                keyStore: InstalacionesStoreKey.equiposUtilizados,
+                item: {
+                  ...item,
+                  usedQuantity: 1,
+
+                  selectedSeries: [],
+                  savedSeries: [],
+                  containsSeries: !!item?.series?.length,
+                },
+                showToast: true,
+              });
+            }}
+          />
+        );
+      },
+    });
+
+  ///* effects ---------------------
+  const isCustomLoading =
+    isLoadingItemsDisponibles || isRefetchingItemsDisponibles;
+
+  useEffect(() => {
+    if (!open || isCustomLoading) return;
+
+    if (!equiposDisponiblesPaging?.data?.meta?.count)
+      ToastWrapper.error(
+        `No se encontraron equipos disponibles en la unidad ${ordenTrabajo?.flota_data?.name}`,
+      );
+  }, [isCustomLoading, equiposDisponiblesPaging]);
+  useLoaders(isCustomLoading);
 
   return (
     <>
@@ -83,10 +127,10 @@ const EquiposDisponiblesOTTecModal: React.FC<
 
             <TableWithoutActions<UbicacionProducto>
               columns={baseColumnsEquiposMaterialesInstallOT01}
-              data={itemsDisponiblesPaging?.data?.items || []}
+              data={equiposDisponiblesPaging?.data?.items || []}
               isLoading={isLoadingItemsDisponibles}
               isRefetching={isRefetchingItemsDisponibles}
-              rowCount={itemsDisponiblesPaging?.data?.meta?.count || 0}
+              rowCount={equiposDisponiblesPaging?.data?.meta?.count || 0}
               // search
               enableGlobalFilter={false}
               // // filters - server side

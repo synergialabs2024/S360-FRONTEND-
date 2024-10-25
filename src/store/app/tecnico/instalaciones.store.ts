@@ -72,7 +72,7 @@ export const useInstalacionesStore = create<InstalacionesState>()(
         (i: any) => i[idKey as any] === (item as any)[idKey as any],
       );
       if (itemExists) {
-        ToastWrapper.info('El item ya ha sido agregado.');
+        ToastWrapper.warning('El item ya ha sido agregado.');
         return;
       }
 
@@ -81,7 +81,7 @@ export const useInstalacionesStore = create<InstalacionesState>()(
         [keyStore]: [...get()[keyStore], item],
       });
 
-      showToast && ToastWrapper.success('Item agregado correctamente.');
+      showToast && ToastWrapper.info('Item agregado correctamente.');
     },
 
     updateSelectedItemValue: ({ keyStore, idKey = 'id', updatedItem }) => {

@@ -20,7 +20,7 @@ export interface UbicacionProducto {
   stock_critico: number;
   stock_actual: number;
 
-  series: SerieProducto[];
+  series: UbicacionSerieProducto[];
 
   created_at?: string;
   modified_at?: string;
@@ -35,7 +35,13 @@ export interface UbicacionProducto {
   ubicacion_data?: Ubicacion;
 }
 
-export interface SerieProducto {
+export interface UbicacionSerieProducto {
   code: string;
   block_until?: string; // timestamp
+}
+
+export type UbicacionProductoSeriesTypeStr = string;
+
+export interface UbicacionProductoSeriesType {
+  code: string;
 }

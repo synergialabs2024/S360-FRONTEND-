@@ -1,7 +1,7 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { emptyCellNested, formatQuantityCell } from '@/shared';
+import { emptyCellNested, formatQuantityCell, TABLE_CONSTANTS } from '@/shared';
 import { EquiposUtilizadosOTTableType } from '../components/form';
 
 type UseColumnsEquiposPreventa = {
@@ -30,6 +30,7 @@ export const useColumnsEquiposMaterialesInstallOT = ({
         accessorKey: 'producto__codigo',
         header: 'CÓDIGO',
         enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
       {
@@ -60,5 +61,16 @@ export const useColumnsEquiposMaterialesInstallOT = ({
     [],
   );
 
-  return { baseColumnsEquiposMaterialesInstallOT01 };
+  const columnsSelectedSeries = useMemo(
+    () => [
+      {
+        id: 'numero_serie',
+        header: 'Series',
+        accessorFn: (str: string) => str,
+      },
+    ],
+    [],
+  );
+
+  return { baseColumnsEquiposMaterialesInstallOT01, columnsSelectedSeries };
 };

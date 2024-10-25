@@ -10,6 +10,8 @@ import {
   useUpdateOrdenTrabajo,
 } from '@/actions/app';
 import {
+  gridSize,
+  gridSizeMdLg9,
   Preventa,
   SolicitudServicio,
   ToastWrapper,
@@ -128,14 +130,15 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
           <Tab label="Materiales" value={3} {...a11yProps(3)} />
         </FormTabsOnly>
       }
+      formSize={gridSize}
     >
       {/* ========================= Datos Generales ========================= */}
-      <CustomTabPanel index={1} value={tabValue}>
+      <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg9}>
         <InstallAsigTecnicoOTFormTab form={form} ordenTrabajo={ordentrabajo!} />
       </CustomTabPanel>
 
       {/* ========================= Orden de Trabajo ========================= */}
-      <CustomTabPanel index={2} value={tabValue}>
+      <CustomTabPanel index={2} value={tabValue} gridSizeChild={gridSizeMdLg9}>
         <InstallAsigOrdenTrabajoFormTab
           form={form}
           ordenTrabajo={ordentrabajo!}
