@@ -119,7 +119,12 @@ const NavItem = ({ item, level, hideMenu }: NavItemProps): ReactElement => {
         >
           <IconPoint stroke={1.5} size="1rem" />
         </ListItemIcon>
-        <ListItemText>
+        <ListItemText
+          sx={{
+            whiteSpace: 'normal',
+            wordWrap: 'break-word',
+          }}
+        >
           {hideMenu ? '' : <>{t(`${item?.title}`)}</>}
         </ListItemText>
         {item.chip && (
