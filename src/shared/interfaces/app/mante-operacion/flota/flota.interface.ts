@@ -1,6 +1,6 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
-import { Bodega } from '../../inventario';
+import { Bodega, Ubicacion } from '../../inventario';
 
 export interface FlotasPaginatedRes {
   status: number;
@@ -50,9 +50,20 @@ export interface Flota {
   auxiliar_data?: SystemUserLimitData;
   lider_data?: SystemUserLimitData;
   bodega_data?: Bodega;
+  ubicacion_data?: Ubicacion;
 }
 
 export type FlotaLimitData = Pick<
   Flota,
-  'uuid' | 'name' | 'id' | 'auxiliar_data' | 'lider_data' | 'state' | 'zonas'
+  | 'uuid'
+  | 'name'
+  | 'id'
+  | 'state'
+  | 'zonas'
+  | 'lider'
+  | 'auxiliar'
+  | 'auxiliar_data'
+  | 'lider_data'
+  | 'ubicacion_data'
+  | 'bodega_data'
 >;

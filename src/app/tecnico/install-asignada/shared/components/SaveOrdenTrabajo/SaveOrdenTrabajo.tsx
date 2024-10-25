@@ -53,11 +53,6 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     initialTabValue: 1,
   });
 
-  // ================== EQUIPOS ==================
-  // useEquiposDisponiblesFlotaOT({ ordenTrabajo: ordentrabajo! });
-
-  // ================== EQUIPOS --- END ==================
-
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
     resolver: yupResolver(ordenTrabajoFormSchema) as any,
@@ -149,7 +144,10 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
 
       {/* ========================= Materiales ========================= */}
       <CustomTabPanel index={3} value={tabValue}>
-        <InstallAsigOTMaterialesFormTab form={form} />
+        <InstallAsigOTMaterialesFormTab
+          form={form}
+          ordenTrabajo={ordentrabajo!}
+        />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

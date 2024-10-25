@@ -4,3 +4,8 @@ export { default as InstallAsigTecnicoOTFormTab } from './InstallAsigTecnicoOTFo
 
 export { default as NapPartInstallAsignFormTab } from './ot/NapPartInstallAsignFormTab';
 export { default as RequestChangePortInstallAsignModal } from './ot/RequestChangePortInstallAsignModal';
+
+export { default as EquiposDisponiblesOTTecModal } from './equipos/EquiposDisponiblesOTTecModal';
+export { default as EquiposUtilizadosInstallAsignFormPart } from './equipos/EquiposUtilizadosInstallAsignFormPart';
+
+export * from './equipos/EquiposUtilizadosInstallAsignFormPart';

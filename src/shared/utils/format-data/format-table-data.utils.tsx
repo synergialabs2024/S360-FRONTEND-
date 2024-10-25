@@ -137,7 +137,7 @@ export const formatBooleanCellNested = (
 export const formatQuantityCell = (
   row: any,
   key: string,
-  color: string,
+  color?: string,
   variant: TypographyProps['variant'] = 'h6',
   fontWeight: number = 400,
 ) => {

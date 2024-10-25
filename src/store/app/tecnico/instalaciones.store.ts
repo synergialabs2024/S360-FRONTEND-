@@ -48,7 +48,7 @@ export interface InstalacionesState {
     updatedItem,
   }: {
     keyStore: InstalacionesStoreKey;
-    idKey: string;
+    idKey?: string;
     updatedItem: EquiposUtilizadosOTTableType;
   }) => void;
 
@@ -67,7 +67,7 @@ export const useInstalacionesStore = create<InstalacionesState>()(
 
     setSelectedRow: item => set({ selectedRow: item }),
 
-    addSelectedItem: ({ item, keyStore, idKey, showToast = true }) => {
+    addSelectedItem: ({ item, keyStore, idKey = 'id', showToast = true }) => {
       const itemExists = get()[keyStore].find(
         (i: any) => i[idKey as any] === (item as any)[idKey as any],
       );
@@ -84,7 +84,7 @@ export const useInstalacionesStore = create<InstalacionesState>()(
       showToast && ToastWrapper.success('Item agregado correctamente.');
     },
 
-    updateSelectedItemValue: ({ keyStore, idKey, updatedItem }) => {
+    updateSelectedItemValue: ({ keyStore, idKey = 'id', updatedItem }) => {
       const items = get()[keyStore].map((i: any) =>
         i[idKey as any] === (updatedItem as any)[idKey as any]
           ? { ...i, ...updatedItem }
@@ -96,7 +96,7 @@ export const useInstalacionesStore = create<InstalacionesState>()(
       });
     },
 
-    removeSelectedItem: ({ item, keyStore, idKey }) => {
+    removeSelectedItem: ({ item, keyStore, idKey = 'id' }) => {
       const items = get()[keyStore].filter(
         (i: any) => i[idKey as any] !== (item as any)[idKey as any],
       );
