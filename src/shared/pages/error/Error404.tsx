@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, Grid } from '@mui/material';
+import { Box, Button, Typography, Container } from '@mui/material';
 import { IconChevronLeft } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -18,6 +18,38 @@ const Error404: React.FC<Error404Props> = ({
 }) => {
   return (
     <Box
+      display="flex"
+      flexDirection="column"
+      height="100vh"
+      textAlign="center"
+      justifyContent="center"
+    >
+      <Container maxWidth="md">
+        <iframe
+          src="https://lottie.host/embed/c6e03d6e-898e-43e6-a7bc-5f89c28528c6/jAxnKQZY3T.json"
+          style={{ border: 'none', width: '100%', height: '350px' }}
+        ></iframe>
+        <Typography align="center" variant="h1" mb={4}>
+          Opps!!!
+        </Typography>
+        <Typography align="center" variant="h4" mb={4}>
+          {message}
+        </Typography>
+        <Link to={buttonLink} style={{ textDecoration: 'none' }}>
+          <Button color="primary" variant="contained" disableElevation>
+            {icon} {buttonText}
+          </Button>
+        </Link>
+      </Container>
+    </Box>
+  );
+};
+
+export default Error404;
+
+/* 
+
+<Box
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -54,7 +86,5 @@ const Error404: React.FC<Error404Props> = ({
         </Grid>
       </Grid>
     </Box>
-  );
-};
-
-export default Error404;
+    
+    */
