@@ -43,6 +43,8 @@ export type LocationZonePolygonFormPartProps = {
 
   disabledInputCoords?: boolean;
   canDragMarker?: boolean;
+
+  showNaps?: boolean;
 };
 
 const LocationZonePolygonFormPart: React.FC<
@@ -57,6 +59,8 @@ const LocationZonePolygonFormPart: React.FC<
 
   disabledInputCoords = false,
   canDragMarker = true,
+
+  showNaps = true,
 }) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
@@ -259,6 +263,9 @@ const LocationZonePolygonFormPart: React.FC<
                   setLatLng={setLatLng}
                   showCoverage
                   coverageZones={zonasPaging?.data?.items || []}
+                  //
+                  showNaps={showNaps}
+                  naps={napsByCoords || []}
                 />
               }
               canDragMarker={canDragMarker}

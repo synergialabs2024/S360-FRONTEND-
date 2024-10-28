@@ -1,4 +1,6 @@
 /* eslint-disable indent */
+import { Grid, Paper, Typography } from '@mui/material';
+
 import L, { Icon } from 'leaflet';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -10,7 +12,6 @@ import {
   useMap,
 } from 'react-leaflet';
 
-import { Grid, Paper, Typography } from '@mui/material';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -18,6 +19,7 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType, Nap, Zona } from '@/shared/interfaces';
 import 'leaflet/dist/leaflet.css';
+import { NapMapDetailPopup } from './components';
 
 // // adapt leaflet to react ----
 // pnpm add leaflet react-leaflet
@@ -116,6 +118,8 @@ const CustomMap: React.FC<MapProps> = ({
     return null;
   };
 
+  console.log({ naps });
+
   return (
     <Grid
       item
@@ -186,36 +190,41 @@ const CustomMap: React.FC<MapProps> = ({
                 </Polygon>
               ))}
             </>
-            // <Polygon
-            //   pathOptions={greenOptions}
-            //   positions={coverage as unknown as L.LatLngExpression[][][]}
-            // />
           )}
 
           {/* -------- naps -------- */}
-          {showNaps && !!naps.length
+          {showNaps && naps.length > 0
             ? naps.map(nap => {
-                const lat = nap?.latitude || 0;
-                const lng = nap?.longitude || 0;
+                const lat = parseFloat(nap.latitude || '0');
+                const lng = parseFloat(nap.longitude || '0');
                 const areValidCoords =
-                  !isNaN(Number(lat)) &&
-                  !isNaN(Number(lng)) &&
-                  +lat !== 0 &&
-                  +lng !== 0;
+                  !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+
+                if (!areValidCoords) return null;
+
+                // ocupado = True | free = False
+                const availablePorts = nap.puertos_list?.filter(
+                  port => !port.estado,
+                );
+                const occupiedPorts = nap.puertos_list?.filter(
+                  port => port.estado,
+                );
 
                 return (
-                  <>
-                    {areValidCoords ? (
-                      <>
-                        <Marker
-                          key={nap.id}
-                          position={[+lat, +lng] as L.LatLngExpression}
-                          title={nap.name}
-                          icon={activeNapIcon}
-                        ></Marker>
-                      </>
-                    ) : null}
-                  </>
+                  <Marker
+                    key={nap.id}
+                    position={[lat, lng] as L.LatLngExpression}
+                    title={nap.name || ''}
+                    icon={activeNapIcon}
+                  >
+                    <NapMapDetailPopup
+                      nap={nap}
+                      lat={lat}
+                      lng={lng}
+                      availablePorts={availablePorts || []}
+                      occupiedPorts={occupiedPorts || []}
+                    />
+                  </Marker>
                 );
               })
             : null}

@@ -84,7 +84,6 @@ export const PricesForm: React.FC<PricesFormProps> = ({
               error={errors?.precios?.[index]?.valor}
               helperText={errors?.precios?.[index]?.valor?.message}
               type="number"
-              onlyNumbers={true}
               InputProps={{
                 inputProps: {
                   min: 0,

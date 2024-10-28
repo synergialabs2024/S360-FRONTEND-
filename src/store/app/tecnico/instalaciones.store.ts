@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 
-import { EquiposUtilizadosOTTableType } from '@/app/tecnico/install-asignada/shared/components/form';
+import type {
+  EquiposUtilizadosOTTableType,
+  MaterialesUtilizadosOTTableType,
+} from '@/app/tecnico/install-asignada/shared/components/form';
+
 import { ToastWrapper } from '@/shared';
 
 export enum InstalacionesStoreKey {
@@ -10,12 +14,14 @@ export enum InstalacionesStoreKey {
 
 export interface InstalacionesState {
   equiposUtilizados: EquiposUtilizadosOTTableType[];
-  materialesUtilizados: any[];
+  materialesUtilizados: MaterialesUtilizadosOTTableType[];
 
   selectedRow: EquiposUtilizadosOTTableType | null;
 
   setEquiposUtilizados: (equipos: EquiposUtilizadosOTTableType[]) => void;
-  setMaterialesUtilizados: (materiales: any[]) => void;
+  setMaterialesUtilizados: (
+    materiales: MaterialesUtilizadosOTTableType[],
+  ) => void;
 
   setSelectedRow: (row: EquiposUtilizadosOTTableType | null) => void;
 
@@ -26,7 +32,7 @@ export interface InstalacionesState {
     idKey,
     showToast,
   }: {
-    item: EquiposUtilizadosOTTableType;
+    item: EquiposUtilizadosOTTableType | MaterialesUtilizadosOTTableType;
     keyStore: InstalacionesStoreKey;
     idKey?: string;
     showToast?: boolean;

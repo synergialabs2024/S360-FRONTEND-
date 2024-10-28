@@ -1,3 +1,4 @@
+import { TipoProductoEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '../../common';
 import { IVA } from '../administration';
 import { CategoriaProducto } from './categoria-producto.interface';
@@ -22,7 +23,7 @@ export interface Producto {
   es_para_venta: boolean; // preventas
 
   precios?: PrecioProducto[];
-  tipo: string;
+  tipo?: TipoProductoEnumChoice;
 
   created_at?: string;
   modified_at?: string;

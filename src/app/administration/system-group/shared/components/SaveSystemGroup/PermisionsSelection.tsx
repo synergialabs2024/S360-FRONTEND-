@@ -18,7 +18,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 export type PermisionsSelectionProps = {
   permissions: SystemPermission[];
@@ -43,30 +43,58 @@ const PermisionsSelection: React.FC<PermisionsSelectionProps> = ({
   const [filter, setFilter] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
 
+  // debouncer filter ---------------------
+  const [debouncedFilter, setDebouncedFilter] = useState(filter);
+  const [debouncedSelectedFilter, setDebouncedSelectedFilter] =
+    useState(selectedFilter);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFilter(filter);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [filter]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSelectedFilter(selectedFilter);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [selectedFilter]);
+
   // New state for multiple selection
   const [selectedItems, setSelectedItems] = useState<SystemPermission[]>([]);
 
-  // Filter permissions
-  const filterWords = filter.toLowerCase().split(' ');
-  const selectedFilterWords = selectedFilter.toLowerCase().split(' ');
+  // Filter permissions using useMemo for optimization
+  const filteredPermissions = useMemo(() => {
+    const filterWords = debouncedFilter.toLowerCase().split(' ');
+    return permissions.filter(permission => {
+      const permissionName = permission?.name?.toLowerCase() || '';
+      return filterWords.every(word => permissionName.includes(word));
+    });
+  }, [permissions, debouncedFilter]);
 
-  const filteredPermissions = permissions.filter(permission => {
-    const permissionName = permission?.name?.toLowerCase();
-    return filterWords.every(word => permissionName.includes(word));
-  });
-
-  const filteredSelectedPermissions = selectedPermissions.filter(permission => {
-    const permissionName = permission?.name?.toLowerCase();
-    return selectedFilterWords.every(word => permissionName.includes(word));
-  });
+  const filteredSelectedPermissions = useMemo(() => {
+    const selectedFilterWords = debouncedSelectedFilter
+      .toLowerCase()
+      .split(' ');
+    return selectedPermissions.filter(permission => {
+      const permissionName = permission?.name?.toLowerCase() || '';
+      return selectedFilterWords.every(word => permissionName.includes(word));
+    });
+  }, [selectedPermissions, debouncedSelectedFilter]);
 
   // Function to handle multiple selection
   const handleSelectItem = (item: SystemPermission) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(prev => prev.filter(i => i !== item));
-    } else {
-      setSelectedItems(prev => [...prev, item]);
-    }
+    setSelectedItems(prev =>
+      prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item],
+    );
   };
 
   // Function to handle moving selected items to the other list
@@ -85,7 +113,6 @@ const PermisionsSelection: React.FC<PermisionsSelectionProps> = ({
         [...permissions, ...itemsToMove].sort((a, b) => {
           const codenameA = a?.name || '';
           const codenameB = b?.name || '';
-
           return codenameA.localeCompare(codenameB);
         }),
       );
@@ -95,6 +122,82 @@ const PermisionsSelection: React.FC<PermisionsSelectionProps> = ({
     }
     setSelectedItems([]);
   };
+
+  // Memoized list items to prevent unnecessary re-renders
+  const PermissionsList = useMemo(
+    () =>
+      memo(({ items }: any) => (
+        <List>
+          {items.map((permission: SystemPermission, index: number) => (
+            <ListItem
+              key={permission.id || index}
+              onClick={() => handleSelectItem(permission)}
+              selected={selectedItems.includes(permission)}
+            >
+              <ListItemText primary={permission?.name} />
+              <ListItemSecondaryAction>
+                <Tooltip
+                  title={
+                    permissions.includes(permission) ? 'Agregar' : 'Remover'
+                  }
+                  placement="right-start"
+                >
+                  <IconButton
+                    edge="end"
+                    color={
+                      permissions.includes(permission) ? 'primary' : 'error'
+                    }
+                    sx={{ '&:hover': { boxShadow: 'none' } }}
+                    onClick={e => {
+                      e.stopPropagation();
+                      if (permissions.includes(permission)) {
+                        setSelectedPermissions([
+                          ...selectedPermissions,
+                          permission,
+                        ]);
+                        setPermissions(
+                          permissions.filter(p => p !== permission),
+                        );
+                      } else {
+                        setPermissions(
+                          [...permissions, permission].sort((a, b) => {
+                            const codenameA = a?.name || '';
+                            const codenameB = b?.name || '';
+                            return codenameA.localeCompare(codenameB);
+                          }),
+                        );
+                        setSelectedPermissions(
+                          selectedPermissions.filter(p => p !== permission),
+                        );
+                      }
+                      // Remove the item from selectedItems if it's there
+                      if (selectedItems.includes(permission)) {
+                        setSelectedItems(prev =>
+                          prev.filter(i => i !== permission),
+                        );
+                      }
+                    }}
+                  >
+                    {permissions.includes(permission) ? (
+                      <AddCircleIcon />
+                    ) : (
+                      <DeleteForeverIcon />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      )),
+    [
+      selectedItems,
+      permissions,
+      setSelectedPermissions,
+      selectedPermissions,
+      setPermissions,
+    ],
+  );
 
   return (
     <Grid item xs={12} container spacing={2} sx={sxGrid}>
@@ -117,44 +220,7 @@ const PermisionsSelection: React.FC<PermisionsSelectionProps> = ({
         />
 
         <Grid item xs={12} style={{ height: 400, overflow: 'auto' }}>
-          <List>
-            {filteredPermissions.map((permission, index) => (
-              <ListItem
-                key={index}
-                onClick={() => handleSelectItem(permission)}
-                selected={selectedItems.includes(permission)}
-              >
-                <ListItemText primary={permission?.name} />
-                <ListItemSecondaryAction>
-                  <Tooltip title="Agregar" placement="right-start">
-                    <IconButton
-                      edge="end"
-                      color="primary"
-                      sx={{ '&:hover': { boxShadow: 'none' } }}
-                      onClick={e => {
-                        e.stopPropagation();
-                        setSelectedPermissions([
-                          ...selectedPermissions,
-                          permission,
-                        ]);
-                        setPermissions(
-                          permissions.filter(p => p !== permission),
-                        );
-                        // Remove the item from selectedItems if it's there
-                        if (selectedItems.includes(permission)) {
-                          setSelectedItems(prev =>
-                            prev.filter(i => i !== permission),
-                          );
-                        }
-                      }}
-                    >
-                      <AddCircleIcon />
-                    </IconButton>
-                  </Tooltip>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
+          <PermissionsList items={filteredPermissions} />
         </Grid>
 
         <Box
@@ -247,47 +313,7 @@ const PermisionsSelection: React.FC<PermisionsSelectionProps> = ({
         />
 
         <Grid item xs={12} style={{ height: 400, overflow: 'auto' }}>
-          <List>
-            {filteredSelectedPermissions.map((permission, index) => (
-              <ListItem
-                key={index}
-                onClick={() => handleSelectItem(permission)}
-                selected={selectedItems.includes(permission)}
-              >
-                <ListItemText primary={permission?.name} />
-                <ListItemSecondaryAction>
-                  <Tooltip title="Remover" placement="right-start">
-                    <IconButton
-                      edge="end"
-                      sx={{ '&:hover': { boxShadow: 'none' } }}
-                      color="error"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setSelectedPermissions(
-                          selectedPermissions.filter(p => p !== permission),
-                        );
-                        setPermissions(
-                          [...permissions, permission].sort((a, b) => {
-                            const codenameA = a?.name || '';
-                            const codenameB = b?.name || '';
-                            return codenameA.localeCompare(codenameB);
-                          }),
-                        );
-                        // Remove the item from selectedItems if it's there
-                        if (selectedItems.includes(permission)) {
-                          setSelectedItems(prev =>
-                            prev.filter(i => i !== permission),
-                          );
-                        }
-                      }}
-                    >
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  </Tooltip>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
+          <PermissionsList items={filteredSelectedPermissions} />
         </Grid>
 
         <Box

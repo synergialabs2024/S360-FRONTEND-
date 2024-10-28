@@ -1,6 +1,6 @@
 import { UseFormReturn } from 'react-hook-form';
 
-import { gridSize, OrdenTrabajo } from '@/shared';
+import { gridSize, gridSizeMdLg6, OrdenTrabajo } from '@/shared';
 import {
   CustomNumberTextField,
   CustomTextArea,
@@ -55,6 +55,12 @@ const InstallAsigOrdenTrabajoFormTab: React.FC<
         />
 
         {/* ------------ to complete ------------ */}
+        <CustomTextFieldNoForm
+          label="Serial ONT"
+          value={ordenTrabajo?.serie_ont || 'N/A'}
+          disabled
+        />
+
         <CustomNumberTextField
           label="Potencia ONT"
           name="potencia_ont"
@@ -62,6 +68,7 @@ const InstallAsigOrdenTrabajoFormTab: React.FC<
           defaultValue={form.getValues().potencia_ont}
           error={errors.potencia_ont}
           helperText={errors.potencia_ont?.message}
+          size={gridSizeMdLg6}
         />
         <CustomTextArea
           label="Observaciones adicionales"

@@ -155,7 +155,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_tercera_edad: cedulaCitizen?.esTerceraEdad,
       fecha_nacimiento: correctFechaNacimiento,
       edad: cedulaCitizen?.edad,
-      direccion: cedulaCitizen?.domicilio,
+      direccion: cedulaCitizen?.domicilio
+        ? cedulaCitizen?.domicilio?.slice(0, 38)
+        : '',
       isFormBlocked: false,
       isValidIdentificacion: true,
 
@@ -419,7 +421,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       onCancel={() => navigate(returnUrlSolicitudsServicioPage)}
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
-        ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
+        ToastWrapper.error(`Errores en: ${keys}`);
       })}
       disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
       maxWidth="xl"

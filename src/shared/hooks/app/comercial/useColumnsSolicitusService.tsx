@@ -179,24 +179,17 @@ export const useColumnsSolicitusService = (
               size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
               enableColumnFilter: false,
               Cell: ({ row }: MRTSServiceType) => {
-                const trazabilidadData = row.original?.trazabilidad_data || [];
-                let lastSolicitaDesbloqueo;
-                for (let i = 0; i < trazabilidadData.length; i++) {
-                  const item = trazabilidadData[i];
-                  if (
+                const trazabilidad = row.original?.trazabilidad_data?.find(
+                  item =>
                     item?.modelo_estado ===
-                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA
-                  ) {
-                    lastSolicitaDesbloqueo = item;
-                    break;
-                  }
-                }
+                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
+                );
+                const message =
+                  `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
+                    trazabilidad?.timestamp,
+                  )}` || 'N/A';
 
-                return lastSolicitaDesbloqueo?.user_data?.razon_social
-                  ? `${lastSolicitaDesbloqueo?.user_data?.razon_social} | ${formatDateWithTime(
-                      lastSolicitaDesbloqueo?.timestamp,
-                    )}`
-                  : 'N/A';
+                return message;
               },
             },
             {
@@ -205,24 +198,17 @@ export const useColumnsSolicitusService = (
               size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
               enableColumnFilter: false,
               Cell: ({ row }: MRTSServiceType) => {
-                const trazabilidadData = row.original?.trazabilidad_data || [];
-                let lastApruebaDesbloqueo;
-                for (let i = 0; i < trazabilidadData.length; i++) {
-                  const item = trazabilidadData[i];
-                  if (
+                const trazabilidad = row.original?.trazabilidad_data?.find(
+                  item =>
                     item?.modelo_estado ===
-                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO
-                  ) {
-                    lastApruebaDesbloqueo = item;
-                    break;
-                  }
-                }
+                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
+                );
+                const message =
+                  `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
+                    trazabilidad?.timestamp,
+                  )}` || 'N/A';
 
-                return lastApruebaDesbloqueo?.user_data?.razon_social
-                  ? `${lastApruebaDesbloqueo?.user_data?.razon_social} | ${formatDateWithTime(
-                      lastApruebaDesbloqueo?.timestamp,
-                    )}`
-                  : 'N/A';
+                return message;
               },
             },
           ]),

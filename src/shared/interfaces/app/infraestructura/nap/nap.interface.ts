@@ -1,4 +1,4 @@
-import { PagingMetaResponse, PuertoType } from '@/shared/interfaces/common';
+import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { CiudadLimitData, SectorLimitData } from '../../administration';
 import { NodoLimitData } from '../nodo';
 import { OLTLimitData } from '../olt';
@@ -19,7 +19,7 @@ export interface Nap {
   direccion: string;
   coordenadas: string;
   puertos?: number;
-  puertos_list?: PuertoType[];
+  puertos_list?: NapPortType[];
   es_soterrado: boolean;
   status_nap: string;
   proyecto_cod: string;
@@ -41,6 +41,11 @@ export interface Nap {
   ciudad_data?: CiudadLimitData;
   sector_data?: SectorLimitData;
 }
+
+export type NapPortType = {
+  estado: boolean;
+  puerto: string;
+};
 
 export type NapLimitData = Pick<
   Nap,

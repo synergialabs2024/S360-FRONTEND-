@@ -4,6 +4,7 @@ import { useFetchUbicacionProductos } from '@/actions/app';
 import {
   InventarioEnumUUID,
   OrdenTrabajo,
+  TipoProductoEnumChoice,
   ToastWrapper,
   UbicacionProducto,
   useLoaders,
@@ -19,14 +20,14 @@ import {
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
 import { useColumnsEquiposMaterialesInstallOT } from '../../../hooks';
 
-export type EquiposDisponiblesOTTecModalProps = {
+export type MaterialesDisponiblesOTTecModalProps = {
   open: boolean;
   onClose: () => void;
   ordenTrabajo: OrdenTrabajo;
 };
 
-const EquiposDisponiblesOTTecModal: React.FC<
-  EquiposDisponiblesOTTecModalProps
+const MaterialesDisponiblesOTTecModal: React.FC<
+  MaterialesDisponiblesOTTecModalProps
 > = ({ onClose, open, ordenTrabajo }) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
@@ -46,7 +47,7 @@ const EquiposDisponiblesOTTecModal: React.FC<
 
   ///* fetch data ---------------------
   const {
-    data: equiposDisponiblesPaging,
+    data: materialesDisponiblesPaging,
     isLoading: isLoadingItemsDisponibles,
     isRefetching: isRefetchingItemsDisponibles,
   } = useFetchUbicacionProductos({
@@ -59,7 +60,8 @@ const EquiposDisponiblesOTTecModal: React.FC<
       producto__codigo: searchTerm,
 
       ubicacion: ordenTrabajo?.flota_data?.ubicacion_data?.id,
-      producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
+      producto__categoria__uuid:
+        InventarioEnumUUID.CATEGORIA_PRODUCTO_MATERIALES,
     },
   });
 
@@ -69,7 +71,7 @@ const EquiposDisponiblesOTTecModal: React.FC<
   };
 
   ///* columns ---------------------
-  const { baseColumnsEquiposMaterialesInstallOT01 } =
+  const { baseColumnsMaterialesInstallOT1 } =
     useColumnsEquiposMaterialesInstallOT({
       showActionColumn: true,
       onActionEquiposRowNode(item) {
@@ -79,15 +81,16 @@ const EquiposDisponiblesOTTecModal: React.FC<
             variant="text"
             color="primary"
             onClick={() => {
+              const isFibra =
+                item?.producto_data?.tipo === TipoProductoEnumChoice.FIBRA;
+
               addSelectedItem({
-                keyStore: InstalacionesStoreKey.equiposUtilizados,
+                keyStore: InstalacionesStoreKey.materialesUtilizados,
                 item: {
                   ...item,
-                  usedQuantity: 1,
 
-                  selectedSeries: [],
-                  savedSeries: [],
-                  containsSeries: !!item?.series?.length,
+                  usedQuantity: isFibra ? 0 : 1,
+                  isFibra,
                 },
                 showToast: true,
               });
@@ -104,18 +107,18 @@ const EquiposDisponiblesOTTecModal: React.FC<
   useEffect(() => {
     if (!open || isCustomLoading) return;
 
-    if (!equiposDisponiblesPaging?.data?.meta?.count)
+    if (!materialesDisponiblesPaging?.data?.meta?.count)
       ToastWrapper.error(
-        `No se encontraron equipos disponibles en la unidad ${ordenTrabajo?.flota_data?.name}`,
+        `No se encontraron materiales disponibles en la unidad ${ordenTrabajo?.flota_data?.name}`,
       );
-  }, [isCustomLoading, equiposDisponiblesPaging, ordenTrabajo, open]);
+  }, [isCustomLoading, materialesDisponiblesPaging, ordenTrabajo, open]);
   useLoaders(isCustomLoading);
 
   return (
     <>
       <ScrollableDialogProps
         open={open}
-        title="Equipos disponibles"
+        title="Materiales disponibles"
         width="60%"
         contentNode={
           <>
@@ -126,11 +129,11 @@ const EquiposDisponiblesOTTecModal: React.FC<
             />
 
             <TableWithoutActions<UbicacionProducto>
-              columns={baseColumnsEquiposMaterialesInstallOT01}
-              data={equiposDisponiblesPaging?.data?.items || []}
+              columns={baseColumnsMaterialesInstallOT1}
+              data={materialesDisponiblesPaging?.data?.items || []}
               isLoading={isLoadingItemsDisponibles}
               isRefetching={isRefetchingItemsDisponibles}
-              rowCount={equiposDisponiblesPaging?.data?.meta?.count || 0}
+              rowCount={materialesDisponiblesPaging?.data?.meta?.count || 0}
               // search
               enableGlobalFilter={false}
               // // filters - server side
@@ -150,4 +153,4 @@ const EquiposDisponiblesOTTecModal: React.FC<
   );
 };
 
-export default EquiposDisponiblesOTTecModal;
+export default MaterialesDisponiblesOTTecModal;

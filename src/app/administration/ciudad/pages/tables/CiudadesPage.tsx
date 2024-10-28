@@ -26,6 +26,7 @@ import {
 import {
   emptyCellNested,
   emptyCellOneLevel,
+  formatCurrency,
   formatDateWithTimeCell,
   formatQuantity,
 } from '@/shared/utils';
@@ -112,11 +113,25 @@ const CiudadesPage: React.FC<CiudadesPageProps> = () => {
         header: 'METRAJE AUTORIZADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return row.original?.metraje_autorizado
+          const hasCoverage = row.original?.has_coverage;
+          return row.original?.metraje_autorizado && hasCoverage
             ? `${formatQuantity(row.original?.metraje_autorizado || 0)} m`
-            : 'N/A';
+            : '-';
         },
       },
+      {
+        accessorKey: 'precio_metraje_excedido',
+        header: '$ METRO EXCEDIDO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const hasCoverage = row.original?.has_coverage;
+
+          return row.original?.precio_metraje_excedido && hasCoverage
+            ? `${formatCurrency(row.original?.precio_metraje_excedido || 0)}`
+            : '-';
+        },
+      },
+
       {
         accessorKey: 'has_coverage',
         header: 'COBERTURA',

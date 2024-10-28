@@ -22,7 +22,7 @@ import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { Ciudad, Pais, Provincia } from '@/shared/interfaces';
-import { ciudadFormSchema } from '@/shared/utils';
+import { ciudadFormSchema, getKeysFormErrorsMessage } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlCiudadesPage } from '../../../pages/tables/CiudadesPage';
 
@@ -40,10 +40,10 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
 
   ///* form
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(ciudadFormSchema),
+    resolver: yupResolver(ciudadFormSchema) as any,
     defaultValues: {
       state: true,
-      has_coverage: true,
+      has_coverage: false,
     },
   });
 
@@ -53,6 +53,7 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
     formState: { errors, isValid },
   } = form;
   const watchedCountry = form.watch('pais');
+  const watchedHasCoverage = form.watch('has_coverage');
 
   ///* fetch data
   const {
@@ -132,7 +133,10 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
     <SingleFormBoxScene
       titlePage={title}
       onCancel={() => navigate(returnUrlCiudadesPage)}
-      onSave={handleSubmit(onSave, () => {})}
+      onSave={handleSubmit(onSave, errors => {
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Campos requeridos: ${keys}`);
+      })}
     >
       <CustomTextField
         label="Nombre"
@@ -141,16 +145,6 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomNumberTextField
-        label="Metraje autorizado"
-        name="metraje_autorizado"
-        control={form.control}
-        defaultValue={form.getValues().metraje_autorizado}
-        error={errors.metraje_autorizado}
-        helperText={errors.metraje_autorizado?.message}
-        size={gridSizeMdLg6}
       />
 
       <CustomAutocomplete<Pais>
@@ -199,6 +193,35 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
         size={gridSizeMdLg6}
         isState
       />
+
+      <>
+        {watchedHasCoverage && (
+          <>
+            <CustomNumberTextField
+              label="Metraje autorizado"
+              name="metraje_autorizado"
+              control={form.control}
+              defaultValue={form.getValues().metraje_autorizado}
+              error={errors.metraje_autorizado}
+              helperText={errors.metraje_autorizado?.message}
+              size={gridSizeMdLg6}
+              min={0}
+              startAdornment="m"
+            />
+            <CustomNumberTextField
+              label="Precio metraje excedido"
+              name="precio_metraje_excedido"
+              control={form.control}
+              defaultValue={form.getValues().precio_metraje_excedido}
+              error={errors.precio_metraje_excedido}
+              helperText={errors.precio_metraje_excedido?.message}
+              size={gridSizeMdLg6}
+              customType="currency"
+              min={0}
+            />
+          </>
+        )}
+      </>
     </SingleFormBoxScene>
   );
 };

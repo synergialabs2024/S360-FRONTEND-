@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   CreateOrdenTrabajoParamsBase,
-  useCreateOrdenTrabajo,
   useUpdateOrdenTrabajo,
 } from '@/actions/app';
 import {
@@ -16,6 +15,7 @@ import {
   SolicitudServicio,
   ToastWrapper,
   useTabsOnly,
+  useUploadImageGeneric,
 } from '@/shared';
 import {
   a11yProps,
@@ -43,7 +43,9 @@ export interface SaveOrdenTrabajoProps {
 
 export type InstallAsignOTSaveFormData = CreateOrdenTrabajoParamsBase &
   Partial<SolicitudServicio> &
-  Partial<Preventa> & {};
+  Partial<Preventa> & {
+    metraje_autorizado_fibra: string;
+  };
 
 const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   titleNode,
@@ -54,6 +56,86 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   const { tabValue, handleTabChange } = useTabsOnly({
     initialTabValue: 1,
   });
+
+  const {
+    UploadImageDropZoneComponent,
+    image1: fotoONT,
+    setImage1: setFotoONT,
+    image2: fotoPotenciaONT,
+    setImage2: setFotoPotenciaONT,
+    image3: fotoONTEncontradoCasa,
+    setImage3: setFotoONTEncontradoCasa,
+    image4: fotoEtiqueta,
+    setImage4: setFotoEtiqueta,
+    image5: fotoNAP,
+    setImage5: setFotoNAP,
+    image6: fotoPotenciaNAP,
+    setImage6: setFotoPotenciaNAP,
+    image7: fotoPremio,
+    setImage7: setFotoPremio,
+    image8: fotoTestSpeed,
+    setImage8: setFotoTestSpeed,
+    image9: fotoActaEntregaUPS,
+    setImage9: setFotoActaEntregaUPS,
+  } = useUploadImageGeneric();
+  const requiredImages = [
+    {
+      label: 'Foto ONT',
+      image: fotoONT,
+      setImage: setFotoONT,
+      isRequired: true,
+    },
+    {
+      label: 'Foto Potencia ONT',
+      image: fotoPotenciaONT,
+      setImage: setFotoPotenciaONT,
+      isRequired: true,
+    },
+
+    {
+      label: 'Foto Etiqueta',
+      image: fotoEtiqueta,
+      setImage: setFotoEtiqueta,
+      isRequired: true,
+    },
+    {
+      label: 'Foto NAP',
+      image: fotoNAP,
+      setImage: setFotoNAP,
+      isRequired: true,
+    },
+    {
+      label: 'Foto Potencia NAP',
+      image: fotoPotenciaNAP,
+      setImage: setFotoPotenciaNAP,
+      isRequired: true,
+    },
+    {
+      label: 'Foto Test Speed',
+      image: fotoTestSpeed,
+      setImage: setFotoTestSpeed,
+      isRequired: true,
+    },
+
+    {
+      label: 'Foto ONT encontrado en casa',
+      image: fotoONTEncontradoCasa,
+      setImage: setFotoONTEncontradoCasa,
+      isRequired: false,
+    },
+    {
+      label: 'Foto Acta Entrega UPS',
+      image: fotoActaEntregaUPS,
+      setImage: setFotoActaEntregaUPS,
+      isRequired: false,
+    },
+    {
+      label: 'Foto Premio',
+      image: fotoPremio,
+      setImage: setFotoPremio,
+      isRequired: false,
+    },
+  ];
 
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
@@ -68,11 +150,6 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   } = form;
 
   ///* mutations ---------------------
-  const createOrdenTrabajoMutation = useCreateOrdenTrabajo({
-    navigate,
-    returnUrl: returnUrlInstallAsignadasOT,
-    enableErrorNavigate: false,
-  });
   const updateOrdenTrabajoMutation =
     useUpdateOrdenTrabajo<CreateOrdenTrabajoParamsBase>({
       navigate,
@@ -83,14 +160,25 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   const onSave = async (data: InstallAsignOTSaveFormData) => {
     if (!isValid) return;
 
+    ///* validate images -------
+    let thereAreEmptyRequiredImages = false;
+    let emptyImageName: any = {};
+    requiredImages.forEach(({ isRequired, image, label }) => {
+      if (isRequired && !image) {
+        thereAreEmptyRequiredImages = true;
+        emptyImageName = label;
+      }
+    });
+    if (thereAreEmptyRequiredImages) {
+      ToastWrapper.error(`La imagen ${emptyImageName?.label} es requerida`);
+      return;
+    }
+
     ///* upd
     if (ordentrabajo?.id) {
       updateOrdenTrabajoMutation.mutate({ id: ordentrabajo.id!, data });
       return;
     }
-
-    ///* create
-    createOrdenTrabajoMutation.mutate(data);
   };
 
   ///* effects ---------------------
@@ -107,6 +195,8 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       ...agendamiento_data,
 
       serie_ont: ordentrabajo?.serie_ont || undefined,
+      metraje_autorizado_fibra:
+        ordentrabajo?.ciudad_data?.metraje_autorizado || '',
     };
 
     reset({
@@ -128,6 +218,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
           <Tab label="Información general" value={1} {...a11yProps(1)} />
           <Tab label="Órden de trabajo" value={2} {...a11yProps(2)} />
           <Tab label="Materiales" value={3} {...a11yProps(3)} />
+          <Tab label="Fotos" value={4} {...a11yProps(4)} />
         </FormTabsOnly>
       }
       formSize={gridSize}
@@ -151,6 +242,18 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
           form={form}
           ordenTrabajo={ordentrabajo!}
         />
+      </CustomTabPanel>
+
+      {/* ========================= Fotos ========================= */}
+      <CustomTabPanel index={4} value={tabValue}>
+        {requiredImages.map(({ label, image, setImage }) => (
+          <UploadImageDropZoneComponent
+            key={label}
+            buttonLabel={label}
+            selectedImage={image}
+            setSelectedImage={setImage as any}
+          />
+        ))}
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

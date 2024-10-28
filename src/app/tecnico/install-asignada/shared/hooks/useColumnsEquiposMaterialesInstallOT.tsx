@@ -1,8 +1,12 @@
+/* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { emptyCellNested, formatQuantityCell, TABLE_CONSTANTS } from '@/shared';
-import { EquiposUtilizadosOTTableType } from '../components/form';
+import {
+  EquiposUtilizadosOTTableType,
+  MaterialesUtilizadosOTTableType,
+} from '../components/form';
 
 type UseColumnsEquiposPreventa = {
   showStockColumn?: boolean;
@@ -48,17 +52,24 @@ export const useColumnsEquiposMaterialesInstallOT = ({
 
       ...(showActionColumn
         ? [
-          {
-            accessorKey: 'action',
-            enableColumnFilter: false,
-            header: 'ACCIÓN',
-            Cell: ({ row }: MRTUbicacionProductoTableType) =>
-              onActionEquiposRowNode?.(row.original),
-          },
-        ]
+            {
+              accessorKey: 'action',
+              enableColumnFilter: false,
+              header: 'ACCIÓN',
+              Cell: ({ row }: MRTUbicacionProductoTableType) =>
+                onActionEquiposRowNode?.(row.original),
+            },
+          ]
         : []),
     ],
-    [],
+    [onActionEquiposRowNode, showActionColumn, showStockColumn],
+  );
+
+  const baseColumnsMaterialesInstallOT1 = useMemo<
+    MRT_ColumnDef<MaterialesUtilizadosOTTableType>[]
+  >(
+    () => [...baseColumnsEquiposMaterialesInstallOT01],
+    [baseColumnsEquiposMaterialesInstallOT01],
   );
 
   const columnsSelectedSeries = useMemo(
@@ -72,5 +83,9 @@ export const useColumnsEquiposMaterialesInstallOT = ({
     [],
   );
 
-  return { baseColumnsEquiposMaterialesInstallOT01, columnsSelectedSeries };
+  return {
+    baseColumnsEquiposMaterialesInstallOT01,
+    columnsSelectedSeries,
+    baseColumnsMaterialesInstallOT1,
+  };
 };

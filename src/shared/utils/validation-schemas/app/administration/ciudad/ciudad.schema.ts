@@ -5,22 +5,36 @@ export const ciudadFormSchema = yup.object({
     .string()
     .required('El campo name es requerido')
     .max(200, 'El campo name no debe exceder los 200 caracteres'),
-  metraje_autorizado: yup
-    .string()
-    .required('El campo metraje autorizado es requerido')
-    .max(200, 'El campo metraje autorizado no debe exceder los 200 caracteres')
-    .test(
-      'is-number',
-      'El campo metraje autorizado debe ser un número positivo',
-      value => {
-        const isValidNumber = isFinite(+value) && +value >= 0;
-        return isValidNumber;
-      },
-    ),
+
   has_coverage: yup
     .boolean()
     .typeError('El campo has coverage es requerido')
     .required('El campo has coverage es requerido'),
+  metraje_autorizado: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('has_coverage', {
+      is: true,
+      then: schema =>
+        schema
+          .required('El campo metraje autorizado es requerido')
+          .typeError('El campo metraje autorizado es requerido')
+          .min(0, 'Debe ser mayor o igual que 0'),
+    }),
+  precio_metraje_excedido: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('has_coverage', {
+      is: true,
+      then: schema =>
+        schema
+          .required('El campo precio metraje excedido es requerido')
+          .typeError('El campo precio metraje excedido es requerido')
+          .min(0, 'Debe ser mayor o igual que 0'),
+    }),
+
   state: yup
     .boolean()
     .typeError('El campo state es requerido')

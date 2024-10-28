@@ -401,6 +401,7 @@ export const usePlanificadorAgendamiento = ({
     return () => {
       socket.off('receive_fleet_schedule');
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isMounted,
     socket,

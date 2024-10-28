@@ -11,6 +11,7 @@ import {
   useUpdateProducto,
 } from '@/actions/app';
 import {
+  PrecioProducto,
   TIPO_PRODUCTO_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
@@ -87,7 +88,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
   });
 
   ///* mutations ---------------------
-  const createProductoMutation = useCreateProducto({
+  const createProductoMutation = useCreateProducto<CreateProductoParamsBase>({
     navigate,
     returnUrl: returnUrlProductosPage,
     enableErrorNavigate: false,
@@ -103,7 +104,16 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
 
     ///* upd
     if (producto?.id) {
-      updateProductoMutation.mutate({ id: producto.id!, data });
+      updateProductoMutation.mutate({
+        id: producto.id!,
+        data: {
+          ...data,
+          precios: data.precios?.map(precio => ({
+            ...precio,
+            valor: precio.valor.toFixed(2),
+          })) as unknown as PrecioProducto[],
+        },
+      });
       return;
     }
 
@@ -113,7 +123,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       precios: data.precios?.map(precio => ({
         ...precio,
         valor: precio.valor.toFixed(2),
-      })),
+      })) as unknown as PrecioProducto[],
     });
   };
 
@@ -239,7 +249,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         size={gridSizeMdLg3}
       />
 
-      {/* Agregamos el componente PricesForm y pasamos el formulario mediante props */}
+      {/* ------------ prices component ------------ */}
       <PricesForm
         control={control}
         watch={watch}

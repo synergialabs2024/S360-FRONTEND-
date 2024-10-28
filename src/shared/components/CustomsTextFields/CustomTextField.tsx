@@ -47,6 +47,7 @@ type CustomTextFieldProps = {
 
   onlyNumbers?: boolean;
   maxLength?: number;
+  limitDecimals?: number;
 };
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -78,6 +79,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
 
   onlyNumbers,
   maxLength,
+  limitDecimals = 2,
 }) => {
   const [emailError, setEmailError] = useState<boolean>(false);
 
@@ -92,6 +94,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
             const onChange = (event: any) => {
               const currentValue = event.target.value;
 
+              // no format type number (no steps)
               if (onlyNumbers) {
                 const onlyNums = currentValue.replace(/[^0-9]/g, '');
                 if (maxLength && onlyNums.length > maxLength) return;
@@ -115,8 +118,23 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
                 return field.onChange(currentValue);
               }
 
-              if (type === 'number' || type === 'password') {
-                onChangeValue && onChangeValue(currentValue?.toUpperCase());
+              if (type === 'number') {
+                const onlyNums = currentValue.replace(/[^0-9.]/g, '');
+                const onlyNumsArray = onlyNums.split('.');
+
+                if (onlyNumsArray.length > 2) return;
+
+                if (onlyNumsArray.length === 2) {
+                  if (onlyNumsArray[1].length > limitDecimals) return;
+                }
+
+                field.onChange(onlyNums);
+                onChangeValue && onChangeValue(onlyNums);
+                return;
+              }
+
+              if (type === 'password') {
+                onChangeValue && onChangeValue(currentValue);
                 return field.onChange(currentValue);
               }
 

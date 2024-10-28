@@ -2,6 +2,7 @@ import { Grid, TextField } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useCallback, useMemo, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
+import { IoMdTrash } from 'react-icons/io';
 import { IoQrCodeSharp } from 'react-icons/io5';
 
 import { OrdenTrabajo, ToastWrapper, UbicacionProducto } from '@/shared';
@@ -13,7 +14,6 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
-import { IoMdTrash } from 'react-icons/io';
 import { useColumnsEquiposMaterialesInstallOT } from '../../../hooks';
 import EquiposDisponiblesOTTecModal from './EquiposDisponiblesOTTecModal';
 
@@ -23,8 +23,6 @@ export type EquiposUtilizadosInstallAsignFormPartProps = {
 
 export type EquiposUtilizadosOTTableType = UbicacionProducto & {
   usedQuantity: number;
-
-  // series: string[]; // @Override
 
   containsSeries: boolean;
   selectedSeries: string[];
@@ -108,7 +106,7 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
 
       {
         accessorKey: 'selectedSeries',
-        header: 'Series Seleccionadas',
+        header: 'SERIES SELECCIONADAS',
         Cell: ({ row }) => {
           return !row.original?.containsSeries
             ? 'SIN SERIES'
@@ -117,7 +115,7 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
       },
       {
         accessorKey: 'series',
-        header: 'Series Disponibles',
+        header: 'SERIES DISPONIBLES',
         size: 60,
         Cell: ({ row }) => {
           const hasSeries = !!row.original?.series?.length;
@@ -145,7 +143,7 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
 
       {
         accessorKey: 'remove',
-        header: 'Acciones',
+        header: 'ACCIONES',
         Cell: ({ row }) => (
           <SingleIconButton
             label="Remover"
@@ -163,7 +161,12 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
         ),
       },
     ],
-    [],
+    [
+      baseColumnsEquiposMaterialesInstallOT01,
+      onChangeQuantity,
+      removeSelectedItem,
+      setSelectedRow,
+    ],
   );
 
   return (

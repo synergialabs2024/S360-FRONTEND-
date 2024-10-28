@@ -1,6 +1,3 @@
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import LockPersonIcon from '@mui/icons-material/LockPerson';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
   Box,
   Chip,
@@ -17,6 +14,11 @@ import {
   Typography,
 } from '@mui/material';
 import { memo, useEffect, useMemo, useState } from 'react';
+import {
+  IoMdUnlock as LockOpenIcon,
+  IoMdEye as VisibilityIcon,
+} from 'react-icons/io';
+import { MdLockPerson as LockPersonIcon } from 'react-icons/md';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
 import { formatQuantity, IPv4Detail } from '@/shared';

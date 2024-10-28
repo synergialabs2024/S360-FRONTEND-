@@ -16,3 +16,8 @@
 .rbc-time-slot {
   min-height: 72px !important;
 }
+
+.MuiTableCell-body {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}

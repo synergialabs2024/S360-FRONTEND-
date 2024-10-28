@@ -1,10 +1,12 @@
 import {
   Agendamiento,
+  Ciudad,
   FlotaLimitData,
   LineaServicio,
   Nodo,
   OLT,
   Preventa,
+  ProvinciaLimitData,
   SolicitudServicio,
   TipoActualizacionActivacionesEnumChoice,
 } from '@/shared';
@@ -96,4 +98,8 @@ export interface OrdenTrabajo {
   linea_servicio_data?: LineaServicio;
   olt_data?: OLT;
   nodo_data?: Nodo;
+
+  // just serializer
+  ciudad_data?: Ciudad;
+  provincia_data?: ProvinciaLimitData;
 }

@@ -138,12 +138,7 @@ const EquiposSeleccionadosPreventa: React.FC<
         ),
       },
     ],
-    [
-      baseColumnsPreventa01,
-      onChangeQuantity,
-      removeSelectedItem,
-      scoreServicio,
-    ],
+    [baseColumnsPreventa01, onChangeQuantity, removeSelectedItem],
   );
 
   return (
