@@ -2,9 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetAgendamiento } from '@/actions/app';
 import { PermissionsEnum, useLoaders } from '@/shared';
-import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import SaveConfirmAgendaOperaciones from '../../shared/components/SaveConfirmAgendaOperaciones';
 import { returnUrlAgendamientoOperacionesPage } from '../tables/AgendamientosMainPage';
 
 export type ConfirmAgendaOperacionesPageProps = {};
@@ -25,7 +23,7 @@ const ConfirmAgendaOperacionesPage: React.FC<
 
   return (
     <>
-      <SaveConfirmAgendaOperaciones
+      {/* <SaveConfirmAgendaOperaciones
         title={
           <CustomTitleRefNumber
             initialText="Gestionar Agendamiento"
@@ -33,7 +31,8 @@ const ConfirmAgendaOperacionesPage: React.FC<
           />
         }
         agendamiento={data.data}
-      />
+      /> */}
+      sss
     </>
   );
 };
