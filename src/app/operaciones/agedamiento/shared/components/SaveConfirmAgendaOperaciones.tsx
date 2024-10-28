@@ -1,23 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  AgendamientoTSQEnum,
   CacheBaseKeysPreventaEnum,
-  useCreateOrdenTrabajo,
+  RecoordinarAgendaData,
 } from '@/actions/app';
-import { CreateInstalacionAsignadaOTOperaciones } from '@/actions/app/tecnico/orden-trabajo-action-types.interface';
+import { useGenericPATCH, useSetCacheRedis } from '@/actions/shared';
 import { usePlanificadorAgendamiento } from '@/app/comercial/agendamiento/shared/hooks';
+import { returnUrlSolicitudsRecoordinacionAgendaPage } from '@/app/operaciones/solicitud-recoordinacion-agenda/pages/tables/SolicitudsRecoordinacionAgendaMainPage';
 import {
   Agendamiento,
   agendamientoOperacionesConfirmFormSchema,
-  EstadoOrdenTrabajoEnumChoice,
   Flota,
   getKeysFormErrorsMessage,
   Preventa,
   SolicitudServicio,
-  TipoOrdenTrabajoEnumChoice,
   ToastWrapper,
 } from '@/shared';
 import {
@@ -26,9 +27,8 @@ import {
   useCustomStepper,
 } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
-import { returnUrlAgendamientoOperacionesPage } from '../../pages/tables/AgendamientosMainPage';
+import { useUiConfirmModalStore } from '@/store/ui';
 import {
-  AgendaOpeRequestUpdate,
   GeneralDataConfirmAgendaStep,
   ServiceCoordinationConfirmAgendaStep,
 } from './form';
@@ -36,6 +36,7 @@ import {
 export type SaveConfirmAgendaOperacionesProps = {
   agendamiento: Agendamiento;
   title: React.ReactNode;
+  solicitudRecoordinacion: string;
 };
 
 const steps = ['Datos generales', 'Servicio y Coordinación'];
@@ -53,12 +54,9 @@ export type SaveConfirmAgendaOperaciones = Partial<SolicitudServicio> &
 
 const SaveConfirmAgendaOperaciones: React.FC<
   SaveConfirmAgendaOperacionesProps
-> = ({ agendamiento, title }) => {
+> = ({ agendamiento, title, solicitudRecoordinacion }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
-
-  ///* local state ---------------------
-  const [openModalUpd, setOpenModalUpd] = useState<boolean>(false);
 
   // stepper
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -69,6 +67,11 @@ const SaveConfirmAgendaOperaciones: React.FC<
   ///* global state ---------------------
   const setActivePreventa = useAgendamientoVentasStore(
     s => s.setActivePreventa,
+  );
+
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
   );
 
   ///* form ---------------------
@@ -83,22 +86,53 @@ const SaveConfirmAgendaOperaciones: React.FC<
   });
 
   ///* mutations ---------------------
-  const approveAgendamiento =
-    useCreateOrdenTrabajo<CreateInstalacionAsignadaOTOperaciones>({
-      customMessageToast: 'Agendamiento aprobado con éxito',
+  const recoordinarAgenda = useGenericPATCH<
+    RecoordinarAgendaData,
+    Agendamiento
+  >(
+    `/agendamiento/recoordinar/${agendamiento?.id!}/`,
+    AgendamientoTSQEnum.AGENDAMIENTOS,
+    {
+      customMessageToast: 'Agendamiento recoordinado con éxito',
       navigate,
-      returnUrl: returnUrlAgendamientoOperacionesPage,
-    });
+      returnUrl: returnUrlSolicitudsRecoordinacionAgendaPage,
+      customOnSuccess() {
+        setCache.mutate({
+          key: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`,
+          value: null,
+        });
+      },
+    },
+  );
+
+  const setCache = useSetCacheRedis({
+    enableToast: false,
+  });
 
   ///* handlers ---------------------
   const onSave = (data: SaveConfirmAgendaOperaciones) => {
-    approveAgendamiento.mutate({
-      estado_orden_trabajo: EstadoOrdenTrabajoEnumChoice.PENDIENTE,
-      tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice.INSTALACION,
-      agendamiento: agendamiento?.id!,
+    // validate date
+    const savedFechaInstall = dayjs(agendamiento?.fecha_instalacion).format(
+      'YYYY-MM-DD',
+    );
+    const savedHoraInstall = agendamiento?.hora_instalacion;
+
+    if (
+      agendamiento?.flota_data?.id === data.flota &&
+      savedFechaInstall === data.fecha_instalacion &&
+      savedHoraInstall === data.hora_instalacion
+    ) {
+      ToastWrapper.error(
+        'No se puede guardar la misma fecha y hora de instalación',
+      );
+      return;
+    }
+
+    recoordinarAgenda.mutate({
+      fecha_instalacion: data.fecha_instalacion!,
+      hora_instalacion: data.hora_instalacion!,
       flota: data.flota!,
-      estado_llamada: data.estado_llamada!,
-      observacion_llamada: data.observacion_llamada!,
+      solicitud_recoordinacion: solicitudRecoordinacion,
     });
   };
 
@@ -122,8 +156,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
       rawFlota: agendamiento?.flota_data,
       nap: agendamiento?.nap!,
 
-      observacion_llamada: agendamiento?.observacion_llamada || '',
-
+      // observacion_llamada: agendamiento?.observacion_llamada || '',
       // zona: solicitud_servicio_data?.zona_data?.id!, // rompe todo y nose xq
     } as unknown as SaveConfirmAgendaOperaciones);
   }, [agendamiento, reset, setActivePreventa]);
@@ -138,7 +171,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
       handleBack={handleBack}
       disableNextStepBtn={disableNextStepBtn}
       // action btns
-      onCancel={() => navigate(returnUrlAgendamientoOperacionesPage)}
+      onCancel={() => navigate(returnUrlSolicitudsRecoordinacionAgendaPage)}
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
@@ -147,10 +180,26 @@ const SaveConfirmAgendaOperaciones: React.FC<
       customSpaceButton={
         <>
           <CustomSingleButton
-            label="Solicitar actualización"
+            label="Rechazar solicitud"
             variant="text"
-            color="warning"
-            onClick={() => setOpenModalUpd(true)}
+            color="error"
+            onClick={() => {
+              setConfirmDialog({
+                isOpen: true,
+                title: 'Rechazar solicitud',
+                subtitle:
+                  '¿Está seguro que desea rechazar esta solicitud de recoordinación?',
+                onConfirm: () => {
+                  setConfirmDialogIsOpen(false);
+                  navigate(`${returnUrlSolicitudsRecoordinacionAgendaPage}`);
+                },
+                confirmTextBtn: 'Si, rechazar',
+                cancelTextBtn: 'Cerrar',
+              });
+            }}
+            sxBtn={{
+              ml: 0.8,
+            }}
           />
         </>
       }
@@ -172,11 +221,11 @@ const SaveConfirmAgendaOperaciones: React.FC<
       )}
 
       {/* =============== modals =============== */}
-      <AgendaOpeRequestUpdate
+      {/* <AgendaOpeRequestUpdate
         open={openModalUpd}
         onClose={() => setOpenModalUpd(false)}
         agendamiento={agendamiento!}
-      />
+      /> */}
     </StepperBoxScene>
   );
 };

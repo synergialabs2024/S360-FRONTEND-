@@ -1,7 +1,4 @@
-import {
-  EstadoAgendamientoEnumChoice,
-  EstadoLlamadaEnumChoice,
-} from '@/shared/constants';
+import { EstadoAgendamientoEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
 import { Preventa, SolicitudServicio } from '../../comercial';
@@ -43,8 +40,8 @@ export interface Agendamiento {
   estado_pago: string;
 
   // pyl --------
-  estado_llamada: EstadoLlamadaEnumChoice;
-  observacion_llamada: string;
+  // estado_llamada: EstadoLlamadaEnumChoice;
+  // observacion_llamada: string;
   user_gestiona?: number;
 
   ///* fk

@@ -330,6 +330,16 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.supervisionComercial.codigosOtpNav,
             }),
+            renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_RECOORDINACION_AGENDA,
+              {
+                id: 'solicitud-recoordinacion-agendas',
+                title: 'Solicitud Recoordinación de agendas',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial
+                  .solicitudRecoordinacionAgendaNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Catalogo de Productos ----------------

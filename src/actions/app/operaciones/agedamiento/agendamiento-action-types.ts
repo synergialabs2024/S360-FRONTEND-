@@ -20,6 +20,7 @@ export type InstallScheduleCacheData = {
 export enum CacheBaseKeysPreventaEnum {
   HORARIO_INSTALACION_AGENDA_VENTAS = 'horario_instalacion_agenda_ventas',
   HORARIO_INSTALACION_AGENDA_OPERACIONES = 'horario_instalacion_agenda_operaciones',
+  HORARIO_INSTALACION_AGENDA_RECOORDINACION = 'horario_instalacion_agenda_recoordinacion',
 }
 
 export const COUNTDOWN_AGENDA_VENTAS_ID = 'agendamientoVentasCountdown';
@@ -32,11 +33,18 @@ export type CreateAgendamientoVentasFormData = Pick<
   | 'fecha_instalacion'
   | 'flota'
   | 'preventa'
-  | 'estado_llamada'
-  | 'observacion_llamada'
+  // | 'estado_llamada'
+  // | 'observacion_llamada'
 > & {};
 
 export type RequestUpdateAgendamientoOpe = Pick<
   Agendamiento,
   'estado_agendamiento' | 'motivo_actualizacion' | 'observacion_actualizacion'
 > & {};
+
+export type RecoordinarAgendaData = Pick<
+  Agendamiento,
+  'flota' | 'nap' | 'fecha_instalacion' | 'hora_instalacion'
+> & {
+  solicitud_recoordinacion: string; // UUID
+};

@@ -3,7 +3,6 @@ import { UseFormReturn } from 'react-hook-form';
 
 import {
   Agendamiento,
-  ESTADO_LLAMADA_ARRAY_CHOICES,
   gridSizeMdLg3,
   gridSizeMdLg6,
   Nap,
@@ -13,10 +12,8 @@ import {
 import {
   a11yProps,
   CustomAutocomplete,
-  CustomAutocompleteArrString,
   CustomCellphoneTextField,
   CustomTabPanel,
-  CustomTextArea,
   CustomTextField,
   CustomTextFieldNoForm,
   CustomTypoLabel,
@@ -220,7 +217,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
 
       {/* =================== Estado Llamada =================== */}
       <>
-        <CustomTypoLabel
+        {/* <CustomTypoLabel
           text="Estado Llamada"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
@@ -257,7 +254,7 @@ const GeneralDataConfirmAgendaStep: React.FC<
           defaultValue={form.getValues().observacion_llamada}
           error={errors.observacion_llamada}
           helperText={errors.observacion_llamada?.message}
-        />
+        /> */}
       </>
     </>
   );

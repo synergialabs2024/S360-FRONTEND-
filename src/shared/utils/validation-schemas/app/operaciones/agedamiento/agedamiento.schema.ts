@@ -32,10 +32,6 @@ export const agendamientoOperacionesConfirmFormSchema = yup.object({
     .string()
     .required('El campo celular es requerido')
     .max(200, 'El campo celular no debe exceder los 200 caracteres'),
-  estado_llamada: yup
-    .string()
-    .required('El campo estado llamada es requerido')
-    .max(200, 'El campo estado llamada no debe exceder los 200 caracteres'),
 
   flota: yup
     .number()
@@ -48,7 +44,11 @@ export const agendamientoOperacionesConfirmFormSchema = yup.object({
     .typeError('El campo distancia nap es requerido')
     .optional(),
 
-  observacion_llamada: yup.string().optional(),
+  // estado_llamada: yup
+  //   .string()
+  //   .required('El campo estado llamada es requerido')
+  //   .max(200, 'El campo estado llamada no debe exceder los 200 caracteres'),
+  // observacion_llamada: yup.string().optional(),
 
   nombre_persona_referencia: yup
     .string()

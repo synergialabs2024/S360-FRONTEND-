@@ -335,6 +335,13 @@ export const ROUTER_PATHS = {
     ///* reasignacion de ventas (sol servicio)
     reasignacionVentas: 'reasignacion-ventas',
     reasignacionVentasNav: '/supervision-comercial/reasignacion-ventas',
+
+    ///* solicitud recoordinacion agenda
+    solicitudRecoordinacionAgenda: 'solicitud-recoordinacion-agenda',
+    solicitudRecoordinacionAgendaHandle:
+      'solicitud-recoordinacion-agenda/:uuid',
+    solicitudRecoordinacionAgendaNav:
+      '/supervision-comercial/solicitud-recoordinacion-agenda',
   },
 
   /////* Administración de Red ----------------

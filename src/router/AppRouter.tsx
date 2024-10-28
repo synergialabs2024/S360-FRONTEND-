@@ -941,6 +941,24 @@ const UpdateOnusConfiguradaPage = Loadable(
   ),
 );
 
+///* agenda ------------
+const SolicitudsRecoordinacionAgendaMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/solicitud-recoordinacion-agenda/pages/tables/SolicitudsRecoordinacionAgendaMainPage'
+      ),
+  ),
+);
+const HandleRecoordinacionAgendaSuperVentas = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/solicitud-recoordinacion-agenda/pages/forms/HandleRecoordinacionAgendaSuperVentas'
+      ),
+  ),
+);
+
 ///* tecnico ------------
 const InstalacionesAsignadasOTMainPage = Loadable(
   lazy(
@@ -1479,6 +1497,17 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.supervisionComercial.reasignacionVentas,
             element: <ReasignacionVentasPage />,
+          },
+          ///* recoordinacion agenda
+          {
+            path: ROUTER_PATHS.supervisionComercial
+              .solicitudRecoordinacionAgenda,
+            element: <SolicitudsRecoordinacionAgendaMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.supervisionComercial
+              .solicitudRecoordinacionAgendaHandle,
+            element: <HandleRecoordinacionAgendaSuperVentas />,
           },
         ],
       },

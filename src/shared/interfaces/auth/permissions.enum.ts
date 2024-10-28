@@ -101,7 +101,8 @@ export enum PermissionsEnum {
   users_view_user = 'users.view_usuario',
   administration_view_motivorechazo = 'administration.view_motivorechazo',
   administration_view_motivoactualizacion = 'administration.view_motivoactualizacion',
-  tecnico_add_ordentrabajo = 'tecnico.add_ordentrabajo',
+  tecnico_view_ordentrabajo = 'tecnico.view_ordentrabajo',
+  operaciones_view_solicitudrecoordinacionagenda = 'operaciones.view_solicitudrecoordinacionagenda',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -199,7 +200,8 @@ export enum PermissionsEnum {
   users_add_user = 'users.add_usuario',
   administration_add_motivorechazo = 'administration.add_motivorechazo',
   administration_add_motivoactualizacion = 'administration.add_motivoactualizacion',
-  tecnico_change_ordentrabajo = 'tecnico.change_ordentrabajo',
+  tecnico_add_ordentrabajo = 'tecnico.add_ordentrabajo',
+  operaciones_add_solicitudrecoordinacionagenda = 'operaciones.add_solicitudrecoordinacionagenda',
 
   // // // // CHANGE ---------------------------
   admin_change_logentry = 'admin.change_logentry',
@@ -296,7 +298,8 @@ export enum PermissionsEnum {
   users_change_user = 'users.change_usuario',
   administration_change_motivorechazo = 'administration.change_motivorechazo',
   administration_change_motivoactualizacion = 'administration.change_motivoactualizacion',
-  tecnico_view_ordentrabajo = 'tecnico.view_ordentrabajo',
+  tecnico_change_ordentrabajo = 'tecnico.change_ordentrabajo',
+  operaciones_change_solicitudrecoordinacionagenda = 'operaciones.change_solicitudrecoordinacionagenda',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',
@@ -398,6 +401,7 @@ export enum PermissionsEnum {
   administration_delete_motivorechazo = 'administration.delete_motivorechazo',
   administration_delete_motivoactualizacion = 'administration.delete_motivoactualizacion',
   tecnico_delete_ordentrabajo = 'tecnico.delete_ordentrabajo',
+  operaciones_delete_solicitudrecoordinacionagenda = 'operaciones.delete_solicitudrecoordinacionagenda',
 
   // // // // PRINT ---------------------------
   billing_print_credit_note = 'billing.print_credit_note',
