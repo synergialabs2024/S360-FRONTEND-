@@ -20,7 +20,6 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 
 export type RecoordinacionAgendaByStatePageProps = {
   state: GeneralModelStatesEnumChoice;
@@ -38,12 +37,6 @@ const RecoordinacionAgendaByStatePage: React.FC<
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state ---------------------
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table ---------------------
   const {
@@ -172,7 +165,7 @@ const RecoordinacionAgendaByStatePage: React.FC<
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [setConfirmDialog, setConfirmDialogIsOpen],
+    [state],
   );
 
   return (
