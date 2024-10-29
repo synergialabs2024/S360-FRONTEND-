@@ -18,11 +18,7 @@ import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import {
-  emptyCellNested,
-  emptyCellOneLevel,
-  formatDateWithTimeCell,
-} from '@/shared/utils';
+import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
@@ -69,7 +65,7 @@ const RecoordinacionAgendaByStatePage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      identificacion: searchTerm,
       ...filterObject,
       filterByState: false,
       estado_solicitud: state,
@@ -89,57 +85,36 @@ const RecoordinacionAgendaByStatePage: React.FC<
   const columns = useMemo<MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]>(
     () => [
       {
-        accessorKey: 'estado_solicitud',
-        header: 'ESTADO SOLICITUD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_solicitud'),
+        accessorKey: 'identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const solService =
+            row.original.agendamiento_data?.solicitud_servicio_data;
+          return solService?.identificacion || 'N/A';
+        },
       },
-
       {
-        accessorKey: 'descripcion',
-        header: 'DESCRIPCION',
+        accessorKey: 'razon_social',
+        header: 'NOMBRE CLIENTE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
+        Cell: ({ row }) => {
+          const solService =
+            row.original.agendamiento_data?.solicitud_servicio_data;
+          return solService?.razon_social || 'N/A';
+        },
       },
-
       {
-        accessorKey: 'agendamiento',
-        header: 'AGENDAMIENTO',
+        accessorKey: 'vendedor__razon_social',
+        header: 'SOLICITADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'agendamiento'),
-      },
-
-      {
-        accessorKey: 'area',
-        header: 'AREA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'area'),
-      },
-
-      {
-        accessorKey: 'departamento',
-        header: 'DEPARTAMENTO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'departamento'),
-      },
-
-      {
-        accessorKey: 'canal_venta',
-        header: 'CANAL VENTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'canal_venta'),
-      },
-
-      {
-        accessorKey: 'vendedor',
-        header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
 
       {
         accessorKey: 'created_at',
-        header: 'CREADO',
+        header: 'FECHA SOLICITUD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
@@ -158,7 +133,7 @@ const RecoordinacionAgendaByStatePage: React.FC<
             },
             {
               accessorKey: 'fecha_atiende',
-              header: 'APROBADO',
+              header: 'APROBADO EN',
               size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
               enableColumnFilter: false,
               enableSorting: false,
