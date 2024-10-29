@@ -17,11 +17,23 @@ export const preventaFormSchema = yup.object({
       200,
       'El campo parentesco referencia no debe exceder los 200 caracteres',
     ),
+  celular: yup
+    .string()
+    .required('El campo celular es requerido')
+    .max(200, 'El campo celular no debe exceder los 200 caracteres'),
   celular_adicional: yup
     .string()
     .required('El campo celular adicional es requerido')
-    .max(200, 'El campo celular adicional no debe exceder los 200 caracteres'),
-
+    .max(200, 'El campo celular adicional no debe exceder los 200 caracteres')
+    .notOneOf(
+      [yup.ref('celular')],
+      'El celular adicional no puede ser igual al celular',
+    ) // Validación adicional
+    .when('celular', {
+      is: (celular: string) => celular !== '', // Se asegura que celular no esté vacío
+      then: schema =>
+        schema.required('El campo celular adicional es requerido'),
+    }),
   direccion: yup
     .string()
     .required('El campo direccion es requerido')
@@ -130,8 +142,35 @@ export const preventaFormSchema = yup.object({
         rawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO,
       then: schema =>
         schema
+          .min(16, 'Debe tener minimo 16 digitos')
           .required('El campo numero tarjeta credito es requerido')
           .typeError('El campo numero tarjeta credito es requerido'),
+    }),
+
+  titular_tarjeta: yup
+    .string()
+    .optional()
+    .nullable()
+    .when('rawPaymentMethod', {
+      is: (rawPaymentMethod: MetodoPago) =>
+        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO,
+      then: schema =>
+        schema
+          .required('El campo titular tarjeta credito es requerido')
+          .typeError('El campo titular tarjeta credito es requerido'),
+    }),
+
+  fecha_vencimiento_tarjeta: yup
+    .string()
+    .optional()
+    .nullable()
+    .when('rawPaymentMethod', {
+      is: (rawPaymentMethod: MetodoPago) =>
+        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO,
+      then: schema =>
+        schema
+          .required('El campo fecha vencimiento tarjeta credito es requerido')
+          .typeError('El campo fecha vencimiento tarjeta credito es requerido'),
     }),
 });
 

@@ -51,6 +51,8 @@ export interface Preventa {
 
   numero_tarjeta_credito?: string; // credito
   url_foto_tarjeta?: string; // credito
+  titular_tarjeta?: string;
+  fecha_vencimiento_tarjeta?: string;
 
   url_foto_cedula_frontal: string;
   url_foto_cedula_trasera: string;

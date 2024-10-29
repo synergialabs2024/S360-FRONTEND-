@@ -131,14 +131,42 @@ const GeneralDataSavePreventaStep: React.FC<
           text="Persona Referencia"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        <CustomTextField
-          label="Nombre Persona Referencia"
-          name="nombre_persona_referencia"
-          control={form.control}
-          defaultValue={form.getValues().nombre_persona_referencia}
-          error={errors.nombre_persona_referencia}
-          helperText={errors.nombre_persona_referencia?.message}
-        />
+
+        {errors.celular_adicional ? (
+          <>
+            <CustomTextField
+              label="Nombre Persona Referencia"
+              name="nombre_persona_referencia"
+              control={form.control}
+              defaultValue={form.getValues().nombre_persona_referencia}
+              error={errors.nombre_persona_referencia}
+              helperText={errors.nombre_persona_referencia?.message}
+              size={gridSizeMdLg6}
+            />
+            <CustomCellphoneTextField
+              label="Celular Cliente"
+              name="celular"
+              control={form.control}
+              defaultValue={form.getValues().celular}
+              error={form.formState.errors.celular}
+              helperText={form.formState.errors.celular?.message}
+              size={gridSizeMdLg6}
+              disabled={true}
+            />
+          </>
+        ) : (
+          <>
+            <CustomTextField
+              label="Nombre Persona Referencia"
+              name="nombre_persona_referencia"
+              control={form.control}
+              defaultValue={form.getValues().nombre_persona_referencia}
+              error={errors.nombre_persona_referencia}
+              helperText={errors.nombre_persona_referencia?.message}
+            />
+          </>
+        )}
+
         <SelectTextFieldArrayString
           label="Parentesco Referencia"
           name="parentesco_referencia"

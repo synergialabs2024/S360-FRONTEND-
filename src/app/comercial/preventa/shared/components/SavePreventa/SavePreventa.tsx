@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme, Box } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -66,6 +66,8 @@ import {
   CustomCardAlert,
   CustomCellphoneTextField,
   CustomCoordsTextField,
+  CustomCreditCardTextField,
+  CustomExpirateDateTextField,
   CustomScanLoad,
   CustomSingleButton,
   CustomTextArea,
@@ -109,6 +111,10 @@ import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
 import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
 import { EquiposSeleccionadosTableType } from './form/equipos/EquiposSeleccionadosPreventa';
+
+import Cards from 'react-credit-cards-2';
+
+import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -253,6 +259,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedIdentificationType = form.watch('tipoIdentificacion');
   const watchedIdentification = form.watch('identificacion');
   const watchedSuggestedPlansBuro = form.watch('plan_sugerido_buro');
+
+  const watcherNumberCreditCard = form.watch('numero_tarjeta_credito');
+
+  const watcherExpirateCreditCard = form.watch('fecha_vencimiento_tarjeta');
+
+  const watcherOwnerCreditCard = form.watch('titular_tarjeta');
 
   // map ---------------
   const {
@@ -1196,6 +1208,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 form.setValue('numero_cuenta_bancaria', '');
                 form.setValue('tarjeta', '' as any);
                 form.setValue('numero_tarjeta_credito', '');
+                form.setValue('fecha_vencimiento_tarjeta', '');
+                form.setValue('titular_tarjeta', '');
               }}
               onChangeRawValue={rawValue => {
                 form.setValue('rawPaymentMethod', rawValue);
@@ -1267,8 +1281,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                   error={errors.tarjeta}
                   helperText={errors.tarjeta?.message}
                   size={gridSizeMdLg6}
+                  disabled
                 />
-                <CustomTextField
+                <Box pt={4}>
+                  <Cards
+                    number={watcherNumberCreditCard || ''}
+                    expiry={watcherExpirateCreditCard || ''}
+                    cvc=""
+                    name={watcherOwnerCreditCard || ''}
+                  />
+                </Box>
+                <CustomCreditCardTextField
                   label="Número tarjeta crédito"
                   name="numero_tarjeta_credito"
                   control={form.control}
@@ -1276,7 +1299,33 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                   error={errors.numero_tarjeta_credito}
                   helperText={errors.numero_tarjeta_credito?.message}
                   onlyNumbers
+                  maxLength={16}
+                  onChangeCardType={cardType => {
+                    const card = tarjetasPaging?.data?.items.find(
+                      card => card?.code === cardType,
+                    );
+                    console.log('card', card);
+                    form.setValue('tarjeta', card?.id);
+                  }}
+                />
+                <CustomTextField
+                  label="Titular tarjeta"
+                  name="titular_tarjeta"
+                  control={form.control}
+                  defaultValue={form.getValues().titular_tarjeta}
+                  error={errors.titular_tarjeta}
+                  helperText={errors.titular_tarjeta?.message}
+                  size={gridSizeMdLg6}
                   maxLength={25}
+                />
+                <CustomExpirateDateTextField
+                  label="Fecha vencimiento tarjeta"
+                  name="fecha_vencimiento_tarjeta"
+                  control={form.control}
+                  defaultValue={form.getValues().fecha_vencimiento_tarjeta}
+                  error={errors.fecha_vencimiento_tarjeta}
+                  helperText={errors.fecha_vencimiento_tarjeta?.message}
+                  size={gridSizeMdLg6}
                 />
               </>
             ) : null}

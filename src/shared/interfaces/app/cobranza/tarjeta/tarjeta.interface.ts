@@ -11,6 +11,8 @@ export interface Tarjeta {
   id?: number;
   uuid?: string;
 
+  code: string;
+
   name: string;
   state: boolean;
 
