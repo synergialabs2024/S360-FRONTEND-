@@ -1,4 +1,8 @@
-import { Agendamiento, SystemUserLimitData } from '@/shared';
+import {
+  Agendamiento,
+  GeneralModelStatesEnumChoice,
+  SystemUserLimitData,
+} from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface SolicitudesRecoordinacionAgendaPaginatedRes {
@@ -12,10 +16,9 @@ export interface SolicitudRecoordinacionAgenda {
   id?: number;
   uuid?: string;
 
-  estado_solicitud: string;
+  estado_solicitud: GeneralModelStatesEnumChoice;
   descripcion: string;
 
-  agendamiento: number;
   usuario_atiende: number;
   fecha_atiende?: string;
 
@@ -23,6 +26,8 @@ export interface SolicitudRecoordinacionAgenda {
   modified_at?: string;
 
   ///* fk
+  agendamiento?: number;
+
   area: number;
   departamento: number;
   canal_venta: number;

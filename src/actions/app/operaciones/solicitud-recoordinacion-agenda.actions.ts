@@ -54,6 +54,7 @@ export const useCreateSolicitudRecoordinacionAgenda = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
@@ -61,12 +62,13 @@ export const useCreateSolicitudRecoordinacionAgenda = <T>({
   return useMutation({
     mutationFn: (params: CreateSolicitudRecoordinacionAgendaParams<T>) =>
       createSolicitudRecoordinacionAgenda(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [
           SolicitudRecoordinacionAgendaTSQEnum.SOLICITUDRECOORDINACIONAGENDAS,
         ],
       });
+      customOnSuccess && customOnSuccess(res);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
@@ -196,7 +198,12 @@ export const updateSolicitudRecoordinacionAgenda = async <T>({
 };
 
 ///* action types ---------------
-export type HandleSolicitudRecoordinacionAgendaData = Pick<
+export type CreateSolRecoordinacionAgenda = Pick<
   SolicitudRecoordinacionAgenda,
-  'descripcion' | 'estado_solicitud'
->;
+  'descripcion'
+> & { agendamiento: number };
+
+export type RejectSolRecoordinacionAgenda = Pick<
+  SolicitudRecoordinacionAgenda,
+  'descripcion'
+> & { agendamiento: number };

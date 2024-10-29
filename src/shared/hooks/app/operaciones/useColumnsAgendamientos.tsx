@@ -176,24 +176,6 @@ export const useColumnsAgendamientos = () => {
       },
 
       {
-        accessorKey: 'solicitud_servicio',
-        header: 'SOLICITUD SERVICIO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'solicitud_servicio'),
-      },
-
-      {
-        accessorKey: 'preventa',
-        header: 'PREVENTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'preventa'),
-      },
-
-      {
         accessorKey: 'flota',
         header: 'FLOTA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -209,33 +191,6 @@ export const useColumnsAgendamientos = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nap'),
-      },
-
-      {
-        accessorKey: 'user_gestiona',
-        header: 'USER GESTIONA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'user_gestiona'),
-      },
-
-      {
-        accessorKey: 'area',
-        header: 'AREA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'area'),
-      },
-
-      {
-        accessorKey: 'departamento',
-        header: 'DEPARTAMENTO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'departamento'),
       },
 
       {

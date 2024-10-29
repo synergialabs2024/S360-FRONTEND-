@@ -385,9 +385,13 @@ export enum BucketKeyNameEnumChoice {
 export enum EstadoAgendamientoEnumChoice {
   ESPERA = 'ESPERA', // abre soporte tecnico para llamar
 
-  APROBADO = 'APROBADO', // x pyl?
+  APROBADO = 'APROBADO', // x pyl? - ahora es de una, agenda y crea la OT sin PyL
   ACTUALIZACION_PENDIENTE = 'ACTUALIZACION PENDIENTE', // x pyl
   FINALIZADO = 'FINALIZADO', // x pyl
+
+  // recoordinacion ------
+  ESPERA_RECOORDINACION = 'ESPERA RECOORDINACION', // se reagenda (OT ya creada)
+  RECOORDINADO = 'RECOORDINADO', // se reagenda
 
   RECHAZADO = 'RECHAZADO',
 

@@ -103,8 +103,8 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
   const onSave = async (data: SaveFormDataAgendaVentas) => {
     ///* create
     createAgendamientoMutation.mutate({
-      estado_llamada: data.estado_llamada,
-      observacion_llamada: data.observacion_llamada,
+      // estado_llamada: data.estado_llamada,
+      // observacion_llamada: data.observacion_llamada,
       fecha_instalacion: data.fecha_instalacion,
       hora_instalacion: data.hora_instalacion,
       flota: data.flota,
@@ -148,7 +148,6 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       // action btns
       onCancel={() => navigate(returnUrlAgendamientoVentasPage)}
       onSave={handleSubmit(onSave, errors => {
-        console.log(errors);
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}

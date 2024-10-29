@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { HiDocumentPlus } from 'react-icons/hi2';
 
 import { useFetchAgendamientos } from '@/actions/app';
 import {
@@ -16,8 +16,6 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { HiDocumentPlus } from 'react-icons/hi2';
-import { returnUrlAgendamientoVentasPage } from './AgendamientoVentasMainPage';
 
 export type AgendamientoVentasByStatePageProps = {
   state: EstadoAgendamientoEnumChoice;
@@ -27,8 +25,6 @@ const AgendamientoVentasByStatePage: React.FC<
   AgendamientoVentasByStatePageProps
 > = ({ state }) => {
   useCheckPermission(PermissionsEnum.operaciones_view_agendamiento);
-
-  const navigate = useNavigate();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -62,22 +58,6 @@ const AgendamientoVentasByStatePage: React.FC<
     },
   });
 
-  ///* handlers
-  const calcEnableActionsColumn = (): boolean => {
-    return false;
-
-    if (state === EstadoAgendamientoEnumChoice.ESPERA) {
-      return true;
-    }
-
-    return false;
-  };
-  const calcOnEdit = (data: Agendamiento) => {
-    if (state === EstadoAgendamientoEnumChoice.ESPERA) {
-      navigate(`${returnUrlAgendamientoVentasPage}/crear/${data.uuid}`);
-    }
-  };
-
   ///* columns
   const { agendaEspera } = useColumnsAgendamientos();
 
@@ -93,10 +73,7 @@ const AgendamientoVentasByStatePage: React.FC<
       />
 
       <CustomTable<Agendamiento>
-        columns={
-          // solicitudServicioBase
-          state === EstadoAgendamientoEnumChoice.ESPERA ? agendaEspera : []
-        }
+        columns={agendaEspera}
         data={agendamientosPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -112,10 +89,9 @@ const AgendamientoVentasByStatePage: React.FC<
         rowCount={agendamientosPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={calcEnableActionsColumn()}
+        enableActionsColumn={false}
         // crud
-        canEdit={calcEnableActionsColumn()}
-        onEdit={calcOnEdit}
+        canEdit={false}
         editIcon={<HiDocumentPlus />}
         // editIconToolTipTitle="Crear preventa"
         canDelete={false}
