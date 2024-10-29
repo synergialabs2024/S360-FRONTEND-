@@ -34,7 +34,7 @@ const AgendamientoVentasMainPage: React.FC<
         isMainTableStates
       >
         {/* <Tab label={'ESPERA VALIDACIÓN'} value={1} {...a11yProps(1)} /> */}
-        <Tab label={'PROGRAMADOS'} value={1} {...a11yProps(1)} />
+        <Tab label={'AGENDADOS'} value={1} {...a11yProps(1)} />
 
         <Tab label={'ESPERA RECOORDINACION'} value={2} {...a11yProps(2)} />
         <Tab label={'RECOORDINADOS'} value={3} {...a11yProps(3)} />

@@ -62,6 +62,7 @@ const RequestRecoordinacionAgendaTableBtn: React.FC<
 
   const handleCloseModal = () => {
     onClose();
+    form.setValue('descripcion', '');
   };
 
   return (

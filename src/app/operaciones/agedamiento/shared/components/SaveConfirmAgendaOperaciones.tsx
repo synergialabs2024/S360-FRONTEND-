@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,9 +27,9 @@ import {
   useCustomStepper,
 } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
-import { useUiConfirmModalStore } from '@/store/ui';
 import {
   GeneralDataConfirmAgendaStep,
+  RejectSolRecoordinacionModal,
   ServiceCoordinationConfirmAgendaStep,
 } from './form';
 
@@ -57,6 +57,10 @@ const SaveConfirmAgendaOperaciones: React.FC<
 > = ({ agendamiento, title, solicitudRecoordinacion }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
+  const cackeKey = `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`;
+
+  ///* local state ---------------------
+  const [openModaReject, setOpenModalReject] = useState(false);
 
   // stepper
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
@@ -69,11 +73,6 @@ const SaveConfirmAgendaOperaciones: React.FC<
     s => s.setActivePreventa,
   );
 
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
   ///* form ---------------------
   const form = useForm<SaveConfirmAgendaOperaciones>({
     resolver: yupResolver(agendamientoOperacionesConfirmFormSchema) as any,
@@ -81,7 +80,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
   });
   const { handleSubmit, reset } = form;
   usePlanificadorAgendamiento({
-    cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`,
+    cackeKey,
     form: form as any,
   });
 
@@ -98,7 +97,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
       returnUrl: returnUrlSolicitudsRecoordinacionAgendaPage,
       customOnSuccess() {
         setCache.mutate({
-          key: `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`,
+          key: cackeKey,
           value: null,
         });
       },
@@ -184,18 +183,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
             variant="text"
             color="error"
             onClick={() => {
-              setConfirmDialog({
-                isOpen: true,
-                title: 'Rechazar solicitud',
-                subtitle:
-                  '¿Está seguro que desea rechazar esta solicitud de recoordinación?',
-                onConfirm: () => {
-                  setConfirmDialogIsOpen(false);
-                  navigate(`${returnUrlSolicitudsRecoordinacionAgendaPage}`);
-                },
-                confirmTextBtn: 'Si, rechazar',
-                cancelTextBtn: 'Cerrar',
-              });
+              setOpenModalReject(true);
             }}
             sxBtn={{
               ml: 0.8,
@@ -221,6 +209,13 @@ const SaveConfirmAgendaOperaciones: React.FC<
       )}
 
       {/* =============== modals =============== */}
+      <RejectSolRecoordinacionModal
+        open={openModaReject}
+        onClose={() => setOpenModalReject(false)}
+        solicitudRecoordinacionUUID={solicitudRecoordinacion!}
+        keyCache={cackeKey}
+      />
+
       {/* <AgendaOpeRequestUpdate
         open={openModalUpd}
         onClose={() => setOpenModalUpd(false)}

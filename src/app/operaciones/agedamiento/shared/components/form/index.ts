@@ -5,3 +5,4 @@ export { default as ServiceCoordinationConfirmAgendaStep } from './ServiceCoordi
 
 export { default as AgendaOpeRequestUpdate } from './AgendaOpeRequestUpdate';
 export { default as AgendaDocsOperaciones } from './docs-step/AgendaDocsOperaciones';
+export { default as RejectSolRecoordinacionModal } from './RejectSolRecoordinacionModal';

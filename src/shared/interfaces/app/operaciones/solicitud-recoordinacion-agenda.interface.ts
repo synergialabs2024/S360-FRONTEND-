@@ -21,6 +21,7 @@ export interface SolicitudRecoordinacionAgenda {
 
   usuario_atiende: number;
   fecha_atiende?: string;
+  observacion_atiende?: string;
 
   created_at?: string;
   modified_at?: string;

@@ -27,3 +27,14 @@ export const approveOrRejectSolRecoordinacionSchema = yup.object({
       'El campo estado solicitud debe ser APROBADO o RECHAZADO',
     ),
 });
+
+export const rejectSolRecoordinacionSchema = yup.object({
+  observacion_atiende: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      750,
+      'El campo observacion atiende no debe exceder los 750 caracteres',
+    ),
+});

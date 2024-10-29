@@ -205,5 +205,5 @@ export type CreateSolRecoordinacionAgenda = Pick<
 
 export type RejectSolRecoordinacionAgenda = Pick<
   SolicitudRecoordinacionAgenda,
-  'descripcion'
-> & { agendamiento: number };
+  'observacion_atiende'
+>;
