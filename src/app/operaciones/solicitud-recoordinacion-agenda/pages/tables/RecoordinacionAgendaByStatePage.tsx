@@ -193,13 +193,17 @@ const RecoordinacionAgendaByStatePage: React.FC<
         rowCount={solicitudsRecoordinacionAgendaPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.operaciones_change_solicitudrecoordinacionagenda,
-        )}
+        enableActionsColumn={
+          hasPermission(
+            PermissionsEnum.operaciones_change_solicitudrecoordinacionagenda,
+          ) && state === GeneralModelStatesEnumChoice.ESPERA
+        }
         // crud
-        canEdit={hasPermission(
-          PermissionsEnum.operaciones_change_solicitudrecoordinacionagenda,
-        )}
+        canEdit={
+          hasPermission(
+            PermissionsEnum.operaciones_change_solicitudrecoordinacionagenda,
+          ) && state === GeneralModelStatesEnumChoice.ESPERA
+        }
         onEdit={onEdit}
         canDelete={false}
         editIcon={<EastIcon />}
