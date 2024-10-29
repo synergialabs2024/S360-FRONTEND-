@@ -7,7 +7,6 @@ import { gridSize, OrdenTrabajo, useTabsOnly } from '@/shared';
 import {
   a11yProps,
   CustomTabPanel,
-  CustomTextAreaNoForm,
   CustomTextFieldNoForm,
   CustomTypoLabel,
   CustomTypoLabelEnum,
@@ -61,7 +60,7 @@ const InstallAsigTecnicoOTFormTab: React.FC<
             <FormTabsOnly value={tabValue} onChange={handleTabChange}>
               <Tab label="Servicio" value={1} {...a11yProps(1)} />
               <Tab label="Datos Cliente" value={2} {...a11yProps(2)} />
-              <Tab label="Estado Llamada" value={3} {...a11yProps(3)} />
+              {/* <Tab label="Estado Llamada" value={3} {...a11yProps(3)} /> */}
             </FormTabsOnly>
           }
           sxContainer={{
@@ -163,7 +162,7 @@ const InstallAsigTecnicoOTFormTab: React.FC<
             />
           </CustomTabPanel>
 
-          {/* ------------- Estado Llamada ------------- */}
+          {/* ------------- Estado Llamada -------------
           <CustomTabPanel value={tabValue} index={3} ptGrid="0">
             <CustomTextFieldNoForm
               label="Celular"
@@ -182,7 +181,7 @@ const InstallAsigTecnicoOTFormTab: React.FC<
               disabled
               size={gridSize}
             />
-          </CustomTabPanel>
+          </CustomTabPanel> */}
         </NestedTabsScene>
       </>
 
