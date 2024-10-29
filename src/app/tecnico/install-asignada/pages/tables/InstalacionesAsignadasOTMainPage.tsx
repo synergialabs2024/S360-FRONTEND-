@@ -26,7 +26,7 @@ const InstalacionesAsignadasOTMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Agendamientos"
+      title="Instalaciones"
       showCreateBtn={false}
       isMainTableStates
     >
@@ -36,6 +36,7 @@ const InstalacionesAsignadasOTMainPage: React.FC<
         isMainTableStates
       >
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
+        <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
         <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
 
         <Tab label={'PRE RECHAZADAS'} value={3} {...a11yProps(3)} />
@@ -44,6 +45,12 @@ const InstalacionesAsignadasOTMainPage: React.FC<
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
         <InstalacionAsignadaOTByState
           state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <InstalacionAsignadaOTByState
+          state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
+          isRecoordinada
         />
       </CustomTabPanel>
 

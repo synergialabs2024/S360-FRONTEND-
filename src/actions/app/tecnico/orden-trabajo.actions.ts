@@ -126,7 +126,9 @@ export const useUpdateOrdenTrabajo = <T>({
 
 ///* axios ---------------
 export type GetOrdenTrabajosParams = Partial<OrdenTrabajo> &
-  PagingPartialParams;
+  PagingPartialParams & {
+    is_recoordinada?: boolean;
+  };
 export type CreateOrdenTrabajoParams<T> = T;
 export type CreateOrdenTrabajoParamsBase = Omit<OrdenTrabajo, 'id'>;
 export interface UpdateOrdenTrabajoParams<T> {

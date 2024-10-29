@@ -20,11 +20,12 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 
 export type InstalacionAsignadaOTByStateProps = {
   state: EstadoOrdenTrabajoEnumChoice;
+  isRecoordinada?: boolean;
 };
 
 const InstalacionAsignadaOTByState: React.FC<
   InstalacionAsignadaOTByStateProps
-> = ({ state }) => {
+> = ({ state, isRecoordinada = false }) => {
   useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
 
   const navigate = useNavigate();
@@ -56,6 +57,10 @@ const InstalacionAsignadaOTByState: React.FC<
       name: searchTerm,
       ...filterObject,
       filterByState: false,
+
+      estado_orden_trabajo: state,
+
+      is_recoordinada: isRecoordinada,
     },
   });
 
