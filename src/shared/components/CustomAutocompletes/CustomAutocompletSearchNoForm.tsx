@@ -1,8 +1,8 @@
-import { Clear as ClearIcon } from '@mui/icons-material';
 import { Autocomplete, Grid, TextField } from '@mui/material';
 import { useState } from 'react';
 
 import { gridSize } from '@/shared/constants';
+import { GridSizeType } from '@/shared/interfaces';
 
 export type CustomAutocompletSearchNoFormProps<T> = {
   loadingText?: string;
@@ -23,12 +23,7 @@ export type CustomAutocompletSearchNoFormProps<T> = {
 
   textFieldKey?: string;
   defaultValue?: string | number;
-  size?: {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-  };
+  size?: GridSizeType;
 };
 
 function CustomAutocompletSearchNoForm<T>({
@@ -79,12 +74,12 @@ function CustomAutocompletSearchNoForm<T>({
   };
 
   // Manejador para limpiar el campo
-  const handleClear = () => {
-    setValue('');
-    setInputValue('');
-    onChangeValue && onChangeValue('');
-    onChangeInputText && onChangeInputText('');
-  };
+  // const handleClear = () => {
+  //   setValue('');
+  //   setInputValue('');
+  //   onChangeValue && onChangeValue('');
+  //   onChangeInputText && onChangeInputText('');
+  // };
 
   return (
     <Grid item {...size}>
@@ -106,7 +101,7 @@ function CustomAutocompletSearchNoForm<T>({
         }
         inputValue={inputValue}
         // Ícono para limpiar el campo
-        clearIcon={<ClearIcon fontSize="small" onClick={handleClear} />}
+        // clearIcon={<ClearIcon fontSize="small" onClick={handleClear} />}
         clearText="Limpiar"
         disabled={disabled}
         renderInput={params => (

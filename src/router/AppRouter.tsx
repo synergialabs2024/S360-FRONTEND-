@@ -670,22 +670,22 @@ const ConsultasBuroPage = Loadable(
 );
 
 ///* Operaciones ------------
-const AgendamientosMainPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/operaciones/agedamiento/pages/tables/AgendamientosMainPage'
-      ),
-  ),
-);
-const ConfirmAgendaOperacionesPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/operaciones/agedamiento/pages/forms/ConfirmAgendaOperacionesPage'
-      ),
-  ),
-);
+// const AgendamientosMainPage = Loadable(
+//   lazy(
+//     () =>
+//       import(
+//         '@/app/operaciones/agedamiento/pages/tables/AgendamientosMainPage'
+//       ),
+//   ),
+// );
+// const ConfirmAgendaOperacionesPage = Loadable(
+//   lazy(
+//     () =>
+//       import(
+//         '@/app/operaciones/agedamiento/pages/forms/ConfirmAgendaOperacionesPage'
+//       ),
+//   ),
+// );
 const PlanificadorsPage = Loadable(
   lazy(
     () =>
@@ -973,6 +973,16 @@ const InstalacionAsignadaOT = Loadable(
     () =>
       import(
         '@/app/tecnico/install-asignada/pages/forms/InstalacionAsignadaOT'
+      ),
+  ),
+);
+
+//* activaciones ---------
+const ActivacionesInstalacionesMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/activacion/instalaciones/pages/forms/ActivacionesInstalacionesMainPage'
       ),
   ),
 );
@@ -1568,14 +1578,20 @@ const AppRouter = [
         path: ROUTER_PATHS.operaciones.root,
 
         children: [
-          ///* agendamientos
+          ///* agendamientos: ya no
+          // {
+          //   path: ROUTER_PATHS.operaciones.agendamientos,
+          //   element: <AgendamientosMainPage />,
+          // },
+          // {
+          //   path: ROUTER_PATHS.operaciones.agendamientosPending,
+          //   element: <ConfirmAgendaOperacionesPage />,
+          // },
+
+          ///* activaciones
           {
-            path: ROUTER_PATHS.operaciones.agendamientos,
-            element: <AgendamientosMainPage />,
-          },
-          {
-            path: ROUTER_PATHS.operaciones.agendamientosPending,
-            element: <ConfirmAgendaOperacionesPage />,
+            path: ROUTER_PATHS.operaciones.activaciones,
+            element: <ActivacionesInstalacionesMainPage />,
           },
         ],
       },

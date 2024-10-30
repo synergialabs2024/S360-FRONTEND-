@@ -35,10 +35,11 @@ export interface UbicacionProducto {
   ubicacion_data?: Ubicacion;
 }
 
-export interface UbicacionSerieProducto {
-  code: string;
-  block_until?: string; // timestamp
-}
+// export interface UbicacionSerieProducto {
+//   code: string;
+//   block_until?: string; // timestamp
+// }
+export type UbicacionSerieProducto = string;
 
 export type UbicacionProductoSeriesTypeStr = string;
 

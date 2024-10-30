@@ -210,9 +210,8 @@ const ProductoUbicacionSeriesModal: React.FC<
 
                             // auto select series based on required quantity
                             const selectedSeries =
-                              selectedRow?.series
-                                ?.map(s => s.code)
-                                ?.slice(0, requiredQuantity) || [];
+                              selectedRow?.series?.slice(0, requiredQuantity) ||
+                              [];
 
                             // update store
                             setSelectedRow({
@@ -257,7 +256,7 @@ const ProductoUbicacionSeriesModal: React.FC<
                   control={form.control as any}
                   // options
                   defaultValue={selectedRow?.savedSeries || []}
-                  options={selectedRow?.series?.map(s => s.code) || []}
+                  options={selectedRow?.series || []}
                   isLoadingData={false}
                   // errors
                   error={!!errors.seriesArrString?.length}

@@ -1,6 +1,8 @@
 import {
   Agendamiento,
   Ciudad,
+  EstadoActivacionEnumChoice,
+  EstadoOrdenTrabajoEnumChoice,
   FlotaLimitData,
   LineaServicio,
   Nodo,
@@ -9,6 +11,7 @@ import {
   ProvinciaLimitData,
   SolicitudServicio,
   TipoActualizacionActivacionesEnumChoice,
+  TipoOrdenTrabajoEnumChoice,
 } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
@@ -22,8 +25,8 @@ export interface OrdenesTrabajoPaginatedRes {
 export interface OrdenTrabajo {
   id?: number;
   uuid?: string;
-  estado_orden_trabajo: string; // choice
-  tipo_orden_trabajo: string; // choice
+  estado_orden_trabajo: EstadoOrdenTrabajoEnumChoice; // choice
+  tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice; // choice
 
   numero_referencia?: string;
   codigo?: string;
@@ -54,7 +57,7 @@ export interface OrdenTrabajo {
   url_foto_acta_entrega_ups: string;
 
   // ACTIVACION -------------------
-  estado_activacion: string;
+  estado_activacion: EstadoActivacionEnumChoice;
   ipv4: string;
   ipv6: string;
   pppoe: string;

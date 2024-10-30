@@ -466,12 +466,28 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconBrandAirtable,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'coordinacion-agendas',
-              title: 'Coordinación de agendas',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.operaciones.agendamientosNav,
-            }),
+            // recoordinacion x el supervisor de ventas, ya no hay llamada - va directo a OT
+            // renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            //   id: 'coordinacion-agendas',
+            //   title: 'Coordinación de agendas',
+            //   type: MenuItemType.ITEM,
+            //   url: ROUTER_PATHS.operaciones.agendamientosNav,
+            // }),
+            // renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            //   id: 'recoordinacion-agendas',
+            //   title: 'Recoordinación de agendas',
+            //   type: MenuItemType.ITEM,
+            //   url: ROUTER_PATHS.notFound,
+            // }),
+            renderByModule(
+              SidenavModulesEnum.OPERACIONES_ACTIVACION_INSTALACIONES,
+              {
+                id: 'activacion-instalaciones',
+                title: 'Activación de instalaciones',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.operaciones.activacionesNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'recoordinacion-agendas',
               title: 'Recoordinación de agendas',

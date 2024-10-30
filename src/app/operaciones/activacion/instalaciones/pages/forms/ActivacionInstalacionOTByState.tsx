@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 
 import { useFetchOrdenTrabajos } from '@/actions/app';
 import {
+  EstadoActivacionEnumChoice,
   EstadoOrdenTrabajoEnumChoice,
   OrdenTrabajo,
   PermissionsEnum,
@@ -19,14 +20,16 @@ import {
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 
-export type InstalacionAsignadaOTByStateProps = {
-  state: EstadoOrdenTrabajoEnumChoice;
+export type ActivacionInstalacionOTByStateProps = {
+  activacionState: EstadoActivacionEnumChoice;
+  otState?: EstadoOrdenTrabajoEnumChoice;
+
   isRecoordinada?: boolean;
 };
 
-const InstalacionAsignadaOTByState: React.FC<
-  InstalacionAsignadaOTByStateProps
-> = ({ state, isRecoordinada = false }) => {
+const ActivacionInstalacionOTByState: React.FC<
+  ActivacionInstalacionOTByStateProps
+> = ({ otState, activacionState, isRecoordinada = false }) => {
   useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
 
   const navigate = useNavigate();
@@ -60,7 +63,8 @@ const InstalacionAsignadaOTByState: React.FC<
       filterByState: false,
 
       tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice.INSTALACION,
-      estado_orden_trabajo: state,
+      ...(otState && { estado_orden_trabajo: otState }),
+      estado_activacion: activacionState,
 
       // apply only to PENDIENTE
       is_recoordinada: isRecoordinada,
@@ -69,10 +73,10 @@ const InstalacionAsignadaOTByState: React.FC<
 
   ///* handlers
   const calcEnableActionsColumn = () => {
-    return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
+    return otState && otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
   };
   const calcOnEdit = (row: OrdenTrabajo) => {
-    navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
+    navigate(`/operaciones/activaciones/instalacion/${row.uuid}`);
   };
 
   ///* columns
@@ -92,9 +96,9 @@ const InstalacionAsignadaOTByState: React.FC<
       <CustomTable<OrdenTrabajo>
         columns={
           // solicitudServicioBase
-          state === EstadoOrdenTrabajoEnumChoice.PENDIENTE
+          otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE
             ? installAsignadasEsperaOTColumns
-            : []
+            : installAsignadasEsperaOTColumns
         }
         data={OrdensTrabajoPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -123,4 +127,4 @@ const InstalacionAsignadaOTByState: React.FC<
   );
 };
 
-export default InstalacionAsignadaOTByState;
+export default ActivacionInstalacionOTByState;

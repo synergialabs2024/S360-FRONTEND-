@@ -246,6 +246,11 @@ export const ROUTER_PATHS = {
     agendamientos: 'agendamientos',
     agendamientosPending: 'agendamientos/pendientes/:uuid',
     agendamientosNav: '/operaciones/agendamientos',
+
+    ///* activaciones
+    activaciones: 'activaciones',
+    activacionesInstalacion: 'activaciones/instalacion/:uuid',
+    activacionesNav: '/operaciones/activaciones',
   },
 
   /////* Infraestructura ----------------
