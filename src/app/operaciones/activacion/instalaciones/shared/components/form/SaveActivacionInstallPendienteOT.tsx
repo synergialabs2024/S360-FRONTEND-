@@ -59,7 +59,7 @@ const SaveActivacionInstallPendienteOT: React.FC<
     ActivateInstalacionOTData,
     OrdenTrabajo
   >(
-    `/activate-instalacion/${ordentrabajo?.id!}`,
+    `/orden-trabajo/instalaciones/activate/${ordentrabajo?.id!}/`,
     OrdenTrabajoTSQEnum.ORDENTRABAJOS,
     {
       customMessageToast: 'Activación de instalación exitosa',
@@ -85,6 +85,7 @@ const SaveActivacionInstallPendienteOT: React.FC<
       hora_fin: data.hora_fin!,
       hora_inicio: data.hora_inicio!,
       serie_ont: selectedSerie,
+      observacion_activacion: data.observacion_activacion!,
     });
   };
 

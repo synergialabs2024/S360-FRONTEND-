@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useFetchUbicacionProductos } from '@/actions/app';
 import {
   InventarioEnumUUID,
@@ -6,7 +8,6 @@ import {
   ToastWrapper,
 } from '@/shared';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
-import { useEffect } from 'react';
 
 type UseEquiposActivacionInstallOTParams = {
   ordenTrabajo: OrdenTrabajo;
