@@ -9,3 +9,9 @@ export type CreateInstalacionAsignadaOTOperaciones = Pick<
     'flota'
     // | 'estado_llamada' | 'observacion_llamada'
   > & {};
+
+///* ACTIVACION ===================================
+export type ActivateInstalacionOTData = Pick<
+  OrdenTrabajo,
+  'serie_ont' | 'hora_inicio' | 'hora_fin'
+> & {};

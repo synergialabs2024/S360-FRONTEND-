@@ -1,24 +1,80 @@
-import { Tab } from '@mui/material';
+/* eslint-disable indent */
+import { Grid, Tab, Typography } from '@mui/material';
+import { useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
+import { FaMapLocationDot } from 'react-icons/fa6';
 
+import { useFetchZonas } from '@/actions/app';
 import { DatosPlanBasicoTecnicoPart } from '@/app/tecnico/install-asignada/shared/components/form';
-import { OrdenTrabajo, useTabsOnly } from '@/shared';
+import {
+  gridSize,
+  gridSizeMdLg1,
+  gridSizeMdLg11,
+  gridSizeMdLg3,
+  OrdenTrabajo,
+  useLoaders,
+  useTabsOnly,
+} from '@/shared';
 import {
   a11yProps,
+  CustomCoordsTextField,
   CustomTabPanel,
+  CustomTextArea,
+  CustomTextAreaNoForm,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   FormTabsOnly,
+  InputAndBtnGridSpace,
+  MapModalComponent,
   NestedTabsScene,
+  SingleIconButton,
 } from '@/shared/components';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import type { ActicacionInstallOTSaveFormData } from './SaveActivacionInstallPendienteOT';
 
 export type ActivacionInstallOTDetallesEquiposFormTabProps = {
   ordenTrabajo: OrdenTrabajo;
+  form: UseFormReturn<ActicacionInstallOTSaveFormData>;
 };
 
 const ActivacionInstallOTDetallesEquiposFormTab: React.FC<
   ActivacionInstallOTDetallesEquiposFormTabProps
-> = ({ ordenTrabajo }) => {
+> = ({ ordenTrabajo, form }) => {
   ///* hooks ---------------------
   const { tabValue, handleTabChange } = useTabsOnly();
+
+  ///* local state ---------------------
+  const [openMapModal, setOpenMapModal] = useState(false);
+
+  ///* form ---------------------
+  const { errors } = form.formState;
+
+  // map --------
+  const {
+    Map,
+    latLng,
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    setLatLng,
+  } = useMapComponent({
+    form,
+    initialCoords: ordenTrabajo?.solicitud_servicio_data?.coordenadas || '',
+    enableFetchNaps: true,
+  });
+
+  const {
+    data: zonasPaging,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    params: {
+      page_size: 1200,
+    },
+  });
+  const isLoading =
+    isLoadingZonas || isLoadingNaps || isRefetchingZonas || isRefetchingNaps;
+  useLoaders(isLoading);
 
   return (
     <>
@@ -33,7 +89,7 @@ const ActivacionInstallOTDetallesEquiposFormTab: React.FC<
         }
         sxContainer={{
           pt: 0,
-          pb: 0,
+          pb: 4,
         }}
       >
         <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -41,9 +97,177 @@ const ActivacionInstallOTDetallesEquiposFormTab: React.FC<
         </CustomTabPanel>
 
         <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-          sss
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputGridSize={gridSizeMdLg11}
+            inputNode={
+              <CustomCoordsTextField
+                label="Coordenadas"
+                name="coordenadas"
+                control={form.control}
+                defaultValue={form.getValues().coordenadas || ''}
+                error={errors.coordenadas as any}
+                helperText={errors.coordenadas?.message as any}
+                disabled={true}
+              />
+            }
+            btnLabel="Ver mapa"
+            overrideBtnNode
+            customBtnNode={
+              <>
+                <SingleIconButton
+                  startIcon={<FaMapLocationDot />}
+                  label={'Ver mapa'}
+                  color={'primary'}
+                  onClick={() => {
+                    setOpenMapModal(true);
+                  }}
+                />
+
+                <MapModalComponent
+                  open={openMapModal}
+                  onClose={() => {
+                    setOpenMapModal(false);
+                  }}
+                  //
+                  showCustomTitleNode
+                  customTitleNode={
+                    <Grid item container xs={12}>
+                      <Typography variant="h4">
+                        Ubicación | Coordenadas:{' '}
+                        <span
+                          style={{
+                            fontSize: '0.93rem',
+                            fontWeight: 400,
+                          }}
+                        >
+                          {latLng?.lat}, {latLng?.lng}
+                        </span>
+                      </Typography>
+                    </Grid>
+                  }
+                  minWidthModal="70%"
+                  contentNodeOverride={
+                    <Map
+                      coordenadas={
+                        latLng
+                          ? {
+                              lat: latLng.lat,
+                              lng: latLng.lng,
+                            }
+                          : { lat: 0, lng: 0 }
+                      }
+                      canDragMarker={false}
+                      setLatLng={setLatLng}
+                      showCoverage
+                      coverageZones={zonasPaging?.data?.items || []}
+                      //
+                      showNaps={true}
+                      naps={napsByCoords || []}
+                    />
+                  }
+                  canDragMarker={false}
+                />
+              </>
+            }
+            btnGridSize={gridSizeMdLg1}
+          />
+
+          <>
+            <CustomTextFieldNoForm
+              label="Sector"
+              value={ordenTrabajo?.sector_data?.name || ''}
+              disabled
+            />
+            <CustomTextFieldNoForm
+              label="Zona"
+              value={ordenTrabajo?.zona_data?.name || ''}
+              disabled
+            />
+            <CustomTextFieldNoForm
+              label="Ciudad"
+              value={ordenTrabajo?.ciudad_data?.name || ''}
+              disabled
+            />
+            <CustomTextFieldNoForm
+              label="Provincia"
+              value={ordenTrabajo?.provincia_data?.name || ''}
+              disabled
+            />
+
+            <CustomTextAreaNoForm
+              label="Dirección"
+              value={ordenTrabajo?.solicitud_servicio_data?.direccion || ''}
+              disabled
+            />
+          </>
         </CustomTabPanel>
       </NestedTabsScene>
+
+      <>
+        <CustomTextFieldNoForm
+          label="Nodo"
+          value={ordenTrabajo?.nodo_data?.name || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="OLT"
+          value={ordenTrabajo?.olt_data?.name || ''}
+          disabled
+        />
+
+        <>
+          <CustomTextFieldNoForm
+            label="NAP"
+            value={ordenTrabajo?.nap_data?.name || ''}
+            disabled
+          />
+          <CustomTextFieldNoForm
+            label="Distancia NAP"
+            value={ordenTrabajo?.agendamiento_data?.distancia_nap || ''}
+            disabled
+            size={gridSizeMdLg3}
+            endAdornment="m"
+          />
+          <CustomTextFieldNoForm
+            label="Puerto"
+            value={ordenTrabajo?.preventa_data?.puerto_nap || ''}
+            disabled
+            size={gridSizeMdLg3}
+          />
+
+          <CustomTextFieldNoForm
+            label="IPv4"
+            value={ordenTrabajo?.ipv4}
+            disabled
+          />
+          <CustomTextFieldNoForm
+            label="IPv6"
+            value={ordenTrabajo?.ipv6}
+            disabled
+          />
+          <CustomTextFieldNoForm
+            label="PPPoE"
+            value={ordenTrabajo?.pppoe}
+            disabled
+          />
+          <CustomTextFieldNoForm
+            label="PPpassword"
+            value={ordenTrabajo?.pppassword}
+            disabled
+          />
+        </>
+      </>
+
+      <CustomTextArea
+        label="Observación de activación"
+        name="observacion_activacion"
+        control={form.control}
+        defaultValue={form.getValues().observacion_activacion}
+        error={errors.observacion_activacion}
+        helperText={errors.observacion_activacion?.message}
+        required={false}
+      />
     </>
   );
 };

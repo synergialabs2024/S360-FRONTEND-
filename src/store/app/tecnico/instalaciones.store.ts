@@ -31,11 +31,13 @@ export interface InstalacionesState {
     keyStore,
     idKey,
     showToast,
+    customSuccessAddMessage,
   }: {
     item: EquiposUtilizadosOTTableType | MaterialesUtilizadosOTTableType;
     keyStore: InstalacionesStoreKey;
     idKey?: string;
     showToast?: boolean;
+    customSuccessAddMessage?: string;
   }) => void;
 
   removeSelectedItem: ({
@@ -73,7 +75,13 @@ export const useInstalacionesStore = create<InstalacionesState>()(
 
     setSelectedRow: item => set({ selectedRow: item }),
 
-    addSelectedItem: ({ item, keyStore, idKey = 'id', showToast = true }) => {
+    addSelectedItem: ({
+      item,
+      keyStore,
+      idKey = 'id',
+      showToast = true,
+      customSuccessAddMessage = 'Item agregado correctamente.',
+    }) => {
       const itemExists = get()[keyStore].find(
         (i: any) => i[idKey as any] === (item as any)[idKey as any],
       );
@@ -87,7 +95,7 @@ export const useInstalacionesStore = create<InstalacionesState>()(
         [keyStore]: [...get()[keyStore], item],
       });
 
-      showToast && ToastWrapper.info('Item agregado correctamente.');
+      showToast && ToastWrapper.info(customSuccessAddMessage);
     },
 
     updateSelectedItemValue: ({ keyStore, idKey = 'id', updatedItem }) => {

@@ -18,4 +18,10 @@ export const activacionInstallOTSchema = yup.object({
         return horaFin.isAfter(horaInicio);
       },
     ),
+
+  observacion_activacion: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(655, 'Máximo 655 caracteres'),
 });

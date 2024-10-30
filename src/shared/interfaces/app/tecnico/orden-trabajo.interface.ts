@@ -5,13 +5,16 @@ import {
   EstadoOrdenTrabajoEnumChoice,
   FlotaLimitData,
   LineaServicio,
+  Nap,
   Nodo,
   OLT,
   Preventa,
   ProvinciaLimitData,
+  SectorLimitData,
   SolicitudServicio,
   TipoActualizacionActivacionesEnumChoice,
   TipoOrdenTrabajoEnumChoice,
+  ZonaLimitData,
 } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
@@ -62,7 +65,7 @@ export interface OrdenTrabajo {
   ipv6: string;
   pppoe: string;
   pppassword: string;
-
+  observacion_activacion: string;
   observacion_prerechazo: string;
 
   // cambio puerto ---------------
@@ -99,10 +102,13 @@ export interface OrdenTrabajo {
   agendamiento_data?: Agendamiento;
   flota_data?: FlotaLimitData;
   linea_servicio_data?: LineaServicio;
-  olt_data?: OLT;
   nodo_data?: Nodo;
+  olt_data?: OLT;
 
   // just serializer
   ciudad_data?: Ciudad;
   provincia_data?: ProvinciaLimitData;
+  zona_data?: ZonaLimitData;
+  sector_data?: SectorLimitData;
+  nap_data?: Nap;
 }

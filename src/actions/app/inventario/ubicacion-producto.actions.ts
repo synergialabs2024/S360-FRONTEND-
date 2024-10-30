@@ -129,6 +129,7 @@ export type GetUbicacionProductosParams = Partial<UbicacionProducto> &
     producto__codigo?: string;
     producto__es_para_venta?: boolean;
     producto__categoria__uuid?: string;
+    producto__tipo?: string;
     bodega__nombre?: string;
     bodega__codigo?: string;
     bodega__centro_costo__pk?: number;

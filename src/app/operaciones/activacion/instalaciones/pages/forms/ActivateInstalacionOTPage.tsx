@@ -52,7 +52,7 @@ const ActivateInstalacionOTPage: React.FC<
     <SaveActivacionInstallPendienteOT
       titleNode={
         <CustomTitleRefNumber
-          initialText="Instalación Asignada"
+          initialText="Activar instalación"
           referenceNumber={data?.data?.numero_referencia!}
         />
       }
