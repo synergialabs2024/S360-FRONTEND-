@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import Chart from 'react-apexcharts';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import DashboardCard from '@/components/shared/DashboardCard';
@@ -26,6 +26,10 @@ const SectionTrafico = () => {
     series: [],
     xAxisCategories: [],
   });
+
+  const handleTraficoChange = (data: Trafico | null) => {
+    setTraficoUser(data);
+  };
 
   // Memoizar los valores calculados de 'subida' y 'bajada' para mejorar el rendimiento
   const subida = useMemo(() => {
@@ -128,22 +132,20 @@ const SectionTrafico = () => {
           optionLabelForEdit={selectedTrafico?.username || ''}
           isLoadingData={isLoadingTraficos}
           onChangeInputText={onChangeFilterTrafico}
-          onChangeRawValue={setTraficoUser}
+          onChangeRawValue={handleTraficoChange}
           required={false}
           size={gridSizeMdLg5}
         />
       }
     >
-      <Grid spacing={3}>
-        <Box className="rounded-bars">
-          <Chart
-            type="area"
-            options={options}
-            series={chartData.series}
-            height={385}
-          />
-        </Box>
-      </Grid>
+      <Box className="rounded-bars">
+        <Chart
+          type="area"
+          options={options}
+          series={chartData.series}
+          height={385}
+        />
+      </Box>
     </DashboardCard>
   );
 };

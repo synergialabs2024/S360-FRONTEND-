@@ -13,9 +13,8 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { AutenticacionCliente } from '@/shared/interfaces/app/administracion-red/autenticacion-cliente';
-import { autenticacionClienteFormSchema } from '@/shared/utils/validation-schemas/app/administracion-red/autenticacion-cliente';
 import { returnUrlAutenticacionClientesPage } from '../../../pages/tables/AutenticacionClientePage';
+import { AutenticacionCliente, autenticacionClienteFormSchema } from '@/shared';
 
 export interface SaveAutenticacionClienteProps {
   title: string;

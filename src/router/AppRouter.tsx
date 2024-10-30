@@ -751,6 +751,9 @@ const TraficosPage = Loadable(
     () => import('@/app/administracion-red/trafico/pages/tables/TraficosPage'),
   ),
 );
+const BrasPage = Loadable(
+  lazy(() => import('@/app/administracion-red/bras/pages/tables/BrasPage')),
+);
 
 const RadiusPage = Loadable(
   lazy(() => import('@/app/administracion-red/radius/pages/tables/RadiusPage')),
@@ -903,6 +906,20 @@ const UpdateGestionOnusPage = Loadable(
   lazy(
     () =>
       import('@/app/netconnect/gestion-onus/pages/forms/UpdateGestionOnusPage'),
+  ),
+);
+
+const ONTModelsPage = Loadable(
+  lazy(() => import('@/app/netconnect/ont-model/pages/tables/ONTModelsPage')),
+);
+const CreateONTModelsPage = Loadable(
+  lazy(
+    () => import('@/app/netconnect/ont-model/pages/forms/CreateONTModelsPage'),
+  ),
+);
+const UpdateONTModelsPage = Loadable(
+  lazy(
+    () => import('@/app/netconnect/ont-model/pages/forms/UpdateONTModelsPage'),
   ),
 );
 //Vlan
@@ -1717,6 +1734,10 @@ const AppRouter = [
             path: ROUTER_PATHS.administracionRed.traficos,
             element: <TraficosPage />,
           },
+          {
+            path: ROUTER_PATHS.administracionRed.bras,
+            element: <BrasPage />,
+          },
           ///* radius
           {
             path: ROUTER_PATHS.administracionRed.radius,
@@ -1813,6 +1834,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.netconnect.onusConfiguradasEditar,
             element: <UpdateOnusConfiguradaPage />,
+          },
+          ///* ONT Module
+          {
+            path: ROUTER_PATHS.netconnect.ontModels,
+            element: <ONTModelsPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.ontModelsCrear,
+            element: <CreateONTModelsPage />,
+          },
+          {
+            path: ROUTER_PATHS.netconnect.ontModelsEditar,
+            element: <UpdateONTModelsPage />,
           },
         ],
       },

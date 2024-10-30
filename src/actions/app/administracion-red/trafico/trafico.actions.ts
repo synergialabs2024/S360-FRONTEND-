@@ -14,7 +14,7 @@ const CONSULTA_API = 'https://radiusapi.intercommerce.com.ec/api/radacct/';
 const TRACE_API = 'https://serverapiolt.intercommerce.com.ec/api/traceroute';
 const PING_API = 'https://serverapiolt.intercommerce.com.ec/api/makePing';
 
-export const fetchCombinedData = async (params?: any) => {
+export const fetchCombinedDataTrafico = async (params?: any) => {
   try {
     const response = await axios.get(API_DATA, { params });
     return response.data;
@@ -34,7 +34,7 @@ export const useFetchTraficos = ({
 }) => {
   return useQuery({
     queryKey: [TraficoTSQEnum.TRAFICOS, ...Object.values(params || {})],
-    queryFn: () => fetchCombinedData(params),
+    queryFn: () => fetchCombinedDataTrafico(params),
     enabled: enabled,
   });
 };

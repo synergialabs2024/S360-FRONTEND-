@@ -23,7 +23,7 @@ const UpdateAutorizacionOnuPage: React.FC<
 
   return (
     <SaveAutorizacionOnus
-      title="Editar AutorizacionOnu"
+      title="Editar Autorizacion de Onu"
       autorizacionOnu={data.data}
     />
   );

@@ -698,7 +698,7 @@ export const useNestedMenu = () => {
               id: 'bras',
               title: 'Bras',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.administracionRed.brasNav,
             }),
             renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_GRUPO_IPV4, {
               id: 'ipv4s',
@@ -792,6 +792,12 @@ export const useNestedMenu = () => {
               title: 'Auditoría de consumos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
+            }),
+            renderByModule(SidenavModulesEnum.NETCONNECT_ONT_MODEL, {
+              id: 'ont-models',
+              title: 'Modelos ONT',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.netconnect.ontModelsNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

@@ -13,8 +13,13 @@ export enum OLTConectTSQEnum {
 }
 ///* tanStack query ---------------
 export const useCreateOLTConect = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
   customMessageToast,
   customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
   enableToast = true,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
@@ -26,12 +31,18 @@ export const useCreateOLTConect = <T>({
       queryClient.invalidateQueries({
         queryKey: [OLTConectTSQEnum.OLTCONECTS],
       });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
           customMessageToast || 'OLT Conect creado correctamente',
         );
     },
     onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
       handleAxiosError(error, customMessageErrorToast);
     },
     onSettled: () => {

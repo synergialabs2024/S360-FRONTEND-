@@ -1,8 +1,12 @@
 import { useFetchOLTs } from '@/actions/app';
+import { useMemo } from 'react';
+import { MRT_ColumnDef } from 'material-react-table';
+
 import {
   ConfigOLT,
   emptyCellOneLevel,
   TABLE_CONSTANTS,
+  useIsMediaQuery,
   useTabsOnly,
 } from '@/shared';
 import {
@@ -12,9 +16,7 @@ import {
   NestedTabsScene,
 } from '@/shared/components';
 import AppCard from '@/shared/components/AppCard/AppCard';
-import { Grid, Tab } from '@mui/material';
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
+import { Box, Grid, Tab } from '@mui/material';
 import { SimpleTable } from '../../../pages/custom';
 
 export type OLTScenceProps = {
@@ -22,6 +24,8 @@ export type OLTScenceProps = {
 };
 
 const OLTScence: React.FC<OLTScenceProps> = ({ data = {} }) => {
+  const isMobile = useIsMediaQuery('sm');
+
   const { tabValue, handleTabChange } = useTabsOnly();
 
   ///* fetch data
@@ -61,24 +65,32 @@ const OLTScence: React.FC<OLTScenceProps> = ({ data = {} }) => {
   ];
 
   return (
-    <>
-      <NestedTabsScene
-        tabs={
-          <FormTabsOnly
-            sxTabs={{ mb: 2 }}
-            value={tabValue}
-            onChange={handleTabChange}
-          >
-            {tabData.map(tab => (
-              <Tab
-                key={tab.index}
-                label={tab.label}
-                value={tab.index}
-                {...a11yProps(tab.index)}
-              />
-            ))}
-          </FormTabsOnly>
-        }
+    <NestedTabsScene
+      tabs={
+        <FormTabsOnly
+          sxTabs={{ mb: 2 }}
+          value={tabValue}
+          onChange={handleTabChange}
+        >
+          {tabData.map(tab => (
+            <Tab
+              key={tab.index}
+              label={tab.label}
+              value={tab.index}
+              {...a11yProps(tab.index)}
+            />
+          ))}
+        </FormTabsOnly>
+      }
+    >
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          pt: isMobile ? 1 : 2,
+          borderRadius: '12px',
+          ml: '0.9cm',
+        }}
       >
         {tabData.map(tab => (
           <CustomTabPanel
@@ -88,7 +100,7 @@ const OLTScence: React.FC<OLTScenceProps> = ({ data = {} }) => {
             ptGrid="0"
           >
             <AppCard>
-              <Grid sx={{ ml: '2cm' }}>
+              <Grid sx={{ m: '5px' }}>
                 <SimpleTable<ConfigOLT>
                   columns={columns}
                   data={tab.data}
@@ -99,8 +111,8 @@ const OLTScence: React.FC<OLTScenceProps> = ({ data = {} }) => {
             </AppCard>
           </CustomTabPanel>
         ))}
-      </NestedTabsScene>
-    </>
+      </Box>
+    </NestedTabsScene>
   );
 };
 

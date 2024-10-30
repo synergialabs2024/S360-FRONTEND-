@@ -370,6 +370,7 @@ export enum BucketTypeEnumChoice {
   IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
   IMAGES_ACEPTACION_CONTRATO = 'images/acaptacion-contrato',
   IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
+  IMAGES_ONT_MODEL = 'images/ont-model',
 }
 
 export enum BucketKeyNameEnumChoice {
@@ -379,6 +380,7 @@ export enum BucketKeyNameEnumChoice {
   PLANILLA_SERVICIOS = 'planilla_servicios',
   ACEPTACION_CONTRATO = 'aceptacion_contrato',
   COMPROBANTES_NO_PLANILLA = 'comprobantes_no_planilla',
+  ONT_MODEL = 'ont_model_image',
 }
 
 // // Agendamiento ==========================================
@@ -469,7 +471,7 @@ export enum EstadoActivacionEnumChoice {
   PENDIENTE_CAMBIO_PUERTO = 'PENDIENTE_CAMBIO_PUERTO',
 }
 
-// examples remove ------------------
+// start examples remove ------------------
 export enum UserOtherRolesEnumChoice {
   DESARROLLO_SOFTWARE = 'DESARROLLO DE SOFTWARE',
   DISENO_PRODUCTO = 'DISEÑO DE PRODUCTO',
@@ -493,6 +495,8 @@ export const USER_OTHER_ROLES_ARRAY_CHOICES = [
   UserOtherRolesEnumChoice.LEGAL,
   UserOtherRolesEnumChoice.GESTIÓN_PRODUCTO,
 ];
+
+// end examples remove ------------------
 
 export enum EstadoValidacionAceptacionEnumChoice {
   FOTOS_NO_COINCIDEN = 'FOTOS_NO_COINCIDEN', // 0
@@ -601,4 +605,59 @@ export enum TipoActualizacionActivacionesEnumChoice {
 export const TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES = [
   TipoActualizacionActivacionesEnumChoice.PUERTO,
   TipoActualizacionActivacionesEnumChoice.NAP_Y_PUERTO,
+];
+
+export enum ONTModelPonTypeEnumChoice {
+  GPON = 'GPON',
+  MKPG = 'MKPG',
+  MONU = 'MONU',
+  TPLG = 'TPLG',
+  XPON = 'XPON',
+  D011 = 'D011',
+}
+
+export const ONT_MODEL_PON_TYPE_ARRAY_CHOICES = [
+  ONTModelPonTypeEnumChoice.GPON,
+  ONTModelPonTypeEnumChoice.MKPG,
+  ONTModelPonTypeEnumChoice.MONU,
+  ONTModelPonTypeEnumChoice.TPLG,
+  ONTModelPonTypeEnumChoice.XPON,
+  ONTModelPonTypeEnumChoice.D011,
+];
+
+export enum ONTModelEthernetPortsEnumChoice {
+  routing = 'routing',
+  bridging = 'bridging',
+}
+
+export const ONT_MODEL_ETHERNET_PORTS_ARRAY_CHOICES = [
+  ONTModelEthernetPortsEnumChoice.routing,
+  ONTModelEthernetPortsEnumChoice.bridging,
+];
+
+export enum ONTModel_Ethernet_Wifi_Void_EnumChoice {
+  CERO = '0',
+  UNO = '1',
+  DOS = '2',
+  TRES = '3',
+  CUATRO = '4',
+  CINCO = '5',
+  SEIS = '6',
+  SIETE = '7',
+  OCHO = '8',
+  NUEVE = '9',
+  DIEZ = '10',
+}
+export const ONT_MODEL_ETHERNET_WIFI_VOID_ARRAY_CHOICES = [
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.CERO,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.UNO,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.DOS,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.TRES,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.CUATRO,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.CINCO,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.SEIS,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.SIETE,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.OCHO,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.NUEVE,
+  ONTModel_Ethernet_Wifi_Void_EnumChoice.DIEZ,
 ];

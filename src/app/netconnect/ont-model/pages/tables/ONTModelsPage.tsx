@@ -2,33 +2,28 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  useFetchAutenticacionClientes,
-  useUpdateAutenticacionCliente,
-} from '@/actions/app';
+import { useFetchONTModels, useUpdateONTModel } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomSwitch,
   CustomTable,
+  ImgModalComponent,
   SingleTableBoxScene,
 } from '@/shared/components';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { AutenticacionCliente, PermissionsEnum } from '@/shared/interfaces';
+import { ONTModel, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-export const returnUrlAutenticacionClientesPage =
-  ROUTER_PATHS.administracionRed.autenticacionClientesNav;
+export const returnUrlONTModelsPage = ROUTER_PATHS.netconnect.ontModelsNav;
 
-export type AutenticacionClientesPageProps = {};
+export type ONTModelsPageProps = {};
 
-const AutenticacionClientesPage: React.FC<
-  AutenticacionClientesPageProps
-> = () => {
+const ONTModelsPage: React.FC<ONTModelsPageProps> = () => {
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
 
@@ -45,7 +40,7 @@ const AutenticacionClientesPage: React.FC<
   );
 
   ///* mutations
-  const changeState = useUpdateAutenticacionCliente({
+  const changeState = useUpdateONTModel({
     enableNavigate: false,
   });
 
@@ -61,10 +56,10 @@ const AutenticacionClientesPage: React.FC<
 
   ///* fetch data
   const {
-    data: AutenticacionClientesPagingRes,
+    data: ONTModelsPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchAutenticacionClientes({
+  } = useFetchONTModels({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -76,22 +71,20 @@ const AutenticacionClientesPage: React.FC<
   });
 
   ///* handlers
-  const onEdit = (authCliente: AutenticacionCliente) => {
+  const onEdit = (ontModel: ONTModel) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Autenticacion del Cliente',
+      title: 'Editar Modelo ONT',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(
-          `${returnUrlAutenticacionClientesPage}/editar/${authCliente.uuid}`,
-        );
+        navigate(`${returnUrlONTModelsPage}/editar/${ontModel.uuid}`);
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<AutenticacionCliente>[]>(
+  const columns = useMemo<MRT_ColumnDef<ONTModel>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -100,6 +93,46 @@ const AutenticacionClientesPage: React.FC<
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+      },
+      {
+        accessorKey: 'pon_type',
+        header: 'TIPO PON',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'pon_type'),
+      },
+      {
+        accessorKey: 'mode',
+        header: 'MODO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'mode'),
+      },
+      {
+        accessorKey: 'ethernet_ports',
+        header: 'PUERTO ETHERNET',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ethernet_ports'),
+      },
+      {
+        accessorKey: 'wifi_ssids',
+        header: 'WIFI SSIDS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'wifi_ssids'),
+      },
+      {
+        accessorKey: 'voip_ports',
+        header: 'PUERTO VOIP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'voip_ports'),
       },
       {
         accessorKey: 'state',
@@ -140,7 +173,22 @@ const AutenticacionClientesPage: React.FC<
           );
         },
       },
-
+      {
+        accessorKey: 'imagen',
+        header: 'IMAGENES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          return (
+            <ImgModalComponent
+              urls={{
+                image_url: row.original.image_url || '',
+              }}
+            />
+          );
+        },
+      },
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -163,8 +211,8 @@ const AutenticacionClientesPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Autenticacion de Clientes"
-      createPageUrl={`${returnUrlAutenticacionClientesPage}/crear`}
+      title="Modelo de ONT"
+      createPageUrl={`${returnUrlONTModelsPage}/crear`}
       ///* Pendiente a cambio
       showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
     >
@@ -174,9 +222,9 @@ const AutenticacionClientesPage: React.FC<
         text="por nombre"
       />
 
-      <CustomTable<AutenticacionCliente>
+      <CustomTable<ONTModel>
         columns={columns}
-        data={AutenticacionClientesPagingRes?.data?.items || []}
+        data={ONTModelsPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -188,7 +236,7 @@ const AutenticacionClientesPage: React.FC<
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={AutenticacionClientesPagingRes?.data?.meta?.count}
+        rowCount={ONTModelsPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
@@ -201,4 +249,4 @@ const AutenticacionClientesPage: React.FC<
   );
 };
 
-export default AutenticacionClientesPage;
+export default ONTModelsPage;

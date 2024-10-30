@@ -374,6 +374,10 @@ export const ROUTER_PATHS = {
     traficos: 'traficos',
     traficosNav: '/administracion-red/traficos',
 
+    ///* Bras
+    bras: 'bras',
+    brasNav: '/administracion-red/bras',
+
     ///* Grupo IPv4
     gruposIPv4: 'redes-ipv4',
     gruposIPv4Crear: 'redes-ipv4/crear',
@@ -451,5 +455,11 @@ export const ROUTER_PATHS = {
     onusConfiguradasCrear: 'onusConfiguradas/crear',
     onusConfiguradasEditar: 'onusConfiguradas/editar/:uuid',
     onusConfiguradasNav: '/netconnect/onusConfiguradas',
+
+    ///* ONT Model
+    ontModels: 'ontModels',
+    ontModelsCrear: 'ontModels/crear',
+    ontModelsEditar: 'ontModels/editar/:uuid',
+    ontModelsNav: '/netconnect/ontModels',
   },
 };
