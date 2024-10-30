@@ -2,17 +2,23 @@ import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetOrdenTrabajo } from '@/actions/app';
-import { EstadoOrdenTrabajoEnumChoice, ToastWrapper } from '@/shared';
+import {
+  EstadoActivacionEnumChoice,
+  EstadoOrdenTrabajoEnumChoice,
+  ToastWrapper,
+} from '@/shared';
 import { CustomTitleRefNumber } from '@/shared/components';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { SaveOrdenTrabajo } from '../../shared/components';
-import { returnUrlInstallAsignadasOT } from '../tables/InstalacionesAsignadasOTMainPage';
+import { SaveActivacionInstallPendienteOT } from '../../shared/components';
+import { returnUrlActivacionesInstallacionesOT } from '../tables/ActivacionesInstalacionesMainPage';
 
-export type InstalacionAsignadaOTProps = {};
+export type ActivateInstalacionOTPageProps = {};
 
-const InstalacionAsignadaOT: React.FC<InstalacionAsignadaOTProps> = () => {
+const ActivateInstalacionOTPage: React.FC<
+  ActivateInstalacionOTPageProps
+> = () => {
   useCheckPermission(PermissionsEnum.tecnico_change_ordentrabajo);
 
   const { uuid } = useParams();
@@ -22,14 +28,15 @@ const InstalacionAsignadaOT: React.FC<InstalacionAsignadaOTProps> = () => {
   ///* effects ----------------
   useEffect(() => {
     if (isLoading || isRefetching) return;
+    const ot = data?.data;
 
     if (
       !!data &&
-      data?.data?.estado_orden_trabajo !==
-        EstadoOrdenTrabajoEnumChoice.PENDIENTE
+      ot?.estado_orden_trabajo !== EstadoOrdenTrabajoEnumChoice.PENDIENTE &&
+      ot?.estado_activacion !== EstadoActivacionEnumChoice.PENDIENTE
     ) {
       ToastWrapper.error(
-        'La instalación asignada no se encuentra en estado pendiente',
+        'La instalación pendiente de activación no se encuentra en estado pendiente',
       );
     }
   }, [data, isLoading, isRefetching]);
@@ -39,10 +46,10 @@ const InstalacionAsignadaOT: React.FC<InstalacionAsignadaOTProps> = () => {
     !data?.data?.id ||
     data?.data?.estado_orden_trabajo !== EstadoOrdenTrabajoEnumChoice.PENDIENTE
   )
-    return <Navigate to={returnUrlInstallAsignadasOT} />;
+    return <Navigate to={returnUrlActivacionesInstallacionesOT} />;
 
   return (
-    <SaveOrdenTrabajo
+    <SaveActivacionInstallPendienteOT
       titleNode={
         <CustomTitleRefNumber
           initialText="Instalación Asignada"
@@ -54,4 +61,4 @@ const InstalacionAsignadaOT: React.FC<InstalacionAsignadaOTProps> = () => {
   );
 };
 
-export default InstalacionAsignadaOT;
+export default ActivateInstalacionOTPage;

@@ -12,5 +12,10 @@ export { default as EquiposUtilizadosInstallAsignFormPart } from './equipos/Equi
 export { default as MaterialesDisponiblesOTTecModal } from './materiales/MaterialesDisponiblesOTTecModal';
 export { default as MaterialesUtilizadosInstallAsignFormPart } from './materiales/MaterialesUtilizadosInstallAsignFormPart';
 
+export { default as DatosClienteTecnicoOTPart } from './general/DatosClienteTecnicoOTPart';
+export { default as DatosInstallOTFormTabPart } from './general/DatosInstallOTFormTabPart';
+export { default as DatosPlanBasicoTecnicoPart } from './general/DatosPlanBasicoTecnicoPart';
+export { default as ServicioClienteInstallFormTabPart } from './general/ServicioClienteInstallFormTabPart';
+
 export * from './equipos/EquiposUtilizadosInstallAsignFormPart';
 export * from './materiales/MaterialesUtilizadosInstallAsignFormPart';

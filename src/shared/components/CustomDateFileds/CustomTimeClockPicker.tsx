@@ -10,6 +10,7 @@ import { Control, Controller, FieldError } from 'react-hook-form';
 
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
+import { CustomFormLabel } from '../Labels';
 
 interface CustomTimeClockPickerProps {
   control: Control<any, any>;
@@ -25,6 +26,7 @@ interface CustomTimeClockPickerProps {
   disabled?: boolean;
   textFieldKey?: string;
   shouldDisableTime?: (time: string | dayjs.Dayjs | null) => boolean;
+  minTime?: Dayjs;
 }
 
 export default function CustomTimeClockPicker({
@@ -41,6 +43,7 @@ export default function CustomTimeClockPicker({
   disabled = false,
   textFieldKey,
   shouldDisableTime,
+  minTime = undefined,
 }: CustomTimeClockPickerProps) {
   return (
     <Grid
@@ -65,10 +68,20 @@ export default function CustomTimeClockPicker({
 
             return (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <CustomFormLabel
+                  sx={{
+                    mt: 0,
+                  }}
+                  htmlFor={label}
+                  required={required}
+                >
+                  {label}
+                </CustomFormLabel>
+
                 <TimePicker
                   {...field}
                   value={field.value ? dayjs(field.value) : null}
-                  label={label}
+                  // label={label}
                   slotProps={{
                     textField: {
                       error: !!error,
@@ -91,6 +104,7 @@ export default function CustomTimeClockPicker({
                   onChange={onChange}
                   disabled={disabled}
                   shouldDisableTime={shouldDisableTime}
+                  minTime={minTime}
                 />
               </LocalizationProvider>
             );

@@ -982,7 +982,15 @@ const ActivacionesInstalacionesMainPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/operaciones/activacion/instalaciones/pages/forms/ActivacionesInstalacionesMainPage'
+        '@/app/operaciones/activacion/instalaciones/pages/tables/ActivacionesInstalacionesMainPage'
+      ),
+  ),
+);
+const ActivateInstalacionOTPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/activacion/instalaciones/pages/forms/ActivateInstalacionOTPage'
       ),
   ),
 );
@@ -1592,6 +1600,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.operaciones.activaciones,
             element: <ActivacionesInstalacionesMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.activacionesInstalacion,
+            element: <ActivateInstalacionOTPage />,
           },
         ],
       },
