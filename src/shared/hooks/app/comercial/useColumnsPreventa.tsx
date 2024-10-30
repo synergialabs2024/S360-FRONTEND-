@@ -9,6 +9,7 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { useAuthStore } from '@/store/auth';
+import { ImgModalComponent } from '@/shared/components';
 
 type MRTSServiceType = { row: MRT_Row<Preventa> };
 
@@ -232,7 +233,28 @@ export const useColumnsPreventa = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'solicitud_servicio_data'),
       },
-
+      {
+        accessorKey: 'imagen',
+        header: 'IMAGENES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <ImgModalComponent
+              urls={{
+                foto_aceptacion: row.original.url_foto_aceptacion || '',
+                foto_cedula_frontal: row.original.url_foto_cedula_frontal || '',
+                foto_cedula_trasera: row.original.url_foto_cedula_trasera || '',
+                foto_documento_cuenta:
+                  row.original.url_foto_documento_cuenta || '',
+                foto_tarjeta: row.original.url_foto_tarjeta || '',
+                foto_vivienda: row.original.url_foto_vivienda || '',
+              }}
+            />
+          );
+        },
+      },
       {
         accessorKey: 'created_at',
         header: 'CREADO',

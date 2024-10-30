@@ -4,6 +4,7 @@ import {
   MRT_RowData,
 } from 'material-react-table';
 import { Box, Typography, useTheme } from '@mui/material';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 export interface SimpleTableProps<T extends MRT_RowData> {
   columns: any;
@@ -23,16 +24,27 @@ function SimpleTable<T extends MRT_RowData>({
   const table = useMaterialReactTable({
     columns,
     data,
-    enableGlobalFilter,
-    enablePagination: true,
+
     muiTableHeadCellProps: {
       sx: {
-        fontSize: '1rem',
-        fontWeight: 600,
+        fontSize: '1rem', // Same as variant h6
+        fontWeight: 600, // Same as variant h6
+        lineHeight: '1.6', // Same as variant h6
+        letterSpacing: '0.0075em', // Same as variant h6
         padding: '16px',
         textTransform: 'capitalize',
       },
     },
+
+    localization: MRT_Localization_ES,
+    enableTopToolbar: true,
+
+    ///* search
+    enableGlobalFilter: enableGlobalFilter,
+    positionGlobalFilter: 'left',
+
+    enablePagination: true,
+    enableFullScreenToggle: false,
     muiTablePaperProps: {
       elevation: 0,
     },

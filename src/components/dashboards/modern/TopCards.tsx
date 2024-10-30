@@ -3,9 +3,9 @@ import { Box, CardContent, Grid, Typography } from '@mui/material';
 import icon1 from '../../../assets/images/svgs/icon-connect.svg';
 import icon2 from '../../../assets/images/svgs/icon-user-male.svg';
 import icon3 from '../../../assets/images/svgs/icon-briefcase.svg';
-import icon4 from '../../../assets/images/svgs/icon-mailbox.svg';
-import icon5 from '../../../assets/images/svgs/icon-favorites.svg';
-import icon6 from '../../../assets/images/svgs/icon-speech-bubble.svg';
+import icon4 from '../../../assets/images/svgs/icon-favorites.svg';
+import icon5 from '../../../assets/images/svgs/icon-pie.svg';
+import icon6 from '../../../assets/images/svgs/icon-dd-application.svg';
 
 interface cardType {
   icon: string;
@@ -17,38 +17,38 @@ interface cardType {
 const topcards: cardType[] = [
   {
     icon: icon2,
-    title: 'Employees',
-    digits: '96',
+    title: 'Solicitud Servicio',
+    digits: '15',
     bgcolor: 'primary',
   },
   {
     icon: icon3,
-    title: 'Clients',
-    digits: '3,650',
+    title: 'Preventa',
+    digits: '20',
     bgcolor: 'warning',
   },
   {
-    icon: icon4,
-    title: 'Projects',
-    digits: '356',
+    icon: icon5,
+    title: 'Venta Corporativa',
+    digits: '100',
     bgcolor: 'secondary',
   },
   {
-    icon: icon5,
-    title: 'Events',
-    digits: '696',
+    icon: icon4,
+    title: 'Inventariables',
+    digits: '4',
     bgcolor: 'error',
   },
   {
     icon: icon6,
-    title: 'Payroll',
-    digits: '$96k',
+    title: 'Agendamientos',
+    digits: '5',
     bgcolor: 'success',
   },
   {
     icon: icon1,
-    title: 'Reports',
-    digits: '59',
+    title: 'CODIGO OTP',
+    digits: '3',
     bgcolor: 'info',
   },
 ];

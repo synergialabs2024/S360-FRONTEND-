@@ -37,58 +37,56 @@ const ConfigOLT: React.FC<ConfigOLTProps> = ({ title, olt }) => {
   }, [olt]);
 
   return (
-    <>
-      <SingleFormBoxSceneOLT
-        onCancel={() => navigate(returnUrlOLTsPage)}
-        titlePage={title}
-        listItems={olt}
-      >
-        <CustomTextView
-          name="name"
-          control={form.control}
-          defaultValue={form.getValues().name}
-          size={gridSizeMdLg4}
-          disabled
-        />
-        <CustomTextView
-          name="descripcion"
-          control={form.control}
-          defaultValue={form.getValues().descripcion}
-          size={gridSizeMdLg4}
-          disabled
-        />
-        <CustomTextView
-          name="location"
-          control={form.control}
-          defaultValue={form.getValues().location}
-          size={gridSizeMdLg4}
-          disabled
-        />
-        <CustomTextView
-          name="hostname"
-          control={form.control}
-          defaultValue={form.getValues().hostname}
-          size={gridSizeMdLg4}
-          disabled
-        />
-        <CustomTextView
-          name="puerto"
-          control={form.control}
-          defaultValue={form.getValues().puerto}
-          size={gridSizeMdLg4}
-          disabled
-        />
-        <CustomTextView
-          name="snmp_community"
-          control={form.control}
-          defaultValue={form.getValues().snmp_community}
-          size={gridSizeMdLg4}
-          disabled
-        />
-        {/* ---------- FK ---------- */}
-        <OLTScence data={olt} />
-      </SingleFormBoxSceneOLT>
-    </>
+    <SingleFormBoxSceneOLT
+      onCancel={() => navigate(returnUrlOLTsPage)}
+      titlePage={title}
+      listItems={olt}
+    >
+      <CustomTextView
+        name="name"
+        control={form.control}
+        defaultValue={form.getValues().name}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <CustomTextView
+        name="descripcion"
+        control={form.control}
+        defaultValue={form.getValues().descripcion}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <CustomTextView
+        name="location"
+        control={form.control}
+        defaultValue={form.getValues().location}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <CustomTextView
+        name="hostname"
+        control={form.control}
+        defaultValue={form.getValues().hostname}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <CustomTextView
+        name="puerto"
+        control={form.control}
+        defaultValue={form.getValues().puerto}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      <CustomTextView
+        name="snmp_community"
+        control={form.control}
+        defaultValue={form.getValues().snmp_community}
+        size={gridSizeMdLg4}
+        disabled
+      />
+      {/* ---------- FK ---------- */}
+      <OLTScence data={olt} />
+    </SingleFormBoxSceneOLT>
   );
 };
 

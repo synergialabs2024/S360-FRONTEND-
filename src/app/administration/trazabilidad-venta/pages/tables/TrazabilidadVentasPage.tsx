@@ -135,7 +135,7 @@ const TrazabilidadVentasPage: React.FC<TrazabilidadVentasPageProps> = () => {
   );
 
   return (
-    <SingleTableBoxScene title="Trazabilidad Venta">
+    <SingleTableBoxScene title="Trazabilidad Venta" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}

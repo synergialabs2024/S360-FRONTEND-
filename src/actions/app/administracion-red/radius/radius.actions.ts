@@ -7,7 +7,7 @@ export enum RadiusTSQEnum {
 }
 
 const API_URL = 'https://radiusapi.intercommerce.com.ec/api/pag-combined-data/';
-export const fetchCombinedData = async (params?: any) => {
+export const fetchCombinedDataRadius = async (params?: any) => {
   try {
     const response = await axios.get(API_URL, { params });
     return response.data;
@@ -26,7 +26,7 @@ export const useFetchRadiuss = ({
 }) => {
   return useQuery({
     queryKey: [RadiusTSQEnum.RADIUSS, ...Object.values(params || {})],
-    queryFn: () => fetchCombinedData(params),
+    queryFn: () => fetchCombinedDataRadius(params),
     enabled: enabled,
   });
 };

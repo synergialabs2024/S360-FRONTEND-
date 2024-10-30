@@ -84,7 +84,7 @@ const CustomCreditCardTextField: React.FC<CustomCreditCardTextFieldProps> = ({
 
   onChangeCardType,
 }) => {
-  const [emailError, setEmailError] = useState<boolean>(false);
+  const [emailError] = useState<boolean>(false);
   const [cardType, setCardType] = useState<string | null>(null);
   return (
     <Grid item {...size} sx={sxGrid}>
@@ -109,7 +109,7 @@ const CustomCreditCardTextField: React.FC<CustomCreditCardTextFieldProps> = ({
                 const onlyNums = currentValue.replace(/[^0-9]/g, '');
                 if (maxLength && onlyNums.length > maxLength) return;
 
-                // Detectar tipo de tarjeta
+                // Detectar tipo de tarjeta yy
                 const detectedCardType = creditCardType(onlyNums);
                 const detectedTypeName = detectedCardType.length
                   ? detectedCardType[0].type
@@ -161,7 +161,7 @@ const CustomCreditCardTextField: React.FC<CustomCreditCardTextFieldProps> = ({
                           <MdEmail />
                         </InputAdornment>
                       ) : (
-                        (startAdornmentInput ?? null)
+                        startAdornmentInput ?? null
                       ),
 
                     endAdornment: endAdornmentInput ?? null,

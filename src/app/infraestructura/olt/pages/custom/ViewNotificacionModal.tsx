@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 import { ScrollableDialogProps } from '@/shared/components';
 import { CreateOLTConectParamsBase, useCreateOLTConect } from '@/actions/app';
 import { oltConectFormSchema } from '@/shared/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { returnUrlOLTsPage } from '../tables/OLTsPage';
 
 export type ViewNotificacionModalProps = {
   nameInfo?: string | undefined;
@@ -26,6 +28,9 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
   ///* global state
   const [open, setOpen] = useState(false);
 
+  ///* hooks
+  const navigate = useNavigate();
+
   ///* form
   const form = useForm<SaveFormData>({
     resolver: yupResolver(oltConectFormSchema) as any,
@@ -43,6 +48,8 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
 
   ///* mutations
   const createOLTConectMutation = useCreateOLTConect({
+    navigate,
+    returnUrl: returnUrlOLTsPage,
     enableErrorNavigate: false,
   });
 
@@ -54,6 +61,7 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
     createOLTConectMutation.mutate(data, {
       onSuccess: () => {
         setOpen(false);
+        navigate(returnUrlOLTsPage);
       },
     });
   };
@@ -76,7 +84,7 @@ const ViewNotificacionModal: React.FC<ViewNotificacionModalProps> = ({
           onClick={() => setOpen(!open)}
           style={{ cursor: 'pointer' }}
         >
-          Crear / Actualizar
+          Crear / Actualizar Infraestructura
         </Button>
       </Typography>
 
