@@ -24,6 +24,7 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import { useInstalacionesStore } from '@/store/app';
+import dayjs from 'dayjs';
 import { returnUrlActivacionesInstallacionesOT } from '../../../pages/tables/ActivacionesInstalacionesMainPage';
 import { useEquiposActivacionInstallOT } from '../../hooks';
 import ActivacionInstallOTDetallesEquiposFormTab from './ActivacionInstallOTDetallesEquiposFormTab';
@@ -63,6 +64,8 @@ const SaveActivacionInstallPendienteOT: React.FC<
     OrdenTrabajoTSQEnum.ORDENTRABAJOS,
     {
       customMessageToast: 'Activación de instalación exitosa',
+      navigate,
+      returnUrl: returnUrlActivacionesInstallacionesOT,
     },
   );
 
@@ -76,16 +79,16 @@ const SaveActivacionInstallPendienteOT: React.FC<
       return ToastWrapper.error('No se han seleccionado la serie de la ONT');
 
     const selectedSerie = ont?.savedSeries?.at(0);
-    console.log({
-      data,
-      serie_ont: selectedSerie,
-    });
+    const currentDate = dayjs().format('YYYY-MM-DD');
+    const horaInicio = dayjs(`${currentDate} ${data.hora_inicio}`).format();
+    const horaFin = dayjs(`${currentDate} ${data.hora_fin}`).format();
 
     activateInstalacion.mutate({
-      hora_fin: data.hora_fin!,
-      hora_inicio: data.hora_inicio!,
+      hora_fin: horaFin,
+      hora_inicio: horaInicio,
       serie_ont: selectedSerie,
       observacion_activacion: data.observacion_activacion!,
+      producto: ont?.producto_data?.id!,
     });
   };
 

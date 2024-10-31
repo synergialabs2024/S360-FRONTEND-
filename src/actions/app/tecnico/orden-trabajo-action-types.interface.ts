@@ -14,4 +14,6 @@ export type CreateInstalacionAsignadaOTOperaciones = Pick<
 export type ActivateInstalacionOTData = Pick<
   OrdenTrabajo,
   'serie_ont' | 'hora_inicio' | 'hora_fin' | 'observacion_activacion'
-> & {};
+> & {
+  producto: number;
+};

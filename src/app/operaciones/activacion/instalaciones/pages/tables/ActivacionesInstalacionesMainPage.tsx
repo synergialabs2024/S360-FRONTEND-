@@ -17,7 +17,7 @@ import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
 import ActivacionInstalacionOTByState from './ActivacionInstalacionOTByState';
 
 export const returnUrlActivacionesInstallacionesOT =
-  ROUTER_PATHS.tecnico.instalacionesAsignadasNav;
+  ROUTER_PATHS.operaciones.activacionesNav;
 
 export type ActivacionesInstalacionesMainPageProps = {};
 

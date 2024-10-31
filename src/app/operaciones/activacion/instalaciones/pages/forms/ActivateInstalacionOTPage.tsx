@@ -32,8 +32,8 @@ const ActivateInstalacionOTPage: React.FC<
 
     if (
       !!data &&
-      ot?.estado_orden_trabajo !== EstadoOrdenTrabajoEnumChoice.PENDIENTE &&
-      ot?.estado_activacion !== EstadoActivacionEnumChoice.PENDIENTE
+      (ot?.estado_orden_trabajo !== EstadoOrdenTrabajoEnumChoice.PENDIENTE ||
+        ot?.estado_activacion !== EstadoActivacionEnumChoice.PENDIENTE)
     ) {
       ToastWrapper.error(
         'La instalación pendiente de activación no se encuentra en estado pendiente',
@@ -44,7 +44,9 @@ const ActivateInstalacionOTPage: React.FC<
   if (isLoading) return null;
   if (
     !data?.data?.id ||
-    data?.data?.estado_orden_trabajo !== EstadoOrdenTrabajoEnumChoice.PENDIENTE
+    data?.data?.estado_orden_trabajo !==
+      EstadoOrdenTrabajoEnumChoice.PENDIENTE ||
+    data?.data?.estado_activacion !== EstadoActivacionEnumChoice.PENDIENTE
   )
     return <Navigate to={returnUrlActivacionesInstallacionesOT} />;
 
