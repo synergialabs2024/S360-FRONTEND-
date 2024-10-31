@@ -7,6 +7,8 @@ import {
   ConfirmRejectCantelButtonsForm,
   CreateOrCancelButtonsForm,
 } from '../../CustomButtons';
+import ParentCard from '../ParentCard';
+import React from 'react';
 
 export type TabsFormBoxSceneProps = {
   children: React.ReactNode;
@@ -41,7 +43,7 @@ export type TabsFormBoxSceneProps = {
 const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
   children,
   titlePage,
-  titlePageNode,
+  titlePageNode = null,
 
   showBtns = true,
   onCancel,
@@ -63,96 +65,83 @@ const TabsFormBoxScene: React.FC<TabsFormBoxSceneProps> = ({
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
+  // Asegúrate de que el title sea siempre un string o JSX.Element
+  const cardTitle: string | JSX.Element =
+    typeof titlePageNode === 'string' || React.isValidElement(titlePageNode) ? (
+      titlePageNode
+    ) : titlePage ? (
+      <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
+        {titlePage}
+      </Typography>
+    ) : (
+      <span />
+    );
+
   return (
     <>
-      <Box
-        sx={{
-          flexGrow: 1,
-          pt: isMobile ? 1 : 2,
+      <ParentCard title={cardTitle}>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            pt: isMobile ? 1 : 2,
+            borderRadius: '12px',
+          }}
+        >
+          <Container maxWidth={maxWidth}>
+            <Stack spacing={3}>
+              {/* =========== form =========== */}
+              <Grid container justifyContent="center" alignItems="center">
+                <Grid item {...formSize}>
+                  {/* ======== tabs ======= */}
+                  {tabs}
 
-          backgroundColor: '#fff',
-          borderRadius: '12px',
-        }}
-      >
-        <Container maxWidth={maxWidth}>
-          <Stack>
-            {/* =========== title =========== */}
-            {titlePageNode ? (
-              titlePageNode
-            ) : (
-              <Typography variant="h2" component="h1" pb={isMobile ? 1 : 2}>
-                {titlePage}
-              </Typography>
-            )}
-          </Stack>
-        </Container>
-      </Box>
+                  {/* ======== tab panel ======= */}
+                  {children}
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          pt: isMobile ? 1 : 2,
-          pb: 8,
-          mt: 3,
+                  {/* ====== reject btn ====== */}
+                  {onReject && onCancel && onSave && (
+                    <Box
+                      sx={{
+                        pr: '9px',
+                      }}
+                    >
+                      <ConfirmRejectCantelButtonsForm
+                        onCancel={onCancel}
+                        onConfirm={onSave}
+                        onReject={onReject}
+                        cancelTextBtn={cancelTextBtn}
+                        rejectTextBtn={rejectTextBtn}
+                        confirmTextBtn={saveTextBtn}
+                      />
+                    </Box>
+                  )}
 
-          backgroundColor: '#fff',
-          borderRadius: '12px',
-        }}
-      >
-        <Container maxWidth={maxWidth}>
-          <Stack spacing={3}>
-            {/* =========== form =========== */}
-            <Grid container justifyContent="center" alignItems="center">
-              <Grid item {...formSize}>
-                {/* ======== tabs ======= */}
-                {tabs}
+                  {/* ====== submit btn ====== */}
+                  {showBtns && onCancel && onSave && !onReject && (
+                    <Box
+                      sx={{
+                        pr: '9px',
+                      }}
+                    >
+                      <CreateOrCancelButtonsForm
+                        onCancel={onCancel}
+                        onSave={onSave}
+                        disabled={disableSubmitBtn}
+                        cancelTextBtn={cancelTextBtn}
+                        saveTextBtn={saveTextBtn}
+                      />
+                    </Box>
+                  )}
 
-                {/* ======== tab panel ======= */}
-                {children}
-
-                {/* ====== reject btn ====== */}
-                {onReject && onCancel && onSave && (
-                  <Box
-                    sx={{
-                      pr: '9px',
-                    }}
-                  >
-                    <ConfirmRejectCantelButtonsForm
-                      onCancel={onCancel}
-                      onConfirm={onSave}
-                      onReject={onReject}
-                      cancelTextBtn={cancelTextBtn}
-                      rejectTextBtn={rejectTextBtn}
-                      confirmTextBtn={saveTextBtn}
-                    />
-                  </Box>
-                )}
-
-                {/* ====== submit btn ====== */}
-                {showBtns && onCancel && onSave && !onReject && (
-                  <Box
-                    sx={{
-                      pr: '9px',
-                    }}
-                  >
-                    <CreateOrCancelButtonsForm
-                      onCancel={onCancel}
-                      onSave={onSave}
-                      disabled={disableSubmitBtn}
-                      cancelTextBtn={cancelTextBtn}
-                      saveTextBtn={saveTextBtn}
-                    />
-                  </Box>
-                )}
-
-                {/* ====== custom btns ====== */}
-                {showCustomBtns && customBtns}
+                  {/* ====== custom btns ====== */}
+                  {showCustomBtns && customBtns}
+                </Grid>
               </Grid>
-            </Grid>
-          </Stack>
-        </Container>
-      </Box>
+            </Stack>
+          </Container>
+        </Box>
+      </ParentCard>
     </>
   );
 };
