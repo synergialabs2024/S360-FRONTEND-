@@ -76,7 +76,9 @@ const SolicitudServicioByStatePage: React.FC<
   const {
     solicitudServicioBase,
     solicitudServicioWithoutGestion,
+    solicitudServicioFinalizadas,
     solicitudServicioFallidas,
+    solicitudServicioRechazadas,
   } = useColumnsSolicitusService();
 
   return (
@@ -95,11 +97,15 @@ const SolicitudServicioByStatePage: React.FC<
           // solicitudServicioBase
           state === EstadoSolicitudServicioEnumChoice.INGRESADO
             ? solicitudServicioBase
-            : state === EstadoSolicitudServicioEnumChoice.CANCELADO
-              ? solicitudServicioFallidas
-              : state === EstadoSolicitudServicioEnumChoice.SIN_GESTION
-                ? solicitudServicioWithoutGestion
-                : solicitudServicioBase
+            : state === EstadoSolicitudServicioEnumChoice.GESTIONANDO
+              ? solicitudServicioFinalizadas
+              : state === EstadoSolicitudServicioEnumChoice.CANCELADO
+                ? solicitudServicioFallidas
+                : state === EstadoSolicitudServicioEnumChoice.RECHAZADO
+                  ? solicitudServicioRechazadas
+                  : state === EstadoSolicitudServicioEnumChoice.SIN_GESTION
+                    ? solicitudServicioWithoutGestion
+                    : solicitudServicioBase
         }
         data={SolicitudsServicioPagingRes?.data?.items || []}
         isLoading={isLoading}
