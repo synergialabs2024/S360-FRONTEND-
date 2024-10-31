@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
@@ -260,6 +261,47 @@ export const useColumnsSolicitusService = (
     [solServiceCreatedAt, solServiceTrazoSinGestion, solicitudServicioBase01],
   );
 
+  const solicitudServicioFinalizadas = useMemo<
+    MRT_ColumnDef<SolicitudServicio>[]
+  >(
+    () => [
+      ...solicitudServicioBase01,
+      ...solServiceCreatedAt,
+      {
+        accessorKey: 'razon_social__finaliza_sol_serv',
+        header: 'FINALIZADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__FINALIZADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_finalizado',
+        header: 'FECHA FINALIZADO',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__FINALIZADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
+      },
+    ],
+    [solServiceCreatedAt, solicitudServicioBase01],
+  );
+
   const solicitudServicioFallidas = useMemo<MRT_ColumnDef<SolicitudServicio>[]>(
     () => [
       ...solicitudServicioBase01,
@@ -299,9 +341,52 @@ export const useColumnsSolicitusService = (
     [solServiceCreatedAt, solicitudServicioBase01],
   );
 
+  const solicitudServicioRechazadas = useMemo<
+    MRT_ColumnDef<SolicitudServicio>[]
+  >(
+    () => [
+      ...solicitudServicioBase01,
+      ...solServiceCreatedAt,
+      {
+        accessorKey: 'razon_social__rechazada_sol_serv',
+        header: 'RECHAZADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__RECHAZADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_rechazado',
+        header: 'FECHA RECHAZADO',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__RECHAZADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
+      },
+    ],
+    [solServiceCreatedAt, solicitudServicioBase01],
+  );
+
   return {
     solicitudServicioBase,
     solicitudServicioWithoutGestion,
+    solicitudServicioFinalizadas,
     solicitudServicioFallidas,
+    solicitudServicioRechazadas,
   };
 };

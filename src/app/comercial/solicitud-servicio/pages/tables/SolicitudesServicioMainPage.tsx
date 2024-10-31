@@ -54,11 +54,11 @@ const SolicitudesServicioMainPage: React.FC<
       </CustomTabPanel>
 
       {/* NO hay Factibilidad */}
-      {/* <CustomTabPanel value={tabValue} index={2} ptGrid="0">
+      <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <SolicitudServicioByStatePage
           state={EstadoSolicitudServicioEnumChoice.GESTIONANDO}
         />
-      </CustomTabPanel> */}
+      </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <SolicitudServicioByStatePage
