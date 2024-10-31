@@ -38,8 +38,8 @@ export interface OrdenTrabajo {
   hora_fin: string; // timestamp
 
   // INVENTARIO -------------------
-  materiales_utilizados: string;
-  equipos_utilizados: string;
+  equipos_utilizados: EquipoUtilizadosInstallOT[];
+  materiales_utilizados: MaterialUtilizadosInstallOT[];
 
   punta_inicial_fibra: string;
   punta_final_fibra: string;
@@ -112,3 +112,15 @@ export interface OrdenTrabajo {
   sector_data?: SectorLimitData;
   nap_data?: Nap;
 }
+
+export type EquipoUtilizadosInstallOT = {
+  codigo: string;
+  cantidad: string;
+  producto_data: {
+    nombre: string;
+    codigo: string;
+    tipo: string;
+  };
+  series: string[];
+};
+export type MaterialUtilizadosInstallOT = EquipoUtilizadosInstallOT & {};

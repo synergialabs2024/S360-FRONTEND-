@@ -73,9 +73,20 @@ const ActivacionInstalacionOTByState: React.FC<
 
   ///* handlers
   const calcEnableActionsColumn = () => {
-    return otState && otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
+    let isRequiredOTState = false;
+    if (otState) {
+      isRequiredOTState = true;
+    }
+
+    const otStateIsPending =
+      isRequiredOTState && otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
+
+    const isActivacionPending =
+      activacionState === EstadoActivacionEnumChoice.PENDIENTE;
+
+    return otStateIsPending && isActivacionPending;
   };
-  const calcOnEdit = (row: OrdenTrabajo) => {
+  const onEdit = (row: OrdenTrabajo) => {
     navigate(`/operaciones/activaciones/instalacion/${row.uuid}`);
   };
 
@@ -118,7 +129,7 @@ const ActivacionInstalacionOTByState: React.FC<
         enableActionsColumn={calcEnableActionsColumn()}
         // crud
         canEdit={calcEnableActionsColumn()}
-        onEdit={calcOnEdit}
+        onEdit={onEdit}
         editIcon={<MdArrowRightAlt />}
         // editIconToolTipTitle="Crear preventa"
         canDelete={false}

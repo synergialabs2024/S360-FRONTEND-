@@ -3,18 +3,6 @@ import * as yup from 'yup';
 import { TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES } from '@/shared/constants';
 
 export const ordenTrabajoFormSchema = yup.object({
-  estado_orden_trabajo: yup
-    .string()
-    .required('El campo estado orden trabajo es requerido')
-    .max(
-      200,
-      'El campo estado orden trabajo no debe exceder los 200 caracteres',
-    ),
-  tipo_orden_trabajo: yup
-    .string()
-    .required('El campo tipo orden trabajo es requerido')
-    .max(200, 'El campo tipo orden trabajo no debe exceder los 200 caracteres'),
-
   hora_inicio: yup
     .string()
     .required('El campo hora inicio es requerido')
@@ -32,17 +20,6 @@ export const ordenTrabajoFormSchema = yup.object({
     .min(1, 'El campo potencia ont debe ser mayor a 0'),
 
   // INVENTARIO -------------------
-  materiales_utilizados: yup
-    .string()
-    .required('El campo materiales utilizados es requerido')
-    .max(
-      200,
-      'El campo materiales utilizados no debe exceder los 200 caracteres',
-    ),
-  equipos_utilizados: yup
-    .string()
-    .required('El campo equipos utilizados es requerido')
-    .max(200, 'El campo equipos utilizados no debe exceder los 200 caracteres'),
   punta_inicial_fibra: yup
     .number()
     .required('El campo punta inicial fibra es requerido')
@@ -62,7 +39,6 @@ export const ordenTrabajoFormSchema = yup.object({
         return value > this.parent.punta_inicial_fibra;
       },
     ),
-
   metraje_utilizado_fibra: yup
     .string()
     .required('El campo metraje utilizado fibra es requerido')
@@ -70,17 +46,6 @@ export const ordenTrabajoFormSchema = yup.object({
       200,
       'El campo metraje utilizado fibra no debe exceder los 200 caracteres',
     ),
-  metraje_exedente_fibra: yup
-    .string()
-    .required('El campo metraje exedente fibra es requerido')
-    .max(
-      200,
-      'El campo metraje exedente fibra no debe exceder los 200 caracteres',
-    ),
-  serie_ont: yup
-    .string()
-    .required('El campo serie ont es requerido')
-    .max(200, 'El campo serie ont no debe exceder los 200 caracteres'),
 
   // ACTIVACION -------------------
   estado_activacion: yup

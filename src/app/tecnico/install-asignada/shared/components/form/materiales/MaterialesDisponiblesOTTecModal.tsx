@@ -119,7 +119,7 @@ const MaterialesDisponiblesOTTecModal: React.FC<
       <ScrollableDialogProps
         open={open}
         title="Materiales disponibles"
-        width="60%"
+        minWidth="60%"
         contentNode={
           <>
             <CustomSearch

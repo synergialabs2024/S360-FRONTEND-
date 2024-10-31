@@ -313,6 +313,30 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
           endAdornment={'m'}
           size={gridSizeMdLg6}
         />
+        <CustomNumberTextField
+          label="Punta Inicial Fibra"
+          name="punta_inicial_fibra"
+          control={form.control}
+          defaultValue={form.getValues().punta_inicial_fibra || ''}
+          error={form.formState.errors.punta_inicial_fibra}
+          helperText={form.formState.errors.punta_inicial_fibra?.message}
+          shrink
+          size={gridSizeMdLg6}
+          disabled
+          endAdornment={'m'}
+        />
+        <CustomNumberTextField
+          label="Punta Final Fibra"
+          name="punta_final_fibra"
+          control={form.control}
+          defaultValue={form.getValues().punta_final_fibra || ''}
+          error={form.formState.errors.punta_final_fibra}
+          helperText={form.formState.errors.punta_final_fibra?.message}
+          shrink
+          size={gridSizeMdLg6}
+          disabled
+          endAdornment={'m'}
+        />
       </Grid>
 
       {/* ==================== modals ==================== */}

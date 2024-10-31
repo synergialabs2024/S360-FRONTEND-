@@ -1,4 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,11 +7,14 @@ import {
   CreateOrdenTrabajoParamsBase,
   useUpdateOrdenTrabajo,
 } from '@/actions/app';
+import { EquipoVentasDetalle } from '@/app/comercial/preventa/shared/components';
 import {
+  EstadoActivacionEnumChoice,
   gridSize,
   gridSizeMdLg9,
   Preventa,
   SolicitudServicio,
+  TipoProductoEnumChoice,
   ToastWrapper,
   useTabsOnly,
   useUploadImageGeneric,
@@ -26,14 +28,17 @@ import {
 import { OrdenTrabajo } from '@/shared/interfaces';
 import {
   getKeysFormErrorsMessage,
-  ordenTrabajoFormSchema,
   sanitizeDataResetForm,
 } from '@/shared/utils';
+import { useInstalacionesStore } from '@/store/app';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
+import { useONTInstallAsignadaOT } from '../../hooks';
 import {
+  EquiposUtilizadosOTTableType,
   InstallAsigOrdenTrabajoFormTab,
   InstallAsigOTMaterialesFormTab,
   InstallAsigTecnicoOTFormTab,
+  MaterialesUtilizadosOTTableType,
 } from '../form';
 
 export interface SaveOrdenTrabajoProps {
@@ -56,6 +61,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   const { tabValue, handleTabChange } = useTabsOnly({
     initialTabValue: 1,
   });
+  useONTInstallAsignadaOT({ ordenTrabajo: ordentrabajo! });
 
   const {
     UploadImageDropZoneComponent,
@@ -139,7 +145,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
 
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
-    resolver: yupResolver(ordenTrabajoFormSchema) as any,
+    // resolver: yupResolver(ordenTrabajoFormSchema) as any,
     defaultValues: {},
   });
 
@@ -159,10 +165,119 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   ///* handlers ---------------------
   const onSave = async (data: InstallAsignOTSaveFormData) => {
     if (!isValid) return;
+    if (
+      ordentrabajo?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA
+    )
+      return ToastWrapper.error(
+        'La orden de trabajo no ha sido gestionada por Activaciones',
+      );
 
-    ///* validate images -------
+    ///* validate equipos & materiales ----------
+    const equiposAdicionales: EquipoVentasDetalle[] =
+      ordentrabajo?.preventa_data?.equipos_venta_detalle || [];
+    const equiposUtilizados: EquiposUtilizadosOTTableType[] =
+      useInstalacionesStore.getState().equiposUtilizados;
+    const materialesUtilizados: MaterialesUtilizadosOTTableType[] =
+      useInstalacionesStore.getState().materialesUtilizados;
+    const serieActicacion = ordentrabajo?.serie_ont;
+
+    if (!equiposUtilizados.length)
+      return ToastWrapper.error(
+        'No se han agregado equipos utilizados en la instalación',
+      );
+    if (!materialesUtilizados.length)
+      return ToastWrapper.error(
+        'No se han agregado materiales utilizados en la instalación',
+      );
+
+    // validate series in equipos
+    let thereAreEmptySeries = false;
+    let equipo: EquiposUtilizadosOTTableType = null as any;
+    let thereAreEquiposWithoutQuantity = false;
+    equiposUtilizados.forEach(eq => {
+      if (eq.containsSeries && !eq.savedSeries.length) {
+        thereAreEmptySeries = true;
+        equipo = eq;
+      }
+      if (!eq.usedQuantity) {
+        thereAreEquiposWithoutQuantity = true;
+        equipo = eq;
+      }
+    });
+    if (thereAreEmptySeries)
+      return ToastWrapper.error(
+        `No se han seleccionado series en los equipos: ${equipo.producto_data?.codigo}`,
+      );
+    if (thereAreEquiposWithoutQuantity)
+      return ToastWrapper.error(
+        `No se puede guardar equipos sin cantidad utilizada: ${equipo.producto_data?.codigo}`,
+      );
+    const ont: EquiposUtilizadosOTTableType | undefined =
+      equiposUtilizados.find(
+        eq => eq.producto_data?.tipo === TipoProductoEnumChoice.ONT,
+      );
+    const seriesOnt = ont?.savedSeries;
+    if (+(seriesOnt?.length || 0) > 1)
+      return ToastWrapper.error(
+        'Solo se puede seleccionar una serie para la ONT',
+      );
+    if (seriesOnt?.at(0) !== serieActicacion)
+      return ToastWrapper.error(
+        `La serie de la ONT no coincide con la serie de activación. Requedida: ${serieActicacion} - Provista: ${seriesOnt?.at(
+          0,
+        )}`,
+      );
+
+    // validate materiales
+    let thereAreMaterialsWithoutQuantity = false;
+    let material: MaterialesUtilizadosOTTableType = null as any;
+    materialesUtilizados.forEach(mat => {
+      if (!mat.usedQuantity) {
+        thereAreMaterialsWithoutQuantity = true;
+        material = mat;
+      }
+    });
+    if (thereAreMaterialsWithoutQuantity)
+      return ToastWrapper.error(
+        `No se puede guardar materiales sin cantidad utilizada: ${material.producto_data?.codigo}`,
+      );
+
+    // validate equipos adicionales
+    let thereAreEmptyEquiposAdicionales = false;
+    let eqAdicional: EquipoVentasDetalle = null as any;
+    equiposAdicionales.forEach(equipo => {
+      const equipoUtilizado = equiposUtilizados.find(
+        item => item.producto_data?.codigo === equipo.codigo,
+      );
+      if (!equipoUtilizado) {
+        thereAreEmptyEquiposAdicionales = true;
+        eqAdicional = equipo;
+      }
+    });
+    if (thereAreEmptyEquiposAdicionales)
+      return ToastWrapper.error(
+        `Faltan equipos adicionales: ${eqAdicional?.codigo}`,
+      );
+
+    let thereAreNotEqualQuantityEquiposAdicionales = false;
+    equiposAdicionales.forEach(equipo => {
+      const equipoUtilizado = equiposUtilizados.find(
+        item => item.producto_data?.codigo === equipo.codigo,
+      );
+      if (+(equipoUtilizado?.usedQuantity || 0) !== +(equipo?.cantidad || 0)) {
+        thereAreNotEqualQuantityEquiposAdicionales = true;
+        eqAdicional = equipo;
+      }
+    });
+    if (thereAreNotEqualQuantityEquiposAdicionales)
+      return ToastWrapper.error(
+        `La cantidad de equipos adicionales no coincide: ${eqAdicional?.codigo} espera ${eqAdicional?.cantidad}`,
+      );
+
+    ///* upload images -------
+    // validate imgs
     let thereAreEmptyRequiredImages = false;
-    let emptyImageName: any = {};
+    let emptyImageName: string | undefined = undefined;
     requiredImages.forEach(({ isRequired, image, label }) => {
       if (isRequired && !image) {
         thereAreEmptyRequiredImages = true;
@@ -170,11 +285,11 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       }
     });
     if (thereAreEmptyRequiredImages) {
-      ToastWrapper.error(`La imagen ${emptyImageName?.label} es requerida`);
+      ToastWrapper.error(`La imagen ${emptyImageName} es requerida`);
       return;
     }
 
-    ///* upd
+    ///* upd -------
     if (ordentrabajo?.id) {
       updateOrdenTrabajoMutation.mutate({ id: ordentrabajo.id!, data });
       return;

@@ -1,7 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
 import { IoMdClock } from 'react-icons/io';
 
-import { OrdenTrabajo } from '@/shared';
+import { formatDateWithTime, OrdenTrabajo } from '@/shared';
 import {
   CustomTextFieldNoForm,
   CustomTypoLabel,
@@ -32,13 +32,21 @@ const InstallAsigTecnicoOTFormTab: React.FC<
         />
         <CustomTextFieldNoForm
           label="Hora de inicio"
-          value={ordenTrabajo?.hora_inicio}
+          value={
+            ordenTrabajo?.hora_inicio
+              ? formatDateWithTime(ordenTrabajo.hora_inicio)
+              : ''
+          }
           disabled
           startAdornment={<IoMdClock />}
         />
         <CustomTextFieldNoForm
           label="Hora de fin"
-          value={ordenTrabajo?.hora_fin}
+          value={
+            ordenTrabajo?.hora_fin
+              ? formatDateWithTime(ordenTrabajo.hora_fin)
+              : ''
+          }
           disabled
           startAdornment={<IoMdClock />}
         />

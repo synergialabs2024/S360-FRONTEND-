@@ -116,7 +116,7 @@ const EquiposDisponiblesOTTecModal: React.FC<
       <ScrollableDialogProps
         open={open}
         title="Equipos disponibles"
-        width="60%"
+        minWidth="60%"
         contentNode={
           <>
             <CustomSearch
