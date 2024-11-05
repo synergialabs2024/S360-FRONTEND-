@@ -313,6 +313,7 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
           endAdornment={'m'}
           size={gridSizeMdLg6}
         />
+
         <CustomNumberTextField
           label="Punta Inicial Fibra"
           name="punta_inicial_fibra"
@@ -334,6 +335,18 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
           helperText={form.formState.errors.punta_final_fibra?.message}
           shrink
           size={gridSizeMdLg6}
+          disabled
+          endAdornment={'m'}
+        />
+
+        <CustomNumberTextField
+          label="Metraje Utilizado Fibra"
+          name="metraje_utilizado_fibra"
+          control={form.control}
+          defaultValue={form.getValues().metraje_utilizado_fibra || ''}
+          error={form.formState.errors.metraje_utilizado_fibra}
+          helperText={form.formState.errors.metraje_utilizado_fibra?.message}
+          shrink
           disabled
           endAdornment={'m'}
         />

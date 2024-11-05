@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -5,13 +6,19 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   CreateOrdenTrabajoParamsBase,
-  useUpdateOrdenTrabajo,
+  OrdenTrabajoTSQEnum,
 } from '@/actions/app';
+import { useGenericPATCH } from '@/actions/shared';
+import { uploadFileToBucket } from '@/actions/statics-api';
 import { EquipoVentasDetalle } from '@/app/comercial/preventa/shared/components';
 import {
+  BucketKeyNameEnumChoice,
+  BucketTypeEnumChoice,
+  EquipoUtilizadosInstallOT,
   EstadoActivacionEnumChoice,
   gridSize,
   gridSizeMdLg9,
+  MaterialUtilizadosInstallOT,
   Preventa,
   SolicitudServicio,
   TipoProductoEnumChoice,
@@ -28,6 +35,7 @@ import {
 import { OrdenTrabajo } from '@/shared/interfaces';
 import {
   getKeysFormErrorsMessage,
+  ordenTrabajoFormSchema,
   sanitizeDataResetForm,
 } from '@/shared/utils';
 import { useInstalacionesStore } from '@/store/app';
@@ -143,9 +151,12 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     },
   ];
 
+  ///* global states ---------------------
+  const clearAll = useInstalacionesStore(state => state.clearAll);
+
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
-    // resolver: yupResolver(ordenTrabajoFormSchema) as any,
+    resolver: yupResolver(ordenTrabajoFormSchema) as any,
     defaultValues: {},
   });
 
@@ -156,11 +167,21 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   } = form;
 
   ///* mutations ---------------------
-  const updateOrdenTrabajoMutation =
-    useUpdateOrdenTrabajo<CreateOrdenTrabajoParamsBase>({
+  const uploadOTInstalacion = useGenericPATCH<
+    CreateOrdenTrabajoParamsBase,
+    OrdenTrabajo
+  >(
+    `/orden-trabajo/instalaciones/upload/${ordentrabajo?.id!}/`,
+    OrdenTrabajoTSQEnum.ORDENTRABAJOS,
+    {
+      customMessageToast: 'Orden de trabajo cargada con éxito',
       navigate,
       returnUrl: returnUrlInstallAsignadasOT,
-    });
+      customOnSettled() {
+        clearAll();
+      },
+    },
+  );
 
   ///* handlers ---------------------
   const onSave = async (data: InstallAsignOTSaveFormData) => {
@@ -280,6 +301,29 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         `La cantidad de equipos adicionales no coincide: ${eqAdicional?.codigo} espera ${eqAdicional?.cantidad}`,
       );
 
+    const mappedEquiposUtilizados: EquipoUtilizadosInstallOT[] =
+      equiposUtilizados?.map(
+        eq =>
+          ({
+            cantidad: (eq.usedQuantity || 0).toString(),
+            producto: eq.producto_data?.id!,
+            series: eq.savedSeries?.map(s => s) || [],
+            codigo: eq.producto_data?.codigo!,
+            producto_data: eq.producto_data,
+          }) as EquipoUtilizadosInstallOT,
+      ) || [];
+    const mappedMaterialesUtilizados: MaterialUtilizadosInstallOT[] =
+      materialesUtilizados?.map(
+        mat =>
+          ({
+            cantidad: (mat.usedQuantity || 0).toString(),
+            producto: mat.producto_data?.id!,
+            series: mat.savedSeries?.map(s => s) || [],
+            codigo: mat.producto_data?.codigo!,
+            producto_data: mat.producto_data,
+          }) as MaterialUtilizadosInstallOT,
+      ) || [];
+
     ///* upload images -------
     // validate imgs
     let thereAreEmptyRequiredImages = false;
@@ -294,10 +338,95 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       ToastWrapper.error(`La imagen ${emptyImageName} es requerida`);
       return;
     }
+    // upload images ---
+    // required
+    const [
+      ontPhoto,
+      potenciaONTPhoto,
+      etiquetaPhoto,
+      napPhoto,
+      potenciaNAPPhoto,
+      testSpeedPhoto,
+    ] = await Promise.all([
+      uploadFileToBucket({
+        file: fotoONT!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      }),
+      uploadFileToBucket({
+        file: fotoPotenciaONT!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      }),
+      uploadFileToBucket({
+        file: fotoEtiqueta!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      }),
+      uploadFileToBucket({
+        file: fotoNAP!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      }),
+      uploadFileToBucket({
+        file: fotoPotenciaNAP!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      }),
+      uploadFileToBucket({
+        file: fotoTestSpeed!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      }),
+    ]);
+
+    // not required
+    let ontEncontradoPhoto = null;
+    if (fotoONTEncontradoCasa) {
+      ontEncontradoPhoto = await uploadFileToBucket({
+        file: fotoONTEncontradoCasa!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      });
+    }
+    let actaEntregaUPSPhoto = null;
+    if (fotoActaEntregaUPS) {
+      actaEntregaUPSPhoto = await uploadFileToBucket({
+        file: fotoActaEntregaUPS!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      });
+    }
+    let premioPhoto = null;
+    if (fotoPremio) {
+      premioPhoto = await uploadFileToBucket({
+        file: fotoPremio!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      });
+    }
 
     ///* upd -------
     if (ordentrabajo?.id) {
-      updateOrdenTrabajoMutation.mutate({ id: ordentrabajo.id!, data });
+      uploadOTInstalacion.mutate({
+        ...data,
+        url_foto_ont: ontPhoto?.streamUlr,
+        url_foto_potencia_ont: potenciaONTPhoto?.streamUlr,
+        url_foto_etiqueta: etiquetaPhoto?.streamUlr,
+        url_foto_nap: napPhoto?.streamUlr,
+        url_foto_potencia_nap: potenciaNAPPhoto?.streamUlr,
+        url_foto_test_speed: testSpeedPhoto?.streamUlr,
+        ...(ontEncontradoPhoto && {
+          url_foto_ont_encontrado_casa: ontEncontradoPhoto?.streamUlr,
+        }),
+        ...(actaEntregaUPSPhoto && {
+          url_foto_acta_entrega_ups: actaEntregaUPSPhoto?.streamUlr,
+        }),
+        ...(premioPhoto && { url_foto_premio: premioPhoto?.streamUlr }),
+
+        equipos_utilizados: mappedEquiposUtilizados,
+        materiales_utilizados: mappedMaterialesUtilizados,
+      });
       return;
     }
   };
@@ -324,6 +453,13 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       ...sanitizeDataResetForm(dataToReset),
     } as InstallAsignOTSaveFormData);
   }, [ordentrabajo, reset]);
+
+  useEffect(() => {
+    return () => {
+      clearAll();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TabsFormBoxScene

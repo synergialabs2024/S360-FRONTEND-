@@ -25,6 +25,7 @@ import {
 } from '@/shared/components';
 import { useInstalacionesStore } from '@/store/app';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
 import { returnUrlActivacionesInstallacionesOT } from '../../../pages/tables/ActivacionesInstalacionesMainPage';
 import { useEquiposActivacionInstallOT } from '../../hooks';
 import ActivacionInstallOTDetallesEquiposFormTab from './ActivacionInstallOTDetallesEquiposFormTab';
@@ -48,6 +49,9 @@ const SaveActivacionInstallPendienteOT: React.FC<
   const { tabValue, handleTabChange } = useTabsOnly();
   useEquiposActivacionInstallOT({ ordenTrabajo: ordentrabajo });
 
+  ///* global states ---------------------
+  const clearAll = useInstalacionesStore(state => state.clearAll);
+
   ///* form ---------------------
   const form = useForm<ActicacionInstallOTSaveFormData>({
     resolver: yupResolver(activacionInstallOTSchema) as any,
@@ -66,6 +70,9 @@ const SaveActivacionInstallPendienteOT: React.FC<
       customMessageToast: 'Activación de instalación exitosa',
       navigate,
       returnUrl: returnUrlActivacionesInstallacionesOT,
+      customOnSuccess() {
+        clearAll();
+      },
     },
   );
 
@@ -93,6 +100,14 @@ const SaveActivacionInstallPendienteOT: React.FC<
       producto: ont?.producto_data?.id!,
     });
   };
+
+  ///* effects -----------------
+  useEffect(() => {
+    return () => {
+      clearAll();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TabsFormBoxScene

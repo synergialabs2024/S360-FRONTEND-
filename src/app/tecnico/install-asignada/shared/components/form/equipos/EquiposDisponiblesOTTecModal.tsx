@@ -83,9 +83,8 @@ const EquiposDisponiblesOTTecModal: React.FC<
             onClick={() => {
               const isONT =
                 item?.producto_data?.tipo === TipoProductoEnumChoice.ONT;
-              let series: string[] = [];
+              let series: string[] = item?.series || [];
               if (isONT) {
-                series = item?.series || [];
                 const tempSeries = item?.series_temporal || [];
                 const activationSerie = ordenTrabajo?.serie_ont;
 
