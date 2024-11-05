@@ -15,6 +15,7 @@ import { Tarjeta } from '../../cobranza';
 import { NapLimitData } from '../../infraestructura';
 import { PlanInternet } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
+import { Flota } from '@/shared';
 
 export interface PreventasPaginatedRes {
   status: number;
@@ -111,4 +112,5 @@ export interface Preventa {
   entidad_financiera_data?: EntidadFinanciera;
   tarjeta_data?: Tarjeta;
   nap_data?: NapLimitData;
+  flota_data?: Flota;
 }

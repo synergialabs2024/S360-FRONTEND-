@@ -65,8 +65,8 @@ export interface OrdenTrabajo {
   ipv6: string;
   pppoe: string;
   pppassword: string;
-  observacion_activacion: string;
-  observacion_prerechazo: string;
+  observacion_activacion?: string | null;
+  observacion_prerechazo?: string | null;
 
   // cambio puerto ---------------
   tipo_actualizacion_puerto?: TipoActualizacionActivacionesEnumChoice;

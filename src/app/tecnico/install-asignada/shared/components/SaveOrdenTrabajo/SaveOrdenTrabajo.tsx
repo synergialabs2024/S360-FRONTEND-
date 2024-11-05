@@ -216,6 +216,12 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       equiposUtilizados.find(
         eq => eq.producto_data?.tipo === TipoProductoEnumChoice.ONT,
       );
+    if (!ont)
+      return ToastWrapper.error(
+        'No se ha seleccionado la ONT en los equipos utilizados',
+      );
+    if (+(ont?.usedQuantity || 0) > 1)
+      return ToastWrapper.error('Solo se puede seleccionar una ONT');
     const seriesOnt = ont?.savedSeries;
     if (+(seriesOnt?.length || 0) > 1)
       return ToastWrapper.error(

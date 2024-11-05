@@ -33,6 +33,7 @@ const ConfirmInstallScheduleVentasModal: React.FC<
   const watchFechaInstalacion = form.watch('fecha_instalacion');
   const watchFlota = form.watch('flota');
   const watchedRawFleet = form.watch('rawFlota');
+  const watchFlotaUUID = form.watch('flotaUUID');
 
   ///* global state ---------------------
   const selectedHour = useAgendamientoVentasStore(s => s.selectedHour);
@@ -64,6 +65,7 @@ const ConfirmInstallScheduleVentasModal: React.FC<
           .format(),
 
         rawFlota: watchedRawFleet,
+        flotaUUID: watchFlotaUUID,
       },
     });
 

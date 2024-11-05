@@ -4,6 +4,7 @@ import { useFetchUbicacionProductos } from '@/actions/app';
 import {
   InventarioEnumUUID,
   OrdenTrabajo,
+  TipoProductoEnumChoice,
   ToastWrapper,
   UbicacionProducto,
   useLoaders,
@@ -16,6 +17,7 @@ import {
   ScrollableDialogProps,
   TableWithoutActions,
 } from '@/shared/components';
+import { getFilteredSeriesOTInstall } from '@/shared/helpers';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
 import { useColumnsEquiposMaterialesInstallOT } from '../../../hooks';
 
@@ -79,12 +81,27 @@ const EquiposDisponiblesOTTecModal: React.FC<
             variant="text"
             color="primary"
             onClick={() => {
+              const isONT =
+                item?.producto_data?.tipo === TipoProductoEnumChoice.ONT;
+              let series: string[] = [];
+              if (isONT) {
+                series = item?.series || [];
+                const tempSeries = item?.series_temporal || [];
+                const activationSerie = ordenTrabajo?.serie_ont;
+
+                series = getFilteredSeriesOTInstall(
+                  series,
+                  tempSeries,
+                  activationSerie || null,
+                );
+              }
+
               addSelectedItem({
                 keyStore: InstalacionesStoreKey.equiposUtilizados,
                 item: {
                   ...item,
+                  series,
                   usedQuantity: 1,
-
                   selectedSeries: [],
                   savedSeries: [],
                   containsSeries: !!item?.series?.length,

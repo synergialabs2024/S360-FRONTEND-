@@ -21,6 +21,7 @@ export interface UbicacionProducto {
   stock_actual: number;
 
   series: UbicacionSerieProducto[];
+  series_temporal: UbicacionSerieProducto[];
 
   created_at?: string;
   modified_at?: string;

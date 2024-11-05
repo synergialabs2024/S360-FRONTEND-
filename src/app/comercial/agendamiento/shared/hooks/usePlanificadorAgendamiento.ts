@@ -25,7 +25,7 @@ import {
   TimeMapPlanificador,
   useLoaders,
 } from '@/shared';
-import { reorderOptionsPks } from '@/shared/helpers';
+
 import {
   useAgendamientoOperacionesStore,
   useAgendamientoVentasStore,
@@ -39,6 +39,31 @@ export type UsePlanificadorAgendamientoParams = {
   cackeKey: string;
   form: UseFormReturn<SaveFormDataAgendaVentas>;
 };
+
+export const reorderOptionsUUIDs = ({
+  optionsUUIDs,
+  flotaUUID,
+}: {
+  optionsUUIDs: string[];
+  flotaUUID: string;
+}): string[] => {
+  // Hacemos una copia del arreglo original para no modificarlo directamente
+  const newOptionsUUIDs = [...optionsUUIDs];
+
+  // Encontramos el índice del flotaUUID en el arreglo
+  const index = newOptionsUUIDs.indexOf(flotaUUID);
+
+  if (index > -1) {
+    // Si lo encontramos, lo removemos del arreglo
+    newOptionsUUIDs.splice(index, 1);
+    // Lo agregamos al inicio del arreglo
+    newOptionsUUIDs.unshift(flotaUUID);
+  }
+
+  // Retornamos el arreglo reordenado
+  return newOptionsUUIDs;
+};
+
 export const usePlanificadorAgendamiento = ({
   cackeKey,
   form,
@@ -48,12 +73,12 @@ export const usePlanificadorAgendamiento = ({
 
   ///* form ---------------------
   const watchedFechaInstalacion = form.watch('fecha_instalacion');
-  const watchedFleet = form.watch('flota');
+  const watchedFleetUUID = form.watch('flotaUUID'); // Cambiado a flotaUUID
   const watchedZone = form.watch('zona');
 
   ///* global state ============================
-  const setAvailableFleetsByZonePks = useAgendamientoVentasStore(
-    s => s.setAvailableFleetsByZonePks,
+  const setAvailableFleetsByZoneUUIDs = useAgendamientoVentasStore(
+    s => s.setAvailableFleetsByZoneUUIDs,
   );
   const setFleetsByZoneLimitData = useAgendamientoVentasStore(
     s => s.setFleetsByZoneLimitData,
@@ -100,10 +125,10 @@ export const usePlanificadorAgendamiento = ({
     isLoading: isLoadingPlanificadores,
     isFetching: isRefetchingPlanificadores,
   } = useFetchPlanificadors({
-    enabled: isMounted && !!watchedFleet && !!watchedFechaInstalacion,
+    enabled: isMounted && !!watchedFleetUUID && !!watchedFechaInstalacion,
     params: {
       page_size: 900,
-      flota: watchedFleet,
+      flota__uuid: watchedFleetUUID, // Usamos flota_uuid
       fecha: watchedFechaInstalacion,
     },
   });
@@ -277,9 +302,10 @@ export const usePlanificadorAgendamiento = ({
         setEdittingSchedule(true); // agenda pyl
 
         form.setValue('fecha_instalacion', (res.data as any)?.selectedDate);
-        form.setValue('flota', (res.data as any)?.flotaId);
+        form.setValue('flotaUUID', (res.data as any)?.flotaUUID); // Cambiado a flotaUUID
         form.setValue('hora_instalacion', (res.data as any)?.selectedHour);
         form.setValue('rawFlota', (res.data as any)?.rawFlota);
+        form.setValue('flota', (res.data as any)?.rawFlota?.id!);
 
         // start timer ------------
         const timerOtp = dayjs((res.data as any)?.limitDate).diff(
@@ -287,16 +313,11 @@ export const usePlanificadorAgendamiento = ({
           'second',
         );
 
-        startTimer(
-          COUNTDOWN_AGENDA_VENTAS_ID,
-          timerOtp,
-          // custom clear cb
-          async () => {
-            useGenericCountdownStore.getState().clearAll();
-            useAgendamientoVentasStore.getState().setCachedData(null);
-            setIsComponentBlocked(false);
-          },
-        );
+        startTimer(COUNTDOWN_AGENDA_VENTAS_ID, timerOtp, async () => {
+          useGenericCountdownStore.getState().clearAll();
+          useAgendamientoVentasStore.getState().setCachedData(null);
+          setIsComponentBlocked(false);
+        });
       } else {
         // TODO: validate this
         setCachedData(null);
@@ -319,13 +340,13 @@ export const usePlanificadorAgendamiento = ({
 
       ///* available fleets by zone ------
       if (isLoadingFlotas || isRefetchingFlotas) return;
-      setAvailableFleetsByZonePks(
-        reorderOptionsPks({
-          optionsPks:
+      setAvailableFleetsByZoneUUIDs(
+        reorderOptionsUUIDs({
+          optionsUUIDs:
             flotasPagingRes?.data?.items
-              .map(item => item.id)
-              .filter((id): id is number => id !== undefined) || [],
-          flotaPk: preventa?.flota || 0,
+              .map(item => item.uuid)
+              .filter((uuid): uuid is string => uuid !== undefined) || [],
+          flotaUUID: preventa?.flota_data?.uuid || '',
         }),
       );
       setFleetsByZoneLimitData(
@@ -333,10 +354,10 @@ export const usePlanificadorAgendamiento = ({
           ?.map(fleet => ({
             name: fleet?.name,
             id: fleet?.id,
+            uuid: fleet?.uuid,
             state: fleet?.state,
             auxiliar_data: fleet?.auxiliar_data,
             lider_data: fleet?.lider_data,
-            uuid: fleet?.uuid,
             zonas: fleet?.zonas,
           }))
           .filter(Boolean) || [],
@@ -351,13 +372,13 @@ export const usePlanificadorAgendamiento = ({
     isLoadingFlotas,
     isRefetchingFlotas,
     flotasPagingRes,
-    setAvailableFleetsByZonePks,
+    setAvailableFleetsByZoneUUIDs,
     endInstallHour,
     setAvailableTimeMap,
     startInstallHour,
     watchedFechaInstalacion,
-    watchedFleet,
-    preventa?.flota,
+    watchedFleetUUID,
+    preventa?.flota_data?.uuid,
     cackeKey,
     userId,
     setIsComponentBlocked,
@@ -367,14 +388,14 @@ export const usePlanificadorAgendamiento = ({
   ]);
 
   useEffect(() => {
-    if (!socket || !isMounted || !watchedFleet) return;
+    if (!socket || !isMounted || !watchedFleetUUID) return;
 
     // register fleet -------
-    socket.emit('register_fleet', watchedFleet);
+    socket.emit('register_fleet', watchedFleetUUID);
 
     // listen fleet schedule -------
     socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
-      if (dayPlanificador?.flota !== watchedFleet) return;
+      if (dayPlanificador?.flota_data?.uuid !== watchedFleetUUID) return;
       const cachedData: Nullable<InstallScheduleCacheData> =
         useAgendamientoVentasStore.getState().cachedData;
 
@@ -406,7 +427,7 @@ export const usePlanificadorAgendamiento = ({
     isMounted,
     socket,
     setAvailableTimeMap,
-    watchedFleet,
+    watchedFleetUUID,
     userId,
     watchedFechaInstalacion,
     startInstallHour,

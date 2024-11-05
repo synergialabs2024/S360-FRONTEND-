@@ -49,9 +49,19 @@ export const useLogin = () => {
 
     onSuccess: async res => {
       const { loginResponse } = res;
+      let user = loginResponse?.user || null;
+      const { permissions, ...rest } = user || {};
+      user = rest as any;
+      const { company_data } = loginResponse || {};
+      if (user) {
+        user = {
+          ...user,
+          company_data: company_data,
+        };
+      }
 
-      setAuth(loginResponse.token, loginResponse?.user || null);
-      setPermissions(loginResponse?.user?.permissions || []);
+      setAuth(loginResponse.token, user);
+      setPermissions(permissions || []);
       setModulos(loginResponse?.system_modules || []);
 
       ToastWrapper.success('Inicio de sesión exitoso');
@@ -125,8 +135,20 @@ export const useLogin = () => {
                   force_login: true,
                   empresa: loginData?.empresa ?? '',
                 });
-                setAuth(loginResponse.token, loginResponse.user || null);
-                setPermissions(loginResponse.user?.permissions || []);
+
+                let user = loginResponse?.user || null;
+                const { permissions, ...rest } = user || {};
+                user = rest as any;
+                const { company_data } = loginResponse || {};
+                if (user) {
+                  user = {
+                    ...user,
+                    company_data: company_data,
+                  };
+                }
+
+                setAuth(loginResponse.token, user || null);
+                setPermissions(permissions || []);
                 setModulos(loginResponse?.system_modules || []);
 
                 ToastWrapper.success('Inicio de sesión exitoso');
@@ -157,7 +179,6 @@ export const useLogin = () => {
 export const login = async (data: LoginData) => {
   const { post } = erpAPI();
 
-  const setAuthToken = useAuthStore.getState().setToken;
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   setIsGlobalLoading(true);
@@ -171,9 +192,6 @@ export const login = async (data: LoginData) => {
     },
     false,
   );
-
-  const { token } = loginRes?.data ?? {};
-  setAuthToken(token); // to get permissions
 
   setIsGlobalLoading(false);
 

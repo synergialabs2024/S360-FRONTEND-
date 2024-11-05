@@ -50,6 +50,7 @@ export type SaveConfirmAgendaOperaciones = Partial<SolicitudServicio> &
     planName?: string;
 
     rawFlota?: Flota;
+    flotaUUID?: string;
   };
 
 const SaveConfirmAgendaOperaciones: React.FC<
@@ -153,6 +154,7 @@ const SaveConfirmAgendaOperaciones: React.FC<
       preventa: preventa_data?.id!,
       flota: agendamiento?.flota_data?.id!,
       rawFlota: agendamiento?.flota_data,
+      flotaUUID: agendamiento?.flota_data?.uuid!,
       nap: agendamiento?.nap!,
 
       // observacion_llamada: agendamiento?.observacion_llamada || '',

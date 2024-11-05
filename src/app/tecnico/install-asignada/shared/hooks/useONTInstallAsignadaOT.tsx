@@ -8,6 +8,7 @@ import {
   ToastWrapper,
 } from '@/shared';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
+import { getFilteredSeriesOTInstall } from '@/shared/helpers';
 
 type UseONTInstallAsignadaOTParams = {
   ordenTrabajo: OrdenTrabajo;
@@ -53,15 +54,24 @@ export const useONTInstallAsignadaOT = ({
     }
 
     const firstONT = items.at(0);
-    if (firstONT && !!ordenTrabajo?.serie_ont) {
+    const activationSerie = ordenTrabajo?.serie_ont;
+    if (firstONT && !!activationSerie) {
+      const series = firstONT?.series || [];
+      const tempSeries = firstONT?.series_temporal || [];
+      const filteredSeries = getFilteredSeriesOTInstall(
+        series,
+        tempSeries,
+        activationSerie,
+      );
+
       addSelectedItem({
         keyStore: InstalacionesStoreKey.equiposUtilizados,
         item: {
           ...firstONT,
-
+          series: filteredSeries,
           usedQuantity: 1,
           selectedSeries: [],
-          savedSeries: [ordenTrabajo?.serie_ont],
+          savedSeries: [activationSerie],
           containsSeries: !!firstONT?.series?.length,
         },
         showToast: false,

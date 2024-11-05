@@ -32,8 +32,8 @@ interface AgendamientoVentasState {
   selectedDate: string; // YYYY-MM-DD
   setSelectedDate: (value: string) => void;
 
-  availableFleetsByZonePks: number[];
-  setAvailableFleetsByZonePks: (value: number[]) => void;
+  availableFleetsByZoneUUIDs: string[];
+  setAvailableFleetsByZoneUUIDs: (value: string[]) => void;
 
   //
   cachedData: Nullable<InstallScheduleCacheData>;
@@ -65,9 +65,9 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
     selectedDate: '',
     setSelectedDate: value => set({ selectedDate: value }),
 
-    availableFleetsByZonePks: [],
-    setAvailableFleetsByZonePks: value =>
-      set({ availableFleetsByZonePks: value }),
+    availableFleetsByZoneUUIDs: [],
+    setAvailableFleetsByZoneUUIDs: value =>
+      set({ availableFleetsByZoneUUIDs: value }),
 
     cachedData: null,
     setCachedData: value => set({ cachedData: value }),
@@ -83,7 +83,7 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
         availableTimeMap: null,
         selectedHour: '',
         selectedDate: '',
-        availableFleetsByZonePks: [],
+        availableFleetsByZoneUUIDs: [],
         cachedData: null,
         fleetsByZoneLimitData: [],
       }),

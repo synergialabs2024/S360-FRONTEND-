@@ -37,7 +37,7 @@ export const preventaFormSchema = yup.object({
   direccion: yup
     .string()
     .required('El campo direccion es requerido')
-    .max(38, 'El campo direccion no debe exceder los 38 caracteres'),
+    .max(45, 'El campo direccion no debe exceder los 45 caracteres'),
 
   // EQUIFAX -----------
   rango_capacidad_pago: yup

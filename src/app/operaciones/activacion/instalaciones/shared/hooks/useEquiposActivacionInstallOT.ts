@@ -55,10 +55,18 @@ export const useEquiposActivacionInstallOT = ({
 
     const firstONT = items.at(0);
     if (firstONT) {
+      const series = firstONT?.series || [];
+      const tempSeries = firstONT?.series_temporal || [];
+      const filteredSeries = series.filter(
+        serie => !tempSeries.includes(serie),
+      );
+
       addSelectedItem({
         keyStore: InstalacionesStoreKey.equiposUtilizados,
         item: {
           ...firstONT,
+
+          series: filteredSeries,
 
           usedQuantity: 1,
           selectedSeries: [],

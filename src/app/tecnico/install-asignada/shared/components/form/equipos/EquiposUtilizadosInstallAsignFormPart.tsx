@@ -5,10 +5,16 @@ import { FiPlus } from 'react-icons/fi';
 import { IoMdTrash } from 'react-icons/io';
 import { IoQrCodeSharp } from 'react-icons/io5';
 
-import { OrdenTrabajo, ToastWrapper, UbicacionProducto } from '@/shared';
+import {
+  gridSize,
+  OrdenTrabajo,
+  ToastWrapper,
+  UbicacionProducto,
+} from '@/shared';
 import {
   CustomMinimalTable,
   CustomSingleButton,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   ProductoUbicacionSeriesModal,
   SingleIconButton,
@@ -174,19 +180,28 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
       <CustomTypoLabel text="Equipos Utilizados" />
 
       <Grid item container xs={12} spacing={1}>
-        <Grid item xs={12} container alignSelf="flex-end">
-          <span className="spacer" />
+        <Grid item xs={12} container alignItems="center">
+          <Grid item xs={6}>
+            <CustomTextFieldNoForm
+              label="Serial ONT"
+              value={ordenTrabajo?.serie_ont || 'N/A'}
+              disabled
+              size={gridSize}
+            />
+          </Grid>
 
-          <CustomSingleButton
-            label="AGREGAR EQUIPO"
-            color="primary"
-            variant="text"
-            startIcon={<FiPlus />}
-            onClick={() => {
-              setOpenEquiposDisponiblesModal(true);
-            }}
-            justifyContent="flex-end"
-          />
+          <Grid item xs={6} container justifyContent="flex-end">
+            <CustomSingleButton
+              label="AGREGAR EQUIPO"
+              color="primary"
+              variant="text"
+              startIcon={<FiPlus />}
+              onClick={() => {
+                setOpenEquiposDisponiblesModal(true);
+              }}
+              justifyContent="flex-end"
+            />
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>

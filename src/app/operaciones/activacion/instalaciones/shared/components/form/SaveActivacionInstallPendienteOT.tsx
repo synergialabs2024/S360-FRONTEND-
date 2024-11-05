@@ -87,7 +87,9 @@ const SaveActivacionInstallPendienteOT: React.FC<
       hora_fin: horaFin,
       hora_inicio: horaInicio,
       serie_ont: selectedSerie,
-      observacion_activacion: data.observacion_activacion!,
+      ...(data.observacion_activacion && {
+        observacion_activacion: data.observacion_activacion,
+      }),
       producto: ont?.producto_data?.id!,
     });
   };

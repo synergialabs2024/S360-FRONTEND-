@@ -15,6 +15,7 @@ export type InstallScheduleCacheData = {
 
   // helpers
   rawFlota?: FlotaLimitData;
+  flotaUUID?: string;
 } | null;
 
 export enum CacheBaseKeysPreventaEnum {

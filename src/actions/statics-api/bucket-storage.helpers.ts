@@ -14,6 +14,7 @@ import {
   putFileBucket,
 } from './bucket.actions';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
+import { useAuthStore } from '@/store/auth';
 
 const { VITE_MINIO_ENDPOINT } = getEnvs();
 
@@ -67,10 +68,15 @@ export const uploadFileToBucket = async (
   params: UploadFileToBucketParams,
 ): Promise<UploadFileToBucketReturn> => {
   try {
+    const schemaName = useAuthStore.getState().user?.company_data?.schema_name;
+    if (!schemaName)
+      throw new Error('No se pudo obtener el schema_name del usuario');
+
     const { file_name, expiration, bucketDir } = params;
     const bucketBase = BucketTypeEnumChoice.BUCKET_BASE;
     // no requiere bucketBase xq el back lo controla, solo lo uso para formar el stream url
-    const fileNameKey = bucketDir + '/' + file_name + '_' + uuidv4();
+    const fileNameKey =
+      schemaName + '/' + bucketDir + '/' + file_name + '_' + uuidv4();
 
     const tempLinkRes = await createTemporaryUploadLink({
       file_name: fileNameKey,

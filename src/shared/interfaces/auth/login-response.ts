@@ -4,6 +4,7 @@ export interface LoginResponse {
   token: string;
   user: UserLoginResponse;
   system_modules?: string[];
+  company_data?: CompanyLoginResponse;
 }
 
 export const LOGIN_ERRORS = {
@@ -30,4 +31,15 @@ export interface UserLoginResponse {
   canal_venta?: string;
   centro_costo?: number;
   role?: UserRolesEnumChoice; // choice
+  company_data?: CompanyLoginResponse; // build in login action
+}
+
+export interface CompanyLoginResponse {
+  id?: number;
+  uuid?: string;
+  company_name: string;
+  commercial_name: string;
+  schema_name: string; // db
+  logo_1_url?: string;
+  logo_2_url?: string;
 }

@@ -46,6 +46,7 @@ export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
     paymentMethodName?: string;
 
     rawFlota?: Flota;
+    flotaUUID?: string;
   };
 
 const steps = ['Datos generales', 'Servicio y Ubicación', 'Agendamiento'];
@@ -130,6 +131,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       entidadFinancieraName: rest?.entidad_financiera_data?.name,
       tarjetaName: rest?.tarjeta_data?.name,
       paymentMethodName: rest?.metodo_pago_data?.name,
+      flotaUUID: preventa?.flota_data?.uuid,
     } as SaveFormDataAgendaVentas);
   }, [preventa, reset, setActivePreventa]);
 

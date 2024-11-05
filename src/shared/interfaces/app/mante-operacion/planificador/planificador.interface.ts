@@ -20,7 +20,8 @@ export interface Planificador {
   modified_at?: string;
 
   ///* fk
-  flota?: number;
+  // flota?: number;
+  flota?: string; // uuid
 
   flota_data?: FlotaLimitData;
 }

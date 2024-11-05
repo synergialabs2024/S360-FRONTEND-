@@ -21,8 +21,8 @@ const InstallationScheduleComponent: React.FC<
   InstallationScheduleComponentProps
 > = ({ form, preventa, cacheKey, showFleetName = false }) => {
   ///* global state ---------------------
-  const availableFleetsByZonePks = useAgendamientoVentasStore(
-    s => s.availableFleetsByZonePks,
+  const availableFleetsByZoneUUIDs = useAgendamientoVentasStore(
+    s => s.availableFleetsByZoneUUIDs,
   );
   const isComponentBlocked = useAgendamientoVentasStore(
     s => s.isComponentBlocked,
@@ -35,8 +35,8 @@ const InstallationScheduleComponent: React.FC<
   const watchedRawFleet = form.watch('rawFlota');
 
   ///* local state ---------------------
-  const [optionsPks, setOptionsPks] = useState<number[]>(
-    availableFleetsByZonePks || [],
+  const [optionsUUIDs, setOptionsUUIDs] = useState<string[]>(
+    availableFleetsByZoneUUIDs || [],
   );
   const [currentOptionIdx, setCurrentOptionIdx] = useState<number>(0);
 
@@ -45,7 +45,7 @@ const InstallationScheduleComponent: React.FC<
 
   ///* handlers ---------------------
   const handleNext = () => {
-    if (currentOptionIdx === optionsPks.length - 1) return;
+    if (currentOptionIdx === optionsUUIDs.length - 1) return;
     setCurrentOptionIdx(prev => prev + 1);
   };
   const handlePrev = () => {
@@ -55,12 +55,12 @@ const InstallationScheduleComponent: React.FC<
 
   ///* effects ---------------------
   useEffect(() => {
-    if (availableFleetsByZonePks && availableFleetsByZonePks.length > 0) {
-      setOptionsPks(availableFleetsByZonePks);
+    if (availableFleetsByZoneUUIDs && availableFleetsByZoneUUIDs.length > 0) {
+      setOptionsUUIDs(availableFleetsByZoneUUIDs);
     } else {
-      setOptionsPks([]);
+      setOptionsUUIDs([]);
     }
-  }, [availableFleetsByZonePks]);
+  }, [availableFleetsByZoneUUIDs]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -69,22 +69,23 @@ const InstallationScheduleComponent: React.FC<
       setIsMounted(false);
     };
   }, []);
-  // upd form flota pk on change
+  // upd form flotaUUID and rawFlota
   useEffect(() => {
     if (!isMounted) return;
 
-    if (optionsPks.length > 0) {
-      form.setValue('flota', optionsPks[currentOptionIdx]);
+    if (optionsUUIDs.length > 0) {
+      form.setValue('flotaUUID', optionsUUIDs[currentOptionIdx]);
 
       const rawFleet = fleetsByZoneLimitData.find(
-        fleet => fleet?.id === optionsPks[currentOptionIdx],
+        fleet => fleet?.uuid === optionsUUIDs[currentOptionIdx],
       );
       form.setValue('rawFlota', rawFleet as any);
+      form.setValue('flota', rawFleet?.id!);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOptionIdx, isMounted]);
 
-  if (!preventa?.flota) return null;
+  if (!preventa?.flota_data?.uuid) return null;
 
   return (
     <>
@@ -116,7 +117,8 @@ const InstallationScheduleComponent: React.FC<
               color="primary"
               onClick={handleNext}
               disabled={
-                currentOptionIdx === optionsPks.length - 1 || isComponentBlocked
+                currentOptionIdx === optionsUUIDs.length - 1 ||
+                isComponentBlocked
               }
             >
               <MdArrowForwardIos fontSize="large" />
