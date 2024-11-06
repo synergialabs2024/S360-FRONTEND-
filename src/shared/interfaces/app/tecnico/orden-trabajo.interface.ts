@@ -68,13 +68,13 @@ export interface OrdenTrabajo {
   observacion_activacion?: string | null;
   observacion_prerechazo?: string | null;
 
-  // cambio puerto ---------------
+  // cambio puerto ya no va, tecnico lo upd ---------------
   tipo_actualizacion_puerto?: TipoActualizacionActivacionesEnumChoice;
   observacion_cambio_puerto?: string;
   fecha_actualizacion_puerto?: string; // timestamp
   usuario_actualizacion_puerto?: number; // fk
 
-  ///* fk
+  ///* fk -------------------
   flota?: number;
   usuario_flota?: number; // gestiona - user de flota
 

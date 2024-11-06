@@ -19,6 +19,7 @@ import {
   gridSize,
   gridSizeMdLg9,
   MaterialUtilizadosInstallOT,
+  Nap,
   Preventa,
   SolicitudServicio,
   TipoProductoEnumChoice,
@@ -58,6 +59,7 @@ export type InstallAsignOTSaveFormData = CreateOrdenTrabajoParamsBase &
   Partial<SolicitudServicio> &
   Partial<Preventa> & {
     metraje_autorizado_fibra: string;
+    rawNap?: Nap;
   };
 
 const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
@@ -309,7 +311,11 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
             producto: eq.producto_data?.id!,
             series: eq.savedSeries?.map(s => s) || [],
             codigo: eq.producto_data?.codigo!,
-            producto_data: eq.producto_data,
+            producto_data: {
+              codigo: eq.producto_data?.codigo!,
+              nombre: eq.producto_data?.nombre!,
+              tipo: eq.producto_data?.tipo!,
+            },
           }) as EquipoUtilizadosInstallOT,
       ) || [];
     const mappedMaterialesUtilizados: MaterialUtilizadosInstallOT[] =
@@ -320,7 +326,11 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
             producto: mat.producto_data?.id!,
             series: mat.savedSeries?.map(s => s) || [],
             codigo: mat.producto_data?.codigo!,
-            producto_data: mat.producto_data,
+            producto_data: {
+              codigo: mat.producto_data?.codigo!,
+              nombre: mat.producto_data?.nombre!,
+              tipo: mat.producto_data?.tipo!,
+            },
           }) as MaterialUtilizadosInstallOT,
       ) || [];
 
@@ -447,6 +457,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       serie_ont: ordentrabajo?.serie_ont || undefined,
       metraje_autorizado_fibra:
         ordentrabajo?.ciudad_data?.metraje_autorizado || '',
+      rawNap: ordentrabajo?.nap_data || undefined,
     };
 
     reset({

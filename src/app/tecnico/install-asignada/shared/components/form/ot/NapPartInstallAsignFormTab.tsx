@@ -1,24 +1,21 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { MdChangeCircle } from 'react-icons/md';
 
 import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
 import {
-  gridSizeMdLg1,
-  gridSizeMdLg11,
+  gridSize,
   gridSizeMdLg3,
   gridSizeMdLg6,
   Nap,
   OrdenTrabajo,
-  ToastWrapper,
 } from '@/shared';
 import {
   CustomAutocomplete,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
-  SingleIconButton,
+  SelectArrayString,
 } from '@/shared/components';
 import { useMapStore } from '@/store/app';
 import { InstallAsignOTSaveFormData } from '../../SaveOrdenTrabajo/SaveOrdenTrabajo';
@@ -35,12 +32,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
 }) => {
   ///* form ---------------------
   const { errors } = form.formState;
-  const watchedTipoActualizacionPuerto = form.watch(
-    'tipo_actualizacion_puerto',
-  );
-  const watchedUsuarioActualizacionPuerto = form.watch(
-    'usuario_actualizacion_puerto',
-  );
+  const watchedRawNap = form.watch('rawNap');
 
   ///* local state ---------------------
   const [openChangePortDialog, setOpenChangePortDialog] =
@@ -75,8 +67,6 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
                 puerto_nap: '' as any,
               });
             }}
-            canDragMarker={false}
-            disabledInputCoords={true}
           />
         </>
 
@@ -100,12 +90,13 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
               if (!nap) {
                 form.setValue('distancia_nap', '' as any);
                 form.setValue('puerto_nap', '' as any);
+                form.setValue('rawNap', undefined);
                 return;
               }
               form.setValue('distancia_nap', nap?.distance as any);
               form.setValue('puerto_nap', '' as any);
+              form.setValue('rawNap', nap);
             }}
-            disabled
           />
           {/* <CustomTextFieldNoForm
             label="NAP"
@@ -126,17 +117,41 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
           />
 
           <Grid item container {...gridSizeMdLg3}>
-            <CustomTextField
-              label="Puerto"
+            <SelectArrayString
+              label="Puerto NAP"
               name="puerto_nap"
               control={form.control}
-              defaultValue={(form.getValues().puerto_nap as any) || ''}
-              error={errors.puerto_nap}
-              helperText={errors.puerto_nap?.message}
-              size={gridSizeMdLg11}
-              disabled
+              defaultValue={
+                form.getValues('puerto_nap')?.toString() || undefined
+              }
+              options={
+                watchedRawNap?.puertos_list
+                  ?.map(p => ({
+                    puerto: p.puerto.toString(),
+                    estado: p.estado,
+                  }))
+                  ?.filter(p => {
+                    const selectedPort =
+                      ordenTrabajo?.preventa_data?.puerto_nap?.toString() ||
+                      '0';
+                    const currPort = p?.puerto;
+                    const selectedNap = ordenTrabajo?.nap_data?.id;
+
+                    if (
+                      selectedPort === currPort &&
+                      selectedNap == watchedRawNap?.id
+                    ) {
+                      return true;
+                    }
+
+                    return !p.estado;
+                  })
+                  ?.map(p => p.puerto) || []
+              }
+              gridSize={gridSize}
             />
-            <SingleIconButton
+
+            {/* <SingleIconButton
               label="Solicitar cambio puerto"
               onClick={() => {
                 if (
@@ -154,7 +169,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
               size={gridSizeMdLg1}
               color="info"
               tooltipPlacement="right"
-            />
+            /> */}
           </Grid>
         </>
       </>

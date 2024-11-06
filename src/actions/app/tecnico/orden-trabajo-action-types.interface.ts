@@ -17,3 +17,26 @@ export type ActivateInstalacionOTData = Pick<
 > & {
   producto: number;
 };
+
+///* INSTALACIONES - TECNICO ===================================
+export type UploadInstalacionOTAsignData = Pick<
+  OrdenTrabajo,
+  | 'equipos_utilizados'
+  | 'materiales_utilizados'
+  | 'punta_inicial_fibra'
+  | 'punta_final_fibra'
+  | 'metraje_utilizado_fibra'
+  | 'metraje_exedente_fibra'
+  | 'serie_ont'
+  | 'potencia_ont'
+  | 'observaciones_adicionales'
+  | 'url_foto_ont'
+  | 'url_foto_potencia_ont'
+  | 'url_foto_ont_encontrado_casa'
+  | 'url_foto_etiqueta'
+  | 'url_foto_nap'
+  | 'url_foto_potencia_nap'
+  | 'url_foto_premio'
+  | 'url_foto_test_speed'
+  | 'url_foto_acta_entrega_ups'
+> & {};

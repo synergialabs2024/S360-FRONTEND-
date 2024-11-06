@@ -9,11 +9,11 @@ export interface SelectArrayStringProps {
   label: string;
 
   textFieldKey?: string;
-  defaultValue?: string | number;
+  defaultValue?: string | number | null;
 
   options: string[] | number[];
   name: string;
-  onChangeValue?: (value: string) => void;
+  onChangeValue?: (value: string | number | null) => void;
 
   gridSize?: GridSizeType;
   disabled?: boolean;
@@ -25,7 +25,7 @@ export interface SelectArrayStringProps {
 
 const SelectArrayString: React.FC<SelectArrayStringProps> = ({
   label,
-  defaultValue,
+  defaultValue = '',
   options,
   textFieldKey,
   name,
@@ -36,20 +36,19 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
   control,
   required = true,
 }) => {
-  // Establecer el primer valor de opciones como valor por defecto
-  const defaultSelection = defaultValue || options[0];
-
   return (
     <Grid item {...gridSize}>
       <FormControl fullWidth variant="outlined">
         <Controller
           name={name}
           control={control}
-          defaultValue={defaultSelection}
+          defaultValue={defaultValue}
           render={({ field }) => {
             const onChange = (event: any) => {
-              field.onChange(event.target.value);
-              onChangeValue && onChangeValue(event.target.value);
+              const value =
+                event.target.value === '' ? null : event.target.value;
+              field.onChange(value);
+              onChangeValue && onChangeValue(value);
             };
 
             return (
@@ -64,12 +63,12 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
                   {label}
                 </CustomFormLabel>
                 <TextField
-                  key={textFieldKey || defaultValue || ''}
+                  key={textFieldKey || ''}
                   select
                   variant="outlined"
                   fullWidth
                   {...field}
-                  value={field.value || defaultSelection}
+                  value={field.value ?? ''}
                   onChange={onChange}
                   inputProps={{ readOnly: disabled }}
                   required={required}
@@ -81,7 +80,7 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
                   }}
                 >
                   {clearable && (
-                    <MenuItem value={null as any}>
+                    <MenuItem value="">
                       <em>-- Sin Selección --</em>
                     </MenuItem>
                   )}
