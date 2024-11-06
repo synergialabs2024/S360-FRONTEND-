@@ -120,6 +120,8 @@ const SaveMotivoActualizacion: React.FC<SaveMotivoActualizacionProps> = ({
         label="Módulo"
         name="modulo"
         control={form.control}
+        error={errors.modulo}
+        helperText={errors.modulo?.message}
         defaultValue={form.getValues('modulo')}
         options={MOTIVO_ACTUALIZACION_MODULO_ARRAY_CHOICES}
       />

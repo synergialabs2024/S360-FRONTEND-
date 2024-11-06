@@ -1,5 +1,5 @@
 import { FormControl, Grid, MenuItem, TextField } from '@mui/material';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldError } from 'react-hook-form';
 
 import { gridSizeMdLg6 } from '@/shared/constants';
 import { GridSizeType } from '@/shared/interfaces';
@@ -21,6 +21,9 @@ export interface SelectArrayStringProps {
 
   control: any; // Agregar control como prop requerido
   required?: boolean;
+
+  error: FieldError | undefined;
+  helperText: React.ReactNode;
 }
 
 const SelectArrayString: React.FC<SelectArrayStringProps> = ({
@@ -35,6 +38,9 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
   clearable = false,
   control,
   required = true,
+
+  error,
+  helperText,
 }) => {
   return (
     <Grid item {...gridSize}>
@@ -72,6 +78,8 @@ const SelectArrayString: React.FC<SelectArrayStringProps> = ({
                   onChange={onChange}
                   inputProps={{ readOnly: disabled }}
                   required={required}
+                  error={!!error}
+                  helperText={helperText}
                   sx={{
                     ...(disabled && {
                       background: 'rgba(0, 0, 0, 0.04)',

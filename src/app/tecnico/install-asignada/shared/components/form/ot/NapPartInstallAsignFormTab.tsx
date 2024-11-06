@@ -149,6 +149,9 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
                   ?.map(p => p.puerto) || []
               }
               gridSize={gridSize}
+              clearable={true}
+              error={errors.puerto_nap}
+              helperText={errors.puerto_nap?.message}
             />
 
             {/* <SingleIconButton

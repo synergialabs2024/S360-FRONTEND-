@@ -19,7 +19,7 @@ type CustomTextAreaProps = {
 
   control?: any;
   name?: string;
-  defaultValue?: string | number;
+  defaultValue?: string | number | undefined | null;
   onChangeValue?: (value: any) => void;
 
   sizeTextField?: 'medium' | 'small';

@@ -19,6 +19,19 @@ export const ordenTrabajoFormSchema = yup.object({
     .positive('El campo potencia ont debe ser un número positivo')
     .min(1, 'El campo potencia ont debe ser mayor a 0'),
 
+  nap: yup
+    .number()
+    .required('El campo nap es requerido')
+    .typeError('El campo nap es requerido'),
+  puerto_nap: yup
+    .number()
+    .required('El campo puerto nap es requerido')
+    .typeError('El campo puerto nap es requerido'),
+  distancia_nap: yup
+    .number()
+    .required('El campo distancia nap es requerido')
+    .typeError('El campo distancia nap es requerido'),
+
   // INVENTARIO -------------------
   punta_inicial_fibra: yup
     .number()

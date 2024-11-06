@@ -159,6 +159,8 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
         label="Tipo de uso"
         name="tipo_uso"
         control={form.control}
+        error={errors.tipo_uso}
+        helperText={errors.tipo_uso?.message}
         defaultValue={form.getValues('tipo_uso')}
         options={IP_USES_TYPE_ARRAY_CHOICES}
       />

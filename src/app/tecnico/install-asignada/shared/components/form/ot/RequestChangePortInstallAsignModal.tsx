@@ -81,6 +81,8 @@ const RequestChangePortInstallAsignModal: React.FC<
               name="tipo_actualizacion_puerto"
               control={form.control}
               defaultValue={form.getValues().tipo_actualizacion_puerto}
+              error={errors.tipo_actualizacion_puerto}
+              helperText={errors.tipo_actualizacion_puerto?.message}
               options={TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES}
               gridSize={gridSize}
             />
