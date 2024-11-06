@@ -8,6 +8,7 @@ import {
   CreateOrdenTrabajoParamsBase,
   OrdenTrabajoTSQEnum,
 } from '@/actions/app';
+import { UploadInstalacionOTAsignData } from '@/actions/app/tecnico/orden-trabajo-action-types.interface';
 import { useGenericPATCH } from '@/actions/shared';
 import { uploadFileToBucket } from '@/actions/statics-api';
 import { EquipoVentasDetalle } from '@/app/comercial/preventa/shared/components';
@@ -170,14 +171,14 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
 
   ///* mutations ---------------------
   const uploadOTInstalacion = useGenericPATCH<
-    CreateOrdenTrabajoParamsBase,
+    UploadInstalacionOTAsignData,
     OrdenTrabajo
   >(
     `/orden-trabajo/instalaciones/upload/${ordentrabajo?.id!}/`,
     OrdenTrabajoTSQEnum.ORDENTRABAJOS,
     {
       customMessageToast: 'Orden de trabajo cargada con éxito',
-      navigate,
+      // navigate,
       returnUrl: returnUrlInstallAsignadasOT,
       customOnSettled() {
         clearAll();
@@ -419,13 +420,27 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     ///* upd -------
     if (ordentrabajo?.id) {
       uploadOTInstalacion.mutate({
-        ...data,
+        equipos_utilizados: mappedEquiposUtilizados,
+        materiales_utilizados: mappedMaterialesUtilizados,
+        punta_inicial_fibra: data.punta_inicial_fibra,
+        punta_final_fibra: data.punta_final_fibra,
+        metraje_utilizado_fibra: data.metraje_utilizado_fibra,
+        metraje_exedente_fibra: data.metraje_exedente_fibra,
+        serie_ont: data.serie_ont,
+        potencia_ont: data.potencia_ont,
+        observaciones_adicionales: data.observaciones_adicionales,
+
+        nap: data.nap,
+        distancia_nap: data.distancia_nap!,
+        puerto_nap: data.puerto_nap!,
+
         url_foto_ont: ontPhoto?.streamUlr,
         url_foto_potencia_ont: potenciaONTPhoto?.streamUlr,
         url_foto_etiqueta: etiquetaPhoto?.streamUlr,
         url_foto_nap: napPhoto?.streamUlr,
         url_foto_potencia_nap: potenciaNAPPhoto?.streamUlr,
         url_foto_test_speed: testSpeedPhoto?.streamUlr,
+
         ...(ontEncontradoPhoto && {
           url_foto_ont_encontrado_casa: ontEncontradoPhoto?.streamUlr,
         }),
@@ -433,9 +448,6 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
           url_foto_acta_entrega_ups: actaEntregaUPSPhoto?.streamUlr,
         }),
         ...(premioPhoto && { url_foto_premio: premioPhoto?.streamUlr }),
-
-        equipos_utilizados: mappedEquiposUtilizados,
-        materiales_utilizados: mappedMaterialesUtilizados,
       });
       return;
     }

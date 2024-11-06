@@ -58,6 +58,17 @@ export const ordenTrabajoFormSchema = yup.object({
     .max(
       200,
       'El campo metraje utilizado fibra no debe exceder los 200 caracteres',
+    )
+    .matches(
+      /^[0-9]+(\.[0-9]+)?$/,
+      'El campo metraje utilizado fibra debe ser un número',
+    )
+    .test(
+      'metraje_utilizado_fibra',
+      'El campo metraje utilizado fibra debe ser mayor a 0',
+      function (value) {
+        return parseFloat(value) > 0;
+      },
     ),
 
   // ACTIVACION -------------------

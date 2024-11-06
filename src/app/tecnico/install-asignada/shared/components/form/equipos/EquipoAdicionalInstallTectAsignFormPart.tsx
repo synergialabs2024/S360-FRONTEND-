@@ -26,6 +26,10 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
     showActionColumn: false,
   });
 
+  const equiposVentaDetail =
+    ordenTrabajo?.preventa_data?.equipos_venta_detalle || [];
+  if (!equiposVentaDetail.length) return null;
+
   return (
     <Grid item container mb={4}>
       <CustomCardAlert
@@ -63,10 +67,7 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
             <Grid item xs={12}>
               <CustomMinimalTable<EquiposSeleccionadosTableType>
                 columns={savedEquiposPreventaColumns}
-                data={
-                  (ordenTrabajo?.preventa_data?.equipos_venta_detalle as any) ||
-                  []
-                }
+                data={(equiposVentaDetail as any) || []}
                 enablePagination
                 density="comfortable"
               />
