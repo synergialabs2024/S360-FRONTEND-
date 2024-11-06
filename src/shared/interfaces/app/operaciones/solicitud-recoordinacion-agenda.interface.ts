@@ -2,6 +2,7 @@ import {
   Agendamiento,
   GeneralModelStatesEnumChoice,
   SystemUserLimitData,
+  TrazabilidadVentas,
 } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
@@ -25,6 +26,8 @@ export interface SolicitudRecoordinacionAgenda {
 
   created_at?: string;
   modified_at?: string;
+
+  trazabilidad_data?: TrazabilidadVentas[]; // JSON
 
   ///* fk
   agendamiento?: number;

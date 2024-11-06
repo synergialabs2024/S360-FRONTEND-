@@ -15,7 +15,7 @@ import { Tarjeta } from '../../cobranza';
 import { NapLimitData } from '../../infraestructura';
 import { PlanInternet } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
-import { Flota } from '@/shared';
+import { Flota, TrazabilidadVentas } from '@/shared';
 
 export interface PreventasPaginatedRes {
   status: number;
@@ -105,6 +105,8 @@ export interface Preventa {
   departamento: number;
   canal_venta: number;
   vendedor: number;
+
+  trazabilidad_data?: TrazabilidadVentas[]; // JSON
 
   solicitud_servicio_data?: SolicitudServicio;
   plan_internet_data?: PlanInternet;
