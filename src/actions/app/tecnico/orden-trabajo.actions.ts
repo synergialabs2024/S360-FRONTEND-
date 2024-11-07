@@ -128,6 +128,7 @@ export const useUpdateOrdenTrabajo = <T>({
 export type GetOrdenTrabajosParams = Partial<OrdenTrabajo> &
   PagingPartialParams & {
     is_recoordinada?: boolean;
+    identificacion?: string;
   };
 export type CreateOrdenTrabajoParams<T> = T;
 export type CreateOrdenTrabajoParamsBase = Omit<OrdenTrabajo, 'id'>;

@@ -5,6 +5,7 @@ import { PermissionsEnum, useLoaders } from '@/shared';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlAgendamientoOperacionesPage } from '../tables/AgendamientosMainPage';
 
+// // // YA NO VA ESTE PROCESO XQ NO HAY PYL
 export type ConfirmAgendaOperacionesPageProps = {};
 
 const ConfirmAgendaOperacionesPage: React.FC<

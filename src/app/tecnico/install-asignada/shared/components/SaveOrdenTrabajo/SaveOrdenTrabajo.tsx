@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,6 +49,7 @@ import {
   InstallAsigOTMaterialesFormTab,
   InstallAsigTecnicoOTFormTab,
   MaterialesUtilizadosOTTableType,
+  PrerejectInstalacionAsignadaOTModal,
 } from '../form';
 
 export interface SaveOrdenTrabajoProps {
@@ -153,6 +154,9 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       isRequired: false,
     },
   ];
+
+  ///* states ---------------------
+  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
 
   ///* global states ---------------------
   const clearAll = useInstalacionesStore(state => state.clearAll);
@@ -487,12 +491,17 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   return (
     <TabsFormBoxScene
       titlePageNode={titleNode}
+      // action btns
       onCancel={() => navigate(returnUrlInstallAsignadasOT)}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(
           `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
         );
       })}
+      onReject={() => {
+        setIsOpenRejectModal(true);
+      }}
+      // tabs
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
           <Tab label="Información general" value={1} {...a11yProps(1)} />
@@ -535,6 +544,13 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
           />
         ))}
       </CustomTabPanel>
+
+      {/* ========================= modals ========================= */}
+      <PrerejectInstalacionAsignadaOTModal
+        open={isOpenRejectModal}
+        onClose={() => setIsOpenRejectModal(false)}
+        ordenTrabajo={ordentrabajo!}
+      />
     </TabsFormBoxScene>
   );
 };

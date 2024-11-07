@@ -113,3 +113,18 @@ export const requestChangePortSchema = yup.object({
       'El campo observacion cambio puerto no debe exceder los 200 caracteres',
     ),
 });
+
+export const prerejectInstallOTAsigSchema = yup.object({
+  motivo_prerechazo: yup
+    .number()
+    .required('El campo motivo prerechazo es requerido')
+    .typeError('El campo motivo prerechazo es requerido'),
+  observacion_prerechazo: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      200,
+      'El campo observacion prerechazo no debe exceder los 200 caracteres',
+    ),
+});

@@ -58,7 +58,7 @@ const ActivacionInstalacionOTByState: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      identificacion: searchTerm,
       ...filterObject,
       filterByState: false,
 

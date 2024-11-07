@@ -17,5 +17,7 @@ export { default as DatosInstallOTFormTabPart } from './general/DatosInstallOTFo
 export { default as DatosPlanBasicoTecnicoPart } from './general/DatosPlanBasicoTecnicoPart';
 export { default as ServicioClienteInstallFormTabPart } from './general/ServicioClienteInstallFormTabPart';
 
+export { default as PrerejectInstalacionAsignadaOTModal } from './PrerejectInstalacionAsignadaOTModal';
+
 export * from './equipos/EquiposUtilizadosInstallAsignFormPart';
 export * from './materiales/MaterialesUtilizadosInstallAsignFormPart';

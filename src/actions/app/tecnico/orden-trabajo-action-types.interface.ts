@@ -45,3 +45,8 @@ export type UploadInstalacionOTAsignData = Pick<
     url_foto_acta_entrega_ups?: string;
     url_foto_premio?: string;
   };
+
+export type RejectInstalacionOTData = Pick<
+  OrdenTrabajo,
+  'observacion_prerechazo' | 'motivo_prerechazo'
+>;
