@@ -1,19 +1,15 @@
 import { useMediaQuery, Box, Drawer, useTheme } from '@mui/material';
 import SidebarItems from './SidebarItems';
 import Logo from '../../shared/logo/Logo';
-import { useSelector, useDispatch } from '@/store/Store';
-import {
-  hoverSidebar,
-  toggleMobileSidebar,
-} from '@/store/customizer/CustomizerSlice';
+
 import Scrollbar from '@/components/custom-scroll/Scrollbar';
 import { Profile } from './SidebarProfile/Profile';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const Sidebar = () => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
-  const customizer = useSelector((state: AppState) => state.customizer);
-  const dispatch = useDispatch();
+  const customizer = useUiStore(state => state.state);
+  const customizerFunctions = useUiStore(state => state);
   const theme = useTheme();
   const toggleWidth =
     customizer.isCollapse && !customizer.isSidebarHover
@@ -22,12 +18,12 @@ const Sidebar = () => {
 
   const onHoverEnter = () => {
     if (customizer.isCollapse) {
-      dispatch(hoverSidebar(true));
+      customizerFunctions.hoverSidebar(true);
     }
   };
 
   const onHoverLeave = () => {
-    dispatch(hoverSidebar(false));
+    customizerFunctions.hoverSidebar(false);
   };
 
   if (lgUp) {
@@ -91,7 +87,9 @@ const Sidebar = () => {
     <Drawer
       anchor="left"
       open={customizer.isMobileSidebar}
-      onClose={() => dispatch(toggleMobileSidebar())}
+      onClose={() =>
+        customizerFunctions.toggleMobileSidebar(!customizer.isMobileSidebar)
+      }
       variant="temporary"
       PaperProps={{
         sx: {

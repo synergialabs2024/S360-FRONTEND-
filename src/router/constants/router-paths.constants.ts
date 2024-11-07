@@ -196,10 +196,9 @@ export const ROUTER_PATHS = {
     serviciosNav: '/clientes/servicios',
 
     ///* clientes
-    clientesFibra: 'clientes',
-    clientesFibraCrear: 'clientes/crear',
-    clientesFibraEditar: 'clientes/editar/:uuid',
-    clientesFibraNav: '/clientes/clientes',
+    clientesFibra: 'fibra-optica',
+    clientesFibraVer: 'clientes/fibra-optica/visualizar/:uuid',
+    clientesFibraNav: '/clientes/fibra-optica',
   },
 
   /////* Cobranza ----------------

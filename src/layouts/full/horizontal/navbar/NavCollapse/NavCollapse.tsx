@@ -12,14 +12,13 @@ import {
   Box,
   ListItemButton,
 } from '@mui/material';
-import { useSelector } from '@/store/Store';
 
 // custom imports
 import NavItem from '../NavItem/NavItem';
 
 // plugins
 import { IconChevronDown } from '@tabler/icons-react';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 type NavGroupProps = {
   [x: string]: any;
@@ -51,7 +50,7 @@ const NavCollapse = ({
   const theme = useTheme();
   const { pathname } = useLocation();
   const [open, setOpen] = React.useState(false);
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const menuIcon =
     level > 1 ? (
       <Icon stroke={1.5} size="1rem" />

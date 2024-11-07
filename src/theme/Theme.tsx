@@ -1,8 +1,6 @@
 import merge from 'lodash/merge';
 import { createTheme } from '@mui/material/styles'; // Importación de createTheme
-import { useSelector } from '@/store/Store';
 import { useEffect } from 'react';
-import { AppState } from '../store/Store';
 import components from './Components';
 import typography from './Typography';
 import { shadows, darkshadows } from './Shadows';
@@ -10,6 +8,7 @@ import { DarkThemeColors } from './DarkThemeColors';
 import { LightThemeColors } from './LightThemeColors';
 import { baseDarkTheme, baselightTheme } from './DefaultColors';
 import * as locales from '@mui/material/locale'; // Revisa si esto es necesario
+import { useUiStore } from '@/store/ui';
 
 export const BuildTheme = (config: any = {}) => {
   const themeOptions = LightThemeColors.find(
@@ -18,7 +17,7 @@ export const BuildTheme = (config: any = {}) => {
   const darkthemeOptions = DarkThemeColors.find(
     theme => theme.name === config.theme,
   );
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const defaultTheme =
     customizer.activeMode === 'dark' ? baseDarkTheme : baselightTheme;
   const defaultShadow =
@@ -49,10 +48,8 @@ export const BuildTheme = (config: any = {}) => {
 };
 
 export const ThemeSettings = () => {
-  const activDir = useSelector((state: AppState) => state.customizer.activeDir);
-  const activeTheme = useSelector(
-    (state: AppState) => state.customizer.activeTheme,
-  );
+  const activDir = useUiStore(state => state.state.activeDir);
+  const activeTheme = useUiStore(state => state.state.activeTheme);
   const theme = BuildTheme({
     direction: activDir,
     theme: activeTheme,

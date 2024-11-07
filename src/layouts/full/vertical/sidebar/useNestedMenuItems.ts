@@ -593,11 +593,11 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUsersGroup,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'clientes',
+            renderByModule(SidenavModulesEnum.CLIENTE_FIBRA, {
+              id: 'clientes-fibra',
               title: 'Clientes',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.clientes.clientesFibraNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'configuracion-plantillas',

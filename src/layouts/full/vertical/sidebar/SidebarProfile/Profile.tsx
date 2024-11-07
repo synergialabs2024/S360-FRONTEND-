@@ -6,16 +6,14 @@ import {
   Tooltip,
   useMediaQuery,
 } from '@mui/material';
-import { useSelector } from '@/store/Store';
 import img1 from '@/assets/images/profile/user-1.jpg';
 import { IconPower } from '@tabler/icons-react';
-import { AppState } from '@/store/Store';
-import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth';
+import { useUiStore } from '@/store/ui/ui.store';
 
 export const Profile = () => {
   const onLogout = useAuthStore(s => s.onLogout);
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
   const hideMenu = lgUp
     ? customizer.isCollapse && !customizer.isSidebarHover

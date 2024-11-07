@@ -1,15 +1,13 @@
 import { useMediaQuery, Box, Drawer, Container, Theme } from '@mui/material';
 import NavListing from './NavListing/NavListing';
 import Logo from '../../shared/logo/Logo';
-import { useSelector, useDispatch } from '@/store/Store';
-import { toggleMobileSidebar } from '@/store/customizer/CustomizerSlice';
 import SidebarItems from '../../vertical/sidebar/SidebarItems';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const Navigation = () => {
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
-  const customizer = useSelector((state: AppState) => state.customizer);
-  const dispatch = useDispatch();
+  const customizer = useUiStore(state => state.state);
+  const customizerFunctions = useUiStore(state => state);
 
   if (lgUp) {
     return (
@@ -32,7 +30,7 @@ const Navigation = () => {
     <Drawer
       anchor="left"
       open={customizer.isMobileSidebar}
-      onClose={() => dispatch(toggleMobileSidebar())}
+      onClose={() => customizerFunctions.toggleMobileSidebar}
       variant="temporary"
       PaperProps={{
         sx: {

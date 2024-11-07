@@ -1012,6 +1012,16 @@ const ActivateInstalacionOTPage = Loadable(
   ),
 );
 
+///* cliente ------------
+const ClienteModule = Loadable(
+  lazy(() => import('@/app/cliente/ClienteModule')),
+);
+const ClientesFibraMainPage = Loadable(
+  lazy(
+    () => import('@/app/cliente/cliente/pages/tables/ClientesFibraMainPage'),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -1628,7 +1638,7 @@ const AppRouter = [
       //////////* Cliente ------------
       {
         path: ROUTER_PATHS.clientes.root,
-        element: <AdministrationModule />,
+        element: <ClienteModule />,
         children: [
           ///* servicio
           {
@@ -1638,6 +1648,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.clientes.serviciosEditar,
             element: <UpdateServicioPage />,
+          },
+
+          ///* clientes
+          {
+            path: ROUTER_PATHS.clientes.clientesFibra,
+            element: <ClientesFibraMainPage />,
           },
         ],
       },

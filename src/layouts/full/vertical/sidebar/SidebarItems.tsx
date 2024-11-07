@@ -4,7 +4,7 @@ import { Box, List, useMediaQuery, Typography } from '@mui/material';
 import { CustomSearch } from '@/shared/components';
 import { useNestedMenu } from './useNestedMenuItems';
 import NavGroup from './components/NavGroup';
-import { AppState, useSelector } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const normalizeText = (text: string) => {
   return text
@@ -15,7 +15,7 @@ const normalizeText = (text: string) => {
 
 const SidebarItems = () => {
   const { menuItems } = useNestedMenu();
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
   const hideMenu: any = lgUp
     ? customizer.isCollapse && !customizer.isSidebarHover

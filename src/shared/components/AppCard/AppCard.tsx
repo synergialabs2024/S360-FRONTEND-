@@ -3,17 +3,16 @@
 import React from 'react';
 
 import { Card } from '@mui/material';
-import { useSelector } from '@/store/Store';
-import { AppState } from '@/store/Store';
 
 import { useTheme } from '@mui/material/styles';
+import { useUiStore } from '@/store/ui/ui.store';
 
 type Props = {
   children: JSX.Element | JSX.Element[];
 };
 
 const AppCard = ({ children }: Props) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const theme = useTheme();
   const borderColor = theme.palette.divider;
 

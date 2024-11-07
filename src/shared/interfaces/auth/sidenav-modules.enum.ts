@@ -76,6 +76,7 @@ export enum SidenavModulesEnum {
   USUARIOS_GRUPOS = 'USUARIOS.GRUPOS',
 
   CLIENTE_SERVICIO = 'CLIENTE.SERVICIO',
+  CLIENTE_FIBRA = 'CLIENTE.FIBRA',
 
   // TODO: modulo temporal visto solo por admin
 
