@@ -400,6 +400,8 @@ export enum BucketTypeEnumChoice {
   IMAGES_ACEPTACION_CONTRATO = 'images/acaptacion-contrato',
   IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
   IMAGES_ONT_MODEL = 'images/ont-model',
+
+  IMAGES_ORDENTRABAJO_INSTALACION = 'images/orden-trabajo/instalaciones',
 }
 
 export enum BucketKeyNameEnumChoice {
@@ -410,6 +412,8 @@ export enum BucketKeyNameEnumChoice {
   ACEPTACION_CONTRATO = 'aceptacion_contrato',
   COMPROBANTES_NO_PLANILLA = 'comprobantes_no_planilla',
   ONT_MODEL = 'ont_model_image',
+
+  INSTALL_ASIGNADA_OT = 'install_asignada_ot',
 }
 
 // // Agendamiento ==========================================
