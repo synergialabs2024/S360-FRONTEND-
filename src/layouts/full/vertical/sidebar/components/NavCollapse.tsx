@@ -12,12 +12,11 @@ import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useUiStore } from '@/store/ui';
+import { useUiStore } from '@/store/ui/ui.store';
 import { MenuItemType } from './../menu-item.interface';
 import { NestedMenuItem } from './../useNestedMenuItems';
 import NavItem from './NavItem';
 import { useTranslation } from 'react-i18next';
-import { AppState, useSelector } from '@/store/Store';
 
 interface NavCollapseProps {
   menu: NestedMenuItem;
@@ -30,7 +29,7 @@ const NavCollapse: React.FC<NavCollapseProps> = ({ menu, level, hideMenu }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const openMenus = useUiStore(state => state.openMenus);
   const setOpenMenu = useUiStore(state => state.setOpenMenu);
 
@@ -127,9 +126,10 @@ const NavCollapse: React.FC<NavCollapseProps> = ({ menu, level, hideMenu }) => {
     color:
       isOpen && level < 2
         ? 'white'
-        : 'inherit' && level > 1 && isOpen
+        : level > 1 && isOpen
           ? theme.palette.primary.main
           : theme.palette.text.secondary,
+
     borderRadius: `${customizer.borderRadius}px`,
   }));
 

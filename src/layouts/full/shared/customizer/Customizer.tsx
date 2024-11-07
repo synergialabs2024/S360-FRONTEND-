@@ -11,20 +11,8 @@ import {
   Tooltip,
   Stack,
 } from '@mui/material';
-import { useSelector, useDispatch } from '@/store/Store';
 import Box, { BoxProps } from '@mui/material/Box';
 import { IconX, IconSettings, IconCheck } from '@tabler/icons-react';
-import {
-  setTheme,
-  setDir,
-  setDarkMode,
-  toggleLayout,
-  toggleSidebar,
-  toggleHorizontal,
-  setBorderRadius,
-  setCardShadow,
-} from '@/store/customizer/CustomizerSlice';
-import { AppState } from '@/store/Store';
 import Scrollbar from '@/components/custom-scroll/Scrollbar';
 import WbSunnyTwoToneIcon from '@mui/icons-material/WbSunnyTwoTone';
 import DarkModeTwoToneIcon from '@mui/icons-material/DarkModeTwoTone';
@@ -39,6 +27,7 @@ import {
   PaddingTwoTone,
   BorderOuter,
 } from '@mui/icons-material';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const SidebarWidth = '320px';
 interface colors {
@@ -48,9 +37,8 @@ interface colors {
 }
 const Customizer: FC = () => {
   const [showDrawer, setShowDrawer] = useState(false);
-  const customizer = useSelector((state: AppState) => state.customizer);
-
-  const dispatch = useDispatch();
+  const customizer = useUiStore(state => state.state);
+  const customizerFunctions = useUiStore(state => state);
 
   const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
     boxShadow: theme.shadows[8],
@@ -149,7 +137,7 @@ const Customizer: FC = () => {
             </Typography>
             <Stack direction={'row'} gap={2} my={2}>
               <StyledBox
-                onClick={() => dispatch(setDarkMode('light'))}
+                onClick={() => customizerFunctions.setDarkMode('light')}
                 display="flex"
                 gap={1}
               >
@@ -161,7 +149,7 @@ const Customizer: FC = () => {
                 Light
               </StyledBox>
               <StyledBox
-                onClick={() => dispatch(setDarkMode('dark'))}
+                onClick={() => customizerFunctions.setDarkMode('dark')}
                 display="flex"
                 gap={1}
               >
@@ -183,7 +171,7 @@ const Customizer: FC = () => {
             </Typography>
             <Stack direction={'row'} gap={2} my={2}>
               <StyledBox
-                onClick={() => dispatch(setDir('ltr'))}
+                onClick={() => customizerFunctions.setDir('ltr')}
                 display="flex"
                 gap={1}
               >
@@ -193,7 +181,7 @@ const Customizer: FC = () => {
                 LTR
               </StyledBox>
               <StyledBox
-                onClick={() => dispatch(setDir('rtl'))}
+                onClick={() => customizerFunctions.setDir('rtl')}
                 display="flex"
                 gap={1}
               >
@@ -214,7 +202,11 @@ const Customizer: FC = () => {
             <Grid container spacing={2}>
               {thColors.map(thcolor => (
                 <Grid item xs={4} key={thcolor.id}>
-                  <StyledBox onClick={() => dispatch(setTheme(thcolor.disp))}>
+                  <StyledBox
+                    onClick={() =>
+                      customizerFunctions.setTheme(thcolor.disp ?? '')
+                    }
+                  >
                     <Tooltip title={`${thcolor.disp}`} placement="top">
                       <Box
                         sx={{
@@ -249,7 +241,7 @@ const Customizer: FC = () => {
             </Typography>
             <Stack direction={'row'} gap={2} my={2}>
               <StyledBox
-                onClick={() => dispatch(toggleHorizontal(false))}
+                onClick={() => customizerFunctions.toggleHorizontal(false)}
                 display="flex"
                 gap={1}
               >
@@ -261,7 +253,7 @@ const Customizer: FC = () => {
                 Vertical
               </StyledBox>
               <StyledBox
-                onClick={() => dispatch(toggleHorizontal(true))}
+                onClick={() => customizerFunctions.toggleHorizontal(true)}
                 display="flex"
                 gap={1}
               >
@@ -282,7 +274,7 @@ const Customizer: FC = () => {
             </Typography>
             <Stack direction={'row'} gap={2} my={2}>
               <StyledBox
-                onClick={() => dispatch(toggleLayout('boxed'))}
+                onClick={() => customizerFunctions.toggleLayout('boxed')}
                 display="flex"
                 gap={1}
               >
@@ -294,7 +286,7 @@ const Customizer: FC = () => {
                 Boxed
               </StyledBox>
               <StyledBox
-                onClick={() => dispatch(toggleLayout('full'))}
+                onClick={() => customizerFunctions.toggleLayout('full')}
                 display="flex"
                 gap={1}
               >
@@ -321,7 +313,7 @@ const Customizer: FC = () => {
                 </Typography>
                 <Stack direction={'row'} gap={2} my={2}>
                   <StyledBox
-                    onClick={() => dispatch(toggleSidebar())}
+                    onClick={() => customizerFunctions.toggleSidebar(false)}
                     display="flex"
                     gap={1}
                   >
@@ -331,7 +323,7 @@ const Customizer: FC = () => {
                     Full
                   </StyledBox>
                   <StyledBox
-                    onClick={() => dispatch(toggleSidebar())}
+                    onClick={() => customizerFunctions.toggleSidebar(true)}
                     display="flex"
                     gap={1}
                   >
@@ -349,7 +341,7 @@ const Customizer: FC = () => {
             </Typography>
             <Stack direction={'row'} gap={2} my={2}>
               <StyledBox
-                onClick={() => dispatch(setCardShadow(false))}
+                onClick={() => customizerFunctions.setCardShadow(false)}
                 display="flex"
                 gap={1}
               >
@@ -359,7 +351,7 @@ const Customizer: FC = () => {
                 Border
               </StyledBox>
               <StyledBox
-                onClick={() => dispatch(setCardShadow(true))}
+                onClick={() => customizerFunctions.setCardShadow(true)}
                 display="flex"
                 gap={1}
               >
@@ -384,7 +376,7 @@ const Customizer: FC = () => {
               min={4}
               max={24}
               onChange={(event: any) =>
-                dispatch(setBorderRadius(event.target.value))
+                customizerFunctions.setBorderRadius(event.target.value)
               }
               valueLabelDisplay="auto"
             />

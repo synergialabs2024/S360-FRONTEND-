@@ -4,16 +4,15 @@ import React from 'react';
 import Menudata from '../Menudata';
 import { useLocation } from 'react-router';
 import { Box, List, Theme, useMediaQuery } from '@mui/material';
-import { useSelector } from '@/store/Store';
 import NavItem from '../NavItem/NavItem';
 import NavCollapse from '../NavCollapse/NavCollapse';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const NavListing = () => {
   const { pathname } = useLocation();
   const pathDirect = pathname;
   const pathWithoutLastPart = pathname.slice(0, pathname.lastIndexOf('/'));
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const hideMenu = lgUp
     ? customizer.isCollapse && !customizer.isSidebarHover

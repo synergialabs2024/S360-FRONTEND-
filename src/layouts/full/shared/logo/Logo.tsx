@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useSelector } from '@/store/Store';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -14,10 +13,10 @@ import { ReactComponent as LogoLight } from '@/assets/images/logos/light-logo.sv
 // @ts-ignore
 import { ReactComponent as LogoLightRTL } from '@/assets/images/logos/light-logo-rtl.svg';
 import { styled } from '@mui/material';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const Logo: FC = () => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const LinkStyled = styled(Link)(() => ({
     height: customizer.TopbarHeight,
     width: customizer.isCollapse ? '40px' : '180px',

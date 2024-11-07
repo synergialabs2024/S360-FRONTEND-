@@ -3,19 +3,16 @@ import {
   IconButton,
   Dialog,
   DialogContent,
-  Stack,
-  Divider,
   Box,
   List,
   Typography,
-  TextField,
   useMediaQuery,
 } from '@mui/material';
-import { IconSearch, IconX } from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
 import { useNestedMenu } from '../sidebar/useNestedMenuItems';
 import { CustomSearch } from '@/shared/components';
-import { AppState, useSelector } from '@/store/Store';
 import NavGroup from '../sidebar/components/NavGroup';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const normalizeText = (text: string) => {
   return text
@@ -27,14 +24,9 @@ const normalizeText = (text: string) => {
 const Search = () => {
   // drawer top
   const [showDrawer2, setShowDrawer2] = useState(false);
-  const [search, setSerach] = useState('');
-
-  const handleDrawerClose2 = () => {
-    setShowDrawer2(false);
-  };
 
   const { menuItems } = useNestedMenu();
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
   const hideMenu: any = lgUp
     ? customizer.isCollapse && !customizer.isSidebarHover

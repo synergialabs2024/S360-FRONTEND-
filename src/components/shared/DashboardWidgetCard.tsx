@@ -3,9 +3,8 @@
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
-import { useSelector } from '@/store/Store';
-import { AppState } from '@/store/Store';
 import { IconGridDots } from '@tabler/icons-react';
+import { useUiStore } from '@/store/ui/ui.store';
 
 type Props = {
   title: string;
@@ -26,7 +25,7 @@ const DashboardWidgetCard = ({
   dataLabel2,
   dataItem2,
 }: Props) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
 
   const theme = useTheme();
   const borderColor = theme.palette.grey[100];

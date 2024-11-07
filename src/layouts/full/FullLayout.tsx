@@ -1,5 +1,4 @@
 import { useParametrosSistemaStore } from '@/store/app';
-import { AppState, useSelector } from '@/store/Store';
 import { Box, Container, styled, useTheme } from '@mui/material';
 import { FC, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -8,6 +7,7 @@ import Navigation from '../full/horizontal/navbar/Navigation';
 import Customizer from './shared/customizer/Customizer';
 import Header from './vertical/header/Header';
 import Sidebar from './vertical/sidebar/Sidebar';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -26,7 +26,7 @@ const PageWrapper = styled('div')(() => ({
 }));
 
 const FullLayout: FC = () => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
 
   const theme = useTheme();
 

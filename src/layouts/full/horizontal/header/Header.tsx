@@ -12,23 +12,21 @@ import {
   Theme,
 } from '@mui/material';
 
-import { useSelector, useDispatch } from '@/store/Store';
-import { toggleMobileSidebar } from '@/store/customizer/CustomizerSlice';
 import { IconMenu2 } from '@tabler/icons-react';
 import Notifications from '@/layouts/full/vertical/header/Notification';
 import Profile from '@/layouts/full/vertical/header/Profile';
 import Search from '@/layouts/full/vertical/header/Search';
 import Navigation from '@/layouts/full/vertical/header/Navigation';
 import Logo from '@/layouts/full/shared/logo/Logo';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const Header = () => {
   const lgDown = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
   // drawer
-  const customizer = useSelector((state: AppState) => state.customizer);
-  const dispatch = useDispatch();
+  const customizer = useUiStore(state => state.state);
+  const customizerFunctions = useUiStore(state => state);
 
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     background: theme.palette.background.paper,
@@ -62,7 +60,7 @@ const Header = () => {
           <IconButton
             color="inherit"
             aria-label="menu"
-            onClick={() => dispatch(toggleMobileSidebar())}
+            onClick={() => customizerFunctions.toggleMobileSidebar}
           >
             <IconMenu2 />
           </IconButton>
@@ -80,7 +78,6 @@ const Header = () => {
         ) : null}
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-
           {/* ------------------------------------------- */}
           {/* End Ecommerce Dropdown */}
           {/* ------------------------------------------- */}

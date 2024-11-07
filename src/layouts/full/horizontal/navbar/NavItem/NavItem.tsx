@@ -12,8 +12,7 @@ import {
   ListItemText,
   useTheme,
 } from '@mui/material';
-import { useSelector } from '@/store/Store';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui/ui.store';
 
 type NavGroup = {
   [x: string]: any;
@@ -40,7 +39,7 @@ interface ItemType {
 }
 
 const NavItem = ({ item, level, pathDirect, onClick }: ItemType) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const Icon = item.icon;
   const theme = useTheme();
   const itemIcon =
