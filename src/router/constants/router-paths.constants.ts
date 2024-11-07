@@ -186,6 +186,7 @@ export const ROUTER_PATHS = {
     planesinternetNav: '/servicios/planesinternet',
   },
 
+  /////* Cliente ----------------
   clientes: {
     root: 'clientes',
 
@@ -193,6 +194,12 @@ export const ROUTER_PATHS = {
     servicios: 'servicios',
     serviciosEditar: 'servicios/editar/:uuid',
     serviciosNav: '/clientes/servicios',
+
+    ///* clientes
+    clientesFibra: 'clientes',
+    clientesFibraCrear: 'clientes/crear',
+    clientesFibraEditar: 'clientes/editar/:uuid',
+    clientesFibraNav: '/clientes/clientes',
   },
 
   /////* Cobranza ----------------
