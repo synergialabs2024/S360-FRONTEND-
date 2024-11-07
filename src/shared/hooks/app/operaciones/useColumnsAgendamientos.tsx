@@ -1,13 +1,21 @@
-import type { MRT_ColumnDef } from 'material-react-table';
+import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { TABLE_CONSTANTS } from '@/shared/constants';
-import { Agendamiento } from '@/shared/interfaces';
+import {
+  SalesStatesActionsEnumChoice,
+  TABLE_CONSTANTS,
+} from '@/shared/constants';
+import {
+  Agendamiento,
+  SolicitudRecoordinacionAgenda,
+} from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+
+type MRTSServiceType = { row: MRT_Row<SolicitudRecoordinacionAgenda> };
 
 export const useColumnsAgendamientos = () => {
   const agendaBase01 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
@@ -236,7 +244,135 @@ export const useColumnsAgendamientos = () => {
     [],
   );
 
+  const agendaEsperaRecooordinacion = useMemo<
+    MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]
+  >(
+    () => [
+      {
+        accessorKey: 'identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const solService =
+            row.original.agendamiento_data?.solicitud_servicio_data;
+          return solService?.identificacion || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'razon_social',
+        header: 'NOMBRE CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          const solService =
+            row.original.agendamiento_data?.solicitud_servicio_data;
+          return solService?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'vendedor__razon_social',
+        header: 'SOLICITADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
+      },
+
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA SOLICITUD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+
+      {
+        accessorKey: 'modified_at',
+        header: 'MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [],
+  );
+
+  const agendaRecoordinados = useMemo<
+    MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]
+  >(
+    () => [
+      {
+        accessorKey: 'solicitud_servicio__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
+      },
+      {
+        accessorKey: 'solicitud_servicio__razon_social',
+        header: 'NOMBRE CLIENTE',
+        size: 312,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'vendedor',
+        header: 'SOLICITADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
+      },
+
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA SOLICITUD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+
+      // {
+      //   accessorKey: 'usuario_atiende__razon_social',
+      //   header: 'RECHAZADO POR',
+      //   size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+      //   Cell: ({ row }) =>
+      //     emptyCellNested(row, ['usuario_atiende_data', 'razon_social']),
+      // },
+      {
+        accessorKey: 'usuario_atiende__razon_social',
+        header: 'APROBADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.AGENDAMIENTO__RECOORDINADO_APROBADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_atiende',
+        header: 'APROBADO EN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_atiende'),
+      },
+    ],
+    [],
+  );
+
   return {
     agendaEspera,
+    agendaEsperaRecooordinacion,
+    agendaRecoordinados,
   };
 };

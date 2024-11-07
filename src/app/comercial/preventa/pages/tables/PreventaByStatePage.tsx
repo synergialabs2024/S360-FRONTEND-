@@ -50,7 +50,13 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
   });
 
   ///* columns
-  const { preventaBaseColumns } = useColumnsPreventa();
+  const {
+    preventaBaseColumns,
+    preventaRealizadas,
+    preventaRechazadas,
+    preventaFallidas,
+    preventaSinGestion,
+  } = useColumnsPreventa();
 
   return (
     <GridTableTabsContainerOnly>
@@ -64,7 +70,17 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
       />
 
       <CustomTable<Preventa>
-        columns={preventaBaseColumns}
+        columns={
+          state === EstadoPreventaEnumChoice.REALIZADO
+            ? preventaRealizadas
+            : state === EstadoPreventaEnumChoice.RECHAZADO
+              ? preventaRechazadas
+              : state === EstadoPreventaEnumChoice.FALLIDO
+                ? preventaFallidas
+                : state === EstadoPreventaEnumChoice.SIN_GESTION
+                  ? preventaSinGestion
+                  : preventaBaseColumns
+        }
         data={preventasPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

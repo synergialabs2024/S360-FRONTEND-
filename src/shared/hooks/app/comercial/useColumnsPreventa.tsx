@@ -1,11 +1,16 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { TABLE_CONSTANTS, UserRolesEnumChoice } from '@/shared/constants';
+import {
+  SalesStatesActionsEnumChoice,
+  TABLE_CONSTANTS,
+  UserRolesEnumChoice,
+} from '@/shared/constants';
 import { Preventa } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
+  formatDateWithTime,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { useAuthStore } from '@/store/auth';
@@ -267,5 +272,169 @@ export const useColumnsPreventa = () => {
     [],
   );
 
-  return { preventaBaseColumns };
+  const preventaRealizadas = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [
+      ...preventaBaseColumns,
+      {
+        accessorKey: 'razon_social__finaliza_preventa',
+        header: 'REALIZADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__REALIZADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_finalizado',
+        header: 'FECHA FINALIZADO',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__REALIZADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
+      },
+    ],
+    [],
+  );
+
+  const preventaRechazadas = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [
+      ...preventaBaseColumns,
+      {
+        accessorKey: 'razon_social__rechazada_preventa',
+        header: 'RECHAZADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__RECHAZADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_rechazado',
+        header: 'FECHA RECHAZADO',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__RECHAZADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
+      },
+    ],
+    [],
+  );
+
+  const preventaFallidas = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [
+      ...preventaBaseColumns,
+      {
+        accessorKey: 'razon_social__cancela_preventa',
+        header: 'CANCELADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__CANCELADO,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'fecha_cancelado',
+        header: 'FECHA CANCELADO',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__CANCELADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
+      },
+    ],
+    [],
+  );
+  const preventaSinGestion = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [
+      ...preventaBaseColumns,
+      {
+        accessorKey: 'vendedor_solicita_desbloqueo',
+        header: 'SOICITO DESBLOQUEO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__SIN_GESTION,
+          );
+          const message =
+            `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
+              trazabilidad?.timestamp,
+            )}` || 'N/A';
+
+          return message;
+        },
+      },
+      {
+        accessorKey: 'admin_aprueba_desbloqueo',
+        header: 'APRUEBA DESBLOQUEO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        Cell: ({ row }: MRTSServiceType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.PREVENTA__SIN_GESTION,
+          );
+          const message =
+            `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
+              trazabilidad?.timestamp,
+            )}` || 'N/A';
+
+          return message;
+        },
+      },
+    ],
+    [],
+  );
+
+  return {
+    preventaBaseColumns,
+    preventaRealizadas,
+    preventaRechazadas,
+    preventaFallidas,
+    preventaSinGestion,
+  };
 };

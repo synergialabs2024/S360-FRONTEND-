@@ -1,7 +1,11 @@
 import { EstadoAgendamientoEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
-import { Preventa, SolicitudServicio } from '../../comercial';
+import {
+  Preventa,
+  SolicitudServicio,
+  TrazabilidadVentas,
+} from '../../comercial';
 import { Nap } from '../../infraestructura';
 import { FlotaLimitData } from '../../mante-operacion';
 
@@ -57,6 +61,8 @@ export interface Agendamiento {
 
   motivo_actualizacion?: number;
   observacion_actualizacion?: string; // string
+
+  trazabilidad_data?: TrazabilidadVentas[]; // JSON
 
   solicitud_servicio_data?: SolicitudServicio;
   preventa_data?: Preventa;
