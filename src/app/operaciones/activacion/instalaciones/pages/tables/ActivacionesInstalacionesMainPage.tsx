@@ -41,8 +41,6 @@ const ActivacionesInstalacionesMainPage: React.FC<
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
         <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
         <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} />
-
-        <Tab label={'PRE RECHAZADAS'} value={3} {...a11yProps(3)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -62,12 +60,6 @@ const ActivacionesInstalacionesMainPage: React.FC<
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <ActivacionInstalacionOTByState
           activacionState={EstadoActivacionEnumChoice.GESTIONADA}
-        />
-      </CustomTabPanel>
-
-      <CustomTabPanel value={tabValue} index={3} ptGrid="0">
-        <ActivacionInstalacionOTByState
-          activacionState={EstadoActivacionEnumChoice.RECHAZADO}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>
