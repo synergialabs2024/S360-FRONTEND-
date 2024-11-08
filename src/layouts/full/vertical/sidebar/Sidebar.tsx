@@ -67,7 +67,7 @@ const Sidebar = () => {
             {/* ------------------------------------------- */}
             {/* Logo */}
             {/* ------------------------------------------- */}
-            <Box px={3}>
+            <Box px={3} sx={{ display: 'flex', justifyContent: 'center' }}>
               <Logo />
             </Box>
             <Scrollbar sx={{ height: 'calc(100% - 190px)' }}>

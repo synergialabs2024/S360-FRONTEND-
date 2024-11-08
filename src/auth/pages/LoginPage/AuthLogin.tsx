@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form';
 import { loginFormSchema } from '@/shared/utils';
 import { useAuthNoLSStore } from '@/store/auth';
 
-import { AuthSocialButtons, CustomFormLabel } from '@/shared/components';
+import { CustomFormLabel } from '@/shared/components';
 import { loginType } from '@/types/auth/auth';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
@@ -68,10 +68,10 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
 
       {subtext}
 
-      <AuthSocialButtons title="Sign in with" />
+      {/* <AuthSocialButtons title="Sign in with" /> */}
       <Box mt={3}>
         <Divider>
-          <Typography
+          {/* <Typography
             component="span"
             color="textSecondary"
             variant="h6"
@@ -80,7 +80,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
             px={2}
           >
             or sign in with
-          </Typography>
+          </Typography> */}
         </Divider>
       </Box>
       <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
