@@ -8,17 +8,19 @@ export interface AutenticacionClientesPaginatedRes {
 }
 
 export interface AutenticacionCliente {
-  id?: number;
-  uuid?: string;
+  UserID?: string;
+  Username?: string;
 
-  state: boolean;
-  name: string;
+  Interface?: string;
 
-  created_at?: string;
-  modified_at?: string;
+  IPaddress?: string;
+  MAC?: string;
+  Vlan?: string;
+  IPv6address?: string;
+  Accesstype?: string;
 }
 
 export type AutenticacionClienteLimitData = Pick<
   AutenticacionCliente,
-  'uuid' | 'name'
+  'UserID' | 'Username'
 >;

@@ -1,47 +1,51 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { useFetchGestionOnus, useUpdateGestionOnu } from '@/actions/app';
+import { useFetchGestionOnus, useFetchOLTs } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
-  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { GestionOnu, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
+import { GestionOnu, OLT, PermissionsEnum } from '@/shared/interfaces';
+import { emptyCellOneLevel } from '@/shared/utils';
+import { SelectOLTItemsNMS } from '@/app/netconnect/custom';
+import { useForm } from 'react-hook-form';
 
 export const returnUrlGestionOnusPage = ROUTER_PATHS.netconnect.gestionOnusNav;
 
 export type GestionOnusPageProps = {};
 
+interface OLTForm extends OLT {
+  olt: string | number;
+}
+
 const GestionOnusPage: React.FC<GestionOnusPageProps> = () => {
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
 
-  const navigate = useNavigate();
+  // Fetch data
+  const { data: OsLTPagingRes, isLoading: isOLTsLoading } = useFetchOLTs({
+    enabled: true,
+  });
 
+  // Memorizar `oltData` para recalcular solo cuando `OsLTPagingRes` cambie
+  const oltData = useMemo(() => {
+    return OsLTPagingRes?.data?.items || [];
+  }, [OsLTPagingRes]);
+
+  // Form setup
+  const form = useForm<OLTForm>({
+    defaultValues: {
+      olt: '',
+    },
+  });
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
-  ///* mutations
-  const changeState = useUpdateGestionOnu({
-    enableNavigate: false,
-  });
 
   ///* table
   const {
@@ -69,107 +73,76 @@ const GestionOnusPage: React.FC<GestionOnusPageProps> = () => {
     },
   });
 
-  ///* handlers
-  const onEdit = (gestionOnu: GestionOnu) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar gestion de ONUs',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlGestionOnusPage}/editar/${gestionOnu.uuid}`);
-      },
-    });
-  };
-
   ///* columns
   const columns = useMemo<MRT_ColumnDef<GestionOnu>[]>(
     () => [
       {
-        accessorKey: 'name',
+        accessorKey: 'nombre',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
-      },
-      {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableSorting: false,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => {
-          return typeof row.original?.state === 'boolean' ? (
-            <CustomSwitch
-              title="state"
-              checked={row.original?.state}
-              onChangeChecked={() => {
-                ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar state',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el state de este registro?',
-                  onConfirm: () => {
-                    changeState.mutate({
-                      id: row.original.id!,
-                      data: {
-                        state: !row.original.state,
-                      },
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
-            />
-          ) : (
-            'N/A'
-          );
-        },
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
         size: 180,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
       {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
+        accessorKey: 'alias',
+        header: 'ALIAS',
         size: 180,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'alias'),
+      },
+      {
+        accessorKey: 'sn_mac',
+        header: 'SN/MAC',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'sn_mac'),
+      },
+      {
+        accessorKey: 'estado_onu',
+        header: 'ESTADO ONU',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_onu'),
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [],
   );
 
   return (
     <SingleTableBoxScene
       title="Gestion de ONUs"
-      createPageUrl={`${returnUrlGestionOnusPage}/crear`}
-      ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      showCreateBtn={false}
+      isMainTableStates
     >
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
+        sxContainer={{
+          mb: 5,
+        }}
+        customSpaceNode={
+          // Asegúrate de pasar 'oltData' como 'data'
+          <SelectOLTItemsNMS
+            data={oltData}
+            label="Seleccione OLT"
+            name="olt"
+            control={form.control}
+            onChange={selectedValue => {
+              console.log(selectedValue);
+            }}
+          />
+        }
       />
 
       <CustomTable<GestionOnu>
         columns={columns}
         data={GestionOnusPagingRes?.data?.items || []}
-        isLoading={isLoading}
+        isLoading={isLoading || isOLTsLoading}
         isRefetching={isRefetching}
         // // filters - server side
         enableManualFiltering={true}
@@ -181,13 +154,7 @@ const GestionOnusPage: React.FC<GestionOnusPageProps> = () => {
         pagination={pagination}
         onPaging={setPagination}
         rowCount={GestionOnusPagingRes?.data?.meta?.count}
-        // // actions
-        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        // crud
-        ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
-        onEdit={onEdit}
-        canDelete={false}
+        enableActionsColumn={false}
       />
     </SingleTableBoxScene>
   );

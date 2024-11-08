@@ -1,3 +1,4 @@
+export * from './auditoria-consumo';
 export * from './autorizacion-onus';
 export * from './gestion-onus';
 export * from './onus-configurada';

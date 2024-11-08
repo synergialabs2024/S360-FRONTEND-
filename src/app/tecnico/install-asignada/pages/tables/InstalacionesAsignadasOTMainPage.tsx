@@ -49,7 +49,7 @@ const InstalacionesAsignadasOTMainPage: React.FC<
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <InstalacionAsignadaOTByState
-          state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
+          state={EstadoOrdenTrabajoEnumChoice.EN_PROCESO}
           isRecoordinada
         />
       </CustomTabPanel>

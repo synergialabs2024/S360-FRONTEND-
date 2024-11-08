@@ -766,22 +766,6 @@ const AutenticacionClientePage = Loadable(
       ),
   ),
 );
-const CreateAutenticacionClientePage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/autenticacion-cliente/pages/forms/CreateAutenticacionClientePage'
-      ),
-  ),
-);
-const UpdateAutenticacionClientePage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/administracion-red/autenticacion-cliente/pages/forms/UpdateAutenticacionClientePage'
-      ),
-  ),
-);
 ///* Cliente ------------
 //Servicio
 const ServiciosPage = Loadable(
@@ -890,25 +874,22 @@ const AutorizacionOnusPage = Loadable(
       ),
   ),
 );
-
+//Gestion de ONUs
 const GestionOnusPage = Loadable(
   lazy(
     () => import('@/app/netconnect/gestion-onus/pages/tables/GestionOnusPage'),
   ),
 );
-const CreateGestionOnusPage = Loadable(
+//Gestion de ONUs
+const AuditoriaConsumosPage = Loadable(
   lazy(
     () =>
-      import('@/app/netconnect/gestion-onus/pages/forms/CreateGestionOnusPage'),
+      import(
+        '@/app/netconnect/auditoria-consumo/pages/tables/AuditoriaConsumosPage'
+      ),
   ),
 );
-const UpdateGestionOnusPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/netconnect/gestion-onus/pages/forms/UpdateGestionOnusPage'),
-  ),
-);
-
+//Modelo ONT
 const ONTModelsPage = Loadable(
   lazy(() => import('@/app/netconnect/ont-model/pages/tables/ONTModelsPage')),
 );
@@ -938,22 +919,6 @@ const OnusConfiguradasPage = Loadable(
     () =>
       import(
         '@/app/netconnect/onus-configurada/pages/tables/OnusConfiguradasPage'
-      ),
-  ),
-);
-const CreateOnusConfiguradaPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/netconnect/onus-configurada/pages/forms/CreateOnusConfiguradaPage'
-      ),
-  ),
-);
-const UpdateOnusConfiguradaPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/netconnect/onus-configurada/pages/forms/UpdateOnusConfiguradaPage'
       ),
   ),
 );
@@ -1792,14 +1757,6 @@ const AppRouter = [
             path: ROUTER_PATHS.administracionRed.autenticacionClientes,
             element: <AutenticacionClientePage />,
           },
-          {
-            path: ROUTER_PATHS.administracionRed.autenticacionClientesCrear,
-            element: <CreateAutenticacionClientePage />,
-          },
-          {
-            path: ROUTER_PATHS.administracionRed.autenticacionClientesEditar,
-            element: <UpdateAutenticacionClientePage />,
-          },
           ///* Grupo IPv4
           {
             path: ROUTER_PATHS.administracionRed.gruposIPv4,
@@ -1845,14 +1802,13 @@ const AppRouter = [
             path: ROUTER_PATHS.netconnect.gestionOnus,
             element: <GestionOnusPage />,
           },
+
+          ///* Auditoria de Consumo
           {
-            path: ROUTER_PATHS.netconnect.gestionOnusCrear,
-            element: <CreateGestionOnusPage />,
+            path: ROUTER_PATHS.netconnect.auditoriaConsumosNav,
+            element: <AuditoriaConsumosPage />,
           },
-          {
-            path: ROUTER_PATHS.netconnect.gestionOnusEditar,
-            element: <UpdateGestionOnusPage />,
-          },
+
           ///* Vlan
           {
             path: ROUTER_PATHS.netconnect.vlans,
@@ -1870,14 +1826,6 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.netconnect.onusConfiguradas,
             element: <OnusConfiguradasPage />,
-          },
-          {
-            path: ROUTER_PATHS.netconnect.onusConfiguradasCrear,
-            element: <CreateOnusConfiguradaPage />,
-          },
-          {
-            path: ROUTER_PATHS.netconnect.onusConfiguradasEditar,
-            element: <UpdateOnusConfiguradaPage />,
           },
           ///* ONT Module
           {

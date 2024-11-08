@@ -8,16 +8,10 @@ export interface BrasPaginatedRes {
 }
 
 export interface Bras {
-  UserID?: string;
-  Username?: string;
+  id?: string;
+  uuid?: string;
 
-  Interface?: string;
-
-  IPaddress?: string;
-  MAC?: string;
-  Vlan?: string;
-  IPv6address?: string;
-  Accesstype?: string;
+  name?: string;
 }
 
-export type BrasLimitData = Pick<Bras, 'UserID' | 'Username'>;
+export type BrasLimitData = Pick<Bras, 'id' | 'uuid'>;

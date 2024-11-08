@@ -3,14 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 
-export enum BrasTSQEnum {
-  BRAS = 'bras',
-  BRA = 'bra',
+export enum AuditoriaConsumosONUTSQEnum {
+  AUDITORIACONSUMOS = 'auditoria-consumos',
+  AUDITORIACONSUMO = 'auditoria-consumo',
 }
 
 const API_DATA = '';
 
-export const fetchCombinedDataBrass = async (params?: any) => {
+export const fetchCombinedDataAuditoriaConsumo = async (params?: any) => {
   try {
     const response = await axios.get(API_DATA, { params });
     return response.data;
@@ -21,7 +21,7 @@ export const fetchCombinedDataBrass = async (params?: any) => {
 };
 
 ///* tanStack query ---------------
-export const useFetchBrass = ({
+export const useFetchAuditoriaConsumos = ({
   enabled = true,
   params,
 }: {
@@ -29,8 +29,11 @@ export const useFetchBrass = ({
   params?: any;
 }) => {
   return useQuery({
-    queryKey: [BrasTSQEnum.BRAS, ...Object.values(params || {})],
-    queryFn: () => fetchCombinedDataBrass(params),
+    queryKey: [
+      AuditoriaConsumosONUTSQEnum.AUDITORIACONSUMOS,
+      ...Object.values(params || {}),
+    ],
+    queryFn: () => fetchCombinedDataAuditoriaConsumo(params),
     enabled: enabled,
   });
 };

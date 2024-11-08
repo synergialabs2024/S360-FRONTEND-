@@ -34,7 +34,7 @@ const ConfigOLT: React.FC<ConfigOLTProps> = ({ title, olt }) => {
   useEffect(() => {
     if (!olt?.id) return;
     reset(olt);
-  }, [olt]);
+  }, [olt, reset]);
 
   return (
     <SingleFormBoxSceneOLT

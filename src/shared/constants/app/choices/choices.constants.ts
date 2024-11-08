@@ -695,3 +695,17 @@ export const ONT_MODEL_ETHERNET_WIFI_VOID_ARRAY_CHOICES = [
   ONTModel_Ethernet_Wifi_Void_EnumChoice.NUEVE,
   ONTModel_Ethernet_Wifi_Void_EnumChoice.DIEZ,
 ];
+
+// // // AUDITORIA SERVICIO ==============================================
+export enum EstadoAuditoriaServicioEnumChoice {
+  CLIENTE_1 = 'CLIENTE_1',
+  CLIENTE_2 = 'CLIENTE_2',
+  CLIENTE_3 = 'CLIENTE_3',
+  CLIENTE_4 = 'CLIENTE_4',
+}
+export const ESTADO_AUDITORIA_SERVICIO_ARRAY_CHOICES = [
+  EstadoAuditoriaServicioEnumChoice.CLIENTE_1,
+  EstadoAuditoriaServicioEnumChoice.CLIENTE_2,
+  EstadoAuditoriaServicioEnumChoice.CLIENTE_3,
+  EstadoAuditoriaServicioEnumChoice.CLIENTE_4,
+];

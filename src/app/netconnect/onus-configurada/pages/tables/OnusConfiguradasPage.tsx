@@ -1,52 +1,55 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import {
-  useFetchOnusConfiguradas,
-  useUpdateOnusConfigurada,
-} from '@/actions/app';
+import { useFetchOLTs, useFetchOnusConfiguradas } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
-  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
+import { OLT, PermissionsEnum } from '@/shared/interfaces';
+import { emptyCellOneLevel } from '@/shared/utils';
 import { OnusConfigurada } from '@/shared/interfaces/app/netconnect';
+import { SelectOLTItemsNMS } from '@/app/netconnect/custom';
+import { useForm } from 'react-hook-form';
 
 export const returnUrlOnusConfiguradasPage =
   ROUTER_PATHS.netconnect.onusConfiguradasNav;
 
 export type OnusConfiguradasPageProps = {};
 
+interface OLTForm extends OLT {
+  olt: string | number;
+}
+
 const OnusConfiguradasPage: React.FC<OnusConfiguradasPageProps> = () => {
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
 
-  const navigate = useNavigate();
+  // Fetch data
+  const { data: OsLTPagingRes, isLoading: isOLTsLoading } = useFetchOLTs({
+    enabled: true,
+  });
 
-  // server side filters - colums table
+  // Memorizar `oltData` para recalcular solo cuando `OsLTPagingRes` cambie
+  const oltData = useMemo(() => {
+    return OsLTPagingRes?.data?.items || [];
+  }, [OsLTPagingRes]);
+
+  // Form setup
+  const form = useForm<OLTForm>({
+    defaultValues: {
+      olt: '',
+    },
+  });
+
+  // server side filters - columns table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
-  ///* mutations
-  const changeState = useUpdateOnusConfigurada({
-    enableNavigate: false,
-  });
 
   ///* table
   const {
@@ -74,109 +77,164 @@ const OnusConfiguradasPage: React.FC<OnusConfiguradasPageProps> = () => {
     },
   });
 
-  ///* handlers
-  const onEdit = (onusConfigurada: OnusConfigurada) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Registro de ONUS Configurada',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(
-          `${returnUrlOnusConfiguradasPage}/editar/${onusConfigurada.uuid}`,
-        );
-      },
-    });
-  };
-
   ///* columns
   const columns = useMemo<MRT_ColumnDef<OnusConfigurada>[]>(
     () => [
       {
-        accessorKey: 'name',
-        header: 'NOMBRE',
+        accessorKey: 'estado_cliente',
+        header: 'ESTADO CLIENTE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_cliente'),
       },
       {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableSorting: false,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => {
-          return typeof row.original?.state === 'boolean' ? (
-            <CustomSwitch
-              title="state"
-              checked={row.original?.state}
-              onChangeChecked={() => {
-                ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar state',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el state de este registro?',
-                  onConfirm: () => {
-                    changeState.mutate({
-                      id: row.original.id!,
-                      data: {
-                        state: !row.original.state,
-                      },
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
-            />
-          ) : (
-            'N/A'
-          );
-        },
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
+        accessorKey: 'nombre',
+        header: 'NOMBRE',
         size: 180,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
       {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
+        accessorKey: 'alias',
+        header: 'ALIAS',
         size: 180,
         enableColumnFilter: false,
         enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'alias'),
+      },
+      {
+        accessorKey: 'sn_mac',
+        header: 'SN/MAC',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'sn_mac'),
+      },
+      {
+        accessorKey: 'potencia',
+        header: 'POTENCIA',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'potencia'),
+      },
+      {
+        accessorKey: 'estado_onu',
+        header: 'ESTADO ONU',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_onu'),
+      },
+      {
+        accessorKey: 'last_down_cause',
+        header: 'LAST DOWN CAUSE',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'last_down_cause'),
+      },
+      {
+        accessorKey: 'pppuser',
+        header: 'PPPUSER',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'pppuser'),
+      },
+      {
+        accessorKey: 'pppass',
+        header: 'PPPASS',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'pppass'),
+      },
+      {
+        accessorKey: 'plan',
+        header: 'PLAN',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'plan'),
+      },
+      {
+        accessorKey: 'ip',
+        header: 'IP',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ip'),
+      },
+      {
+        accessorKey: 'nodo',
+        header: 'NODO',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nodo'),
+      },
+      {
+        accessorKey: 'modelo',
+        header: 'MODELO',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'modelo'),
+      },
+      {
+        accessorKey: 'srv_port',
+        header: 'SRV PORT',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'srv_port'),
+      },
+      {
+        accessorKey: 'vlan',
+        header: 'VLAN',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'vlan'),
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [],
   );
 
   return (
     <SingleTableBoxScene
       title="Registro de Onus Configurada"
-      createPageUrl={`${returnUrlOnusConfiguradasPage}/crear`}
-      ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      showCreateBtn={false}
+      isMainTableStates
     >
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
+        sxContainer={{
+          mb: 5,
+        }}
+        customSpaceNode={
+          // Asegúrate de pasar 'oltData' como 'data'
+          <SelectOLTItemsNMS
+            data={oltData}
+            label="Seleccione OLT"
+            name="olt"
+            control={form.control}
+            onChange={selectedValue => {
+              console.log(selectedValue);
+            }}
+          />
+        }
       />
 
       <CustomTable<OnusConfigurada>
         columns={columns}
         data={OnusConfiguradasPagingRes?.data?.items || []}
-        isLoading={isLoading}
+        isLoading={isLoading || isOLTsLoading}
         isRefetching={isRefetching}
         // // filters - server side
         enableManualFiltering={true}
@@ -188,13 +246,7 @@ const OnusConfiguradasPage: React.FC<OnusConfiguradasPageProps> = () => {
         pagination={pagination}
         onPaging={setPagination}
         rowCount={OnusConfiguradasPagingRes?.data?.meta?.count}
-        // // actions
-        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        // crud
-        ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
-        onEdit={onEdit}
-        canDelete={false}
+        enableActionsColumn={false}
       />
     </SingleTableBoxScene>
   );

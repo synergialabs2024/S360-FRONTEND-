@@ -377,8 +377,6 @@ export const ROUTER_PATHS = {
 
     ///* Autenticacion de Clientes
     autenticacionClientes: 'autenticacionClientes',
-    autenticacionClientesCrear: 'autenticacionClientes/crear',
-    autenticacionClientesEditar: 'autenticacionClientes/editar/:uuid',
     autenticacionClientesNav: '/administracion-red/autenticacionClientes',
 
     ///* Trafico
@@ -434,26 +432,22 @@ export const ROUTER_PATHS = {
     root: 'logistica',
 
     ///* tipoinstalaciones
-    tipoinstalaciones: 'tipoinstalaciones',
-    tipoinstalacionesCrear: 'tipoinstalaciones/crear',
-    tipoinstalacionesEditar: 'tipoinstalaciones/editar/:uuid',
-    tipoinstalacionesNav: '/logistica/tipoinstalaciones',
+    tipoinstalaciones: 'tipo-instalaciones',
+    tipoinstalacionesCrear: 'tipo-instalaciones/crear',
+    tipoinstalacionesEditar: 'tipo-instalaciones/editar/:uuid',
+    tipoinstalacionesNav: '/logistica/tipo-instalaciones',
   },
   /////* NetConnect ----------------
   netconnect: {
     root: 'netconnect',
 
     ///* Autorizacion de ONUs
-    autorizacionOnus: 'autorizacionOnus',
-    autorizacionOnusCrear: 'autorizacionOnus/crear',
-    autorizacionOnusEditar: 'autorizacionOnus/editar/:uuid',
-    autorizacionOnusNav: '/netconnect/autorizacionOnus',
+    autorizacionOnus: 'autorizacion-onus',
+    autorizacionOnusNav: '/netconnect/autorizacion-onus',
 
     ///* Gestion de ONUs
-    gestionOnus: 'gestionOnus',
-    gestionOnusCrear: 'gestionOnus/crear',
-    gestionOnusEditar: 'gestionOnus/editar/:uuid',
-    gestionOnusNav: '/netconnect/gestionOnus',
+    gestionOnus: 'gestion-onus',
+    gestionOnusNav: '/netconnect/gestion-onus',
 
     ///* vlans
     vlans: 'vlans',
@@ -462,15 +456,17 @@ export const ROUTER_PATHS = {
     vlansNav: '/netconnect/vlans',
 
     ///* vlans
-    onusConfiguradas: 'onusConfiguradas',
-    onusConfiguradasCrear: 'onusConfiguradas/crear',
-    onusConfiguradasEditar: 'onusConfiguradas/editar/:uuid',
-    onusConfiguradasNav: '/netconnect/onusConfiguradas',
+    onusConfiguradas: 'onus-configuradas',
+    onusConfiguradasNav: '/netconnect/onus-configuradas',
+
+    ///* Auditoria de consumos
+    auditoriaConsumos: 'auditoria-consumos',
+    auditoriaConsumosNav: '/netconnect/auditoria-consumos',
 
     ///* ONT Model
-    ontModels: 'ontModels',
-    ontModelsCrear: 'ontModels/crear',
+    ontModels: 'ont-models',
+    ontModelsCrear: 'ont-models/crear',
     ontModelsEditar: 'ontModels/editar/:uuid',
-    ontModelsNav: '/netconnect/ontModels',
+    ontModelsNav: '/netconnect/ont-models',
   },
 };
