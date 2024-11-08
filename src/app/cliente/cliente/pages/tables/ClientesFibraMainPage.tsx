@@ -1,4 +1,3 @@
-import { Box, Container, Stack, Typography } from '@mui/material';
 import { MdArrowRightAlt } from 'react-icons/md';
 
 import { useFetchClientes } from '@/actions/app';
@@ -11,7 +10,11 @@ import {
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
-import { CustomSearch, CustomTable } from '@/shared/components';
+import {
+  CustomSearch,
+  CustomTable,
+  SingleTableBoxScene,
+} from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { hasPermission } from '@/shared/utils/auth';
 
@@ -64,59 +67,40 @@ const ClientesFibraMainPage: React.FC<ClientesFibraMainPageProps> = () => {
   const { clientesFibraColumnsActivos } = useColumnsClientes();
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Stack spacing={3}>
-          {/* ========= title & create btn ========= */}
-          <Stack direction="row" justifyContent="space-between" spacing={4}>
-            <Stack spacing={1} pb={2}>
-              <Typography variant="h4">Clientes Fibra Óptica</Typography>
-            </Stack>
-          </Stack>
+    <SingleTableBoxScene title="Clientes Fibra Óptica" showCreateBtn={false}>
+      <CustomSearch
+        onChange={onChangeFilter}
+        value={globalFilter}
+        text="por identificación"
+      />
 
-          {/* ========= Search ========= */}
-          <CustomSearch
-            onChange={onChangeFilter}
-            value={globalFilter}
-            text="por identificación del cliente"
-          />
-
-          {/* ========= Search ========= */}
-          <CustomTable<Cliente>
-            columns={clientesFibraColumnsActivos}
-            data={clientesPagingRes?.data?.items || []}
-            isLoading={isLoadingClientes}
-            isRefetching={isRefetchingClientes}
-            // // filters - server side
-            enableManualFiltering={true}
-            columnFilters={columnFilters}
-            onColumnFiltersChange={setColumnFilters}
-            // // search
-            enableGlobalFilter={false}
-            // // pagination
-            pagination={pagination}
-            onPaging={setPagination}
-            rowCount={clientesPagingRes?.data?.meta.count}
-            // // actions
-            actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-            enableActionsColumn={hasPermission(
-              PermissionsEnum.administration_change_pais,
-            )}
-            // crud
-            canEdit={hasPermission(PermissionsEnum.clientes_view_cliente)}
-            onEdit={onEdit}
-            canDelete={false}
-            editIcon={<MdArrowRightAlt />}
-          />
-        </Stack>
-      </Container>
-    </Box>
+      <CustomTable<Cliente>
+        columns={clientesFibraColumnsActivos}
+        data={clientesPagingRes?.data?.items || []}
+        isLoading={isLoadingClientes}
+        isRefetching={isRefetchingClientes}
+        // // filters - server side
+        enableManualFiltering={true}
+        columnFilters={columnFilters}
+        onColumnFiltersChange={setColumnFilters}
+        // // search
+        enableGlobalFilter={false}
+        // // pagination
+        pagination={pagination}
+        onPaging={setPagination}
+        rowCount={clientesPagingRes?.data?.meta.count}
+        // // actions
+        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasPermission(
+          PermissionsEnum.administration_change_pais,
+        )}
+        // crud
+        canEdit={hasPermission(PermissionsEnum.clientes_view_cliente)}
+        onEdit={onEdit}
+        canDelete={false}
+        editIcon={<MdArrowRightAlt />}
+      />
+    </SingleTableBoxScene>
   );
 };
 
