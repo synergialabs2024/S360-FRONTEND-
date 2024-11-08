@@ -5,7 +5,7 @@ import { returnUrlClientesFibraPage } from '@/app/cliente/cliente/pages/tables/C
 import { CustomTableLink } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Cliente } from '@/shared/interfaces';
-import { emptyCellNestedWithArray, emptyCellOneLevel } from '@/shared/utils';
+import { emptyCellOneLevel } from '@/shared/utils';
 
 type MRTClienteType = { row: MRT_Row<Cliente> };
 
@@ -55,7 +55,7 @@ export const useColumnsClientes = () => {
           emptyCellOneLevel(row, 'tipo_identificacion'),
       },
 
-      // first linea_servicio - contrato
+      // first line service: contract, ...
       {
         accessorKey: 'numero_contrato__first_line',
         header: 'NUMERO CONTRATO',
@@ -63,12 +63,9 @@ export const useColumnsClientes = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
-          return emptyCellNestedWithArray(
-            row,
-            ['linea_servicio_data', 'contrato_data', 'numero_contrato'],
-            'h6',
-            0,
-          );
+          const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
+          return firstLine?.contrato_data?.numero_contrato || 'N/A';
         },
       },
     ],

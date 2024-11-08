@@ -1,4 +1,5 @@
 import { Box, Container, Stack, Typography } from '@mui/material';
+import { MdArrowRightAlt } from 'react-icons/md';
 
 import { useFetchClientes } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
@@ -111,6 +112,7 @@ const ClientesFibraMainPage: React.FC<ClientesFibraMainPageProps> = () => {
             canEdit={hasPermission(PermissionsEnum.clientes_view_cliente)}
             onEdit={onEdit}
             canDelete={false}
+            editIcon={<MdArrowRightAlt />}
           />
         </Stack>
       </Container>
