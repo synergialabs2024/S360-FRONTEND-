@@ -807,7 +807,7 @@ export const useNestedMenu = () => {
               id: 'auditoria-consumos',
               title: 'Auditoría de consumos',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.netconnect.auditoriaConsumosNav,
             }),
             renderByModule(SidenavModulesEnum.NETCONNECT_ONT_MODEL, {
               id: 'ont-models',

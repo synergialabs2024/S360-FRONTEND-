@@ -1,4 +1,3 @@
-export * from './autenticacion-cliente';
 export * from './monitoreo';
 export * from './router.schema';
 export * from './ont-model';

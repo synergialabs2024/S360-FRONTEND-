@@ -2,20 +2,20 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { ReactComponent as LogoDark } from '@/assets/images/logos/dark-logo.svg';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { ReactComponent as LogoDarkRTL } from '@/assets/images/logos/dark-rtl-logo.svg';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { ReactComponent as LogoLight } from '@/assets/images/logos/light-logo.svg';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { ReactComponent as LogoLightRTL } from '@/assets/images/logos/light-logo-rtl.svg';
 import { styled } from '@mui/material';
 import { useUiStore } from '@/store/ui/ui.store';
+import { useAuthStore } from '@/store/auth';
 
 const Logo: FC = () => {
+  const logo = useAuthStore(state => state.user?.company_data?.logo_1_url);
   const customizer = useUiStore(state => state.state);
   const LinkStyled = styled(Link)(() => ({
     height: customizer.TopbarHeight,
@@ -33,7 +33,11 @@ const Logo: FC = () => {
           alignItems: 'center',
         }}
       >
-        {customizer.activeMode === 'dark' ? <LogoLight /> : <LogoDark />}
+        <img
+          src={logo}
+          alt=""
+          style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+        />
       </LinkStyled>
     );
   }
@@ -46,7 +50,11 @@ const Logo: FC = () => {
         alignItems: 'center',
       }}
     >
-      {customizer.activeMode === 'dark' ? <LogoDarkRTL /> : <LogoLightRTL />}
+      <img
+        src={logo}
+        alt=""
+        style={{ width: '00%', height: 'auto', objectFit: 'contain' }}
+      />
     </LinkStyled>
   );
 };

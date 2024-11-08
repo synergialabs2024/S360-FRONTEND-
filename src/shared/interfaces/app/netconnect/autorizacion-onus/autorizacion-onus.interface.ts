@@ -8,14 +8,11 @@ export interface autorizacionOnusPaginatedRes {
 }
 
 export interface AutorizacionOnu {
-  id?: number;
-  uuid?: string;
+  serial_number?: string;
 
-  state: boolean;
-  name: string;
-
-  created_at?: string;
-  modified_at?: string;
+  board?: number;
+  port?: number;
+  type?: string;
 }
 
-export type AutorizacionOnusLimitData = Pick<AutorizacionOnu, 'uuid' | 'name'>;
+export type AutorizacionOnusLimitData = Pick<AutorizacionOnu, 'serial_number'>;

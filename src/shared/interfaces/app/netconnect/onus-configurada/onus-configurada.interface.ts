@@ -8,14 +8,25 @@ export interface onusConfiguradasPaginatedRes {
 }
 
 export interface OnusConfigurada {
-  id?: number;
-  uuid?: string;
+  id_cliente?: number;
 
-  state: boolean;
-  name: string;
+  estado_cliente?: string;
+  nombre?: string;
+  alias?: string;
+  sn_mac?: string;
+  potencia?: string;
 
-  created_at?: string;
-  modified_at?: string;
+  estado_onu?: string;
+  last_down_cause?: string;
+  pppuser?: string;
+  pppass?: string;
+  plan?: string;
+  ip?: string;
+  nodo?: number;
+  onu?: string;
+  modelo?: string;
+  srv_port?: number;
+  vlan?: number;
 }
 
-export type OnusConfiguradasLimitData = Pick<OnusConfigurada, 'uuid' | 'name'>;
+export type OnusConfiguradasLimitData = Pick<OnusConfigurada, 'id_cliente'>;

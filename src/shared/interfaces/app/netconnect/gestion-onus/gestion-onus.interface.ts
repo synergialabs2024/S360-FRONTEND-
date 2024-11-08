@@ -8,14 +8,13 @@ export interface GestionOnusPaginatedRes {
 }
 
 export interface GestionOnu {
-  id?: number;
-  uuid?: string;
+  id_cliente?: number;
 
-  state: boolean;
-  name: string;
+  nombre?: string;
+  alias?: string;
+  sn_mac?: string;
 
-  created_at?: string;
-  modified_at?: string;
+  estado_onu?: string;
 }
 
-export type GestionOnuLimitData = Pick<GestionOnu, 'uuid' | 'name'>;
+export type GestionOnuLimitData = Pick<GestionOnu, 'id_cliente'>;
