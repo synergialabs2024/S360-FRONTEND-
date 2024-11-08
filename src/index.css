@@ -21,3 +21,14 @@
   font-size: 1rem !important;
   font-weight: 400 !important;
 }
+
+/* table links */
+.table__link {
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer;
+}
+
+.table__link:hover {
+  text-decoration: underline !important;
+}

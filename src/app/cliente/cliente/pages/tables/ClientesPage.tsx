@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useFetchClientes } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomTable,
@@ -16,8 +15,7 @@ import { Cliente, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-
-export const returnUrlClientesPage = ROUTER_PATHS.clientes.clientesFibraNav;
+import { returnUrlClientesFibraPage } from './ClientesFibraMainPage';
 
 export type ClientesPageProps = {};
 
@@ -70,7 +68,7 @@ const ClientesPage: React.FC<ClientesPageProps> = () => {
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlClientesPage}/editar/${cliente.uuid}`);
+        navigate(`${returnUrlClientesFibraPage}/editar/${cliente.uuid}`);
       },
     });
   };
@@ -228,7 +226,7 @@ const ClientesPage: React.FC<ClientesPageProps> = () => {
   return (
     <SingleTableBoxScene
       title="Cliente"
-      createPageUrl={`${returnUrlClientesPage}/crear`}
+      createPageUrl={`${returnUrlClientesFibraPage}/crear`}
       showCreateBtn={hasPermission(PermissionsEnum.clientes_add_cliente)}
     >
       <CustomSearch

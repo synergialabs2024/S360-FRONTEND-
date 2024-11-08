@@ -64,7 +64,6 @@ const NavCollapse: React.FC<NavCollapseProps> = ({ menu, level, hideMenu }) => {
         }
       });
     }
-    console.log('level', level);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, menu.children]);
 

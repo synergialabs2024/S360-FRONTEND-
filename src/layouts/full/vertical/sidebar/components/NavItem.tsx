@@ -70,7 +70,6 @@ const NavItem = ({ item, level, hideMenu }: NavItemProps): ReactElement => {
         isOpen: [item.id],
       });
     }
-    console.log('level', level);
     // eslint-disable-next-line
   }, [pathname]);
 
