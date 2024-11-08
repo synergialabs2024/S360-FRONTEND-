@@ -24,6 +24,7 @@ export enum HTTPResStatusCodeEnum {
 
   CONFLICTS_OR_ACTIVE_SESSION = 409, // active session
   CLIENTE_EXISTS_IN_DB = 412, // new line
+  CLIENTE_EXISTS_IN_MIKRO = 411, // new line
 
   USER_BLOCKED = 423, // fail login more than 3 times
 
