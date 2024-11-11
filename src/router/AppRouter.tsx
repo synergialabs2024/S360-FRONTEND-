@@ -986,6 +986,9 @@ const ClientesFibraMainPage = Loadable(
     () => import('@/app/cliente/cliente/pages/tables/ClientesFibraMainPage'),
   ),
 );
+const FibraClientFormPage = Loadable(
+  lazy(() => import('@/app/cliente/cliente/pages/forms/FibraClientFormPage')),
+);
 
 const AppRouter = [
   ////* Auth
@@ -1619,6 +1622,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.clientes.clientesFibra,
             element: <ClientesFibraMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.clientes.clientesFibraVer,
+            element: <FibraClientFormPage />,
           },
         ],
       },

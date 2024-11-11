@@ -18,9 +18,10 @@ export const useColumnsClientes = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
           return (
             <CustomTableLink
-              url={`${returnUrlClientesFibraPage}/${row.original?.uuid}`}
+              url={`${returnUrlClientesFibraPage}/${firstLine?.uuid}`}
               text={original?.identificacion}
             />
           );
@@ -32,9 +33,10 @@ export const useColumnsClientes = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
           return (
             <CustomTableLink
-              url={`${returnUrlClientesFibraPage}/${row.original?.uuid}`}
+              url={`${returnUrlClientesFibraPage}/${firstLine?.uuid}`}
               text={original?.razon_social}
             />
           );

@@ -1,1 +1,1 @@
-export * from './SaveCliente';
+export * from './fibra';

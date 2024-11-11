@@ -1,4 +1,5 @@
 import { MdArrowRightAlt } from 'react-icons/md';
+import { useNavigate } from 'react-router';
 
 import { useFetchClientes } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
@@ -27,7 +28,7 @@ const ClientesFibraMainPage: React.FC<ClientesFibraMainPageProps> = () => {
   ///* hooks -----------------
   useCheckPermission(PermissionsEnum.clientes_view_cliente);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -60,7 +61,8 @@ const ClientesFibraMainPage: React.FC<ClientesFibraMainPageProps> = () => {
 
   ///* handlers ---------------------------
   const onEdit = (cliente: Cliente) => {
-    console.log('onEdit', cliente);
+    const firstLine = cliente?.linea_servicio_data?.[0];
+    navigate(`${returnUrlClientesFibraPage}/${firstLine?.uuid}`);
   };
 
   ///* columns ---------------------------
@@ -99,6 +101,8 @@ const ClientesFibraMainPage: React.FC<ClientesFibraMainPageProps> = () => {
         onEdit={onEdit}
         canDelete={false}
         editIcon={<MdArrowRightAlt />}
+        editIconToolTipTitle="Ver detalle"
+        editIconTooltipPlacement="left"
       />
     </SingleTableBoxScene>
   );
