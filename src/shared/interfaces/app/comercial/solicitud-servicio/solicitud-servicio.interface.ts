@@ -95,3 +95,5 @@ export type SolicitudServicioLimitData = Pick<
   | 'identificacion'
   | 'razon_social'
 >;
+
+// export type LineaServicioModel = Omit<SolicitudServicio, 'id'>;

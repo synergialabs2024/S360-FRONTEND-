@@ -1,20 +1,36 @@
-import { Cliente } from '@/shared';
+import { Tab } from '@mui/material';
+
+import { LineaServicio, useTabsOnly } from '@/shared';
+import { a11yProps, FormTabsOnly, TabsFormBoxScene } from '@/shared/components';
+import ClienteFibraTitle from './ClienteFibraTitle';
 
 export type GeneralFibraClientProps = {
-  title: string;
-  cliente?: Cliente;
+  serviceLine?: LineaServicio;
 };
 
 const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
-  title,
-  cliente,
+  serviceLine,
 }) => {
+  ///* hooks ----------------
+  const { tabValue, handleTabChange } = useTabsOnly({
+    initialTabValue: 1,
+  });
+
   return (
-    <>
-      SaveCliente
-      {title}
-      {cliente?.razon_social}
-    </>
+    <TabsFormBoxScene
+      titlePageNode={<ClienteFibraTitle serviceLine={serviceLine!} />}
+      showBtns={false}
+      // tabs -------------
+      tabs={
+        <FormTabsOnly value={tabValue} onChange={handleTabChange}>
+          <Tab label="Datos Generales" value={1} {...a11yProps(1)} />
+
+          <Tab label="Matriz" value={2} {...a11yProps(2)} />
+        </FormTabsOnly>
+      }
+    >
+      ssss
+    </TabsFormBoxScene>
   );
 };
 
