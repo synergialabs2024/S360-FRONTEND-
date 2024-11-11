@@ -75,13 +75,11 @@ const AgendamientoVentasByStatePage: React.FC<
 
       <CustomTable<Agendamiento>
         columns={
-          state === EstadoAgendamientoEnumChoice.ESPERA
-            ? agendaEspera
-            : state === EstadoAgendamientoEnumChoice.ESPERA_RECOORDINACION
-              ? agendaEsperaRecooordinacion
-              : state === EstadoAgendamientoEnumChoice.RECOORDINADO
-                ? agendaRecoordinados
-                : null
+          state === EstadoAgendamientoEnumChoice.ESPERA_RECOORDINACION
+            ? agendaEsperaRecooordinacion
+            : state === EstadoAgendamientoEnumChoice.RECOORDINADO
+              ? agendaRecoordinados
+              : agendaEspera
         }
         data={agendamientosPagingRes?.data?.items || []}
         isLoading={isLoading}

@@ -10,6 +10,7 @@ import {
 } from '@/shared/components';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
 import AgendamientoVentasByStatePage from './AgendamientoVentasByStatePage';
+import AgendasAprobadasVentaPage from './AgendasAprobadasVentaPage';
 
 export const returnUrlAgendamientoVentasPage =
   ROUTER_PATHS.comercial.agendamientosNav;
@@ -44,9 +45,7 @@ const AgendamientoVentasMainPage: React.FC<
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <AgendamientoVentasByStatePage
-          state={EstadoAgendamientoEnumChoice.ESPERA}
-        />
+        <AgendasAprobadasVentaPage />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">

@@ -218,13 +218,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
       },
-    ],
-    [],
-  );
-
-  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
-    () => [
-      ...agendaBase01,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -242,12 +235,63 @@ export const useColumnsAgendamientos = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [agendaBase01],
+    [],
   );
 
-  const agendaEsperaRecooordinacion = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
     () => [...agendaBase01],
-    [agendaBase01],
+    [],
+  );
+
+  const agendaEsperaRecooordinacion = useMemo<
+    MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]
+  >(
+    () => [
+      {
+        accessorKey: 'identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const solService =
+            row.original.agendamiento_data?.solicitud_servicio_data;
+          return solService?.identificacion || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'razon_social',
+        header: 'NOMBRE CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          const solService =
+            row.original.agendamiento_data?.solicitud_servicio_data;
+          return solService?.razon_social || 'N/A';
+        },
+      },
+      {
+        accessorKey: 'vendedor__razon_social',
+        header: 'SOLICITADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA SOLICITUD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+      {
+        accessorKey: 'modified_at',
+        header: 'MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [],
   );
 
   const agendaRecoordinados = useMemo<
