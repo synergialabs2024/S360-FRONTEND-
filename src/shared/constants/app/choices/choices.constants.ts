@@ -709,3 +709,20 @@ export const ESTADO_AUDITORIA_SERVICIO_ARRAY_CHOICES = [
   EstadoAuditoriaServicioEnumChoice.CLIENTE_3,
   EstadoAuditoriaServicioEnumChoice.CLIENTE_4,
 ];
+
+// // // CLIENTE ==============================================
+// Linea de servicio --------------
+export enum LineaServicioEnumChoice {
+  ACTIVO = 'ACTIVO',
+  SUSPENDIDO = 'SUSPENDIDO',
+  RETIRADO = 'RETIRADO',
+  RETENCION = 'RETENCION',
+  NO_INSTALADO = 'NO_INSTALADO', // inicia proceso y aun no instalado
+}
+export const LINEA_SERVICIO_ARRAY_CHOICES = [
+  LineaServicioEnumChoice.ACTIVO,
+  LineaServicioEnumChoice.SUSPENDIDO,
+  LineaServicioEnumChoice.RETIRADO,
+  LineaServicioEnumChoice.RETENCION,
+  LineaServicioEnumChoice.NO_INSTALADO,
+];
