@@ -1,6 +1,4 @@
-import {
-  IconSearch
-} from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
 import {
   Card,
   Grid,
@@ -33,15 +31,16 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
   sxContainer,
 
   customSpaceNode = null,
-  hideMenu
+  hideMenu,
 }) => {
   return (
     <>
       {/* <Card sx={{ p: 2 }}> */}
 
-
-      {
-        hideMenu ? <IconSearch size={16} style={{marginLeft: '12'}}/> : (<Stack spacing={2} direction="row" sx={sxContainer}>
+      {hideMenu ? (
+        <IconSearch size={16} style={{ marginLeft: '12' }} />
+      ) : (
+        <Stack spacing={2} direction="row" sx={sxContainer}>
           <Card
             sx={{
               width: '100%',
@@ -67,9 +66,7 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
               sx={{ maxWidth: 500 }}
               className="custom-search-form__input"
               value={value}
-              onChange={e => {
-                onChange(e.target.value);
-              }}
+              onChange={onChange}
             />
           </Card>
           <span className="spacer"></span>
@@ -78,14 +75,19 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
 
           {customSpaceNode && (
             <>
-              <Grid item container justifyContent="flex-end" alignItems="center">
+              <Grid
+                item
+                container
+                justifyContent="flex-end"
+                alignItems="center"
+              >
                 {customSpaceNode}
               </Grid>
             </>
           )}
           {/* ------ Filter Date ------ */}
-        </Stack>)
-      }
+        </Stack>
+      )}
     </>
   );
 };

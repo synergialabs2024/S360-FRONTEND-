@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Box, List, useMediaQuery, Typography } from '@mui/material';
 
 import { CustomSearch } from '@/shared/components';
@@ -23,40 +23,40 @@ const SidebarItems = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredItems = menuItems
-    .map(item => {
-      if (searchTerm === '') {
-        return item;
-      }
-      if (item.type === 'group' && item.children) {
-        const filteredChildren = item.children
-          .map(child => {
-            if (child.children) {
-              const nestedFiltered = child.children.filter(nestedChild =>
-                normalizeText(nestedChild.title).includes(
-                  normalizeText(searchTerm),
-                ),
-              );
-              if (nestedFiltered.length > 0) {
-                return {
-                  ...child,
-                  children: nestedFiltered,
-                };
+  const filteredItems = useMemo(() => {
+    return menuItems
+      .map(item => {
+        if (searchTerm === '') return item;
+        if (item.type === 'group' && item.children) {
+          const filteredChildren = item.children
+            .map(child => {
+              if (child.children) {
+                const nestedFiltered = child.children.filter(nestedChild =>
+                  normalizeText(nestedChild.title).includes(
+                    normalizeText(searchTerm),
+                  ),
+                );
+                if (nestedFiltered.length > 0) {
+                  return {
+                    ...child,
+                    children: nestedFiltered,
+                  };
+                }
               }
-            }
-            return null;
-          })
-          .filter(child => child !== null);
-        if (filteredChildren.length > 0) {
-          return {
-            ...item,
-            children: filteredChildren,
-          };
+              return null;
+            })
+            .filter(child => child !== null);
+          if (filteredChildren.length > 0) {
+            return {
+              ...item,
+              children: filteredChildren,
+            };
+          }
         }
-      }
-      return null;
-    })
-    .filter(item => item !== null);
+        return null;
+      })
+      .filter(item => item !== null);
+  }, [menuItems, searchTerm]);
 
   const navItems = filteredItems.map(item => {
     if (item && item.type === 'group') {
@@ -69,14 +69,19 @@ const SidebarItems = () => {
     );
   });
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // No necesitas verificar si el valor cambió
+  };
+
   return (
     <Box sx={{ px: 3 }}>
       <CustomSearch
-        onChange={e => setSearchTerm(e)}
+        onChange={handleSearchChange}
         value={searchTerm}
         text="modulos"
         hideMenu={hideMenu}
       />
+
       <List sx={{ pt: 0 }} className="sidebarNav">
         {navItems.length > 0 ? (
           navItems
