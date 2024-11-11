@@ -14,7 +14,9 @@ import {
   gridSizeMdLg1,
   gridSizeMdLg5,
   gridSizeMdLg6,
+  LINEA_SERVICIO_ARRAY_CHOICES,
   LineaServicio,
+  LineaServicioEnumChoice,
 } from '@/shared';
 import { ChipModelState, SingleIconButton } from '@/shared/components';
 
@@ -40,10 +42,6 @@ const StyledMenu = styled((props: MenuProps) => (
     borderRadius: 6,
     marginTop: theme.spacing(1),
     minWidth: 180,
-    color:
-      theme.palette.mode === 'light'
-        ? 'rgb(55, 65, 81)'
-        : theme.palette.grey[300],
     boxShadow:
       'rgb(255, 255, 255) 0px 0px 0px 0px, ' +
       'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, ' +
@@ -55,7 +53,6 @@ const StyledMenu = styled((props: MenuProps) => (
     '& .MuiMenuItem-root': {
       '& .MuiSvgIcon-root': {
         fontSize: 18,
-        color: theme.palette.text.secondary,
         marginRight: theme.spacing(1.5),
       },
       '&:active': {
@@ -76,7 +73,55 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   const open = Boolean(anchorEl);
 
   const estadoServicio = serviceLine?.estado_linea;
-  console.log('estadoServicio:', estadoServicio);
+  const onClicks = {
+    [LineaServicioEnumChoice.ACTIVO]: () => {
+      alert('ACTIVO');
+    },
+    [LineaServicioEnumChoice.RETIRADO]: () => {
+      alert('RETIRADO');
+    },
+    [LineaServicioEnumChoice.SUSPENDIDO]: () => {
+      alert('SUSPENDIDO');
+    },
+    [LineaServicioEnumChoice.RETENCION]: () => {
+      alert('RETENCION');
+    },
+    [LineaServicioEnumChoice.NO_INSTALADO]: () => {
+      alert('NO_INSTALADO');
+    },
+  };
+  const menuItems = LINEA_SERVICIO_ARRAY_CHOICES.filter(
+    item =>
+      item !== estadoServicio && item !== LineaServicioEnumChoice.NO_INSTALADO,
+  ).map((item: LineaServicioEnumChoice) => {
+    switch (item) {
+      case LineaServicioEnumChoice.ACTIVO:
+        return {
+          label: 'ACTIVAR',
+          onClick: onClicks[item],
+        };
+      case LineaServicioEnumChoice.RETIRADO:
+        return {
+          label: 'RETIRAR',
+          onClick: onClicks[item],
+        };
+      case LineaServicioEnumChoice.SUSPENDIDO:
+        return {
+          label: 'SUSPENDER',
+          onClick: onClicks[item],
+        };
+      case LineaServicioEnumChoice.RETENCION:
+        return {
+          label: 'RETENER',
+          onClick: onClicks[item],
+        };
+      default:
+        return {
+          label: item,
+          onClick: onClicks[item],
+        };
+    }
+  });
 
   ///* handlers ----------------
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -117,36 +162,20 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
           open={open}
           onClose={handleClose}
         >
-          <MenuItem
-            onClick={() => {
-              // Acción 1
-              handleClose();
-            }}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'start',
-              gap: 2,
-              color: '#1c63ad',
-            }}
-          >
-            Opción 1
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              // Acción 2
-              handleClose();
-            }}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'start',
-              gap: 2,
-              color: '#1c63ad',
-            }}
-          >
-            Opción 2
-          </MenuItem>
+          {menuItems.map(menuItem => (
+            <MenuItem
+              key={menuItem.label}
+              onClick={menuItem.onClick}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'start',
+                gap: 2,
+              }}
+            >
+              {menuItem.label}
+            </MenuItem>
+          ))}
         </StyledMenu>
       </Grid>
     </Grid>
