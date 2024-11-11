@@ -1,7 +1,14 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { LineaServicio, useIsMediaQuery } from '@/shared';
+import {
+  ClientLimiTypeData,
+  gridSize,
+  LineaServicio,
+  useIsMediaQuery,
+} from '@/shared';
+import { CustomAutocompleteNoForm } from '@/shared/components';
 import { returnUrlClientesFibraPage } from '../../../pages/tables/ClientesFibraMainPage';
 
 export type ClienteFibraTitleProps = {
@@ -15,10 +22,20 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
   const navigate = useNavigate();
   const isMobile = useIsMediaQuery('sm');
 
+  const [selectedOption, setSelectedOption] = useState<string | null>(
+    serviceLine?.uuid || null,
+  );
+
   return (
-    <Grid item xs={12} container>
-      <Grid item xs={12} md={9}>
-        <Typography variant="h2" pb={isMobile ? 3 : 6}>
+    <Grid
+      item
+      xs={12}
+      container
+      justifyContent="space-between"
+      alignItems="start"
+    >
+      <Grid item xs={12} md={8}>
+        <Typography variant="h3" pb={isMobile ? 1 : 1}>
           {serviceLine?.cliente_data?.razon_social}
 
           <span className="cliente__page--title">
@@ -27,26 +44,26 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
         </Typography>
       </Grid>
 
-      <Grid
-        item
-        xs={12}
-        md={3}
-        container
-        justifyContent="flex-end"
-        alignItems="flex-start"
-      >
-        <Button
-          onClick={() => navigate(returnUrlClientesFibraPage)}
-          variant="text"
-          sx={{
-            py: 1,
-            my: 0,
+      <Grid item xs={12} md={3}>
+        <CustomAutocompleteNoForm<ClientLimiTypeData>
+          label="Línea de servicio"
+          inLineLabel
+          value={selectedOption}
+          actualValueKey="uuid"
+          onChange={newValue => {
+            setSelectedOption(newValue as string);
+            navigate(`${returnUrlClientesFibraPage}/${newValue}`);
           }}
-          size="small"
-          startIcon={'<-'}
-        >
-          REGRESAR
-        </Button>
+          options={serviceLine?.client_lines_data || []}
+          getOptionLabel={option =>
+            option?.contrato_data?.identificacion_pago || ''
+          }
+          loading={false}
+          required
+          error={false}
+          disableClearable
+          size={gridSize}
+        />
       </Grid>
     </Grid>
   );

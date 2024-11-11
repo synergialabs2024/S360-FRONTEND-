@@ -48,4 +48,6 @@ export interface LineaServicio {
 export type ClientLimiTypeData = Pick<
   LineaServicio,
   'id' | 'uuid' | 'estado_linea' | 'linea_numero' | 'cliente'
->;
+> & {
+  contrato_data?: Pick<Contrato, 'numero_contrato' | 'identificacion_pago'>;
+};
