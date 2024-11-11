@@ -1,5 +1,7 @@
-import { LineaServicio } from '@/shared';
+/* eslint-disable indent */
+import { gridSize, gridSizeMdLg6, LineaServicio } from '@/shared';
 import { CustomTextFieldNoForm, CustomTypoLabel } from '@/shared/components';
+import FibraClientInfoPart from './FibraClientInfoPart';
 import LineStateFibraClient from './LineStateFibraClient';
 
 export type ContractFibraClientPartProps = {
@@ -13,6 +15,8 @@ const ContractFibraClientPart: React.FC<ContractFibraClientPartProps> = ({
     <>
       <CustomTypoLabel text="Datos del contrato" />
 
+      <LineStateFibraClient serviceLine={serviceLine} />
+
       <CustomTextFieldNoForm
         label="Número de contrato"
         value={serviceLine?.contrato_data?.numero_contrato}
@@ -24,7 +28,81 @@ const ContractFibraClientPart: React.FC<ContractFibraClientPartProps> = ({
         disabled
       />
 
-      <LineStateFibraClient serviceLine={serviceLine} />
+      <CustomTextFieldNoForm
+        label="Tipo de servicio"
+        value={serviceLine?.preventa_data?.tipo_servicio}
+        disabled
+      />
+      <CustomTextFieldNoForm
+        label="Tipo de plan"
+        value={serviceLine?.preventa_data?.tipo_plan}
+        disabled
+      />
+
+      {serviceLine?.contrato_data?.plan_internet_ingreso_data?.name !=
+      serviceLine?.contrato_data?.plan_internet_actual_data?.name ? (
+        <>
+          <CustomTextFieldNoForm
+            label="Plan internet ingreso"
+            value={serviceLine?.contrato_data?.plan_internet_ingreso_data?.name}
+            disabled
+          />
+          <CustomTextFieldNoForm
+            label="Plan internet actual"
+            value={serviceLine?.contrato_data?.plan_internet_actual_data?.name}
+            disabled
+          />
+        </>
+      ) : (
+        <CustomTextFieldNoForm
+          label="Plan internet contratado"
+          value={serviceLine?.contrato_data?.plan_internet_actual_data?.name}
+          disabled
+          size={gridSize}
+        />
+      )}
+
+      <CustomTextFieldNoForm
+        label="Velocidad descarga máxima"
+        value={
+          serviceLine?.contrato_data?.plan_internet_actual_data
+            ?.velocidad_descarga_maxima
+        }
+        disabled
+        size={gridSizeMdLg6}
+        endAdornment={
+          serviceLine?.contrato_data?.plan_internet_actual_data
+            ?.unidad_velocidad
+        }
+      />
+      <CustomTextFieldNoForm
+        label="Velocidad subida máxima"
+        value={
+          serviceLine?.contrato_data?.plan_internet_actual_data
+            ?.velocidad_subida_maxima
+        }
+        disabled
+        size={gridSizeMdLg6}
+        endAdornment={
+          serviceLine?.contrato_data?.plan_internet_actual_data
+            ?.unidad_velocidad
+        }
+      />
+      <CustomTextFieldNoForm
+        label="Valor"
+        value={serviceLine?.contrato_data?.plan_internet_actual_data?.valor}
+        disabled
+        startAdornment="$"
+      />
+      <CustomTextFieldNoForm
+        label="Permanencia"
+        value={
+          serviceLine?.contrato_data?.plan_internet_actual_data?.permanencia
+        }
+        disabled
+      />
+
+      <FibraClientInfoPart serviceLine={serviceLine} />
     </>
   );
 };

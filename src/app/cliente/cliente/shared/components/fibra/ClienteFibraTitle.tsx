@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { useState } from 'react';
+import { FaArrowLeft } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 
 import {
@@ -8,7 +9,10 @@ import {
   LineaServicio,
   useIsMediaQuery,
 } from '@/shared';
-import { CustomAutocompleteNoForm } from '@/shared/components';
+import {
+  CustomAutocompleteNoForm,
+  SingleIconButton,
+} from '@/shared/components';
 import { returnUrlClientesFibraPage } from '../../../pages/tables/ClientesFibraMainPage';
 
 export type ClienteFibraTitleProps = {
@@ -34,14 +38,28 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
       justifyContent="space-between"
       alignItems="start"
     >
-      <Grid item xs={12} md={8}>
-        <Typography variant="h3" pb={isMobile ? 1 : 1}>
-          {serviceLine?.cliente_data?.razon_social}
+      <Grid item container xs={12} md={8} alignItems="start" spacing={1}>
+        <Grid item xs={2} sm="auto">
+          <SingleIconButton
+            startIcon={<FaArrowLeft />}
+            label="Volver"
+            tooltipPlacement="left"
+            onClick={() => {
+              navigate(returnUrlClientesFibraPage);
+            }}
+            color="inherit"
+            size={gridSize}
+          />
+        </Grid>
 
-          <span className="cliente__page--title">
-            (#{serviceLine?.contrato_data?.numero_contrato})
-          </span>
-        </Typography>
+        <Grid item xs>
+          <Typography variant="h3" pb={isMobile ? 1 : 1}>
+            {serviceLine?.cliente_data?.razon_social}
+            <span className="cliente__page--title">
+              (#{serviceLine?.contrato_data?.numero_contrato})
+            </span>
+          </Typography>
+        </Grid>
       </Grid>
 
       <Grid item xs={12} md={3}>

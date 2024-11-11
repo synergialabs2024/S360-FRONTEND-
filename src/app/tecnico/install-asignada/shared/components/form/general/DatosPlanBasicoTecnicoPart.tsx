@@ -29,7 +29,7 @@ const DatosPlanBasicoTecnicoPart: React.FC<DatosPlanBasicoTecnicoPartProps> = ({
         disabled
       />
       <CustomTextFieldNoForm
-        label="Tipo de plan"
+        label="Plan contratado"
         value={
           ordenTrabajo?.linea_servicio_data?.contrato_data
             ?.plan_internet_ingreso_data?.name

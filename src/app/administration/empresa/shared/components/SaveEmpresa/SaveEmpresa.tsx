@@ -171,7 +171,7 @@ const SaveEmpresa: React.FC<SaveEmpresaProps> = ({ title, empresa }) => {
       />
 
       <CustomTextField
-        label="Razon social"
+        label="Nombre"
         name="razon_social"
         control={form.control}
         defaultValue={form.getValues().razon_social}
