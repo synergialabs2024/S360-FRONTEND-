@@ -57,4 +57,5 @@ export type NapLimitData = Pick<
   | 'es_soterrado'
   | 'status_nap'
   | 'proyecto_cod'
+  | 'puertos_list'
 >;

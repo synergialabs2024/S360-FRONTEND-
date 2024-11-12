@@ -1,11 +1,17 @@
 import type { PagingMetaResponse } from '@/shared/interfaces/common';
 import type {
   Agendamiento,
+  CiudadLimitData,
   Cliente,
   Contrato,
+  NapLimitData,
   OrdenTrabajo,
+  PaisLimitData,
   Preventa,
+  ProvinciaLimitData,
+  SectorLimitData,
   SolicitudServicio,
+  ZonaLimitData,
 } from '../';
 
 export interface LineasServicioPaginatedRes {
@@ -35,10 +41,19 @@ export interface LineaServicio {
   cliente_data?: Cliente;
   contrato_data?: Contrato;
 
-  // sales serializer ---------
+  // sales serializer -------------
   solicitud_servicio_data?: SolicitudServicio;
+  pais_data?: PaisLimitData;
+  provincia_data?: ProvinciaLimitData;
+  ciudad_data?: CiudadLimitData;
+  zona_data?: ZonaLimitData;
+  sector_data?: SectorLimitData;
+
   preventa_data?: Preventa;
+  nap_data?: Omit<NapLimitData, 'puertos_list'>;
+
   agendamiento_data?: Agendamiento;
+
   orden_trabajo_data?: OrdenTrabajo;
 
   // helpers serializers ---------
