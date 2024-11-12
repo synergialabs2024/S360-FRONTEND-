@@ -23,6 +23,7 @@ export type ProductoUbicacionSeriesModalProps = {
   onChangeKeyArrayStore: InstalacionesStoreKey;
   enableAutoSelect?: boolean;
   showSelectedSeriesTextInViewMode?: boolean;
+  enableEditSeries?: boolean;
 };
 
 // just to handle onChange series multiple
@@ -38,6 +39,7 @@ const ProductoUbicacionSeriesModal: React.FC<
   open,
   enableAutoSelect = true,
   showSelectedSeriesTextInViewMode = true,
+  enableEditSeries = true,
 }) => {
   ///* local state ==========================
   const [isEdittingSeries, setIsEdittingSeries] = useState<boolean>(false);
@@ -126,17 +128,19 @@ const ProductoUbicacionSeriesModal: React.FC<
                 </Grid>
 
                 <Grid item container md={6} xs={12}>
-                  <CustomSingleButton
-                    label="EDITAR SERIES"
-                    variant="text"
-                    color="primary"
-                    startIcon={<MdEdit />}
-                    onClick={() => {
-                      setIsEdittingSeries(true);
-                      setIsAutoSelectingSeries(false);
-                    }}
-                    justifyContent="flex-end"
-                  />
+                  {enableEditSeries && (
+                    <CustomSingleButton
+                      label="EDITAR SERIES"
+                      variant="text"
+                      color="primary"
+                      startIcon={<MdEdit />}
+                      onClick={() => {
+                        setIsEdittingSeries(true);
+                        setIsAutoSelectingSeries(false);
+                      }}
+                      justifyContent="flex-end"
+                    />
+                  )}
                 </Grid>
               </Grid>
 

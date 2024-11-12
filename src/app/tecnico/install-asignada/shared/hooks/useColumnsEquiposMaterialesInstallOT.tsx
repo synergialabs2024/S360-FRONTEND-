@@ -14,6 +14,8 @@ type UseColumnsEquiposPreventa = {
   onActionEquiposRowNode?: (
     item: EquiposUtilizadosOTTableType,
   ) => React.ReactNode;
+
+  showCurrentStockColumn?: boolean;
 };
 
 type MRTUbicacionProductoTableType = {
@@ -24,6 +26,7 @@ export const useColumnsEquiposMaterialesInstallOT = ({
   showStockColumn = true,
   showActionColumn = false,
   onActionEquiposRowNode,
+  showCurrentStockColumn = true,
 }: UseColumnsEquiposPreventa = {}) => {
   ///* base columns -------------------------------
   const baseColumnsEquiposMaterialesInstallOT01 = useMemo<
@@ -42,13 +45,19 @@ export const useColumnsEquiposMaterialesInstallOT = ({
         header: 'NOMBRE',
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
-      {
-        accessorKey: 'stock_actual',
-        header: 'STOCK',
-        enableColumnFilter: false,
-        hidden: !showStockColumn,
-        Cell: ({ row }) => formatQuantityCell(row, 'stock_actual'),
-      },
+
+      ...(showCurrentStockColumn
+        ? [
+            {
+              accessorKey: 'stock_actual',
+              header: 'STOCK',
+              enableColumnFilter: false,
+              hidden: !showStockColumn,
+              Cell: ({ row }: MRTUbicacionProductoTableType) =>
+                formatQuantityCell(row, 'stock_actual'),
+            },
+          ]
+        : []),
 
       ...(showActionColumn
         ? [
@@ -62,7 +71,12 @@ export const useColumnsEquiposMaterialesInstallOT = ({
           ]
         : []),
     ],
-    [onActionEquiposRowNode, showActionColumn, showStockColumn],
+    [
+      onActionEquiposRowNode,
+      showActionColumn,
+      showCurrentStockColumn,
+      showStockColumn,
+    ],
   );
 
   const baseColumnsMaterialesInstallOT1 = useMemo<
