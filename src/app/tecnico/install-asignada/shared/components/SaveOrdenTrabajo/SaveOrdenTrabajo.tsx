@@ -186,6 +186,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       returnUrl: returnUrlInstallAsignadasOT,
       customOnSettled() {
         clearAll();
+        navigate(returnUrlInstallAsignadasOT);
       },
     },
   );

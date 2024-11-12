@@ -5,6 +5,7 @@ import type {
   Cliente,
   Contrato,
   EntidadFinanciera,
+  FlotaLimitData,
   MetodoPago,
   NapLimitData,
   OrdenTrabajo,
@@ -61,6 +62,7 @@ export interface LineaServicio {
   agendamiento_data?: Agendamiento;
 
   orden_trabajo_data?: OrdenTrabajo;
+  flota_data?: FlotaLimitData;
 
   // helpers serializers ---------
   client_lines_data?: ClientLimiTypeData[]; // to handle switch between services (all except NO_INSTALADO)

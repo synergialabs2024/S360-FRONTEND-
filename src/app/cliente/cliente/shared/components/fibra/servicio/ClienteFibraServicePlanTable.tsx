@@ -10,7 +10,11 @@ import {
   SolicitudServicio,
   TABLE_CONSTANTS,
 } from '@/shared';
-import { CustomMinimalTable, PDFIconButton } from '@/shared/components';
+import {
+  CustomMinimalTable,
+  PasswordTableCell,
+  PDFIconButton,
+} from '@/shared/components';
 
 export type ClienteFibraServicePlanTableProps = {
   serviceLine: LineaServicio;
@@ -134,6 +138,11 @@ const ClienteFibraServicePlanTable: React.FC<
         accessorKey: 'pppassword',
         header: 'PPPassword',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          return (
+            <PasswordTableCell password={row.original?.pppassword || 'N/A'} />
+          );
+        },
       },
     ],
     [],

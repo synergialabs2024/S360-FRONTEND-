@@ -19,8 +19,8 @@ const PasswordTableCell: React.FC<PasswordTableCellProps> = ({ password }) => {
           arrow
         >
           <Typography
-            variant="body2"
             color="inherit"
+            fontSize={16}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setIsVisible(!isVisble);

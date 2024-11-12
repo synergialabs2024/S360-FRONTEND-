@@ -1,5 +1,6 @@
 import { LineaServicio } from '@/shared';
 import { CustomTypoLabel } from '@/shared/components';
+import ClienteFibraOTServicePart from './ClienteFibraOTServicePart';
 import ClienteFibraServicePlanTable from './ClienteFibraServicePlanTable';
 
 export type ServiceFibraClientPartProps = {
@@ -15,6 +16,9 @@ const ServiceFibraClientPart: React.FC<ServiceFibraClientPartProps> = ({
 
       {/* ---------------- service plan table ---------------- */}
       <ClienteFibraServicePlanTable serviceLine={serviceLine} />
+
+      {/* ---------------- OT ---------------- */}
+      <ClienteFibraOTServicePart serviceLine={serviceLine} />
     </>
   );
 };

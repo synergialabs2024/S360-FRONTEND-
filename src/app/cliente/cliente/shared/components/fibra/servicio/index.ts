@@ -1,2 +1,4 @@
+export { default as ClienteFibraOTServicePart } from './ClienteFibraOTServicePart';
 export { default as ClienteFibraServicePlanTable } from './ClienteFibraServicePlanTable';
+export { default as InstallAsigTecnicoOTClienteFibraPart } from './InstallAsigTecnicoOTClienteFibraPart';
 export { default as ServiceFibraClientPart } from './ServiceFibraClientPart';
