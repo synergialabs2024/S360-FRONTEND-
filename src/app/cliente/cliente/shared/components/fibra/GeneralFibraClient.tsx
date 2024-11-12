@@ -34,7 +34,8 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
           <Tab label="SERVICIO" value={2} {...a11yProps(2)} />
           <Tab label="PLANTILLA" value={3} {...a11yProps(3)} />
           <Tab label="DOCUMENTOS" value={4} {...a11yProps(4)} />
-          <Tab label="LOGS" value={5} {...a11yProps(5)} />
+          <Tab label="RUBROS" value={5} {...a11yProps(5)} />
+          <Tab label="LOGS" value={6} {...a11yProps(6)} />
         </FormTabsOnly>
       }
       formSize={gridSize}
@@ -47,6 +48,26 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
       {/* ========================= Servicio ========================= */}
       <CustomTabPanel index={2} value={tabValue}>
         <ServiceFibraClientPart serviceLine={serviceLine!} />
+      </CustomTabPanel>
+
+      {/* ========================= Plantilla ========================= */}
+      <CustomTabPanel index={3} value={tabValue}>
+        Plantilla
+      </CustomTabPanel>
+
+      {/* ========================= Documentos ========================= */}
+      <CustomTabPanel index={4} value={tabValue}>
+        Documentos
+      </CustomTabPanel>
+
+      {/* ========================= Rubros ========================= */}
+      <CustomTabPanel index={5} value={tabValue}>
+        Rubros
+      </CustomTabPanel>
+
+      {/* ========================= Logs ========================= */}
+      <CustomTabPanel index={6} value={tabValue}>
+        Logs
       </CustomTabPanel>
     </TabsFormBoxScene>
   );
