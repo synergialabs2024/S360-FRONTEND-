@@ -100,8 +100,9 @@ export const preventaFormSchema = yup.object({
     .optional()
     .nullable()
     .when('rawPaymentMethod', {
-      is: (rawPaymentMethod: MetodoPago) =>
-        rawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO,
+      is: (rawPaymentMethod: MetodoPago) => {
+        return rawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO;
+      },
       then: schema =>
         schema
           .required('El campo entidad financiera es requerido')

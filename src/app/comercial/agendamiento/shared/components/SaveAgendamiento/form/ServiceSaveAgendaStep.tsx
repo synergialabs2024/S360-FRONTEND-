@@ -1,17 +1,23 @@
+import Cards from 'react-credit-cards-2';
 import { UseFormReturn } from 'react-hook-form';
 
+import { useFetchEntidadFinancieras } from '@/actions/app';
 import {
+  EntidadFinanciera,
   gridSizeMdLg6,
   MetodoPagoEnumUUID,
   Preventa,
   TIPO_CUENTA_BANCARIA_ARRAY_CHOICES,
 } from '@/shared';
 import {
+  CustomAutocomplete,
+  CustomExpirateDateTextField,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
   SelectTextFieldArrayString,
 } from '@/shared/components';
+import { Grid } from '@mui/material';
 import { SaveFormDataAgendaVentas } from '../SaveAgendamiento';
 import InternetPlanPartSaveAgendaForm from './InternetPlanPartSaveAgendaForm';
 
@@ -26,11 +32,25 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
 }) => {
   ///* form ---------------------
   const { errors } = form.formState;
+  const watcherNumberCreditCard = form.watch('numero_tarjeta_credito');
+  const watcherExpirateCreditCard = form.watch('fecha_vencimiento_tarjeta');
+  const watcherOwnerCreditCard = form.watch('titular_tarjeta');
 
   const isDebito =
     preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.DEBITO;
   const isCredito =
     preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.CREDITO;
+
+  ///* fetch data ---------------------
+  const {
+    data: entidadFinancierasPaging,
+    isLoading: isLoadingEntidadFinancieras,
+    isRefetching: isRefetchingEntidadFinancieras,
+  } = useFetchEntidadFinancieras({
+    params: {
+      page_size: 900,
+    },
+  });
 
   return (
     <>
@@ -109,6 +129,16 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
               size={gridSizeMdLg6}
               disabled
             />
+
+            <Grid item xs={12} mt={3} mb={2}>
+              <Cards
+                number={watcherNumberCreditCard || ''}
+                expiry={watcherExpirateCreditCard || ''}
+                cvc=""
+                name={watcherOwnerCreditCard || ''}
+              />
+            </Grid>
+
             <CustomTextField
               label="Número tarjeta crédito"
               name="numero_tarjeta_credito"
@@ -118,6 +148,47 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
               helperText={errors.numero_tarjeta_credito?.message}
               onlyNumbers
               maxLength={25}
+              disabled
+              size={gridSizeMdLg6}
+            />
+            <CustomAutocomplete<EntidadFinanciera>
+              label="Entidad financiera"
+              name="entidad_financiera"
+              // options
+              options={entidadFinancierasPaging?.data?.items || []}
+              valueKey="name"
+              actualValueKey="id"
+              defaultValue={form.getValues().entidad_financiera}
+              isLoadingData={
+                isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
+              }
+              // vaidation
+              control={form.control}
+              error={errors.entidad_financiera}
+              helperText={errors.entidad_financiera?.message}
+              size={gridSizeMdLg6}
+              disabled
+            />
+            <CustomTextField
+              label="Titular tarjeta"
+              name="titular_tarjeta"
+              control={form.control}
+              defaultValue={form.getValues().titular_tarjeta}
+              error={errors.titular_tarjeta}
+              helperText={errors.titular_tarjeta?.message}
+              size={gridSizeMdLg6}
+              maxLength={25}
+              disabled
+            />
+            <CustomExpirateDateTextField
+              label="Fecha vencimiento tarjeta"
+              name="fecha_vencimiento_tarjeta"
+              control={form.control}
+              defaultValue={form.getValues().fecha_vencimiento_tarjeta}
+              error={errors.fecha_vencimiento_tarjeta}
+              helperText={errors.fecha_vencimiento_tarjeta?.message}
+              size={gridSizeMdLg6}
+              disabled
             />
           </>
         )}

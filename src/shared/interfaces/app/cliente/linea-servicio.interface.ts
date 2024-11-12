@@ -4,6 +4,8 @@ import type {
   CiudadLimitData,
   Cliente,
   Contrato,
+  EntidadFinanciera,
+  MetodoPago,
   NapLimitData,
   OrdenTrabajo,
   PaisLimitData,
@@ -11,6 +13,7 @@ import type {
   ProvinciaLimitData,
   SectorLimitData,
   SolicitudServicio,
+  Tarjeta,
   ZonaLimitData,
 } from '../';
 
@@ -51,6 +54,9 @@ export interface LineaServicio {
 
   preventa_data?: Preventa;
   nap_data?: Omit<NapLimitData, 'puertos_list'>;
+  metodo_pago_data?: MetodoPago;
+  entidad_financiera_data?: EntidadFinanciera;
+  tarjeta_data?: Tarjeta;
 
   agendamiento_data?: Agendamiento;
 

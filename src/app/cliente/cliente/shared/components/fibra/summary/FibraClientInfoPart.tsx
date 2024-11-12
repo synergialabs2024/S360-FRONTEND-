@@ -6,12 +6,14 @@ import { FaMapLocationDot } from 'react-icons/fa6';
 
 import { useFetchZonas } from '@/actions/app';
 import {
+  formatExpirationDateCreditCard,
   gridSize,
   gridSizeMdLg1,
   gridSizeMdLg11,
   gridSizeMdLg3,
   gridSizeMdLg6,
   LineaServicio,
+  MetodoPagoEnumUUID,
   PARENTESCO_TYPE_ARRAY_CHOICES,
   Preventa,
   SolicitudServicio,
@@ -37,6 +39,7 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import Cards from 'react-credit-cards-2';
 
 export type FibraClientInfoPartProps = {
   serviceLine: LineaServicio;
@@ -52,6 +55,11 @@ const FibraClientInfoPart: React.FC<FibraClientInfoPartProps> = ({
 
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
+
+  const isDebito =
+    serviceLine?.metodo_pago_data?.uuid === MetodoPagoEnumUUID.DEBITO;
+  const isCredito =
+    serviceLine?.metodo_pago_data?.uuid === MetodoPagoEnumUUID.CREDITO;
 
   ///* form ---------------------
   const form = useForm<FormData>();
@@ -111,6 +119,7 @@ const FibraClientInfoPart: React.FC<FibraClientInfoPartProps> = ({
           <FormTabsOnly value={tabValue} onChange={handleTabChange}>
             <Tab label="Cliente" value={1} {...a11yProps(1)} />
             <Tab label="Ubicadión cliente y NAP" value={2} {...a11yProps(2)} />
+            <Tab label="Método de pago" value={3} {...a11yProps(3)} />
           </FormTabsOnly>
         }
         sxContainer={{
@@ -352,6 +361,79 @@ const FibraClientInfoPart: React.FC<FibraClientInfoPartProps> = ({
               size={gridSizeMdLg3}
             />
           </>
+        </CustomTabPanel>
+
+        <CustomTabPanel value={tabValue} index={3} ptGrid="0">
+          <CustomTextFieldNoForm
+            label="Método de pago"
+            value={serviceLine?.metodo_pago_data?.name || ''}
+            disabled
+          />
+
+          {isDebito && (
+            <>
+              <CustomTextFieldNoForm
+                label="Entidad financiera"
+                value={serviceLine?.entidad_financiera_data?.name || ''}
+                disabled
+              />
+              <CustomTextFieldNoForm
+                label="Tipo cuenta bancaria"
+                value={serviceLine?.preventa_data?.tipo_cuenta_bancaria || ''}
+                disabled
+              />
+              <CustomTextFieldNoForm
+                label="Número cuenta bancaria"
+                value={serviceLine?.preventa_data?.numero_cuenta_bancaria || ''}
+                disabled
+              />
+            </>
+          )}
+
+          {isCredito && (
+            <>
+              <CustomTextFieldNoForm
+                label="Tarjeta"
+                value={serviceLine?.tarjeta_data?.name || ''}
+                disabled
+              />
+              <Grid item xs={12} mt={3} mb={2}>
+                <Cards
+                  number={
+                    serviceLine?.preventa_data?.numero_tarjeta_credito || ''
+                  }
+                  expiry={
+                    serviceLine?.preventa_data?.fecha_vencimiento_tarjeta || ''
+                  }
+                  cvc=""
+                  name={serviceLine?.preventa_data?.titular_tarjeta || ''}
+                />
+              </Grid>
+
+              <CustomTextFieldNoForm
+                label="Número tarjeta crédito"
+                value={serviceLine?.preventa_data?.numero_tarjeta_credito || ''}
+                disabled
+              />
+              <CustomTextFieldNoForm
+                label="Entidad financiera"
+                value={serviceLine?.entidad_financiera_data?.name || ''}
+                disabled
+              />
+              <CustomTextFieldNoForm
+                label="Titular tarjeta"
+                value={serviceLine?.preventa_data?.titular_tarjeta || ''}
+                disabled
+              />
+              <CustomTextFieldNoForm
+                label="Fecha vencimiento tarjeta"
+                value={formatExpirationDateCreditCard(
+                  serviceLine?.preventa_data?.fecha_vencimiento_tarjeta || '',
+                )}
+                disabled
+              />
+            </>
+          )}
         </CustomTabPanel>
       </NestedTabsScene>
     </>

@@ -1,15 +1,17 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useRoutes } from 'react-router-dom';
-import { ThemeSettings } from './theme/Theme';
 import RTL from './layouts/full/shared/customizer/RTL';
+import { ThemeSettings } from './theme/Theme';
 // import Router from './routes/Router';
+import { Bounce, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { SocketProvider } from './context/SocketContext';
 import AppRouter from './router/AppRouter';
 import { CustomConfirmDialog } from './shared/components';
 import { CustomBackdropLoader } from './shared/components/Loaders';
-import { SocketProvider } from './context/SocketContext';
-import { Bounce, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
 import 'simplebar-react/dist/simplebar.min.css';
 import { useUiStore } from './store/ui';

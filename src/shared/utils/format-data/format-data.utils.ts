@@ -82,3 +82,7 @@ export const sanitizeDataResetForm = (obj: any): any => {
     return obj;
   }
 };
+
+export const formatExpirationDateCreditCard = (date: string): string => {
+  return date.replace(/(\d{2})(\d{2})/, '$1/$2');
+};

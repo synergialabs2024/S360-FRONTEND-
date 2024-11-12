@@ -13,12 +13,12 @@ export type DocsSavePreventaStepProps = {
   cedulaPosteriorImg: File | null;
   viviendaImg: File | null;
   documentoCuentaBancariaImg: File | null;
-  documentoTarjetaCreditoImg: File | null;
+  // documentoTarjetaCreditoImg: File | null;
 
   setCedulaFrontalImg: any;
   setCedulaPosteriorImg: any;
   setDocumentoCuentaBancairaImg: any;
-  setDocumentoTarjetaCreditoImg: any;
+  // setDocumentoTarjetaCreditoImg: any;
   setViviendaImg: any;
   UploadImageDropZoneComponent: React.FC<UploadImagePreviewBtnProps>;
 };
@@ -29,12 +29,12 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
   cedulaPosteriorImg,
   viviendaImg,
   documentoCuentaBancariaImg,
-  documentoTarjetaCreditoImg,
+  // documentoTarjetaCreditoImg,
 
   setCedulaFrontalImg,
   setCedulaPosteriorImg,
   setDocumentoCuentaBancairaImg,
-  setDocumentoTarjetaCreditoImg,
+  // setDocumentoTarjetaCreditoImg,
   setViviendaImg,
   UploadImageDropZoneComponent,
 
@@ -102,11 +102,13 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
           setSelectedImage={setDocumentoCuentaBancairaImg}
         />
       ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
-        <UploadImageDropZoneComponent
-          buttonLabel="Anexo tarjeta crédito"
-          selectedImage={documentoTarjetaCreditoImg}
-          setSelectedImage={setDocumentoTarjetaCreditoImg}
-        />
+        <>
+          {/* <UploadImageDropZoneComponent
+            buttonLabel="Anexo tarjeta crédito"
+            selectedImage={documentoTarjetaCreditoImg}
+            setSelectedImage={setDocumentoTarjetaCreditoImg}
+          /> */}
+        </>
       ) : null}
 
       {/* =============== modal =============== */}

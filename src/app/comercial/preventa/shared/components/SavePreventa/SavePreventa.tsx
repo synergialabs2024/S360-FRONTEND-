@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -115,8 +115,6 @@ import { EquiposSeleccionadosTableType } from './form/equipos/EquiposSeleccionad
 
 import Cards from 'react-credit-cards-2';
 
-import 'react-credit-cards-2/dist/es/styles-compiled.css';
-
 export interface SavePreventaProps {
   title: React.ReactNode;
   solicitudServicio: SolicitudServicio;
@@ -168,8 +166,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setImage2: setCedulaPosteriorImg,
     image3: documentoCuentaBancariaImg,
     setImage3: setDocumentoCuentaBancairaImg,
-    image4: documentoTarjetaCreditoImg,
-    setImage4: setDocumentoTarjetaCreditoImg,
     image5: viviendaImg,
     setImage5: setViviendaImg,
   } = useUploadImageGeneric();
@@ -262,9 +258,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedSuggestedPlansBuro = form.watch('plan_sugerido_buro');
 
   const watcherNumberCreditCard = form.watch('numero_tarjeta_credito');
-
   const watcherExpirateCreditCard = form.watch('fecha_vencimiento_tarjeta');
-
   const watcherOwnerCreditCard = form.watch('titular_tarjeta');
 
   // map ---------------
@@ -556,13 +550,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.error(
         'La foto del documento de la cuenta bancaria es requerida cuando el método de pago es débito',
       );
-    if (
-      !documentoTarjetaCreditoImg &&
-      watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO
-    )
-      return ToastWrapper.error(
-        'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
-      );
+    // if (
+    //   !documentoTarjetaCreditoImg &&
+    //   watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO
+    // )
+    //   return ToastWrapper.error(
+    //     'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
+    //   );
     if (!viviendaImg)
       return ToastWrapper.error('La foto de la vivienda es requerida');
 
@@ -1284,14 +1278,14 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                   size={gridSizeMdLg6}
                   disabled
                 />
-                <Box pt={4}>
+                <Grid item xs={12} pt={4}>
                   <Cards
                     number={watcherNumberCreditCard || ''}
                     expiry={watcherExpirateCreditCard || ''}
                     cvc=""
                     name={watcherOwnerCreditCard || ''}
                   />
-                </Box>
+                </Grid>
                 <CustomCreditCardTextField
                   label="Número tarjeta crédito"
                   name="numero_tarjeta_credito"
@@ -1305,9 +1299,27 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                     const card = tarjetasPaging?.data?.items.find(
                       card => card?.code === cardType,
                     );
-                    console.log('card', card);
                     form.setValue('tarjeta', card?.id);
                   }}
+                  size={gridSizeMdLg6}
+                />
+                <CustomAutocomplete<EntidadFinanciera>
+                  label="Entidad financiera"
+                  name="entidad_financiera"
+                  // options
+                  options={entidadFinancierasPaging?.data?.items || []}
+                  valueKey="name"
+                  actualValueKey="id"
+                  defaultValue={form.getValues().entidad_financiera}
+                  isLoadingData={
+                    isLoadingEntidadFinancieras ||
+                    isRefetchingEntidadFinancieras
+                  }
+                  // vaidation
+                  control={form.control}
+                  error={errors.entidad_financiera}
+                  helperText={errors.entidad_financiera?.message}
+                  size={gridSizeMdLg6}
                 />
                 <CustomTextField
                   label="Titular tarjeta"
@@ -1566,11 +1578,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             cedulaPosteriorImg={cedulaPosteriorImg}
             viviendaImg={viviendaImg}
             documentoCuentaBancariaImg={documentoCuentaBancariaImg}
-            documentoTarjetaCreditoImg={documentoTarjetaCreditoImg}
+            // documentoTarjetaCreditoImg={documentoTarjetaCreditoImg}
             setCedulaFrontalImg={setCedulaFrontalImg}
             setCedulaPosteriorImg={setCedulaPosteriorImg}
             setDocumentoCuentaBancairaImg={setDocumentoCuentaBancairaImg}
-            setDocumentoTarjetaCreditoImg={setDocumentoTarjetaCreditoImg}
+            // setDocumentoTarjetaCreditoImg={setDocumentoTarjetaCreditoImg}
             setViviendaImg={setViviendaImg}
           />
         </>
