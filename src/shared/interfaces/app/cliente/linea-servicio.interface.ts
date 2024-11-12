@@ -8,6 +8,8 @@ import type {
   FlotaLimitData,
   MetodoPago,
   NapLimitData,
+  NodoLimitData,
+  OLTLimitData,
   OrdenTrabajo,
   PaisLimitData,
   Preventa,
@@ -63,6 +65,8 @@ export interface LineaServicio {
 
   orden_trabajo_data?: OrdenTrabajo;
   flota_data?: FlotaLimitData;
+  nodo_data?: NodoLimitData;
+  olt_data?: OLTLimitData;
 
   // helpers serializers ---------
   client_lines_data?: ClientLimiTypeData[]; // to handle switch between services (all except NO_INSTALADO)
