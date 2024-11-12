@@ -1,3 +1,4 @@
+export { default as ClienteFibraOTFotosPart } from './ClienteFibraOTFotosPart';
 export { default as ClienteFibraOTPart } from './ClienteFibraOTPart';
 export { default as ClienteFibraOTServicePart } from './ClienteFibraOTServicePart';
 export { default as ClienteFibraServicePlanTable } from './ClienteFibraServicePlanTable';

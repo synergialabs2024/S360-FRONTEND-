@@ -10,6 +10,7 @@ import {
   NestedTabsScene,
 } from '@/shared/components';
 import { ClienteFibraOTEquiposMaterialesPart } from '../equipos';
+import ClienteFibraOTFotosPart from './ClienteFibraOTFotosPart';
 import ClienteFibraOTPart from './ClienteFibraOTPart';
 import InstallAsigTecnicoOTClienteFibraPart from './InstallAsigTecnicoOTClienteFibraPart';
 
@@ -57,6 +58,11 @@ const ClienteFibraOTServicePart: React.FC<ClienteFibraOTServicePartProps> = ({
         {/* ========================= Materiales ========================= */}
         <CustomTabPanel index={3} value={tabValue}>
           <ClienteFibraOTEquiposMaterialesPart serviceLine={serviceLine} />
+        </CustomTabPanel>
+
+        {/* ========================= Fotos ========================= */}
+        <CustomTabPanel index={4} value={tabValue}>
+          <ClienteFibraOTFotosPart serviceLine={serviceLine} />
         </CustomTabPanel>
       </NestedTabsScene>
     </>
