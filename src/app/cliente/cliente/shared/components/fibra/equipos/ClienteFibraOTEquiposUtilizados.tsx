@@ -41,6 +41,15 @@ const ClienteFibraOTEquiposUtilizados: React.FC<
   >(
     () => [
       ...baseColumnsEquiposMaterialesInstallOT01,
+
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        Cell: ({ row }) => {
+          return (row.original as any)?.cantidad || 0;
+        },
+      },
+
       {
         accessorKey: 'selectedSeries',
         header: 'SERIES SELECCIONADAS',

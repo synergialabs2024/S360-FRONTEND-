@@ -1,6 +1,7 @@
 import { EquipoAdicionalInstallTectAsignFormPart } from '@/app/tecnico/install-asignada/shared/components/form';
 import { LineaServicio } from '@/shared';
 import ClienteFibraOTEquiposUtilizados from './ClienteFibraOTEquiposUtilizados';
+import ClienteFibraOTMaterialesUtilizados from './ClienteFibraOTMaterialesUtilizados';
 
 export type ClienteFibraOTEquiposMaterialesPartProps = {
   serviceLine: LineaServicio;
@@ -26,6 +27,15 @@ const ClienteFibraOTEquiposMaterialesPart: React.FC<
         ordenTrabajo={
           {
             ...ordenTrabajo,
+          } as any
+        }
+      />
+
+      <ClienteFibraOTMaterialesUtilizados
+        ordenTrabajo={
+          {
+            ...ordenTrabajo,
+            ciudad_data: serviceLine?.ciudad_data,
           } as any
         }
       />

@@ -9,7 +9,6 @@ import {
 } from '../components/form';
 
 type UseColumnsEquiposPreventa = {
-  showStockColumn?: boolean;
   showActionColumn?: boolean;
   onActionEquiposRowNode?: (
     item: EquiposUtilizadosOTTableType,
@@ -23,7 +22,6 @@ type MRTUbicacionProductoTableType = {
 };
 
 export const useColumnsEquiposMaterialesInstallOT = ({
-  showStockColumn = true,
   showActionColumn = false,
   onActionEquiposRowNode,
   showCurrentStockColumn = true,
@@ -52,7 +50,6 @@ export const useColumnsEquiposMaterialesInstallOT = ({
               accessorKey: 'stock_actual',
               header: 'STOCK',
               enableColumnFilter: false,
-              hidden: !showStockColumn,
               Cell: ({ row }: MRTUbicacionProductoTableType) =>
                 formatQuantityCell(row, 'stock_actual'),
             },
@@ -71,12 +68,7 @@ export const useColumnsEquiposMaterialesInstallOT = ({
           ]
         : []),
     ],
-    [
-      onActionEquiposRowNode,
-      showActionColumn,
-      showCurrentStockColumn,
-      showStockColumn,
-    ],
+    [onActionEquiposRowNode, showActionColumn, showCurrentStockColumn],
   );
 
   const baseColumnsMaterialesInstallOT1 = useMemo<

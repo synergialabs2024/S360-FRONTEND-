@@ -1,7 +1,7 @@
 import type { PagingMetaResponse } from '@/shared/interfaces/common';
 import type {
   Agendamiento,
-  CiudadLimitData,
+  Ciudad,
   Cliente,
   Contrato,
   EntidadFinanciera,
@@ -51,7 +51,7 @@ export interface LineaServicio {
   solicitud_servicio_data?: SolicitudServicio;
   pais_data?: PaisLimitData;
   provincia_data?: ProvinciaLimitData;
-  ciudad_data?: CiudadLimitData;
+  ciudad_data?: Ciudad;
   zona_data?: ZonaLimitData;
   sector_data?: SectorLimitData;
 
