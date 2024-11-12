@@ -9,7 +9,7 @@ import {
   FormTabsOnly,
   NestedTabsScene,
 } from '@/shared/components';
-import { ClienteFibraOTEquiposMaterialesPart } from '../equipos';
+import { ClienteFibraOTEquiposMaterialesPart } from './equipos';
 import ClienteFibraOTFotosPart from './ClienteFibraOTFotosPart';
 import ClienteFibraOTPart from './ClienteFibraOTPart';
 import InstallAsigTecnicoOTClienteFibraPart from './InstallAsigTecnicoOTClienteFibraPart';
