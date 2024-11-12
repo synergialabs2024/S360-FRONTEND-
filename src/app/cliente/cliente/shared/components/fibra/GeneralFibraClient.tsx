@@ -8,6 +8,7 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import ClienteFibraTitle from './ClienteFibraTitle';
+import { ServiceFibraClientPart } from './servicio';
 import FibraClientSummaryFormPart from './summary/FibraClientSummaryFormPart';
 
 export type GeneralFibraClientProps = {
@@ -19,7 +20,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 }) => {
   ///* hooks ----------------
   const { tabValue, handleTabChange } = useTabsOnly({
-    initialTabValue: 1,
+    initialTabValue: 2,
   });
 
   return (
@@ -41,6 +42,11 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
       {/* ========================= Resumen ========================= */}
       <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg10}>
         <FibraClientSummaryFormPart serviceLine={serviceLine!} />
+      </CustomTabPanel>
+
+      {/* ========================= Servicio ========================= */}
+      <CustomTabPanel index={2} value={tabValue}>
+        <ServiceFibraClientPart serviceLine={serviceLine!} />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );
