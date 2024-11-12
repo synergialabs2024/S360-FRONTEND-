@@ -8,6 +8,7 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import ClienteFibraTitle from './ClienteFibraTitle';
+import { ClienteFibrRubrosTab } from './rubros';
 import { ServiceFibraClientPart } from './servicio';
 import FibraClientSummaryFormPart from './summary/FibraClientSummaryFormPart';
 
@@ -62,7 +63,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 
       {/* ========================= Rubros ========================= */}
       <CustomTabPanel index={5} value={tabValue}>
-        Rubros
+        <ClienteFibrRubrosTab serviceLine={serviceLine} />
       </CustomTabPanel>
 
       {/* ========================= Logs ========================= */}
