@@ -10,7 +10,6 @@ import {
   gridSize,
   gridSizeMdLg1,
   gridSizeMdLg11,
-  gridSizeMdLg3,
   OrdenTrabajo,
   useLoaders,
   useTabsOnly,
@@ -30,6 +29,7 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import ActivacionInstallOTNodoIPsPPPPart from './ActivacionInstallOTNodoIPsPPPPart';
 import type { ActicacionInstallOTSaveFormData } from './SaveActivacionInstallPendienteOT';
 
 export type ActivacionInstallOTDetallesEquiposFormTabProps = {
@@ -204,60 +204,7 @@ const ActivacionInstallOTDetallesEquiposFormTab: React.FC<
         </CustomTabPanel>
       </NestedTabsScene>
 
-      <>
-        <CustomTextFieldNoForm
-          label="Nodo"
-          value={ordenTrabajo?.nodo_data?.name || ''}
-          disabled
-        />
-        <CustomTextFieldNoForm
-          label="OLT"
-          value={ordenTrabajo?.olt_data?.name || ''}
-          disabled
-        />
-
-        <>
-          <CustomTextFieldNoForm
-            label="NAP"
-            value={ordenTrabajo?.nap_data?.name || ''}
-            disabled
-          />
-          <CustomTextFieldNoForm
-            label="Distancia NAP"
-            value={ordenTrabajo?.agendamiento_data?.distancia_nap || ''}
-            disabled
-            size={gridSizeMdLg3}
-            endAdornment="m"
-          />
-          <CustomTextFieldNoForm
-            label="Puerto"
-            value={ordenTrabajo?.preventa_data?.puerto_nap || ''}
-            disabled
-            size={gridSizeMdLg3}
-          />
-
-          <CustomTextFieldNoForm
-            label="IPv4"
-            value={ordenTrabajo?.ipv4}
-            disabled
-          />
-          <CustomTextFieldNoForm
-            label="IPv6"
-            value={ordenTrabajo?.ipv6}
-            disabled
-          />
-          <CustomTextFieldNoForm
-            label="PPPoE"
-            value={ordenTrabajo?.pppoe}
-            disabled
-          />
-          <CustomTextFieldNoForm
-            label="PPpassword"
-            value={ordenTrabajo?.pppassword}
-            disabled
-          />
-        </>
-      </>
+      <ActivacionInstallOTNodoIPsPPPPart ordenTrabajo={ordenTrabajo} />
 
       <CustomTextArea
         label="Observación de activación"
