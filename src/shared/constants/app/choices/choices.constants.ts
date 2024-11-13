@@ -710,6 +710,20 @@ export const ESTADO_AUDITORIA_SERVICIO_ARRAY_CHOICES = [
   EstadoAuditoriaServicioEnumChoice.CLIENTE_4,
 ];
 
+// // // AUDITORIA CONSUMOS ==============================================
+export enum AuditoriaConsumoEnumChoice {
+  SUSPENSION_CONSUMO = 'CLIENTES SUSPENDIDOS CON CONSUMO',
+  ACTIVOS_ALTO_CONSUMO = 'CLIENTES ACTIVOS ALTO CONSUMO',
+  ACTIVOS_MOROSO = 'CLIENTES ACTIVOS EN MOROSO',
+  SUSPENSION_CONSUMO_MK = 'CLIENTES SUSPENDIDOS CON CONSUMO EN MK',
+}
+export const AUDITORIA_CONSUMOS_ARRAY_CHOICES = [
+  AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO,
+  AuditoriaConsumoEnumChoice.ACTIVOS_ALTO_CONSUMO,
+  AuditoriaConsumoEnumChoice.ACTIVOS_MOROSO,
+  AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO_MK,
+];
+
 // // // CLIENTE ==============================================
 // Linea de servicio --------------
 export enum LineaServicioEnumChoice {

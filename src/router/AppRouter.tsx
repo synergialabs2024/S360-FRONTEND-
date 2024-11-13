@@ -881,11 +881,11 @@ const GestionOnusPage = Loadable(
   ),
 );
 //Gestion de ONUs
-const AuditoriaConsumosPage = Loadable(
+const AuditoriaConsumoMainPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/netconnect/auditoria-consumo/pages/tables/AuditoriaConsumosPage'
+        '@/app/netconnect/auditoria-consumo/pages/tables/AuditoriaConsumoMainPage'
       ),
   ),
 );
@@ -1813,7 +1813,7 @@ const AppRouter = [
           ///* Auditoria de Consumo
           {
             path: ROUTER_PATHS.netconnect.auditoriaConsumosNav,
-            element: <AuditoriaConsumosPage />,
+            element: <AuditoriaConsumoMainPage />,
           },
 
           ///* Vlan
