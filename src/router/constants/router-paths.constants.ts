@@ -210,6 +210,12 @@ export const ROUTER_PATHS = {
     tarjetasCrear: 'tarjetas/crear',
     tarjetasEditar: 'tarjetas/editar/:uuid',
     tarjetasNav: '/cobranza/tarjetas',
+
+    ///* rubros
+    rubros: 'rubros',
+    rubrosCrear: 'rubros/crear',
+    rubrosEditar: 'rubros/editar/:uuid',
+    rubrosNav: '/cobranza/rubros',
   },
 
   /////* Comercial ----------------
