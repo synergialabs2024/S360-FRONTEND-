@@ -1,5 +1,6 @@
 import { EstadoRubroEnumChoice, TipoRubroEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { ClienteLimitData, ContratoLimitData } from '../cliente';
 
 export interface RubrosPaginatedRes {
   status: number;
@@ -36,9 +37,12 @@ export interface Rubro {
   modified_at: string;
 
   ///* fk
-  cliente: number;
-  linea_servicio: number;
-  contrato: number;
+  cliente?: number;
+  linea_servicio?: number;
+  contrato?: number;
+
+  cliente_data?: ClienteLimitData;
+  contrato_data?: ContratoLimitData;
 }
 
 export type BaseRubroDetail = {

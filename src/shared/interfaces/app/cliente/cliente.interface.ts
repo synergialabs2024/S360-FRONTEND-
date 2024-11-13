@@ -34,3 +34,13 @@ export interface Cliente {
 
   linea_servicio_data?: LineaServicio[];
 }
+
+export type ClienteLimitData = Pick<
+  Cliente,
+  | 'uuid'
+  | 'razon_social'
+  | 'email'
+  | 'celular'
+  | 'tipo_identificacion'
+  | 'identificacion'
+>;

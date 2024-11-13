@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IoQrCodeSharp } from 'react-icons/io5';
 
 import { EquiposUtilizadosOTTableType } from '@/app/tecnico/install-asignada/shared/components/form';
@@ -29,6 +29,7 @@ const ClienteFibraOTEquiposUtilizados: React.FC<
 
   ///* global state --------------------
   const setSelectedRow = useInstalacionesStore(s => s.setSelectedRow);
+  const clearAllStore = useInstalacionesStore(s => s.clearAll);
 
   ///* columns --------------------
   const { baseColumnsEquiposMaterialesInstallOT01 } =
@@ -94,6 +95,15 @@ const ClienteFibraOTEquiposUtilizados: React.FC<
     ],
     [baseColumnsEquiposMaterialesInstallOT01, setSelectedRow],
   );
+
+  ///* effects --------------------
+  // clear store
+  useEffect(() => {
+    return () => {
+      clearAllStore();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

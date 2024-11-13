@@ -37,9 +37,18 @@ export interface UserLoginResponse {
 export interface CompanyLoginResponse {
   id?: number;
   uuid?: string;
+
   company_name: string;
   commercial_name: string;
+
+  email: string;
+  main_address: string;
+  establishment_address: string;
+  phone: string;
+  mobile: string;
+
   schema_name: string; // db
+
   logo_1_url?: string;
   logo_2_url?: string;
 }

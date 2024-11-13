@@ -19,6 +19,8 @@ export interface Contrato {
   config_plantilla_cliente_json: ConfiguracionPlantillaCliente[];
   identificacion_pago: string;
 
+  direccion: string; // sol servicio
+
   created_at?: string;
   modified_at?: string;
 
@@ -38,3 +40,8 @@ export interface Contrato {
   plan_internet_ingreso_data?: PlanInternet;
   plan_internet_actual_data?: PlanInternet;
 }
+
+export type ContratoLimitData = Pick<
+  Contrato,
+  'id' | 'uuid' | 'numero_contrato' | 'codigo' | 'estado_contrato' | 'direccion'
+>;

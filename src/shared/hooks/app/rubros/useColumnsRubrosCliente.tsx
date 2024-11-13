@@ -2,7 +2,10 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { ClienteFibraRubroChipState } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/rurbos/tables';
+import {
+  ClienteFibraRubroChipState,
+  ClienteFibraRubroInfoTableCell,
+} from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/rurbos/tables';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { type Rubro } from '@/shared/interfaces';
 import {
@@ -32,7 +35,11 @@ export const useColumnsRubrosCliente = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
+        Cell: ({ row }) => {
+          const value = row?.original?.numero_referencia;
+          if (!value) return '-';
+          return <ClienteFibraRubroInfoTableCell rubro={row.original} />;
+        },
       },
 
       ...(showNumberRubro

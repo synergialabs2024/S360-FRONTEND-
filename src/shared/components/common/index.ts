@@ -4,6 +4,7 @@ export { default as Transitions } from './Transitions';
 
 export * from './buttons';
 export * from './grids';
+export * from './logos';
 export * from './progressbar';
 export * from './Scrollbar';
 export * from './tables';

@@ -17,6 +17,8 @@ export const formatQuantity = (value: string | number): string => {
 
 // // // Dates ========================================
 import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+dayjs.locale('es');
 
 export const formatDate = (date?: Date | string): string => {
   if (!date) return '';
@@ -39,6 +41,13 @@ export const formatHourByNumber = (hour: number): string => {
 
 export const formatHourTimeField = (hour: string): string => {
   return dayjs(hour, 'HH:mm').format('hh:mm A');
+};
+
+export const formatDateLong = (date?: Date | string): string => {
+  if (!date) return '';
+  const formattedDate = dayjs(date).format('dddd, MMMM DD, YYYY');
+
+  return capitalizeFirstLetterOfEachWord(formattedDate);
 };
 
 // // // Timers ========================================
@@ -85,4 +94,8 @@ export const sanitizeDataResetForm = (obj: any): any => {
 
 export const formatExpirationDateCreditCard = (date: string): string => {
   return date.replace(/(\d{2})(\d{2})/, '$1/$2');
+};
+
+export const capitalizeFirstLetterOfEachWord = (str: string): string => {
+  return str.replace(/(?:^|\s)\S/g, char => char.toUpperCase());
 };
