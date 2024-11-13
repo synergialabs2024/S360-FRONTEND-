@@ -726,3 +726,29 @@ export const LINEA_SERVICIO_ARRAY_CHOICES = [
   LineaServicioEnumChoice.RETENCION,
   LineaServicioEnumChoice.NO_INSTALADO,
 ];
+
+// rubros --------------
+export enum TipoRubroEnumChoice {
+  SERVICIO = 'SERVICIO',
+  PRODUCTOS = 'PRODUCTOS',
+  LIBRE = 'LIBRE',
+}
+export const TIPO_RUBRO_ARRAY_CHOICES = [
+  TipoRubroEnumChoice.SERVICIO,
+  TipoRubroEnumChoice.PRODUCTOS,
+  TipoRubroEnumChoice.LIBRE,
+];
+export enum EstadoRubroEnumChoice {
+  NO_PAGADO = 'NO_PAGADO',
+  PAGADO = 'PAGADO',
+  PAGO_INCOMPLETO = 'PAGO_INCOMPLETO',
+  VENCIDO = 'VENCIDO',
+  ANULADO = 'ANULADO',
+}
+export const ESTADO_RUBRO_ARRAY_CHOICES = [
+  EstadoRubroEnumChoice.NO_PAGADO,
+  EstadoRubroEnumChoice.PAGADO,
+  EstadoRubroEnumChoice.PAGO_INCOMPLETO,
+  EstadoRubroEnumChoice.VENCIDO,
+  EstadoRubroEnumChoice.ANULADO,
+];

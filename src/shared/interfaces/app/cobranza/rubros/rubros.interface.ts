@@ -1,6 +1,7 @@
+import { EstadoRubroEnumChoice, TipoRubroEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
-export interface Rubros {
+export interface RubrosPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
@@ -10,23 +11,35 @@ export interface Rubros {
 export interface Rubro {
   id: number;
   uuid: string;
-  created_at: Date;
-  modified_at: Date;
-  // tipo_rubro: TipoRubro;
-  // estado_rubro: EstadoRubro;
+
+  tipo_rubro: TipoRubroEnumChoice;
+  estado_rubro: EstadoRubroEnumChoice;
+
   concepto: string;
+
   subtotal: string;
   valor_taxes: string;
   valor_total: string;
   valor_ice: string;
   valor_pagado: string;
-  fecha_pago: Date;
-  fecha_emision: Date;
-  fecha_vencimiento: Date;
-  // detalle: Detalle[];
+
+  detalle: BaseRubroDetail[];
+
+  fecha_pago: string;
+  fecha_emision: string;
+  fecha_vencimiento: string;
+
+  created_at: string;
+  modified_at: string;
 
   ///* fk
   cliente: number;
   linea_servicio: number;
   contrato: number;
 }
+
+export type BaseRubroDetail = {
+  codigo: string;
+  precio: string;
+  cantidad: string;
+};
