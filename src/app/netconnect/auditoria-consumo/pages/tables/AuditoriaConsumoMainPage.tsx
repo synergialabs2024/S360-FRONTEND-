@@ -1,13 +1,14 @@
 import { Tab } from '@mui/material';
 
 import { ROUTER_PATHS } from '@/router/constants';
-import { useTabsOnly } from '@/shared';
+import { AuditoriaConsumoEnumChoice, useTabsOnly } from '@/shared';
 import {
   a11yProps,
   BoxFormTabsOnly,
   CustomTabPanel,
   SingleTableBoxScene,
 } from '@/shared/components';
+import AuditoriaConsumosByStatePage from './AuditoriaConsumosByStatePage';
 
 export const returnUrlAuditoriaConsumoPage =
   ROUTER_PATHS.netconnect.auditoriaConsumosNav;
@@ -49,19 +50,27 @@ const AuditoriaConsumoMainPage: React.FC<
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        1
+        <AuditoriaConsumosByStatePage
+          state={AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO}
+        />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        2
+        <AuditoriaConsumosByStatePage
+          state={AuditoriaConsumoEnumChoice.ACTIVOS_ALTO_CONSUMO}
+        />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
-        3
+        <AuditoriaConsumosByStatePage
+          state={AuditoriaConsumoEnumChoice.ACTIVOS_MOROSO}
+        />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
-        4
+        <AuditoriaConsumosByStatePage
+          state={AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO_MK}
+        />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );

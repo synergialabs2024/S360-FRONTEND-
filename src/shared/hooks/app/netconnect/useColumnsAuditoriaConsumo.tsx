@@ -6,16 +6,8 @@ import { TABLE_CONSTANTS } from '@/shared/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
 
 export const useColumnsAuditoriaConsumo = () => {
-  const clientesActivosAltoConsumo = useMemo<MRT_ColumnDef<AuditoriaConsumo>[]>(
+  const consumoClientesBase000 = useMemo<MRT_ColumnDef<AuditoriaConsumo>[]>(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'ID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'id'),
-      },
       {
         accessorKey: 'nombre',
         header: 'NOMBRE',
@@ -23,14 +15,6 @@ export const useColumnsAuditoriaConsumo = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
-      },
-      {
-        accessorKey: 'contrato',
-        header: 'CONTRATO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'contrato'),
       },
       {
         accessorKey: 'cedula',
@@ -47,6 +31,29 @@ export const useColumnsAuditoriaConsumo = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado'),
+      },
+    ],
+    [],
+  );
+
+  const consumoClientesBase001 = useMemo<MRT_ColumnDef<AuditoriaConsumo>[]>(
+    () => [
+      {
+        accessorKey: 'id',
+        header: 'ID',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'id'),
+      },
+      ...consumoClientesBase000,
+      {
+        accessorKey: 'contrato',
+        header: 'CONTRATO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'contrato'),
       },
       {
         accessorKey: 'mb_subida',
@@ -81,12 +88,45 @@ export const useColumnsAuditoriaConsumo = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'gb_subida'),
       },
     ],
-    [],
+    [consumoClientesBase000],
   );
 
-  const clientesSuspendidosConsumo = useMemo<MRT_ColumnDef<AuditoriaConsumo>[]>(
+  const consumoClientesBase002 = useMemo<MRT_ColumnDef<AuditoriaConsumo>[]>(
     () => [
-      ...clientesActivosAltoConsumo,
+      {
+        accessorKey: 'id_cliente',
+        header: 'ID CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'id_cliente'),
+      },
+      ...consumoClientesBase000,
+      {
+        accessorKey: 'ip',
+        header: 'IP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ip'),
+      },
+      {
+        accessorKey: 'nodo',
+        header: 'NODO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nodo'),
+      },
+    ],
+    [consumoClientesBase000],
+  );
+
+  const consumoClientes_Suspendidos_Cosumo = useMemo<
+    MRT_ColumnDef<AuditoriaConsumo>[]
+  >(
+    () => [
+      ...consumoClientesBase001,
       {
         accessorKey: 'nodo',
         header: 'NODO',
@@ -104,10 +144,16 @@ export const useColumnsAuditoriaConsumo = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'ip_cliente'),
       },
     ],
-    [clientesActivosAltoConsumo],
+    [consumoClientesBase001],
   );
 
-  const clientesActivosMoroso = useMemo<MRT_ColumnDef<AuditoriaConsumo>[]>(
+  const consumoClientes_Activos_Alto_Consumo = useMemo<
+    MRT_ColumnDef<AuditoriaConsumo>[]
+  >(() => [...consumoClientesBase001], [consumoClientesBase001]);
+
+  const consumoClientes_Activos_Moroso = useMemo<
+    MRT_ColumnDef<AuditoriaConsumo>[]
+  >(
     () => [
       {
         accessorKey: 'comment',
@@ -134,12 +180,12 @@ export const useColumnsAuditoriaConsumo = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'address'),
       },
       {
-        accessorKey: 'creation_time',
-        header: 'CREATION-TIME',
+        accessorKey: 'creation-time',
+        header: 'CREATION TIME',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'creation_time'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'creation-time'),
       },
       {
         accessorKey: 'ccr',
@@ -150,133 +196,31 @@ export const useColumnsAuditoriaConsumo = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'ccr'),
       },
       {
-        accessorKey: 'ip_ccr',
+        accessorKey: 'ip ccr',
         header: 'IP CCR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ip_ccr'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ip ccr'),
       },
+      ...consumoClientesBase002,
       {
-        accessorKey: 'estado',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado'),
-      },
-      {
-        accessorKey: 'id_cliente',
-        header: 'ID CLIENTE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'id_cliente'),
-      },
-      {
-        accessorKey: 'cedula',
-        header: 'CEDULA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'cedula'),
-      },
-      {
-        accessorKey: 'nombre',
-        header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
-      },
-      {
-        accessorKey: 'router_sn',
+        accessorKey: 'router sn',
         header: 'ROUTER SN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'router_sn'),
-      },
-      {
-        accessorKey: 'nodo',
-        header: 'NODO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nodo'),
-      },
-      {
-        accessorKey: 'ip',
-        header: 'IP',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ip'),
-      },
-      {
-        accessorKey: 'pppuser',
-        header: 'PPPUSER',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'pppuser'),
-      },
-      {
-        accessorKey: 'ppppass',
-        header: 'PPPPASS',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ppppass'),
-      },
-      {
-        accessorKey: 'plan',
-        header: 'PLAN',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'router sn'),
       },
     ],
-    [],
+    [consumoClientesBase002],
   );
 
-  const clientesSuspendidosConsumoMK = useMemo<
+  const consumoClientes_Suspendidos_Consumo_MK = useMemo<
     MRT_ColumnDef<AuditoriaConsumo>[]
   >(
     () => [
-      {
-        accessorKey: 'id_cliente',
-        header: 'ID CLIENTE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'id_cliente'),
-      },
-      {
-        accessorKey: 'nombre',
-        header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
-      },
-      {
-        accessorKey: 'cedula',
-        header: 'CEDULA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'cedula'),
-      },
-      {
-        accessorKey: 'estado',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado'),
-      },
+      ...consumoClientesBase002,
       {
         accessorKey: 'sn',
         header: 'SN',
@@ -286,22 +230,6 @@ export const useColumnsAuditoriaConsumo = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'sn'),
       },
       {
-        accessorKey: 'ip_ccr',
-        header: 'IP CCR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ip_ccr'),
-      },
-      {
-        accessorKey: 'ip',
-        header: 'IP',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ip'),
-      },
-      {
         accessorKey: 'plan',
         header: 'PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -310,13 +238,13 @@ export const useColumnsAuditoriaConsumo = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'plan'),
       },
     ],
-    [],
+    [consumoClientesBase002],
   );
 
   return {
-    clientesActivosAltoConsumo,
-    clientesSuspendidosConsumo,
-    clientesActivosMoroso,
-    clientesSuspendidosConsumoMK,
+    consumoClientes_Suspendidos_Cosumo,
+    consumoClientes_Activos_Alto_Consumo,
+    consumoClientes_Activos_Moroso,
+    consumoClientes_Suspendidos_Consumo_MK,
   };
 };
