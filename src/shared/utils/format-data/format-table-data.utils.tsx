@@ -1,4 +1,5 @@
 import { Typography, TypographyProps } from '@mui/material';
+import dayjs from 'dayjs';
 import {
   formatCurrency,
   formatDate,
@@ -100,6 +101,17 @@ export const formatDateWithTimeCellNested = (
       {value ? formatDateWithTime(value) : 'N/A'}
     </Typography>
   );
+};
+export const formatDateWithTimeCellOnlyDate = (row: any, key: string) => {
+  const value = row?.original?.[key];
+  if (!value) return 'N/A';
+
+  try {
+    const date = dayjs(value).format('YYYY-MM-DD');
+    return date;
+  } catch {
+    return '-';
+  }
 };
 
 export const formatBooleanCell = (

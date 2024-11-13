@@ -9,8 +9,11 @@ export interface RubrosPaginatedRes {
 }
 
 export interface Rubro {
-  id: number;
-  uuid: string;
+  id?: number;
+  uuid?: string;
+
+  numero_referencia: string;
+  numero_rubro: string;
 
   tipo_rubro: TipoRubroEnumChoice;
   estado_rubro: EstadoRubroEnumChoice;

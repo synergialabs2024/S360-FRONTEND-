@@ -21,7 +21,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 }) => {
   ///* hooks ----------------
   const { tabValue, handleTabChange } = useTabsOnly({
-    initialTabValue: 2,
+    initialTabValue: 5,
   });
 
   return (
