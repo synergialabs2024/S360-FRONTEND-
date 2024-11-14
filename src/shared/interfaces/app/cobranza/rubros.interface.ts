@@ -50,6 +50,7 @@ export type BaseRubroDetail = {
   codigo: string;
   precio: string;
   cantidad: string;
+
   producto_data?: BaseRubroDetailProductData;
 };
 export type BaseRubroDetailProductData = Pick<

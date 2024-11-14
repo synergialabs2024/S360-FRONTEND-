@@ -1,4 +1,5 @@
 import { Tab } from '@mui/material';
+import { useEffect } from 'react';
 
 import { gridSize, gridSizeMdLg10, LineaServicio, useTabsOnly } from '@/shared';
 import {
@@ -7,6 +8,7 @@ import {
   FormTabsOnly,
   TabsFormBoxScene,
 } from '@/shared/components';
+import { useRubroStore } from '@/store/app/rubros';
 import ClienteFibraTitle from './ClienteFibraTitle';
 import { ClienteFibrRubrosTab } from './rubros';
 import { ServiceFibraClientPart } from './servicio';
@@ -23,6 +25,21 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
   const { tabValue, handleTabChange } = useTabsOnly({
     initialTabValue: 5,
   });
+
+  ///* global state ----------------------
+  const setOT = useRubroStore(s => s.setActiveOrdenTrabajo);
+  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+
+  ///* effects ----------------
+  useEffect(() => {
+    if (!serviceLine) return;
+    setOT(serviceLine?.orden_trabajo_data || null);
+  }, [serviceLine, setOT]);
+  useEffect(() => {
+    return () => {
+      clearAllRubroStore();
+    };
+  }, [clearAllRubroStore]);
 
   return (
     <TabsFormBoxScene

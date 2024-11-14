@@ -1,5 +1,4 @@
 import { Divider } from '@mui/material';
-import { useState } from 'react';
 
 import { Rubro } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
@@ -24,10 +23,6 @@ const ClienteFibraRobroInfoModal: React.FC<ClienteFibraRobroInfoModalProps> = ({
 }) => {
   const rubroType = rubro?.tipo_rubro;
 
-  ///* local state -------------------
-  const [openSeriesModal, setOpenSeriesModal] = useState<boolean>(false);
-  console.log('openSeriesModal', openSeriesModal);
-
   ///* global state --------------------
   const setSelectedRow = useInstalacionesStore(s => s.setSelectedRow);
   const clearAllStore = useInstalacionesStore(s => s.clearAll);
@@ -35,7 +30,6 @@ const ClienteFibraRobroInfoModal: React.FC<ClienteFibraRobroInfoModalProps> = ({
   ///* handlers -------------------------
   const handleClose = () => {
     onClose();
-    setOpenSeriesModal(false);
     setSelectedRow(null);
     clearAllStore();
   };
