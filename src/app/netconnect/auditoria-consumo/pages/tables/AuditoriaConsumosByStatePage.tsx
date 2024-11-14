@@ -1,7 +1,13 @@
-import { useFetchAuditoriaConsumos } from '@/actions/app';
+import {
+  useFetchClientesActivosAltoConsumo,
+  useFetchClientesActivosMoroso,
+  useFetchClientesSuspendidosConsumo,
+  useFetchClientesSuspendidosConsumoMK,
+} from '@/actions/app';
 import {
   AuditoriaConsumo,
   AuditoriaConsumoEnumChoice,
+  useButtonsAuditoriaConsumo,
   useColumnsAuditoriaConsumo,
   useTableFilter,
   useTableServerSideFiltering,
@@ -35,10 +41,52 @@ const AuditoriaConsumosByStatePage: React.FC<
 
   ///* fetch data
   const {
-    data: AuditoriaConsumosPagingRes,
-    isLoading,
-    isRefetching,
-  } = useFetchAuditoriaConsumos({
+    data: ClientesSuspendidosConsumoPagingRes,
+    isLoading: isLoadingCSC,
+    isRefetching: isRefetchingCSC,
+  } = useFetchClientesSuspendidosConsumo({
+    enabled: true,
+    params: {
+      identificacion: searchTerm,
+      ...filterObject,
+      page_size: pageSize,
+      page: pageIndex + 1,
+    },
+  });
+
+  const {
+    data: ClientesActivosAltoConsumoPagingRes,
+    isLoading: isLoadingCAAC,
+    isRefetching: isRefetchingCAAC,
+  } = useFetchClientesActivosAltoConsumo({
+    enabled: true,
+    params: {
+      identificacion: searchTerm,
+      ...filterObject,
+      page_size: pageSize,
+      page: pageIndex + 1,
+    },
+  });
+
+  const {
+    data: ClientesActivosMorosoPagingRes,
+    isLoading: isLoadingCAM,
+    isRefetching: isRefetchingCAM,
+  } = useFetchClientesActivosMoroso({
+    enabled: true,
+    params: {
+      identificacion: searchTerm,
+      ...filterObject,
+      page_size: pageSize,
+      page: pageIndex + 1,
+    },
+  });
+
+  const {
+    data: ClientesSuspendidosConsumoMKPagingRes,
+    isLoading: isLoadingCSCMK,
+    isRefetching: isRefetchingCSCMK,
+  } = useFetchClientesSuspendidosConsumoMK({
     enabled: true,
     params: {
       identificacion: searchTerm,
@@ -56,7 +104,14 @@ const AuditoriaConsumosByStatePage: React.FC<
     consumoClientes_Suspendidos_Consumo_MK,
   } = useColumnsAuditoriaConsumo();
 
-  console.log(state);
+  ///* buttons
+
+  const {
+    buttonClientesSuspendidosConsumo,
+    buttonClientesActivosAltoConsumo,
+    buttonActivosMoroso,
+    buttonSuspendidosConsumoMK,
+  } = useButtonsAuditoriaConsumo();
 
   return (
     <GridTableTabsContainerOnly>
@@ -67,6 +122,19 @@ const AuditoriaConsumosByStatePage: React.FC<
         sxContainer={{
           mb: 5,
         }}
+        customSpaceNode={
+          <>
+            {state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO ? (
+              <>{buttonClientesSuspendidosConsumo()}</>
+            ) : state === AuditoriaConsumoEnumChoice.ACTIVOS_ALTO_CONSUMO ? (
+              <>{buttonClientesActivosAltoConsumo()}</>
+            ) : state === AuditoriaConsumoEnumChoice.ACTIVOS_MOROSO ? (
+              <>{buttonActivosMoroso()}</>
+            ) : state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO_MK ? (
+              <>{buttonSuspendidosConsumoMK()}</>
+            ) : null}
+          </>
+        }
       />
       <CustomTable<AuditoriaConsumo>
         columns={
@@ -81,9 +149,29 @@ const AuditoriaConsumosByStatePage: React.FC<
                   ? consumoClientes_Suspendidos_Consumo_MK
                   : consumoClientes_Suspendidos_Cosumo
         }
-        data={AuditoriaConsumosPagingRes?.data?.items || []}
-        isLoading={isLoading}
-        isRefetching={isRefetching}
+        data={ClientesSuspendidosConsumoPagingRes?.data?.items || []}
+        isLoading={
+          state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO
+            ? isLoadingCSC
+            : state === AuditoriaConsumoEnumChoice.ACTIVOS_ALTO_CONSUMO
+              ? isLoadingCAAC
+              : state === AuditoriaConsumoEnumChoice.ACTIVOS_MOROSO
+                ? isLoadingCAM
+                : state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO_MK
+                  ? isLoadingCSCMK
+                  : isLoadingCSC
+        }
+        isRefetching={
+          state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO
+            ? isRefetchingCSC
+            : state === AuditoriaConsumoEnumChoice.ACTIVOS_ALTO_CONSUMO
+              ? isRefetchingCAAC
+              : state === AuditoriaConsumoEnumChoice.ACTIVOS_MOROSO
+                ? isRefetchingCAM
+                : state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO_MK
+                  ? isRefetchingCSCMK
+                  : isRefetchingCSC
+        }
         // // filters - server side
         enableManualFiltering={true}
         columnFilters={columnFilters}
@@ -93,7 +181,17 @@ const AuditoriaConsumosByStatePage: React.FC<
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={AuditoriaConsumosPagingRes?.data?.meta?.count}
+        rowCount={
+          state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO
+            ? ClientesSuspendidosConsumoPagingRes?.data?.meta?.count
+            : state === AuditoriaConsumoEnumChoice.ACTIVOS_ALTO_CONSUMO
+              ? ClientesActivosAltoConsumoPagingRes?.data?.meta?.count
+              : state === AuditoriaConsumoEnumChoice.ACTIVOS_MOROSO
+                ? ClientesActivosMorosoPagingRes?.data?.meta?.count
+                : state === AuditoriaConsumoEnumChoice.SUSPENSION_CONSUMO_MK
+                  ? ClientesSuspendidosConsumoMKPagingRes?.data?.meta?.count
+                  : ClientesSuspendidosConsumoPagingRes?.data?.meta?.count
+        }
         enableActionsColumn={false}
       />
     </GridTableTabsContainerOnly>
