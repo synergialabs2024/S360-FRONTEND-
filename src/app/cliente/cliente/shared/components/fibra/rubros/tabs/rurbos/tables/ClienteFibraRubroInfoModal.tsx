@@ -1,10 +1,11 @@
+import { Divider } from '@mui/material';
 import { useState } from 'react';
 
 import { Rubro } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
 import { useInstalacionesStore } from '@/store/app';
-import { Divider } from '@mui/material';
 import {
+  ClienteFibraRobroInfoAmounts,
   ClienteFibraRobroInfoFromTo,
   ClienteFibraRobroInfoHeader,
   ClienteFibraRobroInfoTableDetails,
@@ -57,6 +58,8 @@ const ClienteFibraRobroInfoModal: React.FC<ClienteFibraRobroInfoModalProps> = ({
             <ClienteFibraRobroInfoFromTo rubro={rubro} />
 
             <ClienteFibraRobroInfoTableDetails rubro={rubro} />
+
+            <ClienteFibraRobroInfoAmounts rubro={rubro} />
           </>
         }
       />

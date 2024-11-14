@@ -26,6 +26,8 @@ const ClienteFibraRobroInfoTableDetails: React.FC<
   const detail: BaseRubroDetail[] = rubro?.detalle;
   const hasName = detail?.some(item => item?.producto_data?.nombre);
 
+  // TODO: calc subtotal for productos that have coutas
+
   return (
     <>
       <Paper variant="outlined">
