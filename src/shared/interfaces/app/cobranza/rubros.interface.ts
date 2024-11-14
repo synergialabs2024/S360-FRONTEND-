@@ -1,6 +1,7 @@
 import { EstadoRubroEnumChoice, TipoRubroEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { ClienteLimitData, ContratoLimitData } from '../cliente';
+import { Producto } from '../inventario';
 
 export interface RubrosPaginatedRes {
   status: number;
@@ -49,4 +50,9 @@ export type BaseRubroDetail = {
   codigo: string;
   precio: string;
   cantidad: string;
+  producto_data?: BaseRubroDetailProductData;
 };
+export type BaseRubroDetailProductData = Pick<
+  Producto,
+  'id' | 'uuid' | 'nombre'
+>;

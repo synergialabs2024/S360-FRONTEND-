@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-import { Rubro, TipoRubroEnumChoice } from '@/shared';
+import { Rubro } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
 import { useInstalacionesStore } from '@/store/app';
 import { Divider } from '@mui/material';
 import {
   ClienteFibraRobroInfoFromTo,
   ClienteFibraRobroInfoHeader,
+  ClienteFibraRobroInfoTableDetails,
 } from './modal';
 
 export type ClienteFibraRobroInfoModalProps = {
@@ -50,21 +51,12 @@ const ClienteFibraRobroInfoModal: React.FC<ClienteFibraRobroInfoModalProps> = ({
         onClose={handleClose}
         contentNode={
           <>
-            <>
-              {rubroType === TipoRubroEnumChoice.SERVICIO ? (
-                <>SERVICIO</>
-              ) : rubroType === TipoRubroEnumChoice.PRODUCTOS ? (
-                <>PRODUCTOS</>
-              ) : rubroType === TipoRubroEnumChoice.LIBRE ? (
-                <>LIBRE</>
-              ) : null}
-            </>
-
-            {/* ========================================================================== */}
             <ClienteFibraRobroInfoHeader rubro={rubro} />
             <Divider></Divider>
 
             <ClienteFibraRobroInfoFromTo rubro={rubro} />
+
+            <ClienteFibraRobroInfoTableDetails rubro={rubro} />
           </>
         }
       />

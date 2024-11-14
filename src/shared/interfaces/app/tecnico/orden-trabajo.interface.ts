@@ -116,11 +116,13 @@ export interface OrdenTrabajo {
 export type EquipoUtilizadosInstallOT = {
   codigo: string;
   cantidad: string;
-  producto_data: {
-    nombre: string;
-    codigo: string;
-    tipo: string;
-  };
   series: string[];
+  producto_data: ProductDataLimitOT;
 };
 export type MaterialUtilizadosInstallOT = EquipoUtilizadosInstallOT & {};
+
+export type ProductDataLimitOT = {
+  nombre: string;
+  codigo: string;
+  tipo: string;
+};

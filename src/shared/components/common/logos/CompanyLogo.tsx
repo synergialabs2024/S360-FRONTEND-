@@ -13,6 +13,7 @@ const CompanyLogo: React.FC<CompanyLogoProps> = ({ logoHeight = '4.2rem' }) => {
         src={user?.company_data?.logo_1_url || ''}
         alt="logo"
         style={{ width: 'auto', height: logoHeight, objectFit: 'contain' }}
+        draggable={false}
       />
     </>
   );
