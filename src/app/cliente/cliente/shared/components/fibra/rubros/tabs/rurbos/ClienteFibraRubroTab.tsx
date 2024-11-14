@@ -1,3 +1,6 @@
+import { Grid } from '@mui/material';
+import { FiPlus } from 'react-icons/fi';
+
 import { useFetchRubros } from '@/actions/app';
 import {
   LineaServicio,
@@ -8,8 +11,6 @@ import {
   useTableServerSideFiltering,
 } from '@/shared';
 import { CustomSingleButton, CustomTable } from '@/shared/components';
-import { Grid } from '@mui/material';
-import { FiPlus } from 'react-icons/fi';
 
 export type ClienteFibraRubroTabProps = {
   serviceLine?: LineaServicio;

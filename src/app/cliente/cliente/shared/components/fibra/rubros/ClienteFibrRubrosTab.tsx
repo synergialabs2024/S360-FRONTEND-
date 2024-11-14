@@ -1,7 +1,12 @@
 import { Tab } from '@mui/material';
 
 import { LineaServicio, useTabsOnly } from '@/shared';
-import { a11yProps, FormTabsOnly, NestedTabsScene } from '@/shared/components';
+import {
+  a11yProps,
+  CustomTabPanel,
+  FormTabsOnly,
+  NestedTabsScene,
+} from '@/shared/components';
 import { ClienteFibraRubroTab } from './tabs/rurbos';
 
 export type ClienteFibrRubrosTabProps = {
@@ -31,7 +36,19 @@ const ClienteFibrRubrosTab: React.FC<ClienteFibrRubrosTabProps> = ({
         }}
       >
         {/* ========================= rubros ========================= */}
-        <ClienteFibraRubroTab serviceLine={serviceLine} />
+        <CustomTabPanel index={1} value={tabValue}>
+          <ClienteFibraRubroTab serviceLine={serviceLine} />
+        </CustomTabPanel>
+
+        {/* ========================= transacciones ========================= */}
+        <CustomTabPanel index={2} value={tabValue}>
+          TRANSACCIONES
+        </CustomTabPanel>
+
+        {/* ========================= saldos ========================= */}
+        <CustomTabPanel index={3} value={tabValue}>
+          SALDOS
+        </CustomTabPanel>
       </NestedTabsScene>
     </>
   );
