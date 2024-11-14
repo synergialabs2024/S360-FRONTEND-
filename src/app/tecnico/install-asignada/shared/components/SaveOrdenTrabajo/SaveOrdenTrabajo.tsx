@@ -184,7 +184,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       customMessageToast: 'Orden de trabajo cargada con éxito',
       // navigate,
       returnUrl: returnUrlInstallAsignadasOT,
-      customOnSettled() {
+      customOnSuccess() {
         clearAll();
         navigate(returnUrlInstallAsignadasOT);
       },
