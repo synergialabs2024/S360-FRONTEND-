@@ -6,8 +6,9 @@ import { useForm } from 'react-hook-form';
 import {
   AgendamientoTSQEnum,
   CreateSolRecoordinacionAgenda,
-  useCreateSolicitudRecoordinacionAgenda,
+  SolicitudRecoordinacionAgendaTSQEnum,
 } from '@/actions/app';
+import { useGenericPOST } from '@/actions/shared';
 import {
   Agendamiento,
   getKeysFormErrorsMessage,
@@ -21,13 +22,20 @@ export type RequestRecoordinacionAgendaTableBtnProps = {
   agendamiento: Agendamiento;
   open: boolean;
   onClose(): void;
+
+  customUrl?: string;
 };
 
 type SaveFormData = SolicitudRecoordinacionAgenda & {};
 
 const RequestRecoordinacionAgendaTableBtn: React.FC<
   RequestRecoordinacionAgendaTableBtnProps
-> = ({ open, onClose, agendamiento }) => {
+> = ({
+  open,
+  onClose,
+  agendamiento,
+  customUrl = '/solicitud-recoordinacion-agenda/',
+}) => {
   const queryClient = useQueryClient();
 
   ///* form ---------------------
@@ -37,11 +45,17 @@ const RequestRecoordinacionAgendaTableBtn: React.FC<
   const { errors } = form.formState;
 
   ///* mutations ---------------------
-  const createSolRecoordinacionAgenda =
-    useCreateSolicitudRecoordinacionAgenda<CreateSolRecoordinacionAgenda>({
+  const createSolRecoordinacionAgenda = useGenericPOST<
+    CreateSolRecoordinacionAgenda,
+    SolicitudRecoordinacionAgenda
+  >(
+    customUrl,
+    SolicitudRecoordinacionAgendaTSQEnum.SOLICITUDRECOORDINACIONAGENDAS,
+    {
       customMessageToast:
         'Se ha solicitado la recoordinación de agenda con éxito',
-    });
+    },
+  );
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {

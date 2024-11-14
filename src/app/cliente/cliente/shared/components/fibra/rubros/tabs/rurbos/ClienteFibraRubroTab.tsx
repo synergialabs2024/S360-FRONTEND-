@@ -11,6 +11,7 @@ import {
   useTableServerSideFiltering,
 } from '@/shared';
 import { CustomSingleButton, CustomTable } from '@/shared/components';
+import { ClienteFibraRubroLibreModal } from './libre';
 
 export type ClienteFibraRubroTabProps = {
   serviceLine?: LineaServicio;
@@ -115,6 +116,9 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
           />
         </Grid>
       </Grid>
+
+      {/* -------------- modals -------------- */}
+      <ClienteFibraRubroLibreModal />
     </>
   );
 };

@@ -152,3 +152,15 @@ export const updateRubro = async <T>({ id, data }: UpdateRubroParams<T>) => {
 
   return patch<Rubro>(`/rubro/${id}/`, data, true);
 };
+
+///* action types ===================================
+export type CreateRubroLibreClienteData = Pick<
+  Rubro,
+  | 'tipo_rubro'
+  | 'fecha_vencimiento'
+  | 'valor_total'
+  | 'valor_taxes'
+  | 'subtotal'
+  | 'linea_servicio'
+  | 'detalle'
+>;
