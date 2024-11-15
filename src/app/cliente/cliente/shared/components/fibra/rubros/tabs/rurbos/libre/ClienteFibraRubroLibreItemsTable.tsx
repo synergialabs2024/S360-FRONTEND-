@@ -1,8 +1,9 @@
-import { Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Grid, TextField, Typography } from '@mui/material';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
-import { IoMdAddCircle } from 'react-icons/io';
+import { IoMdAddCircle, IoMdTrash } from 'react-icons/io';
 
 import {
   useFetchBodegas,
@@ -29,8 +30,11 @@ import {
   CustomSingleButton,
   CustomTable,
   CustomToggleSection,
+  ProductoUbicacionSeriesModal,
+  SingleIconButton,
 } from '@/shared/components';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
+import { IoQrCodeSharp } from 'react-icons/io5';
 import ClienteFibraRubroLibreHeader from './ClienteFibraRubroLibreHeader';
 import { RubrosClienteFormData } from './ClienteFibraRubroLibreModal';
 
@@ -39,7 +43,13 @@ export type ClienteFibraRubroLibreItemsTableProps = {
   form: UseFormReturn<RubrosClienteFormData>;
 };
 
-export type ClienteRubroLibreTableType = UbicacionProducto & {};
+export type ClienteRubroLibreTableType = UbicacionProducto & {
+  usedQuantity: number;
+
+  containsSeries: boolean;
+  selectedSeries: string[];
+  savedSeries: string[];
+};
 
 const ClienteFibraRubroLibreItemsTable: React.FC<
   ClienteFibraRubroLibreItemsTableProps
@@ -52,10 +62,16 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
 
   ///* local state ----------------
   const [showTable, setShowTable] = useState<boolean>(false);
+  const [openSeriesModal, setOpenSeriesModal] = useState<boolean>(false);
 
   ///* global state ----------------
   const addSelectedItem = useInstalacionesStore(s => s.addSelectedItem);
   const selectedItems = useInstalacionesStore(s => s.equiposUtilizados);
+  const updateSelectedItemValue = useInstalacionesStore(
+    s => s.updateSelectedItemValue,
+  );
+  const removeSelectedItem = useInstalacionesStore(s => s.removeSelectedItem);
+  const setSelectedRow = useInstalacionesStore(s => s.setSelectedRow);
 
   ///* form ----------------
   const { errors } = form.formState;
@@ -114,6 +130,30 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
   });
 
   ///* handlers ----------------
+  const onChangeQuantity = useCallback(
+    (value: string, item: ClienteRubroLibreTableType) => {
+      const currentStock = item?.stock_actual || 0;
+      if (+value > +currentStock) {
+        ToastWrapper.error(`La cantidad máxima permitida es ${currentStock}`);
+        return;
+      }
+
+      updateSelectedItemValue({
+        keyStore: InstalacionesStoreKey.equiposUtilizados,
+        updatedItem: {
+          ...item,
+          usedQuantity: +value,
+
+          // reset series when quantity is changed
+          selectedSeries: [],
+          savedSeries: [],
+          containsSeries: !!item?.series?.length,
+        },
+      });
+    },
+    [updateSelectedItemValue],
+  );
+
   const onAddEmptyLine = () => {
     console.log('add empty line');
   };
@@ -123,6 +163,101 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
     baseColumnsUbicacionProducto,
     baseColumnsRubroClienteUbicacionProducto,
   } = useColumnsUbicacionProducto();
+
+  const equiposUtilizadosColumns = useMemo<
+    MRT_ColumnDef<ClienteRubroLibreTableType>[]
+  >(
+    () => [
+      ...baseColumnsRubroClienteUbicacionProducto,
+      {
+        accessorKey: 'usedQuantity',
+        header: 'CANTIDAD ',
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              variant="outlined"
+              value={row.original?.usedQuantity?.toString() || ''}
+              onChange={e => {
+                const value = e.target.value;
+                const intValue = parseInt(value, 10);
+
+                onChangeQuantity(intValue.toString(), row.original);
+              }}
+              type="number"
+              inputProps={{
+                min: 1,
+                max: row.original?.stock_actual || 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+
+      {
+        accessorKey: 'selectedSeries',
+        header: 'SERIES SELECCIONADAS',
+        Cell: ({ row }) => {
+          return !row.original?.containsSeries
+            ? 'SIN SERIES'
+            : row.original?.savedSeries?.length;
+        },
+      },
+      {
+        accessorKey: 'series',
+        header: 'SERIES DISPONIBLES',
+        size: 60,
+        Cell: ({ row }) => {
+          const hasSeries = !!row.original?.series?.length;
+          const alreadySelected = !!row.original?.savedSeries?.length;
+
+          return hasSeries ? (
+            <SingleIconButton
+              label={`${alreadySelected ? 'Ver' : 'Seleccionar'} Series`}
+              startIcon={<IoQrCodeSharp />}
+              color="info"
+              onClick={() => {
+                setSelectedRow({
+                  ...row.original,
+                  selectedSeries: row.original?.savedSeries || [],
+                });
+                setOpenSeriesModal(true);
+              }}
+              justifyContent="center"
+            />
+          ) : (
+            'SIN SERIES'
+          );
+        },
+      },
+
+      {
+        accessorKey: 'remove',
+        header: 'ACCIONES',
+        Cell: ({ row }) => (
+          <SingleIconButton
+            label="Remover"
+            startIcon={<IoMdTrash />}
+            color="error"
+            tooltipPlacement="right-end"
+            onClick={() => {
+              removeSelectedItem({
+                item: row.original as any,
+                keyStore: InstalacionesStoreKey.equiposUtilizados,
+              });
+            }}
+            justifyContent="center"
+          />
+        ),
+      },
+    ],
+    [
+      baseColumnsRubroClienteUbicacionProducto,
+      onChangeQuantity,
+      removeSelectedItem,
+      setSelectedRow,
+    ],
+  );
 
   ///* effects ----------------
   // alerts ---------
@@ -346,12 +481,22 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
       {/* ==================== selected items ==================== */}
       <>
         <CustomMinimalTable<ClienteRubroLibreTableType>
-          columns={baseColumnsRubroClienteUbicacionProducto}
+          columns={equiposUtilizadosColumns}
           data={selectedItems || []}
           enablePagination
-          density="comfortable"
+          density="compact"
         />
       </>
+
+      {/* ==================== modals ==================== */}
+      <ProductoUbicacionSeriesModal
+        open={openSeriesModal}
+        onClose={() => {
+          setOpenSeriesModal(false);
+          setSelectedRow(null);
+        }}
+        onChangeKeyArrayStore={InstalacionesStoreKey.equiposUtilizados}
+      />
     </Grid>
   );
 };
