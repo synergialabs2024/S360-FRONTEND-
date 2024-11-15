@@ -1,23 +1,95 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
+import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
-import { createRubroClienteFormSchema } from '@/shared';
+import { CreateRubroLibreClienteData, useCreateRubro } from '@/actions/app';
+import { createRubroClienteFormSchema, LineaServicio, Rubro } from '@/shared';
+import { ScrollableDialogProps } from '@/shared/components';
+import { useRubroStore } from '@/store/app/rubros';
+import ClienteFibraRubroLibreItemsTable from './ClienteFibraRubroLibreItemsTable';
 
-export type ClienteFibraRubroLibreModalProps = {};
+export type ClienteFibraRubroLibreModalProps = {
+  open: boolean;
+  onClose: () => void;
+  serviceLine: LineaServicio;
+};
 
-type RubrosClienteFormData = {};
+export type RubrosClienteFormData = Partial<Rubro> & {
+  // helpers to fetch items ------------
+  bodega?: number;
+  ubicacion?: number;
+  categoria_producto?: number;
+};
 
 const ClienteFibraRubroLibreModal: React.FC<
   ClienteFibraRubroLibreModalProps
-> = () => {
+> = ({ open, onClose, serviceLine }) => {
+  ///* global state --------------------------
+  const activeRubro = useRubroStore(s => s.activeRubro);
+
   ///* form --------------------------
   const form = useForm<RubrosClienteFormData>({
     resolver: yupResolver(createRubroClienteFormSchema) as any,
-    defaultValues: {},
+    defaultValues: {
+      fecha_emision: dayjs().format(),
+    },
   });
-  console.log(form);
 
-  return <>ClienteFibraRubroLibreModal</>;
+  ///* mutations --------------------------
+  const createRurbo = useCreateRubro<CreateRubroLibreClienteData>({
+    customMessageToast: 'Rubro creado correctamente',
+    customOnSuccess: () => {
+      form.reset();
+      onClose();
+    },
+  });
+
+  ///* handlers --------------------------
+  const onSave = (data: RubrosClienteFormData) => {
+    createRurbo.mutate({
+      detalle: data?.detalle!,
+      fecha_vencimiento: data?.fecha_vencimiento!,
+      subtotal: data?.subtotal!,
+      tipo_rubro: data?.tipo_rubro!,
+      valor_taxes: data?.valor_taxes!,
+      valor_total: data?.valor_total!,
+      linea_servicio: serviceLine.id,
+    });
+  };
+
+  const handleClose = () => {
+    form.reset();
+    onClose();
+  };
+
+  return (
+    <>
+      <ScrollableDialogProps
+        title={`${activeRubro?.id ? 'Editar' : 'Crear'} Rubro Libre`}
+        open={open}
+        onClose={handleClose}
+        minWidth="81%"
+        // confirm --------
+        onConfirm={form.handleSubmit(onSave)}
+        confirmVariantBtn="outlined"
+        confirmTextBtn="Guardar"
+        // // content --------
+        contentNode={
+          <>
+            <Grid container spacing={3} mt={2} mb={1}>
+              <ClienteFibraRubroLibreItemsTable
+                serviceLine={serviceLine}
+                form={form}
+              />
+
+              {/* ================== add item table ================== */}
+            </Grid>
+          </>
+        }
+      />
+    </>
+  );
 };
 
 export default ClienteFibraRubroLibreModal;

@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 
 import { useFetchRubros } from '@/actions/app';
@@ -20,6 +21,10 @@ export type ClienteFibraRubroTabProps = {
 const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   serviceLine,
 }) => {
+  ///* local state -------------------------
+  const [isOpenFreeRubroModal, setIsOpenFreeRubroModal] =
+    useState<boolean>(false);
+
   ///* table -------------------------
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -74,7 +79,7 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
               variant="text"
               startIcon={<FiPlus />}
               onClick={() => {
-                console.log('open agregar equipo');
+                setIsOpenFreeRubroModal(true);
               }}
               justifyContent="flex-end"
             />
@@ -118,7 +123,11 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
       </Grid>
 
       {/* -------------- modals -------------- */}
-      <ClienteFibraRubroLibreModal />
+      <ClienteFibraRubroLibreModal
+        open={isOpenFreeRubroModal}
+        onClose={() => setIsOpenFreeRubroModal(false)}
+        serviceLine={serviceLine!}
+      />
     </>
   );
 };
