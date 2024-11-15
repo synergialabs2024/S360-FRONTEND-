@@ -5,6 +5,7 @@ import {
   EstadoOrdenTrabajoEnumChoice,
   FlotaLimitData,
   LineaServicio,
+  MotivoRechazo,
   Nap,
   Nodo,
   OLT,
@@ -104,6 +105,7 @@ export interface OrdenTrabajo {
   linea_servicio_data?: LineaServicio;
   nodo_data?: Nodo;
   olt_data?: OLT;
+  motivo_prerechazo_data?: MotivoRechazo;
 
   // just serializer
   ciudad_data?: Ciudad;

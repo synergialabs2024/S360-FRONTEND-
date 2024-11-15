@@ -1,8 +1,12 @@
+import { Grid, Typography } from '@mui/material';
+import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
 
 import {
   useFetchBodegas,
   useFetchCategoriaProductos,
+  useFetchUbicacionProductos,
   useFetchUbicacions,
 } from '@/actions/app';
 import {
@@ -11,15 +15,17 @@ import {
   gridSizeMdLg4,
   LineaServicio,
   Ubicacion,
+  UbicacionProducto,
+  useColumnsUbicacionProducto,
+  useTableFilter,
+  useTableServerSideFiltering,
 } from '@/shared';
 import {
   CustomAutocomplete,
   CustomSingleButton,
   CustomToggleSection,
+  TableWithoutActions,
 } from '@/shared/components';
-import { Grid, Typography } from '@mui/material';
-import { useState } from 'react';
-import { FiPlus } from 'react-icons/fi';
 import ClienteFibraRubroLibreHeader from './ClienteFibraRubroLibreHeader';
 import { RubrosClienteFormData } from './ClienteFibraRubroLibreModal';
 
@@ -31,12 +37,19 @@ export type ClienteFibraRubroLibreItemsTableProps = {
 const ClienteFibraRubroLibreItemsTable: React.FC<
   ClienteFibraRubroLibreItemsTableProps
 > = ({ form, serviceLine }) => {
+  ///* hooks ---------------------
+  const { filterObject, columnFilters, setColumnFilters } =
+    useTableServerSideFiltering();
+  const { pagination, setPagination } = useTableFilter();
+  const { pageIndex, pageSize } = pagination;
+
   ///* local state ----------------
   const [showTable, setShowTable] = useState<boolean>(false);
 
   ///* form ----------------
-  const watchedBodega = form.watch('bodega');
   const { errors } = form.formState;
+  const watchedBodega = form.watch('bodega');
+  const watchedUbicacion = form.watch('ubicacion');
 
   ///* fetch data ----------------
   const {
@@ -71,10 +84,29 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
     },
   });
 
+  const {
+    data: itemsDisponiblesPaging,
+    isLoading: isLoadingItemsDisponibles,
+    isRefetching: isRefetchingItemsDisponibles,
+  } = useFetchUbicacionProductos({
+    enabled: !!showTable && !!watchedUbicacion,
+    params: {
+      page: pageIndex + 1,
+      page_size: pageSize,
+
+      ...filterObject,
+
+      ubicacion: watchedUbicacion!,
+    },
+  });
+
   ///* handlers ----------------
   const onAddEmptyLine = () => {
     console.log('add empty line');
   };
+
+  ///* columns ----------------
+  const { baseColumnsUbicacionProducto } = useColumnsUbicacionProducto();
 
   return (
     <Grid item xs={12}>
@@ -122,66 +154,89 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
       <>
         {showTable && (
           <>
-            <Grid item container xs={12} mb={4} spacing={3}>
-              <CustomToggleSection sectionTitle="Productos disponibles">
-                <Grid item container xs={12} spacing={3}>
-                  <CustomAutocomplete<Bodega>
-                    label="Bodega"
-                    name="bodega"
-                    defaultValue={form.getValues().bodega || ''}
-                    // options
-                    valueKey="nombre"
-                    actualValueKey="id"
-                    options={bodegasPaging?.data.items || []}
-                    isLoadingData={isLoadingBodegas || isRefetchingBodegas}
-                    disableClearable
-                    // errors
-                    control={form.control}
-                    error={errors.bodega as any}
-                    helperText={errors.bodega?.message}
-                    size={gridSizeMdLg4}
-                  />
+            <CustomToggleSection sectionTitle="Productos disponibles">
+              <Grid item container xs={12} spacing={3}>
+                <CustomAutocomplete<Bodega>
+                  label="Bodega"
+                  name="bodega"
+                  defaultValue={form.getValues().bodega || ''}
+                  // options
+                  valueKey="nombre"
+                  actualValueKey="id"
+                  options={bodegasPaging?.data.items || []}
+                  isLoadingData={isLoadingBodegas || isRefetchingBodegas}
+                  disableClearable
+                  // errors
+                  control={form.control}
+                  error={errors.bodega as any}
+                  helperText={errors.bodega?.message}
+                  size={gridSizeMdLg4}
+                />
 
-                  <CustomAutocomplete<Ubicacion>
-                    label="Ubicacion"
-                    name="ubicacion"
-                    defaultValue={form.getValues().ubicacion || ''}
-                    // options
-                    valueKey="nombre"
-                    actualValueKey="id"
-                    options={ubicacionesPaging?.data.items || []}
-                    isLoadingData={
-                      isLoadingUbicaciones || isRefetchingUbicaciones
-                    }
-                    disableClearable
-                    // errors
-                    control={form.control}
-                    error={errors.ubicacion as any}
-                    helperText={errors.ubicacion?.message}
-                    size={gridSizeMdLg4}
-                  />
+                <CustomAutocomplete<Ubicacion>
+                  label="Ubicacion"
+                  name="ubicacion"
+                  defaultValue={form.getValues().ubicacion || ''}
+                  // options
+                  valueKey="nombre"
+                  actualValueKey="id"
+                  options={ubicacionesPaging?.data.items || []}
+                  isLoadingData={
+                    isLoadingUbicaciones || isRefetchingUbicaciones
+                  }
+                  disableClearable
+                  // errors
+                  control={form.control}
+                  error={errors.ubicacion as any}
+                  helperText={errors.ubicacion?.message}
+                  size={gridSizeMdLg4}
+                />
 
-                  <CustomAutocomplete<CategoriaProducto>
-                    label="Categoría Producto"
-                    name="categoria_producto"
-                    defaultValue={form.getValues().categoria_producto || ''}
-                    // options
-                    valueKey="nombre"
-                    actualValueKey="id"
-                    options={productCategoryPaging?.data.items || []}
-                    isLoadingData={
-                      isLoadingCategoryProduct || isRefetchingCategoryProduct
-                    }
-                    disableClearable
-                    // errors
-                    control={form.control}
-                    error={errors.categoria_producto as any}
-                    helperText={errors.categoria_producto?.message}
-                    size={gridSizeMdLg4}
-                  />
-                </Grid>
-              </CustomToggleSection>
-            </Grid>
+                <CustomAutocomplete<CategoriaProducto>
+                  label="Categoría Producto"
+                  name="categoria_producto"
+                  defaultValue={form.getValues().categoria_producto || ''}
+                  // options
+                  valueKey="nombre"
+                  actualValueKey="id"
+                  options={productCategoryPaging?.data.items || []}
+                  isLoadingData={
+                    isLoadingCategoryProduct || isRefetchingCategoryProduct
+                  }
+                  disableClearable
+                  // errors
+                  control={form.control}
+                  error={errors.categoria_producto as any}
+                  helperText={errors.categoria_producto?.message}
+                  size={gridSizeMdLg4}
+                />
+              </Grid>
+
+              {/* ----------- table ----------- */}
+              <>
+                {!!watchedBodega && !!watchedUbicacion && (
+                  <Grid item xs={12} my={3}>
+                    <TableWithoutActions<UbicacionProducto>
+                      columns={baseColumnsUbicacionProducto}
+                      data={itemsDisponiblesPaging?.data?.items || []}
+                      isLoading={isLoadingItemsDisponibles}
+                      isRefetching={isRefetchingItemsDisponibles}
+                      rowCount={itemsDisponiblesPaging?.data?.meta?.count || 0}
+                      // search
+                      enableGlobalFilter={false}
+                      // // filters - server side
+                      enableManualFiltering={true}
+                      columnFilters={columnFilters}
+                      onColumnFiltersChange={setColumnFilters}
+                      // // pagination
+                      pagination={pagination}
+                      onPaging={setPagination}
+                      // add
+                    />
+                  </Grid>
+                )}
+              </>
+            </CustomToggleSection>
           </>
         )}
       </>
