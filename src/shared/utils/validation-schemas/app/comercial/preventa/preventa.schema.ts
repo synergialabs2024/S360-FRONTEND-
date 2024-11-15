@@ -181,3 +181,17 @@ export const unlockPlanillaPhotoSchema = yup.object({
     .required('El campo motivo es requerido')
     .max(900, 'El campo motivo no debe exceder los 900 caracteres'),
 });
+
+export const cancelAgendaPreventaOTFormSchema = yup.object({
+  motivo_rechazo: yup
+    .number()
+    .typeError('El campo motivo rechazo es requerido')
+    .required('El campo motivo rechazo es requerido'),
+  observacion_cancelacion: yup
+    .string()
+    .required('El campo observacion cancelacion es requerido')
+    .max(
+      255,
+      'El campo observacion cancelacion no debe exceder los 255 caracteres',
+    ),
+});

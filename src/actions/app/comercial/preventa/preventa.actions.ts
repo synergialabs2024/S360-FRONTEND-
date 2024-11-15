@@ -159,3 +159,10 @@ export const updatePreventa = async <T>({
 
   return patch<Preventa>(`/preventa/${id}/`, data, true);
 };
+
+// request unlock OT
+
+export type CancelAgendaPreventaData = Pick<
+  Preventa,
+  'motivo_rechazo' | 'observacion_cancelacion'
+>;

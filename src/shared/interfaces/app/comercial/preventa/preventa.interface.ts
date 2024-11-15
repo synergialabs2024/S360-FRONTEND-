@@ -76,6 +76,10 @@ export interface Preventa {
   created_at?: string;
   modified_at?: string;
 
+  // fallido
+  motivo_rechazo?: number; // fk
+  observacion_cancelacion?: string;
+
   // equifax --------------
   rango_capacidad_pago: string;
   score_servicios: string;
