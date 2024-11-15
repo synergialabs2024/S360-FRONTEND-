@@ -1,7 +1,6 @@
 import { useFetchPreventas } from '@/actions/app';
 import {
   EstadoPreventaEnumChoice,
-  PermissionsEnum,
   Preventa,
   TABLE_CONSTANTS,
   useColumnsPreventa,
@@ -13,16 +12,12 @@ import {
   CustomTable,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
-import { EsperaAgendaPreventaCustomButtons } from '../../shared/components';
-import { useCheckPermission } from '@/shared/hooks/auth';
 
 export type PreventaByStatePageProps = {
   state: EstadoPreventaEnumChoice;
 };
 
 const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -45,28 +40,18 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
   } = useFetchPreventas({
     enabled: true,
     params: {
+      page: pageIndex + 1,
+      page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      estado_preventa: state,
-      page_size: pageSize,
-      page: pageIndex + 1,
       filterByState: false,
+      estado_preventa: state,
     },
   });
-
-  ///* handlers
-  const calcEnableActionsColumn = (): boolean => {
-    if (state === EstadoPreventaEnumChoice.ESPERA) {
-      return true;
-    }
-
-    return false;
-  };
 
   ///* columns
   const {
     preventaBaseColumns,
-    preventaEspera,
     preventaRealizadas,
     preventaRechazadas,
     preventaFallidas,
@@ -86,17 +71,15 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
 
       <CustomTable<Preventa>
         columns={
-          state === EstadoPreventaEnumChoice.ESPERA
-            ? preventaEspera
-            : state === EstadoPreventaEnumChoice.REALIZADO
-              ? preventaRealizadas
-              : state === EstadoPreventaEnumChoice.RECHAZADO
-                ? preventaRechazadas
-                : state === EstadoPreventaEnumChoice.FALLIDO
-                  ? preventaFallidas
-                  : state === EstadoPreventaEnumChoice.SIN_GESTION
-                    ? preventaSinGestion
-                    : preventaBaseColumns
+          state === EstadoPreventaEnumChoice.REALIZADO
+            ? preventaRealizadas
+            : state === EstadoPreventaEnumChoice.RECHAZADO
+              ? preventaRechazadas
+              : state === EstadoPreventaEnumChoice.FALLIDO
+                ? preventaFallidas
+                : state === EstadoPreventaEnumChoice.SIN_GESTION
+                  ? preventaSinGestion
+                  : preventaBaseColumns
         }
         data={preventasPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -113,14 +96,11 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
         rowCount={preventasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={calcEnableActionsColumn()}
+        enableActionsColumn={false}
         // crud
-        canEdit={calcEnableActionsColumn()}
+        canEdit={false}
+        // onEdit={onEdit}
         canDelete={false}
-        showCustomButtonsSpaceEnd={calcEnableActionsColumn()}
-        customButtonsSpaceEnd={(preventa: Preventa) => {
-          return <EsperaAgendaPreventaCustomButtons preventa={preventa!} />;
-        }}
       />
     </GridTableTabsContainerOnly>
   );

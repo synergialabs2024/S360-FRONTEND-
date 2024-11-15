@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
@@ -23,6 +21,7 @@ type MRTSServiceType = { row: MRT_Row<Preventa> };
 export const useColumnsPreventa = () => {
   const isSalesman =
     useAuthStore(s => s.user?.role) === UserRolesEnumChoice.AGENTE;
+  console.log(isSalesman);
 
   const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
@@ -96,59 +95,51 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'es_referido'),
       },
 
-      // only supervisor to top
-      ...(isSalesman
-        ? []
-        : [
-            {
-              accessorKey: 'cliente_refiere',
-              header: 'CLIENTE REFIERE',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'cliente_refiere'),
-            },
-            {
-              accessorKey: 'correo_cliente_refiere',
-              header: 'CORREO CLIENTE REFIERE',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'correo_cliente_refiere'),
-            },
+      {
+        accessorKey: 'cliente_refiere',
+        header: 'CLIENTE REFIERE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'cliente_refiere'),
+      },
 
-            {
-              accessorKey: 'tipo_servicio',
-              header: 'TIPO SERVICIO',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'tipo_servicio'),
-            },
+      {
+        accessorKey: 'correo_cliente_refiere',
+        header: 'CORREO CLIENTE REFIERE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'correo_cliente_refiere'),
+      },
 
-            {
-              accessorKey: 'tipo_plan',
-              header: 'TIPO PLAN',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'tipo_plan'),
-            },
+      {
+        accessorKey: 'tipo_servicio',
+        header: 'TIPO SERVICIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_servicio'),
+      },
 
-            {
-              accessorKey: 'numero_cuenta_bancaria',
-              header: 'NUMERO CUENTA BANCARIA',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: true,
-              enableSorting: true,
-              Cell: ({ row }: MRTSServiceType) =>
-                emptyCellOneLevel(row, 'numero_cuenta_bancaria'),
-            },
-          ]),
+      {
+        accessorKey: 'tipo_plan',
+        header: 'TIPO PLAN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_plan'),
+      },
+
+      {
+        accessorKey: 'numero_cuenta_bancaria',
+        header: 'NUMERO CUENTA BANCARIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_cuenta_bancaria'),
+      },
+
       {
         accessorKey: 'costo_instalacion',
         header: 'COSTO INSTALACION',
@@ -157,6 +148,7 @@ export const useColumnsPreventa = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'costo_instalacion'),
       },
+
       {
         accessorKey: 'url_foto_cedula_frontal',
         header: 'URL FOTO CEDULA FRONTAL',
@@ -268,13 +260,6 @@ export const useColumnsPreventa = () => {
           );
         },
       },
-    ],
-    [isSalesman],
-  );
-
-  const preventaEspera = useMemo<MRT_ColumnDef<Preventa>[]>(
-    () => [
-      ...preventaBaseColumns,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -284,7 +269,7 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
     ],
-    [preventaBaseColumns],
+    [],
   );
 
   const preventaRealizadas = useMemo<MRT_ColumnDef<Preventa>[]>(
@@ -305,8 +290,8 @@ export const useColumnsPreventa = () => {
         },
       },
       {
-        accessorKey: 'fecha_realizado',
-        header: 'FECHA REALIZADO',
+        accessorKey: 'fecha_finalizado',
+        header: 'FECHA FINALIZADO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }: MRTSServiceType) => {
@@ -322,7 +307,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [],
   );
 
   const preventaRechazadas = useMemo<MRT_ColumnDef<Preventa>[]>(
@@ -360,7 +345,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [],
   );
 
   const preventaFallidas = useMemo<MRT_ColumnDef<Preventa>[]>(
@@ -398,7 +383,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [],
   );
   const preventaSinGestion = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
@@ -442,12 +427,11 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [],
   );
 
   return {
     preventaBaseColumns,
-    preventaEspera,
     preventaRealizadas,
     preventaRechazadas,
     preventaFallidas,

@@ -218,6 +218,7 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
       },
+
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -274,6 +275,7 @@ export const useColumnsAgendamientos = () => {
         Cell: ({ row }) =>
           emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
+
       {
         accessorKey: 'created_at',
         header: 'FECHA SOLICITUD',
@@ -282,6 +284,7 @@ export const useColumnsAgendamientos = () => {
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
+
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',
