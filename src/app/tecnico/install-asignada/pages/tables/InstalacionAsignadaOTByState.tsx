@@ -69,25 +69,14 @@ const InstalacionAsignadaOTByState: React.FC<
 
   ///* handlers
   const calcEnableActionsColumn = () => {
-    if (state === EstadoOrdenTrabajoEnumChoice.PENDIENTE) {
-      return true;
-    }
-
-    return false;
+    return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
   };
   const calcOnEdit = (row: OrdenTrabajo) => {
-    if (state === EstadoOrdenTrabajoEnumChoice.PENDIENTE) {
-      navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
-    }
+    navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
   };
 
   ///* columns
-  const {
-    installAsignadasEsperaOTColumns,
-    installAsignadasRecoordinadasOTColumns,
-    installGestionadasOTColumns,
-    installPreRechazadoOTColumns,
-  } = useColumnsOrdenTrabajo();
+  const { installAsignadasEsperaOTColumns } = useColumnsOrdenTrabajo();
 
   return (
     <GridTableTabsContainerOnly>
@@ -105,13 +94,7 @@ const InstalacionAsignadaOTByState: React.FC<
           // solicitudServicioBase
           state === EstadoOrdenTrabajoEnumChoice.PENDIENTE
             ? installAsignadasEsperaOTColumns
-            : state === EstadoOrdenTrabajoEnumChoice.EN_PROCESO
-              ? installAsignadasRecoordinadasOTColumns
-              : state === EstadoOrdenTrabajoEnumChoice.FINALIZADO
-                ? installGestionadasOTColumns
-                : state === EstadoOrdenTrabajoEnumChoice.PRE_RECHAZADO
-                  ? installPreRechazadoOTColumns
-                  : installAsignadasEsperaOTColumns
+            : []
         }
         data={OrdensTrabajoPagingRes?.data?.items || []}
         isLoading={isLoading}

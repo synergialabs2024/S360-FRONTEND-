@@ -39,24 +39,7 @@ export const useColumnsOrdenTrabajo = () => {
     MRT_ColumnDef<OrdenTrabajo>[]
   >(() => [...otColumnsBase01], [otColumnsBase01]);
 
-  const installAsignadasRecoordinadasOTColumns = useMemo<
-    MRT_ColumnDef<OrdenTrabajo>[]
-  >(() => [...otColumnsBase01], [otColumnsBase01]);
-
-  const installGestionadasOTColumns = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
-    () => [...otColumnsBase01],
-    [otColumnsBase01],
-  );
-
-  const installPreRechazadoOTColumns = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
-    () => [...otColumnsBase01],
-    [otColumnsBase01],
-  );
-
   return {
     installAsignadasEsperaOTColumns,
-    installAsignadasRecoordinadasOTColumns,
-    installGestionadasOTColumns,
-    installPreRechazadoOTColumns,
   };
 };
