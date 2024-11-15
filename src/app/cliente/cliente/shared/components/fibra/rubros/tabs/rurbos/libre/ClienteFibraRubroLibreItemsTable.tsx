@@ -1,7 +1,8 @@
 import { Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
+import { IoMdAddCircle } from 'react-icons/io';
 
 import {
   useFetchBodegas,
@@ -14,6 +15,8 @@ import {
   CategoriaProducto,
   gridSizeMdLg4,
   LineaServicio,
+  TABLE_CONSTANTS,
+  ToastWrapper,
   Ubicacion,
   UbicacionProducto,
   useColumnsUbicacionProducto,
@@ -23,8 +26,8 @@ import {
 import {
   CustomAutocomplete,
   CustomSingleButton,
+  CustomTable,
   CustomToggleSection,
-  TableWithoutActions,
 } from '@/shared/components';
 import ClienteFibraRubroLibreHeader from './ClienteFibraRubroLibreHeader';
 import { RubrosClienteFormData } from './ClienteFibraRubroLibreModal';
@@ -50,6 +53,7 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
   const { errors } = form.formState;
   const watchedBodega = form.watch('bodega');
   const watchedUbicacion = form.watch('ubicacion');
+  const watchedCategoriaProducto = form.watch('categoria_producto');
 
   ///* fetch data ----------------
   const {
@@ -83,7 +87,6 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
       page_size: 900,
     },
   });
-
   const {
     data: itemsDisponiblesPaging,
     isLoading: isLoadingItemsDisponibles,
@@ -96,6 +99,8 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
 
       ...filterObject,
 
+      producto__categoria__pk: watchedCategoriaProducto,
+
       ubicacion: watchedUbicacion!,
     },
   });
@@ -107,6 +112,26 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
 
   ///* columns ----------------
   const { baseColumnsUbicacionProducto } = useColumnsUbicacionProducto();
+
+  ///* effects ----------------
+  useEffect(() => {
+    if (!showTable) return;
+
+    if (isLoadingBodegas || isRefetchingBodegas) return;
+    !bodegasPaging?.data?.items?.length && ToastWrapper.error('No hay bodegas');
+
+    if (isLoadingUbicaciones || isRefetchingUbicaciones) return;
+    !ubicacionesPaging?.data?.items?.length &&
+      ToastWrapper.error('No hay ubicaciones');
+  }, [
+    bodegasPaging?.data?.items?.length,
+    isLoadingBodegas,
+    isLoadingUbicaciones,
+    isRefetchingBodegas,
+    isRefetchingUbicaciones,
+    showTable,
+    ubicacionesPaging?.data?.items?.length,
+  ]);
 
   return (
     <Grid item xs={12}>
@@ -171,6 +196,9 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
                   error={errors.bodega as any}
                   helperText={errors.bodega?.message}
                   size={gridSizeMdLg4}
+                  onChangeValue={() => {
+                    form.setValue('ubicacion', undefined as any);
+                  }}
                 />
 
                 <CustomAutocomplete<Ubicacion>
@@ -203,7 +231,6 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
                   isLoadingData={
                     isLoadingCategoryProduct || isRefetchingCategoryProduct
                   }
-                  disableClearable
                   // errors
                   control={form.control}
                   error={errors.categoria_producto as any}
@@ -216,22 +243,31 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
               <>
                 {!!watchedBodega && !!watchedUbicacion && (
                   <Grid item xs={12} my={3}>
-                    <TableWithoutActions<UbicacionProducto>
+                    <CustomTable<UbicacionProducto>
                       columns={baseColumnsUbicacionProducto}
                       data={itemsDisponiblesPaging?.data?.items || []}
                       isLoading={isLoadingItemsDisponibles}
                       isRefetching={isRefetchingItemsDisponibles}
-                      rowCount={itemsDisponiblesPaging?.data?.meta?.count || 0}
-                      // search
-                      enableGlobalFilter={false}
                       // // filters - server side
                       enableManualFiltering={true}
                       columnFilters={columnFilters}
                       onColumnFiltersChange={setColumnFilters}
+                      // // search
+                      enableGlobalFilter={false}
                       // // pagination
                       pagination={pagination}
                       onPaging={setPagination}
-                      // add
+                      rowCount={itemsDisponiblesPaging?.data?.meta?.count}
+                      // // actions
+                      actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+                      enableActionsColumn={true}
+                      // crud
+                      canEdit={true}
+                      onEdit={() => {}}
+                      editIcon={<IoMdAddCircle />}
+                      editIconColor="primary"
+                      editIconToolTipTitle="Agregar"
+                      canDelete={false}
                     />
                   </Grid>
                 )}
