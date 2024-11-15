@@ -14,6 +14,7 @@ import {
 import {
   Bodega,
   CategoriaProducto,
+  formatCurrency,
   gridSizeMdLg4,
   LineaServicio,
   TABLE_CONSTANTS,
@@ -49,6 +50,8 @@ export type ClienteRubroLibreTableType = UbicacionProducto & {
   containsSeries: boolean;
   selectedSeries: string[];
   savedSeries: string[];
+
+  defaultPrice: number;
 };
 
 const ClienteFibraRubroLibreItemsTable: React.FC<
@@ -154,6 +157,23 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
     [updateSelectedItemValue],
   );
 
+  const onChangePrice = useCallback(
+    (value: string, item: ClienteRubroLibreTableType) => {
+      updateSelectedItemValue({
+        keyStore: InstalacionesStoreKey.equiposUtilizados,
+        updatedItem: {
+          ...item,
+          defaultPrice: +value,
+        } as any,
+      });
+    },
+    [updateSelectedItemValue],
+  );
+
+  const calcSubtotalLine = (item: ClienteRubroLibreTableType) => {
+    return item?.usedQuantity * item?.defaultPrice;
+  };
+
   const onAddEmptyLine = () => {
     console.log('add empty line');
   };
@@ -191,6 +211,42 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
               }}
             />
           );
+        },
+      },
+
+      {
+        accessorKey: 'unit_price',
+        header: 'PRECIO UNITARIO',
+        size: 200,
+        Cell: ({ row }) => {
+          const defaultPrice = row.original?.defaultPrice || 0;
+
+          return (
+            <TextField
+              variant="outlined"
+              value={defaultPrice?.toString() || ''}
+              onChange={e => {
+                const value = e.target.value;
+                const intValue = parseInt(value, 10);
+
+                onChangePrice(intValue.toString(), row.original);
+              }}
+              type="number"
+              inputProps={{
+                min: 1,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'total',
+        header: 'SUB TOTAL',
+        size: 200,
+        Cell: ({ row }) => {
+          const subtotal = calcSubtotalLine(row.original);
+          return `${formatCurrency(subtotal)}`;
         },
       },
 
@@ -253,6 +309,7 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
     ],
     [
       baseColumnsRubroClienteUbicacionProducto,
+      onChangePrice,
       onChangeQuantity,
       removeSelectedItem,
       setSelectedRow,
@@ -452,6 +509,10 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
                       // crud
                       canEdit={true}
                       onEdit={ubProd => {
+                        const defaultPrice =
+                          ubProd?.producto_data?.precios?.find(p => p?.default)
+                            ?.valor || 0;
+
                         addSelectedItem({
                           keyStore: InstalacionesStoreKey.equiposUtilizados,
                           item: {
@@ -460,7 +521,8 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
                             selectedSeries: [],
                             savedSeries: [],
                             containsSeries: !!ubProd?.series?.length,
-                          },
+                            defaultPrice,
+                          } as any,
                           showToast: true,
                         });
                       }}
@@ -482,7 +544,7 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
       <>
         <CustomMinimalTable<ClienteRubroLibreTableType>
           columns={equiposUtilizadosColumns}
-          data={selectedItems || []}
+          data={(selectedItems as any) || []}
           enablePagination
           density="compact"
         />

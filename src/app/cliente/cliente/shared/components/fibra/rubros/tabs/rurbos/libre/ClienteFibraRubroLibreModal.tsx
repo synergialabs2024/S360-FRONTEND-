@@ -4,7 +4,13 @@ import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
 import { CreateRubroLibreClienteData, useCreateRubro } from '@/actions/app';
-import { createRubroClienteFormSchema, LineaServicio, Rubro } from '@/shared';
+import {
+  createRubroClienteFormSchema,
+  getKeysFormErrorsMessage,
+  LineaServicio,
+  Rubro,
+  ToastWrapper,
+} from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
 import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
@@ -76,7 +82,10 @@ const ClienteFibraRubroLibreModal: React.FC<
         onClose={handleClose}
         minWidth="81%"
         // confirm --------
-        onConfirm={form.handleSubmit(onSave)}
+        onConfirm={form.handleSubmit(onSave, errors => {
+          const keys = getKeysFormErrorsMessage(errors);
+          ToastWrapper.error(`Campos requeridos: ${keys}`);
+        })}
         confirmVariantBtn="outlined"
         confirmTextBtn="Guardar"
         // // content --------
