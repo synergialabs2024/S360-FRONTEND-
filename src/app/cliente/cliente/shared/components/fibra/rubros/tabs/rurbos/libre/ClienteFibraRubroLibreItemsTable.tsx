@@ -25,10 +25,12 @@ import {
 } from '@/shared';
 import {
   CustomAutocomplete,
+  CustomMinimalTable,
   CustomSingleButton,
   CustomTable,
   CustomToggleSection,
 } from '@/shared/components';
+import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
 import ClienteFibraRubroLibreHeader from './ClienteFibraRubroLibreHeader';
 import { RubrosClienteFormData } from './ClienteFibraRubroLibreModal';
 
@@ -36,6 +38,8 @@ export type ClienteFibraRubroLibreItemsTableProps = {
   serviceLine: LineaServicio;
   form: UseFormReturn<RubrosClienteFormData>;
 };
+
+export type ClienteRubroLibreTableType = UbicacionProducto & {};
 
 const ClienteFibraRubroLibreItemsTable: React.FC<
   ClienteFibraRubroLibreItemsTableProps
@@ -48,6 +52,10 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
 
   ///* local state ----------------
   const [showTable, setShowTable] = useState<boolean>(false);
+
+  ///* global state ----------------
+  const addSelectedItem = useInstalacionesStore(s => s.addSelectedItem);
+  const selectedItems = useInstalacionesStore(s => s.equiposUtilizados);
 
   ///* form ----------------
   const { errors } = form.formState;
@@ -111,26 +119,71 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
   };
 
   ///* columns ----------------
-  const { baseColumnsUbicacionProducto } = useColumnsUbicacionProducto();
+  const {
+    baseColumnsUbicacionProducto,
+    baseColumnsRubroClienteUbicacionProducto,
+  } = useColumnsUbicacionProducto();
 
   ///* effects ----------------
+  // alerts ---------
   useEffect(() => {
     if (!showTable) return;
 
     if (isLoadingBodegas || isRefetchingBodegas) return;
-    !bodegasPaging?.data?.items?.length && ToastWrapper.error('No hay bodegas');
+    if (
+      !isLoadingBodegas &&
+      !isRefetchingBodegas &&
+      bodegasPaging?.data?.items &&
+      bodegasPaging.data.items.length === 0
+    ) {
+      ToastWrapper.error('No se encontraron bodegas');
+    }
 
     if (isLoadingUbicaciones || isRefetchingUbicaciones) return;
-    !ubicacionesPaging?.data?.items?.length &&
-      ToastWrapper.error('No hay ubicaciones');
+    if (
+      !isLoadingUbicaciones &&
+      !isRefetchingUbicaciones &&
+      ubicacionesPaging?.data?.items &&
+      ubicacionesPaging.data.items.length === 0
+    ) {
+      ToastWrapper.error(
+        'No han encontrado ubicaciones para la bodega seleccionada',
+      );
+    }
+
+    if (isLoadingCategoryProduct || isRefetchingCategoryProduct) return;
+    if (
+      !isLoadingCategoryProduct &&
+      !isRefetchingCategoryProduct &&
+      productCategoryPaging?.data?.items &&
+      productCategoryPaging.data.items.length === 0
+    ) {
+      ToastWrapper.error('No se encontraron categorías de productos');
+    }
+
+    if (isLoadingItemsDisponibles || isRefetchingItemsDisponibles) return;
+    if (
+      !isLoadingItemsDisponibles &&
+      !isRefetchingItemsDisponibles &&
+      itemsDisponiblesPaging?.data?.items &&
+      itemsDisponiblesPaging.data.items.length === 0
+    ) {
+      ToastWrapper.error('No se encontraron items disponibles');
+    }
   }, [
-    bodegasPaging?.data?.items?.length,
+    bodegasPaging,
     isLoadingBodegas,
+    isLoadingCategoryProduct,
+    isLoadingItemsDisponibles,
     isLoadingUbicaciones,
     isRefetchingBodegas,
+    isRefetchingCategoryProduct,
+    isRefetchingItemsDisponibles,
     isRefetchingUbicaciones,
+    itemsDisponiblesPaging,
+    productCategoryPaging,
     showTable,
-    ubicacionesPaging?.data?.items?.length,
+    ubicacionesPaging,
   ]);
 
   return (
@@ -175,7 +228,7 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
         </Grid>
       </Grid>
 
-      {/* ==================== table ==================== */}
+      {/* ==================== items table ==================== */}
       <>
         {showTable && (
           <>
@@ -263,11 +316,24 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
                       enableActionsColumn={true}
                       // crud
                       canEdit={true}
-                      onEdit={() => {}}
+                      onEdit={ubProd => {
+                        addSelectedItem({
+                          keyStore: InstalacionesStoreKey.equiposUtilizados,
+                          item: {
+                            ...ubProd,
+                            usedQuantity: 1,
+                            selectedSeries: [],
+                            savedSeries: [],
+                            containsSeries: !!ubProd?.series?.length,
+                          },
+                          showToast: true,
+                        });
+                      }}
                       editIcon={<IoMdAddCircle />}
                       editIconColor="primary"
                       editIconToolTipTitle="Agregar"
                       canDelete={false}
+                      editIconTooltipPlacement="left"
                     />
                   </Grid>
                 )}
@@ -275,6 +341,16 @@ const ClienteFibraRubroLibreItemsTable: React.FC<
             </CustomToggleSection>
           </>
         )}
+      </>
+
+      {/* ==================== selected items ==================== */}
+      <>
+        <CustomMinimalTable<ClienteRubroLibreTableType>
+          columns={baseColumnsRubroClienteUbicacionProducto}
+          data={selectedItems || []}
+          enablePagination
+          density="comfortable"
+        />
       </>
     </Grid>
   );

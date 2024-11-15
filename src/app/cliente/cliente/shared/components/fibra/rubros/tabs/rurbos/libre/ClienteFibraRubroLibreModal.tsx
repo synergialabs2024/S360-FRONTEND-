@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { CreateRubroLibreClienteData, useCreateRubro } from '@/actions/app';
 import { createRubroClienteFormSchema, LineaServicio, Rubro } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
+import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
 import ClienteFibraRubroLibreItemsTable from './ClienteFibraRubroLibreItemsTable';
 
@@ -27,6 +28,8 @@ const ClienteFibraRubroLibreModal: React.FC<
 > = ({ open, onClose, serviceLine }) => {
   ///* global state --------------------------
   const activeRubro = useRubroStore(s => s.activeRubro);
+  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
 
   ///* form --------------------------
   const form = useForm<RubrosClienteFormData>({
@@ -61,6 +64,8 @@ const ClienteFibraRubroLibreModal: React.FC<
   const handleClose = () => {
     form.reset();
     onClose();
+    clearAllRubroStore();
+    clearAllItemsStore();
   };
 
   return (

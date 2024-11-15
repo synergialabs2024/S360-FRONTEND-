@@ -2,6 +2,7 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
+import { ClienteRubroLibreTableType } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/rurbos/libre/ClienteFibraRubroLibreItemsTable';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { UbicacionProducto } from '@/shared/interfaces';
 import { emptyCellNested, formatQuantityCell } from '@/shared/utils';
@@ -48,7 +49,14 @@ export const useColumnsUbicacionProducto = ({
     [showCurrentStockColumn],
   );
 
+  // // clientes -------------------------
+  const baseColumnsRubroClienteUbicacionProducto = useMemo<
+    MRT_ColumnDef<ClienteRubroLibreTableType>[]
+  >(() => [...baseColumnsUbicacionProducto], [baseColumnsUbicacionProducto]);
+
   return {
     baseColumnsUbicacionProducto,
+
+    baseColumnsRubroClienteUbicacionProducto,
   };
 };
