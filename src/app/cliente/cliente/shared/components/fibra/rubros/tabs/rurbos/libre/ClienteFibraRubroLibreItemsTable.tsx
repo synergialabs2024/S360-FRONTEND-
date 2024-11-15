@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdAddCircle, IoMdTrash } from 'react-icons/io';
+import { IoQrCodeSharp } from 'react-icons/io5';
 
 import {
   useFetchBodegas,
@@ -35,7 +36,6 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
-import { IoQrCodeSharp } from 'react-icons/io5';
 import ClienteFibraRubroLibreHeader from './ClienteFibraRubroLibreHeader';
 import { RubrosClienteFormData } from './ClienteFibraRubroLibreModal';
 
