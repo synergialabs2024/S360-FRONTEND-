@@ -283,7 +283,7 @@ export const useColumnsPreventa = () => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
               item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__REALIZADO,
+              SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
           );
 
           return trazabilidad?.user_data?.razon_social || 'N/A';
@@ -298,7 +298,7 @@ export const useColumnsPreventa = () => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
               item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__REALIZADO,
+              SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
           );
 
           return trazabilidad
@@ -310,6 +310,7 @@ export const useColumnsPreventa = () => {
     [],
   );
 
+  /*
   const preventaRechazadas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       ...preventaBaseColumns,
@@ -347,6 +348,7 @@ export const useColumnsPreventa = () => {
     ],
     [],
   );
+  */
 
   const preventaFallidas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
@@ -433,7 +435,6 @@ export const useColumnsPreventa = () => {
   return {
     preventaBaseColumns,
     preventaRealizadas,
-    preventaRechazadas,
     preventaFallidas,
     preventaSinGestion,
   };

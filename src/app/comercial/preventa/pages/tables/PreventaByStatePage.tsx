@@ -53,7 +53,7 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
   const {
     preventaBaseColumns,
     preventaRealizadas,
-    preventaRechazadas,
+    //preventaRechazadas,
     preventaFallidas,
     preventaSinGestion,
   } = useColumnsPreventa();
@@ -73,13 +73,11 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
         columns={
           state === EstadoPreventaEnumChoice.REALIZADO
             ? preventaRealizadas
-            : state === EstadoPreventaEnumChoice.RECHAZADO
-              ? preventaRechazadas
-              : state === EstadoPreventaEnumChoice.FALLIDO
-                ? preventaFallidas
-                : state === EstadoPreventaEnumChoice.SIN_GESTION
-                  ? preventaSinGestion
-                  : preventaBaseColumns
+            : state === EstadoPreventaEnumChoice.FALLIDO
+              ? preventaFallidas
+              : state === EstadoPreventaEnumChoice.SIN_GESTION
+                ? preventaSinGestion
+                : preventaBaseColumns
         }
         data={preventasPagingRes?.data?.items || []}
         isLoading={isLoading}
