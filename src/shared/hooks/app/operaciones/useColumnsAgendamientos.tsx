@@ -5,17 +5,15 @@ import {
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
 } from '@/shared/constants';
-import {
-  Agendamiento,
-  SolicitudRecoordinacionAgenda,
-} from '@/shared/interfaces';
+import { Agendamiento } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
+  formatDateWithTime,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 
-type MRTSServiceType = { row: MRT_Row<SolicitudRecoordinacionAgenda> };
+type MRTAgendamientoType = { row: MRT_Row<Agendamiento> };
 
 export const useColumnsAgendamientos = () => {
   const agendaBase01 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
@@ -29,15 +27,6 @@ export const useColumnsAgendamientos = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
       },
       {
-        accessorKey: 'solicitud_servicio__identificacion',
-        header: 'IDENTIFICACION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
-      },
-      {
         accessorKey: 'solicitud_servicio__tipo_identificacion',
         header: 'TIPO IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -48,6 +37,15 @@ export const useColumnsAgendamientos = () => {
             'solicitud_servicio_data',
             'tipo_identificacion',
           ]),
+      },
+      {
+        accessorKey: 'solicitud_servicio__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
       },
       {
         accessorKey: 'solicitud_servicio__razon_social',
@@ -66,15 +64,12 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
+    ],
+    [],
+  );
 
-      {
-        accessorKey: 'estado_agendamiento',
-        header: 'ESTADO AGENDAMIENTO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_agendamiento'),
-      },
+  const agendaBase02 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+    () => [
       {
         accessorKey: 'fecha_instalacion',
         header: 'FECHA INSTALACION',
@@ -101,7 +96,87 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'distancia_nap'),
       },
+    ],
+    [],
+  );
 
+  const agendaBase03 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+    () => [
+      {
+        accessorKey: 'descripcion_pago',
+        header: 'DESCRIPCION PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion_pago'),
+      },
+
+      {
+        accessorKey: 'estado_pago',
+        header: 'ESTADO PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_pago'),
+      },
+
+      {
+        accessorKey: 'linea_servicio',
+        header: 'LINEA SERVICIO',
+        size: 312,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'preventa_data',
+            'linea_servicio_data',
+            'estado_linea',
+          ]),
+      },
+
+      {
+        accessorKey: 'flota',
+        header: 'FLOTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['flota_data', 'name']),
+      },
+
+      {
+        accessorKey: 'nap',
+        header: 'NAP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['nap_data', 'name']),
+      },
+
+      {
+        accessorKey: 'vendedor',
+        header: 'VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
+      },
+    ],
+    [],
+  );
+
+  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+    () => [
+      ...agendaBase01,
+      {
+        accessorKey: 'estado_agendamiento',
+        header: 'ESTADO AGENDAMIENTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_agendamiento'),
+      },
+      ...agendaBase02,
       {
         accessorKey: 'encuesta',
         header: 'ENCUESTA',
@@ -119,7 +194,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'usos'),
       },
-
       {
         accessorKey: 'observaciones_vendedor',
         header: 'OBSERVACIONES VENDEDOR',
@@ -128,7 +202,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'observaciones_vendedor'),
       },
-
       {
         accessorKey: 'observacion_rechazo',
         header: 'OBSERVACION RECHAZO',
@@ -155,70 +228,7 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'url_foto_comprobante'),
       },
-
-      {
-        accessorKey: 'descripcion_pago',
-        header: 'DESCRIPCION PAGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion_pago'),
-      },
-
-      {
-        accessorKey: 'estado_pago',
-        header: 'ESTADO PAGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_pago'),
-      },
-
-      {
-        accessorKey: 'linea_servicio',
-        header: 'LINEA SERVICIO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'linea_servicio'),
-      },
-
-      {
-        accessorKey: 'flota',
-        header: 'FLOTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'flota'),
-      },
-
-      {
-        accessorKey: 'nap',
-        header: 'NAP',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nap'),
-      },
-
-      {
-        accessorKey: 'canal_venta',
-        header: 'CANAL VENTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'canal_venta'),
-      },
-
-      {
-        accessorKey: 'vendedor',
-        header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
-      },
-
+      ...agendaBase03,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -236,119 +246,75 @@ export const useColumnsAgendamientos = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [],
+    [agendaBase01, agendaBase02, agendaBase03],
   );
 
-  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
-    () => [...agendaBase01],
-    [],
-  );
-
-  const agendaEsperaRecooordinacion = useMemo<
-    MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]
-  >(
+  const agendaEsperaRecooordinacion = useMemo<MRT_ColumnDef<Agendamiento>[]>(
     () => [
+      ...agendaBase01,
+      ...agendaBase02,
       {
-        accessorKey: 'identificacion',
-        header: 'IDENTIFICACION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => {
-          const solService =
-            row.original.agendamiento_data?.solicitud_servicio_data;
-          return solService?.identificacion || 'N/A';
+        accessorKey: 'observaciones_vendedor',
+        header: 'OBSERVACIONES VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'observaciones_vendedor'),
+      },
+      ...agendaBase03,
+      {
+        accessorKey: 'razon_social__espera_recoordinacion_agendamiento',
+        header: 'ESPERA RECORDINADA POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }: MRTAgendamientoType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.AGENDAMIENTO__RECOORDINADO_ESPERA,
+          );
+
+          return trazabilidad?.user_data?.razon_social || 'N/A';
         },
       },
       {
-        accessorKey: 'razon_social',
-        header: 'NOMBRE CLIENTE',
+        accessorKey: 'fecha_espera_recoordinada',
+        header: 'FECHA ESPERA RECOORDINADA',
+        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => {
-          const solService =
-            row.original.agendamiento_data?.solicitud_servicio_data;
-          return solService?.razon_social || 'N/A';
+        Cell: ({ row }: MRTAgendamientoType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.AGENDAMIENTO__RECOORDINADO_ESPERA,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
         },
-      },
-      {
-        accessorKey: 'vendedor__razon_social',
-        header: 'SOLICITADO POR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['vendedor_data', 'razon_social']),
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'FECHA SOLICITUD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [],
+    [agendaBase01, agendaBase02, agendaBase03],
   );
 
-  const agendaRecoordinados = useMemo<
-    MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]
-  >(
+  const agendaRecoordinados = useMemo<MRT_ColumnDef<Agendamiento>[]>(
     () => [
+      ...agendaBase01,
+      ...agendaBase02,
       {
-        accessorKey: 'solicitud_servicio__identificacion',
-        header: 'IDENTIFICACION',
+        accessorKey: 'observaciones_vendedor',
+        header: 'OBSERVACIONES VENDEDOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'observaciones_vendedor'),
       },
+      ...agendaBase03,
       {
-        accessorKey: 'solicitud_servicio__razon_social',
-        header: 'NOMBRE CLIENTE',
-        size: 312,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
-      },
-      {
-        accessorKey: 'vendedor',
-        header: 'SOLICITADO POR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'vendedor'),
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'FECHA SOLICITUD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-
-      // {
-      //   accessorKey: 'usuario_atiende__razon_social',
-      //   header: 'RECHAZADO POR',
-      //   size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-      //   Cell: ({ row }) =>
-      //     emptyCellNested(row, ['usuario_atiende_data', 'razon_social']),
-      // },
-      {
-        accessorKey: 'usuario_atiende__razon_social',
-        header: 'APROBADO POR',
+        accessorKey: 'razon_social__recoordinacion_agendamiento',
+        header: 'RECORDINADA POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }: MRTSServiceType) => {
+        Cell: ({ row }: MRTAgendamientoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
               item?.modelo_estado ===
@@ -359,15 +325,24 @@ export const useColumnsAgendamientos = () => {
         },
       },
       {
-        accessorKey: 'fecha_atiende',
-        header: 'APROBADO EN',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        accessorKey: 'fecha_recoordinada',
+        header: 'FECHA RECOORDINADA',
         enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_atiende'),
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTAgendamientoType) => {
+          const trazabilidad = row.original?.trazabilidad_data?.find(
+            item =>
+              item?.modelo_estado ===
+              SalesStatesActionsEnumChoice.AGENDAMIENTO__RECOORDINADO_APROBADO,
+          );
+
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.timestamp)
+            : 'N/A';
+        },
       },
     ],
-    [],
+    [agendaBase01, agendaBase02, agendaBase03],
   );
 
   return {

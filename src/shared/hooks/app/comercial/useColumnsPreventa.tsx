@@ -307,7 +307,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [],
+    [preventaBaseColumns],
   );
 
   /*
@@ -385,7 +385,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [],
+    [preventaBaseColumns],
   );
   const preventaSinGestion = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
@@ -429,7 +429,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [],
+    [preventaBaseColumns],
   );
 
   return {
