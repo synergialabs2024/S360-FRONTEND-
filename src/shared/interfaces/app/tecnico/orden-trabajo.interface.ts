@@ -68,6 +68,7 @@ export interface OrdenTrabajo {
   pppassword: string;
   observacion_activacion?: string | null;
   observacion_prerechazo?: string | null;
+  descripcion?: string | null;
 
   // cambio puerto ya no va, tecnico lo upd ---------------
   tipo_actualizacion_puerto?: TipoActualizacionActivacionesEnumChoice;

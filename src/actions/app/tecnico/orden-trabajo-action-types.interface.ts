@@ -48,5 +48,5 @@ export type UploadInstalacionOTAsignData = Pick<
 
 export type RejectInstalacionOTData = Pick<
   OrdenTrabajo,
-  'observacion_prerechazo' | 'motivo_prerechazo'
+  'observacion_prerechazo' | 'motivo_prerechazo' | 'descripcion'
 >;
