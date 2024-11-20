@@ -182,7 +182,7 @@ export const useColumnsPreventa = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'metodo_pago'),
+        Cell: ({ row }) => emptyCellNested(row, ['metodo_pago_data', 'name']),
       },
 
       {
@@ -191,7 +191,8 @@ export const useColumnsPreventa = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'entidad_financiera'),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['entidad_financiera_data', 'name']),
       },
 
       {
@@ -200,44 +201,10 @@ export const useColumnsPreventa = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'solicitud_servicio'),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
       },
 
-      {
-        accessorKey: 'area',
-        header: 'AREA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'area'),
-      },
-
-      {
-        accessorKey: 'departamento',
-        header: 'DEPARTAMENTO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'departamento'),
-      },
-
-      {
-        accessorKey: 'canal_venta',
-        header: 'CANAL VENTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'canal_venta'),
-      },
-
-      {
-        accessorKey: 'solicitud_servicio_data',
-        header: 'SOLICITUD SERVICIO DATA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'solicitud_servicio_data'),
-      },
       {
         accessorKey: 'imagen',
         header: 'IMAGENES',
