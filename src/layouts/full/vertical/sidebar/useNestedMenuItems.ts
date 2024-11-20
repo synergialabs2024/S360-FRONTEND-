@@ -280,6 +280,18 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(SidenavModulesEnum.COMERCIAL_INSTALACION, {
+              id: 'instalaciones',
+              title: 'Instalaciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.comercial.instalacionesNav,
+            }),
+            // renderByModule(SidenavModulesEnum.COMERCIAL_INSTALL_PRE_RECHAZADO, {
+            //   id: 'instalaciones-pre-rechazadas',
+            //   title: 'instalacion pre rechazada',
+            //   type: MenuItemType.ITEM,
+            //   url: ROUTER_PATHS.comercial.instalacionPreRechazadaOT,
+            // }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Supervision Comercial ----------------

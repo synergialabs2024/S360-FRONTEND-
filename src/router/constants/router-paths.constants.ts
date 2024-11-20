@@ -248,6 +248,12 @@ export const ROUTER_PATHS = {
     agendamientos: 'agendamientos',
     createAgendamiento: 'agendamientos/crear/:uuid',
     agendamientosNav: '/comercial/agendamientos',
+
+    ///* instalaciones
+    instalaciones: 'instalaciones',
+    instalacionesNav: '/comercial/instalaciones',
+    instalacionesPreRechazadas: 'instalaciones',
+    instalacionPreRechazadaOT: 'instalaciones/:uuid',
   },
 
   /////* Operaciones ----------------

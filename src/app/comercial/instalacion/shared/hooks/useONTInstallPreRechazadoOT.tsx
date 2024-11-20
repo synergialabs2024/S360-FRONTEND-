@@ -1,0 +1,87 @@
+import { useEffect } from 'react';
+
+import { useFetchUbicacionProductos } from '@/actions/app';
+import {
+  InventarioEnumUUID,
+  OrdenTrabajo,
+  TipoProductoEnumChoice,
+  ToastWrapper,
+} from '@/shared';
+import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
+import { getFilteredSeriesOTInstall } from '@/shared/helpers';
+
+type useONTInstallPreRechazadoOTParams = {
+  ordenTrabajo: OrdenTrabajo;
+};
+export const useONTInstallPreRechazadoOT = ({
+  ordenTrabajo,
+}: useONTInstallPreRechazadoOTParams) => {
+  ///* global state --------------------
+  const addSelectedItem = useInstalacionesStore(s => s.addSelectedItem);
+
+  ///* fetch data ---------------------
+  const {
+    data: ontsDisponiblesPaging,
+    isLoading: isLoadingONTsDisponibles,
+    isRefetching: isRefetchingOntsDisponibles,
+  } = useFetchUbicacionProductos({
+    enabled: !!ordenTrabajo?.id,
+    params: {
+      page_size: 10,
+
+      producto__tipo: TipoProductoEnumChoice.ONT,
+
+      ubicacion: ordenTrabajo?.flota_data?.ubicacion_data?.id,
+      producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
+    },
+  });
+
+  ///* effects ---------------------
+  useEffect(() => {
+    if (
+      !ordenTrabajo?.id ||
+      isLoadingONTsDisponibles ||
+      isRefetchingOntsDisponibles
+    )
+      return;
+
+    const items = ontsDisponiblesPaging?.data?.items || [];
+    if (!items?.length) {
+      ToastWrapper.error(
+        `La flota ${ordenTrabajo?.flota_data?.name} no tiene ONT disponibles`,
+      );
+      return;
+    }
+
+    const firstONT = items.at(0);
+    const activationSerie = ordenTrabajo?.serie_ont;
+    if (firstONT && !!activationSerie) {
+      const series = firstONT?.series || [];
+      const tempSeries = firstONT?.series_temporal || [];
+      const filteredSeries = getFilteredSeriesOTInstall(
+        series,
+        tempSeries,
+        activationSerie,
+      );
+
+      addSelectedItem({
+        keyStore: InstalacionesStoreKey.equiposUtilizados,
+        item: {
+          ...firstONT,
+          series: filteredSeries,
+          usedQuantity: 1,
+          selectedSeries: [],
+          savedSeries: [activationSerie],
+          containsSeries: !!firstONT?.series?.length,
+        },
+        showToast: false,
+      });
+    }
+  }, [
+    ordenTrabajo,
+    ontsDisponiblesPaging,
+    isLoadingONTsDisponibles,
+    isRefetchingOntsDisponibles,
+    addSelectedItem,
+  ]);
+};

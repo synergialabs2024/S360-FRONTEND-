@@ -455,6 +455,25 @@ const CreateSolicitudServicioPage = Loadable(
   ),
 );
 
+///* Instalaciones ---------------------
+const InstalacionesVentasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/instalacion/pages/tables/InstalacionesComercialOTMainPage'
+      ),
+  ),
+);
+
+const InstalacionPreRechazadaOT = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/instalacion/pages/forms/InstalacionPreRechazadaOT'
+      ),
+  ),
+);
+
 ///* Supervision Comercial ------------
 const SupervisionComercialModule = Loadable(
   lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
@@ -766,7 +785,7 @@ const AutenticacionClientePage = Loadable(
       ),
   ),
 );
-///* Cliente ------------
+///* Cliente ------------InstalacionComercialOTByState
 //Servicio
 const ServiciosPage = Loadable(
   lazy(() => import('@/app/cliente/servicio/pages/tables/ServiciosPage')),
@@ -1572,6 +1591,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.comercial.createAgendamiento,
             element: <CreateAgendamientoVentasPage />,
+          },
+
+          ///* instalaciones
+          {
+            path: ROUTER_PATHS.comercial.instalaciones,
+            element: <InstalacionesVentasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.instalacionPreRechazadaOT,
+            element: <InstalacionPreRechazadaOT />,
           },
         ],
       },
