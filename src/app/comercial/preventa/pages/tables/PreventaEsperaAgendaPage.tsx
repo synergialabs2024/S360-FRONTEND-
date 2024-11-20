@@ -50,8 +50,6 @@ const PreventaEsperaAgendaPage: React.FC<
     },
   });
 
-  ///* handlers ------------------------
-
   ///* columns ------------------------
   const { preventaBaseColumns } = useColumnsPreventa();
 

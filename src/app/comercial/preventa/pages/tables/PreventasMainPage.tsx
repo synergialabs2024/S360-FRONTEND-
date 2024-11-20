@@ -31,6 +31,8 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
         isMainTableStates
       >
         <Tab label={'PREVENTAS'} value={1} {...a11yProps(1)} />
+        <Tab label={'ESPERA ACEPTACION'} value={6} {...a11yProps(6)} />
+
         <Tab label={'REALIZADAS'} value={2} {...a11yProps(2)} />
         {/**
           <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
