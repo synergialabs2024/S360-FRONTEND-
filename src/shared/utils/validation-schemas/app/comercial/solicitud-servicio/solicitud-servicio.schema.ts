@@ -37,7 +37,9 @@ export const solicitudServicioFormSchema = yup.object({
   celular: yup
     .string()
     .required('El campo celular es requerido')
-    .max(200, 'El campo celular no debe exceder los 200 caracteres'),
+    .max(200, 'El campo celular no debe exceder los 200 caracteres')
+    .matches(/^(09)\d{8}$/, 'Número de celular inválido'),
+
   direccion: yup
     .string()
     .required('El campo direccion es requerido')
