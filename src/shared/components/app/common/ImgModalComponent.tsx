@@ -5,12 +5,11 @@ import {
   IconPhoto,
   IconChevronLeft,
   IconChevronRight,
-  IconPhotoOff,
 } from '@tabler/icons-react';
 import { ScrollableDialogProps } from '../../CustomDialogs';
 
 export type ImgModalComponentProps = {
-  urls: Record<string, string>;
+  urls: Record<string, string | null>;
   modalTitle?: string;
 };
 
@@ -21,9 +20,13 @@ const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Title URL
-  const imageUrls = Object.values(urls);
-  const imageTitles = Object.keys(urls).map(title =>
+  // Filtrar URLs y títulos no válidos
+  const validEntries = Object.entries(urls).filter(
+    ([, url]) => url !== null && url !== '',
+  );
+
+  const imageUrls = validEntries.map(([, url]) => url as string);
+  const imageTitles = validEntries.map(([title]) =>
     title.toUpperCase().replace(/_/g, ' '),
   );
 
@@ -87,30 +90,14 @@ const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
                   </IconButton>
                 )}
 
-                {imageUrls[currentIndex] ? (
-                  <img
-                    src={imageUrls[currentIndex]}
-                    alt={`Imagen ${currentIndex + 1}`}
-                    style={{
-                      maxWidth: '50%',
-                      maxHeight: '300px',
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: '50%',
-                      height: '300px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: '#f0f0f0',
-                      color: '#888',
-                    }}
-                  >
-                    <IconPhotoOff style={{ width: '100px', height: '100px' }} />
-                  </div>
-                )}
+                <img
+                  src={imageUrls[currentIndex]}
+                  alt={`Imagen ${currentIndex + 1}`}
+                  style={{
+                    maxWidth: '50%',
+                    maxHeight: '300px',
+                  }}
+                />
 
                 {imageUrls.length > 1 && (
                   <IconButton onClick={handleNext} style={{ margin: '5px' }}>
