@@ -150,33 +150,6 @@ export const useColumnsPreventa = () => {
       },
 
       {
-        accessorKey: 'url_foto_cedula_frontal',
-        header: 'URL FOTO CEDULA FRONTAL',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'url_foto_cedula_frontal'),
-      },
-
-      {
-        accessorKey: 'url_foto_cedula_trasera',
-        header: 'URL FOTO CEDULA TRASERA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'url_foto_cedula_trasera'),
-      },
-
-      {
-        accessorKey: 'url_foto_documento_cuenta',
-        header: 'URL FOTO DOCUMENTO CUENTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'url_foto_documento_cuenta'),
-      },
-
-      {
         accessorKey: 'metodo_pago',
         header: 'METODO PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -196,13 +169,64 @@ export const useColumnsPreventa = () => {
       },
 
       {
-        accessorKey: 'solicitud_servicio',
-        header: 'SOLICITUD SERVICIO',
+        accessorKey: 'solicitud_servicio__tipo_plan',
+        header: 'TIPO PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) =>
-          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
+          emptyCellNested(row, [
+            'solicitud_servicio_data',
+            'linea_servicio_data',
+            'contrato_data',
+            'plan_internet_ingreso_data',
+            'tipo_plan',
+          ]),
+      },
+      {
+        accessorKey: 'solicitud_servicio__codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'solicitud_servicio_data',
+            'linea_servicio_data',
+            'contrato_data',
+            'plan_internet_ingreso_data',
+            'codigo',
+          ]),
+      },
+      {
+        accessorKey: 'solicitud_servicio__permanencia',
+        header: 'PERMANENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'solicitud_servicio_data',
+            'linea_servicio_data',
+            'contrato_data',
+            'plan_internet_ingreso_data',
+            'permanencia',
+          ]),
+      },
+      {
+        accessorKey: 'solicitud_servicio__tipo_servicio',
+        header: 'TIPO SERVICIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'solicitud_servicio_data',
+            'linea_servicio_data',
+            'contrato_data',
+            'plan_internet_ingreso_data',
+            'tipo_servicio',
+          ]),
       },
 
       {
