@@ -15,9 +15,13 @@ import {
 
 export type PreventaByStatePageProps = {
   state: EstadoPreventaEnumChoice;
+  noAceptados?: boolean;
 };
 
-const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
+const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
+  state,
+  noAceptados,
+}) => {
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -44,8 +48,8 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({ state }) => {
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      filterByState: false,
       estado_preventa: state,
+      ...(noAceptados && { contrato_aceptado: false }),
     },
   });
 

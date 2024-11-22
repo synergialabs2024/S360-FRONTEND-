@@ -45,8 +45,8 @@ const PreventaEsperaAgendaPage: React.FC<
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      filterByState: false,
       estado_preventa: EstadoPreventaEnumChoice.ESPERA,
+      // contrato_aceptado: true,
     },
   });
 

@@ -45,11 +45,18 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
         <PreventaEsperaAgendaPage />
       </CustomTabPanel>
 
+      <CustomTabPanel value={tabValue} index={6} ptGrid="0">
+        <PreventaByStatePage
+          state={EstadoPreventaEnumChoice.ESPERA}
+          noAceptados
+        />
+      </CustomTabPanel>
+
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <PreventaByStatePage state={EstadoPreventaEnumChoice.REALIZADO} />
       </CustomTabPanel>
 
-      {/**
+      {/*
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <PreventaByStatePage state={EstadoPreventaEnumChoice.RECHAZADO} />
       </CustomTabPanel>
