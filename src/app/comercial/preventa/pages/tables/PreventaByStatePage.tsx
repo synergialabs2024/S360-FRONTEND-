@@ -58,6 +58,7 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
     preventaBaseColumns,
     preventaRealizadas,
     //preventaRechazadas,
+    preventasEsperaAceptacionColumns,
     preventaFallidas,
     preventaSinGestion,
   } = useColumnsPreventa();
@@ -75,13 +76,15 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
 
       <CustomTable<Preventa>
         columns={
-          state === EstadoPreventaEnumChoice.REALIZADO
-            ? preventaRealizadas
-            : state === EstadoPreventaEnumChoice.FALLIDO
-              ? preventaFallidas
-              : state === EstadoPreventaEnumChoice.SIN_GESTION
-                ? preventaSinGestion
-                : preventaBaseColumns
+          state === EstadoPreventaEnumChoice.ESPERA
+            ? preventasEsperaAceptacionColumns
+            : state === EstadoPreventaEnumChoice.REALIZADO
+              ? preventaRealizadas
+              : state === EstadoPreventaEnumChoice.FALLIDO
+                ? preventaFallidas
+                : state === EstadoPreventaEnumChoice.SIN_GESTION
+                  ? preventaSinGestion
+                  : preventaBaseColumns
         }
         data={preventasPagingRes?.data?.items || []}
         isLoading={isLoading}

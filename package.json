@@ -28,6 +28,7 @@
     "axios": "^1.7.7",
     "axios-mock-adapter": "^2.1.0",
     "chance": "^1.1.12",
+    "copy-to-clipboard": "^3.3.3",
     "credit-card-type": "^10.0.1",
     "date-fns": "2.25.0",
     "dayjs": "^1.11.13",

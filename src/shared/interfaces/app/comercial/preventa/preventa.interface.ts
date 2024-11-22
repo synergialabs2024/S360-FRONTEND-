@@ -72,6 +72,7 @@ export interface Preventa {
   // x eventualidad en validacion faces oficina virtual
   estado_validacion_aceptacion?: EstadoValidacionAceptacionEnumChoice;
   fecha_validacion_aceptacion?: string;
+  url_aceptacion?: string; // url oficina virtual
 
   created_at?: string;
   modified_at?: string;

@@ -1,10 +1,10 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
+import { CopyTextOnClickBtn, ImgModalComponent } from '@/shared/components';
 import {
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
-  UserRolesEnumChoice,
 } from '@/shared/constants';
 import { Preventa } from '@/shared/interfaces';
 import {
@@ -13,16 +13,11 @@ import {
   formatDateWithTime,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { useAuthStore } from '@/store/auth';
-import { ImgModalComponent } from '@/shared/components';
+import { ToastWrapper } from '@/shared/wrappers';
 
 type MRTSServiceType = { row: MRT_Row<Preventa> };
 
 export const useColumnsPreventa = () => {
-  const isSalesman =
-    useAuthStore(s => s.user?.role) === UserRolesEnumChoice.AGENTE;
-  console.log(isSalesman);
-
   const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       {
@@ -423,10 +418,34 @@ export const useColumnsPreventa = () => {
     [preventaBaseColumns],
   );
 
+  const preventasEsperaAceptacionColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [
+      ...preventaBaseColumns,
+      {
+        accessorKey: 'url_oficina_virtual',
+        header: 'OFICINA VIRTUAL',
+        size: 50,
+        Cell: ({ row }) => {
+          const url = row.original?.url_aceptacion || '';
+          return (
+            <CopyTextOnClickBtn
+              text={url}
+              onClick={() => {
+                ToastWrapper.info('URL copiada al portapapeles');
+              }}
+            />
+          );
+        },
+      },
+    ],
+    [preventaBaseColumns],
+  );
+
   return {
     preventaBaseColumns,
     preventaRealizadas,
     preventaFallidas,
     preventaSinGestion,
+    preventasEsperaAceptacionColumns,
   };
 };
