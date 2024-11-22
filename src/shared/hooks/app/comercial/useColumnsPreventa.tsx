@@ -430,7 +430,6 @@ export const useColumnsPreventa = () => {
   const preventasEsperaAceptacionColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       ...preventaBaseColumns01,
-      ...preventaBaseColumns,
       {
         accessorKey: 'url_oficina_virtual',
         header: 'OFICINA VIRTUAL',
@@ -447,6 +446,7 @@ export const useColumnsPreventa = () => {
           );
         },
       },
+      ...preventaBaseColumns,
     ],
     [preventaBaseColumns, preventaBaseColumns01],
   );
