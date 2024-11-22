@@ -466,6 +466,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         updatedSolServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
 
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
+      email: prevForm.email,
     });
   };
 
