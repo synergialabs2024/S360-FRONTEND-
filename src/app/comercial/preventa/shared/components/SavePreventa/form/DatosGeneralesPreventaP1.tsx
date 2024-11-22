@@ -10,10 +10,12 @@ import { SaveFormDataPreventa } from '../SavePreventa';
 
 export type DatosGeneralesPreventaP1Props = {
   form: UseFormReturn<Partial<SaveFormDataPreventa>>;
+  canEditEmail?: boolean;
 };
 
 const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
   form,
+  canEditEmail = false,
 }) => {
   const { errors } = form.formState;
 
@@ -79,7 +81,7 @@ const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
         defaultValue={form.getValues().email}
         error={errors.email}
         helperText={errors.email?.message}
-        disabled
+        disabled={!canEditEmail}
       />
     </>
   );

@@ -123,6 +123,7 @@ const GeneralDataSavePreventaStep: React.FC<
     <>
       <DatosGeneralesPreventaP1
         form={form as UseFormReturn<Partial<SaveFormDataPreventa>>}
+        canEditEmail
       />
 
       {/* ============= Persona Referencia ============= */}

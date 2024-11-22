@@ -1,6 +1,8 @@
+import * as yup from 'yup';
+
 import { MetodoPagoEnumUUID } from '@/shared/constants';
 import { MetodoPago } from '@/shared/interfaces';
-import * as yup from 'yup';
+import { emailYupValidation } from '../../common';
 
 export const preventaFormSchema = yup.object({
   nombre_persona_referencia: yup
@@ -17,6 +19,7 @@ export const preventaFormSchema = yup.object({
       200,
       'El campo parentesco referencia no debe exceder los 200 caracteres',
     ),
+  email: emailYupValidation,
   celular: yup
     .string()
     .required('El campo celular es requerido')
