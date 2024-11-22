@@ -18,7 +18,7 @@ import { ToastWrapper } from '@/shared/wrappers';
 type MRTSServiceType = { row: MRT_Row<Preventa> };
 
 export const useColumnsPreventa = () => {
-  const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
+  const preventaBaseColumns01 = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       {
         accessorKey: 'numero_referencia',
@@ -58,6 +58,13 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) =>
           emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
       },
+    ],
+    [],
+  );
+
+  const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [
+      ...preventaBaseColumns01,
       {
         accessorKey: 'codigo',
         header: 'CODIGO',
@@ -255,11 +262,12 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
     ],
-    [],
+    [preventaBaseColumns01],
   );
 
   const preventaRealizadas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
+      ...preventaBaseColumns01,
       ...preventaBaseColumns,
       {
         accessorKey: 'razon_social__finaliza_preventa',
@@ -293,7 +301,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [preventaBaseColumns, preventaBaseColumns01],
   );
 
   /*
@@ -338,6 +346,7 @@ export const useColumnsPreventa = () => {
 
   const preventaFallidas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
+      ...preventaBaseColumns01,
       ...preventaBaseColumns,
       {
         accessorKey: 'razon_social__cancela_preventa',
@@ -371,7 +380,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [preventaBaseColumns, preventaBaseColumns01],
   );
   const preventaSinGestion = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
@@ -420,6 +429,7 @@ export const useColumnsPreventa = () => {
 
   const preventasEsperaAceptacionColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
+      ...preventaBaseColumns01,
       ...preventaBaseColumns,
       {
         accessorKey: 'url_oficina_virtual',
@@ -438,7 +448,7 @@ export const useColumnsPreventa = () => {
         },
       },
     ],
-    [preventaBaseColumns],
+    [preventaBaseColumns, preventaBaseColumns01],
   );
 
   return {
