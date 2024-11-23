@@ -78,7 +78,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_instalacion'),
       },
-
       {
         accessorKey: 'hora_instalacion',
         header: 'HORA INSTALACION',
@@ -87,7 +86,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'hora_instalacion'),
       },
-
       {
         accessorKey: 'distancia_nap',
         header: 'DISTANCIA NAP',
@@ -96,12 +94,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'distancia_nap'),
       },
-    ],
-    [],
-  );
-
-  const agendaBase03 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
-    () => [
       {
         accessorKey: 'descripcion_pago',
         header: 'DESCRIPCION PAGO',
@@ -119,55 +111,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_pago'),
       },
-
-      {
-        accessorKey: 'linea_servicio',
-        header: 'LINEA SERVICIO',
-        size: 312,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, [
-            'preventa_data',
-            'linea_servicio_data',
-            'estado_linea',
-          ]),
-      },
-
-      {
-        accessorKey: 'flota',
-        header: 'FLOTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellNested(row, ['flota_data', 'name']),
-      },
-
-      {
-        accessorKey: 'nap',
-        header: 'NAP',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellNested(row, ['nap_data', 'name']),
-      },
-
-      {
-        accessorKey: 'vendedor',
-        header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['vendedor_data', 'razon_social']),
-      },
-    ],
-    [],
-  );
-
-  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
-    () => [
-      ...agendaBase01,
       {
         accessorKey: 'estado_agendamiento',
         header: 'ESTADO AGENDAMIENTO',
@@ -176,7 +119,6 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_agendamiento'),
       },
-      ...agendaBase02,
       {
         accessorKey: 'encuesta',
         header: 'ENCUESTA',
@@ -219,15 +161,64 @@ export const useColumnsAgendamientos = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'numero_comprobante'),
       },
+    ],
+    [],
+  );
 
+  const agendaBase03 = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+    () => [
       {
-        accessorKey: 'url_foto_comprobante',
-        header: 'URL FOTO COMPROBANTE',
+        accessorKey: 'flota__flota',
+        header: 'FLOTA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'url_foto_comprobante'),
+        Cell: ({ row }) => emptyCellNested(row, ['flota_data', 'name']),
       },
+
+      {
+        accessorKey: 'nap__nap',
+        header: 'NAP',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['nap_data', 'name']),
+      },
+      {
+        accessorKey: 'preventa__tipo_plan',
+        header: 'LINEA SERVICIO',
+        size: 312,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['preventa_data', 'tipo_plan']),
+      },
+      {
+        accessorKey: 'preventa__tipo_servicio',
+        header: 'LINEA SERVICIO',
+        size: 312,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['preventa_data', 'tipo_servicio']),
+      },
+
+      {
+        accessorKey: 'vendedor__vendedor',
+        header: 'VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
+      },
+    ],
+    [],
+  );
+
+  const agendaEspera = useMemo<MRT_ColumnDef<Agendamiento>[]>(
+    () => [
+      ...agendaBase01,
+      ...agendaBase02,
       ...agendaBase03,
       {
         accessorKey: 'created_at',
@@ -253,14 +244,6 @@ export const useColumnsAgendamientos = () => {
     () => [
       ...agendaBase01,
       ...agendaBase02,
-      {
-        accessorKey: 'observaciones_vendedor',
-        header: 'OBSERVACIONES VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'observaciones_vendedor'),
-      },
       ...agendaBase03,
       {
         accessorKey: 'razon_social__espera_recoordinacion_agendamiento',
@@ -301,14 +284,6 @@ export const useColumnsAgendamientos = () => {
     () => [
       ...agendaBase01,
       ...agendaBase02,
-      {
-        accessorKey: 'observaciones_vendedor',
-        header: 'OBSERVACIONES VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'observaciones_vendedor'),
-      },
       ...agendaBase03,
       {
         accessorKey: 'razon_social__recoordinacion_agendamiento',
