@@ -63,49 +63,64 @@ const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
           minWidth="75%"
           title={modalTitle}
           contentNode={
-            <>
-              <div style={{ textAlign: 'center' }}>
-                <p
-                  style={{
-                    marginBottom: '8px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {imageTitles[currentIndex]}
-                </p>
-              </div>
+            validEntries.length === 0 ? (
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  height: '200px',
                 }}
               >
-                {imageUrls.length > 1 && (
-                  <IconButton
-                    onClick={handlePrevious}
-                    style={{ margin: '5px' }}
-                  >
-                    <IconChevronLeft />
-                  </IconButton>
-                )}
-
-                <img
-                  src={imageUrls[currentIndex]}
-                  alt={`Imagen ${currentIndex + 1}`}
-                  style={{
-                    maxWidth: '50%',
-                    maxHeight: '300px',
-                  }}
-                />
-
-                {imageUrls.length > 1 && (
-                  <IconButton onClick={handleNext} style={{ margin: '5px' }}>
-                    <IconChevronRight />
-                  </IconButton>
-                )}
+                <p style={{ fontWeight: 'bold', fontSize: '18px' }}>
+                  Sin imágenes
+                </p>
               </div>
-            </>
+            ) : (
+              <>
+                <div style={{ textAlign: 'center' }}>
+                  <p
+                    style={{
+                      marginBottom: '8px',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {imageTitles[currentIndex]}
+                  </p>
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {imageUrls.length > 1 && (
+                    <IconButton
+                      onClick={handlePrevious}
+                      style={{ margin: '5px' }}
+                    >
+                      <IconChevronLeft />
+                    </IconButton>
+                  )}
+
+                  <img
+                    src={imageUrls[currentIndex]}
+                    alt={`Imagen ${currentIndex + 1}`}
+                    style={{
+                      maxWidth: '50%',
+                      maxHeight: '300px',
+                    }}
+                  />
+
+                  {imageUrls.length > 1 && (
+                    <IconButton onClick={handleNext} style={{ margin: '5px' }}>
+                      <IconChevronRight />
+                    </IconButton>
+                  )}
+                </div>
+              </>
+            )
           }
         />
       )}
