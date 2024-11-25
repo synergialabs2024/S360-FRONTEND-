@@ -1,6 +1,7 @@
 import { useFetchPreventas } from '@/actions/app';
 import {
   EstadoPreventaEnumChoice,
+  PermissionsEnum,
   Preventa,
   TABLE_CONSTANTS,
   useColumnsPreventa,
@@ -12,6 +13,8 @@ import {
   CustomTable,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
+import { EsperaAgendaPreventaCustomButtons } from '../../shared/components';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export type PreventaByStatePageProps = {
   state: EstadoPreventaEnumChoice;
@@ -22,6 +25,7 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
   state,
   noAceptados,
 }) => {
+  useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -103,9 +107,12 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={false}
         // crud
-        canEdit={false}
-        // onEdit={onEdit}
+        canEdit={true}
         canDelete={false}
+        // onEdit={onEdit}
+        customButtonsSpaceEnd={(preventa: Preventa) => {
+          return <EsperaAgendaPreventaCustomButtons preventa={preventa!} />;
+        }}
       />
     </GridTableTabsContainerOnly>
   );
