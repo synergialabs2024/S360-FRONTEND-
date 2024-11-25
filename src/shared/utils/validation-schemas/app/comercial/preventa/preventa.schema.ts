@@ -37,7 +37,7 @@ export const preventaFormSchema = yup.object({
       then: schema =>
         schema.required('El campo celular adicional es requerido'),
     }),
-  direccion: yup
+  direccion_referencia: yup
     .string()
     .required('El campo direccion es requerido')
     .max(45, 'El campo direccion no debe exceder los 45 caracteres'),

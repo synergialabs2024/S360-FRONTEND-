@@ -155,7 +155,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_tercera_edad: cedulaCitizen?.esTerceraEdad,
       fecha_nacimiento: correctFechaNacimiento,
       edad: cedulaCitizen?.edad,
-      direccion: cedulaCitizen?.domicilio
+      direccion_referencia: cedulaCitizen?.domicilio
         ? cedulaCitizen?.domicilio?.slice(0, 38)
         : '',
       isFormBlocked: false,
@@ -261,7 +261,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         es_tercera_edad: !!data?.esTerceraEdad,
         fecha_nacimiento: correctFechaNacimiento,
         edad: data?.edad,
-        direccion: data?.domicilio,
+        direccion_referencia: data?.domicilio,
         isFormBlocked: false,
         isValidIdentificacion: true,
 
@@ -392,7 +392,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_tercera_edad: false,
       fecha_nacimiento: '',
       edad: undefined,
-      direccion: '',
+      direccion_referencia: '',
       identificacion: '',
       tiene_cobertura: false,
       email: '',

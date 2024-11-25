@@ -197,7 +197,10 @@ const ActivacionInstallOTDetallesEquiposFormTab: React.FC<
 
             <CustomTextAreaNoForm
               label="Dirección"
-              value={ordenTrabajo?.solicitud_servicio_data?.direccion || ''}
+              value={
+                ordenTrabajo?.solicitud_servicio_data?.direccion_referencia ||
+                ''
+              }
               disabled
             />
           </>

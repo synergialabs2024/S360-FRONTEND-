@@ -454,7 +454,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       zona,
       sector,
       coordenadas,
-      direccion,
+      direccion_referencia,
       tiene_cobertura,
       ...rest
     } = updatedSolServicio || {};
@@ -1031,11 +1031,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
           <CustomTextArea
             label="Dirección"
-            name="direccion"
+            name="direccion_referencia"
             control={form.control}
-            defaultValue={form.getValues().direccion}
-            error={errors.direccion}
-            helperText={errors.direccion?.message}
+            defaultValue={form.getValues().direccion_referencia}
+            error={errors.direccion_referencia}
+            helperText={errors.direccion_referencia?.message}
           />
 
           {watchedThereAreNaps ? (

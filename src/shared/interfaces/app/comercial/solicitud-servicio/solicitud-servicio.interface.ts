@@ -30,6 +30,7 @@ export interface SolicitudServicio {
   razon_social: string;
   email: string;
   celular: string;
+  direccion_referencia: string; // unique for each user
   direccion: string;
   es_discapacitado: boolean;
   es_tercera_edad: boolean;

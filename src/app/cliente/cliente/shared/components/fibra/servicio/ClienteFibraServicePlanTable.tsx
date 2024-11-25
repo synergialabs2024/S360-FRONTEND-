@@ -41,7 +41,8 @@ const ClienteFibraServicePlanTable: React.FC<
       identificacion_pago: serviceLine?.contrato_data?.identificacion_pago!,
       url_contrato: serviceLine?.contrato_data?.url_contrato!,
 
-      direccion: serviceLine?.solicitud_servicio_data?.direccion!,
+      direccion_referencia:
+        serviceLine?.solicitud_servicio_data?.direccion_referencia!,
 
       tipo_servicio: serviceLine?.preventa_data?.tipo_servicio!,
       tipo_plan: serviceLine?.preventa_data?.tipo_plan!,

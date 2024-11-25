@@ -173,7 +173,9 @@ const FibraClientUbicacionNapPart: React.FC<
 
         <CustomTextAreaNoForm
           label="Dirección"
-          value={serviceLine?.solicitud_servicio_data?.direccion || ''}
+          value={
+            serviceLine?.solicitud_servicio_data?.direccion_referencia || ''
+          }
           disabled
         />
       </>

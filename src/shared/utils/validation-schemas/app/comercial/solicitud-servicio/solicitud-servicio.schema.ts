@@ -37,11 +37,15 @@ export const solicitudServicioFormSchema = yup.object({
     .required('El campo celular es requerido')
     .max(200, 'El campo celular no debe exceder los 200 caracteres')
     .matches(/^(09)\d{8}$/, 'Número de celular inválido'),
-
-  direccion: yup
+  direccion_referencia: yup
     .string()
     .required('El campo direccion es requerido')
-    .max(38, 'El campo direccion no debe exceder los 38 caracteres'),
+    .max(255, 'El campo direccion no debe exceder los 255 caracteres'),
+
+  // direccion: yup
+  //   .string()
+  //   .required('El campo direccion es requerido')
+  //   .max(38, 'El campo direccion no debe exceder los 38 caracteres'),
   es_discapacitado: yup
     .boolean()
     .typeError('El campo es discapacitado es requerido')

@@ -334,11 +334,11 @@ const LocationZonePolygonFormPart: React.FC<
 
       <CustomTextArea
         label="Dirección"
-        name="direccion"
+        name="direccion_referencia"
         control={form.control}
-        defaultValue={form.getValues().direccion}
-        error={errors.direccion as any}
-        helperText={errors.direccion?.message as any}
+        defaultValue={form.getValues().direccion_referencia}
+        error={errors.direccion_referencia as any}
+        helperText={errors.direccion_referencia?.message as any}
       />
 
       {watchedThereAreNaps ? (
