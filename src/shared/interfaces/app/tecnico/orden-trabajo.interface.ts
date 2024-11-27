@@ -15,6 +15,7 @@ import {
   SolicitudServicio,
   TipoActualizacionActivacionesEnumChoice,
   TipoOrdenTrabajoEnumChoice,
+  TrazabilidadVentas,
   ZonaLimitData,
 } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
@@ -107,6 +108,7 @@ export interface OrdenTrabajo {
   nodo_data?: Nodo;
   olt_data?: OLT;
   motivo_prerechazo_data?: MotivoRechazo;
+  trazabilidad_data?: TrazabilidadVentas[]; // JSON
 
   // just serializer
   ciudad_data?: Ciudad;
