@@ -118,8 +118,6 @@ const CustomMap: React.FC<MapProps> = ({
     return null;
   };
 
-  console.log({ naps });
-
   return (
     <Grid
       item
