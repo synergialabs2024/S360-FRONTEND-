@@ -98,7 +98,7 @@ const EsperaAgendaPreventaCustomButtons: React.FC<
           <Grid item xs={2}>
             <SingleIconButton
               startIcon={<HiDocumentPlus />}
-              label="Crear agenda"
+              label="Crear agenda "
               color="inherit"
               onClick={() => {
                 navigate(
