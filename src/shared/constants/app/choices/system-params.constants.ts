@@ -10,6 +10,7 @@ export enum SystemParamsSlugsEnum {
   SCORE_BURO_PAGA_PREVIO_AGENDA = 'score_buro_paga_previo_agenda',
   SCORE_BURO_LIBRE_CUOTAS_EQUIPO_VENTA = 'score_buro_libre_cuotas_equipo_venta',
   DESCUENTO_3RA_EDAD_PORCENTAJE = 'descuento_3ra_edad_porcentaje',
+  SLUG_HORAS_CORECCION_IMAGES_PREVENTA_KERAS_ACEPTACION = 'horas_correccion_images_preventa_keras_aceptacion',
 
   // planificador
   HORA_INICIO_INSTALACIONES = 'hora_inicio_instalaciones',
