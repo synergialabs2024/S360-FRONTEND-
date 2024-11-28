@@ -335,13 +335,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
       setIsCheckingIdentificacion(true);
       await Promise.all([
-        // consultarEquifax.mutateAsync({
-        //   identificacion: value,
-        //   tipo_identificacion: EquifaxEdentificationType.RUC,
-        // }),
-        // await useSearchRucMutation.mutateAsync({
-        //   ruc: value,
-        // })
+        searchCedulaMutation.mutateAsync({
+          identificacion: value,
+        }),
       ]);
       setIsCheckingIdentificacion(false);
     }
