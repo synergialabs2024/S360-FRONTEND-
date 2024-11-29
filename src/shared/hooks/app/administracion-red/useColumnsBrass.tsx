@@ -1,5 +1,5 @@
 import { useUpdateBras } from '@/actions/app';
-import { CustomSwitch } from '@/shared/components';
+import { CustomSwitch, PasswordTableCell } from '@/shared/components';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
 import {
   Brass,
@@ -56,10 +56,14 @@ export const useColumnsBrass = () => {
       {
         accessorKey: 'password',
         header: 'PASSWORD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'password'),
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <PasswordTableCell password={row.original?.password || 'N/A'} />
+          );
+        },
       },
       {
         accessorKey: 'direccion',
@@ -101,57 +105,55 @@ export const useColumnsBrass = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ciudad_data', 'name']),
       },
-    ],
-    [],
-  );
-
-  const brassBaseColumns03 = useMemo<MRT_ColumnDef<Brass>[]>(
-    () => [
       {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
         filterVariant: 'select',
         filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => (
-          <CustomSwitch
-            title="Estado"
-            checked={row.original?.state}
-            onChangeChecked={() => {
-              if (
-                //Pendiente a cambio
-                !hasPermission(PermissionsEnum.administration_view_pais)
-              )
-                return;
+        Cell: ({ row }) => {
+          return typeof row.original?.state === 'boolean' ? (
+            <CustomSwitch
+              title="state"
+              checked={row.original?.state}
+              onChangeChecked={() => {
+                if (
+                  // Pendiente a cambio
+                  !hasPermission(PermissionsEnum.administration_change_pais)
+                )
+                  return;
 
-              setConfirmDialog({
-                isOpen: true,
-                title: 'Cambiar Estado',
-                subtitle:
-                  '¿Está seguro que desea cambiar el estado de este registro?',
-                onConfirm: () => {
-                  setConfirmDialogIsOpen(false);
-                  changeState.mutate({
-                    id: row.original.id!,
-                    data: {
-                      state: !row.original?.state,
-                    },
-                  });
-                },
-              });
-            }}
-          />
-        ),
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar state',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el state de este registro?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        state: !row.original.state,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [setConfirmDialog, setConfirmDialogIsOpen, changeState],
   );
 
-  const brassColumn = useMemo<MRT_ColumnDef<Brass>[]>(
+  const brassColumns = useMemo<MRT_ColumnDef<Brass>[]>(
     () => [
       ...brassBaseColumns01,
       ...brassBaseColumns02,
-      ...brassBaseColumns03,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -169,10 +171,10 @@ export const useColumnsBrass = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [brassBaseColumns01, brassBaseColumns02, brassBaseColumns03],
+    [brassBaseColumns01, brassBaseColumns02],
   );
 
   return {
-    brassColumn,
+    brassColumns,
   };
 };

@@ -773,6 +773,16 @@ const TraficosPage = Loadable(
 const BrassPage = Loadable(
   lazy(() => import('@/app/administracion-red/brass/pages/tables/BrassPage')),
 );
+const CreateBrassPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/brass/pages/forms/CreateBrassPage'),
+  ),
+);
+const UpdateBrassPage = Loadable(
+  lazy(
+    () => import('@/app/administracion-red/brass/pages/forms/UpdateBrassPage'),
+  ),
+);
 
 const RadiusPage = Loadable(
   lazy(() => import('@/app/administracion-red/radius/pages/tables/RadiusPage')),
@@ -1779,9 +1789,18 @@ const AppRouter = [
             path: ROUTER_PATHS.administracionRed.traficos,
             element: <TraficosPage />,
           },
+          ///* Brass
           {
             path: ROUTER_PATHS.administracionRed.brass,
             element: <BrassPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.brassCrear,
+            element: <CreateBrassPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracionRed.brassEditar,
+            element: <UpdateBrassPage />,
           },
           ///* radius
           {

@@ -17,6 +17,8 @@ import { useFetchBrass } from '@/actions/app';
 import { useNavigate } from 'react-router';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { hasAllPermissions } from '@/shared/utils/auth';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
 
 export const returnUrlBrassPage = ROUTER_PATHS.administracionRed.brassNav;
 
@@ -54,12 +56,12 @@ const BrassPage: React.FC<BrassPageProps> = () => {
     isLoading,
     isRefetching,
   } = useFetchBrass({
-    enabled: true,
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
       username: searchTerm,
       ...filterObject,
+      filterByState: false,
     },
   });
 
@@ -77,7 +79,12 @@ const BrassPage: React.FC<BrassPageProps> = () => {
   };
 
   ///* columns
-  const { brassColumn } = useColumnsBrass();
+  const { brassColumns } = useColumnsBrass();
+
+  const columns = useMemo<MRT_ColumnDef<Brass>[]>(
+    () => [...brassColumns],
+    [brassColumns],
+  );
 
   return (
     <SingleTableBoxScene
@@ -93,7 +100,7 @@ const BrassPage: React.FC<BrassPageProps> = () => {
         />
 
         <CustomTable<Brass>
-          columns={brassColumn}
+          columns={columns}
           data={BrasPagingRes?.data?.items || []}
           isLoading={isLoading}
           isRefetching={isRefetching}
