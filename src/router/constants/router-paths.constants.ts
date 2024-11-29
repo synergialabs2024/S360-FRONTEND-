@@ -395,9 +395,11 @@ export const ROUTER_PATHS = {
     traficos: 'traficos',
     traficosNav: '/administracion-red/traficos',
 
-    ///* Bras
-    bras: 'bras',
-    brasNav: '/administracion-red/bras',
+    ///* Brass
+    brass: 'brass',
+    brassCrear: 'brass/crear',
+    brassEditar: 'brass/editar/:uuid',
+    brassNav: '/administracion-red/brass',
 
     ///* Grupo IPv4
     gruposIPv4: 'redes-ipv4',

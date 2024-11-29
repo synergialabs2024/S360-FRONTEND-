@@ -1,5 +1,5 @@
 export * from './autenticacion-cliente';
-export * from './bras';
+export * from './brass';
 export * from './grupoipv4.actions';
 export * from './grupoipv6.actions';
 export * from './monitoreo';

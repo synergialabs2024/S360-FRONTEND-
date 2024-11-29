@@ -1,6 +1,3 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
-
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
@@ -9,23 +6,37 @@ import {
   SingleTableBoxScene,
 } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import {
+  useColumnsBrass,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { Bras, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel } from '@/shared/utils';
+import { Brass, PermissionsEnum } from '@/shared/interfaces';
 import { useFetchBrass } from '@/actions/app';
+import { useNavigate } from 'react-router';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { hasAllPermissions } from '@/shared/utils/auth';
 
-export const returnUrlBrasPage = ROUTER_PATHS.administracionRed.brasNav;
+export const returnUrlBrassPage = ROUTER_PATHS.administracionRed.brassNav;
 
-export type BrasPageProps = {};
+export type BrassPageProps = {};
 
-const BrasPage: React.FC<BrasPageProps> = () => {
+const BrassPage: React.FC<BrassPageProps> = () => {
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
+
+  const navigate = useNavigate();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* table
   const {
@@ -52,23 +63,28 @@ const BrasPage: React.FC<BrasPageProps> = () => {
     },
   });
 
-  ///* columns
-  const columns = useMemo<MRT_ColumnDef<Bras>[]>(
-    () => [
-      {
-        accessorKey: 'name',
-        header: 'NAME',
-        size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+  ///* handlers
+  const onEdit = (brass: Brass) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Editar Brass',
+      subtitle: '¿Está seguro que desea editar este registro?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(`${returnUrlBrassPage}/editar/${brass.uuid}`);
       },
-    ],
-    [],
-  );
+    });
+  };
+
+  ///* columns
+  const { brassColumn } = useColumnsBrass();
 
   return (
-    <SingleTableBoxScene title="Bras" showCreateBtn={false} isMainTableStates>
+    <SingleTableBoxScene
+      title="Bras"
+      createPageUrl={`${returnUrlBrassPage}/crear`}
+      isMainTableStates
+    >
       <GridTableTabsContainerOnly>
         <CustomSearch
           onChange={onChangeFilter}
@@ -76,8 +92,8 @@ const BrasPage: React.FC<BrasPageProps> = () => {
           text="por nombre"
         />
 
-        <CustomTable<Bras>
-          columns={columns}
+        <CustomTable<Brass>
+          columns={brassColumn}
           data={BrasPagingRes?.data?.items || []}
           isLoading={isLoading}
           isRefetching={isRefetching}
@@ -91,11 +107,22 @@ const BrasPage: React.FC<BrasPageProps> = () => {
           pagination={pagination}
           onPaging={setPagination}
           rowCount={BrasPagingRes?.data?.meta?.count}
-          enableActionsColumn={false}
+          // // actions
+          actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+          enableActionsColumn={hasAllPermissions([
+            //Pendiente a cambio
+            PermissionsEnum.administration_view_pais,
+          ])}
+          // crud
+          canEdit={hasAllPermissions([
+            //Pendiente a cambio
+            PermissionsEnum.administration_view_pais,
+          ])}
+          onEdit={onEdit}
         />
       </GridTableTabsContainerOnly>
     </SingleTableBoxScene>
   );
 };
 
-export default BrasPage;
+export default BrassPage;

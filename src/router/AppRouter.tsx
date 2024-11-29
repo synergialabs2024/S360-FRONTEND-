@@ -770,8 +770,8 @@ const TraficosPage = Loadable(
     () => import('@/app/administracion-red/trafico/pages/tables/TraficosPage'),
   ),
 );
-const BrasPage = Loadable(
-  lazy(() => import('@/app/administracion-red/bras/pages/tables/BrasPage')),
+const BrassPage = Loadable(
+  lazy(() => import('@/app/administracion-red/brass/pages/tables/BrassPage')),
 );
 
 const RadiusPage = Loadable(
@@ -1780,8 +1780,8 @@ const AppRouter = [
             element: <TraficosPage />,
           },
           {
-            path: ROUTER_PATHS.administracionRed.bras,
-            element: <BrasPage />,
+            path: ROUTER_PATHS.administracionRed.brass,
+            element: <BrassPage />,
           },
           ///* radius
           {

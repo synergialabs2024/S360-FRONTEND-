@@ -723,10 +723,10 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.administracionRed.routersNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'bras',
-              title: 'Bras',
+              id: 'brass',
+              title: 'Brass',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.administracionRed.brasNav,
+              url: ROUTER_PATHS.administracionRed.brassNav,
             }),
             renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_GRUPO_IPV4, {
               id: 'ipv4s',

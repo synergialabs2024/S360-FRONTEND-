@@ -1,3 +1,4 @@
+export * from './brass';
 export * from './monitoreo';
 export * from './router.schema';
 export * from './ont-model';

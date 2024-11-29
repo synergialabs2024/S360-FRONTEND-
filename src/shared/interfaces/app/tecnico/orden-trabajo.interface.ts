@@ -1,6 +1,6 @@
 import {
   Agendamiento,
-  Bras,
+  Brass,
   Ciudad,
   EstadoActivacionEnumChoice,
   EstadoOrdenTrabajoEnumChoice,
@@ -110,7 +110,7 @@ export interface OrdenTrabajo {
   olt_data?: OLT;
   motivo_prerechazo_data?: MotivoRechazo;
   trazabilidad_data?: TrazabilidadVentas[]; // JSON
-  brass_data?: Bras;
+  brass_data?: Brass;
 
   // just serializer
   ciudad_data?: Ciudad;
