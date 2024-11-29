@@ -1,4 +1,4 @@
-import { gridSizeMdLg3, OrdenTrabajo } from '@/shared';
+import { gridSize, gridSizeMdLg3, OrdenTrabajo } from '@/shared';
 import { CustomTextFieldNoForm } from '@/shared/components';
 
 export type ActivacionInstallOTNodoIPsPPPPartProps = {
@@ -10,6 +10,13 @@ const ActivacionInstallOTNodoIPsPPPPart: React.FC<
 > = ({ ordenTrabajo }) => {
   return (
     <>
+      <CustomTextFieldNoForm
+        label="Brass"
+        value={ordenTrabajo?.brass_data?.name || ''}
+        disabled
+        size={gridSize}
+      />
+
       <CustomTextFieldNoForm
         label="Nodo"
         value={ordenTrabajo?.nodo_data?.name || ''}
