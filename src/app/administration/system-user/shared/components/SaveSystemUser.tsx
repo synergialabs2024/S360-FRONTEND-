@@ -57,7 +57,7 @@ import {
   SystemUserItem,
   Zona,
 } from '@/shared/interfaces';
-import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
+import { PersonaInformacion } from '@/shared/interfaces/consultas-api/persona-informacion.interface';
 import { systemUserFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -212,10 +212,10 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   });
 
   // handlers ------------
-  const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
+  const onSuccessSearchCedula = (personaInformacion: PersonaInformacion) => {
     form.reset({
       ...form.getValues(),
-      razon_social: cedulaCitizen?.fullName,
+      razon_social: personaInformacion?.nombres,
     });
   };
 
@@ -231,7 +231,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   const useSearchCedulaMutation = useSearchCedula<SearchCedulaParams>({
     enableErrorNavigate: false,
     customOnSuccess: data => {
-      onSuccessSearchCedula(data as CedulaCitizen);
+      onSuccessSearchCedula(data as PersonaInformacion);
     },
   });
   const handleFetchCedulaRucInfo = async (value: string) => {

@@ -55,7 +55,7 @@ import {
   SolicitudServicio,
 } from '@/shared/interfaces';
 import { ClienteExist } from '@/shared/interfaces/app/comercial/solicitud-servicio/client-mikrowisp.interface';
-import { CedulaCitizen } from '@/shared/interfaces/consultas-api/cedula-citizen.interface';
+import { PersonaInformacion } from '@/shared/interfaces/consultas-api/persona-informacion.interface';
 import {
   getKeysFormErrorsMessage,
   solicitudServicioFormSchema,
@@ -139,30 +139,31 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   });
 
   // handlers ------------
-  const onSuccessSearchCedula = (cedulaCitizen: CedulaCitizen) => {
+  const onSuccessSearchCedula = (personaInformacion: PersonaInformacion) => {
     const correctFechaNacimiento = dayjs(
-      cedulaCitizen?.fechaNacimiento,
+      personaInformacion?.registro_res?.fechaNacimiento,
       'DD/MM/YYYY',
     ).format('YYYY-MM-DD');
     const currentCountry = paisesPaging?.data.items.find(
-      country => country.nationality === cedulaCitizen?.nacionalidad,
+      country =>
+        country.nationality === personaInformacion?.registro_res?.nacionalidad,
     );
 
     form.reset({
       ...form.getValues(),
-      razon_social: cedulaCitizen?.fullName,
-      es_discapacitado: cedulaCitizen?.esDiscapacitado,
-      es_tercera_edad: cedulaCitizen?.esTerceraEdad,
+      razon_social: personaInformacion?.nombres,
+      es_discapacitado: false,
+      es_tercera_edad: personaInformacion?.es_tercera_edad,
       fecha_nacimiento: correctFechaNacimiento,
-      edad: cedulaCitizen?.edad,
-      direccion_referencia: cedulaCitizen?.domicilio
-        ? cedulaCitizen?.domicilio?.slice(0, 38)
+      edad: personaInformacion?.edad,
+      direccion_referencia: personaInformacion?.direccion
+        ? personaInformacion?.direccion?.slice(0, 38)
         : '',
       isFormBlocked: false,
       isValidIdentificacion: true,
 
       pais: currentCountry?.id,
-      nacionalidad: cedulaCitizen?.nacionalidad,
+      nacionalidad: personaInformacion?.registro_res?.nacionalidad,
     });
   };
   const onErrorSearchCedula = (err: any) => {
@@ -308,7 +309,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     useValidateCedulaSolService<ValidateIdentificacionParams>({
       enableErrorNavigate: false,
       customOnSuccess: data => {
-        onSuccessSearchCedula(data as CedulaCitizen);
+        onSuccessSearchCedula(data as PersonaInformacion);
       },
       customOnError: err => {
         onErrorSearchCedula(err);
