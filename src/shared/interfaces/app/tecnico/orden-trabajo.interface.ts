@@ -118,6 +118,8 @@ export interface OrdenTrabajo {
   zona_data?: ZonaLimitData;
   sector_data?: SectorLimitData;
   nap_data?: Nap;
+
+  can_be_managed?: boolean; // when oneAtTime filter is true
 }
 
 export type EquipoUtilizadosInstallOT = {

@@ -17,6 +17,8 @@ export enum UserRolesEnumChoice {
   COORDINADOR = 'COORDINADOR', // all department
   SUPERVISOR = 'SUPERVISOR', // all sales channel
   AGENTE = 'AGENTE', // all created by himself
+
+  TECNICO = 'TECNICO', // flotas - group tecnico
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,

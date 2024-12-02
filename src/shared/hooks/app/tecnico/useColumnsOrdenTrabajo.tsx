@@ -17,17 +17,38 @@ export const useColumnsOrdenTrabajo = () => {
   const otColumnsBase01 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
       {
-        accessorKey: 'numero_referencia',
-        header: '# REF',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
-      },
-      {
         accessorKey: 'identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
+      },
+      {
+        accessorKey: 'solicitud_servicio__razon_social',
+        header: 'NOMBRE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'agendamiento__fecha_instalacion',
+        header: 'FECHA INSTALACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['agendamiento_data', 'fecha_instalacion']),
+      },
+      {
+        accessorKey: 'agendamiento__hora_instalacion',
+        header: 'HORA INSTALACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['agendamiento_data', 'hora_instalacion']),
       },
       {
         accessorKey: 'solicitud_servicio__tipo_identificacion',
@@ -40,23 +61,6 @@ export const useColumnsOrdenTrabajo = () => {
             'solicitud_servicio_data',
             'tipo_identificacion',
           ]),
-      },
-      {
-        accessorKey: 'solicitud_servicio__razon_social',
-        header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['solicitud_servicio_data', 'razon_social']),
-      },
-      {
-        accessorKey: 'codigo',
-        header: 'CODIGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
     ],
     [],
@@ -239,24 +243,6 @@ export const useColumnsOrdenTrabajo = () => {
           ]),
       },
       {
-        accessorKey: 'agendamiento__fecha_instalacion',
-        header: 'FECHA INSTALACION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['agendamiento_data', 'fecha_instalacion']),
-      },
-      {
-        accessorKey: 'agendamiento__hora_instalacion',
-        header: 'HORA INSTALACION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['agendamiento_data', 'hora_instalacion']),
-      },
-      {
         accessorKey: 'flota__name',
         header: 'FLOTA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -349,6 +335,21 @@ export const useColumnsOrdenTrabajo = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
+      },
+
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'numero_referencia',
+        header: '# REF',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
       },
     ],
     [],

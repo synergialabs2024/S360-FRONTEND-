@@ -127,8 +127,12 @@ export const useUpdateOrdenTrabajo = <T>({
 ///* axios ---------------
 export type GetOrdenTrabajosParams = Partial<OrdenTrabajo> &
   PagingPartialParams & {
+    // helpers
     is_recoordinada?: boolean;
     identificacion?: string;
+
+    // filter tecnico (only for tecnico)
+    oneAtTime?: boolean;
   };
 export type CreateOrdenTrabajoParams<T> = T;
 export type CreateOrdenTrabajoParamsBase = Omit<OrdenTrabajo, 'id'>;

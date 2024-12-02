@@ -9,6 +9,7 @@ import {
   TABLE_CONSTANTS,
   TipoOrdenTrabajoEnumChoice,
   useColumnsOrdenTrabajo,
+  UserRolesEnumChoice,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -18,6 +19,7 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { useAuthStore } from '@/store/auth';
 
 export type InstalacionAsignadaOTByStateProps = {
   state: EstadoOrdenTrabajoEnumChoice;
@@ -34,6 +36,8 @@ const InstalacionAsignadaOTByState: React.FC<
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  const user = useAuthStore(s => s.user);
 
   ///* table
   const {
@@ -64,6 +68,11 @@ const InstalacionAsignadaOTByState: React.FC<
 
       // apply only to PENDIENTE
       is_recoordinada: isRecoordinada,
+
+      // filter by tecnico
+      ...(user?.role === UserRolesEnumChoice.TECNICO && {
+        oneAtTime: true,
+      }),
     },
   });
 
@@ -71,7 +80,7 @@ const InstalacionAsignadaOTByState: React.FC<
   const calcEnableActionsColumn = () => {
     return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
   };
-  const calcOnEdit = (row: OrdenTrabajo) => {
+  const onEdit = (row: OrdenTrabajo) => {
     navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
   };
 
@@ -114,7 +123,13 @@ const InstalacionAsignadaOTByState: React.FC<
         enableActionsColumn={calcEnableActionsColumn()}
         // crud
         canEdit={calcEnableActionsColumn()}
-        onEdit={calcOnEdit}
+        onEdit={onEdit}
+        onConditionEdit={ot => {
+          return (
+            ot.estado_orden_trabajo ===
+              EstadoOrdenTrabajoEnumChoice.PENDIENTE && !!ot?.can_be_managed
+          );
+        }}
         editIcon={<MdArrowRightAlt />}
         // editIconToolTipTitle="Crear preventa"
         canDelete={false}
