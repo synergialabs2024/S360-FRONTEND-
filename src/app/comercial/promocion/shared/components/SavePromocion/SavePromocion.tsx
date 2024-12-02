@@ -1,4 +1,3 @@
- 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
 import { useEffect } from 'react';
@@ -9,6 +8,7 @@ import {
   CreatePromocionParamsBase,
   useCreatePromocion,
   useFetchCiudades,
+  useFetchMetodoPagos,
   useFetchPlanInternets,
   useFetchProvincias,
   useFetchSectores,
@@ -41,6 +41,7 @@ import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import type {
   Ciudad,
+  MetodoPago,
   PlanInternet,
   Promocion,
   Provincia,
@@ -63,6 +64,7 @@ type SaveFormData = CreatePromocionParamsBase & {
   allZones?: boolean;
   allSectores?: boolean;
   allPlanes?: boolean;
+  allMetodosPago?: boolean;
 };
 
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
@@ -96,8 +98,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const watchedAllSectores = form.watch('allSectores');
   const watchedTipoDescuento = form.watch('tipo_descuento');
   const watchedAllPlanes = form.watch('allPlanes');
-  const watchedFechaInicio = form.watch('fecha_inicio');
+  const watchedAllMetodosPago = form.watch('allMetodosPago');
 
+  const watchedFechaInicio = form.watch('fecha_inicio');
   const watchedProvincias = form.watch('provincias');
   const watchedCiudades = form.watch('ciudades');
   const watchedZonas = form.watch('zonas');
@@ -171,6 +174,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       page_size: 600,
     },
   });
+  const {
+    data: metodoPagosPaging,
+    isLoading: isLoadingMetodoPagos,
+    isRefetching: isRefetchingMetodoPagos,
+  } = useFetchMetodoPagos({
+    params: {
+      page_size: 1100,
+    },
+  });
 
   ///* mutations ----------------
   const createPromocionMutation = useCreatePromocion<CreatePromocionParamsBase>(
@@ -240,7 +252,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoadingProvincias ||
     isRefetchingProvincias ||
     isLoadingPlanes ||
-    isRefetchingPlanes;
+    isRefetchingPlanes ||
+    isLoadingMetodoPagos ||
+    isRefetchingMetodoPagos;
   useLoaders(customLoading);
 
   return (
@@ -633,6 +647,50 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               onClickDisabled={() => {
                 ToastWrapper.warning(
                   'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
+                );
+              }}
+            />
+          }
+        />
+
+        {/* --------- Payment methods --------- */}
+        <InputAndBtnGridSpace
+          mainGridSize={gridSize}
+          inputNode={
+            <CustomAutocompleteMultiple<MetodoPago>
+              label="Métodos de pago"
+              name="metodo_pagos"
+              textFieldKey="nombre"
+              valueKey="name"
+              actualValueKey="id"
+              // options
+              options={metodoPagosPaging?.data?.items || []}
+              isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
+              // errors
+              control={form.control}
+              error={undefined}
+              helperText={errors.metodo_pagos?.message}
+              onlyActualValueKey
+              required={false}
+              disabled={watchedAllMetodosPago}
+            />
+          }
+          overrideBtnNode
+          customBtnNode={
+            <SampleCheckbox
+              label="TODOS"
+              name="allMetodosPago"
+              control={form.control}
+              defaultValue={!!form.getValues().allMetodosPago}
+              onChangeValue={value => {
+                if (value) return form.setValue('metodo_pagos', ['*']);
+                form.setValue('metodo_pagos', []);
+              }}
+              // disabled
+              disabled={!metodoPagosPaging?.data?.items?.length}
+              onClickDisabled={() => {
+                ToastWrapper.warning(
+                  'No se puede seleccionar todos los métodos de pago ya que no se tienen registros disponibles',
                 );
               }}
             />

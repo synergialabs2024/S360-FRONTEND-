@@ -73,9 +73,12 @@ export const erpAPI = ({
         throw error;
       }
 
-      if (error.response?.status === HTTPResStatusCodeEnum.UNAUTHORIZED) {
+      if (
+        error.response?.status === HTTPResStatusCodeEnum.UNAUTHORIZED &&
+        !error.response?.data?.data?.failed_attempts
+      ) {
         logout();
-        ToastWrapper.error('Sesión expirada');
+        ToastWrapper.error('Sesión expirada!!!!');
         throw new Error('UNAUTHORIZED');
       }
       if (error.response?.status === HTTPResStatusCodeEnum.FORBIDDEN) {

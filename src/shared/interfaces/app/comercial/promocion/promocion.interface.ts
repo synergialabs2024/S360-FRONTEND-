@@ -1,6 +1,7 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import {
   CiudadLimitData,
+  MetodoPago,
   PaisLimitData,
   ProvinciaLimitData,
   SectorLimitData,
@@ -30,6 +31,10 @@ export interface Promocion {
   created_at?: string;
   modified_at?: string;
 
+  // fk
+  facturas_gratis?: number[];
+  facturas_descuento?: number[];
+
   paises?: number[] | string[];
   provincias?: number[] | string[];
   ciudades?: number[] | string[];
@@ -37,10 +42,7 @@ export interface Promocion {
   sectores?: number[] | string[];
   canales_venta?: number[] | string[];
   planes?: number[] | string[];
-  // meses_gratis?: number[] | string[];
-  // meses_descuento?: number[] | string[];
-  facturas_gratis?: number[];
-  facturas_descuento?: number[];
+  metodo_pagos?: number[] | string[];
 
   planes_data?: PlanInternetLimitData[];
   paises_data?: PaisLimitData[];
@@ -48,4 +50,5 @@ export interface Promocion {
   ciudades_data?: CiudadLimitData[];
   zonas_data?: ZonaLimitData[];
   sectores_data?: SectorLimitData[];
+  metodo_pagos_data?: MetodoPago[];
 }
