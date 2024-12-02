@@ -10,10 +10,9 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 
 import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
-import { CustomFormLabel } from '../Labels';
 import { CustomCircularPorgress } from '../Loaders';
 
-export type CustomAutocompleteMultipleProps<T> = {
+export type CustomAutocompleteMultiplepleProps<T> = {
   options: T[];
   defaultValue?: T[];
 
@@ -30,7 +29,7 @@ export type CustomAutocompleteMultipleProps<T> = {
   label: string;
   name: string;
   disabled?: boolean;
-  onChangeValue?: (value: string | any[]) => void;
+  onChangeValue?: (value: string) => void;
   onChangeRawValue?: (value: T[]) => void;
   error: FieldError | undefined;
   helperText: React.ReactNode;
@@ -43,8 +42,6 @@ export type CustomAutocompleteMultipleProps<T> = {
   getOptionDisabled?: boolean;
 
   onlyActualValueKey?: boolean;
-
-  shouldStringify?: boolean;
 };
 
 const icon = <MdCheckBoxOutlineBlank />;
@@ -75,9 +72,7 @@ export default function CustomAutocompleteMultiple<T>({
   size = gridSize,
 
   limitTags = 2,
-
-  shouldStringify = false,
-}: CustomAutocompleteMultipleProps<T>) {
+}: CustomAutocompleteMultiplepleProps<T>) {
   return (
     <>
       <Grid item {...size}>
@@ -102,76 +97,62 @@ export default function CustomAutocompleteMultiple<T>({
                     return;
                   }
 
-                  if (shouldStringify) {
-                    // Convertir a cadena JSON si shouldStringify es true
-                    const isThereAnyValue = !!data?.length;
-                    const selectedValue: string = isThereAnyValue
-                      ? JSON.stringify(data)
-                      : '[]';
-                    field.onChange(selectedValue);
-                    onChangeValue && onChangeValue(selectedValue);
-                  } else {
-                    // Mantener el arreglo de objetos
-                    field.onChange(data);
-                    onChangeRawValue && onChangeRawValue(data);
-                  }
+                  // data is an valid array - parse to string
+                  const isThereAnyValue = !!data?.length;
+                  const selectedValue: string = isThereAnyValue
+                    ? JSON.stringify(data || '[]')
+                    : '[]';
+
+                  field.onChange(selectedValue);
+
+                  onChangeValue && onChangeValue(selectedValue); // string
+                  onChangeRawValue && onChangeRawValue(data); // T[]
                 };
 
                 return (
-                  <>
-                    <CustomFormLabel
-                      sx={{
-                        mt: 0,
-                      }}
-                      htmlFor={label}
-                      required={required}
-                    >
-                      {label}
-                    </CustomFormLabel>
-
-                    <Autocomplete
-                      // checkbox
-                      multiple
-                      id="checkboxes-tags"
-                      limitTags={limitTags}
-                      defaultValue={defaultValue}
-                      // options
-                      options={options}
-                      loading={isLoadingData}
-                      loadingText={loadingText}
-                      disableCloseOnSelect
-                      // optional label
-                      getOptionLabel={(option: any) => option[valueKey] as any}
-                      // render option checkbox
-                      renderOption={(props, option, { selected }) => {
-                        const { key, ...rest } = props as any;
-                        return (
-                          <li key={key} {...rest}>
-                            <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                            />
-                            {option[valueKey] as any}
-                          </li>
-                        );
-                      }}
-                      onChange={onChange}
-                      disabled={disabled}
-                      // text field
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          error={!!error}
-                          helperText={helperText}
-                          required={required}
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </>
+                  <Autocomplete
+                    ////* checkbox
+                    multiple
+                    id="checkboxes-tags"
+                    limitTags={limitTags}
+                    defaultValue={defaultValue}
+                    // // options
+                    options={options}
+                    loading={isLoadingData}
+                    loadingText={loadingText}
+                    disableCloseOnSelect
+                    // // optional label
+                    getOptionLabel={(option: any) => option[valueKey] as any}
+                    // // render option checkbox
+                    renderOption={(props, option, { selected }) => {
+                      const { key, ...rest } = props as any;
+                      return (
+                        <li key={key} {...rest}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option[valueKey] as any}
+                        </li>
+                      );
+                    }}
+                    onChange={onChange}
+                    disabled={disabled}
+                    // // text field
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        label={label}
+                        variant="outlined"
+                        error={!!error}
+                        helperText={helperText}
+                        required={required}
+                        disabled={disabled}
+                      />
+                    )}
+                  />
                 );
               }}
             />

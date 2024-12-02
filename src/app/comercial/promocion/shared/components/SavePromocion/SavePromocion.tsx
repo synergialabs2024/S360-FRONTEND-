@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
 import { useEffect } from 'react';
@@ -239,6 +240,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       allZones,
       allSectores,
       allPlanes,
+      facturas_gratis: promocion?.facturas_gratis || [],
     });
   }, [promocion, reset]);
 
@@ -354,6 +356,16 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           actualValueKey="value"
           // options
           options={FACTURAS_CUOTAS_ARRAY_OBJECT}
+          defaultValue={
+            form.getValues().facturas_gratis?.length
+              ? FACTURAS_CUOTAS_ARRAY_OBJECT.filter(
+                  (factura: FacturasCuotasObjArray) =>
+                    (form.getValues().facturas_gratis as any[])?.includes(
+                      factura?.value,
+                    ),
+                )
+              : []
+          }
           isLoadingData={false}
           // errors
           control={form.control}
@@ -373,6 +385,16 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           actualValueKey="value"
           // options
           options={FACTURAS_CUOTAS_ARRAY_OBJECT}
+          defaultValue={
+            form.getValues().facturas_descuento?.length
+              ? FACTURAS_CUOTAS_ARRAY_OBJECT.filter(
+                  (factura: FacturasCuotasObjArray) =>
+                    (form.getValues().facturas_descuento as any[])?.includes(
+                      factura?.value,
+                    ),
+                )
+              : []
+          }
           isLoadingData={false}
           // errors
           control={form.control}
@@ -427,6 +449,16 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={provinciasPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().provincias?.length
+                  ? provinciasPaging?.data?.items?.filter(
+                      (provincia: Provincia) =>
+                        (form.getValues().provincias as any[])?.includes(
+                          provincia?.id!,
+                        ),
+                    )
+                  : []
+              }
               isLoadingData={isLoadingProvincias || isRefetchingProvincias}
               // errors
               control={form.control}
@@ -471,6 +503,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={ciudadesPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().ciudades?.length
+                  ? ciudadesPaging?.data?.items?.filter((ciudad: Ciudad) =>
+                      (form.getValues().ciudades as any[])?.includes(
+                        ciudad?.id!,
+                      ),
+                    )
+                  : []
+              }
               isLoadingData={isLoadingCiudades || isRefetchingCiudades}
               // errors
               control={form.control}
@@ -523,6 +564,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={zonasPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().zonas?.length
+                  ? zonasPaging?.data?.items?.filter((zona: Zona) =>
+                      (form.getValues().zonas as any[])?.includes(zona?.id!),
+                    )
+                  : []
+              }
               isLoadingData={isLoadingZonas || isRefetchingZonas}
               // errors
               control={form.control}
@@ -572,6 +620,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={sectoresPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().sectores?.length
+                  ? sectoresPaging?.data?.items?.filter((sector: Sector) =>
+                      (form.getValues().sectores as any[])?.includes(
+                        sector?.id!,
+                      ),
+                    )
+                  : []
+              }
               isLoadingData={isLoadingSectores || isRefetchingSectores}
               // errors
               control={form.control}
@@ -621,6 +678,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={planesPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().planes?.length
+                  ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
+                      (form.getValues().planes as any[])?.includes(plan?.id!),
+                    )
+                  : []
+              }
               isLoadingData={isLoadingPlanes || isRefetchingPlanes}
               // errors
               control={form.control}
@@ -665,6 +729,16 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               actualValueKey="id"
               // options
               options={metodoPagosPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().metodo_pagos?.length
+                  ? metodoPagosPaging?.data?.items?.filter(
+                      (metodoPago: MetodoPago) =>
+                        (form.getValues().metodo_pagos as any[])?.includes(
+                          metodoPago?.id!,
+                        ),
+                    )
+                  : []
+              }
               isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
               // errors
               control={form.control}
