@@ -1,4 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { Brass } from './brass';
 import { Router } from './router';
 
 export interface GruposIPv6PaginatedRes {
@@ -27,6 +28,11 @@ export interface GrupoIPv6 {
   modified_at?: string;
 
   routers_data?: Router[];
+
+  ///* fk
+  brass?: number;
+
+  brass_data?: Brass;
 }
 
 export interface IPv6Detail {

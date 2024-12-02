@@ -6,29 +6,25 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateGrupoIPv4ParamsBase,
   useCreateGrupoIPv4,
-  useFetchRouters,
+  useFetchBrass,
   useUpdateGrupoIPv4,
 } from '@/actions/app';
-import { useColumnsRouters } from '@/app/administracion-red/shared/hooks';
 import {
   IP_USES_TYPE_ARRAY_CHOICES,
   PermissionsEnum,
   Router,
   ToastWrapper,
-  useLoaders,
 } from '@/shared';
 import {
-  CustomAutocompleteMultiple,
-  CustomMinimalTable,
+  CustomAutocomplete,
   CustomNumberTextField,
   CustomTextField,
-  SampleCheckbox,
   SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { GrupoIPv4 } from '@/shared/interfaces';
+import { Brass, GrupoIPv4 } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, grupoIPv4FormSchema } from '@/shared/utils';
 import { returnUrlGruposIPv4Page } from '../../../pages/tables/GruposIPv4Page';
 
@@ -60,7 +56,7 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
     formState: { errors, isValid },
   } = form;
 
-  const watchedRouters = form.watch('routers');
+  // const watchedRouters = form.watch('routers');
 
   ///* mutations ---------------------
   const createGrupoIPv4Mutation = useCreateGrupoIPv4<CreateGrupoIPv4ParamsBase>(
@@ -78,13 +74,22 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
   );
 
   ///* fetch data ---------------------
+  // const {
+  //   data: routersPagingRes,
+  //   isLoading: isLoadingRouters,
+  //   isRefetching: isRefetchingRouters,
+  // } = useFetchRouters({
+  //   params: {
+  //     tiene_grupo_ipv4: false,
+  //     page_size: 1500,
+  //   },
+  // });
   const {
-    data: routersPagingRes,
-    isLoading: isLoadingRouters,
-    isRefetching: isRefetchingRouters,
-  } = useFetchRouters({
+    data: brassPagingRes,
+    isLoading: isLoadingBrass,
+    isRefetching: isRefetchingBrass,
+  } = useFetchBrass({
     params: {
-      tiene_grupo_ipv4: false,
       page_size: 1500,
     },
   });
@@ -121,7 +126,7 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
   };
 
   ///* columns ---------------------
-  const { routersDataColumnsIPs } = useColumnsRouters();
+  // const { routersDataColumnsIPs } = useColumnsRouters();
 
   ///* effects ---------------------
   useEffect(() => {
@@ -134,8 +139,8 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
     });
   }, [grupoipv4, reset]);
 
-  const isCustomLoading = isLoadingRouters || isRefetchingRouters;
-  useLoaders(isCustomLoading);
+  // const isCustomLoading = isLoadingRouters || isRefetchingRouters;
+  // useLoaders(isCustomLoading);
 
   return (
     <SingleFormBoxScene
@@ -188,7 +193,31 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
       />
 
       <>
-        <CustomAutocompleteMultiple<Router>
+        <CustomAutocomplete<Brass>
+          label="Brass"
+          name="brass"
+          textFieldKey="name"
+          valueKey="name"
+          actualValueKey="id"
+          // options
+          options={brassPagingRes?.data?.items || []}
+          defaultValue={form.getValues('brass')}
+          isLoadingData={isLoadingBrass || isRefetchingBrass}
+          // errors
+          control={form.control}
+          error={errors.routers as any}
+          helperText={
+            errors.routers?.message ||
+            'Una vez guardado, no se podrá cambiar el brass.'
+          }
+          required={false}
+          disabled={!!grupoipv4?.id}
+        />
+      </>
+
+      <>
+        {/* =============== BRASS =============== */}
+        {/* <CustomAutocompleteMultiple<Router>
           label="Routers"
           name="routers"
           textFieldKey="name"
@@ -215,15 +244,15 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
           defaultValue={form.getValues().state}
           size={gridSizeMdLg6}
           isState
-        />
+        /> */}
       </>
 
       {/* --------- routers table --------- */}
-      <CustomMinimalTable<Router>
+      {/* <CustomMinimalTable<Router>
         columns={routersDataColumnsIPs}
         data={watchedRouters || []}
         enablePagination
-      />
+      /> */}
     </SingleFormBoxScene>
   );
 };

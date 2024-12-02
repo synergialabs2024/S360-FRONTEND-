@@ -17,4 +17,9 @@ export const grupoIPv6FormSchema = yup.object({
     .string()
     .required('El campo tipo uso es requerido')
     .max(200, 'El campo tipo uso no debe exceder los 200 caracteres'),
+
+  brass: yup
+    .number()
+    .typeError('El campo brass es requerido')
+    .required('El campo brass es requerido'),
 });

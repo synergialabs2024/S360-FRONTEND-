@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateGrupoIPv6ParamsBase,
   useCreateGrupoIPv6,
-  useFetchRouters,
+  useFetchBrass,
   useUpdateGrupoIPv6,
 } from '@/actions/app';
-import { useColumnsRouters } from '@/app/administracion-red/shared/hooks';
 import {
   IP_USES_TYPE_ARRAY_CHOICES,
   PermissionsEnum,
@@ -18,17 +17,15 @@ import {
   useLoaders,
 } from '@/shared';
 import {
-  CustomAutocompleteMultiple,
-  CustomMinimalTable,
+  CustomAutocomplete,
   CustomNumberTextField,
   CustomTextField,
-  SampleCheckbox,
   SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { GrupoIPv6 } from '@/shared/interfaces';
+import { Brass, GrupoIPv6 } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, grupoIPv6FormSchema } from '@/shared/utils';
 import { returnUrlGruposIPv6Page } from '../../../pages/tables/GruposIPv6Page';
 
@@ -59,16 +56,25 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
     reset,
     formState: { errors, isValid },
   } = form;
-  const watchedRouters = form.watch('routers');
+  // const watchedRouters = form.watch('routers');
 
   ///* fetch data ---------------------
+  // const {
+  //   data: routersPagingRes,
+  //   isLoading: isLoadingRouters,
+  //   isRefetching: isRefetchingRouters,
+  // } = useFetchRouters({
+  //   params: {
+  //     tiene_grupo_ipv6: false,
+  //     page_size: 1500,
+  //   },
+  // });
   const {
-    data: routersPagingRes,
-    isLoading: isLoadingRouters,
-    isRefetching: isRefetchingRouters,
-  } = useFetchRouters({
+    data: brassPagingRes,
+    isLoading: isLoadingBrass,
+    isRefetching: isRefetchingBrass,
+  } = useFetchBrass({
     params: {
-      tiene_grupo_ipv6: false,
       page_size: 1500,
     },
   });
@@ -90,6 +96,7 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
+    console.log('data', data);
     if (!isValid) return;
 
     ///* upd
@@ -121,7 +128,7 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
   };
 
   ///* columns ---------------------
-  const { routersDataColumnsIPs } = useColumnsRouters();
+  // const { routersDataColumnsIPs } = useColumnsRouters();
 
   ///* effects ---------------------
   useEffect(() => {
@@ -133,8 +140,8 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
       routers,
     });
   }, [grupoipv6, reset]);
-  const isCustomLoading = isLoadingRouters || isRefetchingRouters;
-  useLoaders(isCustomLoading);
+  const isLoadingCustom = isLoadingBrass || isRefetchingBrass;
+  useLoaders(isLoadingCustom);
 
   return (
     <SingleFormBoxScene
@@ -187,7 +194,31 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
       />
 
       <>
-        <CustomAutocompleteMultiple<Router>
+        <CustomAutocomplete<Brass>
+          label="Brass"
+          name="brass"
+          textFieldKey="name"
+          valueKey="name"
+          actualValueKey="id"
+          // options
+          options={brassPagingRes?.data?.items || []}
+          defaultValue={form.getValues('brass')}
+          isLoadingData={isLoadingBrass || isRefetchingBrass}
+          // errors
+          control={form.control}
+          error={errors.routers as any}
+          helperText={
+            errors.routers?.message ||
+            'Una vez guardado, no se podrá cambiar el brass.'
+          }
+          required={false}
+          disabled={!!grupoipv6?.id}
+        />
+      </>
+
+      <>
+        {/* ==================== ROUTER ==================== */}
+        {/* <CustomAutocompleteMultiple<Router>
           label="Routers"
           name="routers"
           textFieldKey="name"
@@ -214,14 +245,14 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
           defaultValue={form.getValues().state}
           size={gridSizeMdLg6}
           isState
-        />
+        /> */}
 
         {/* --------- routers table --------- */}
-        <CustomMinimalTable<Router>
+        {/* <CustomMinimalTable<Router>
           columns={routersDataColumnsIPs}
           data={watchedRouters || []}
           enablePagination
-        />
+        /> */}
       </>
     </SingleFormBoxScene>
   );
