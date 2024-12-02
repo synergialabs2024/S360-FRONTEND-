@@ -21,6 +21,10 @@ export interface Contrato {
 
   direccion: string; // sol servicio
 
+  // profile classificator
+  perfil_ingreso: string;
+  perfil_actual: string;
+
   created_at?: string;
   modified_at?: string;
 
