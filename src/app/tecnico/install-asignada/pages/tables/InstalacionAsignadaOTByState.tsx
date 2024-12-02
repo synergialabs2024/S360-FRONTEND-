@@ -125,6 +125,8 @@ const InstalacionAsignadaOTByState: React.FC<
         canEdit={calcEnableActionsColumn()}
         onEdit={onEdit}
         onConditionEdit={ot => {
+          if (user?.role !== UserRolesEnumChoice.TECNICO) return true;
+
           return (
             ot.estado_orden_trabajo ===
               EstadoOrdenTrabajoEnumChoice.PENDIENTE && !!ot?.can_be_managed

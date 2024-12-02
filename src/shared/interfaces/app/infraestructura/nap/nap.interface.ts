@@ -23,6 +23,7 @@ export interface Nap {
   es_soterrado: boolean;
   status_nap: string;
   proyecto_cod: string;
+
   distance?: number; // calc based on coords only for coordenadas_radio filter
   max_polygon_distance?: number; // polygon distance only for coordenadas_radio filter
   latitude?: string;

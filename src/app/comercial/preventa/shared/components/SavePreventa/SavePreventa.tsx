@@ -1041,7 +1041,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
           {watchedThereAreNaps ? (
             <CustomCardAlert
               sizeType="small"
-              alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${napsByCoords?.at(0)?.distance}m`}
+              alertMessage={`Cajas disponibles. La mas cercana está a aprox. ${
+                napsByCoords?.at(0)?.max_polygon_distance ||
+                napsByCoords?.at(0)?.distance
+              }m`}
               alertSeverity="success"
             />
           ) : (

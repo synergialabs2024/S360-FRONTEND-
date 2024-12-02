@@ -1,10 +1,10 @@
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 
 import { gridSize, Preventa } from '@/shared';
-import { CustomTextFieldNoForm } from '@/shared/components';
+import { CustomSingleButton, CustomTextFieldNoForm } from '@/shared/components';
 import { useAgendamientoVentasStore } from '@/store/app';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento/SaveAgendamiento';
 import ConfirmInstallScheduleVentasModal from './ConfirmInstallScheduleVentasModal';
@@ -105,24 +105,38 @@ const InstallationScheduleComponent: React.FC<
         <span className="spacer" />
         <Grid item xs={12}>
           <Box display="flex" justifyContent="flex-end">
-            <IconButton
+            <CustomSingleButton
+              label="Atrás"
+              variant={currentOptionIdx === 0 ? 'outlined' : 'contained'}
               color="primary"
+              startIcon={<MdArrowBackIosNew />}
               onClick={handlePrev}
+              sxBtn={{
+                ml: 0.8,
+              }}
               disabled={currentOptionIdx === 0 || isComponentBlocked}
-            >
-              <MdArrowBackIosNew fontSize="large" />
-            </IconButton>
+            />
+            <span className="spacer" />
 
-            <IconButton
+            <CustomSingleButton
+              label="Siguiente"
+              variant={
+                currentOptionIdx === optionsUUIDs.length - 1
+                  ? 'outlined'
+                  : 'contained'
+              }
               color="primary"
+              startIcon={<MdArrowForwardIos />}
               onClick={handleNext}
+              sxBtn={{
+                ml: 0.8,
+              }}
               disabled={
                 currentOptionIdx === optionsUUIDs.length - 1 ||
                 isComponentBlocked
               }
-            >
-              <MdArrowForwardIos fontSize="large" />
-            </IconButton>
+              justifyContent="flex-end"
+            />
           </Box>
         </Grid>
       </Grid>
