@@ -49,6 +49,7 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
     resolver: yupResolver(planinternetFormSchema) as any,
     defaultValues: {
       state: true,
+      es_plan_base: false,
     },
   });
 

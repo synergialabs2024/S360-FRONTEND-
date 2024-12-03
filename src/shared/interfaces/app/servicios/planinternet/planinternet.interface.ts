@@ -23,6 +23,8 @@ export interface PlanInternet {
   comparticion: string;
   prioridad: number;
 
+  es_plan_base: boolean; // only one
+
   created_at?: string;
   modified_at?: string;
   state: boolean;

@@ -138,7 +138,7 @@ const IVAsPage: React.FC<IVAsPageProps> = () => {
 
                 setConfirmDialog({
                   isOpen: true,
-                  title: 'Cambiar iva_defecto',
+                  title: 'Marcar este IVA como predeterminado',
                   subtitle:
                     '¿Está seguro que desea cambiar el iva_defecto de este registro?',
                   onConfirm: () => {

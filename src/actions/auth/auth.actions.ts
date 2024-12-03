@@ -52,11 +52,12 @@ export const useLogin = () => {
       let user = loginResponse?.user || null;
       const { permissions, ...rest } = user || {};
       user = rest as any;
-      const { company_data } = loginResponse || {};
+      const { company_data, flota_data } = loginResponse || {};
       if (user) {
         user = {
           ...user,
           company_data: company_data,
+          flota_data: flota_data,
         };
       }
 
@@ -139,11 +140,12 @@ export const useLogin = () => {
                 let user = loginResponse?.user || null;
                 const { permissions, ...rest } = user || {};
                 user = rest as any;
-                const { company_data } = loginResponse || {};
+                const { company_data, flota_data } = loginResponse || {};
                 if (user) {
                   user = {
                     ...user,
                     company_data: company_data,
+                    flota_data: flota_data,
                   };
                 }
 

@@ -11,7 +11,11 @@ import {
   SingleTableBoxScene,
   ViewMoreTextModalTableCell,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import {
+  MODEL_BOOLEAN,
+  MODEL_STATE_BOOLEAN,
+  TABLE_CONSTANTS,
+} from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, PlanInternet } from '@/shared/interfaces';
@@ -99,34 +103,6 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
-      {
-        accessorKey: 'codigo',
-        header: 'CODIGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
-      },
-
-      {
-        accessorKey: 'description',
-        header: 'DESCRIPCIÓN',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => {
-          const str = row?.original?.description
-            ? row.original.description
-            : 'N/A';
-          return (
-            <ViewMoreTextModalTableCell
-              longText={str}
-              limit={27}
-              modalTitle={`Descripcion de ${row?.original?.name}`}
-            />
-          );
-        },
-      },
 
       {
         accessorKey: 'valor',
@@ -143,6 +119,48 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'clasificacion_score_buro'),
+      },
+
+      {
+        accessorKey: 'es_plan_base',
+        header: 'PLAN BASE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.es_plan_base === 'boolean' ? (
+            <CustomSwitch
+              title="es_plan_base"
+              checked={row.original?.es_plan_base}
+              isSimpleBoolean
+              onChangeChecked={() => {
+                if (
+                  !hasPermission(PermissionsEnum.servicios_change_planinternet)
+                )
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Marcar como plan base',
+                  subtitle:
+                    '¿Está seguro que desea establecer este plan como base?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        es_plan_base: !row.original.es_plan_base,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
       },
 
       {
@@ -246,6 +264,34 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_plan'),
+      },
+
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'description',
+        header: 'DESCRIPCIÓN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.description
+            ? row.original.description
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Descripcion de ${row?.original?.name}`}
+            />
+          );
+        },
       },
 
       {

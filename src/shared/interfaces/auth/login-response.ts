@@ -1,10 +1,12 @@
 import { UserRolesEnumChoice } from '@/shared/constants';
+import { FlotaLimitData } from '../app';
 
 export interface LoginResponse {
   token: string;
   user: UserLoginResponse;
   system_modules?: string[];
   company_data?: CompanyLoginResponse;
+  flota_data?: FlotaLimitData;
 }
 
 export const LOGIN_ERRORS = {
@@ -14,6 +16,7 @@ export const LOGIN_ERRORS = {
   },
 };
 
+// use localStorage
 export interface UserLoginResponse {
   id?: number;
   uuid?: string;
@@ -32,6 +35,7 @@ export interface UserLoginResponse {
   centro_costo?: number;
   role?: UserRolesEnumChoice; // choice
   company_data?: CompanyLoginResponse; // build in login action
+  flota_data?: FlotaLimitData; // build in login action
 }
 
 export interface CompanyLoginResponse {
