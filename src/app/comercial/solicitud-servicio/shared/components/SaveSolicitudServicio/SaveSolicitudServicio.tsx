@@ -46,7 +46,7 @@ import {
   gridSizeMdLg12,
   gridSizeMdLg4,
   gridSizeMdLg6,
-  gridSizeMdLg8,
+  gridSizeMdLg7,
 } from '@/shared/constants/ui';
 import { calcAge, calcIsTerceraEdad } from '@/shared/helpers';
 import {
@@ -152,7 +152,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     form.reset({
       ...form.getValues(),
       razon_social: personaInformacion?.nombres,
-      es_discapacitado: false,
+      es_discapacitado: !!personaInformacion?.registro_res?.esDiscapacitado,
       es_tercera_edad: personaInformacion?.es_tercera_edad,
       fecha_nacimiento: correctFechaNacimiento,
       edad: personaInformacion?.edad,
@@ -592,8 +592,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           size={gridSizeMdLg6}
         />
 
-        <Grid item container xs={12} justifyContent="flex-end">
-          <Grid item {...gridSizeMdLg8}>
+        <Grid item container xs={12} justifyContent="space-between">
+          <Grid item {...gridSizeMdLg7}>
             {!!watchedIsTerceraEdad && (
               <CustomCardAlert
                 sizeType="small"

@@ -84,7 +84,7 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
       {
         accessorKey: 'name',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
@@ -126,43 +126,6 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'type'),
       },
-      // {
-      //   accessorKey: 'state',
-      //   header: 'ESTADO',
-      //   size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-      //   filterVariant: 'select',
-      //   filterSelectOptions: MODEL_STATE_BOOLEAN,
-      //   Cell: ({ row }) => (
-      //     <CustomSwitch
-      //       title="Estado"
-      //       checked={row.original?.state}
-      //       onChangeChecked={() => {
-      //         if (
-      //           !hasPermission(
-      //             PermissionsEnum.administration_change_parametrosistema,
-      //           )
-      //         )
-      //           return;
-
-      //         setConfirmDialog({
-      //           isOpen: true,
-      //           title: 'Cambiar Estado',
-      //           subtitle:
-      //             '¿Está seguro que desea cambiar el estado de este registro?',
-      //           onConfirm: () => {
-      //             setConfirmDialogIsOpen(false);
-      //             changeState.mutate({
-      //               id: row.original.id!,
-      //               data: {
-      //                 state: !row.original?.state,
-      //               },
-      //             });
-      //           },
-      //         });
-      //       }}
-      //     />
-      //   ),
-      // },
 
       {
         accessorKey: 'created_at',
@@ -181,16 +144,14 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [setConfirmDialog, setConfirmDialogIsOpen],
+    [],
   );
 
   return (
     <SingleTableBoxScene
       title="Parámetro del Sistema"
       createPageUrl={`${returnUrlParamestrosSistemasPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.administration_add_parametrosistema,
-      )}
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}

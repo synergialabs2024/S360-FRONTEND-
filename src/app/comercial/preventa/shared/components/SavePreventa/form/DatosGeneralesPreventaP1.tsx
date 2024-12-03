@@ -2,6 +2,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { gridSizeMdLg6 } from '@/shared';
 import {
+  CustomCardAlert,
   CustomNumberTextField,
   CustomTextField,
   CustomTypoLabel,
@@ -18,6 +19,9 @@ const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
   canEditEmail = false,
 }) => {
   const { errors } = form.formState;
+
+  const watchedEsTerceraEdad = form.watch('es_tercera_edad');
+  const watchedEsDiscapacitado = form.watch('es_discapacitado');
 
   return (
     <>
@@ -83,6 +87,23 @@ const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
         helperText={errors.email?.message}
         disabled={!canEditEmail}
       />
+
+      <>
+        {watchedEsTerceraEdad && (
+          <CustomCardAlert
+            sizeType="small"
+            alertMessage={'El cliente es de tercera edad'}
+            alertSeverity="info"
+          />
+        )}
+        {watchedEsDiscapacitado && (
+          <CustomCardAlert
+            sizeType="small"
+            alertMessage={'El cliente es discapacitado'}
+            alertSeverity="info"
+          />
+        )}
+      </>
     </>
   );
 };

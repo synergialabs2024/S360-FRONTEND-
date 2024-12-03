@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -22,11 +22,11 @@ import {
   SYSTEM_PARAMETER_BOOLEAN_TYPE_ARRAY_CHOICES,
   SYSTEM_PARAMETER_TYPE_ARRAY_CHOICES,
 } from '@/shared/constants/app';
+import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { useCheckPermission } from '@/shared/hooks/auth';
 import { ParametroSistema, PermissionsEnum } from '@/shared/interfaces';
 import { parametro_sistemaFormSchema } from '@/shared/utils';
 import { returnUrlParamestrosSistemasPage } from '../../../pages/tables/ParametrosSistemasPage';
-import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
-import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveParametroSistemaProps {
   title: string;
@@ -219,6 +219,7 @@ const SaveParametroSistema: React.FC<SaveParametroSistemaProps> = ({
         error={errors.slug}
         helperText={errors.slug?.message}
         size={gridSizeMdLg6}
+        disabled={!!parametro_sistema?.id}
       />
       <CustomAutocompleteArrString
         label="Tipo"
@@ -233,6 +234,7 @@ const SaveParametroSistema: React.FC<SaveParametroSistemaProps> = ({
           form.setValue('value', '');
         }}
         size={sizeComponente}
+        disabled={!!parametro_sistema?.id}
       />
       {valorComponente}
       <CustomTextArea
