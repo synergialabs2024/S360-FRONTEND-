@@ -108,8 +108,8 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
           name: data.name,
           description: data.description,
           permissions: selectedPermissions
-            .map(item => item?.id)
-            .filter(Boolean) as number[],
+            .map(item => item?.codename)
+            .filter(Boolean) as any[],
           system_modules: selectedSystemModules,
         },
       });
@@ -120,9 +120,7 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
     createSystemGroupMutation.mutate({
       name: data.name,
       description: data.description,
-      permissions: selectedPermissions
-        .map(item => item?.id)
-        .filter(Boolean) as number[],
+      permissions: selectedPermissions.map(item => item?.codename) as any[],
       system_modules: selectedSystemModules,
     });
   };
