@@ -1,4 +1,9 @@
-import { Checkbox, FormControlLabel, Grid } from '@mui/material';
+import {
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+} from '@mui/material';
 import { Control, Controller } from 'react-hook-form';
 
 import { gridSize } from '@/shared/constants/ui';
@@ -27,6 +32,8 @@ export interface SampleCheckboxProps {
 
   disabled?: boolean;
   onClickDisabled?: () => void;
+  flexDirection?: 'row' | 'column';
+  customHelperText?: string;
 }
 
 const SampleCheckbox: React.FC<SampleCheckboxProps> = ({
@@ -42,6 +49,8 @@ const SampleCheckbox: React.FC<SampleCheckboxProps> = ({
   isState = false,
   disabled = false,
   onClickDisabled,
+  flexDirection = 'row',
+  customHelperText,
 }) => {
   return (
     <Grid
@@ -50,6 +59,7 @@ const SampleCheckbox: React.FC<SampleCheckboxProps> = ({
       container
       justifyContent={justifyContent}
       alignItems={alignItems}
+      flexDirection={flexDirection}
     >
       <Controller
         name={name}
@@ -66,21 +76,27 @@ const SampleCheckbox: React.FC<SampleCheckboxProps> = ({
           };
 
           return (
-            <FormControlLabel
-              label={isState ? (field.value ? 'Activo' : 'Inactivo') : label}
-              control={
-                <Checkbox
-                  {...field}
-                  size="small"
-                  checked={field.value || false}
-                  onChange={onChange}
-                  // disabled={disabled}
-                  sx={{
-                    color: disabled && !field.value ? '' : 'primary.main',
-                  }}
-                />
-              }
-            />
+            <>
+              <FormControlLabel
+                label={isState ? (field.value ? 'Activo' : 'Inactivo') : label}
+                control={
+                  <Checkbox
+                    {...field}
+                    size="small"
+                    checked={field.value || false}
+                    onChange={onChange}
+                    // disabled={disabled}
+                    sx={{
+                      color: disabled && !field.value ? '' : 'primary.main',
+                    }}
+                  />
+                }
+              />
+
+              {customHelperText && (
+                <FormHelperText>{customHelperText}</FormHelperText>
+              )}
+            </>
           );
         }}
       />

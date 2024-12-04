@@ -18,19 +18,19 @@ export interface ConfiguracionPlantillaCliente {
   dia_facturacion: number; // CalendarioFacturacion - 1-31
   dia_suspension: number; // CalendarioFacturacion - 1-31
 
-  dia_pago_limite: number; // 1-31
-
   crea_factura?: string; // null or days before
 
+  dia_pago_limite: number; // 1-31
   dias_gracia: string; //  dias tolerancia prev corte - dia_pago_limite?
-  aplica_corte: string; // null or meses vencidos
+
+  aplica_corte: string; // null or meses vencidos -----
 
   aplica_mora: boolean;
 
   bajar_velocidad: boolean; // no suspende, sino q baja velocidad
   aplica_reconexion: boolean;
 
-  aviso_pantalla: string; // null or days before corte
+  aviso_pantalla: string; // null or days before corte -----
   recordatorio_pago: string; // null or medio (SMS, EMAIL, etc.)
 
   recordatorio_1: string; // null or days before corte

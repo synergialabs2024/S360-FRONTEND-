@@ -1,1 +1,1 @@
-export * from './SaveConfiguracionPlantilla';
+export * from './form';

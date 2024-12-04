@@ -776,3 +776,15 @@ export const ESTADO_RUBRO_ARRAY_CHOICES = [
   EstadoRubroEnumChoice.VENCIDO,
   EstadoRubroEnumChoice.ANULADO,
 ];
+
+// // Configuracion de plantilla --------------
+export enum RecordatorioPagoTiposEnumChoice {
+  EMAIL = 'EMAIL',
+  SMS = 'SMS',
+  NO_NOTIFICAR = 'NO NOTIFICAR',
+}
+export const RECORDATORIO_PAGO_TIPOS_ARRAY_CHOICES = [
+  RecordatorioPagoTiposEnumChoice.EMAIL,
+  RecordatorioPagoTiposEnumChoice.SMS,
+  RecordatorioPagoTiposEnumChoice.NO_NOTIFICAR,
+];
