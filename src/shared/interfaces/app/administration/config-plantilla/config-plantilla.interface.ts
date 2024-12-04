@@ -1,13 +1,13 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
-export interface ConfiguracionesPlantillaPaginatedRes {
+export interface ConfiguracionesPlantillaClientePaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: ConfiguracionPlantilla[];
+  items: ConfiguracionPlantillaCliente[];
 }
 
-export interface ConfiguracionPlantilla {
+export interface ConfiguracionPlantillaCliente {
   id?: number;
   uuid?: string;
 

@@ -204,6 +204,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.motivosActualizacionNav,
             }),
+            renderByModule(SidenavModulesEnum.ADMIN_CONFIGURACION_PLANTILLA, {
+              id: 'configuracion-plantilla',
+              title: 'Configuración de plantilla cliente',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.configuracionPlantillasNav,
+            }),
 
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {

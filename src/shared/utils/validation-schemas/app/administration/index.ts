@@ -2,6 +2,7 @@ export * from './area';
 export * from './canal-venta';
 export * from './centro-costo';
 export * from './ciudad';
+export * from './config-plantilla';
 export * from './departamento';
 export * from './empresa';
 export * from './entidad-financiera';

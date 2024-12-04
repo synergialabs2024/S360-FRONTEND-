@@ -134,6 +134,12 @@ export const ROUTER_PATHS = {
     motivosActualizacionEditar: 'motivos-actualizacion/editar/:uuid',
     motivosActualizacionNav: '/parametrizacion/motivos-actualizacion',
 
+    ///* configuracion plantilla
+    configuracionPlantillas: 'configuracion-plantillas',
+    configuracionPlantillasCrear: 'configuracion-plantillas/crear',
+    configuracionPlantillasEditar: 'configuracion-plantillas/editar/:uuid',
+    configuracionPlantillasNav: '/parametrizacion/configuracion-plantillas',
+
     // // =================================
     ///* usuarios
     usuarios: 'usuarios',

@@ -2,6 +2,7 @@ export * from './area';
 export * from './canal-venta';
 export * from './centro-costo';
 export * from './ciudad';
+export * from './config-plantilla';
 export * from './departamento';
 export * from './empresa';
 export * from './entidad-financiera';
@@ -18,6 +19,3 @@ export * from './system-user';
 export * from './tipo-comprobante';
 export * from './trazabilidad-venta';
 export * from './zona';
-
-// TODO: move this
-export * from './configuracion-plantilla-cliente/configuracion-plantilla-cliente.interface';

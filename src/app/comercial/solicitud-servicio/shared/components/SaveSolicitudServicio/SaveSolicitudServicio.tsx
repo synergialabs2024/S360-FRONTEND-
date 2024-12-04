@@ -164,6 +164,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
       pais: currentCountry?.id,
       nacionalidad: personaInformacion?.registro_res?.nacionalidad,
+
+      // reset es cliente modal alert
+      es_cliente: false,
     });
   };
   const onErrorSearchCedula = (err: any) => {

@@ -1019,6 +1019,31 @@ const FibraClientFormPage = Loadable(
   lazy(() => import('@/app/cliente/cliente/pages/forms/FibraClientFormPage')),
 );
 
+const ConfiguracionsPlantillaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/config-plantilla/pages/tables/ConfiguracionsPlantillaPage'
+      ),
+  ),
+);
+const CreateConfiguracionPlantillaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/config-plantilla/pages/forms/CreateConfiguracionPlantillaPage'
+      ),
+  ),
+);
+const UpdateConfiguracionPlantillaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/config-plantilla/pages/forms/UpdateConfiguracionPlantillaPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -1292,6 +1317,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.tipocomprobantesEditar,
             element: <UpdateTipocomprobantePage />,
+          },
+
+          ///* Configuracion Plantilla
+          {
+            path: ROUTER_PATHS.administracion.configuracionPlantillas,
+            element: <ConfiguracionsPlantillaPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.configuracionPlantillasCrear,
+            element: <CreateConfiguracionPlantillaPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.configuracionPlantillasEditar,
+            element: <UpdateConfiguracionPlantillaPage />,
           },
 
           ///* USER ----------
