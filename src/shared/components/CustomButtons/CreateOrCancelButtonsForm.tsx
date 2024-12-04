@@ -7,6 +7,8 @@ export type CreateOrCancelButtonsFormProps = {
   saveTextBtn?: string;
   disabled?: boolean;
   pt?: number;
+
+  cancelBtnHidden?: boolean;
 };
 
 const CreateOrCancelButtonsForm: React.FC<CreateOrCancelButtonsFormProps> = ({
@@ -16,13 +18,17 @@ const CreateOrCancelButtonsForm: React.FC<CreateOrCancelButtonsFormProps> = ({
   saveTextBtn = 'Guardar',
   disabled = false,
   pt = 6,
+
+  cancelBtnHidden = false,
 }) => {
   return (
     <Grid container spacing={1} justifyContent="end" pt={pt}>
       <Grid item>
-        <Button onClick={onCancel} variant="outlined" color="secondary">
-          {cancelTextBtn || 'Cancelar'}
-        </Button>
+        {!cancelBtnHidden && (
+          <Button onClick={onCancel} variant="outlined" color="secondary">
+            {cancelTextBtn || 'Cancelar'}
+          </Button>
+        )}
       </Grid>
 
       <Grid item>

@@ -1,44 +1,42 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import {
   CreateConfiguracionPlantillaParamsBase,
-  useCreateConfiguracionPlantilla,
   useUpdateConfiguracionPlantilla,
 } from '@/actions/app';
-import { ToastWrapper } from '@/shared';
 import {
+  ConfiguracionPlantillaFacturacionPart,
+  ConfiguracionPlantillaNotificacionPart,
+} from '@/app/administration/config-plantilla/shared/components';
+import { SaveFormDataConfigPlantilla } from '@/app/administration/config-plantilla/shared/components/form/SaveConfiguracionPlantilla';
+import {
+  configuracionPlantillaFormSchema,
+  getKeysFormErrorsMessage,
+  gridSizeMdLg6,
+  LineaServicio,
+  ToastWrapper,
+} from '@/shared';
+import {
+  CreateOrCancelButtonsForm,
   CustomTextField,
   CustomTypoLabel,
   CustomTypoLabelEnum,
   SampleCheckbox,
-  SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg10, gridSizeMdLg6 } from '@/shared/constants/ui';
-import { ConfiguracionPlantillaCliente } from '@/shared/interfaces';
-import {
-  configuracionPlantillaFormSchema,
-  getKeysFormErrorsMessage,
-} from '@/shared/utils';
-import { returnUrlConfiguracionsPlantillaPage } from '../../../pages/tables/ConfiguracionsPlantillaPage';
-import ConfiguracionPlantillaFacturacionPart from './ConfiguracionPlantillaFacturacionPart';
-import ConfiguracionPlantillaNotificacionPart from './ConfiguracionPlantillaNotificacionPart';
+import { Grid } from '@mui/material';
+import { useEffect } from 'react';
 
-export interface SaveConfiguracionPlantillaProps {
-  title: string;
-  configuracionplantilla?: ConfiguracionPlantillaCliente;
-}
+export type ConfigPlantillaClienteFibraPartProps = {
+  serviceLine: LineaServicio;
+};
 
-export type SaveFormDataConfigPlantilla =
-  CreateConfiguracionPlantillaParamsBase & {};
-
-const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
-  title,
-  configuracionplantilla,
-}) => {
-  const navigate = useNavigate();
+const ConfigPlantillaClienteFibraPart: React.FC<
+  ConfigPlantillaClienteFibraPartProps
+> = ({ serviceLine }) => {
+  const configPlantillaArray =
+    serviceLine?.contrato_data?.config_plantilla_cliente_json || [];
+  const configuracionplantilla = configPlantillaArray?.at(0);
 
   ///* form ---------------------
   const form = useForm<SaveFormDataConfigPlantilla>({
@@ -47,7 +45,6 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
       state: true,
     },
   });
-
   const {
     handleSubmit,
     reset,
@@ -55,16 +52,8 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
   } = form;
 
   ///* mutations ---------------------
-  const createConfiguracionPlantillaMutation = useCreateConfiguracionPlantilla({
-    navigate,
-    returnUrl: returnUrlConfiguracionsPlantillaPage,
-    enableErrorNavigate: false,
-  });
   const updateConfiguracionPlantillaMutation =
-    useUpdateConfiguracionPlantilla<CreateConfiguracionPlantillaParamsBase>({
-      navigate,
-      returnUrl: returnUrlConfiguracionsPlantillaPage,
-    });
+    useUpdateConfiguracionPlantilla<CreateConfiguracionPlantillaParamsBase>({});
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataConfigPlantilla) => {
@@ -78,9 +67,6 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
       });
       return;
     }
-
-    ///* create
-    createConfiguracionPlantillaMutation.mutate(data);
   };
 
   ///* effects ---------------------
@@ -90,17 +76,7 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
   }, [configuracionplantilla, reset]);
 
   return (
-    <SingleFormBoxScene
-      titlePage={title}
-      onCancel={() => navigate(returnUrlConfiguracionsPlantillaPage)}
-      onSave={handleSubmit(onSave, errors => {
-        ToastWrapper.error(
-          `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
-        );
-      })}
-      maxWidth="xl"
-      gridSizeForm={gridSizeMdLg10}
-    >
+    <Grid item container spacing={3}>
       <CustomTextField
         label="Nombre de la plantilla"
         name="name"
@@ -109,6 +85,7 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
         error={errors.name}
         helperText={errors.name?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <SampleCheckbox
@@ -118,6 +95,7 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
         defaultValue={form.getValues().state}
         size={gridSizeMdLg6}
         isState
+        disabled
       />
 
       <>
@@ -129,10 +107,24 @@ const SaveConfiguracionPlantilla: React.FC<SaveConfiguracionPlantillaProps> = ({
       </>
 
       <>
+        <CustomTypoLabel
+          text="Notificaciones"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
         <ConfiguracionPlantillaNotificacionPart form={form} />
       </>
-    </SingleFormBoxScene>
+
+      <CreateOrCancelButtonsForm
+        onCancel={() => {}}
+        onSave={handleSubmit(onSave, errors => {
+          ToastWrapper.error(
+            `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
+          );
+        })}
+        cancelBtnHidden
+      />
+    </Grid>
   );
 };
 
-export default SaveConfiguracionPlantilla;
+export default ConfigPlantillaClienteFibraPart;

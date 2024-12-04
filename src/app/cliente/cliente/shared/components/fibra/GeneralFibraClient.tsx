@@ -10,6 +10,7 @@ import {
 } from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
 import ClienteFibraTitle from './ClienteFibraTitle';
+import { ConfigPlantillaClienteFibraPart } from './plantilla';
 import { ClienteFibrRubrosTab } from './rubros';
 import { ServiceFibraClientPart } from './servicio';
 import FibraClientSummaryFormPart from './summary/FibraClientSummaryFormPart';
@@ -23,7 +24,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 }) => {
   ///* hooks ----------------
   const { tabValue, handleTabChange } = useTabsOnly({
-    initialTabValue: 5,
+    initialTabValue: 3,
   });
 
   ///* global state ----------------------
@@ -70,7 +71,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 
       {/* ========================= Plantilla ========================= */}
       <CustomTabPanel index={3} value={tabValue}>
-        Plantilla
+        <ConfigPlantillaClienteFibraPart serviceLine={serviceLine!} />
       </CustomTabPanel>
 
       {/* ========================= Documentos ========================= */}
