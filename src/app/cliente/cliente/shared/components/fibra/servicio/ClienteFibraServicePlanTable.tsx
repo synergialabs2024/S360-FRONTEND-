@@ -41,8 +41,7 @@ const ClienteFibraServicePlanTable: React.FC<
       identificacion_pago: serviceLine?.contrato_data?.identificacion_pago!,
       url_contrato: serviceLine?.contrato_data?.url_contrato!,
 
-      direccion_referencia:
-        serviceLine?.solicitud_servicio_data?.direccion_referencia!,
+      direccion: serviceLine?.solicitud_servicio_data?.direccion_referencia!,
 
       tipo_servicio: serviceLine?.preventa_data?.tipo_servicio!,
       tipo_plan: serviceLine?.preventa_data?.tipo_plan!,
@@ -64,51 +63,51 @@ const ClienteFibraServicePlanTable: React.FC<
     () => [
       {
         accessorKey: 'uuid',
-        header: 'Linea ID',
+        header: 'LINEA ID',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
       {
         accessorKey: 'plan_contratado__name',
-        header: 'Plan contratado',
+        header: 'PLAN CONTRATADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
       {
         accessorKey: 'tipo_servicio',
-        header: 'Tipo de servicio',
+        header: 'TIPO DE SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
       {
         accessorKey: 'tipo_plan',
-        header: 'Tipo de plan',
+        header: 'TIPO DE PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
 
       {
         accessorKey: 'estado_linea',
-        header: 'Estado de la línea',
+        header: 'ESTADO DE LA LÍNEA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
 
       {
         accessorKey: 'plan_contratado__precio',
-        header: 'Precio del plan',
+        header: 'PRECIO DEL PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => formatCurrencyCell(row, 'plan_contratado__precio'),
       },
 
       {
         accessorKey: 'numero_contrato',
-        header: 'Número de contrato',
+        header: 'NÚMERO DE CONTRATO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
       {
         accessorKey: 'identificacion_pago',
-        header: 'Identificación de pago',
+        header: 'IDENTIFICACIÓN DE PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
       {
         accessorKey: 'url_contrato',
-        header: 'URL contrato',
+        header: 'URL CONTRATO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
           const url = row.original.url_contrato;
@@ -117,7 +116,7 @@ const ClienteFibraServicePlanTable: React.FC<
       },
       {
         accessorKey: 'direccion',
-        header: 'Dirección',
+        header: 'DIRECCIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
       {
@@ -137,7 +136,7 @@ const ClienteFibraServicePlanTable: React.FC<
       },
       {
         accessorKey: 'pppassword',
-        header: 'PPPassword',
+        header: 'PPPASSWORD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
           return (
