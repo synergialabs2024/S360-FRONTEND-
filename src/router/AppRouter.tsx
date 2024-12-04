@@ -582,6 +582,29 @@ const CreateNapPage = Loadable(
 const UpdateNapPage = Loadable(
   lazy(() => import('@/app/infraestructura/nap/pages/forms/UpdateNapPage')),
 );
+// PRIMERY NAP
+const PrimaryNapPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/infraestructura/primary-nap/pages/tables/PrimaryNapPage'),
+  ),
+);
+const CreatePrimaryNapPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/infraestructura/primary-nap/pages/forms/CreatePrimaryNapPage'
+      ),
+  ),
+);
+const UpdatePrimaryNapPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/infraestructura/primary-nap/pages/forms/UpdatePrimaryNapPage'
+      ),
+  ),
+);
 // RADIOBASE
 const RadioBasesPage = Loadable(
   lazy(
@@ -1496,6 +1519,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.infraestructura.napsEditar,
             element: <UpdateNapPage />,
+          },
+
+          ///* PRIMARY NAP
+          {
+            path: ROUTER_PATHS.infraestructura.primarynaps,
+            element: <PrimaryNapPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.primarynapsCrear,
+            element: <CreatePrimaryNapPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.primarynapsEditar,
+            element: <UpdatePrimaryNapPage />,
           },
 
           ///* RADIOBASE

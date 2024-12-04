@@ -596,6 +596,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.napsNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'primary-naps',
+              title: 'NAPs PRIMARIAS',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.infraestructura.primarynapsNav,
+            }),
             renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_RUTA, {
               id: 'rutas',
               title: 'Rutas',
