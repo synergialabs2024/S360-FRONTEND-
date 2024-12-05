@@ -1,103 +1,176 @@
-import { FormControl, Grid, MenuItem, Select, Chip, Box } from '@mui/material';
-import { Controller } from 'react-hook-form';
-import { gridSizeMdLg6 } from '@/shared/constants';
+import {
+  Autocomplete,
+  Checkbox,
+  FormControl,
+  Grid,
+  TextField,
+} from '@mui/material';
+import { Control, Controller, FieldError } from 'react-hook-form';
+import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
+import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType } from '@/shared/interfaces';
+import { CustomCircularPorgress } from '../../Loaders';
+import { CustomFormLabel } from '../../Labels';
 
-export interface SelectArrayChipProps {
-  label?: string;
-  textFieldKey?: string;
-  defaultValue?: string | number | string[];
+export type SelectArrayChipProps<T> = {
+  options: T[];
+  defaultValue?: T[];
+  valueKey: keyof T;
+  actualValueKey?: keyof T;
+  titleArray?: (keyof T)[];
+  loadingText?: string;
+  isLoadingData: boolean;
+  control: Control<any, any>;
+  label: string;
   name: string;
-  data: any[]; // Asegúrate de que contiene uuid e id
-  gridSize?: GridSizeType;
   disabled?: boolean;
-  clearable?: boolean;
-  control?: any; // Control de react-hook-form
-  onChange?: (value: any) => void; // Callback para manejar el cambio
-}
-
-const SelectArrayChip: React.FC<SelectArrayChipProps> = ({
-  label,
-  defaultValue = [],
-  textFieldKey,
-  name,
-  data,
-  gridSize = gridSizeMdLg6,
-  disabled = false,
-  clearable = false,
-  control,
-  onChange,
-}) => {
-  const items = data ?? [];
-
-  const handleChange = (selectedUuids: string[]) => {
-    const selectedIds = selectedUuids
-      .map(uuid => {
-        const item = items.find(i => i.uuid === uuid);
-        return item?.id ?? null; // Convertimos uuid a id
-      })
-      .filter(id => id !== null); // Eliminamos valores nulos
-
-    if (onChange) {
-      onChange(selectedIds); // Enviamos los ids en lugar de uuid
-    }
-  };
-
-  return (
-    <Grid item {...gridSize}>
-      <FormControl fullWidth variant="outlined">
-        <Controller
-          name={name}
-          control={control}
-          defaultValue={defaultValue}
-          render={({ field }) => (
-            <Select
-              key={String(textFieldKey || defaultValue)}
-              label={label}
-              multiple
-              fullWidth
-              value={field.value || []}
-              onChange={e => {
-                field.onChange(e.target.value);
-                handleChange(e.target.value); // Ejecutamos la transformación aquí
-              }}
-              renderValue={selected => (
-                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                  {(selected as string[]).map(uuid => {
-                    const item = items.find(i => i.uuid === uuid);
-                    return (
-                      <Chip
-                        key={uuid}
-                        label={`${item?.hostname || ''} - ${item?.name || ''}`}
-                      />
-                    );
-                  })}
-                </Box>
-              )}
-              sx={{
-                ...(disabled && {
-                  background: 'rgba(0, 0, 0, 0.04)',
-                  borderRadius: '13px',
-                }),
-              }}
-              inputProps={{ readOnly: disabled }}
-            >
-              {clearable && (
-                <MenuItem value="">
-                  <em>-- Sin Selección --</em>
-                </MenuItem>
-              )}
-              {items?.map(i => (
-                <MenuItem key={i.uuid} value={i.uuid}>
-                  {i.hostname} - {i.name}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-      </FormControl>
-    </Grid>
-  );
+  onChangeValue?: (value: string | any[]) => void;
+  onChangeRawValue?: (value: T[]) => void;
+  error: FieldError | undefined;
+  helperText?: React.ReactNode;
+  required?: boolean;
+  size?: GridSizeType;
+  limitTags?: number;
+  shouldStringify?: boolean;
 };
 
-export default SelectArrayChip;
+const icon = <MdCheckBoxOutlineBlank />;
+const checkedIcon = <MdCheckBox />;
+
+const buildTitle = <T,>(
+  item: T,
+  titleArray: (keyof T)[] | undefined,
+): string => {
+  if (!titleArray || titleArray.length === 0) return String(item);
+  return titleArray
+    .map(key => item[key])
+    .filter(Boolean)
+    .join(' - ');
+};
+
+export default function SelectArrayChip<T>({
+  options,
+  valueKey,
+  actualValueKey,
+  titleArray,
+  isLoadingData,
+  loadingText = 'Cargando...',
+  label,
+  name,
+  control,
+  defaultValue,
+  error,
+  helperText,
+  required = true,
+  disabled = false,
+  onChangeRawValue,
+  onChangeValue,
+  size = gridSize,
+  limitTags = 2,
+  shouldStringify = false,
+}: SelectArrayChipProps<T>) {
+  return (
+    <Grid item {...size}>
+      {isLoadingData ? (
+        <CustomCircularPorgress />
+      ) : (
+        <FormControl fullWidth>
+          <Controller
+            name={name}
+            control={control}
+            key={name}
+            defaultValue={defaultValue}
+            render={({ field }) => {
+              const onChange = (_event: any, data: T[]) => {
+                if (actualValueKey) {
+                  const selectedValue: T[keyof T][] = data.map(
+                    item => item[actualValueKey],
+                  );
+                  field.onChange(selectedValue);
+                  onChangeValue && onChangeValue(selectedValue as any);
+                  return;
+                }
+                if (shouldStringify) {
+                  const isThereAnyValue = !!data?.length;
+                  const selectedValue: string = isThereAnyValue
+                    ? JSON.stringify(data)
+                    : '[]';
+                  field.onChange(selectedValue);
+                  onChangeValue && onChangeValue(selectedValue);
+                } else {
+                  field.onChange(data);
+                  onChangeRawValue && onChangeRawValue(data);
+                }
+              };
+
+              return (
+                <>
+                  <CustomFormLabel
+                    sx={{
+                      mt: 0,
+                    }}
+                    htmlFor={name}
+                    required={required}
+                  >
+                    {label}
+                  </CustomFormLabel>
+                  <Autocomplete
+                    // checkbox
+                    multiple
+                    id="checkboxes-tags"
+                    //id={`${name}-autocomplete`}
+                    limitTags={limitTags}
+                    defaultValue={defaultValue}
+                    // options
+                    options={options}
+                    loading={isLoadingData}
+                    loadingText={loadingText}
+                    disableCloseOnSelect
+                    // optional label
+                    getOptionLabel={(option: T) =>
+                      buildTitle(option, titleArray) ||
+                      (option[valueKey] as any)
+                    }
+                    // render option checkbox
+                    renderOption={(props, option, { selected }) => {
+                      const { key, ...rest } = props as any;
+                      return (
+                        <li key={key} {...rest}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {buildTitle(option, titleArray)}
+                        </li>
+                      );
+                    }}
+                    onChange={onChange}
+                    disabled={disabled}
+                    // text field
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label={label}
+                        error={!!error}
+                        helperText={helperText}
+                        required={required}
+                        disabled={disabled}
+                      />
+                    )}
+                  />
+                  {helperText && (
+                    <div style={{ marginTop: '8px' }}>{helperText}</div>
+                  )}
+                  {error && <div style={{ color: 'red' }}>{error.message}</div>}
+                </>
+              );
+            }}
+          />
+        </FormControl>
+      )}
+    </Grid>
+  );
+}
