@@ -1,10 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
   CreateConfiguracionPlantillaParamsBase,
-  useUpdateConfiguracionPlantilla,
+  LineaServicioTSQEnum,
 } from '@/actions/app';
+import { useGenericPATCH } from '@/actions/shared';
 import {
   ConfiguracionPlantillaFacturacionPart,
   ConfiguracionPlantillaNotificacionPart,
@@ -12,6 +15,7 @@ import {
 import { SaveFormDataConfigPlantilla } from '@/app/administration/config-plantilla/shared/components/form/SaveConfiguracionPlantilla';
 import {
   configuracionPlantillaFormSchema,
+  Contrato,
   getKeysFormErrorsMessage,
   gridSizeMdLg6,
   LineaServicio,
@@ -24,8 +28,7 @@ import {
   CustomTypoLabelEnum,
   SampleCheckbox,
 } from '@/shared/components';
-import { Grid } from '@mui/material';
-import { useEffect } from 'react';
+import { useUiConfirmModalStore } from '@/store/ui';
 
 export type ConfigPlantillaClienteFibraPartProps = {
   serviceLine: LineaServicio;
@@ -37,6 +40,12 @@ const ConfigPlantillaClienteFibraPart: React.FC<
   const configPlantillaArray =
     serviceLine?.contrato_data?.config_plantilla_cliente_json || [];
   const configuracionplantilla = configPlantillaArray?.at(0);
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* form ---------------------
   const form = useForm<SaveFormDataConfigPlantilla>({
@@ -52,8 +61,17 @@ const ConfigPlantillaClienteFibraPart: React.FC<
   } = form;
 
   ///* mutations ---------------------
-  const updateConfiguracionPlantillaMutation =
-    useUpdateConfiguracionPlantilla<CreateConfiguracionPlantillaParamsBase>({});
+  const updateConfiguracionPlantillaMutation = useGenericPATCH<
+    CreateConfiguracionPlantillaParamsBase,
+    Contrato
+  >(
+    `/contrato/update-template-config/${configuracionplantilla?.id}/`,
+    LineaServicioTSQEnum.LINEASERVICIO,
+    {
+      customMessageToast:
+        'Configuración de plantilla actualizada correctamente',
+    },
+  );
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataConfigPlantilla) => {
@@ -62,8 +80,7 @@ const ConfigPlantillaClienteFibraPart: React.FC<
     ///* upd
     if (configuracionplantilla?.id) {
       updateConfiguracionPlantillaMutation.mutate({
-        id: configuracionplantilla.id!,
-        data,
+        ...data,
       });
       return;
     }
@@ -116,11 +133,22 @@ const ConfigPlantillaClienteFibraPart: React.FC<
 
       <CreateOrCancelButtonsForm
         onCancel={() => {}}
-        onSave={handleSubmit(onSave, errors => {
-          ToastWrapper.error(
-            `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
-          );
-        })}
+        onSave={() => {
+          setConfirmDialog({
+            isOpen: true,
+            title: 'Editar configuración de plantilla',
+            subtitle: `¿Está seguro que desea actualizar la configuración de plantilla del cliente ${serviceLine?.cliente_data?.razon_social} para la línea de servicio ${serviceLine?.contrato_data?.identificacion_pago}?`,
+            onConfirm: () => {
+              setConfirmDialogIsOpen(false);
+
+              handleSubmit(onSave, errors => {
+                ToastWrapper.error(
+                  `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
+                );
+              })();
+            },
+          });
+        }}
         cancelBtnHidden
       />
     </Grid>
