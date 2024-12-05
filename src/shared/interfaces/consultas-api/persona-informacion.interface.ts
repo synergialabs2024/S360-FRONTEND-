@@ -1,3 +1,5 @@
+import { CedulaCitizen } from './cedula-citizen.interface';
+
 export interface PersonaInformacion {
   id: string;
   nombres: string;
@@ -22,7 +24,7 @@ export interface PersonaInformacion {
   contactos?: Contacto[];
   es_tercera_edad: boolean;
   edad: number;
-  registro_res?: RegistroRes;
+  registro_res?: CedulaCitizen;
 }
 
 export interface Buro {
@@ -59,37 +61,4 @@ export interface Laboral {
   empresa: string;
   ocupacion: string;
   salida: string;
-}
-
-export interface RegistroRes {
-  calle: string;
-  codigoError: string;
-  condicionCedulado: string;
-  conyuge: string;
-  domicilio: string;
-  edad: number;
-  error: string;
-  esDiscapacitado: boolean;
-  esTerceraEdad: boolean;
-  estadoCivil: string;
-  fechaCedulacion: string;
-  fechaInscripcionDefuncion: string;
-  fechaInscripcionGenero: string;
-  fechaLimitRefetch: string;
-  fechaNacimiento: string;
-  fullName: string;
-  genero: string;
-  id?: string;
-  identificacion: string;
-  instruccion: string;
-  lugarInscripcionGenero: string;
-  lugarNacimiento: string;
-  nUI: string;
-  nacionalidad: string;
-  nombreMadre: string;
-  nombrePadre: string;
-  numeroCasa: string;
-  profesion: string;
-  sexo: string;
-  tipoIdentificacion: string;
 }

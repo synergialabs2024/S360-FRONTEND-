@@ -61,6 +61,7 @@ import {
   SolicitudServicio,
 } from '@/shared/interfaces';
 import { ClienteExist } from '@/shared/interfaces/app/comercial/solicitud-servicio/client-mikrowisp.interface';
+import { CondicionCedulado } from '@/shared/interfaces/consultas-api';
 import { PersonaInformacion } from '@/shared/interfaces/consultas-api/persona-informacion.interface';
 import {
   getKeysFormErrorsMessage,
@@ -97,6 +98,13 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
   const [clientData, setClientData] = useState<ClienteExist | null>(null);
+
+  const [aplicaRestriccionCiudadano, setAplicaRestriccionCiudadano] =
+    useState<boolean>(false);
+  const [isExtranjeroCedulado, setIsExtranjeroCedulado] =
+    useState<boolean>(false);
+  const [condicionCedulado, setCondicionCedulado] =
+    useState<CondicionCedulado | null>(null);
 
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -149,6 +157,25 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     const nacimiento = personaInformacion?.nacimiento || null; // 2002-07-22
     const fechaNacimiento =
       nacimiento || personaInformacion?.registro_res?.fechaNacimiento;
+
+    const applayCiudadanoValidation = !!personaInformacion?.registro_res;
+    setCondicionCedulado(
+      personaInformacion?.registro_res?.condicionCedulado || null,
+    );
+    setAplicaRestriccionCiudadano(applayCiudadanoValidation);
+    if (applayCiudadanoValidation) {
+      if (
+        personaInformacion?.registro_res?.condicionCedulado !==
+        CondicionCedulado.CIUDADANO
+      ) {
+        setIsExtranjeroCedulado(true);
+        ToastWrapper.warning(
+          `El solicitante presenta una condición de cedulado: ${personaInformacion?.registro_res?.condicionCedulado}, por lo tanto no puede continuar con la solicitud de servicio`,
+        );
+      } else {
+        setIsExtranjeroCedulado(false);
+      }
+    }
 
     const correctFechaNacimiento = dayjs(
       fechaNacimiento,
@@ -416,6 +443,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       pais: undefined,
       nacionalidad: '',
     });
+
+    setAplicaRestriccionCiudadano(false);
+    setIsExtranjeroCedulado(false);
   };
 
   ///* effects -----------------
@@ -435,7 +465,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Errores en: ${keys}`);
       })}
-      disableSubmitBtn={watchedIsFormBlocked || !watchedIsValidIdentificacion}
+      disableSubmitBtn={
+        watchedIsFormBlocked ||
+        !watchedIsValidIdentificacion ||
+        (aplicaRestriccionCiudadano && isExtranjeroCedulado)
+      }
       maxWidth="xl"
       gridSizeForm={gridSizeMdLg12}
     >
@@ -626,6 +660,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             size={gridSizeMdLg4}
             justifyContent="flex-end"
           />
+        </Grid>
+
+        <Grid item container xs={12} justifyContent="space-between">
+          {aplicaRestriccionCiudadano && isExtranjeroCedulado && (
+            <CustomCardAlert
+              sizeType="small"
+              alertMessage={`La condición de cedulado del solicitante es: ${condicionCedulado} `}
+              alertSeverity="warning"
+            />
+          )}
         </Grid>
       </Grid>
 

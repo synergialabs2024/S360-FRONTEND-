@@ -5,7 +5,7 @@ export interface CedulaCitizen {
   tipoIdentificacion: string;
   fullName: string;
   nacionalidad: string;
-  condicionCedulado: string;
+  condicionCedulado: CondicionCedulado; // CIUDADANO, EXTRANJERO
   esDiscapacitado: boolean;
   fechaNacimiento: string;
   esTerceraEdad: boolean;
@@ -30,4 +30,9 @@ export interface CedulaCitizen {
   fechaInscripcionDefuncion: string;
   fechaInscripcionGenero: string;
   fechaLimitRefetch: Date;
+}
+
+export enum CondicionCedulado {
+  CIUDADANO = 'CIUDADANO',
+  EXTRANJERO = 'EXTRANJERO',
 }
