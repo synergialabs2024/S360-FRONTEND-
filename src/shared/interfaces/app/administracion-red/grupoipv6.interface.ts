@@ -27,7 +27,7 @@ export interface GrupoIPv6 {
   created_at?: string;
   modified_at?: string;
 
-  routers_data?: Router[];
+  routers_data?: Router[]; // ya no - ahora brass
 
   ///* fk
   brass?: number;

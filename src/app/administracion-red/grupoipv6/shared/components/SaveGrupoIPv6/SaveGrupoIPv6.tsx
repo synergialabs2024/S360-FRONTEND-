@@ -96,26 +96,20 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
-    console.log('data', data);
     if (!isValid) return;
 
     ///* upd
     if (grupoipv6?.id) {
-      const { routers, ...rest } = data;
-
       updateGrupoIPv6Mutation.mutate({
         id: grupoipv6.id!,
         data: {
-          name: rest.name,
-          state: rest.state,
-          ipv_6: rest.ipv_6,
-          cidr: rest.cidr,
-          tipo_uso: rest.tipo_uso,
-
-          ...((!grupoipv6?.routers_data?.length && {
-            routers: routers.map(router => router.id),
-          }) as any),
-        },
+          name: data.name,
+          state: data.state,
+          ipv_6: data.ipv_6,
+          cidr: data.cidr,
+          tipo_uso: data.tipo_uso,
+          brass: data.brass,
+        } as any,
       });
       return;
     }
@@ -123,7 +117,6 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
     ///* create
     createGrupoIPv6Mutation.mutate({
       ...data,
-      routers: data.routers.map(router => router.id),
     });
   };
 
@@ -148,6 +141,8 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
       titlePage={title}
       onCancel={() => navigate(returnUrlGruposIPv6Page)}
       onSave={handleSubmit(onSave, errors => {
+        console.log('errors', errors);
+
         ToastWrapper.error(
           `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
         );
@@ -206,9 +201,9 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
           isLoadingData={isLoadingBrass || isRefetchingBrass}
           // errors
           control={form.control}
-          error={errors.routers as any}
+          error={errors.brass}
           helperText={
-            errors.routers?.message ||
+            errors.brass?.message ||
             'Una vez guardado, no se podrá cambiar el brass.'
           }
           required={false}
