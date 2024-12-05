@@ -1,4 +1,5 @@
 import { PersonaInformacion } from '@/shared/interfaces/consultas-api';
+import { calcIsValidEmail } from './common.helpers';
 
 export const getCelulcarPersoanInfo = (data: PersonaInformacion) => {
   let cel =
@@ -29,7 +30,9 @@ export const getEmailPersonaInfo = (data: PersonaInformacion) => {
     email = emails[emails.length - 1]?.contacto;
   }
 
-  return email;
+  const isValidEmail = calcIsValidEmail(email);
+
+  return isValidEmail ? email : undefined;
 };
 
 export const getAddressesPersonaInfo = (data: PersonaInformacion) => {

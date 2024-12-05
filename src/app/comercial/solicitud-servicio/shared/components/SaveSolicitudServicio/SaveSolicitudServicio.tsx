@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
@@ -105,6 +106,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     useState<boolean>(false);
   const [condicionCedulado, setCondicionCedulado] =
     useState<CondicionCedulado | null>(null);
+  const [isDefuncion, setIsDefuncion] = useState<boolean>(false);
 
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -155,6 +157,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   // handlers ------------
   const onSuccessSearchCedula = (personaInformacion: PersonaInformacion) => {
     const nacimiento = personaInformacion?.nacimiento || null; // 2002-07-22
+    const isDefuncion =
+      personaInformacion?.defuncion ||
+      personaInformacion?.registro_res?.condicionCedulado ===
+        CondicionCedulado.FALLECIDO ||
+      null;
     const fechaNacimiento =
       nacimiento || personaInformacion?.registro_res?.fechaNacimiento;
 
@@ -164,9 +171,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     );
     setAplicaRestriccionCiudadano(applayCiudadanoValidation);
     if (applayCiudadanoValidation) {
+      // ciudadania ecuatoriana
       if (
-        personaInformacion?.registro_res?.condicionCedulado !==
-        CondicionCedulado.CIUDADANO
+        personaInformacion?.registro_res?.condicionCedulado ===
+        CondicionCedulado.EXTRANJERO
       ) {
         setIsExtranjeroCedulado(true);
         ToastWrapper.warning(
@@ -174,6 +182,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         );
       } else {
         setIsExtranjeroCedulado(false);
+      }
+
+      // defuncion
+      if (isDefuncion) {
+        setIsDefuncion(true);
+        ToastWrapper.warning(
+          `El solicitante presenta una condición de cedulado: ${personaInformacion?.registro_res?.condicionCedulado}, por lo tanto no puede continuar con la solicitud de servicio`,
+        );
+      } else {
+        setIsDefuncion(false);
       }
     }
 
@@ -191,7 +209,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       ...form.getValues(),
       razon_social: personaInformacion?.nombres,
       es_discapacitado: !!personaInformacion?.registro_res?.esDiscapacitado,
-      es_tercera_edad: personaInformacion?.es_tercera_edad,
+      es_tercera_edad: isDefuncion
+        ? false
+        : personaInformacion?.es_tercera_edad,
       fecha_nacimiento: correctFechaNacimiento,
       edad: personaInformacion?.edad,
       isFormBlocked: false,
@@ -468,7 +488,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       disableSubmitBtn={
         watchedIsFormBlocked ||
         !watchedIsValidIdentificacion ||
-        (aplicaRestriccionCiudadano && isExtranjeroCedulado)
+        (aplicaRestriccionCiudadano && isExtranjeroCedulado) ||
+        isDefuncion
       }
       maxWidth="xl"
       gridSizeForm={gridSizeMdLg12}
@@ -663,13 +684,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         </Grid>
 
         <Grid item container xs={12} justifyContent="space-between">
-          {aplicaRestriccionCiudadano && isExtranjeroCedulado && (
-            <CustomCardAlert
-              sizeType="small"
-              alertMessage={`La condición de cedulado del solicitante es: ${condicionCedulado} `}
-              alertSeverity="warning"
-            />
-          )}
+          {aplicaRestriccionCiudadano &&
+            (isExtranjeroCedulado || isDefuncion) && (
+              <CustomCardAlert
+                sizeType="small"
+                alertMessage={`La condición de cedulado del solicitante es: ${condicionCedulado} `}
+                alertSeverity="warning"
+              />
+            )}
         </Grid>
       </Grid>
 

@@ -35,4 +35,5 @@ export interface CedulaCitizen {
 export enum CondicionCedulado {
   CIUDADANO = 'CIUDADANO',
   EXTRANJERO = 'EXTRANJERO',
+  FALLECIDO = 'FALLECIDO',
 }
