@@ -48,7 +48,13 @@ import {
   gridSizeMdLg6,
   gridSizeMdLg7,
 } from '@/shared/constants/ui';
-import { calcAge, calcIsTerceraEdad } from '@/shared/helpers';
+import {
+  calcAge,
+  calcIsTerceraEdad,
+  getAddressesPersonaInfo,
+  getCelulcarPersoanInfo,
+  getEmailPersonaInfo,
+} from '@/shared/helpers';
 import {
   HTTPResStatusCodeEnum,
   Pais,
@@ -140,10 +146,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   // handlers ------------
   const onSuccessSearchCedula = (personaInformacion: PersonaInformacion) => {
+    const nacimiento = personaInformacion?.nacimiento || null; // 2002-07-22
+    const fechaNacimiento =
+      nacimiento || personaInformacion?.registro_res?.fechaNacimiento;
+
     const correctFechaNacimiento = dayjs(
-      personaInformacion?.registro_res?.fechaNacimiento,
-      'DD/MM/YYYY',
+      fechaNacimiento,
+      nacimiento ? 'YYYY-MM-DD' : 'DD/MM/YYYY',
     ).format('YYYY-MM-DD');
+
     const currentCountry = paisesPaging?.data.items.find(
       country =>
         country.nationality === personaInformacion?.registro_res?.nacionalidad,
@@ -156,14 +167,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       es_tercera_edad: personaInformacion?.es_tercera_edad,
       fecha_nacimiento: correctFechaNacimiento,
       edad: personaInformacion?.edad,
-      direccion_referencia: personaInformacion?.direccion
-        ? personaInformacion?.direccion?.slice(0, 38)
-        : '',
       isFormBlocked: false,
       isValidIdentificacion: true,
 
       pais: currentCountry?.id,
       nacionalidad: personaInformacion?.registro_res?.nacionalidad,
+
+      email: getEmailPersonaInfo(personaInformacion),
+      celular: getCelulcarPersoanInfo(personaInformacion),
+      direccion_referencia: getAddressesPersonaInfo(personaInformacion),
 
       // reset es cliente modal alert
       es_cliente: false,
