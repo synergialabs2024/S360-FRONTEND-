@@ -29,6 +29,7 @@ import {
   SampleCheckbox,
 } from '@/shared/components';
 import { useUiConfirmModalStore } from '@/store/ui';
+import ConfigPlantillaClienteFibraFacturacionCards from './ConfigPlantillaClienteFibraFacturacionCards';
 
 export type ConfigPlantillaClienteFibraPartProps = {
   serviceLine: LineaServicio;
@@ -121,6 +122,7 @@ const ConfigPlantillaClienteFibraPart: React.FC<
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
         <ConfiguracionPlantillaFacturacionPart form={form} />
+        <ConfigPlantillaClienteFibraFacturacionCards form={form} />
       </>
 
       <>
