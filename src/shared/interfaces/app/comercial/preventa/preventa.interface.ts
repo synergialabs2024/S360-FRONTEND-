@@ -60,6 +60,9 @@ export interface Preventa {
   url_foto_documento_cuenta?: string;
   url_foto_vivienda: string;
 
+  url_foto_cedula_frontal_corregida: string;
+  url_foto_aceptacion_corregida: string;
+
   // // factibilidad ------
   flota?: number; // fk
   nap?: number; // fk
@@ -73,6 +76,10 @@ export interface Preventa {
   estado_validacion_aceptacion?: EstadoValidacionAceptacionEnumChoice;
   fecha_validacion_aceptacion?: string;
   url_aceptacion?: string; // url oficina virtual
+  requiere_correccion_aceptacion: boolean;
+
+  fecha_aceptacion?: string;
+  fecha_limite_validacion_aceptacion?: string;
 
   created_at?: string;
   modified_at?: string;

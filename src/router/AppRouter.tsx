@@ -531,6 +531,25 @@ const PreventasMainPage = Loadable(
 const CreatePreventaPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/forms/CreatePreventaPage')),
 );
+
+// correccion preventas
+
+const CorreccionPreventasMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/correccion-preventa/pages/tables/CorreccionPreventasMainPage'
+      ),
+  ),
+);
+const CorreccionesPreventaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/comercial/correccion-preventa/pages/forms/CorreccionesPreventaPage'
+      ),
+  ),
+);
 const AgendamientoVentasMainPage = Loadable(
   lazy(
     () =>
@@ -1667,6 +1686,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.comercial.preventasCrear,
             element: <CreatePreventaPage />,
+          },
+
+          ///* correccion preventas
+          {
+            path: ROUTER_PATHS.comercial.correccionPreventas,
+            element: <CorreccionPreventasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.preventasCorrecciones,
+            element: <CorreccionesPreventaPage />,
           },
 
           ///* agendamiento

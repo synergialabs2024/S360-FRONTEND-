@@ -250,9 +250,15 @@ export const ROUTER_PATHS = {
     preventasCrear: 'preventas/crear/:uuid', // open solicitud_servicio
     preventasNav: '/comercial/preventas',
 
+    ///* correccion preventa
+    correccionPreventas: 'correcciones-preventas',
+    // correccionPreventasCrear: 'preventas/crear/:uuid', // open solicitud_servicio
+    CorreccionPreventasNav: '/comercial/correcciones-preventas',
+
     ///* agendamientos
     agendamientos: 'agendamientos',
     createAgendamiento: 'agendamientos/crear/:uuid',
+    preventasCorrecciones: 'agendamientos/correcciones/:uuid',
     agendamientosNav: '/comercial/agendamientos',
 
     ///* instalaciones
