@@ -1,50 +1,81 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { useFetchAutorizacionOnus, useFetchOLTs } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
+import {
+  AutorizacionONUTSQEnum,
+  CreateAuthOnuParamsBase,
+  useCreateAuthONUs,
+  useFetchAuthOnu,
+  useFetchOLTs,
+} from '@/actions/app';
 import {
   CustomSearch,
   CustomTable,
+  SelectArrayChip,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import { gridSizeMdLg8 } from '@/shared/constants/ui';
+import {
+  useColumnsAutorizacionOnus,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { AutorizacionOnu, OLT, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel } from '@/shared/utils';
-import { SelectOLTItemsNMS } from '@/app/netconnect/custom';
-import { useForm } from 'react-hook-form';
 
-export const returnUrlAutorizacionOnusPage =
-  ROUTER_PATHS.netconnect.autorizacionOnusNav;
+type SaveFormData = CreateAuthOnuParamsBase & {};
 
 export type AutorizacionOnusPageProps = {};
-
-interface OLTForm extends OLT {
-  olt: string | number;
-}
 
 const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
 
-  // Fetch data
-  const { data: OsLTPagingRes, isLoading: isOLTsLoading } = useFetchOLTs({
+  // Select OLT
+  const {
+    data: OltsTPagingRes,
+    isLoading: isLoadingOlts,
+    isRefetching: isRefetchingOlts,
+  } = useFetchOLTs({
     enabled: true,
   });
 
-  // Memorizar `oltData` para recalcular solo cuando `OsLTPagingRes` cambie
-  const oltData = useMemo(() => {
-    return OsLTPagingRes?.data?.items || [];
-  }, [OsLTPagingRes]);
-
   // Form setup
-  const form = useForm<OLTForm>({
+  const form = useForm<SaveFormData>({
     defaultValues: {
-      olt: '',
+      olt_data: [],
     },
   });
+
+  const {
+    handleSubmit,
+    formState: { isValid, errors },
+  } = form;
+
+  const watchIdOLT = form.watch('olt_data');
+  console.log(watchIdOLT);
+
+  ///* mutations
+  const createAutorizacionONUMutation = useCreateAuthONUs({
+    enableErrorNavigate: false,
+  });
+
+  const queryClient = useQueryClient();
+
+  ///* handlers
+  const onSave = async () => {
+    if (!isValid) return;
+
+    await queryClient.invalidateQueries({
+      queryKey: [AutorizacionONUTSQEnum.AUTORIZACIONONUS],
+    });
+
+    ///* create
+    createAutorizacionONUMutation.mutate({
+      olt_ids: watchIdOLT,
+    });
+  };
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -65,7 +96,7 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
     data: AutorizacionOnusPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchAutorizacionOnus({
+  } = useFetchAuthOnu({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -76,44 +107,8 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
     },
   });
 
-  ///* columns
-  const columns = useMemo<MRT_ColumnDef<AutorizacionOnu>[]>(
-    () => [
-      {
-        accessorKey: 'board',
-        header: 'BOARD',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'board'),
-      },
-      {
-        accessorKey: 'port',
-        header: 'PORT',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'port'),
-      },
-      {
-        accessorKey: 'type',
-        header: 'TYPE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'type'),
-      },
-      {
-        accessorKey: 'serial_number',
-        header: 'SERIAL NUMBER',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'serial_number'),
-      },
-    ],
-    [],
-  );
+  ///* columns ------------------------
+  const { consumoAutorizacion_Onus } = useColumnsAutorizacionOnus();
 
   return (
     <SingleTableBoxScene
@@ -130,22 +125,32 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
         }}
         customSpaceNode={
           // Asegúrate de pasar 'oltData' como 'data'
-          <SelectOLTItemsNMS
-            data={oltData}
-            label="Seleccione OLT"
-            name="olt"
-            control={form.control}
-            onChange={selectedValue => {
-              console.log(selectedValue);
-            }}
-          />
+          <>
+            <SelectArrayChip<OLT>
+              label="Seleccione OLT"
+              name="olt_data"
+              valueKey="name"
+              actualValueKey="id"
+              options={OltsTPagingRes?.data?.items || []}
+              isLoadingData={isLoadingOlts || isRefetchingOlts}
+              control={form.control}
+              error={errors.olt_data as any}
+              required={false}
+              size={gridSizeMdLg8}
+              titleArray={['name', 'hostname']}
+            />
+
+            <Button sx={{ mt: 3 }} onClick={handleSubmit(onSave, () => {})}>
+              Buscar ONTs
+            </Button>
+          </>
         }
       />
 
       <CustomTable<AutorizacionOnu>
-        columns={columns}
+        columns={consumoAutorizacion_Onus}
         data={AutorizacionOnusPagingRes?.data?.items || []}
-        isLoading={isLoading || isOLTsLoading}
+        isLoading={isLoadingOlts || isLoadingOlts || isLoading}
         isRefetching={isRefetching}
         // // filters - server side
         enableManualFiltering={true}

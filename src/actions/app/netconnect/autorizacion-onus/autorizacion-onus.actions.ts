@@ -1,39 +1,104 @@
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { handleAxiosError } from '@/shared/axios/axios.utils';
+import { erpAPI } from '@/axios/erp-api';
+import {
+  AutorizacionOnu,
+  autorizacionOnusPaginatedRes,
+  getUrlParams,
+  PagingPartialParams,
+  ToastWrapper,
+  UseFetchEnabledParams,
+  UseMutationParams,
+} from '@/shared';
+import { useUiStore } from '@/store/ui';
+
+const { get, post } = erpAPI();
 
 export enum AutorizacionONUTSQEnum {
   AUTORIZACIONONUS = 'autorizacion-onus',
   AUTORIZACIONONU = 'autorizacion-onu',
 }
-
-const API_DATA = '';
-
-export const fetchCombinedDataAuthOnus = async (params?: any) => {
-  try {
-    const response = await axios.get(API_DATA, { params });
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error);
-    throw error;
-  }
-};
-
 ///* tanStack query ---------------
-export const useFetchAutorizacionOnus = ({
+export const useFetchAuthOnu = ({
   enabled = true,
   params,
-}: {
-  enabled?: boolean;
-  params?: any;
-}) => {
+}: UseFetchEnabledParams<GetAuthONUsParams>) => {
   return useQuery({
     queryKey: [
       AutorizacionONUTSQEnum.AUTORIZACIONONUS,
       ...Object.values(params || {}),
     ],
-    queryFn: () => fetchCombinedDataAuthOnus(params),
+    queryFn: () => getAuthONUs(params),
     enabled: enabled,
   });
+};
+
+export const useCreateAuthONUs = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateAuthOnuParams<T>) => createAuthONU(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [AutorizacionONUTSQEnum.AUTORIZACIONONU],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Autorizacion ONU creado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+///* axios ---------------
+export type GetAuthONUsParams = Partial<AutorizacionOnu> & PagingPartialParams;
+export type CreateAuthOnuParams<T> = T;
+export type CreateAuthOnuParamsBase = Omit<AutorizacionOnu, 'id'>;
+
+export const getAuthONUs = async (params?: GetAuthONUsParams) => {
+  const stateParams = { ...params };
+
+  // filter by state
+  if (stateParams.filterByState === false && stateParams.state === undefined) {
+    delete stateParams.state;
+  } else if (stateParams.filterByState !== false) {
+    stateParams.state = true;
+  }
+  delete stateParams.filterByState;
+
+  const queryParams = getUrlParams(stateParams);
+  return get<autorizacionOnusPaginatedRes>(
+    `/ont-unauthorized/?${queryParams}`,
+    true,
+  );
+};
+
+export const createAuthONU = async <T>(data: CreateAuthOnuParams<T>) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<AutorizacionOnu>('/olt-conect/olt/ont_autofind/', data, true);
 };
