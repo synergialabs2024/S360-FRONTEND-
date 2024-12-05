@@ -5,7 +5,7 @@ import { returnUrlClientesFibraPage } from '@/app/cliente/cliente/pages/tables/C
 import { CustomTableLink, PDFIconButton } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Cliente } from '@/shared/interfaces';
-import { emptyCellOneLevel } from '@/shared/utils';
+import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 
 type MRTClienteType = { row: MRT_Row<Cliente> };
 
@@ -82,9 +82,98 @@ export const useColumnsClientes = () => {
     [],
   );
 
+  const clientesFibraColumnsB02 = useMemo<MRT_ColumnDef<Cliente>[]>(
+    () => [
+      {
+        accessorKey: 'tipo_servicio',
+        header: 'TIPO SERVICIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }: MRTClienteType) =>
+          emptyCellOneLevel(row, 'tipo_servicio'),
+      },
+      {
+        accessorKey: 'tipo_plan',
+        header: 'TIPO PLAN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }: MRTClienteType) => emptyCellOneLevel(row, 'tipo_plan'),
+      },
+    ],
+    [],
+  );
+
+  const clientesFibraColumnsB03 = useMemo<MRT_ColumnDef<Cliente>[]>(
+    () => [
+      {
+        accessorKey: 'linea_servicio__identificacion_pago',
+        header: 'IDENTIFICACION DE PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTClienteType) => {
+          const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
+          const idPago = firstLine?.contrato_data?.identificacion_pago;
+
+          if (!idPago) return 'N/A';
+
+          return idPago;
+        },
+      },
+      {
+        accessorKey: 'linea_servicio__tipo_plan',
+        header: 'NOMBRE PLAN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTClienteType) => {
+          const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
+          const namePlan =
+            firstLine?.contrato_data?.plan_internet_actual_data?.name;
+
+          if (!namePlan) return 'N/A';
+
+          return namePlan;
+        },
+      },
+
+      {
+        accessorKey: 'linea_servicio__direccion',
+        header: 'DIRECCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }: MRTClienteType) => {
+          const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
+          const direction = firstLine?.contrato_data?.direccion;
+
+          if (!direction) return 'N/A';
+
+          return direction;
+        },
+      },
+    ],
+    [],
+  );
+
   const clientesFibraColumnsActivos = useMemo<MRT_ColumnDef<Cliente>[]>(
-    () => [...clientesFibraColumnsB01],
-    [clientesFibraColumnsB01],
+    () => [
+      ...clientesFibraColumnsB01,
+      ...clientesFibraColumnsB02,
+      ...clientesFibraColumnsB03,
+      {
+        accessorKey: 'created_at',
+        header: 'CREADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+      {
+        accessorKey: 'modified_at',
+        header: 'MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [clientesFibraColumnsB01, clientesFibraColumnsB02, clientesFibraColumnsB03],
   );
 
   return {
