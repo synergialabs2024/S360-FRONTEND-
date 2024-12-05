@@ -262,6 +262,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.preventasNav,
             }),
+
+            renderByModule(SidenavModulesEnum.COMERCIAL_CORRECCION_PREVENTA, {
+              id: 'correcciones-preventas',
+              title: 'Correcciones Preventas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.comercial.CorreccionPreventasNav,
+            }),
+
             renderByModule(SidenavModulesEnum.COMERCIAL_AGENDAMIENTO, {
               id: 'agendamiento-ventas',
               title: 'Agendamiento',

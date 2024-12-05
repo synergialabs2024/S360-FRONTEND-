@@ -40,6 +40,18 @@ export const useGetPreventa = (uuid: string, refetchOnWindowFocus = false) => {
   });
 };
 
+export const useGetCorreccionPreventa = (
+  uuid: string,
+  refetchOnWindowFocus = false,
+) => {
+  return useQuery({
+    queryKey: [PreventaTSQEnum.PREVENTA, uuid],
+    queryFn: () => getCorreccionPreventa(uuid),
+    retry: false,
+    refetchOnWindowFocus,
+  });
+};
+
 export const useCreatePreventa = <T>({
   navigate,
   returnUrl,
@@ -143,6 +155,14 @@ export const getPreventa = async (uuid: string) => {
   }
 };
 
+export const getCorreccionPreventa = async (uuid: string) => {
+  try {
+    return await get<Preventa>(`/preventa/pending-correction/${uuid}`, true);
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
 export const createPreventa = async <T>(data: CreatePreventaParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
@@ -165,4 +185,9 @@ export const updatePreventa = async <T>({
 export type CancelAgendaPreventaData = Pick<
   Preventa,
   'motivo_rechazo' | 'observacion_cancelacion'
+>;
+
+export type CorreccionDocumentsPreventaData = Pick<
+  Preventa,
+  'url_foto_cedula_frontal_corregida' | 'url_foto_aceptacion_corregida'
 >;

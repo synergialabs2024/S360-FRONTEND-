@@ -293,6 +293,14 @@ export enum EstadoPreventaEnumChoice {
   SIN_GESTION = 'SIN_GESTION', // unblock sale approved
 }
 
+export enum EstadoCorreccionPreventaEnumChoice {
+  EXPIRADO = 'EXPIRADO',
+  CORREGIDO = 'CORREGIDO',
+  FOTO_CEDULA_NO_ROSTRO = 'FOTO_CEDULA_NO_ROSTRO',
+  FOTO_ACEPTACION_NO_ROSTRO = 'FOTO_ACEPTACION_NO_ROSTRO',
+  ROSTROS_NO_COINCIDEN = 'ROSTROS_NO_COINCIDEN',
+}
+
 // -----------------------------------------------
 
 // global states
@@ -408,7 +416,8 @@ export enum BucketTypeEnumChoice {
   IMAGES_IDENTIFICACION = 'images/identificacion',
   IMAGES_VIVIENDA = 'images/vivienda',
   IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
-  IMAGES_ACEPTACION_CONTRATO = 'images/acaptacion-contrato',
+  IMAGES_ACEPTACION_CONTRATO = 'images/aceptacioncontrato',
+  IMAGES_ACEPTACION_CONTRATO_CORRECCIONES = 'images/aceptacioncontrato/correcciones',
   IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
   IMAGES_ONT_MODEL = 'images/ont-model',
 
@@ -421,6 +430,8 @@ export enum BucketKeyNameEnumChoice {
   VIVIENDA = 'vivienda',
   PLANILLA_SERVICIOS = 'planilla_servicios',
   ACEPTACION_CONTRATO = 'aceptacion_contrato',
+  ACEPTACION_CONTRATO_CORRECCIONES = 'aceptacion_contrato_correcciones',
+  CEDULA_FRONTAL_CORRECCIONES = 'cedula_frontal_correcciones',
   COMPROBANTES_NO_PLANILLA = 'comprobantes_no_planilla',
   ONT_MODEL = 'ont_model_image',
 
