@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router';
 
 import { useFetchOrdenTrabajos } from '@/actions/app';
 import {
+  EstadoActivacionEnumChoice,
   EstadoOrdenTrabajoEnumChoice,
   OrdenTrabajo,
   PermissionsEnum,
   TABLE_CONSTANTS,
   TipoOrdenTrabajoEnumChoice,
+  ToastWrapper,
   useColumnsOrdenTrabajo,
   UserRolesEnumChoice,
   useTableFilter,
@@ -81,6 +83,17 @@ const InstalacionAsignadaOTByState: React.FC<
     return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
   };
   const onEdit = (row: OrdenTrabajo) => {
+    // requiere gestion de activaciones para poder subir cambios
+    if (
+      row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
+      user?.role === UserRolesEnumChoice.TECNICO
+    ) {
+      ToastWrapper.error(
+        'La instalación asignada aún no ha sido gestionada por activaciones.',
+      );
+      return;
+    }
+
     navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
   };
 
@@ -133,7 +146,6 @@ const InstalacionAsignadaOTByState: React.FC<
           );
         }}
         editIcon={<MdArrowRightAlt />}
-        // editIconToolTipTitle="Crear preventa"
         canDelete={false}
       />
     </GridTableTabsContainerOnly>

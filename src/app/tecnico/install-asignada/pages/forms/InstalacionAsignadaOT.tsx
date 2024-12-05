@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetOrdenTrabajo } from '@/actions/app';
-import { EstadoOrdenTrabajoEnumChoice, ToastWrapper } from '@/shared';
+import {
+  EstadoActivacionEnumChoice,
+  EstadoOrdenTrabajoEnumChoice,
+  ToastWrapper,
+} from '@/shared';
 import { CustomTitleRefNumber } from '@/shared/components';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
@@ -30,6 +34,14 @@ const InstalacionAsignadaOT: React.FC<InstalacionAsignadaOTProps> = () => {
     ) {
       ToastWrapper.error(
         'La instalación asignada no se encuentra en estado pendiente',
+      );
+    }
+    if (
+      !!data &&
+      data?.data?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA
+    ) {
+      ToastWrapper.error(
+        'La instalación asignada aún no ha sido gestionada por activaciones, no podrás guardar cambios',
       );
     }
   }, [data, isLoading, isRefetching]);
