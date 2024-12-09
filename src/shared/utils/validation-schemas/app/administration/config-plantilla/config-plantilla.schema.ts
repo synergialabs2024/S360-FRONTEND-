@@ -70,12 +70,6 @@ export const configuracionPlantillaFormSchema = yup.object({
     .number()
     .typeError('El campo impuesto 1 es requerido')
     .required('El campo impuesto 1 es requerido'),
-  impuesto_2: yup
-    .number()
-    .typeError('El campo impuesto 2 es requerido')
-    .required('El campo impuesto 2 es requerido'),
-  impuesto_3: yup
-    .number()
-    .typeError('El campo impuesto 3 es requerido')
-    .required('El campo impuesto 3 es requerido'),
+  // impuesto_2: yup.number().optional().nullable(),
+  // impuesto_3: yup.number().optional().nullable(),
 });

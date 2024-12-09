@@ -363,24 +363,6 @@ export const useColumnsOrdenTrabajo = () => {
       ...otColumnsBase02,
       ...otColumnsBase03,
       ...otColumnsBase04,
-      /*
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
-      */
       {
         accessorKey: 'razon_social__asignada_orde_trabajo',
         header: 'ASIGNADA POR',
