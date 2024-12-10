@@ -501,4 +501,21 @@ export const ROUTER_PATHS = {
     ontModelsEditar: 'ontModels/editar/:uuid',
     ontModelsNav: '/netconnect/ont-models',
   },
+
+  /////* Tecnico ----------------
+  tickets: {
+    root: 'tickets',
+
+    ///* parametros
+    parametrosAsuntos: 'parametros/asuntos',
+    parametrosAsuntosCrear: 'parametros/asuntos/crear',
+    parametrosAsuntosEditar: 'parametros/asuntos/editar/:uuid',
+    parametrosAsuntosNav: '/tickets/parametros/asuntos',
+
+    // parametros: {
+    //   root: 'parametros',
+
+    //   parametrosAsuntosNav: '/tickets/parametros/asuntos',
+    // }
+  },
 };

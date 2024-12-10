@@ -7,6 +7,7 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
+import TicketsModule from '@/app/tickets/TicketsModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -1086,6 +1087,26 @@ const UpdateConfiguracionPlantillaPage = Loadable(
   ),
 );
 
+// Tickets
+
+const AsuntosPage = Loadable(
+  lazy(
+    () => import('@/app/tickets/parametros/asunto/pages/tables/AsuntosPage'),
+  ),
+);
+const CreateAsuntoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/parametros/asunto/pages/forms/CreateAsuntoPage'),
+  ),
+);
+const UpdateAsuntoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/parametros/asunto/pages/forms/UpdateAsuntoPage'),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -2016,6 +2037,27 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tecnico.instalacionAsignadaOT,
             element: <InstalacionAsignadaOT />,
+          },
+        ],
+      },
+
+      //////////* Tickets ------------
+      {
+        path: ROUTER_PATHS.tickets.root,
+        element: <TicketsModule />,
+        children: [
+          ///* Instalaciones Asignadas
+          {
+            path: ROUTER_PATHS.tickets.parametrosAsuntos,
+            element: <AsuntosPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.parametrosAsuntosCrear,
+            element: <CreateAsuntoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.parametrosAsuntosEditar,
+            element: <UpdateAsuntoPage />,
           },
         ],
       },

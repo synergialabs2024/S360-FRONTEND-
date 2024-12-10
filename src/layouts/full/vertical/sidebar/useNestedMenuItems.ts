@@ -971,6 +971,36 @@ export const useNestedMenu = () => {
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
+
+        /////* Tickets ----------------
+        {
+          id: 'tickets',
+          title: 'Tickets',
+          type: MenuItemType.COLLAPSE,
+          icon: IconBuildingWarehouse,
+          children: [
+            // renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+            //   id: 'asuntos',
+            //   title: 'Asuntos',
+            //   type: MenuItemType.ITEM,
+            //   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
+            // }),
+            {
+              id: 'parametros',
+              title: 'Parametros',
+              type: MenuItemType.COLLAPSE,
+              icon: IconBuildingWarehouse,
+              children: [
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+                  id: 'asuntos',
+                  title: 'Asunto ticker',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
+                }),
+              ],
+            },
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
       ],
     };
 

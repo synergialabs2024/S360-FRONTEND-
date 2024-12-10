@@ -84,6 +84,9 @@ export enum SidenavModulesEnum {
   CLIENTE_SERVICIO = 'CLIENTE.SERVICIO',
   CLIENTE_FIBRA = 'CLIENTE.FIBRA',
 
+  // TICKETS_PARAMETROS = 'TICKETS.TICKETS_PARAMETROS',
+  TICKETS_PARAMETROS = 'TICKETS.TICKETS_PARAMETROS',
+
   // TODO: modulo temporal visto solo por admin
 
   // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
