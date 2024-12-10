@@ -98,7 +98,11 @@ const InstalacionAsignadaOTByState: React.FC<
   };
 
   ///* columns
-  const { installAsignadasEsperaOTColumns } = useColumnsOrdenTrabajo();
+  const {
+    installAsignadasEsperaOTColumns,
+    installGestionadasOTColumns,
+    installPreRechazadoOTColumns,
+  } = useColumnsOrdenTrabajo();
 
   return (
     <GridTableTabsContainerOnly>
@@ -116,7 +120,11 @@ const InstalacionAsignadaOTByState: React.FC<
           // solicitudServicioBase
           state === EstadoOrdenTrabajoEnumChoice.PENDIENTE
             ? installAsignadasEsperaOTColumns
-            : []
+            : state === EstadoOrdenTrabajoEnumChoice.FINALIZADO
+              ? installGestionadasOTColumns
+              : state === EstadoOrdenTrabajoEnumChoice.PRE_RECHAZADO
+                ? installPreRechazadoOTColumns
+                : installAsignadasEsperaOTColumns
         }
         data={OrdensTrabajoPagingRes?.data?.items || []}
         isLoading={isLoading}

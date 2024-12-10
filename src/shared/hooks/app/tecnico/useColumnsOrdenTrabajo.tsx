@@ -503,7 +503,7 @@ export const useColumnsOrdenTrabajo = () => {
         },
       },
       {
-        accessorKey: 'fecha_´pre_rechazada',
+        accessorKey: 'fecha_pre_rechazada',
         header: 'FECHA PRE RECHAZADA',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
