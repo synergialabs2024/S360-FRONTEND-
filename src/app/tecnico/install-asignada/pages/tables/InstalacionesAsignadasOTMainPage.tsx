@@ -37,6 +37,8 @@ const InstalacionesAsignadasOTMainPage: React.FC<
       >
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
         <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
+
+        <Tab label={'ESPERA REVISIÓN'} value={5} {...a11yProps(5)} />
         <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
 
         <Tab label={'PRE RECHAZADAS'} value={3} {...a11yProps(3)} />
@@ -54,6 +56,11 @@ const InstalacionesAsignadasOTMainPage: React.FC<
         />
       </CustomTabPanel>
 
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <InstalacionAsignadaOTByState
+          state={EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA}
+        />
+      </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <InstalacionAsignadaOTByState
           state={EstadoOrdenTrabajoEnumChoice.FINALIZADO}
