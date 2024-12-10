@@ -1,6 +1,7 @@
 export * from './administracion-red';
 export * from './clientes';
 export * from './comercial';
+export * from './infraestructura';
 export * from './inventario';
 export * from './mantenimiento-ope';
 export * from './netconnect';

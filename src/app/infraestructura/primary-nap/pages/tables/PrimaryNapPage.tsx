@@ -6,6 +6,7 @@ import {
   PermissionsEnum,
   PrimaryNap,
   TABLE_CONSTANTS,
+  useColumnsPrimaryNap,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -14,7 +15,6 @@ import {
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { useColumnsPrimaryNap } from '@/shared/hooks/app/infraestructura/useColumnsPrimaryNap';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -84,7 +84,7 @@ const PrimaryNapsPage: React.FC<PrimaryNapsPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Cajas Primarias Nap"
+      title="Cajas Nap Primarias"
       createPageUrl={`${returnUrlPrimaryNapsPage}/crear`}
       // Pendiente a cambio
       showCreateBtn={hasPermission(PermissionsEnum.infraestructura_add_nap)}
