@@ -19,7 +19,7 @@ const UpdateNapPage: React.FC<UpdateNapPageProps> = () => {
   if (isLoading || isRefetching) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlNapsPage} />;
 
-  return <SaveNap title="Editar Caja Nap" nap={data.data} />;
+  return <SaveNap title="Editar Caja Nap Secundaria" nap={data.data} />;
 };
 
 export default UpdateNapPage;

@@ -300,17 +300,17 @@ export const ROUTER_PATHS = {
     oltsEditar: 'olts/editar/:uuid',
     oltsNav: '/infraestructura/olts',
 
-    ///* nap
-    naps: 'naps',
-    napsCrear: 'naps/crear',
-    napsEditar: 'naps/editar/:uuid',
-    napsNav: '/infraestructura/naps',
-
-    ///* nap
+    ///* nap primaria
     primarynaps: 'primary-naps',
     primarynapsCrear: 'primary-naps/crear',
     primarynapsEditar: 'primary-naps/editar/:uuid',
     primarynapsNav: '/infraestructura/primary-naps',
+
+    ///* nap secundaria
+    secondarynaps: 'secondary-naps',
+    secondarynapsCrear: 'secondary-naps/crear',
+    secondarynapsEditar: 'secondary-naps/editar/:uuid',
+    secondarynapsNav: '/infraestructura/secondary-naps',
 
     ///* radiobase
     radiobases: 'radiobases',

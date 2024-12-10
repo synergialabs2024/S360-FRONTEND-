@@ -598,17 +598,17 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.oltsNav,
             }),
-            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_NAP, {
-              id: 'naps',
-              title: 'NAPs',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.infraestructura.napsNav,
-            }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'primary-naps',
-              title: 'NAPs PRIMARIAS',
+              title: 'NAPs Primarias',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.primarynapsNav,
+            }),
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_NAP, {
+              id: 'secondary-naps',
+              title: 'NAPs Secundarias',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.infraestructura.secondarynapsNav,
             }),
             renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_RUTA, {
               id: 'rutas',

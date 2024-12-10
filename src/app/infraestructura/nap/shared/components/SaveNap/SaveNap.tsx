@@ -10,6 +10,7 @@ import {
   useFetchCiudades,
   useFetchNodos,
   useFetchOLTs,
+  useFetchPrimaryNaps,
   useFetchSectores,
   useUpdateNap,
 } from '@/actions/app';
@@ -34,7 +35,16 @@ import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
-import { Ciudad, Nap, Nodo, OLT, Sector } from '@/shared/interfaces';
+import {
+  Ciudad,
+  Nap,
+  NapPortSecondPrimaryType,
+  NapPortType,
+  Nodo,
+  OLT,
+  PrimaryNap,
+  Sector,
+} from '@/shared/interfaces';
 import { napFormSchema } from '@/shared/utils';
 import { returnUrlNapsPage } from '../../../pages/tables/NapsPage';
 
@@ -68,9 +78,21 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
     reset,
     formState: { errors, isValid },
   } = form;
+  const watchedPuertosList = form.watch('puertos_list');
   const watchedCity = form.watch('ciudad');
   const watchedSector = form.watch('sector');
   const watchedNodo = form.watch('nodo');
+  const watchedPuertos = form.watch('puertos');
+
+  const arrayPuertoNapSecondPrimary = [];
+
+  // Generar el array dinámicamente
+  for (let i = 0; i < (watchedPuertos ?? 0); i++) {
+    arrayPuertoNapSecondPrimary.push({
+      puerto: (i + 1).toString(),
+      id: i + 1,
+    });
+  }
 
   const {
     Map,
@@ -91,6 +113,16 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
   });
 
   ///* fetch data -----------------------
+  const {
+    data: napPrimaryPagingRes,
+    isLoading: isLoadingNapPrimary,
+    isRefetching: isRefetchingNapPrimary,
+  } = useFetchPrimaryNaps({
+    params: {
+      page_size: 900,
+    },
+  });
+
   const {
     data: citiesPagingRes,
     isLoading: isLoadingCities,
@@ -231,6 +263,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         error={errors.name}
         helperText={errors.name?.message}
       />
+
       <SelectTextFieldArrayString
         label="Nap status"
         name="status_nap"
@@ -244,8 +277,58 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         helperText={form.formState.errors.status_nap?.message}
         gridSize={gridSizeMdLg6}
       />
+      <CustomAutocomplete<PrimaryNap>
+        label="Nap Primaria"
+        name="nap_primaria"
+        // options
+        options={napPrimaryPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().nap_primaria}
+        isLoadingData={isLoadingNapPrimary || isRefetchingNapPrimary}
+        // vaidation
+        control={form.control}
+        error={errors.nap_primaria}
+        helperText={errors.nap_primaria?.message}
+        size={gridSizeMdLg6}
+        onChangeRawValue={row => {
+          form.setValue('puerto_nap_primaria', undefined);
+          form.setValue(
+            'puertos_list',
+            row.puertos_list
+              ?.map(item => ({
+                ...item,
+                puerto: item.puerto.toString(),
+              }))
+              ?.filter(i => i.estado == false),
+          );
+          form.setValue('proyecto_cod', row.proyecto_cod as any);
+          form.setValue('ciudad', row.ciudad as any);
+          form.setValue('sector', row.sector as any);
+          form.setValue('nodo', row.nodo as any);
+          form.setValue('olt', row.olt as any);
+          form.setValue('direccion', row.direccion as any);
+          form.setValue('coordenadas', row.coordenadas as any);
+          const s = row.coordenadas.split(',').map(Number);
+          setLatLng({ lat: s[0], lng: s[1] });
+        }}
+      />
+      <CustomAutocomplete<NapPortType>
+        label="Puerto salida primaria"
+        name="puerto_nap_primaria"
+        options={watchedPuertosList || []}
+        valueKey="puerto"
+        actualValueKey="puerto"
+        defaultValue={form.getValues().puerto_nap_primaria}
+        isLoadingData={isLoadingNapPrimary || isRefetchingNapPrimary}
+        control={form.control}
+        error={errors.puerto_nap_primaria}
+        helperText={errors.puerto_nap_primaria?.message}
+        size={gridSizeMdLg6}
+      />
+
       <SelectTextFieldArrayString
-        label="Cantidad de puertos"
+        label="Puertos"
         name="puertos"
         textFieldKey="puertos"
         // options
@@ -257,6 +340,23 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         helperText={form.formState.errors.puertos?.message}
         disabled={!!nap?.id}
         gridSize={gridSizeMdLg6}
+        onChangeValue={() => {
+          form.setValue('puerto_nap_secundaria_primaria', undefined);
+        }}
+      />
+
+      <CustomAutocomplete<NapPortSecondPrimaryType>
+        label="Puerto a conectar"
+        name="puerto_nap_secundaria_primaria"
+        options={arrayPuertoNapSecondPrimary || []}
+        valueKey="puerto"
+        actualValueKey="id"
+        defaultValue={form.getValues().puerto_nap_secundaria_primaria}
+        isLoadingData={isLoadingNapPrimary || isRefetchingNapPrimary}
+        control={form.control}
+        error={errors.puerto_nap_secundaria_primaria}
+        helperText={errors.puerto_nap_secundaria_primaria?.message}
+        size={gridSizeMdLg6}
       />
 
       <CustomTextField
@@ -278,7 +378,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         actualValueKey="id"
         defaultValue={form.getValues().ciudad}
         isLoadingData={isLoadingCities || isRefetchingCities}
-        // vaidation
+        // validation
         control={form.control}
         error={errors.ciudad}
         helperText={errors.ciudad?.message}
@@ -297,6 +397,7 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
         control={form.control}
         error={errors.sector}
         helperText={errors.sector?.message}
+        size={gridSizeMdLg6}
       />
 
       <CustomAutocomplete<Nodo>

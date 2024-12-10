@@ -7,7 +7,7 @@ export type CreateNapPageProps = {};
 const CreateNapPage: React.FC<CreateNapPageProps> = () => {
   useCheckPermission(PermissionsEnum.infraestructura_add_nap);
 
-  return <SaveNap title="Crear Caja Nap" />;
+  return <SaveNap title="Crear Caja Nap Secundaria" />;
 };
 
 export default CreateNapPage;

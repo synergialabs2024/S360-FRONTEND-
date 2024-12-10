@@ -1526,20 +1526,6 @@ const AppRouter = [
             element: <UpdateOLTPage />,
           },
 
-          ///* NAP
-          {
-            path: ROUTER_PATHS.infraestructura.naps,
-            element: <NapsPage />,
-          },
-          {
-            path: ROUTER_PATHS.infraestructura.napsCrear,
-            element: <CreateNapPage />,
-          },
-          {
-            path: ROUTER_PATHS.infraestructura.napsEditar,
-            element: <UpdateNapPage />,
-          },
-
           ///* PRIMARY NAP
           {
             path: ROUTER_PATHS.infraestructura.primarynaps,
@@ -1552,6 +1538,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.infraestructura.primarynapsEditar,
             element: <UpdatePrimaryNapPage />,
+          },
+
+          ///* SECONDARY NAP
+          {
+            path: ROUTER_PATHS.infraestructura.secondarynaps,
+            element: <NapsPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.secondarynapsCrear,
+            element: <CreateNapPage />,
+          },
+          {
+            path: ROUTER_PATHS.infraestructura.secondarynapsEditar,
+            element: <UpdateNapPage />,
           },
 
           ///* RADIOBASE

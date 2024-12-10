@@ -2,6 +2,7 @@ import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { CiudadLimitData, SectorLimitData } from '../../administration';
 import { NodoLimitData } from '../nodo';
 import { OLTLimitData } from '../olt';
+import { PrimaryNapLimitData } from '../primary-nap';
 
 export interface NapsPaginatedRes {
   status: number;
@@ -37,7 +38,11 @@ export interface Nap {
   olt: number;
   ciudad: number;
   sector: number;
+  nap_primaria: number;
+  puerto_nap_primaria?: number;
+  puerto_nap_secundaria_primaria?: number;
 
+  nap_primaria_data?: PrimaryNapLimitData;
   nodo_data?: NodoLimitData;
   olt_data?: OLTLimitData;
   ciudad_data?: CiudadLimitData;
@@ -47,6 +52,12 @@ export interface Nap {
 export type NapPortType = {
   estado: boolean;
   puerto: string;
+};
+
+export type NapPortSecondPrimaryType = {
+  id: number;
+  puerto: string;
+  estado?: boolean;
 };
 
 export type NapLimitData = Pick<
