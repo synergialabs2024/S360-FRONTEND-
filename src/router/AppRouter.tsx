@@ -1124,6 +1124,24 @@ const UpdateAsuntoPage = Loadable(
   ),
 );
 
+const OrigenesPage = Loadable(
+  lazy(
+    () => import('@/app/tickets/parametros/origen/pages/tables/OrigenesPage'),
+  ),
+);
+const CreateOrigenPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/parametros/origen/pages/forms/CreateOrigenPage'),
+  ),
+);
+const UpdateOrigenPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/parametros/origen/pages/forms/UpdateOrigenPage'),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -2073,7 +2091,7 @@ const AppRouter = [
         path: ROUTER_PATHS.tickets.root,
         element: <TicketsModule />,
         children: [
-          ///* Instalaciones Asignadas
+          ///* Parametro / Asunto
           {
             path: ROUTER_PATHS.tickets.parametrosAsuntos,
             element: <AsuntosPage />,
@@ -2085,6 +2103,21 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.parametrosAsuntosEditar,
             element: <UpdateAsuntoPage />,
+          },
+
+          ///* Parametro / Origen
+
+          {
+            path: ROUTER_PATHS.tickets.parametrosOrigenes,
+            element: <OrigenesPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.parametrosOrigenesCrear,
+            element: <CreateOrigenPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.parametrosOrigenesEditar,
+            element: <UpdateOrigenPage />,
           },
         ],
       },

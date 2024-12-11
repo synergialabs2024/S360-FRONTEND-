@@ -10,7 +10,7 @@ import { useGetAsunto } from '@/actions/app/tickets/parametros/asunto/asunto.act
 export type UpdateAsuntoPageProps = {};
 
 const UpdateAsuntoPage: React.FC<UpdateAsuntoPageProps> = () => {
-  useCheckPermission(PermissionsEnum.tecnico_change_tickettecnico);
+  useCheckPermission(PermissionsEnum.tecnico_change_asuntoticket);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetAsunto(uuid!);
@@ -19,7 +19,7 @@ const UpdateAsuntoPage: React.FC<UpdateAsuntoPageProps> = () => {
   if (isLoading || isRefetching) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlAsuntosPage} />;
 
-  return <SaveAsunto title="Editar Ubicación" asunto={data.data} />;
+  return <SaveAsunto title="Editar Asunto" asunto={data.data} />;
 };
 
 export default UpdateAsuntoPage;
