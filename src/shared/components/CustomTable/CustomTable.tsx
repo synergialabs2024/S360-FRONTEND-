@@ -218,7 +218,13 @@ function CustomTable<T>({
               }}
               color={editIconColor}
             >
-              {editIcon || arrowIcon ? <MdArrowRightAlt /> : <MdEdit />}
+              {editIcon ? (
+                editIcon
+              ) : arrowIcon ? (
+                <MdArrowRightAlt />
+              ) : (
+                <MdEdit />
+              )}
             </IconButton>
           </Tooltip>
         ) : null}
