@@ -3,11 +3,11 @@ import { lazy } from 'react';
 
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 import TecnicoModule from '@/app/tecnico/TecnicoModule';
+import TicketsModule from '@/app/tickets/TicketsModule';
 import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
-import TicketsModule from '@/app/tickets/TicketsModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -1048,6 +1048,23 @@ const ActivateInstalacionOTPage = Loadable(
       ),
   ),
 );
+///* auditoria ------------
+const AuditoriaInstalacionesMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/auditoria/pages/tables/AuditoriaInstalacionesMainPage'
+      ),
+  ),
+);
+const AuditoriaInstallPendienteFormPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/auditoria/pages/forms/AuditoriaInstallPendienteFormPage'
+      ),
+  ),
+);
 
 ///* cliente ------------
 const ClienteModule = Loadable(
@@ -1764,6 +1781,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.operaciones.activacionesInstalacion,
             element: <ActivateInstalacionOTPage />,
+          },
+
+          ///* auditoria
+          {
+            path: ROUTER_PATHS.operaciones.auditoriaInstalaciones,
+            element: <AuditoriaInstalacionesMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.auditoriaInstalacion,
+            element: <AuditoriaInstallPendienteFormPage />,
           },
         ],
       },

@@ -3,6 +3,7 @@ import {
   Brass,
   Ciudad,
   EstadoActivacionEnumChoice,
+  EstadoAuditoriaOTInstallEnumChoice,
   EstadoOrdenTrabajoEnumChoice,
   FlotaLimitData,
   LineaServicio,
@@ -77,6 +78,9 @@ export interface OrdenTrabajo {
   observacion_cambio_puerto?: string;
   fecha_actualizacion_puerto?: string; // timestamp
   usuario_actualizacion_puerto?: number; // fk
+
+  // AUDITORIA -------------------
+  estado_auditoria?: EstadoAuditoriaOTInstallEnumChoice;
 
   ///* fk -------------------
   flota?: number;

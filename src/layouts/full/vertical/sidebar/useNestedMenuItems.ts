@@ -514,6 +514,16 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.operaciones.activacionesNav,
               },
             ),
+            renderByModule(
+              SidenavModulesEnum.OPERACIONES_ACTIVACION_AUDITORIA_INSTALACION,
+              {
+                id: 'activacion-auditoria-instalaciones',
+                title: 'Revisión de instalaciones',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.operaciones.auditoriaNav,
+              },
+            ),
+
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'recoordinacion-agendas',
               title: 'Recoordinación de agendas',

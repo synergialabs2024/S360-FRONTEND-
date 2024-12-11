@@ -523,10 +523,49 @@ export const useColumnsOrdenTrabajo = () => {
     [otColumnsBase01, otColumnsBase02, otColumnsBase03, otColumnsBase04],
   );
 
+  // auditoria -----------
+  const installEsperaAuditoriaOTColumns = useMemo<
+    MRT_ColumnDef<OrdenTrabajo>[]
+  >(
+    () => [
+      ...otColumnsBase01,
+      ...otColumnsBase02,
+      ...otColumnsBase03,
+      ...otColumnsBase04,
+    ],
+    [otColumnsBase01, otColumnsBase02, otColumnsBase03, otColumnsBase04],
+  );
+  const installEsperaCorreccionAuditoriaOTColumns = useMemo<
+    MRT_ColumnDef<OrdenTrabajo>[]
+  >(
+    () => [
+      ...otColumnsBase01,
+      ...otColumnsBase02,
+      ...otColumnsBase03,
+      ...otColumnsBase04,
+    ],
+    [otColumnsBase01, otColumnsBase02, otColumnsBase03, otColumnsBase04],
+  );
+  const installAprobadasAuditoriaOTColumns = useMemo<
+    MRT_ColumnDef<OrdenTrabajo>[]
+  >(
+    () => [
+      ...otColumnsBase01,
+      ...otColumnsBase02,
+      ...otColumnsBase03,
+      ...otColumnsBase04,
+    ],
+    [otColumnsBase01, otColumnsBase02, otColumnsBase03, otColumnsBase04],
+  );
+
   return {
     installAsignadasEsperaOTColumns,
     installAsignadasRecoordinadasOTColumns,
     installGestionadasOTColumns,
     installPreRechazadoOTColumns,
+
+    installEsperaAuditoriaOTColumns,
+    installEsperaCorreccionAuditoriaOTColumns,
+    installAprobadasAuditoriaOTColumns,
   };
 };

@@ -11,7 +11,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdArrowRightAlt, MdDelete, MdEdit } from 'react-icons/md';
 
 // server-side filtering by columns - date type
 import { ColorButtonType } from '@/shared/interfaces';
@@ -49,6 +49,7 @@ export interface CustomTableProps<T> {
   onDelete?: (original: T) => void;
   onEdit?: (original: T) => void | Promise<void>;
   enableActionsColumn?: boolean;
+  arrowIcon?: boolean;
 
   onConditionDelete?: (original: T) => boolean;
   onConditionEdit?: (original: T) => boolean;
@@ -142,6 +143,8 @@ function CustomTable<T>({
   editIconToolTipTitle = 'Editar',
   editIconColor,
   editIconTooltipPlacement = 'bottom',
+
+  arrowIcon = false,
 }: CustomTableProps<T>) {
   const theme = useTheme();
 
@@ -215,7 +218,7 @@ function CustomTable<T>({
               }}
               color={editIconColor}
             >
-              {editIcon || <MdEdit />}
+              {editIcon || arrowIcon ? <MdArrowRightAlt /> : <MdEdit />}
             </IconButton>
           </Tooltip>
         ) : null}

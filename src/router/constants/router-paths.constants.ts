@@ -281,6 +281,11 @@ export const ROUTER_PATHS = {
     activaciones: 'activaciones',
     activacionesInstalacion: 'activaciones/instalacion/:uuid',
     activacionesNav: '/operaciones/activaciones',
+
+    ///* auditoria
+    auditoriaInstalaciones: 'auditoria/instalaciones',
+    auditoriaInstalacion: 'auditoria/instalaciones/:uuid',
+    auditoriaNav: '/operaciones/auditoria/instalaciones',
   },
 
   /////* Infraestructura ----------------
