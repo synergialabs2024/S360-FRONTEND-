@@ -1007,6 +1007,12 @@ export const useNestedMenu = () => {
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+                  id: 'origenes',
+                  title: 'Origen ticker',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.tickets.parametrosOrigenesNav,
+                }),
               ],
             },
           ].filter(item => !!item) as NestedMenuItem[],

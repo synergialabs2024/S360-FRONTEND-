@@ -83,7 +83,8 @@ const NavItem = ({ item, level, hideMenu }: NavItemProps): ReactElement => {
       level > 1 && pathname === item?.url
         ? `${theme.palette.primary.main}!important`
         : theme.palette.text.secondary,
-    paddingLeft: level > 2 ? `${level * 15}px` : '10px',
+    paddingLeft: hideMenu ? '10px' : level > 2 ? `${level * 15}px` : '10px',
+
     '&:hover': {
       backgroundColor: theme.palette.primary.light,
       color: theme.palette.primary.main,

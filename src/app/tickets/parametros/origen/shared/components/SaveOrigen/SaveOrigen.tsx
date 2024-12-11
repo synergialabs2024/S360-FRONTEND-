@@ -1,13 +1,7 @@
-import {
-  CreateAsuntoParamsBase,
-  useCreateAsunto,
-  useUpdateAsunto,
-} from '@/actions/app/tickets/parametros/asunto/asunto.actions';
-import { Asunto } from '@/shared/interfaces/app/ticket';
+import { Origen } from '@/shared/interfaces/app/ticket';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { returnUrlAsuntosPage } from '../../../pages/tables/AsuntosPage';
 import { getKeysFormErrorsMessage, ToastWrapper } from '@/shared';
 import { useEffect } from 'react';
 import {
@@ -15,21 +9,27 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { asuntoFormSchema } from '@/shared/utils/validation-schemas/app/tickets/parametros/asunto/asunto.schema';
+import {
+  CreateOrigenParamsBase,
+  useCreateOrigen,
+  useUpdateOrigen,
+} from '@/actions/app/tickets';
+import { origenFormSchema } from '@/shared/utils/validation-schemas/app/tickets';
+import { returnUrlOrigenesPage } from '../../../pages/tables/OrigenesPage';
 
-export type SaveAsuntoProps = {
+export type SaveOrigenProps = {
   title: string;
-  asunto?: Asunto;
+  origen?: Origen;
 };
 
-type SaveFormData = CreateAsuntoParamsBase & {};
+type SaveFormData = CreateOrigenParamsBase & {};
 
-const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
+const SaveOrigen: React.FC<SaveOrigenProps> = ({ title, origen }) => {
   const navigate = useNavigate();
 
   ///* form ---------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(asuntoFormSchema) as any,
+    resolver: yupResolver(origenFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -42,14 +42,14 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
   } = form;
 
   ///* mutations ---------------------
-  const createAsuntoMutation = useCreateAsunto({
+  const createOrigenMutation = useCreateOrigen({
     navigate,
-    returnUrl: returnUrlAsuntosPage,
+    returnUrl: returnUrlOrigenesPage,
     enableErrorNavigate: false,
   });
-  const updateAsuntoMutation = useUpdateAsunto<CreateAsuntoParamsBase>({
+  const updateOrigenMutation = useUpdateOrigen<CreateOrigenParamsBase>({
     navigate,
-    returnUrl: returnUrlAsuntosPage,
+    returnUrl: returnUrlOrigenesPage,
   });
 
   ///* handlers ---------------------
@@ -57,25 +57,25 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
     if (!isValid) return;
 
     ///* upd
-    if (asunto?.id) {
-      updateAsuntoMutation.mutate({ id: asunto.id!, data });
+    if (origen?.id) {
+      updateOrigenMutation.mutate({ id: origen.id!, data });
       return;
     }
 
     ///* create
-    createAsuntoMutation.mutate(data);
+    createOrigenMutation.mutate(data);
   };
 
   ///* effects ---------------------
   useEffect(() => {
-    if (!asunto?.id) return;
-    reset(asunto);
-  }, [asunto, reset]);
+    if (!origen?.id) return;
+    reset(origen);
+  }, [origen, reset]);
 
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlAsuntosPage)}
+      onCancel={() => navigate(returnUrlOrigenesPage)}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(
           `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
@@ -91,15 +91,6 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
         helperText={errors.name?.message}
       />
 
-      <CustomTextField
-        label="Valor a cobrar"
-        name="valor_cobrar"
-        control={form.control}
-        defaultValue={(form.getValues().valor_cobrar ?? '').toString()}
-        error={errors.valor_cobrar}
-        helperText={errors.valor_cobrar?.message}
-      />
-
       <SampleCheckbox
         label="state"
         name="state"
@@ -111,4 +102,4 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
   );
 };
 
-export default SaveAsunto;
+export default SaveOrigen;

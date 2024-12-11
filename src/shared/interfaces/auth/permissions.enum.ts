@@ -115,7 +115,7 @@ export enum PermissionsEnum {
   servicios_view_servicio = 'servicios.view_servicio',
   sessions_view_session = 'sessions.view_session',
   tecnico_view_ordentrabajo = 'tecnico.view_ordentrabajo',
-  tecnico_parametros_view_asunto = 'tecnico.view_tickettecnico',
+  tecnico_view_tickettecnico = 'tecnico.view_tickettecnico',
   tecnico_view_asuntoticket = 'tecnico.view_asuntoticket',
   tecnico_view_origenticket = 'tecnico.view_origenticket',
   user_view_user = 'user.view_user',

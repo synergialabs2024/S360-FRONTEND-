@@ -16,18 +16,15 @@ import { PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { Asunto } from '@/shared/interfaces/app/ticket';
-import {
-  useFetchAsuntos,
-  useUpdateAsunto,
-} from '@/actions/app/tickets/parametros/asunto/asunto.actions';
+import { Origen } from '@/shared/interfaces/app/ticket';
+import { useFetchOrigenes, useUpdateOrigen } from '@/actions/app/tickets';
 
-export const returnUrlAsuntosPage = ROUTER_PATHS.tickets.parametrosAsuntosNav;
+export const returnUrlOrigenesPage = ROUTER_PATHS.tickets.parametrosOrigenesNav;
 
-export type AsuntosPageProps = {};
+export type OrigenesPageProps = {};
 
-const AsuntosPage: React.FC<AsuntosPageProps> = () => {
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+const OrigenesPage: React.FC<OrigenesPageProps> = () => {
+  useCheckPermission(PermissionsEnum.tecnico_view_origenticket);
 
   const navigate = useNavigate();
 
@@ -42,7 +39,7 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
   );
 
   ///* mutations
-  const changeState = useUpdateAsunto({
+  const changeState = useUpdateOrigen({
     enableNavigate: false,
   });
 
@@ -58,10 +55,10 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
 
   ///* fetch data
   const {
-    data: AsuntosPagingRes,
+    data: OrigenesPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchAsuntos({
+  } = useFetchOrigenes({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -73,20 +70,20 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (asunto: Asunto) => {
+  const onEdit = (origen: Origen) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Asunto',
+      title: 'Editar Origen',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlAsuntosPage}/editar/${asunto.uuid}`);
+        navigate(`${returnUrlOrigenesPage}/editar/${origen.uuid}`);
       },
     });
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<Asunto>[]>(
+  const columns = useMemo<MRT_ColumnDef<Origen>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -95,15 +92,6 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
-      },
-
-      {
-        accessorKey: 'valor_cobrar',
-        header: 'VALOR A COBRAR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_cobrar'),
       },
 
       {
@@ -119,7 +107,7 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.tecnico_change_asuntoticket))
+                if (!hasPermission(PermissionsEnum.tecnico_change_origenticket))
                   return;
 
                 setConfirmDialog({
@@ -166,9 +154,9 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Asunto"
-      createPageUrl={`${returnUrlAsuntosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.tecnico_view_tickettecnico)}
+      title="Origen"
+      createPageUrl={`${returnUrlOrigenesPage}/crear`}
+      showCreateBtn={hasPermission(PermissionsEnum.tecnico_view_origenticket)}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -176,9 +164,9 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
         text="por nombre"
       />
 
-      <CustomTable<Asunto>
+      <CustomTable<Origen>
         columns={columns}
-        data={AsuntosPagingRes?.data?.items || []}
+        data={OrigenesPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side
@@ -190,14 +178,14 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={AsuntosPagingRes?.data?.meta?.count}
+        rowCount={OrigenesPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
-          PermissionsEnum.tecnico_change_asuntoticket,
+          PermissionsEnum.tecnico_change_origenticket,
         )}
         // crud
-        canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)}
+        canEdit={hasPermission(PermissionsEnum.tecnico_change_origenticket)}
         onEdit={onEdit}
         canDelete={false}
       />
@@ -205,4 +193,4 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
   );
 };
 
-export default AsuntosPage;
+export default OrigenesPage;

@@ -517,10 +517,9 @@ export const ROUTER_PATHS = {
     parametrosAsuntosEditar: 'parametros/asuntos/editar/:uuid',
     parametrosAsuntosNav: '/tickets/parametros/asuntos',
 
-    // parametros: {
-    //   root: 'parametros',
-
-    //   parametrosAsuntosNav: '/tickets/parametros/asuntos',
-    // }
+    parametrosOrigenes: 'parametros/origenes',
+    parametrosOrigenesCrear: 'parametros/origenes/crear',
+    parametrosOrigenesEditar: 'parametros/origenes/editar/:uuid',
+    parametrosOrigenesNav: '/tickets/parametros/origenes',
   },
 };
