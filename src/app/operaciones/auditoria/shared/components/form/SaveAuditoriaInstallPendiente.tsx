@@ -1,5 +1,5 @@
 import { Tab } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
@@ -27,6 +27,7 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import { returnUrlAuditoriaInstallacionesOT } from '../../../pages/tables/AuditoriaInstalacionesMainPage';
+import AuditoriaInstallRequestUpdOT from './AuditoriaInstallRequestUpdOT';
 
 export type SaveAuditoriaInstallPendienteProps = {
   titleNode: React.ReactNode;
@@ -43,6 +44,9 @@ const SaveAuditoriaInstallPendiente: React.FC<
   ///* hooks --------------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly();
+
+  ///* local states ---------------------
+  const [openRequestUpdOTModal, setOpenRequestUpdOTModal] = useState(false);
 
   ///* form ---------------------
   const form = useForm<AuditoriaInstallOTSaveFormData>({
@@ -85,10 +89,16 @@ const SaveAuditoriaInstallPendiente: React.FC<
   return (
     <TabsFormBoxScene
       titlePageNode={titleNode}
+      // action btns
       onCancel={() => navigate(returnUrlAuditoriaInstallacionesOT)}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(`Error en: ${getKeysFormErrorsMessage(errors)}`);
       })}
+      rejectTextBtn="Solicitar Actualización"
+      onReject={() => {
+        setOpenRequestUpdOTModal(true);
+      }}
+      // tabs
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
           <Tab label="Información general" value={1} {...a11yProps(1)} />
@@ -139,6 +149,13 @@ const SaveAuditoriaInstallPendiente: React.FC<
           }
         />
       </CustomTabPanel>
+
+      {/* ========================= modals ========================= */}
+      <AuditoriaInstallRequestUpdOT
+        open={openRequestUpdOTModal}
+        onClose={() => setOpenRequestUpdOTModal(false)}
+        ordenTrabajo={ordentrabajo!}
+      />
     </TabsFormBoxScene>
   );
 };

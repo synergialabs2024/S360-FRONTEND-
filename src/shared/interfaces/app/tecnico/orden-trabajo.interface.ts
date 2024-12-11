@@ -7,6 +7,7 @@ import {
   EstadoOrdenTrabajoEnumChoice,
   FlotaLimitData,
   LineaServicio,
+  MotivoCorreccionOTAuditoriaEnumChoice,
   MotivoRechazo,
   Nap,
   Nodo,
@@ -81,6 +82,8 @@ export interface OrdenTrabajo {
 
   // AUDITORIA -------------------
   estado_auditoria?: EstadoAuditoriaOTInstallEnumChoice;
+  motivo_correccion?: MotivoCorreccionOTAuditoriaEnumChoice;
+  observacion_correccion?: string;
 
   ///* fk -------------------
   flota?: number;

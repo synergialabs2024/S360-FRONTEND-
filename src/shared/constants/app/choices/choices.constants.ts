@@ -552,6 +552,14 @@ export enum EstadoAuditoriaOTInstallEnumChoice {
   APROBADO = 'APROBADO',
   RECHAZADO = 'RECHAZADO',
 }
+export enum MotivoCorreccionOTAuditoriaEnumChoice {
+  INFORMACION_INCORRECTA = 'INFORMACION INCORRECTA',
+  FOTOS_INCORRECTAS = 'FOTOS INCORRECTAS',
+}
+export const MOTIVO_CORRECCION_OT_AUDITORIA_ARRAY_CHOICES = [
+  MotivoCorreccionOTAuditoriaEnumChoice.INFORMACION_INCORRECTA,
+  MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS,
+];
 
 // start examples remove ------------------
 export enum UserOtherRolesEnumChoice {
