@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import { OrdenTrabajoTSQEnum } from '@/actions/app';
+import { useGenericPATCH } from '@/actions/shared';
 import { ClienteFibraOTFotosPart } from '@/app/cliente/cliente/shared/components/fibra/servicio';
 import { ClienteFibraOTEquiposMaterialesPart } from '@/app/cliente/cliente/shared/components/fibra/servicio/equipos';
 import {
@@ -26,6 +28,7 @@ import {
   FormTabsOnly,
   TabsFormBoxScene,
 } from '@/shared/components';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlAuditoriaInstallacionesOT } from '../../../pages/tables/AuditoriaInstalacionesMainPage';
 import AuditoriaInstallRequestUpdOT from './AuditoriaInstallRequestUpdOT';
 
@@ -48,18 +51,42 @@ const SaveAuditoriaInstallPendiente: React.FC<
   ///* local states ---------------------
   const [openRequestUpdOTModal, setOpenRequestUpdOTModal] = useState(false);
 
+  ///* global state ---------------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
+
   ///* form ---------------------
   const form = useForm<AuditoriaInstallOTSaveFormData>({
     defaultValues: {},
   });
   const { handleSubmit, reset } = form;
 
-  ///* mutations ----------------
+  ///* mutations ---------------------
+  const approveOtInstall = useGenericPATCH<any, OrdenTrabajo>(
+    `/orden-trabajo/instalaciones/audit-uploaded/${ordentrabajo?.id!}/`,
+    OrdenTrabajoTSQEnum.ORDENTRABAJOS,
+    {
+      customMessageToast: 'Orden de trabajo de instalación aprobada con éxito',
+      navigate,
+      returnUrl: returnUrlAuditoriaInstallacionesOT,
+      customOnSuccess() {
+        setConfirmDialogIsOpen(false);
+      },
+    },
+  );
 
-  ///* handlers -----------------
-  const onSave = async (data: AuditoriaInstallOTSaveFormData) => {
-    console.log('data', data);
-    console.log('ordentrabajo', ordentrabajo);
+  ///* handlers ---------------------
+  const onSave = async () => {
+    setConfirmDialog({
+      isOpen: true,
+      title: '¿Estás seguro de aprobar la orden de trabajo?',
+      subtitle: 'Una vez aprobada no podrá ser modificada',
+      onConfirm: () => {
+        approveOtInstall.mutate({});
+      },
+    });
   };
 
   ///* effects ---------------------
@@ -94,6 +121,7 @@ const SaveAuditoriaInstallPendiente: React.FC<
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(`Error en: ${getKeysFormErrorsMessage(errors)}`);
       })}
+      saveTextBtn="Aprobar"
       rejectTextBtn="Solicitar Actualización"
       onReject={() => {
         setOpenRequestUpdOTModal(true);
