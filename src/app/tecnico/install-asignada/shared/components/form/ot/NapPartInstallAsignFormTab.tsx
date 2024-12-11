@@ -24,11 +24,13 @@ import RequestChangePortInstallAsignModal from './RequestChangePortInstallAsignM
 export type NapPartInstallAsignFormTabProps = {
   form: UseFormReturn<InstallAsignOTSaveFormData>;
   ordenTrabajo: OrdenTrabajo;
+  onlyView?: boolean;
 };
 
 const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
   form,
   ordenTrabajo,
+  onlyView = false, // auditoria
 }) => {
   ///* form ---------------------
   const { errors } = form.formState;
@@ -59,6 +61,8 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
             ptLabel="0px"
             showSectionTitle={false}
             onChangeCoordsInput={coords => {
+              if (onlyView) return;
+
               form.reset({
                 ...form.getValues(),
                 coordenadas: coords,
@@ -67,6 +71,9 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
                 puerto_nap: '' as any,
               });
             }}
+            disabledInputCoords={onlyView}
+            canDragMarker={!onlyView}
+            disabledAddressInput={onlyView}
           />
         </>
 
@@ -97,6 +104,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
               form.setValue('puerto_nap', '' as any);
               form.setValue('rawNap', nap);
             }}
+            disabled={onlyView}
           />
           {/* <CustomTextFieldNoForm
             label="NAP"
@@ -152,6 +160,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
               clearable={true}
               error={errors.puerto_nap}
               helperText={errors.puerto_nap?.message}
+              disabled={onlyView}
             />
 
             {/* <SingleIconButton
@@ -177,7 +186,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
         </>
       </>
 
-      {/* ================ modals ================ */}
+      {/* ================ modals - AHORA EL TECNICO MISMO LO CAMBIA ================ */}
       <RequestChangePortInstallAsignModal
         open={openChangePortDialog}
         onClose={() => setOpenChangePortDialog(false)}

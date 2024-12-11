@@ -13,11 +13,13 @@ import NapPartInstallAsignFormTab from './ot/NapPartInstallAsignFormTab';
 export type InstallAsigOrdenTrabajoFormTabProps = {
   form: UseFormReturn<InstallAsignOTSaveFormData>;
   ordenTrabajo: OrdenTrabajo;
+
+  onlyView?: boolean; // auditoria
 };
 
 const InstallAsigOrdenTrabajoFormTab: React.FC<
   InstallAsigOrdenTrabajoFormTabProps
-> = ({ form, ordenTrabajo }) => {
+> = ({ form, ordenTrabajo, onlyView = false }) => {
   ///* form ---------------------
   const { errors } = form.formState;
 
@@ -69,6 +71,7 @@ const InstallAsigOrdenTrabajoFormTab: React.FC<
           error={errors.potencia_ont}
           helperText={errors.potencia_ont?.message}
           size={gridSizeMdLg6}
+          disabled={onlyView}
         />
         <CustomTextArea
           label="Observaciones adicionales"
@@ -78,10 +81,15 @@ const InstallAsigOrdenTrabajoFormTab: React.FC<
           error={errors.observaciones_adicionales}
           helperText={errors.observaciones_adicionales?.message}
           required={false}
+          disabled={onlyView}
         />
       </>
 
-      <NapPartInstallAsignFormTab form={form} ordenTrabajo={ordenTrabajo!} />
+      <NapPartInstallAsignFormTab
+        form={form}
+        ordenTrabajo={ordenTrabajo!}
+        onlyView={onlyView}
+      />
     </>
   );
 };

@@ -41,6 +41,7 @@ import {
   sanitizeDataResetForm,
 } from '@/shared/utils';
 import { useInstalacionesStore } from '@/store/app';
+import { useUiStore } from '@/store/ui';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
 import { useONTInstallAsignadaOT } from '../../hooks';
 import {
@@ -160,6 +161,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
 
   ///* global states ---------------------
   const clearAll = useInstalacionesStore(state => state.clearAll);
+  const setIsGlobalLoading = useUiStore(state => state.setIsGlobalLoading);
 
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
@@ -354,6 +356,8 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       ToastWrapper.error(`La imagen ${emptyImageName} es requerida`);
       return;
     }
+
+    setIsGlobalLoading(true);
     // upload images ---
     // required
     const [
@@ -456,6 +460,8 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       });
       return;
     }
+
+    setIsGlobalLoading(false);
   };
 
   ///* effects ---------------------

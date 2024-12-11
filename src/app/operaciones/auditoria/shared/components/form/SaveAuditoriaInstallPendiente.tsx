@@ -1,12 +1,21 @@
 import { Tab } from '@mui/material';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import { ClienteFibraOTFotosPart } from '@/app/cliente/cliente/shared/components/fibra/servicio';
+import { ClienteFibraOTEquiposMaterialesPart } from '@/app/cliente/cliente/shared/components/fibra/servicio/equipos';
+import {
+  InstallAsigOrdenTrabajoFormTab,
+  InstallAsigTecnicoOTFormTab,
+} from '@/app/tecnico/install-asignada/shared/components/form';
 import {
   getKeysFormErrorsMessage,
   gridSize,
   gridSizeMdLg9,
   OrdenTrabajo,
   Preventa,
+  sanitizeDataResetForm,
   SolicitudServicio,
   ToastWrapper,
   useTabsOnly,
@@ -17,7 +26,6 @@ import {
   FormTabsOnly,
   TabsFormBoxScene,
 } from '@/shared/components';
-import { useForm } from 'react-hook-form';
 import { returnUrlAuditoriaInstallacionesOT } from '../../../pages/tables/AuditoriaInstalacionesMainPage';
 
 export type SaveAuditoriaInstallPendienteProps = {
@@ -40,7 +48,7 @@ const SaveAuditoriaInstallPendiente: React.FC<
   const form = useForm<AuditoriaInstallOTSaveFormData>({
     defaultValues: {},
   });
-  const { handleSubmit } = form;
+  const { handleSubmit, reset } = form;
 
   ///* mutations ----------------
 
@@ -49,6 +57,30 @@ const SaveAuditoriaInstallPendiente: React.FC<
     console.log('data', data);
     console.log('ordentrabajo', ordentrabajo);
   };
+
+  ///* effects ---------------------
+  useEffect(() => {
+    if (!ordentrabajo?.id) return;
+
+    const { solicitud_servicio_data, preventa_data, agendamiento_data } =
+      ordentrabajo;
+
+    const dataToReset = {
+      ...ordentrabajo,
+      ...solicitud_servicio_data,
+      ...preventa_data,
+      ...agendamiento_data,
+
+      serie_ont: ordentrabajo?.serie_ont || undefined,
+      metraje_autorizado_fibra:
+        ordentrabajo?.ciudad_data?.metraje_autorizado || '',
+      rawNap: ordentrabajo?.nap_data || undefined,
+    };
+
+    reset({
+      ...sanitizeDataResetForm(dataToReset),
+    } as AuditoriaInstallOTSaveFormData);
+  }, [ordentrabajo, reset]);
 
   return (
     <TabsFormBoxScene
@@ -60,15 +92,52 @@ const SaveAuditoriaInstallPendiente: React.FC<
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
           <Tab label="Información general" value={1} {...a11yProps(1)} />
-          <Tab label="Detalles de Activación" value={2} {...a11yProps(2)} />
-          <Tab label="Equipos" value={3} {...a11yProps(3)} />
+          <Tab label="Órden de trabajo" value={2} {...a11yProps(2)} />
+          <Tab label="Materiales" value={3} {...a11yProps(3)} />
+          <Tab label="Fotos" value={4} {...a11yProps(4)} />
         </FormTabsOnly>
       }
       formSize={gridSize}
     >
       {/* ========================= Datos Generales ========================= */}
       <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg9}>
-        GENERAL INFO
+        <InstallAsigTecnicoOTFormTab
+          form={form as any}
+          ordenTrabajo={ordentrabajo!}
+        />
+      </CustomTabPanel>
+
+      {/* ========================= Orden de Trabajo ========================= */}
+      <CustomTabPanel index={2} value={tabValue} gridSizeChild={gridSizeMdLg9}>
+        <InstallAsigOrdenTrabajoFormTab
+          form={form as any}
+          ordenTrabajo={ordentrabajo!}
+          onlyView
+        />
+      </CustomTabPanel>
+
+      {/* ========================= Materiales ========================= */}
+      <CustomTabPanel index={3} value={tabValue}>
+        <ClienteFibraOTEquiposMaterialesPart
+          serviceLine={
+            {
+              orden_trabajo_data: ordentrabajo,
+              preventa_data: ordentrabajo?.preventa_data,
+              ciudad_data: ordentrabajo?.ciudad_data,
+            } as any
+          }
+        />
+      </CustomTabPanel>
+
+      {/* ========================= Fotos ========================= */}
+      <CustomTabPanel index={4} value={tabValue}>
+        <ClienteFibraOTFotosPart
+          serviceLine={
+            {
+              orden_trabajo_data: ordentrabajo,
+            } as any
+          }
+        />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

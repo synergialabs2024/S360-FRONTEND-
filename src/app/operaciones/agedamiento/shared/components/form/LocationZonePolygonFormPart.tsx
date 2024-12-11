@@ -43,6 +43,7 @@ export type LocationZonePolygonFormPartProps = {
 
   disabledInputCoords?: boolean;
   canDragMarker?: boolean;
+  disabledAddressInput?: boolean;
 
   showNaps?: boolean;
 };
@@ -61,6 +62,7 @@ const LocationZonePolygonFormPart: React.FC<
   canDragMarker = true,
 
   showNaps = true,
+  disabledAddressInput = false,
 }) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
@@ -339,6 +341,7 @@ const LocationZonePolygonFormPart: React.FC<
         defaultValue={form.getValues().direccion_referencia}
         error={errors.direccion_referencia as any}
         helperText={errors.direccion_referencia?.message as any}
+        disabled={disabledAddressInput}
       />
 
       {watchedThereAreNaps ? (
