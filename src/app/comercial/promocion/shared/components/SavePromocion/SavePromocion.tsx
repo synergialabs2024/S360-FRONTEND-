@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,6 +69,9 @@ type SaveFormData = CreatePromocionParamsBase & {
 };
 
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
+  ///* State Global ----------------------
+  const [loadingArray, setLoadingArray] = useState(true);
+
   useCheckPermissionsArray(SAVE_PROMOCION_PERMISSIONS);
 
   ///* hooks ----------------
@@ -225,6 +228,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
   ///* effects
   useEffect(() => {
+    setLoadingArray(false);
     if (!promocion?.id) return;
 
     const allProvincias = (promocion.provincias as any[])?.includes('*');
@@ -366,7 +370,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 )
               : []
           }
-          isLoadingData={false}
+          isLoadingData={loadingArray}
           // errors
           control={form.control}
           error={errors.facturas_gratis as any}
@@ -395,7 +399,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 )
               : []
           }
-          isLoadingData={false}
+          isLoadingData={loadingArray}
           // errors
           control={form.control}
           error={errors.facturas_descuento as any}
