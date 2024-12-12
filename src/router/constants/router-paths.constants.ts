@@ -162,6 +162,12 @@ export const ROUTER_PATHS = {
     tipocomprobantesCrear: 'tipo-comprobantes/crear',
     tipocomprobantesEditar: 'tipo-comprobantes/editar/:uuid',
     tipocomprobantesNav: '/parametrizacion/tipo-comprobantes',
+
+    ///* calendario facturacion
+    calendariofacturaciones: 'calendario-facturaciones',
+    calendariofacturacionesCrear: 'calendario-facturaciones/crear',
+    calendariofacturacionesEditar: 'calendario-facturaciones/editar/:uuid',
+    calendariofacturacionesNav: '/parametrizacion/calendario-facturaciones',
   },
 
   // // =================================
