@@ -56,7 +56,7 @@ const FibraClientInfoPart: React.FC<FibraClientInfoPartProps> = ({
   useEffect(() => {
     if (!serviceLine) return;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { solicitud_servicio_data, preventa_data, ...rest } = serviceLine;
+    const { solicitud_servicio_data, preventa_data } = serviceLine;
 
     form.reset({
       ...solicitud_servicio_data,

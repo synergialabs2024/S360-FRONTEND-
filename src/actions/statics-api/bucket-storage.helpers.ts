@@ -61,7 +61,7 @@ export type UploadFileToBucketParams = CreateTemporaryUploadLinkParams & {
   bucketDir: BucketTypeEnumChoice;
 };
 
-type UploadFileToBucketReturn = {
+export type UploadFileToBucketReturn = {
   streamUlr: string;
 };
 export const uploadFileToBucket = async (

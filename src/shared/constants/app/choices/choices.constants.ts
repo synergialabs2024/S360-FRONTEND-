@@ -430,6 +430,7 @@ export enum BucketTypeEnumChoice {
   IMAGES_ACEPTACION_CONTRATO_CORRECCIONES = 'images/aceptacioncontrato/correcciones',
   IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
   IMAGES_ONT_MODEL = 'images/ont-model',
+  IMAGES_DOCUMENTO_BANCARIOS = 'images/documentos-bancarios',
 
   IMAGES_ORDENTRABAJO_INSTALACION = 'images/orden-trabajo/instalaciones',
 }
@@ -444,6 +445,8 @@ export enum BucketKeyNameEnumChoice {
   CEDULA_FRONTAL_CORRECCIONES = 'cedula_frontal_correcciones',
   COMPROBANTES_NO_PLANILLA = 'comprobantes_no_planilla',
   ONT_MODEL = 'ont_model_image',
+
+  DOCUMENTO_CUENTA_BANCARIA = 'documento_cuenta_bancaria',
 
   INSTALL_ASIGNADA_OT = 'install_asignada_ot',
 }

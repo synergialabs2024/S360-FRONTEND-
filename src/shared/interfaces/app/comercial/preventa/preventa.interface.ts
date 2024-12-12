@@ -59,6 +59,7 @@ export interface Preventa {
   url_foto_cedula_trasera: string;
   url_foto_documento_cuenta?: string;
   url_foto_vivienda: string;
+  url_foto_planilla: string; // 3ra edad
 
   url_foto_cedula_frontal_corregida: string;
   url_foto_aceptacion_corregida: string;

@@ -21,6 +21,9 @@ export type DocsSavePreventaStepProps = {
   // setDocumentoTarjetaCreditoImg: any;
   setViviendaImg: any;
   UploadImageDropZoneComponent: React.FC<UploadImagePreviewBtnProps>;
+
+  planillaServicioBasicoImg: File | null;
+  setPlanillaServicioBasicoImg: any;
 };
 
 const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
@@ -39,6 +42,10 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
   UploadImageDropZoneComponent,
 
   form,
+
+  // 3ra edad
+  planillaServicioBasicoImg,
+  setPlanillaServicioBasicoImg,
 }) => {
   ///* local states ---------------------
 
@@ -46,6 +53,7 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
 
   ///* form ---------------------
   const watchedRawPaymentMethod = form.watch('rawPaymentMethod');
+  const watchedIs3raEdad = form.watch('es_tercera_edad');
 
   ///* mutations ---------------------
   // const createSolUnblockSolServiceMutation =
@@ -108,6 +116,18 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
             selectedImage={documentoTarjetaCreditoImg}
             setSelectedImage={setDocumentoTarjetaCreditoImg}
           /> */}
+        </>
+      ) : null}
+
+      {/*  */}
+      {watchedIs3raEdad ? (
+        <>
+          <UploadImageDropZoneComponent
+            buttonLabel="Foto de la planilla de servicio básico"
+            selectedImage={planillaServicioBasicoImg}
+            setSelectedImage={setPlanillaServicioBasicoImg}
+            sizeContainer={gridSize}
+          />
         </>
       ) : null}
 

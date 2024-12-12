@@ -34,7 +34,10 @@ import {
   ResendOtpDataCache,
   SetCodigoOtpInCacheData,
 } from '@/actions/shared/cache-redis-types.interface';
-import { uploadFileToBucket } from '@/actions/statics-api';
+import {
+  uploadFileToBucket,
+  UploadFileToBucketReturn,
+} from '@/actions/statics-api';
 import {
   BucketKeyNameEnumChoice,
   BucketTypeEnumChoice,
@@ -168,6 +171,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setImage3: setDocumentoCuentaBancairaImg,
     image5: viviendaImg,
     setImage5: setViviendaImg,
+    image6: planillaServicioBasicoImg,
+    setImage6: setPlanillaServicioBasicoImg,
   } = useUploadImageGeneric();
 
   ///* local state -------------------
@@ -244,6 +249,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
   const watchedThereAreNaps = form.watch('thereAreNaps');
+
+  const watchedIs3raEdad = form.watch('es_tercera_edad');
 
   const watchedRawPaymentMethod = form.watch('rawPaymentMethod');
 
@@ -551,15 +558,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       return ToastWrapper.error(
         'La foto del documento de la cuenta bancaria es requerida cuando el método de pago es débito',
       );
-    // if (
-    //   !documentoTarjetaCreditoImg &&
-    //   watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO
-    // )
-    //   return ToastWrapper.error(
-    //     'La foto de la tarjeta de crédito es requerida cuando el método de pago es crédito',
-    //   );
     if (!viviendaImg)
       return ToastWrapper.error('La foto de la vivienda es requerida');
+    if (watchedIs3raEdad && !planillaServicioBasicoImg)
+      return ToastWrapper.error(
+        'La foto de la planilla de servicio básico es requerida para personas de la tercera edad',
+      );
 
     // upload images ----
     setIsCheckingCedula(true);
@@ -582,6 +586,25 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         }),
       ]);
 
+    let planillaPhotoObj: UploadFileToBucketReturn =
+      {} as UploadFileToBucketReturn;
+    if (watchedIs3raEdad) {
+      planillaPhotoObj = await uploadFileToBucket({
+        file: planillaServicioBasicoImg!,
+        file_name: BucketKeyNameEnumChoice.PLANILLA_SERVICIOS,
+        bucketDir: BucketTypeEnumChoice.IMAGES_PLANILLA_SERVICIOS,
+      });
+    }
+    let documentoCuentaBancariaObj: UploadFileToBucketReturn =
+      {} as UploadFileToBucketReturn;
+    if (watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO) {
+      documentoCuentaBancariaObj = await uploadFileToBucket({
+        file: documentoCuentaBancariaImg!,
+        file_name: BucketKeyNameEnumChoice.DOCUMENTO_CUENTA_BANCARIA,
+        bucketDir: BucketTypeEnumChoice.IMAGES_DOCUMENTO_BANCARIOS,
+      });
+    }
+
     // equipos venta ------------
     const detalleEquipos: EquipoVentasDetalle[] = equiposSeleccionados?.map(
       equipo => ({
@@ -600,6 +623,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       url_foto_cedula_trasera: cedulaPosteriorUrl?.streamUlr || '',
       url_foto_vivienda: viviendaUrl?.streamUlr || '',
       equipos_venta_detalle: detalleEquipos,
+
+      url_foto_planilla: planillaPhotoObj?.streamUlr || '',
+      url_foto_documento_cuenta: documentoCuentaBancariaObj?.streamUlr || '',
     });
     setIsCheckingCedula(false);
   };
@@ -1588,6 +1614,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
             setDocumentoCuentaBancairaImg={setDocumentoCuentaBancairaImg}
             // setDocumentoTarjetaCreditoImg={setDocumentoTarjetaCreditoImg}
             setViviendaImg={setViviendaImg}
+            planillaServicioBasicoImg={planillaServicioBasicoImg}
+            setPlanillaServicioBasicoImg={setPlanillaServicioBasicoImg}
           />
         </>
       )}
