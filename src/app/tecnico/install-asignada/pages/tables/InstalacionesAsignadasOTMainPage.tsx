@@ -11,6 +11,7 @@ import {
 import { EstadoOrdenTrabajoEnumChoice } from '@/shared/constants/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
+import InstalacionAsignadaEsperaTablePage from './InstalacionAsignadaEsperaTablePage';
 import InstalacionAsignadaOTByState from './InstalacionAsignadaOTByState';
 
 export const returnUrlInstallAsignadasOT =
@@ -45,9 +46,10 @@ const InstalacionesAsignadasOTMainPage: React.FC<
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <InstalacionAsignadaOTByState
+        <InstalacionAsignadaEsperaTablePage />
+        {/* <InstalacionAsignadaOTByState
           state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
-        />
+        /> */}
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <InstalacionAsignadaOTByState

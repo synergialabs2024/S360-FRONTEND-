@@ -21,17 +21,15 @@ import {
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useAuthStore } from '@/store/auth';
+import { InstallAsignPendienteTableBtns } from '../../shared/components/tables';
 
-export type InstalacionAsignadaOTByStateProps = {
-  state: EstadoOrdenTrabajoEnumChoice;
-  isRecoordinada?: boolean;
-};
+export type InstalacionAsignadaEsperaTablePageProps = {};
 
-const InstalacionAsignadaOTByState: React.FC<
-  InstalacionAsignadaOTByStateProps
-> = ({ state, isRecoordinada = false }) => {
+const InstalacionAsignadaEsperaTablePage: React.FC<
+  InstalacionAsignadaEsperaTablePageProps
+> = () => {
+  ///* hooks ---------------------
   useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
-
   const navigate = useNavigate();
 
   // server side filters - colums table
@@ -40,7 +38,7 @@ const InstalacionAsignadaOTByState: React.FC<
 
   const user = useAuthStore(s => s.user);
 
-  ///* table
+  ///* table ---------------------
   const {
     globalFilter,
     pagination,
@@ -50,7 +48,7 @@ const InstalacionAsignadaOTByState: React.FC<
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
 
-  ///* fetch data
+  ///* fetch data ---------------------
   const {
     data: OrdensTrabajoPagingRes,
     isLoading,
@@ -65,10 +63,7 @@ const InstalacionAsignadaOTByState: React.FC<
       filterByState: false,
 
       tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice.INSTALACION,
-      estado_orden_trabajo: state,
-
-      // apply only to PENDIENTE
-      is_recoordinada: isRecoordinada,
+      estado_orden_trabajo: EstadoOrdenTrabajoEnumChoice.PENDIENTE,
 
       // filter by tecnico
       ...(user?.role === UserRolesEnumChoice.TECNICO && {
@@ -77,10 +72,7 @@ const InstalacionAsignadaOTByState: React.FC<
     },
   });
 
-  ///* handlers
-  const calcEnableActionsColumn = () => {
-    return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
-  };
+  ///* handlers ---------------------
   const onEdit = (row: OrdenTrabajo) => {
     // requiere gestion de activaciones para poder subir cambios
     if (
@@ -96,12 +88,8 @@ const InstalacionAsignadaOTByState: React.FC<
     navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
   };
 
-  ///* columns
-  const {
-    installAsignadasEsperaOTColumns,
-    installGestionadasOTColumns,
-    installPreRechazadoOTColumns,
-  } = useColumnsOrdenTrabajo();
+  ///* columns ---------------------
+  const { installAsignadasEsperaOTColumns } = useColumnsOrdenTrabajo();
 
   return (
     <GridTableTabsContainerOnly>
@@ -115,16 +103,7 @@ const InstalacionAsignadaOTByState: React.FC<
       />
 
       <CustomTable<OrdenTrabajo>
-        columns={
-          // solicitudServicioBase
-          state === EstadoOrdenTrabajoEnumChoice.PENDIENTE
-            ? installAsignadasEsperaOTColumns
-            : state === EstadoOrdenTrabajoEnumChoice.FINALIZADO
-              ? installGestionadasOTColumns
-              : state === EstadoOrdenTrabajoEnumChoice.PRE_RECHAZADO
-                ? installPreRechazadoOTColumns
-                : installAsignadasEsperaOTColumns
-        }
+        columns={installAsignadasEsperaOTColumns}
         data={OrdensTrabajoPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -140,9 +119,9 @@ const InstalacionAsignadaOTByState: React.FC<
         rowCount={OrdensTrabajoPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={calcEnableActionsColumn()}
+        enableActionsColumn={true}
         // crud
-        canEdit={calcEnableActionsColumn()}
+        canEdit={true}
         onEdit={onEdit}
         onConditionEdit={ot => {
           if (user?.role !== UserRolesEnumChoice.TECNICO) return true;
@@ -154,9 +133,14 @@ const InstalacionAsignadaOTByState: React.FC<
         }}
         arrowIcon
         canDelete={false}
+        // custom btns
+        showCustomButtonsSpaceEnd={true}
+        customButtonsSpaceEnd={ot => {
+          return <InstallAsignPendienteTableBtns ot={ot!} />;
+        }}
       />
     </GridTableTabsContainerOnly>
   );
 };
 
-export default InstalacionAsignadaOTByState;
+export default InstalacionAsignadaEsperaTablePage;

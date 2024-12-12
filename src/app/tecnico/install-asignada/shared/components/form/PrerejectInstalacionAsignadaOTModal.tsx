@@ -105,6 +105,8 @@ const PrerejectInstalacionAsignadaOTModal: React.FC<
   }, [isLoading, motivosRechazoPagingRes, open]);
   useLoaders(isLoading);
 
+  if (!open) return null;
+
   return (
     <ScrollableDialogProps
       open={open}
