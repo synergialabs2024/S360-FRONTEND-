@@ -289,6 +289,30 @@ const UpdateCanalVentaPage = Loadable(
       ),
   ),
 );
+const CalendarioFacturacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/calendario-facturacion/pages/tables/CalendarioFacturacionPage'
+      ),
+  ),
+);
+const CreateCalendarioFacturacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/calendario-facturacion/pages/forms/CreateCalendarioFacturacionPage'
+      ),
+  ),
+);
+const UpdateCalendarioFacturacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/calendario-facturacion/pages/forms/UpdateCalendarioFacturacionPage'
+      ),
+  ),
+);
 // const EmpresasPage = Loadable(
 //   lazy(() => import('@/app/administration/empresa/pages/tables/EmpresasPage')),
 // );
@@ -1429,6 +1453,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.configuracionPlantillasEditar,
             element: <UpdateConfiguracionPlantillaPage />,
+          },
+
+          ///*Calendario Facturacion
+          {
+            path: ROUTER_PATHS.administracion.calendariofacturaciones,
+            element: <CalendarioFacturacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.calendariofacturacionesCrear,
+            element: <CreateCalendarioFacturacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.calendariofacturacionesEditar,
+            element: <UpdateCalendarioFacturacionPage />,
           },
 
           ///* USER ----------

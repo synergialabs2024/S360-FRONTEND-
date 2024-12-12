@@ -1,4 +1,5 @@
 export * from './area';
+export * from './calendario-facturacion';
 export * from './canal-venta';
 export * from './centro-costo';
 export * from './ciudad';

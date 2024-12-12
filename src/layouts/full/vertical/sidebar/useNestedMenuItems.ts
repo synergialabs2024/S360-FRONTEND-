@@ -210,6 +210,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.configuracionPlantillasNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'calendario-facturacion',
+              title: 'Calendario de facturación',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.calendariofacturacionesNav,
+            }),
 
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {

@@ -1,4 +1,5 @@
 export * from './administracion-red';
+export * from './administration';
 export * from './clientes';
 export * from './comercial';
 export * from './infraestructura';
