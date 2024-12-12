@@ -19,6 +19,8 @@ export enum UserRolesEnumChoice {
   AGENTE = 'AGENTE', // all created by himself
 
   TECNICO = 'TECNICO', // flotas - group tecnico
+  BODEGA = 'BODEGA', // flotas - group tecnico
+  PLAN_EXTERNA = 'PLAN EXTERNA', // flotas - group tecnico
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
@@ -26,6 +28,10 @@ export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.COORDINADOR,
   UserRolesEnumChoice.SUPERVISOR,
   UserRolesEnumChoice.AGENTE,
+
+  UserRolesEnumChoice.TECNICO,
+  UserRolesEnumChoice.BODEGA,
+  UserRolesEnumChoice.PLAN_EXTERNA,
 ];
 
 export enum InternetServiceTypeEnumChoice {
