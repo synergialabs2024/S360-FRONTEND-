@@ -66,7 +66,7 @@ const ConfigPlantillaClienteFibraPart: React.FC<
     CreateConfiguracionPlantillaParamsBase,
     Contrato
   >(
-    `/contrato/update-template-config/${configuracionplantilla?.id}/`,
+    `/contrato/update-template-config/${serviceLine?.contrato_data?.id}/`,
     LineaServicioTSQEnum.LINEASERVICIO,
     {
       customMessageToast:
@@ -79,9 +79,10 @@ const ConfigPlantillaClienteFibraPart: React.FC<
     if (!isValid) return;
 
     ///* upd
-    if (configuracionplantilla?.id) {
+    if (serviceLine?.contrato_data?.id) {
       updateConfiguracionPlantillaMutation.mutate({
         ...data,
+        dias_gracia: +(data.dias_gracia || 0),
       });
       return;
     }

@@ -3,9 +3,10 @@ import { UseFormReturn } from 'react-hook-form';
 import { useFetchIVAs } from '@/actions/app';
 import {
   CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ,
-  DIAS_GRACIA_ARRAY_OBJ,
+  DIAS_GRACIA_ARRAY_OBJ_NUM_VALUE,
   DIAS_PAGO_OBJ_01_TO_28,
   DiasAntesCreacionFacturaType,
+  DiasGraciaType,
   gridSizeMdLg3,
   gridSizeMdLg4,
   gridSizeMdLg6,
@@ -114,11 +115,11 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         size={gridSizeMdLg6}
       />
 
-      <CustomAutocomplete<DiasAntesCreacionFacturaType>
+      <CustomAutocomplete<DiasGraciaType>
         label="Días de gracia"
         name="dias_gracia"
         // options
-        options={DIAS_GRACIA_ARRAY_OBJ}
+        options={DIAS_GRACIA_ARRAY_OBJ_NUM_VALUE}
         valueKey="label"
         actualValueKey="value"
         defaultValue={form.getValues().dias_gracia}

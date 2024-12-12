@@ -296,6 +296,108 @@ export const DIAS_1_TO_25_OBJ = [
     value: '25',
   },
 ];
+export const DIAS_1_TO_25_OBJ_NUMBER_VALUE = [
+  {
+    label: '1 día',
+    value: 1,
+  },
+  {
+    label: '2 días',
+    value: 2,
+  },
+  {
+    label: '3 días',
+    value: 3,
+  },
+  {
+    label: '4 días',
+    value: 4,
+  },
+  {
+    label: '5 días',
+    value: 5,
+  },
+  {
+    label: '6 días',
+    value: 6,
+  },
+  {
+    label: '7 días',
+    value: 7,
+  },
+  {
+    label: '8 días',
+    value: 8,
+  },
+  {
+    label: '9 días',
+    value: 9,
+  },
+  {
+    label: '10 días',
+    value: 10,
+  },
+  {
+    label: '11 días',
+    value: 11,
+  },
+  {
+    label: '12 días',
+    value: 12,
+  },
+  {
+    label: '13 días',
+    value: 13,
+  },
+  {
+    label: '14 días',
+    value: 14,
+  },
+  {
+    label: '15 días',
+    value: 15,
+  },
+  {
+    label: '16 días',
+    value: 16,
+  },
+  {
+    label: '17 días',
+    value: 17,
+  },
+  {
+    label: '18 días',
+    value: 18,
+  },
+  {
+    label: '19 días',
+    value: 19,
+  },
+  {
+    label: '20 días',
+    value: 20,
+  },
+  {
+    label: '21 días',
+    value: 21,
+  },
+  {
+    label: '22 días',
+    value: 22,
+  },
+  {
+    label: '23 días',
+    value: 23,
+  },
+  {
+    label: '24 días',
+    value: 24,
+  },
+  {
+    label: '25 días',
+    value: 25,
+  },
+];
 
 export const CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ = [
   {
@@ -312,6 +414,17 @@ export const DIAS_GRACIA_ARRAY_OBJ = [
     value: '0',
   },
   ...DIAS_1_TO_25_OBJ,
+];
+export type DiasGraciaType = {
+  label: string;
+  value: number;
+};
+export const DIAS_GRACIA_ARRAY_OBJ_NUM_VALUE = [
+  {
+    label: '0 Días',
+    value: 0,
+  },
+  ...DIAS_1_TO_25_OBJ_NUMBER_VALUE,
 ];
 
 export type DiasRecordatorioPagoType = {

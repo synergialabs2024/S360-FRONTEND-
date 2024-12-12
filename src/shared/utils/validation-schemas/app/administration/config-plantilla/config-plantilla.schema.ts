@@ -42,10 +42,29 @@ export const configuracionPlantillaFormSchema = yup.object({
     .boolean()
     .typeError('El campo bajar velocidad es requerido')
     .required('El campo bajar velocidad es requerido'),
+
   aplica_reconexion: yup
     .boolean()
     .typeError('El campo aplica reconexion es requerido')
     .required('El campo aplica reconexion es requerido'),
+  valor_reconexion: yup
+    .string()
+    .when('aplica_reconexion', {
+      is: true,
+      then: schema =>
+        schema.required(
+          'El campo valor reconexion es requerido cuando aplica reconexion',
+        ),
+    })
+    .test(
+      'is-numeric-positive',
+      'El campo valor reconexion debe ser numérico',
+      value => {
+        if (!value) return true;
+        return !isNaN(Number(value));
+      },
+    ),
+
   aviso_pantalla: yup
     .string()
     .required('El campo aviso pantalla es requerido')
