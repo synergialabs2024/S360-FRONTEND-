@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { OrdenTrabajoTSQEnum } from '@/actions/app';
-import { useGenericPATCH } from '@/actions/shared';
+import { useGenericPOST } from '@/actions/shared';
 import {
   getKeysFormErrorsMessage,
   gridSize,
@@ -29,7 +29,9 @@ export type AuditoriaInstallRequestUpdOTProps = {
 type SaveFormData = Pick<
   OrdenTrabajo,
   'motivo_correccion' | 'observacion_correccion'
->;
+> & {
+  orden_trabajo: number;
+};
 
 const AuditoriaInstallRequestUpdOT: React.FC<
   AuditoriaInstallRequestUpdOTProps
@@ -47,8 +49,8 @@ const AuditoriaInstallRequestUpdOT: React.FC<
   } = form;
 
   ///* mutations ---------------------
-  const requestUpdOT = useGenericPATCH<SaveFormData, OrdenTrabajo>(
-    `/orden-trabajo/instalaciones/request-update/${ordenTrabajo?.id!}/`,
+  const requestUpdOT = useGenericPOST<SaveFormData, OrdenTrabajo>(
+    '/orden-trabajo/instalaciones/request-update/',
     OrdenTrabajoTSQEnum.ORDENTRABAJOS,
     {
       customMessageToast: 'Solicitud de corrección enviada con éxito',
@@ -65,6 +67,7 @@ const AuditoriaInstallRequestUpdOT: React.FC<
     requestUpdOT.mutate({
       motivo_correccion: data.motivo_correccion,
       observacion_correccion: data.observacion_correccion,
+      orden_trabajo: ordenTrabajo?.id!,
     });
   };
 

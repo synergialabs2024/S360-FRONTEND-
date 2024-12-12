@@ -26,6 +26,7 @@ export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.COORDINADOR,
   UserRolesEnumChoice.SUPERVISOR,
   UserRolesEnumChoice.AGENTE,
+  UserRolesEnumChoice.TECNICO,
 ];
 
 export enum InternetServiceTypeEnumChoice {

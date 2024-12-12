@@ -7,7 +7,7 @@ import {
 } from '@/app/tecnico/install-asignada/shared/components/form';
 import { gridSizeMdLg6, OrdenTrabajo } from '@/shared';
 import {
-  CustomTimeClockPicker,
+  CustomTimePicker,
   CustomTypoLabel,
   CustomTypoLabelEnum,
 } from '@/shared/components';
@@ -30,7 +30,7 @@ const ActivacionInstallOTGeneralInfoTab: React.FC<
       <DatosInstallOTFormTabPart ordenTrabajo={ordenTrabajo} />
 
       <>
-        <CustomTimeClockPicker
+        <CustomTimePicker
           label="Hora de entrada técnico"
           name="hora_inicio"
           control={form.control}
@@ -42,7 +42,7 @@ const ActivacionInstallOTGeneralInfoTab: React.FC<
             form.setValue('hora_fin', undefined);
           }}
         />
-        <CustomTimeClockPicker
+        <CustomTimePicker
           label="Hora de salida técnico"
           name="hora_fin"
           control={form.control}

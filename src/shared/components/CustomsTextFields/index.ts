@@ -7,6 +7,7 @@ export { default as CustomNumberTextField } from './CustomNumberTextField';
 export { default as CustomPasswordTextField } from './CustomPasswordTextField';
 export { default as CustomTextArea } from './CustomTextArea';
 export { default as CustomTextField } from './CustomTextField';
+export { default as CustomTimePicker } from './CustomTimePicker';
 export { default as IdentificacionTextField } from './IdentificacionTextField';
 
 export * from './no-form';
