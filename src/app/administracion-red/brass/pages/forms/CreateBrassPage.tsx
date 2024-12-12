@@ -5,8 +5,7 @@ import { SaveBrass } from '../../shared/components';
 export type CreateBrassPageProps = {};
 
 const CreateBrassPage: React.FC<CreateBrassPageProps> = () => {
-  // Pendiente a cambios
-  useCheckPermission(PermissionsEnum.administration_add_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_add_brass);
 
   return <SaveBrass title="Crear Brass" />;
 };

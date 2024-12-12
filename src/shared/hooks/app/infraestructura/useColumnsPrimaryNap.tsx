@@ -147,8 +147,9 @@ export const useColumnsPrimaryNap = () => {
               checked={row.original?.es_soterrado}
               onChangeChecked={() => {
                 if (
-                  // Pendiente a cambio
-                  !hasPermission(PermissionsEnum.infraestructura_change_nap)
+                  !hasPermission(
+                    PermissionsEnum.infraestructura_change_napprimary,
+                  )
                 )
                   return;
 
@@ -188,8 +189,9 @@ export const useColumnsPrimaryNap = () => {
               checked={row.original?.state}
               onChangeChecked={() => {
                 if (
-                  // Pendiente a cambio
-                  !hasPermission(PermissionsEnum.infraestructura_change_nap)
+                  !hasPermission(
+                    PermissionsEnum.infraestructura_change_napprimary,
+                  )
                 )
                   return;
 

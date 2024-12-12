@@ -45,8 +45,7 @@ export interface SaveBrassProps {
 type SaveFormData = CreateBrasParamsBase & {};
 
 const SaveBrass: React.FC<SaveBrassProps> = ({ title, brass }) => {
-  //Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_view_brass);
 
   ///* local state -----------------
   const [canWritePassword, setCanWritePassword] = useState<boolean>(true);

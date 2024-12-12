@@ -119,8 +119,7 @@ export const useColumnsBrass = () => {
               checked={row.original?.state}
               onChangeChecked={() => {
                 if (
-                  // Pendiente a cambio
-                  !hasPermission(PermissionsEnum.administration_change_pais)
+                  !hasPermission(PermissionsEnum.infraestructura_change_brass)
                 )
                   return;
 

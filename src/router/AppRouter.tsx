@@ -1917,7 +1917,7 @@ const AppRouter = [
             element: <CategoriasProductoPage />,
           },
           {
-            path: ROUTER_PATHS.inventario.categoriaProductoEditar,
+            path: ROUTER_PATHS.inventario.categoriaProductoCrear,
             element: <CreateCategoriaProductoPage />,
           },
           {

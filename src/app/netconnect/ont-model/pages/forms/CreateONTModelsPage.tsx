@@ -5,8 +5,7 @@ import { SaveONTModels } from '../../shared/components';
 export type CreateONTModelPageProps = {};
 
 const CreateONTModelPage: React.FC<CreateONTModelPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_add_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_add_ontmodel);
 
   return <SaveONTModels title="Crear Modelo de ONT" />;
 };
