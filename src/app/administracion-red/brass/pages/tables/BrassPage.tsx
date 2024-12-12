@@ -25,8 +25,7 @@ export const returnUrlBrassPage = ROUTER_PATHS.administracionRed.brassNav;
 export type BrassPageProps = {};
 
 const BrassPage: React.FC<BrassPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_view_brass);
 
   const navigate = useNavigate();
 
@@ -117,13 +116,11 @@ const BrassPage: React.FC<BrassPageProps> = () => {
           // // actions
           actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
           enableActionsColumn={hasAllPermissions([
-            //Pendiente a cambio
-            PermissionsEnum.administration_view_pais,
+            PermissionsEnum.infraestructura_view_brass,
           ])}
           // crud
           canEdit={hasAllPermissions([
-            //Pendiente a cambio
-            PermissionsEnum.administration_view_pais,
+            PermissionsEnum.infraestructura_view_brass,
           ])}
           onEdit={onEdit}
         />

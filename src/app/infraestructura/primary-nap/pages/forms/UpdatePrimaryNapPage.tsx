@@ -10,8 +10,7 @@ import { returnUrlPrimaryNapsPage } from '../tables/PrimaryNapPage';
 export type UpdatePrimaryNapPageProps = {};
 
 const UpdatePrimaryNapPage: React.FC<UpdatePrimaryNapPageProps> = () => {
-  //Pendiente a cambios
-  useCheckPermission(PermissionsEnum.infraestructura_change_nap);
+  useCheckPermission(PermissionsEnum.infraestructura_change_napprimary);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetPrimaryNap(uuid!);

@@ -10,8 +10,7 @@ import { useGetBras } from '@/actions/app';
 export type UpdateBrassPageProps = {};
 
 const UpdateBrassPage: React.FC<UpdateBrassPageProps> = () => {
-  // Pendiente a cambios
-  useCheckPermission(PermissionsEnum.administration_change_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_change_brass);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetBras(uuid!);

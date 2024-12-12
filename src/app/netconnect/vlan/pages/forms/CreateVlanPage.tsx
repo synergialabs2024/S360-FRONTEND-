@@ -5,8 +5,7 @@ import { PermissionsEnum } from '@/shared';
 export type CreateVlanPageProps = {};
 
 const CreateVlanPage: React.FC<CreateVlanPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_add_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_add_ontmodel);
 
   return <SaveVlan title="Crear Vlan" />;
 };

@@ -614,7 +614,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.oltsNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_PRIMARY_NAP, {
               id: 'primary-naps',
               title: 'NAPs Primarias',
               type: MenuItemType.ITEM,
@@ -758,7 +758,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracionRed.routersNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_BRASS, {
               id: 'brass',
               title: 'Brass',
               type: MenuItemType.ITEM,

@@ -17,7 +17,7 @@ import {
 } from '@/actions/app';
 import {
   NAPS_PORTS_QUANTITY_ARRAY,
-  SAVE_NAP_PERMISSIONS,
+  SAVE_NAP_PRIMARY_PERMISSIONS,
   ToastWrapper,
   useLoaders,
 } from '@/shared';
@@ -59,8 +59,7 @@ const SavePrimaryNap: React.FC<SavePrimaryNapProps> = ({
   title,
   primarynap,
 }) => {
-  //Pendiente a cambio
-  useCheckPermissionsArray(SAVE_NAP_PERMISSIONS);
+  useCheckPermissionsArray(SAVE_NAP_PRIMARY_PERMISSIONS);
 
   ///* hooks -----------------------
   const navigate = useNavigate();

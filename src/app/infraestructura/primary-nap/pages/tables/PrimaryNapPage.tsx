@@ -25,8 +25,7 @@ export const returnUrlPrimaryNapsPage =
 export type PrimaryNapsPageProps = {};
 
 const PrimaryNapsPage: React.FC<PrimaryNapsPageProps> = () => {
-  //Pendiente a cambio
-  useCheckPermission(PermissionsEnum.infraestructura_view_nap);
+  useCheckPermission(PermissionsEnum.infraestructura_view_napprimary);
 
   const navigate = useNavigate();
 
@@ -86,8 +85,9 @@ const PrimaryNapsPage: React.FC<PrimaryNapsPageProps> = () => {
     <SingleTableBoxScene
       title="Cajas Nap Primarias"
       createPageUrl={`${returnUrlPrimaryNapsPage}/crear`}
-      // Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.infraestructura_add_nap)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.infraestructura_add_napprimary,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -113,12 +113,12 @@ const PrimaryNapsPage: React.FC<PrimaryNapsPageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
-          // Pendiente a cambio
-          PermissionsEnum.infraestructura_change_nap,
+          PermissionsEnum.infraestructura_change_napprimary,
         )}
         // crud
-        //Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.infraestructura_change_nap)}
+        canEdit={hasPermission(
+          PermissionsEnum.infraestructura_change_napprimary,
+        )}
         onEdit={onEdit}
         canDelete={false}
       />

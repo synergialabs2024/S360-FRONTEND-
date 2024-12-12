@@ -9,8 +9,7 @@ import { SaveONTModels } from '../../shared/components';
 export type UpdateONTModelPageProps = {};
 
 const UpdateONTModelPage: React.FC<UpdateONTModelPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_change_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_change_ontmodel);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetONTModel(uuid!);
