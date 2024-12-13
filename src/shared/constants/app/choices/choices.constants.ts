@@ -19,8 +19,11 @@ export enum UserRolesEnumChoice {
   AGENTE = 'AGENTE', // all created by himself
 
   TECNICO = 'TECNICO', // flotas - group tecnico
-  BODEGA = 'BODEGA', // flotas - group tecnico
-  PLAN_EXTERNA = 'PLAN EXTERNA', // flotas - group tecnico
+  PLANTA_EXTERNA = 'PLANTA EXTERNA', // flotas - group tecnico
+  INVENTARIO = 'INVENTARIO', // flotas - group tecnico
+  OPERADOR_ACTIVACIONES = 'OPERADOR ACTIVACIONES', // all orden trabajo
+  // no filters (pool ips, netconect):
+  OPERADOR_NETWORKING = 'OPERADOR NETWORKING',
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
@@ -30,8 +33,10 @@ export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.AGENTE,
 
   UserRolesEnumChoice.TECNICO,
-  UserRolesEnumChoice.BODEGA,
-  UserRolesEnumChoice.PLAN_EXTERNA,
+  UserRolesEnumChoice.PLANTA_EXTERNA,
+  UserRolesEnumChoice.INVENTARIO,
+  UserRolesEnumChoice.OPERADOR_ACTIVACIONES,
+  UserRolesEnumChoice.OPERADOR_NETWORKING,
 ];
 
 export enum InternetServiceTypeEnumChoice {
@@ -759,20 +764,6 @@ export const ONT_MODEL_ETHERNET_WIFI_VOID_ARRAY_CHOICES = [
   ONTModel_Ethernet_Wifi_Void_EnumChoice.OCHO,
   ONTModel_Ethernet_Wifi_Void_EnumChoice.NUEVE,
   ONTModel_Ethernet_Wifi_Void_EnumChoice.DIEZ,
-];
-
-// // // AUDITORIA SERVICIO ==============================================
-export enum EstadoAuditoriaServicioEnumChoice {
-  CLIENTE_1 = 'CLIENTE_1',
-  CLIENTE_2 = 'CLIENTE_2',
-  CLIENTE_3 = 'CLIENTE_3',
-  CLIENTE_4 = 'CLIENTE_4',
-}
-export const ESTADO_AUDITORIA_SERVICIO_ARRAY_CHOICES = [
-  EstadoAuditoriaServicioEnumChoice.CLIENTE_1,
-  EstadoAuditoriaServicioEnumChoice.CLIENTE_2,
-  EstadoAuditoriaServicioEnumChoice.CLIENTE_3,
-  EstadoAuditoriaServicioEnumChoice.CLIENTE_4,
 ];
 
 // // // AUDITORIA CONSUMOS ==============================================
