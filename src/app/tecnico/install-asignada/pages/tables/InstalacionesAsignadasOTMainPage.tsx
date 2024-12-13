@@ -11,6 +11,7 @@ import {
 import { EstadoOrdenTrabajoEnumChoice } from '@/shared/constants/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
+import InstalacionAsignadaEsperaCoreccionTectOT from './InstalacionAsignadaEsperaCoreccionTectOT';
 import InstalacionAsignadaEsperaTablePage from './InstalacionAsignadaEsperaTablePage';
 import InstalacionAsignadaOTByState from './InstalacionAsignadaOTByState';
 
@@ -38,8 +39,10 @@ const InstalacionesAsignadasOTMainPage: React.FC<
       >
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
         <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
-
         <Tab label={'ESPERA REVISIÓN'} value={5} {...a11yProps(5)} />
+
+        <Tab label={'PENDIENTES CORECCIÓN'} value={6} {...a11yProps(6)} />
+
         <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
 
         <Tab label={'PRE RECHAZADAS'} value={3} {...a11yProps(3)} />
@@ -47,9 +50,6 @@ const InstalacionesAsignadasOTMainPage: React.FC<
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
         <InstalacionAsignadaEsperaTablePage />
-        {/* <InstalacionAsignadaOTByState
-          state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
-        /> */}
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <InstalacionAsignadaOTByState
@@ -57,12 +57,16 @@ const InstalacionesAsignadasOTMainPage: React.FC<
           isRecoordinada
         />
       </CustomTabPanel>
-
       <CustomTabPanel value={tabValue} index={5} ptGrid="0">
         <InstalacionAsignadaOTByState
           state={EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA}
         />
       </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={6} ptGrid="0">
+        <InstalacionAsignadaEsperaCoreccionTectOT />
+      </CustomTabPanel>
+
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <InstalacionAsignadaOTByState
           state={EstadoOrdenTrabajoEnumChoice.FINALIZADO}
