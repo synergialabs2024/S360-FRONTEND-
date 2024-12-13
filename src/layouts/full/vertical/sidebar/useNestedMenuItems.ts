@@ -575,12 +575,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.mantenimientoOperacion.flotasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'organizacion-horarios',
-              title: 'Organización de horarios',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.mantenimientoOperacion.planificadoresNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.MANTENIMIENTO_OPERACION_PLANIFICADOR,
+              {
+                id: 'organizacion-horarios',
+                title: 'Organización de horarios',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.mantenimientoOperacion.planificadoresNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.ADMIN_SECTORES, {
               id: 'sectores',
               title: 'Sectores',
