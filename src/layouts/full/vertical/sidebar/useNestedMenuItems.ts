@@ -590,7 +590,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.sectoresNav,
             }),
-            renderByModule(SidenavModulesEnum.ADMIN_PAISES, {
+            renderByModule(SidenavModulesEnum.LOGISTICA_TIPO_INSTALACION, {
               id: 'tipo-instalacion',
               title: 'Tipo de instalación',
               type: MenuItemType.ITEM,
