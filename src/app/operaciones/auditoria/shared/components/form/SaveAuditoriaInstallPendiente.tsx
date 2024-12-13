@@ -78,7 +78,7 @@ const SaveAuditoriaInstallPendiente: React.FC<
   );
 
   ///* handlers ---------------------
-  const onSave = async () => {
+  const onSave = () => {
     setConfirmDialog({
       isOpen: true,
       title: '¿Estás seguro de aprobar la orden de trabajo?',

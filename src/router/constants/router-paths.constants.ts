@@ -360,6 +360,8 @@ export const ROUTER_PATHS = {
     instalacionesAsignadas: 'instalaciones-asignadas',
     instalacionAsignadaOT: 'instalaciones-asignadas/:uuid',
     instalacionesAsignadasNav: '/tecnico/instalaciones-asignadas',
+
+    instalPendingUpdDatos: 'correccion-datos/:uuid',
   },
 
   /////* Supervision Comercial ----------------

@@ -128,3 +128,53 @@ export const prerejectInstallOTAsigSchema = yup.object({
       'El campo observacion prerechazo no debe exceder los 200 caracteres',
     ),
 });
+
+// // UPD data required by auditoria --------------------
+export const updDataInstallOtByTechReqAuditSchema = yup.object({
+  direccion_referencia: yup
+    .string()
+    .required('El campo dirección es requerido')
+    .max(200, 'El campo dirección no debe exceder los 200 caracteres'),
+
+  potencia_ont: yup
+    .number()
+    .required('El campo potencia ont es requerido')
+    .typeError('El campo potencia ont debe ser un número')
+    .positive('El campo potencia ont debe ser un número positivo')
+    .min(1, 'El campo potencia ont debe ser mayor a 0'),
+
+  observaciones_adicionales: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      685,
+      'El campo observaciones adicionales no debe exceder los 685 caracteres',
+    ),
+
+  coordenadas: yup
+    .string()
+    .required('El campo coordenadas es requerido')
+    .max(200, 'El campo coordenadas no debe exceder los 200 caracteres'),
+  sector: yup
+    .number()
+    .required('El campo sector es requerido')
+    .typeError('El campo sector es requerido'),
+  zona: yup
+    .number()
+    .required('El campo zona es requerido')
+    .typeError('El campo zona es requerido'),
+
+  nap: yup
+    .number()
+    .required('El campo nap es requerido')
+    .typeError('El campo nap es requerido'),
+  distancia_nap: yup
+    .number()
+    .required('El campo distancia nap es requerido')
+    .typeError('El campo distancia nap es requerido'),
+  puerto_nap: yup
+    .number()
+    .required('El campo puerto nap es requerido')
+    .typeError('El campo puerto nap es requerido'),
+});

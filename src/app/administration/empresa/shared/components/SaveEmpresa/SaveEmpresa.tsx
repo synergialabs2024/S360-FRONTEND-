@@ -7,6 +7,7 @@ import {
   useCreateEmpresa,
   useUpdateEmpresa,
 } from '@/actions/app';
+import { SAVE_EMPRESA_PERMISSIONS } from '@/shared';
 import {
   CustomNumberTextField,
   CustomTextField,
@@ -15,12 +16,11 @@ import {
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useUploadImageGeneric } from '@/shared/hooks';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { Empresa } from '@/shared/interfaces';
-import { uploadFileUtils } from '@/shared/utils';
+import { uploadFileUtils } from '@/shared/utils/statics';
 import { ToastWrapper } from '@/shared/wrappers';
 import { returnUrlEmpresasPage } from '../../../pages/tables/EmpresasPage';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
-import { SAVE_EMPRESA_PERMISSIONS } from '@/shared';
 
 export interface SaveEmpresaProps {
   title: string;

@@ -11,13 +11,13 @@ import {
 } from '@/shared';
 import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { SaveAuditoriaInstallPendiente } from '../../shared/components/form';
-import { returnUrlAuditoriaInstallacionesOT } from '../tables/AuditoriaInstalacionesMainPage';
+import { SaveUpdInfoInstallOT } from '../../shared/components/form-upd';
+import { returnUrlInstallAsignadasOT } from '../tables/InstalacionesAsignadasOTMainPage';
 
-export type AuditoriaInstallPendienteFormPageProps = {};
+export type InstallAsigOTUpdInfoPageProps = {};
 
-const AuditoriaInstallPendienteFormPage: React.FC<
-  AuditoriaInstallPendienteFormPageProps
+const InstallAsigOTUpdInfoPage: React.FC<
+  InstallAsigOTUpdInfoPageProps
 > = () => {
   useCheckPermission(PermissionsEnum.tecnico_change_ordentrabajo);
 
@@ -33,36 +33,37 @@ const AuditoriaInstallPendienteFormPage: React.FC<
     if (
       !!data &&
       (ot?.estado_orden_trabajo !==
-        EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA ||
-        ot?.estado_auditoria !== EstadoAuditoriaOTInstallEnumChoice.PENDIENTE)
+        EstadoOrdenTrabajoEnumChoice.ESPERA_CORRECCION ||
+        ot?.estado_auditoria !==
+          EstadoAuditoriaOTInstallEnumChoice.ESPERA_CORRECCION)
     ) {
       ToastWrapper.error(
-        'La instalación pendiente de auditoría no se encuentra en estado correcto',
+        'La instalación pendiente de corrección no se encuentra en estado correcto',
       );
     }
-  }, [data, isLoading, isRefetching]);
+  }, [data, data?.data, isLoading, isRefetching]);
 
   if (isLoading || isRefetching) return null;
   if (
     !data?.data?.id ||
     data?.data?.estado_orden_trabajo !==
-      EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA ||
+      EstadoOrdenTrabajoEnumChoice.ESPERA_CORRECCION ||
     data?.data?.estado_auditoria !==
-      EstadoAuditoriaOTInstallEnumChoice.PENDIENTE
+      EstadoAuditoriaOTInstallEnumChoice.ESPERA_CORRECCION
   )
-    return <Navigate to={returnUrlAuditoriaInstallacionesOT} />;
+    return <Navigate to={returnUrlInstallAsignadasOT} />;
 
   return (
-    <SaveAuditoriaInstallPendiente
+    <SaveUpdInfoInstallOT
       titleNode={
         <CustomTitleRefNumber
-          initialText="Revisión de instalación"
+          initialText="Actualización de datos de instalación"
           referenceNumber={data?.data?.numero_referencia!}
         />
       }
-      ordentrabajo={data?.data}
+      ordenTrabajo={data?.data}
     />
   );
 };
 
-export default AuditoriaInstallPendienteFormPage;
+export default InstallAsigOTUpdInfoPage;

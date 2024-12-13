@@ -1089,6 +1089,14 @@ const AuditoriaInstallPendienteFormPage = Loadable(
       ),
   ),
 );
+const InstallAsigOTUpdInfoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tecnico/install-asignada/pages/forms/InstallAsigOTUpdInfoPage'
+      ),
+  ),
+);
 
 ///* cliente ------------
 const ClienteModule = Loadable(
@@ -2120,6 +2128,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tecnico.instalacionAsignadaOT,
             element: <InstalacionAsignadaOT />,
+          },
+          {
+            path: ROUTER_PATHS.tecnico.instalPendingUpdDatos,
+            element: <InstallAsigOTUpdInfoPage />,
           },
         ],
       },
