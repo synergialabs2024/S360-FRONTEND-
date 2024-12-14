@@ -15,17 +15,20 @@ export type InstallAsigOrdenTrabajoFormTabProps = {
   ordenTrabajo: OrdenTrabajo;
 
   onlyView?: boolean; // auditoria
+  customCardNode?: React.ReactNode;
 };
 
 const InstallAsigOrdenTrabajoFormTab: React.FC<
   InstallAsigOrdenTrabajoFormTabProps
-> = ({ form, ordenTrabajo, onlyView = false }) => {
+> = ({ form, ordenTrabajo, onlyView = false, customCardNode = null }) => {
   ///* form ---------------------
   const { errors } = form.formState;
 
   return (
     <>
       <CustomTypoLabel text="Detalle de la orden de trabajo" />
+      <>{customCardNode}</>
+
       <>
         <CustomTextFieldNoForm
           label="IPv4"

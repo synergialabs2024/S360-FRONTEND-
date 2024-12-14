@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useFetchOrdenTrabajos } from '@/actions/app';
 import {
   EstadoAuditoriaOTInstallEnumChoice,
+  MotivoCorreccionOTAuditoriaEnumChoice,
   OrdenTrabajo,
   PermissionsEnum,
   TABLE_CONSTANTS,
@@ -79,9 +80,22 @@ const AuditoriaInstalacionByStatePage: React.FC<
       navigate(`/operaciones/auditoria/instalaciones/${row.uuid}`);
     } else if (
       estadoAuditoria ===
-      EstadoAuditoriaOTInstallEnumChoice.ACTUALIZADOS_TECNICO_ESPERA_REVISION
+        EstadoAuditoriaOTInstallEnumChoice.ACTUALIZADOS_TECNICO_ESPERA_REVISION &&
+      row.motivo_correccion ===
+        MotivoCorreccionOTAuditoriaEnumChoice.INFORMACION_INCORRECTA
     ) {
-      navigate(`/operaciones/auditoria/instalaciones-actualizadas/${row.uuid}`);
+      navigate(
+        `/operaciones/auditoria/instalaciones-actualizadas/datos/${row.uuid}`,
+      );
+    } else if (
+      estadoAuditoria ===
+        EstadoAuditoriaOTInstallEnumChoice.ACTUALIZADOS_TECNICO_ESPERA_REVISION &&
+      row.motivo_correccion ===
+        MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS
+    ) {
+      navigate(
+        `/operaciones/auditoria/instalaciones-actualizadas/fotos/${row.uuid}`,
+      );
     }
   };
 

@@ -292,6 +292,9 @@ export const ROUTER_PATHS = {
     auditoriaInstalaciones: 'auditoria/instalaciones',
     auditoriaInstalacion: 'auditoria/instalaciones/:uuid',
     auditoriaNav: '/operaciones/auditoria/instalaciones',
+    auditOtInstallFixedData: 'auditoria/instalaciones-actualizadas/datos/:uuid',
+    auditOtInstallFixedPhotos:
+      'auditoria/instalaciones-actualizadas/fotos/:uuid',
   },
 
   /////* Infraestructura ----------------

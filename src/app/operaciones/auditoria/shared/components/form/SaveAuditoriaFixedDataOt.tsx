@@ -1,11 +1,13 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Tab } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { OrdenTrabajoTSQEnum } from '@/actions/app';
 import { useGenericPATCH } from '@/actions/shared';
+import {
+  InstallAsigOrdenTrabajoFormTab,
+  InstallAsigTecnicoOTFormTab,
+} from '@/app/tecnico/install-asignada/shared/components/form';
 import {
   getKeysFormErrorsMessage,
   gridSize,
@@ -15,7 +17,6 @@ import {
   sanitizeDataResetForm,
   SolicitudServicio,
   ToastWrapper,
-  updDataInstallOtByTechReqAuditSchema,
   useTabsOnly,
 } from '@/shared';
 import {
@@ -26,26 +27,29 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
-import InstallAsigOrdenTrabajoFormTab from '../form/InstallAsigOrdenTrabajoFormTab';
-import InstallAsigTecnicoOTFormTab from '../form/InstallAsigTecnicoOTFormTab';
+import { Tab } from '@mui/material';
+import { returnUrlAuditoriaInstallacionesOT } from '../../../pages/tables/AuditoriaInstalacionesMainPage';
+import AuditoriaInstallRequestUpdOT from './AuditoriaInstallRequestUpdOT';
 
-export type SaveUpdInfoInstallOTProps = {
-  ordenTrabajo: OrdenTrabajo;
+export type SaveAuditoriaFixedDataOtProps = {
+  ot: OrdenTrabajo;
   titleNode: React.ReactNode;
 };
 
-type SaveUpdInfoInstallOTForm = Partial<OrdenTrabajo> &
+type AuditoriaInstallFixedDataOTSaveFormData = Partial<OrdenTrabajo> &
   Partial<SolicitudServicio> &
   Partial<Preventa> & {};
 
-const SaveUpdInfoInstallOT: React.FC<SaveUpdInfoInstallOTProps> = ({
-  ordenTrabajo,
+const SaveAuditoriaFixedDataOt: React.FC<SaveAuditoriaFixedDataOtProps> = ({
+  ot,
   titleNode,
 }) => {
   ///* hooks --------------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly();
+
+  ///* local states ---------------------
+  const [openRequestUpdOTModal, setOpenRequestUpdOTModal] = useState(false);
 
   ///* global state ---------------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -54,20 +58,18 @@ const SaveUpdInfoInstallOT: React.FC<SaveUpdInfoInstallOTProps> = ({
   );
 
   ///* form ---------------------
-  const form = useForm<SaveUpdInfoInstallOTForm>({
-    resolver: yupResolver(updDataInstallOtByTechReqAuditSchema) as any,
-  });
+  const form = useForm<AuditoriaInstallFixedDataOTSaveFormData>();
   const { handleSubmit, reset } = form;
 
   ///* mutations ---------------------
   const approveOtInstall = useGenericPATCH<any, OrdenTrabajo>(
-    `/orden-trabajo/instalaciones/fix-data/${ordenTrabajo?.id!}/`,
+    `/orden-trabajo/instalaciones/audit-uploaded/${ot?.id!}/`,
     OrdenTrabajoTSQEnum.ORDENTRABAJOS,
     {
       customMessageToast:
-        'Orden de trabajo de instalación actualizada con éxito',
+        'Orden de trabajo de instalación actualizada aprobada con éxito',
       navigate,
-      // returnUrl: returnUrlInstallAsignadasOT,
+      returnUrl: returnUrlAuditoriaInstallacionesOT,
       customOnSuccess() {
         setConfirmDialogIsOpen(false);
       },
@@ -75,60 +77,53 @@ const SaveUpdInfoInstallOT: React.FC<SaveUpdInfoInstallOTProps> = ({
   );
 
   ///* handlers ---------------------
-  const onSave = (data: SaveUpdInfoInstallOTForm) => {
+  const onSave = () => {
     setConfirmDialog({
       isOpen: true,
-      title: '¿Estás seguro de guardar los cambios?',
-      subtitle:
-        'Una vez guardados no podrás modificar la información y esta se enviará a revisión',
+      title:
+        '¿Estás seguro de aprobar la actualización de la orden de trabajo?',
+      subtitle: 'Una vez aprobada no se podrá modificar',
       onConfirm: () => {
-        approveOtInstall.mutate({
-          direccion_referencia: data.direccion_referencia,
-          potencia_ont: data.potencia_ont,
-          observaciones_adicionales: data.observaciones_adicionales,
-          coordenadas: data.coordenadas,
-          sector: data.sector,
-          zona: data.zona,
-          nap: data.nap,
-          distancia_nap: data.distancia_nap,
-          puerto_nap: data.puerto_nap,
-        });
+        approveOtInstall.mutate({});
       },
     });
   };
 
   ///* effects ---------------------
   useEffect(() => {
-    if (!ordenTrabajo?.id) return;
+    if (!ot?.id) return;
 
-    const { solicitud_servicio_data, preventa_data, agendamiento_data } =
-      ordenTrabajo;
+    const { solicitud_servicio_data, preventa_data, agendamiento_data } = ot;
 
     const dataToReset = {
-      ...ordenTrabajo,
+      ...ot,
       ...solicitud_servicio_data,
       ...preventa_data,
       ...agendamiento_data,
 
-      serie_ont: ordenTrabajo?.serie_ont || undefined,
-      metraje_autorizado_fibra:
-        ordenTrabajo?.ciudad_data?.metraje_autorizado || '',
-      rawNap: ordenTrabajo?.nap_data || undefined,
+      serie_ont: ot?.serie_ont || undefined,
+      metraje_autorizado_fibra: ot?.ciudad_data?.metraje_autorizado || '',
+      rawNap: ot?.nap_data || undefined,
     };
 
     reset({
       ...sanitizeDataResetForm(dataToReset),
-    } as SaveUpdInfoInstallOTForm);
-  }, [ordenTrabajo, reset]);
+    } as AuditoriaInstallFixedDataOTSaveFormData);
+  }, [ot, reset]);
 
   return (
     <TabsFormBoxScene
       titlePageNode={titleNode}
       // action btns
-      onCancel={() => navigate(returnUrlInstallAsignadasOT)}
+      onCancel={() => navigate(returnUrlAuditoriaInstallacionesOT)}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(`Error en: ${getKeysFormErrorsMessage(errors)}`);
       })}
+      saveTextBtn="Aprobar"
+      rejectTextBtn="Solicitar Actualización"
+      onReject={() => {
+        setOpenRequestUpdOTModal(true);
+      }}
       // tabs
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
@@ -140,29 +135,34 @@ const SaveUpdInfoInstallOT: React.FC<SaveUpdInfoInstallOTProps> = ({
     >
       {/* ========================= Datos Generales ========================= */}
       <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg9}>
-        <InstallAsigTecnicoOTFormTab
-          form={form as any}
-          ordenTrabajo={ordenTrabajo!}
-        />
+        <InstallAsigTecnicoOTFormTab form={form as any} ordenTrabajo={ot!} />
       </CustomTabPanel>
 
       {/* ========================= Orden de Trabajo ========================= */}
       <CustomTabPanel index={2} value={tabValue} gridSizeChild={gridSizeMdLg9}>
         <InstallAsigOrdenTrabajoFormTab
           form={form as any}
-          ordenTrabajo={ordenTrabajo!}
+          ordenTrabajo={ot!}
+          onlyView
           customCardNode={
             <CustomCardAlert
               sizeType="medium"
               alertSeverity="info"
               alertTitle="OBSERVACIONES"
-              alertContentNode={<>{ordenTrabajo?.observacion_correccion}</>}
+              alertContentNode={<>{ot?.observacion_correccion}</>}
             />
           }
         />
       </CustomTabPanel>
+
+      {/* ========================= modals ========================= */}
+      <AuditoriaInstallRequestUpdOT
+        open={openRequestUpdOTModal}
+        onClose={() => setOpenRequestUpdOTModal(false)}
+        ordenTrabajo={ot!}
+      />
     </TabsFormBoxScene>
   );
 };
 
-export default SaveUpdInfoInstallOT;
+export default SaveAuditoriaFixedDataOt;
