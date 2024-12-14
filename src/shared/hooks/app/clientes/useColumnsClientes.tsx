@@ -106,7 +106,7 @@ export const useColumnsClientes = () => {
       {
         accessorKey: 'linea_servicio__identificacion_pago',
         header: 'IDENTIFICACION DE PAGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
