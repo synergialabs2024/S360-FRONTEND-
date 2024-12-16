@@ -1054,6 +1054,12 @@ const InstalacionAsignadaOT = Loadable(
       ),
   ),
 );
+const UpdateCorreccionTec = Loadable(
+  lazy(
+    () =>
+      import('@/app/tecnico/install-asignada/pages/forms/UpdateCorreccionTec'),
+  ),
+);
 
 //* activaciones ---------
 const ActivacionesInstalacionesMainPage = Loadable(
@@ -2144,6 +2150,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tecnico.instalPendingUpdDatos,
             element: <InstallAsigOTUpdInfoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tecnico.instalacionesCorreccionFotos,
+            element: <UpdateCorreccionTec />,
           },
         ],
       },

@@ -365,6 +365,7 @@ export const ROUTER_PATHS = {
     instalacionesAsignadasNav: '/tecnico/instalaciones-asignadas',
 
     instalPendingUpdDatos: 'correccion-datos/:uuid',
+    instalacionesCorreccionFotos: 'coreccion-fotos/:uuid',
   },
 
   /////* Supervision Comercial ----------------

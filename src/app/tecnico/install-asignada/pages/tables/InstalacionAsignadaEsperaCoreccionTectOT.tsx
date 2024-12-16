@@ -60,11 +60,6 @@ const InstalacionAsignadaEsperaCoreccionTectOT: React.FC<
       tipo_orden_trabajo: TipoOrdenTrabajoEnumChoice.INSTALACION,
       estado_orden_trabajo: EstadoOrdenTrabajoEnumChoice.ESPERA_CORRECCION,
       estado_auditoria: EstadoAuditoriaOTInstallEnumChoice.ESPERA_CORRECCION,
-
-      // // filter by tecnico
-      // ...(user?.role === UserRolesEnumChoice.TECNICO && {
-      //   oneAtTime: true,
-      // }),
     },
   });
 
