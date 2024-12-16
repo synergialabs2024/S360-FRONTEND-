@@ -1,6 +1,9 @@
 import * as yup from 'yup';
 
-import { TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES } from '@/shared/constants';
+import {
+  CodigoModeloProductoEnumChoice,
+  TIPO_ACTUALIZACION_ACTIVACIONES_ARRAY_CHOICES,
+} from '@/shared/constants';
 
 export const ordenTrabajoFormSchema = yup.object({
   hora_inicio: yup
@@ -33,43 +36,71 @@ export const ordenTrabajoFormSchema = yup.object({
     .typeError('El campo distancia nap es requerido'),
 
   // INVENTARIO -------------------
-  punta_inicial_fibra: yup
-    .number()
-    .required('El campo punta inicial fibra es requerido')
-    .typeError('El campo punta inicial fibra debe ser un número')
-    .positive('El campo punta inicial fibra debe ser un número positivo')
-    .min(1, 'El campo punta inicial fibra debe ser mayor a 0'),
-  punta_final_fibra: yup
-    .number()
-    .required('El campo punta final fibra es requerido')
-    .typeError('El campo punta final fibra debe ser un número')
-    .positive('El campo punta final fibra debe ser un número positivo')
-    .min(1, 'El campo punta final fibra debe ser mayor a 0')
-    .test(
-      'punta_final_fibra',
-      'La punta final fibra debe ser mayor a la punta inicial fibra',
-      function (value) {
-        return value > this.parent.punta_inicial_fibra;
-      },
-    ),
-  metraje_utilizado_fibra: yup
+  modelo_ont_wifi: yup
     .string()
-    .required('El campo metraje utilizado fibra es requerido')
+    .required('El campo modelo ont wifi es requerido')
+    .max(200, 'El campo modelo ont wifi no debe exceder los 200 caracteres'),
+  modelo_fibra_utilizada: yup
+    .string()
+    .required('El campo modelo fibra utilizada es requerido')
     .max(
       200,
-      'El campo metraje utilizado fibra no debe exceder los 200 caracteres',
-    )
-    .matches(
-      /^[0-9]+(\.[0-9]+)?$/,
-      'El campo metraje utilizado fibra debe ser un número',
-    )
-    .test(
-      'metraje_utilizado_fibra',
-      'El campo metraje utilizado fibra debe ser mayor a 0',
-      function (value) {
-        return parseFloat(value) > 0;
-      },
+      'El campo modelo fibra utilizada no debe exceder los 200 caracteres',
     ),
+  punta_inicial_fibra: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('modelo_fibra_utilizada', {
+      is: (value: any) => value === CodigoModeloProductoEnumChoice.FIBRA_GRANEL,
+      then: schema =>
+        schema
+          .required('El campo punta inicial fibra es requerido')
+          .typeError('El campo punta inicial fibra debe ser un número')
+          .positive('El campo punta inicial fibra debe ser un número positivo')
+          .min(1, 'El campo punta inicial fibra debe ser mayor a 0'),
+    }),
+  punta_final_fibra: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('modelo_fibra_utilizada', {
+      is: (value: any) => value === CodigoModeloProductoEnumChoice.FIBRA_GRANEL,
+      then: schema =>
+        schema
+          .required('El campo punta final fibra es requerido')
+          .typeError('El campo punta final fibra debe ser un número')
+          .positive('El campo punta final fibra debe ser un número positivo')
+          .min(1, 'El campo punta final fibra debe ser mayor a 0')
+          .test(
+            'punta_final_fibra',
+            'La punta final fibra debe ser mayor a la punta inicial fibra',
+            function (value) {
+              return value > this.parent.punta_inicial_fibra;
+            },
+          ),
+    }),
+  metraje_utilizado_fibra: yup.string().when('modelo_fibra_utilizada', {
+    is: (value: any) => value === CodigoModeloProductoEnumChoice.FIBRA_GRANEL,
+    then: schema =>
+      schema
+        .required('El campo metraje utilizado fibra es requerido')
+        .max(
+          200,
+          'El campo metraje utilizado fibra no debe exceder los 200 caracteres',
+        )
+        .matches(
+          /^[0-9]+(\.[0-9]+)?$/,
+          'El campo metraje utilizado fibra debe ser un número',
+        )
+        .test(
+          'metraje_utilizado_fibra',
+          'El campo metraje utilizado fibra debe ser mayor a 0',
+          function (value) {
+            return parseFloat(value) > 0;
+          },
+        ),
+  }),
 
   // ACTIVACION -------------------
   estado_activacion: yup

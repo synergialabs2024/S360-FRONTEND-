@@ -13,7 +13,11 @@ export type CreateInstalacionAsignadaOTOperaciones = Pick<
 ///* ACTIVACION ===================================
 export type ActivateInstalacionOTData = Pick<
   OrdenTrabajo,
-  'serie_ont' | 'hora_inicio' | 'hora_fin' | 'observacion_activacion'
+  | 'serie_ont'
+  | 'hora_inicio'
+  | 'hora_fin'
+  | 'observacion_activacion'
+  | 'modelo_ont_wifi'
 > & {
   producto: number;
 };
@@ -36,6 +40,7 @@ export type UploadInstalacionOTAsignData = Pick<
   | 'url_foto_nap'
   | 'url_foto_potencia_nap'
   | 'url_foto_test_speed'
+  | 'modelo_fibra_utilizada'
   // | 'url_foto_ont_encontrado_casa'
   // | 'url_foto_premio'
   // | 'url_foto_acta_entrega_ups'

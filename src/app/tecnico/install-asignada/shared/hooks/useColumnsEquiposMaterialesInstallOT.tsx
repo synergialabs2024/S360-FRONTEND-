@@ -16,6 +16,7 @@ type UseColumnsEquiposPreventa = {
 
   showCurrentStockColumn?: boolean;
   showModelColumn?: boolean;
+  showModelOnlyViewColumn?: boolean;
 };
 
 type MRTUbicacionProductoTableType = {
@@ -27,6 +28,7 @@ export const useColumnsEquiposMaterialesInstallOT = ({
   onActionEquiposRowNode,
   showCurrentStockColumn = true,
   showModelColumn = true,
+  showModelOnlyViewColumn = false,
 }: UseColumnsEquiposPreventa = {}) => {
   ///* base columns -------------------------------
   const baseColumnsEquiposMaterialesInstallOT01 = useMemo<
@@ -45,6 +47,7 @@ export const useColumnsEquiposMaterialesInstallOT = ({
         header: 'NOMBRE',
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
+
       ...(showModelColumn
         ? [
             {
@@ -52,6 +55,16 @@ export const useColumnsEquiposMaterialesInstallOT = ({
               header: 'MODELO',
               Cell: ({ row }: MRTUbicacionProductoTableType) =>
                 emptyCellNested(row, ['modelo_data', 'nombre']),
+            },
+          ]
+        : []),
+      ...(showModelOnlyViewColumn
+        ? [
+            {
+              accessorKey: 'producto__modelo__nombre',
+              header: 'MODELO',
+              Cell: ({ row }: MRTUbicacionProductoTableType) =>
+                emptyCellNested(row, ['producto_data', 'modeloName']),
             },
           ]
         : []),
@@ -85,6 +98,7 @@ export const useColumnsEquiposMaterialesInstallOT = ({
       showActionColumn,
       showCurrentStockColumn,
       showModelColumn,
+      showModelOnlyViewColumn,
     ],
   );
 

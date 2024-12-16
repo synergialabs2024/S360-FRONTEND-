@@ -5,7 +5,7 @@ import { IoQrCodeSharp } from 'react-icons/io5';
 
 import { EquiposUtilizadosOTTableType } from '@/app/tecnico/install-asignada/shared/components/form';
 import { useColumnsEquiposMaterialesInstallOT } from '@/app/tecnico/install-asignada/shared/hooks';
-import { gridSize, OrdenTrabajo } from '@/shared';
+import { gridSize, humanizeString, OrdenTrabajo } from '@/shared';
 import {
   CustomMinimalTable,
   CustomTextFieldNoForm,
@@ -35,6 +35,8 @@ const ClienteFibraOTEquiposUtilizados: React.FC<
   const { baseColumnsEquiposMaterialesInstallOT01 } =
     useColumnsEquiposMaterialesInstallOT({
       showCurrentStockColumn: false,
+      showModelColumn: false,
+      showModelOnlyViewColumn: true,
     });
 
   const equiposUtilizadosColumns = useMemo<
@@ -111,11 +113,19 @@ const ClienteFibraOTEquiposUtilizados: React.FC<
 
       <>
         <Grid item container xs={12} spacing={1}>
-          <Grid item xs={12} container alignItems="center">
-            <Grid item xs={6}>
+          <Grid item xs={12} container alignItems="center" spacing={2}>
+            <Grid item xs={8}>
               <CustomTextFieldNoForm
                 label="Serial ONT"
                 value={ordenTrabajo?.serie_ont || 'N/A'}
+                disabled
+                size={gridSize}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <CustomTextFieldNoForm
+                label="MODELO ONT"
+                value={humanizeString(ordenTrabajo?.modelo_ont_wifi || 'N/A')}
                 disabled
                 size={gridSize}
               />

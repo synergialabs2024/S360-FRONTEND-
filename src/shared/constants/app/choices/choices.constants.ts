@@ -554,6 +554,16 @@ export const CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_ONT = [
     value: CodigoModeloProductoEnumChoice.ONT_WIFI_6,
   },
 ];
+export const CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA = [
+  {
+    label: 'FIBRA GRANEL',
+    value: CodigoModeloProductoEnumChoice.FIBRA_GRANEL,
+  },
+  {
+    label: 'FIBRA PRECONECTIZADA',
+    value: CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA,
+  },
+];
 
 ///* ORDEN TRABAJO ==========================================
 export enum EstadoOrdenTrabajoEnumChoice {

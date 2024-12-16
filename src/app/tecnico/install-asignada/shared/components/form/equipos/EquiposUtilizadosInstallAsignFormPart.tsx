@@ -7,6 +7,7 @@ import { IoQrCodeSharp } from 'react-icons/io5';
 
 import {
   gridSize,
+  humanizeString,
   OrdenTrabajo,
   ToastWrapper,
   UbicacionProducto,
@@ -180,8 +181,21 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
       <CustomTypoLabel text="Equipos Utilizados" />
 
       <Grid item container xs={12} spacing={1}>
-        <Grid item xs={12} container alignItems="center">
-          <Grid item xs={6}>
+        <Grid item xs={12} container justifyContent="flex-end" pb={3}>
+          <CustomSingleButton
+            label="AGREGAR EQUIPO"
+            color="primary"
+            variant="text"
+            startIcon={<FiPlus />}
+            onClick={() => {
+              setOpenEquiposDisponiblesModal(true);
+            }}
+            justifyContent="flex-end"
+          />
+        </Grid>
+
+        <Grid item xs={12} container alignItems="center" spacing={2}>
+          <Grid item xs={8}>
             <CustomTextFieldNoForm
               label="Serial ONT"
               value={ordenTrabajo?.serie_ont || 'N/A'}
@@ -189,17 +203,12 @@ const EquiposUtilizadosInstallAsignFormPart: React.FC<
               size={gridSize}
             />
           </Grid>
-
-          <Grid item xs={6} container justifyContent="flex-end">
-            <CustomSingleButton
-              label="AGREGAR EQUIPO"
-              color="primary"
-              variant="text"
-              startIcon={<FiPlus />}
-              onClick={() => {
-                setOpenEquiposDisponiblesModal(true);
-              }}
-              justifyContent="flex-end"
+          <Grid item xs={4}>
+            <CustomTextFieldNoForm
+              label="MODELO ONT"
+              value={humanizeString(ordenTrabajo?.modelo_ont_wifi || 'N/A')}
+              disabled
+              size={gridSize}
             />
           </Grid>
         </Grid>

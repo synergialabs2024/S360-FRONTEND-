@@ -1,4 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -42,6 +41,7 @@ import {
 } from '@/shared/utils';
 import { useInstalacionesStore } from '@/store/app';
 import { useUiStore } from '@/store/ui';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
 import { useONTInstallAsignadaOT } from '../../hooks';
 import {
@@ -166,7 +166,6 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
   ///* form ---------------------
   const form = useForm<InstallAsignOTSaveFormData>({
     resolver: yupResolver(ordenTrabajoFormSchema) as any,
-    defaultValues: {},
   });
 
   const { handleSubmit, reset } = form;
@@ -206,6 +205,8 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     const materialesUtilizados: MaterialesUtilizadosOTTableType[] =
       useInstalacionesStore.getState().materialesUtilizados;
     const serieActicacion = ordentrabajo?.serie_ont;
+    const selectedFibraModel =
+      useInstalacionesStore.getState().selectedFibraModel;
 
     if (!equiposUtilizados.length)
       return ToastWrapper.error(
@@ -216,7 +217,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         'No se han agregado materiales utilizados en la instalación',
       );
 
-    // validate series in equipos
+    // validate series in equipos ----------
     let thereAreEmptySeries = false;
     let equipo: EquiposUtilizadosOTTableType = null as any;
     let thereAreEquiposWithoutQuantity = false;
@@ -238,29 +239,36 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       return ToastWrapper.error(
         `No se puede guardar equipos sin cantidad utilizada: ${equipo.producto_data?.codigo}`,
       );
-    const ont: EquiposUtilizadosOTTableType | undefined =
-      equiposUtilizados.find(
-        eq => eq.producto_data?.tipo === TipoProductoEnumChoice.ONT,
-      );
-    if (!ont)
+
+    // ont -------------
+    const ontItems: EquiposUtilizadosOTTableType[] = equiposUtilizados.filter(
+      eq => eq?.producto_data?.tipo === TipoProductoEnumChoice.ONT,
+    );
+    if (ontItems.length === 0)
       return ToastWrapper.error(
         'No se ha seleccionado la ONT en los equipos utilizados',
       );
-    if (+(ont?.usedQuantity || 0) > 1)
-      return ToastWrapper.error('Solo se puede seleccionar una ONT');
-    const seriesOnt = ont?.savedSeries;
-    if (+(seriesOnt?.length || 0) > 1)
+    if (ontItems.length > 1)
       return ToastWrapper.error(
-        'Solo se puede seleccionar una serie para la ONT',
+        'Solo se puede seleccionar un item de tipo ONT',
       );
-    if (seriesOnt?.at(0) !== serieActicacion)
+    const firstOnt = ontItems?.[0];
+    if (firstOnt?.modelo_data?.codigo !== ordentrabajo?.modelo_ont_wifi)
       return ToastWrapper.error(
-        `La serie de la ONT no coincide con la serie de activación. Requedida: ${serieActicacion} - Provista: ${seriesOnt?.at(
+        `El modelo de la ONT no coincide con el modelo de activación. Requedido: ${ordentrabajo?.modelo_ont_wifi} - Provisto: ${firstOnt?.modelo_data?.codigo}`,
+      );
+    if (firstOnt.usedQuantity > 1)
+      return ToastWrapper.error(
+        'Solo se puede seleccionar un item de tipo ONT',
+      );
+    if (firstOnt.savedSeries?.at(0) !== serieActicacion)
+      return ToastWrapper.error(
+        `La serie de la ONT no coincide con la serie de activación. Requedida: ${serieActicacion} - Provista: ${firstOnt.savedSeries?.at(
           0,
         )}`,
       );
 
-    // validate materiales
+    // validate materiales =================
     let thereAreMaterialsWithoutQuantity = false;
     let material: MaterialesUtilizadosOTTableType = null as any;
     materialesUtilizados.forEach(mat => {
@@ -274,7 +282,30 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         `No se puede guardar materiales sin cantidad utilizada: ${material.producto_data?.codigo}`,
       );
 
-    // validate equipos adicionales
+    // fibra -------------
+    const fibraItems: MaterialesUtilizadosOTTableType[] =
+      materialesUtilizados.filter(
+        mat => mat?.producto_data?.tipo === TipoProductoEnumChoice.FIBRA,
+      ) || [];
+    if (fibraItems.length === 0)
+      return ToastWrapper.error(
+        'No se ha seleccionado la fibra en los materiales utilizados',
+      );
+    if (fibraItems.length > 1)
+      return ToastWrapper.error(
+        'Solo se puede seleccionar un item de tipo FIBRA',
+      );
+    const firstFibra = fibraItems?.[0];
+    if (firstFibra?.usedQuantity > 1 && firstFibra.isFibraPreconect)
+      return ToastWrapper.error(
+        'Solo se puede seleccionar un item de tipo FIBRA modelo Preconecteriorizada',
+      );
+    if (firstFibra.modelo_data?.codigo !== selectedFibraModel)
+      return ToastWrapper.error(
+        `El modelo de la fibra no coincide con el modelo seleccionado. Requedido: ${selectedFibraModel} - Provisto: ${firstFibra.modelo_data?.codigo}`,
+      );
+
+    // validate equipos adicionales ----------
     let thereAreEmptyEquiposAdicionales = false;
     let eqAdicional: EquipoVentasDetalle = null as any;
     equiposAdicionales.forEach(equipo => {
@@ -318,6 +349,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
               codigo: eq.producto_data?.codigo!,
               nombre: eq.producto_data?.nombre!,
               tipo: eq.producto_data?.tipo!,
+              modeloName: eq.modelo_data?.nombre!,
             },
           }) as EquipoUtilizadosInstallOT,
       ) || [];
@@ -333,6 +365,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
               codigo: mat.producto_data?.codigo!,
               nombre: mat.producto_data?.nombre!,
               tipo: mat.producto_data?.tipo!,
+              modeloName: mat.modelo_data?.nombre!,
             },
           }) as MaterialUtilizadosInstallOT,
       ) || [];
@@ -433,6 +466,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         serie_ont: data.serie_ont,
         potencia_ont: data.potencia_ont,
         observaciones_adicionales: data.observaciones_adicionales,
+        modelo_fibra_utilizada: data.modelo_fibra_utilizada,
 
         nap: data.nap,
         distancia_nap: data.distancia_nap!,

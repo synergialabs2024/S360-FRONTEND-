@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useFetchUbicacionProductos } from '@/actions/app';
 import {
+  CodigoModeloProductoEnumChoice,
   InventarioEnumUUID,
   OrdenTrabajo,
   TipoProductoEnumChoice,
@@ -81,16 +82,26 @@ const MaterialesDisponiblesOTTecModal: React.FC<
             variant="text"
             color="primary"
             onClick={() => {
-              const isFibra =
-                item?.producto_data?.tipo === TipoProductoEnumChoice.FIBRA;
+              const isFibraGranel =
+                item?.producto_data?.tipo === TipoProductoEnumChoice.FIBRA &&
+                item?.modelo_data?.codigo ===
+                  CodigoModeloProductoEnumChoice.FIBRA_GRANEL;
+
+              const isFibraPreconect =
+                item?.producto_data?.tipo === TipoProductoEnumChoice.FIBRA &&
+                item?.modelo_data?.codigo ===
+                  CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA;
+
+              const usedQuantity = isFibraGranel ? 0 : 1;
 
               addSelectedItem({
                 keyStore: InstalacionesStoreKey.materialesUtilizados,
                 item: {
                   ...item,
 
-                  usedQuantity: isFibra ? 0 : 1,
-                  isFibra,
+                  usedQuantity: usedQuantity,
+                  isFibra: isFibraGranel,
+                  isFibraPreconect,
                 },
                 showToast: true,
               });

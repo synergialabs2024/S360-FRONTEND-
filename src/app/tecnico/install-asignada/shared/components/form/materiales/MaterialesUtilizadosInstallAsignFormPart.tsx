@@ -5,8 +5,16 @@ import type { UseFormReturn } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdTrash } from 'react-icons/io';
 
-import { gridSizeMdLg6, OrdenTrabajo, ToastWrapper } from '@/shared';
 import {
+  CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA,
+  CodigoModeloProductoEnumChoice,
+  CodigoModeloProductoEnumChoiceType,
+  gridSizeMdLg6,
+  OrdenTrabajo,
+  ToastWrapper,
+} from '@/shared';
+import {
+  CustomAutocompleteNoForm,
   CustomMinimalTable,
   CustomNumberTextField,
   CustomSingleButton,
@@ -27,9 +35,11 @@ export type MaterialesUtilizadosInstallAsignFormPartProps = {
 
 export type MaterialesUtilizadosOTTableType = EquiposUtilizadosOTTableType & {
   // firbra
-  isFibra?: boolean;
+  isFibra?: boolean; // granel that requeries puntas
   puntaInicio?: number;
   puntaFin?: number;
+
+  isFibraPreconect?: boolean;
 };
 
 const MaterialesUtilizadosInstallAsignFormPart: React.FC<
@@ -46,6 +56,10 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
   const removeSelectedItem = useInstalacionesStore(s => s.removeSelectedItem);
   const updateSelectedItemValue = useInstalacionesStore(
     s => s.updateSelectedItemValue,
+  );
+  const selectedFibraModel = useInstalacionesStore(s => s.selectedFibraModel);
+  const setSelectedFibraModel = useInstalacionesStore(
+    s => s.setSelectedFibraModel,
   );
 
   ///* handlers --------------------
@@ -107,31 +121,52 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
   ///* effects --------------------
   useEffect(() => {
     if (!ordenTrabajo) return;
+    if (!selectedFibraModel) return;
 
-    const metrajeAutorizado = +(
-      ordenTrabajo?.ciudad_data?.metraje_autorizado || 0
-    );
-    const fibraItem = useInstalacionesStore
-      .getState()
-      .materialesUtilizados.find(item => item.isFibra);
+    if (selectedFibraModel === CodigoModeloProductoEnumChoice.FIBRA_GRANEL) {
+      const metrajeAutorizado = +(
+        ordenTrabajo?.ciudad_data?.metraje_autorizado || 0
+      );
+      const fibraItem = useInstalacionesStore
+        .getState()
+        .materialesUtilizados.find(item => item.isFibra);
 
-    const metrajeUtilizadoFibra = fibraItem?.usedQuantity || 0;
-    const metrajeExedenteFibra = metrajeUtilizadoFibra - metrajeAutorizado;
+      const metrajeUtilizadoFibra = fibraItem?.usedQuantity || 0;
+      const metrajeExedenteFibra = metrajeUtilizadoFibra - metrajeAutorizado;
 
-    form.setValue(
-      'punta_inicial_fibra',
-      fibraItem?.puntaInicio?.toString() || '0.00',
-    );
-    form.setValue(
-      'punta_final_fibra',
-      fibraItem?.puntaFin?.toString() || '0.00',
-    );
-    form.setValue('metraje_utilizado_fibra', metrajeUtilizadoFibra.toString());
-    form.setValue(
-      'metraje_exedente_fibra',
-      metrajeExedenteFibra < 0 ? '0' : metrajeExedenteFibra?.toString(),
-    );
-  }, [form, materialesUtilizados, ordenTrabajo]);
+      form.setValue(
+        'punta_inicial_fibra',
+        fibraItem?.puntaInicio?.toString() || '0.00',
+      );
+      form.setValue(
+        'punta_final_fibra',
+        fibraItem?.puntaFin?.toString() || '0.00',
+      );
+      form.setValue(
+        'metraje_utilizado_fibra',
+        metrajeUtilizadoFibra.toString() || '0.00',
+      );
+      form.setValue(
+        'metraje_exedente_fibra',
+        metrajeExedenteFibra < 0
+          ? '0.00'
+          : metrajeExedenteFibra?.toString() || '0.00',
+      );
+    }
+
+    if (
+      selectedFibraModel ===
+      CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA
+    ) {
+      // const fibraItem = useInstalacionesStore
+      //   .getState()
+      //   .materialesUtilizados.find(item => item.isFibraPreconect);
+      // form.setValue(
+      //   'metraje_utilizado_fibra',
+      //   fibraItem?.usedQuantity?.toString() || '0',
+      // );
+    }
+  }, [form, materialesUtilizados, ordenTrabajo, selectedFibraModel]);
 
   ///* columns --------------------
   const { baseColumnsEquiposMaterialesInstallOT01 } =
@@ -176,7 +211,8 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
         accessorKey: 'punta_inicio',
         header: 'PUNTA INICIAL',
         Cell: ({ row }) => {
-          const isFibra = row.original?.isFibra;
+          // fibra granel requires puntas
+          const isFibraGranel = row.original?.isFibra;
 
           return (
             <TextField
@@ -188,7 +224,7 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
                 min: 0,
                 step: 1,
               }}
-              disabled={!isFibra}
+              disabled={!isFibraGranel}
             />
           );
         },
@@ -197,7 +233,7 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
         accessorKey: 'punta_fin',
         header: 'PUNTA FINAL',
         Cell: ({ row }) => {
-          const isFibra = row.original?.isFibra;
+          const isFibraGranel = row.original?.isFibra;
 
           return (
             <TextField
@@ -209,7 +245,7 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
                 min: 0,
                 step: 1,
               }}
-              disabled={!isFibra}
+              disabled={!isFibraGranel}
             />
           );
         },
@@ -253,21 +289,50 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
 
       {/* ==================== TABLE ==================== */}
       <Grid item container xs={12} spacing={1}>
-        <Grid item xs={12} container alignSelf="flex-end">
-          <span className="spacer" />
+        {/* ==================== btn ==================== */}
+        <Grid item xs={12} container alignItems="center" justifyContent="end">
+          <Grid item xs={6}>
+            <CustomAutocompleteNoForm<CodigoModeloProductoEnumChoiceType>
+              label="Modelo de fibra"
+              value={selectedFibraModel}
+              actualValueKey="value"
+              onChange={v => {
+                setSelectedFibraModel(v as string);
+                form.setValue('modelo_fibra_utilizada', v as any);
 
-          <CustomSingleButton
-            label="AGREGAR MATERIAL"
-            color="primary"
-            variant="text"
-            startIcon={<FiPlus />}
-            onClick={() => {
-              setOpenMaterialesDisponiblesModal(true);
-            }}
-            justifyContent="flex-end"
-          />
+                form.setValue('punta_inicial_fibra', '0.00');
+                form.setValue('punta_final_fibra', '0.00');
+                form.setValue('metraje_utilizado_fibra', '0.00');
+                form.setValue('metraje_exedente_fibra', '0.00');
+              }}
+              options={CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA}
+              getOptionLabel={o => o.label}
+              loading={false}
+              required
+              error={false}
+              disableClearable
+              size={gridSizeMdLg6}
+            />
+          </Grid>
+
+          <Grid item xs={6} container justifyContent="flex-end">
+            <CustomSingleButton
+              label="AGREGAR MATERIAL"
+              color="primary"
+              variant="text"
+              startIcon={<FiPlus />}
+              onClick={() => {
+                if (!selectedFibraModel)
+                  return ToastWrapper.warning('Seleccione un modelo de fibra');
+
+                setOpenMaterialesDisponiblesModal(true);
+              }}
+              justifyContent="flex-end"
+            />
+          </Grid>
         </Grid>
 
+        {/* ==================== table ==================== */}
         <Grid item xs={12}>
           <CustomMinimalTable<MaterialesUtilizadosOTTableType>
             columns={materialesUtilizadosColumns}

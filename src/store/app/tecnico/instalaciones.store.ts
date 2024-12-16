@@ -26,8 +26,10 @@ export interface InstalacionesState {
   setSelectedRow: (row: EquiposUtilizadosOTTableType | null) => void;
 
   // helpers ------
-  selectedProductModel: string | null;
+  selectedProductModel: string | null; // ont model
   setSelectedProductModel: (model: string | null) => void;
+  selectedFibraModel: string | null; // fibra model
+  setSelectedFibraModel: (model: string | null) => void;
 
   // operations functions ------
   addSelectedItem: ({
@@ -128,11 +130,15 @@ export const useInstalacionesStore = create<InstalacionesState>()(
       set({
         equiposUtilizados: [],
         materialesUtilizados: [],
+        selectedProductModel: null,
+        selectedFibraModel: null,
       });
     },
 
     // helpers ------
     selectedProductModel: null,
     setSelectedProductModel: model => set({ selectedProductModel: model }),
+    selectedFibraModel: null,
+    setSelectedFibraModel: model => set({ selectedFibraModel: model }),
   }),
 );

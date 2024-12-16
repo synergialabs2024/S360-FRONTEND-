@@ -53,6 +53,8 @@ export interface OrdenTrabajo {
   serie_ont?: string;
   potencia_ont: string;
   observaciones_adicionales: string;
+  modelo_fibra_utilizada: string; // code
+  modelo_ont_wifi: string; // code
 
   url_foto_ont: string;
   url_foto_potencia_ont: string;
@@ -141,4 +143,6 @@ export type ProductDataLimitOT = {
   nombre: string;
   codigo: string;
   tipo: string;
+
+  modeloName?: string;
 };

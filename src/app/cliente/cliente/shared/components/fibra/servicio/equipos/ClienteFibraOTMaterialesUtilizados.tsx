@@ -4,7 +4,12 @@ import { useMemo } from 'react';
 
 import { MaterialesUtilizadosOTTableType } from '@/app/tecnico/install-asignada/shared/components/form';
 import { useColumnsEquiposMaterialesInstallOT } from '@/app/tecnico/install-asignada/shared/hooks';
-import { gridSize, OrdenTrabajo, TipoProductoEnumChoice } from '@/shared';
+import {
+  gridSize,
+  humanizeString,
+  OrdenTrabajo,
+  TipoProductoEnumChoice,
+} from '@/shared';
 import {
   CustomMinimalTable,
   CustomTextFieldNoForm,
@@ -74,6 +79,16 @@ const ClienteFibraOTMaterialesUtilizados: React.FC<
 
       {/* ==================== TABLE ==================== */}
       <Grid item container xs={12} spacing={1}>
+        <Grid item xs={12}>
+          <CustomTextFieldNoForm
+            label="MODELO FIBRA"
+            value={humanizeString(
+              ordenTrabajo?.modelo_fibra_utilizada || 'N/A',
+            )}
+            disabled
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <CustomMinimalTable<MaterialesUtilizadosOTTableType>
             columns={materialesUtilizadosColumns}

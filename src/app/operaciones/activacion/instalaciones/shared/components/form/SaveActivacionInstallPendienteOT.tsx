@@ -125,6 +125,7 @@ const SaveActivacionInstallPendienteOT: React.FC<
         observacion_activacion: data.observacion_activacion,
       }),
       producto: ont?.producto_data?.id!,
+      modelo_ont_wifi: selectedProductModel,
     });
   };
 

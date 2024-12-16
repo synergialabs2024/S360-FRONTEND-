@@ -53,7 +53,9 @@ export const useONTInstallAsignadaOT = ({
       return;
     }
 
-    const firstONT = items.at(0);
+    const firstONT = items?.find(
+      i => i?.modelo_data?.codigo === ordenTrabajo?.modelo_ont_wifi,
+    );
     const activationSerie = ordenTrabajo?.serie_ont;
     if (firstONT && !!activationSerie) {
       const series = firstONT?.series || [];
