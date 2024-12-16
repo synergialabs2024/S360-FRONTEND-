@@ -451,6 +451,11 @@ export const useColumnsPreventa = () => {
     [preventaBaseColumns, preventaBaseColumns01],
   );
 
+  const preventaEsperaPagoColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [...preventaBaseColumns],
+    [preventaBaseColumns],
+  );
+
   const preventaRequiereCorreccionAceptacion = useMemo<
     MRT_ColumnDef<Preventa>[]
   >(() => [...preventaBaseColumns], [preventaBaseColumns]);
@@ -461,6 +466,7 @@ export const useColumnsPreventa = () => {
     preventaFallidas,
     preventaSinGestion,
     preventasEsperaAceptacionColumns,
+    preventaEsperaPagoColumns,
     preventaRequiereCorreccionAceptacion,
   };
 };

@@ -25,11 +25,23 @@ export type EquiposDisponiblesOTTecModalProps = {
   open: boolean;
   onClose: () => void;
   ordenTrabajo: OrdenTrabajo;
+
+  // helper product model
+  filterByProductModel?: boolean;
+  productModel?: string;
 };
 
 const EquiposDisponiblesOTTecModal: React.FC<
   EquiposDisponiblesOTTecModalProps
-> = ({ onClose, open, ordenTrabajo }) => {
+> = ({
+  onClose,
+  open,
+  ordenTrabajo,
+
+  // helper product model
+  filterByProductModel,
+  productModel,
+}) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -62,6 +74,10 @@ const EquiposDisponiblesOTTecModal: React.FC<
 
       ubicacion: ordenTrabajo?.flota_data?.ubicacion_data?.id,
       producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
+
+      ...(filterByProductModel && {
+        producto__modelo__codigo: productModel,
+      }),
     },
   });
 

@@ -96,7 +96,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
       {
         accessorKey: 'nombre',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
@@ -204,8 +204,11 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          `${emptyCellNested(row, ['iva_data', 'percentage'])}%`,
+        Cell: ({ row }) => {
+          return row.original?.iva_data?.percentage
+            ? `${row.original?.iva_data?.percentage}%`
+            : 'N/A';
+        },
       },
 
       {

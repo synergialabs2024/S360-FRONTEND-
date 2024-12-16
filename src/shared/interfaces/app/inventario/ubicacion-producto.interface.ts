@@ -1,5 +1,6 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { Bodega } from './bodega';
+import { ModeloProducto } from './modelo-producto/modelo-producto.interface';
 import { Producto } from './producto.interface';
 import { Ubicacion } from './ubicacion.interface';
 
@@ -34,6 +35,7 @@ export interface UbicacionProducto {
   bodega_data?: Bodega;
   producto_data?: Producto;
   ubicacion_data?: Ubicacion;
+  modelo_data?: ModeloProducto;
 }
 
 // export interface UbicacionSerieProducto {

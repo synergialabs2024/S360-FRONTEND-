@@ -1,6 +1,7 @@
 import type { PagingMetaResponse } from '@/shared/interfaces/common';
 import type {
   Agendamiento,
+  BrasLimitData,
   Ciudad,
   Cliente,
   Contrato,
@@ -67,6 +68,7 @@ export interface LineaServicio {
   flota_data?: FlotaLimitData;
   nodo_data?: NodoLimitData;
   olt_data?: OLTLimitData;
+  brass_data?: BrasLimitData;
 
   // helpers serializers ---------
   client_lines_data?: ClientLimiTypeData[]; // to handle switch between services (all except NO_INSTALADO)

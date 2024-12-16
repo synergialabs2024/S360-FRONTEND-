@@ -297,7 +297,7 @@ export const ESTADO_SOLICITUD_SERVICIO_ARRAY_CHOICES = [
 
 export enum EstadoPreventaEnumChoice {
   ESPERA = 'ESPERA',
-  REALIZADO = 'REALIZADO',
+  FINALIZADO = 'FINALIZADO',
   RECHAZADO = 'RECHAZADO',
   FALLIDO = 'CANCELADO', // cancela el vendedor x cliente
 
@@ -526,6 +526,33 @@ export const TIPO_PRODUCTO_ARRAY_CHOICES = [
   TipoProductoEnumChoice.FIBRA,
   TipoProductoEnumChoice.UTP,
   TipoProductoEnumChoice.ONT,
+];
+
+export enum CodigoModeloProductoEnumChoice {
+  ONT_WIFI_5 = 'ONT_WIFI_5',
+  ONT_WIFI_6 = 'ONT_WIFI_6',
+  FIBRA_GRANEL = 'FIBRA_GRANEL',
+  FIBRA_PRECONECTORIZADA = 'FIBRA_PRECONECTORIZADA',
+}
+export const CODIGO_MODELO_PRODUCTO_ARRAY_CHOICES = [
+  CodigoModeloProductoEnumChoice.ONT_WIFI_5,
+  CodigoModeloProductoEnumChoice.ONT_WIFI_6,
+  CodigoModeloProductoEnumChoice.FIBRA_GRANEL,
+  CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA,
+];
+export type CodigoModeloProductoEnumChoiceType = {
+  label: string;
+  value: CodigoModeloProductoEnumChoice;
+};
+export const CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_ONT = [
+  {
+    label: 'ONT WIFI 5',
+    value: CodigoModeloProductoEnumChoice.ONT_WIFI_5,
+  },
+  {
+    label: 'ONT WIFI 6',
+    value: CodigoModeloProductoEnumChoice.ONT_WIFI_6,
+  },
 ];
 
 ///* ORDEN TRABAJO ==========================================

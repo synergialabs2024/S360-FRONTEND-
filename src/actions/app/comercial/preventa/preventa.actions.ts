@@ -132,7 +132,11 @@ export const useUpdatePreventa = <T>({
 };
 
 ///* axios ---------------
-export type GetPreventasParams = Partial<Preventa> & PagingPartialParams;
+export type GetPreventasParams = Partial<Preventa> &
+  PagingPartialParams & {
+    correcciones_aceptacion_pendientes?: boolean;
+    por_agendar?: boolean;
+  };
 export type CreatePreventaParams<T> = T;
 export type CreatePreventaParamsBase = Omit<Preventa, 'id'>;
 export interface UpdatePreventaParams<T> {

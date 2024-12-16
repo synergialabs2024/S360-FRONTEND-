@@ -1,11 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
+import dayjs from 'dayjs';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { OrdenTrabajoTSQEnum } from '@/actions/app';
 import { ActivateInstalacionOTData } from '@/actions/app/tecnico/orden-trabajo-action-types.interface';
 import { useGenericPATCH } from '@/actions/shared';
+import { EquiposUtilizadosOTTableType } from '@/app/tecnico/install-asignada/shared/components/form';
 import {
   activacionInstallOTSchema,
   getKeysFormErrorsMessage,
@@ -24,10 +27,7 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import { useInstalacionesStore } from '@/store/app';
-import dayjs from 'dayjs';
-import { useEffect } from 'react';
 import { returnUrlActivacionesInstallacionesOT } from '../../../pages/tables/ActivacionesInstalacionesMainPage';
-import { useEquiposActivacionInstallOT } from '../../hooks';
 import ActivacionInstallOTDetallesEquiposFormTab from './ActivacionInstallOTDetallesEquiposFormTab';
 import ActivacionInstallOTEquiposFormTab from './ActivacionInstallOTEquiposFormTab';
 import ActivacionInstallOTGeneralInfoTab from './ActivacionInstallOTGeneralInfoTab';
@@ -47,7 +47,8 @@ const SaveActivacionInstallPendienteOT: React.FC<
   ///* hooks --------------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly();
-  useEquiposActivacionInstallOT({ ordenTrabajo: ordentrabajo });
+  // old logic (now there are ont models)
+  // useEquiposActivacionInstallOT({ ordenTrabajo: ordentrabajo });
 
   ///* global states ---------------------
   const clearAll = useInstalacionesStore(state => state.clearAll);
@@ -80,10 +81,36 @@ const SaveActivacionInstallPendienteOT: React.FC<
   const onSave = (data: ActicacionInstallOTSaveFormData) => {
     const equiposUtilizados =
       useInstalacionesStore.getState().equiposUtilizados;
+    const selectedProductModel =
+      useInstalacionesStore.getState().selectedProductModel;
+
+    if (!equiposUtilizados?.length)
+      return ToastWrapper.error('No se han seleccionado equipos');
+    // if (equiposUtilizados?.length > 1)
+    //   return ToastWrapper.error('Solo se puede seleccionar un equipo');
+
+    let thereAreEquiposWithoutSerie = false;
+    let equiposWithoutSerie: EquiposUtilizadosOTTableType = {} as any;
+    equiposUtilizados?.forEach(equipo => {
+      if (!equipo.savedSeries?.length) {
+        thereAreEquiposWithoutSerie = true;
+        equiposWithoutSerie = equipo;
+      }
+    });
+    if (thereAreEquiposWithoutSerie)
+      return ToastWrapper.error(
+        `El equipo ${equiposWithoutSerie?.producto_data?.nombre} no tiene serie seleccionada`,
+      );
 
     const ont = equiposUtilizados?.at(0);
     if (!ont || !ont?.savedSeries?.length)
       return ToastWrapper.error('No se han seleccionado la serie de la ONT');
+    if (!selectedProductModel)
+      return ToastWrapper.error('No se ha seleccionado un modelo de ONT');
+    if (selectedProductModel !== ont?.modelo_data?.codigo)
+      return ToastWrapper.error(
+        'El modelo de ONT seleccionado no coincide con el modelo del equipo seleccionado',
+      );
 
     const selectedSerie = ont?.savedSeries?.at(0);
     const currentDate = dayjs().format('YYYY-MM-DD');

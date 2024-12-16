@@ -25,6 +25,10 @@ export interface InstalacionesState {
 
   setSelectedRow: (row: EquiposUtilizadosOTTableType | null) => void;
 
+  // helpers ------
+  selectedProductModel: string | null;
+  setSelectedProductModel: (model: string | null) => void;
+
   // operations functions ------
   addSelectedItem: ({
     item,
@@ -126,5 +130,9 @@ export const useInstalacionesStore = create<InstalacionesState>()(
         materialesUtilizados: [],
       });
     },
+
+    // helpers ------
+    selectedProductModel: null,
+    setSelectedProductModel: model => set({ selectedProductModel: model }),
   }),
 );

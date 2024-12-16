@@ -128,4 +128,7 @@ export interface Preventa {
   tarjeta_data?: Tarjeta;
   nap_data?: NapLimitData;
   flota_data?: Flota;
+
+  // helpers properties
+  can_be_scheduled?: boolean;
 }

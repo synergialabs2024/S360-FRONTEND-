@@ -32,8 +32,9 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
       >
         <Tab label={'PREVENTAS'} value={1} {...a11yProps(1)} />
         <Tab label={'ESPERA ACEPTACION'} value={6} {...a11yProps(6)} />
+        <Tab label={'ESPERA PAGO'} value={7} {...a11yProps(7)} />
 
-        <Tab label={'REALIZADAS'} value={2} {...a11yProps(2)} />
+        <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
         {/**
           <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
          */}
@@ -52,8 +53,15 @@ const PreventasMainPage: React.FC<PreventasMainPageProps> = () => {
         />
       </CustomTabPanel>
 
+      <CustomTabPanel value={tabValue} index={7} ptGrid="0">
+        <PreventaByStatePage
+          state={EstadoPreventaEnumChoice.ESPERA}
+          pedingPayment
+        />
+      </CustomTabPanel>
+
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <PreventaByStatePage state={EstadoPreventaEnumChoice.REALIZADO} />
+        <PreventaByStatePage state={EstadoPreventaEnumChoice.FINALIZADO} />
       </CustomTabPanel>
 
       {/*

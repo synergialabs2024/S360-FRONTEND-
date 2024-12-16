@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useGetPreventa } from '@/actions/app';
-import { EstadoPagoEnumChoice, ToastWrapper, useLoaders } from '@/shared';
+import { ToastWrapper, useLoaders } from '@/shared';
 import { CustomTitleRefNumber } from '@/shared/components';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
@@ -27,21 +27,15 @@ const CreateAgendamientoVentasPage: React.FC<
   useEffect(() => {
     if (isLoading || isRefetching) return;
 
-    if (
-      !!data &&
-      data?.data?.requiere_pago_previo &&
-      data?.data?.estado_pago !== EstadoPagoEnumChoice.PAGADO
-    ) {
-      ToastWrapper.error('La preventa requiere pago previo al agendamiento');
+    if (!!data && !data?.data?.can_be_scheduled) {
+      ToastWrapper.error(
+        'La preventa no puede ser agendada puesto que o no esta en espera o requiere pago previo.',
+      );
     }
   }, [data, isLoading, isRefetching]);
 
   if (isLoading || isRefetching) return null;
-  if (
-    !data?.data?.id ||
-    (data?.data?.requiere_pago_previo &&
-      data?.data?.estado_pago !== EstadoPagoEnumChoice.PAGADO)
-  )
+  if (!data?.data?.id || !data?.data?.can_be_scheduled)
     return <Navigate to={returnUrlAgendamientoVentasPage} />;
 
   return (

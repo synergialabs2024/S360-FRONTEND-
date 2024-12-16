@@ -1,6 +1,5 @@
 import { useFetchPreventas } from '@/actions/app';
 import {
-  EstadoPreventaEnumChoice,
   Preventa,
   TABLE_CONSTANTS,
   useColumnsPreventa,
@@ -45,8 +44,9 @@ const PreventaEsperaAgendaPage: React.FC<
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      estado_preventa: EstadoPreventaEnumChoice.ESPERA,
-      contrato_aceptado: true,
+      // estado_preventa: EstadoPreventaEnumChoice.ESPERA,
+      // contrato_aceptado: true,
+      por_agendar: true,
     },
   });
 

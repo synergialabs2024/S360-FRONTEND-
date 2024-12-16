@@ -31,6 +31,7 @@ const ClienteFibraOTPart: React.FC<ClienteFibraOTPartProps> = ({
             nap_data: serviceLine?.nap_data,
             preventa_data: serviceLine?.preventa_data,
             agendamiento_data: serviceLine?.agendamiento_data,
+            brass_data: serviceLine?.brass_data,
           } as any
         }
       />

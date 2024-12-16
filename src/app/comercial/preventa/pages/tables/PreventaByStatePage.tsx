@@ -1,5 +1,6 @@
 import { useFetchPreventas } from '@/actions/app';
 import {
+  EstadoPagoEnumChoice,
   EstadoPreventaEnumChoice,
   PermissionsEnum,
   Preventa,
@@ -13,17 +14,19 @@ import {
   CustomTable,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
-import { EsperaAgendaPreventaCustomButtons } from '../../shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { EsperaAgendaPreventaCustomButtons } from '../../shared/components';
 
 export type PreventaByStatePageProps = {
   state: EstadoPreventaEnumChoice;
   noAceptados?: boolean;
+  pedingPayment?: boolean;
 };
 
 const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
   state,
   noAceptados,
+  pedingPayment,
 }) => {
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
@@ -53,7 +56,14 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
       name: searchTerm,
       ...filterObject,
       estado_preventa: state,
+
       ...(noAceptados && { contrato_aceptado: false }),
+
+      ...(pedingPayment && {
+        estado_pago: EstadoPagoEnumChoice.PENDIENTE,
+        requiere_pago_previo: true,
+        contrato_aceptado: true,
+      }),
     },
   });
 
@@ -63,6 +73,7 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
     preventaRealizadas,
     //preventaRechazadas,
     preventasEsperaAceptacionColumns,
+    preventaEsperaPagoColumns,
     preventaFallidas,
     preventaSinGestion,
   } = useColumnsPreventa();
@@ -80,15 +91,17 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
 
       <CustomTable<Preventa>
         columns={
-          state === EstadoPreventaEnumChoice.ESPERA
+          state === EstadoPreventaEnumChoice.ESPERA && noAceptados
             ? preventasEsperaAceptacionColumns
-            : state === EstadoPreventaEnumChoice.REALIZADO
-              ? preventaRealizadas
-              : state === EstadoPreventaEnumChoice.FALLIDO
-                ? preventaFallidas
-                : state === EstadoPreventaEnumChoice.SIN_GESTION
-                  ? preventaSinGestion
-                  : preventaBaseColumns
+            : state === EstadoPreventaEnumChoice.ESPERA && pedingPayment
+              ? preventaEsperaPagoColumns
+              : state === EstadoPreventaEnumChoice.FINALIZADO
+                ? preventaRealizadas
+                : state === EstadoPreventaEnumChoice.FALLIDO
+                  ? preventaFallidas
+                  : state === EstadoPreventaEnumChoice.SIN_GESTION
+                    ? preventaSinGestion
+                    : preventaBaseColumns
         }
         data={preventasPagingRes?.data?.items || []}
         isLoading={isLoading}

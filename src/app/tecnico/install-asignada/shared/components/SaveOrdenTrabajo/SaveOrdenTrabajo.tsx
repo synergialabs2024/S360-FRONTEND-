@@ -169,11 +169,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     defaultValues: {},
   });
 
-  const {
-    handleSubmit,
-    reset,
-    formState: { isValid },
-  } = form;
+  const { handleSubmit, reset } = form;
 
   ///* mutations ---------------------
   const uploadOTInstalacion = useGenericPATCH<
@@ -195,7 +191,6 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
 
   ///* handlers ---------------------
   const onSave = async (data: InstallAsignOTSaveFormData) => {
-    if (!isValid) return;
     if (
       ordentrabajo?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA
     )
