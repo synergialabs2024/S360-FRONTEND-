@@ -158,13 +158,14 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
       selectedFibraModel ===
       CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA
     ) {
-      // const fibraItem = useInstalacionesStore
-      //   .getState()
-      //   .materialesUtilizados.find(item => item.isFibraPreconect);
-      // form.setValue(
-      //   'metraje_utilizado_fibra',
-      //   fibraItem?.usedQuantity?.toString() || '0',
-      // );
+      const fibraItem = useInstalacionesStore
+        .getState()
+        .materialesUtilizados.find(item => item.isFibraPreconect);
+
+      form.setValue(
+        'metraje_utilizado_fibra',
+        fibraItem?.producto_data?.metraje_relativo || '0.00',
+      );
     }
   }, [form, materialesUtilizados, ordenTrabajo, selectedFibraModel]);
 

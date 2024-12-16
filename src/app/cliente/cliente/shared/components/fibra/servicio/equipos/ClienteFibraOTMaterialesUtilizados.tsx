@@ -30,6 +30,8 @@ const ClienteFibraOTMaterialesUtilizados: React.FC<
   const { baseColumnsEquiposMaterialesInstallOT01 } =
     useColumnsEquiposMaterialesInstallOT({
       showCurrentStockColumn: false,
+      showModelColumn: false,
+      showModelOnlyViewColumn: true,
     });
 
   const materialesUtilizadosColumns = useMemo<

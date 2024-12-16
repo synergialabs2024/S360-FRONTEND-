@@ -21,6 +21,7 @@ export interface Producto {
   descripcion: string;
 
   es_para_venta: boolean; // preventas
+  metraje_relativo?: string; // to handle m in CodigoModeloProductoEnumChoice
 
   precios?: PrecioProducto[];
   tipo?: TipoProductoEnumChoice;
