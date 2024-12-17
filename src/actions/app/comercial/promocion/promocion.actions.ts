@@ -119,7 +119,15 @@ export const useUpdatePromocion = <T>({
 };
 
 ///* axios ---------------
-export type GetPromocionsParams = Partial<Promocion> & PagingPartialParams;
+export type GetPromocionsParams = Partial<Promocion> &
+  PagingPartialParams & {
+    province?: number;
+    city?: number;
+    zone?: number;
+    sector?: number;
+    plan?: number;
+    payment_method?: number;
+  };
 export type CreatePromocionParams<T> = T;
 export type CreatePromocionParamsBase = Omit<Promocion, 'id'>;
 export interface UpdatePromocionParams<T> {

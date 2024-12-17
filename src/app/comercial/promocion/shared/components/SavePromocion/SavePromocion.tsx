@@ -236,6 +236,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     const allZones = (promocion.zonas as any[])?.includes('*');
     const allSectores = (promocion.sectores as any[])?.includes('*');
     const allPlanes = (promocion.planes as any[])?.includes('*');
+    const allMetodosPago = (promocion.metodo_pagos as any[])?.includes('*');
 
     reset({
       ...promocion,
@@ -244,6 +245,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       allZones,
       allSectores,
       allPlanes,
+      allMetodosPago,
       facturas_gratis: promocion?.facturas_gratis || [],
     });
   }, [promocion, reset]);
