@@ -52,6 +52,6 @@ export const promocionFormSchema = yup.object({
   sectores: yup.array().optional().nullable(),
   canales_venta: yup.array().optional().nullable(),
   planes: yup.array().optional().nullable(),
-  meses_gratis: yup.array().optional().nullable(),
-  meses_descuento: yup.array().optional().nullable(),
+  facturas_gratis: yup.array().optional().nullable(),
+  facturas_descuento: yup.array().optional().nullable(),
 });

@@ -121,6 +121,7 @@ export const useUpdatePromocion = <T>({
 ///* axios ---------------
 export type GetPromocionsParams = Partial<Promocion> &
   PagingPartialParams & {
+    find_promocion_ventas?: boolean;
     province?: number;
     city?: number;
     zone?: number;

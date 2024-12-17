@@ -13,7 +13,7 @@ export interface PromocionesPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  items: Promocion;
+  items: Promocion[];
 }
 
 export interface Promocion {
