@@ -22,7 +22,6 @@ import {
   useFetchEntidadFinancieras,
   useFetchMetodoPagos,
   useFetchPlanInternets,
-  useFetchPromocions,
   useFetchSectores,
   useFetchTarjetas,
   useFetchZonas,
@@ -118,6 +117,7 @@ import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
 import { EquiposSeleccionadosTableType } from './form/equipos/EquiposSeleccionadosPreventa';
 
 import Cards from 'react-credit-cards-2';
+import { PromocionPreventaFormPart } from './promocion';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -255,12 +255,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   // promociones
   const watchedIs3raEdad = form.watch('es_tercera_edad');
-  const watchedInternetPlan = form.watch('plan_internet');
-  const watchedPaymentMethod = form.watch('metodo_pago');
-  const watchedProvince = form.watch('provincia');
-  const watchedCity = form.watch('ciudad');
-  // watchedZone
-  const watchedSector = form.watch('sector');
 
   const watchedServiceType = form.watch('tipo_servicio');
   const watchedServicePlan = form.watch('tipo_plan');
@@ -372,31 +366,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       tipo_servicio: watchedServiceType,
       tipo_plan: watchedServicePlan,
       clasificacion_score_buro: watchedSuggestedPlansBuro, // only filters
-    },
-  });
-
-  // promociones
-  const {
-    data: promocionesPagingRes,
-    isLoading: isLoadingPromociones,
-    isRefetching: isRefetchingPromociones,
-  } = useFetchPromocions({
-    enabled:
-      !watchedIs3raEdad &&
-      !!watchedInternetPlan &&
-      !!watchedPaymentMethod &&
-      !!watchedProvince &&
-      !!watchedCity &&
-      !!watchedZone &&
-      !!watchedSector,
-    params: {
-      page_size: 900,
-      province: watchedProvince!,
-      city: watchedCity!,
-      zone: watchedZone!,
-      sector: watchedSector!,
-      plan: watchedInternetPlan!,
-      payment_method: watchedPaymentMethod!,
     },
   });
 
@@ -924,9 +893,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     isLoadingTarjetas ||
     isRefetchingTarjetas ||
     isLoadingPlanInternets ||
-    isRefetchingPlanInternets ||
-    isLoadingPromociones ||
-    isRefetchingPromociones;
+    isRefetchingPlanInternets;
   useLoaders(isCustomLoading);
 
   return (
@@ -1415,9 +1382,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
 
-            <code>
-              {JSON.stringify(promocionesPagingRes?.data?.items || [])}
-            </code>
+            <PromocionPreventaFormPart form={form} />
           </>
         </>
       )}
