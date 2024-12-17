@@ -1,10 +1,13 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
+import React from 'react';
 
 import { useIsMediaQuery } from '@/shared/hooks';
 import { GridSizeType, MaxWidthType } from '@/shared/interfaces';
-import { CreateOrCancelButtonsForm } from '../CustomButtons';
+import {
+  ConfirmRejectCantelButtonsForm,
+  CreateOrCancelButtonsForm,
+} from '../CustomButtons';
 import ParentCard from './ParentCard';
-import React from 'react';
 
 export type SingleFormBoxSceneProps = {
   children: React.ReactNode;
@@ -21,6 +24,11 @@ export type SingleFormBoxSceneProps = {
   maxWidth?: MaxWidthType;
 
   titleNode?: React.ReactNode;
+
+  onReject?: () => void;
+  cancelTextBtn?: string;
+  saveTextBtn?: string;
+  rejectTextBtn?: string;
 };
 
 const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
@@ -31,6 +39,11 @@ const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
   disableSubmitBtn = false,
 
   titleNode = null,
+
+  onReject,
+  cancelTextBtn = 'Cancelar',
+  saveTextBtn = 'Guardar',
+  rejectTextBtn = 'Rechazar',
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -68,12 +81,24 @@ const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
                 sx={{ mb: 3 }}
               >
                 {children}
+
                 {/* ====== submit btn ====== */}
-                <CreateOrCancelButtonsForm
-                  onCancel={onCancel}
-                  onSave={onSave}
-                  disabled={disableSubmitBtn}
-                />
+                {onReject ? (
+                  <ConfirmRejectCantelButtonsForm
+                    onCancel={onCancel}
+                    onConfirm={onSave}
+                    onReject={onReject}
+                    cancelTextBtn={cancelTextBtn}
+                    rejectTextBtn={rejectTextBtn}
+                    confirmTextBtn={saveTextBtn}
+                  />
+                ) : (
+                  <CreateOrCancelButtonsForm
+                    onCancel={onCancel}
+                    onSave={onSave}
+                    disabled={disableSubmitBtn}
+                  />
+                )}
               </Grid>
             </Grid>
           </Stack>
