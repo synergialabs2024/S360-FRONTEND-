@@ -1,28 +1,20 @@
-import {
-  gridSizeMdLg1,
-  gridSizeMdLg11,
-  Promocion,
-  useColumnsPromocion,
-} from '@/shared';
-import {
-  CustomMinimalTable,
-  CustomTextFieldNoForm,
-  SingleIconButton,
-} from '@/shared/components';
 import { Grid } from '@mui/material';
 import { useState } from 'react';
 import { MdUnfoldMore } from 'react-icons/md';
 
+import { gridSizeMdLg1, gridSizeMdLg11, Promocion } from '@/shared';
+import { CustomTextFieldNoForm, SingleIconButton } from '@/shared/components';
+
 export type PromocionPreventaComponentProps = { promocion: Promocion };
 
 const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
-  promocion,
+  promocion = {} as any,
 }) => {
   ///* local state ----------------
   const [isVissible, setIsVissible] = useState(true);
 
   ///* columns ----------------
-  const { promocionPreventaColumns } = useColumnsPromocion();
+  // const { promocionPreventaColumns } = useColumnsPromocion();
 
   return (
     <>
@@ -56,12 +48,13 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
       <Grid item xs={12}>
         {isVissible && (
           <>
-            <CustomMinimalTable<Promocion>
+            TABLE TEM 1
+            {/* <CustomMinimalTable<Promocion>
               columns={promocionPreventaColumns}
               data={[promocion]}
               enablePagination
               density="comfortable"
-            />
+            /> */}
           </>
         )}
       </Grid>
