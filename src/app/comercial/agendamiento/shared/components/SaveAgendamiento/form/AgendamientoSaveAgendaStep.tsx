@@ -10,6 +10,7 @@ import {
 } from '@/shared/components';
 import { InstallationScheduleComponent } from '../../planificador-step';
 import type { SaveFormDataAgendaVentas } from '../SaveAgendamiento';
+import PromocionPreventaView from './PromocionPreventaView';
 
 export type AgendamientoSaveAgendaStepProps = {
   form: UseFormReturn<SaveFormDataAgendaVentas>;
@@ -44,6 +45,12 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
           *La distancia es un valor aproximado en metros, calculado entre las
           coordenadas del usuario y la NAP asignada.
         </FormHelperText>
+      </Grid>
+
+      <Grid item container xs={12} spacing={2}>
+        <CustomTypoLabel text="PROMOCIONES" />
+
+        <PromocionPreventaView preventa={preventa!} />
       </Grid>
 
       {/* ============ planificador component ============ */}

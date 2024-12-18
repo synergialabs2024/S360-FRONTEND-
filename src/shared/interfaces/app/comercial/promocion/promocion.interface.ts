@@ -52,3 +52,14 @@ export interface Promocion {
   sectores_data?: SectorLimitData[];
   metodo_pagos_data?: MetodoPago[];
 }
+
+export type PromocionLimitData = Pick<
+  Promocion,
+  | 'name'
+  | 'uuid'
+  | 'id'
+  | 'tipo_descuento'
+  | 'valor_descuento'
+  | 'facturas_descuento'
+  | 'facturas_gratis'
+>;

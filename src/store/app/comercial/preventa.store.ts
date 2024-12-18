@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 import { SetCodigoOtpInCacheData } from '@/actions/shared/cache-redis-types.interface';
-import { Nullable } from '@/shared';
+import { Nullable, Promocion } from '@/shared';
 
 interface PreventaState {
   isOTPVerified: boolean;
@@ -18,6 +18,10 @@ interface PreventaState {
   setScoreServicio: (scoreServicio: string | null) => void;
   selectedCuotas: number; // global to all selected equipos venta
   setSelectedCuotas: (selectedCuotas: number) => void;
+
+  // promocion --------------------
+  salectedPromociones: Promocion[];
+  setSalectedPromociones: (salectedPromociones: Promocion[]) => void;
 
   clearAll: () => void;
 }
@@ -42,6 +46,10 @@ export const usePreventaStore = create<PreventaState>(set => ({
   selectedCuotas: 1,
   setSelectedCuotas: selectedCuotas => set({ selectedCuotas }),
 
+  // promocion --------------------
+  salectedPromociones: [],
+  setSalectedPromociones: salectedPromociones => set({ salectedPromociones }),
+
   clearAll: () =>
     set({
       isOTPVerified: false,
@@ -50,5 +58,7 @@ export const usePreventaStore = create<PreventaState>(set => ({
 
       scoreServicio: null,
       selectedCuotas: 1,
+
+      salectedPromociones: [],
     }),
 }));

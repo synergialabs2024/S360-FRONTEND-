@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MdUnfoldMore } from 'react-icons/md';
 
@@ -21,7 +21,7 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
   form,
 }) => {
   ///* local state ----------------
-  const [isVissible, setIsVissible] = useState(false);
+  const [isVissible, setIsVissible] = useState(true);
 
   ///* form ----------------
   const watchedIs3raEdad = form.watch('es_tercera_edad');
@@ -59,11 +59,43 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
   });
 
   const isCustomLoading = isLoadingPromociones || isRefetchingPromociones;
+
+  ///* effects ----------------
+  useEffect(() => {
+    if (!isCustomLoading) return;
+
+    const firstPromocion = promocionesPagingRes?.data?.items?.at(0);
+    if (firstPromocion) {
+      form.setValue('promociones', [firstPromocion?.id!]);
+    } else {
+      form.setValue('promociones', []);
+    }
+  }, [form, isCustomLoading, promocionesPagingRes?.data?.items]);
+
   useLoaders(isCustomLoading);
+
+  if (
+    !watchedInternetPlan ||
+    !watchedPaymentMethod ||
+    !watchedProvince ||
+    !watchedCity ||
+    !watchedZone ||
+    !watchedSector
+  )
+    return (
+      <>
+        <CustomCardAlert
+          sizeType="small"
+          alertMessage={
+            'Es necesario seleccionar un plan de internet y método de pago para calcular la promoción.'
+          }
+        />
+      </>
+    );
 
   return (
     <>
-      {!watchedIs3raEdad ? (
+      {watchedIs3raEdad ? (
         <>
           <CustomCardAlert
             sizeType="small"
@@ -76,44 +108,62 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       ) : (
         <>
           <Grid item container xs={12} spacing={2}>
-            <Grid
-              item
-              container
-              xs={12}
-              spacing={2}
-              alignItems="end"
-              justifyContent="center"
-              pb={4}
-            >
-              <CustomTextFieldNoForm
-                label="Promoción aplicada"
-                value={promocionesPagingRes?.data?.items?.at(0)?.name || 'N/A'}
-                disabled
-                size={gridSizeMdLg11}
-              />
-
-              <SingleIconButton
-                startIcon={<MdUnfoldMore />}
-                onClick={() => {
-                  setIsVissible(!isVissible);
-                }}
-                label={
-                  isVissible ? 'Ocultar detalles' : 'Ver detalles de promoción'
-                }
-                size={gridSizeMdLg1}
-              />
-            </Grid>
-
-            {/* --------- table --------- */}
-            <Grid item xs={12}>
-              {isVissible && (
-                <>
-                  <PromocionPreventaComponent
-                    promocion={promocionesPagingRes?.data?.items?.at(0)! || {}}
+            {promocionesPagingRes?.data?.items?.length === 0 ? (
+              <>
+                <CustomCardAlert
+                  sizeType="small"
+                  alertMessage={'No aplica promoicón para este cliente.'}
+                  alertSeverity="info"
+                />
+              </>
+            ) : (
+              <>
+                <Grid
+                  item
+                  container
+                  xs={12}
+                  spacing={2}
+                  alignItems="end"
+                  justifyContent="center"
+                  pb={4}
+                >
+                  <CustomTextFieldNoForm
+                    label="Promoción aplicada"
+                    value={
+                      promocionesPagingRes?.data?.items?.at(0)?.name || 'N/A'
+                    }
+                    disabled
+                    size={gridSizeMdLg11}
                   />
-                </>
-              )}
-            </Grid>
+
+                  <SingleIconButton
+                    startIcon={<MdUnfoldMore />}
+                    onClick={() => {
+                      setIsVissible(!isVissible);
+                    }}
+                    label={
+                      isVissible
+                        ? 'Ocultar detalles'
+                        : 'Ver detalles de promoción'
+                    }
+                    size={gridSizeMdLg1}
+                  />
+                </Grid>
+
+                {/* --------- table --------- */}
+                <Grid item xs={12}>
+                  {isVissible && (
+                    <>
+                      <PromocionPreventaComponent
+                        promocion={
+                          promocionesPagingRes?.data?.items?.at(0)! || {}
+                        }
+                      />
+                    </>
+                  )}
+                </Grid>
+              </>
+            )}
           </Grid>
         </>
       )}
