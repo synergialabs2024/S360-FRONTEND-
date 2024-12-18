@@ -1,15 +1,10 @@
 import { Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { MdUnfoldMore } from 'react-icons/md';
 
 import { useFetchPromocions } from '@/actions/app';
-import { gridSizeMdLg1, gridSizeMdLg11, useLoaders } from '@/shared';
-import {
-  CustomCardAlert,
-  CustomTextFieldNoForm,
-  SingleIconButton,
-} from '@/shared/components';
+import { useLoaders } from '@/shared';
+import { CustomCardAlert } from '@/shared/components';
 import type { SaveFormDataPreventa } from '../SavePreventa';
 import PromocionPreventaComponent from './PromocionPreventaComponent';
 
@@ -20,9 +15,6 @@ export type PromocionPreventaFormPartProps = {
 const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
   form,
 }) => {
-  ///* local state ----------------
-  const [isVissible, setIsVissible] = useState(true);
-
   ///* form ----------------
   const watchedIs3raEdad = form.watch('es_tercera_edad');
   const watchedInternetPlan = form.watch('plan_internet');
@@ -118,50 +110,9 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
               </>
             ) : (
               <>
-                <Grid
-                  item
-                  container
-                  xs={12}
-                  spacing={2}
-                  alignItems="end"
-                  justifyContent="center"
-                  pb={4}
-                >
-                  <CustomTextFieldNoForm
-                    label="Promoción aplicada"
-                    value={
-                      promocionesPagingRes?.data?.items?.at(0)?.name || 'N/A'
-                    }
-                    disabled
-                    size={gridSizeMdLg11}
-                  />
-
-                  <SingleIconButton
-                    startIcon={<MdUnfoldMore />}
-                    onClick={() => {
-                      setIsVissible(!isVissible);
-                    }}
-                    label={
-                      isVissible
-                        ? 'Ocultar detalles'
-                        : 'Ver detalles de promoción'
-                    }
-                    size={gridSizeMdLg1}
-                  />
-                </Grid>
-
-                {/* --------- table --------- */}
-                <Grid item xs={12}>
-                  {isVissible && (
-                    <>
-                      <PromocionPreventaComponent
-                        promocion={
-                          promocionesPagingRes?.data?.items?.at(0)! || {}
-                        }
-                      />
-                    </>
-                  )}
-                </Grid>
+                <PromocionPreventaComponent
+                  promocion={promocionesPagingRes?.data?.items?.at(0)!}
+                />
               </>
             )}
           </Grid>

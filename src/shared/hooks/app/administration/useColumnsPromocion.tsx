@@ -37,7 +37,7 @@ export const useColumnsPromocion = ({
       {
         accessorKey: 'name',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),

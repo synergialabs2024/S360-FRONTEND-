@@ -48,7 +48,10 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
       </Grid>
 
       <Grid item container xs={12} spacing={2}>
-        <CustomTypoLabel text="PROMOCIONES" />
+        <CustomTypoLabel
+          text="PROMOCIONES"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
 
         <PromocionPreventaView preventa={preventa!} />
       </Grid>

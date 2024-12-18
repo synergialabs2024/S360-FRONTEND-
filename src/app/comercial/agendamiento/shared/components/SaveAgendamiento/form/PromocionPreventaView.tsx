@@ -1,4 +1,5 @@
-import type { Preventa } from '@/shared';
+import { PromocionPreventaComponent } from '@/app/comercial/preventa/shared/components';
+import type { Preventa, Promocion } from '@/shared';
 import { CustomCardAlert } from '@/shared/components';
 
 export type PromocionPreventaViewProps = {
@@ -26,7 +27,13 @@ const PromocionPreventaView: React.FC<PromocionPreventaViewProps> = ({
       />
     );
 
-  return <>PromocionPreventaView</>;
+  return (
+    <PromocionPreventaComponent
+      promocion={
+        (preventa?.promociones_data?.at(0)! as unknown as Promocion) || {}
+      }
+    />
+  );
 };
 
 export default PromocionPreventaView;
