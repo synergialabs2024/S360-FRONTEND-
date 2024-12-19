@@ -1111,6 +1111,14 @@ const AuditoriaInstallFixedOTPage = Loadable(
       ),
   ),
 );
+const AuditoriaInstallActualizadasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/auditoria/pages/forms/AuditoriaInstallActualizadasPage'
+      ),
+  ),
+);
 
 ///* cliente ------------
 const ClienteModule = Loadable(
@@ -1873,6 +1881,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.operaciones.auditOtInstallFixedData,
             element: <AuditoriaInstallFixedOTPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.auditOtInstallFixedPhotos,
+            element: <AuditoriaInstallActualizadasPage />,
           },
         ],
       },
