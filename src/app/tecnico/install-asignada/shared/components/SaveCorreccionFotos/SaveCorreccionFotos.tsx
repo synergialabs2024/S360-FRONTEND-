@@ -318,7 +318,7 @@ const SaveCorreccionFotos: React.FC<SaveCorreccionFotosProps> = ({
 
   const titleAndImage = (title: string, imgUrl: string) => {
     return (
-      <Grid item xs={isMobile ? 1 : 6} sx={isMobile ? { mb: 2 } : {}}>
+      <Grid item xs={isMobile ? 8 : 6} sx={isMobile ? { mb: 2 } : {}} pb={2}>
         <CustomTypoLabel
           text={title}
           pt={CustomTypoLabelEnum.ptMiddlePosition}
@@ -329,7 +329,7 @@ const SaveCorreccionFotos: React.FC<SaveCorreccionFotosProps> = ({
             imgUrl: imgUrl || '',
             title: title,
           }}
-          widthPercentage="60%"
+          widthPercentage={isMobile ? '100%' : '60%'}
         />
       </Grid>
     );
@@ -351,15 +351,21 @@ const SaveCorreccionFotos: React.FC<SaveCorreccionFotosProps> = ({
       <>
         {ordenTrabajo && (
           <>
+            <CustomTypoLabel text={'Motivo Correccion'} color={'#505050'} />
+
             <CustomTypoLabel
               text={
                 ordenTrabajo.motivo_correccion
                   ? ordenTrabajo.motivo_correccion.toString()
                   : ''
               }
-              pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
 
+            <CustomTypoLabel
+              text={'Observacion Correccion'}
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+              color={'#505050'}
+            />
             <CustomTypoLabel
               text={
                 ordenTrabajo.observacion_correccion
@@ -370,77 +376,72 @@ const SaveCorreccionFotos: React.FC<SaveCorreccionFotosProps> = ({
           </>
         )}
 
-        <Grid
-          container
-          direction={isMobile ? 'column' : 'row'}
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {ordenTrabajo && (
-            <>
-              {titleAndImage('Foto Ont', ordenTrabajo.url_foto_ont || '')}
-              {titleAndImage(
-                'Foto Potencia Ont',
-                ordenTrabajo.url_foto_potencia_ont || '',
-              )}
-              {titleAndImage(
-                'Foto Ont Encontrada en Casa',
-                ordenTrabajo.url_foto_ont_encontrado_casa || '',
-              )}
-              {titleAndImage(
-                'Foto Etiqueta',
-                ordenTrabajo.url_foto_etiqueta || '',
-              )}
-              {titleAndImage('Foto Nap', ordenTrabajo.url_foto_nap || '')}
-              {titleAndImage(
-                'Foto Potencia Nap',
-                ordenTrabajo.url_foto_potencia_nap || '',
-              )}
-              {titleAndImage('Foto Premio', ordenTrabajo.url_foto_premio || '')}
-              {titleAndImage(
-                'Foto Test Speed',
-                ordenTrabajo.url_foto_test_speed || '',
-              )}
-              {titleAndImage(
-                'Foto Acta Entrega Ups',
-                ordenTrabajo.url_foto_acta_entrega_ups || '',
-              )}
-            </>
-          )}
-        </Grid>
-
         {/* ============= Corrección Docs ============= */}
         <DocsSaveCorreccionFotos
           UploadImageDropZoneComponent={UploadImageDropZoneComponent}
           // Ont
           ontImg={ontImg}
           setOntImg={setOntImg}
+          ontImgLabel={titleAndImage(
+            'Foto Ont',
+            typeof ontImg === 'string' ? ontImg : ordenTrabajo!.url_foto_ont,
+          )}
           // Potencia Ont
           potenciaOntImg={potenciaOntImg}
           setPotenciaOntImg={setPotenciaOntImg}
+          potenciaOntImgLabel={titleAndImage(
+            'Foto Potencia Ont',
+            ordenTrabajo!.url_foto_potencia_ont || '',
+          )}
           // Ont Encontrada en Casa
           ontEncontradaCasaImg={ontEncontradaCasaImg}
           setOntEncontradaCasaImg={setOntEncontradaCasaImg}
+          ontEncontradaCasaImgLabel={titleAndImage(
+            'Foto Ont Encontrada en Casa',
+            ordenTrabajo!.url_foto_ont_encontrado_casa || '',
+          )}
           // Etiqueta
           etiquetaImg={etiquetaImg}
           setEtiquetaImg={setEtiquetaImg}
+          etiquetaImgLabel={titleAndImage(
+            'Foto Etiqueta',
+            ordenTrabajo!.url_foto_etiqueta || '',
+          )}
           // Nap
           napImg={napImg}
           setNapImg={setNapImg}
+          napImgLabel={titleAndImage(
+            'Foto Nap',
+            ordenTrabajo!.url_foto_nap || '',
+          )}
           // Potencia Nap
           potenciaNapImg={potenciaNapImg}
           setPotenciaNapImg={setPotenciaNapImg}
+          potenciaNapImgLabel={titleAndImage(
+            'Foto Potencia Nap',
+            ordenTrabajo!.url_foto_potencia_nap || '',
+          )}
           // Premio
           premioImg={premioImg}
           setPremioImg={setPremioImg}
+          premioImgLabel={titleAndImage(
+            'Foto Premio',
+            ordenTrabajo!.url_foto_premio || '',
+          )}
           // TestSpeed
           testSpeedImg={testSpeedImg}
           setTestSpeedImg={setTestSpeedImg}
+          testSpeedImgLabel={titleAndImage(
+            'Foto Test Speed',
+            ordenTrabajo!.url_foto_test_speed || '',
+          )}
           // Entrega Ups
           actaEntregaUpsImg={actaEntregaUpsImg}
           setActaEntregaUpsImg={setActaEntregaUpsImg}
+          actaEntregaUpsImgLabel={titleAndImage(
+            'Foto Acta Entrega Ups',
+            ordenTrabajo!.url_foto_acta_entrega_ups || '',
+          )}
         />
       </>
     </SingleFormBoxScene>
