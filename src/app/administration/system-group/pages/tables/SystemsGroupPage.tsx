@@ -67,7 +67,7 @@ const SystemsGroupPage: React.FC<SystemsGroupPageProps> = () => {
   const onEdit = (systemgroup: SystemGroup) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar SystemGroup',
+      title: 'Editar Grupo del Sistema',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
