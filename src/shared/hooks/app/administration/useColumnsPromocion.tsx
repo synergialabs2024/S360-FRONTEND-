@@ -37,7 +37,7 @@ export const useColumnsPromocion = ({
       {
         accessorKey: 'name',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
@@ -58,7 +58,7 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           return row?.original?.valor_descuento
-            ? `${row.original.valor_descuento} ${row.original?.tipo_descuento === DiscountTypeEnumChoice.PORCENTAJE ? '%' : 'USD'}`
+            ? `${row.original?.valor_descuento} ${row.original?.tipo_descuento === DiscountTypeEnumChoice.PORCENTAJE ? '%' : 'USD'}`
             : 'N/A';
         },
       },
@@ -76,7 +76,7 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.facturas_descuento
-            ? row.original.facturas_descuento.join(', ')
+            ? row.original?.facturas_descuento.join(', ')
             : 'SIN SELECCIONAR';
           return (
             <ViewMoreTextModalTableCell
@@ -96,7 +96,7 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.facturas_gratis
-            ? row.original.facturas_gratis.join(', ')
+            ? row.original?.facturas_gratis.join(', ')
             : 'SIN SELECCIONAR';
           return (
             <ViewMoreTextModalTableCell
@@ -165,9 +165,9 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.planes_data?.length
-            ? (row.original.planes_data as any[]).includes('*')
+            ? (row.original?.planes_data as any[]).includes('*')
               ? 'TODOS'
-              : row.original.planes_data.map(item => item.name).join(', ')
+              : row.original?.planes_data.map(item => item?.name).join(', ')
             : 'NO SELECCIONADOS';
           return (
             <ViewMoreTextModalTableCell
@@ -186,9 +186,9 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.provincias_data?.length
-            ? (row.original.provincias_data as any[]).includes('*')
+            ? (row.original?.provincias_data as any[]).includes('*')
               ? 'TODOS'
-              : row.original.provincias_data.map(item => item.name).join(', ')
+              : row.original?.provincias_data.map(item => item?.name).join(', ')
             : 'NO SELECCIONADOS';
           return (
             <ViewMoreTextModalTableCell
@@ -207,9 +207,9 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.ciudades_data?.length
-            ? (row.original.ciudades_data as any[]).includes('*')
+            ? (row.original?.ciudades_data as any[]).includes('*')
               ? 'TODOS'
-              : row.original.ciudades_data.map(item => item.name).join(', ')
+              : row.original?.ciudades_data.map(item => item?.name).join(', ')
             : 'NO SELECCIONADOS';
           return (
             <ViewMoreTextModalTableCell
@@ -228,9 +228,9 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.zonas_data?.length
-            ? (row.original.zonas_data as any[]).includes('*')
+            ? (row.original?.zonas_data as any[]).includes('*')
               ? 'TODOS'
-              : row.original.zonas_data.map(item => item.name).join(', ')
+              : row.original?.zonas_data.map(item => item?.name).join(', ')
             : 'NO SELECCIONADOS';
           return (
             <ViewMoreTextModalTableCell
@@ -249,9 +249,9 @@ export const useColumnsPromocion = ({
         enableSorting: true,
         Cell: ({ row }) => {
           const str = row?.original?.sectores_data?.length
-            ? (row.original.sectores_data as any[]).includes('*')
+            ? (row.original?.sectores_data as any[]).includes('*')
               ? 'TODOS'
-              : row.original.sectores_data.map(item => item.name).join(', ')
+              : row.original?.sectores_data.map(item => item?.name).join(', ')
             : 'SIN SELECCIONAR';
           return (
             <ViewMoreTextModalTableCell
@@ -301,9 +301,9 @@ export const useColumnsPromocion = ({
                     '¿Está seguro que desea cambiar el state de este registro?',
                   onConfirm: () => {
                     changeState.mutate({
-                      id: row.original.id!,
+                      id: row.original?.id!,
                       data: {
-                        state: !row.original.state,
+                        state: !row.original?.state,
                       },
                     });
                     setConfirmDialogIsOpen(false);

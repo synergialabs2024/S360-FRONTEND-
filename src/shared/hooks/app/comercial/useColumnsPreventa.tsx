@@ -18,6 +18,7 @@ import { ToastWrapper } from '@/shared/wrappers';
 type MRTSServiceType = { row: MRT_Row<Preventa> };
 
 export const useColumnsPreventa = () => {
+  // table base columns ---------------------
   const preventaBaseColumns01 = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       {
@@ -61,7 +62,9 @@ export const useColumnsPreventa = () => {
     ],
     [],
   );
+  // const preventaMetaInfoBase = useMemo<MRT_ColumnDef<Preventa>[]>(() => [], []);
 
+  // table columns ---------------------
   const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       ...preventaBaseColumns01,
@@ -304,46 +307,6 @@ export const useColumnsPreventa = () => {
     [preventaBaseColumns, preventaBaseColumns01],
   );
 
-  /*
-  const preventaRechazadas = useMemo<MRT_ColumnDef<Preventa>[]>(
-    () => [
-      ...preventaBaseColumns,
-      {
-        accessorKey: 'razon_social__rechazada_preventa',
-        header: 'RECHAZADO POR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__RECHAZADO,
-          );
-
-          return trazabilidad?.user_data?.razon_social || 'N/A';
-        },
-      },
-      {
-        accessorKey: 'fecha_rechazado',
-        header: 'FECHA RECHAZADO',
-        enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__RECHAZADO,
-          );
-
-          return trazabilidad
-            ? formatDateWithTime(trazabilidad?.timestamp)
-            : 'N/A';
-        },
-      },
-    ],
-    [],
-  );
-  */
-
   const preventaFallidas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       ...preventaBaseColumns01,
@@ -382,6 +345,7 @@ export const useColumnsPreventa = () => {
     ],
     [preventaBaseColumns, preventaBaseColumns01],
   );
+
   const preventaSinGestion = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       ...preventaBaseColumns,

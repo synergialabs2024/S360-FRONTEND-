@@ -14,6 +14,7 @@ import type {
   OrdenTrabajo,
   PaisLimitData,
   Preventa,
+  PromocionLimitData,
   ProvinciaLimitData,
   SectorLimitData,
   SolicitudServicio,
@@ -72,6 +73,8 @@ export interface LineaServicio {
 
   // helpers serializers ---------
   client_lines_data?: ClientLimiTypeData[]; // to handle switch between services (all except NO_INSTALADO)
+
+  promociones_data?: PromocionLimitData[]; // contract.promociones
 }
 
 export type ClientLimiTypeData = Pick<

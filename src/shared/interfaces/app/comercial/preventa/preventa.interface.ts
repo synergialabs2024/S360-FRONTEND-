@@ -1,4 +1,5 @@
 import { EquipoVentasDetalle } from '@/app/comercial/preventa/shared/components';
+import { Flota, PromocionLimitData, TrazabilidadVentas } from '@/shared';
 import {
   ClasificacionPlanesScoreBuroEnumChoice,
   EstadoPagoEnumChoice,
@@ -15,7 +16,6 @@ import { Tarjeta } from '../../cobranza';
 import { NapLimitData } from '../../infraestructura';
 import { PlanInternet } from '../../servicios';
 import { SolicitudServicio } from '../solicitud-servicio';
-import { Flota, TrazabilidadVentas } from '@/shared';
 
 export interface PreventasPaginatedRes {
   status: number;
@@ -113,12 +113,15 @@ export interface Preventa {
 
   tarjeta?: number; // credito
 
+  promociones?: number[]; // fk
+
   // sales filter logic
   area: number;
   departamento: number;
   canal_venta: number;
   vendedor: number;
 
+  //
   trazabilidad_data?: TrazabilidadVentas[]; // JSON
 
   solicitud_servicio_data?: SolicitudServicio;
@@ -128,7 +131,9 @@ export interface Preventa {
   tarjeta_data?: Tarjeta;
   nap_data?: NapLimitData;
   flota_data?: Flota;
+  promociones_data?: PromocionLimitData[];
 
   // helpers properties
   can_be_scheduled?: boolean;
+  es_tercera_edad?: boolean; // <- sol_service
 }

@@ -4,3 +4,4 @@ export { default as GeneralDataSavePreventaStep } from './GeneralDataSavePrevent
 export { default as SavePreventa } from './SavePreventa';
 
 export * from './form';
+export * from './promocion';

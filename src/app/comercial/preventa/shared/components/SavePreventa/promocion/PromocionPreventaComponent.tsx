@@ -1,21 +1,72 @@
-import { Promocion, useColumnsPromocion } from '@/shared';
-import { CustomMinimalTable } from '@/shared/components';
+import { Grid } from '@mui/material';
+import { useState } from 'react';
+import { MdUnfoldMore } from 'react-icons/md';
+
+import {
+  gridSizeMdLg1,
+  gridSizeMdLg11,
+  Promocion,
+  useColumnsPromocion,
+} from '@/shared';
+import {
+  CustomMinimalTable,
+  CustomTextFieldNoForm,
+  SingleIconButton,
+} from '@/shared/components';
 
 export type PromocionPreventaComponentProps = { promocion: Promocion };
 
 const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
-  promocion,
+  promocion = {} as any,
 }) => {
+  ///* local state ----------------
+  const [isVissible, setIsVissible] = useState(true);
+
   ///* columns ----------------
   const { promocionPreventaColumns } = useColumnsPromocion();
 
   return (
-    <CustomMinimalTable<Promocion>
-      columns={promocionPreventaColumns}
-      data={[promocion]}
-      enablePagination
-      density="comfortable"
-    />
+    <>
+      <Grid
+        item
+        container
+        xs={12}
+        spacing={2}
+        alignItems="end"
+        justifyContent="center"
+        pb={4}
+      >
+        <CustomTextFieldNoForm
+          label="Promoción aplicada"
+          value={promocion?.name || 'N/A'}
+          disabled
+          size={gridSizeMdLg11}
+        />
+
+        <SingleIconButton
+          startIcon={<MdUnfoldMore />}
+          onClick={() => {
+            setIsVissible(!isVissible);
+          }}
+          label={isVissible ? 'Ocultar detalles' : 'Ver detalles de promoción'}
+          size={gridSizeMdLg1}
+        />
+      </Grid>
+
+      {/* --------- table --------- */}
+      <Grid item xs={12}>
+        {isVissible && promocion?.id && (
+          <>
+            <CustomMinimalTable<Promocion>
+              columns={promocionPreventaColumns}
+              data={[promocion]}
+              enablePagination
+              density="comfortable"
+            />
+          </>
+        )}
+      </Grid>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import {
   AlertSeverityType,
   AlertVariantType,
   GridSizeType,
+  SxPropsThemeType,
 } from '@/shared/interfaces';
 import { CustomCircularPorgress } from '../Loaders';
 
@@ -19,6 +20,9 @@ export type CustomCardAlertProps = {
   gridSizeCard?: GridSizeType;
 
   isLoading?: boolean;
+
+  sxAlert?: SxPropsThemeType;
+  sxTypo?: SxPropsThemeType;
 };
 
 const CustomCardAlert: React.FC<CustomCardAlertProps> = ({
@@ -30,6 +34,9 @@ const CustomCardAlert: React.FC<CustomCardAlertProps> = ({
   gridSizeCard = gridSize,
   isLoading = false,
   sizeType = 'small',
+
+  sxAlert = {},
+  sxTypo = {},
 }) => {
   if (isLoading) {
     return (
@@ -44,9 +51,13 @@ const CustomCardAlert: React.FC<CustomCardAlertProps> = ({
   if (sizeType === 'small') {
     return (
       <Grid item {...gridSizeCard}>
-        <Alert variant={alertVariant} severity={alertSeverity}>
+        <Alert
+          variant={alertVariant}
+          severity={alertSeverity}
+          sx={{ ...sxAlert }}
+        >
           {alertContentNode || (
-            <Typography variant="body1" component="div">
+            <Typography variant="body1" component="div" sx={{ ...sxTypo }}>
               {alertMessage}
             </Typography>
           )}
@@ -58,15 +69,21 @@ const CustomCardAlert: React.FC<CustomCardAlertProps> = ({
   if (sizeType === 'medium') {
     return (
       <Grid item {...gridSizeCard}>
-        <Alert severity={alertSeverity} variant={alertVariant}>
-          <AlertTitle>{alertTitle}</AlertTitle>
+        <Alert
+          severity={alertSeverity}
+          variant={alertVariant}
+          sx={{ ...sxAlert }}
+        >
+          <AlertTitle sx={{ ...sxTypo }}>{alertTitle}</AlertTitle>
 
           <Grid container>
             <Grid item xs={12}>
               {alertContentNode ? (
                 alertContentNode
               ) : (
-                <Typography variant="body1">{alertMessage}</Typography>
+                <Typography variant="body1" sx={{ ...sxTypo }}>
+                  {alertMessage}
+                </Typography>
               )}
             </Grid>
           </Grid>

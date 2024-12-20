@@ -989,10 +989,13 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                             }
                           : { lat: 0, lng: 0 }
                       }
-                      canDragMarker={true}
+                      canDragMarker
                       setLatLng={setLatLng}
+                      // coverage -------
                       showCoverage
                       coverageZones={zonasPaging?.data?.items || []}
+                      showNaps
+                      naps={napsByCoords || []}
                     />
                   }
                 />
