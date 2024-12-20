@@ -22,7 +22,6 @@ import { ToastWrapper, useLoaders } from '@/shared';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   CustomAutocomplete,
-  CustomAutocompleteArrString,
   CustomCardAlert,
   CustomCellphoneTextField,
   CustomDatePicker,
@@ -30,6 +29,7 @@ import {
   CustomNumberTextField,
   CustomScanLoad,
   CustomTextField,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   InputAndBtnGridSpace,
   SampleCheckbox,
@@ -38,7 +38,6 @@ import {
 import {
   EstadoSolicitudServicioEnumChoice,
   GeneralModelStatesEnumChoice,
-  IDENTIFICATION_TYPE_ARRAY_CHOICES,
   IdentificationTypeEnumChoice,
   SalesModelsEnumChoice,
   SalesStatesActionsEnumChoice,
@@ -127,6 +126,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       isFormBlocked: false,
       thereIsCoverage: false,
       thereAreNaps: false,
+
+      tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
     },
   });
   const {
@@ -504,7 +505,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       <Grid item container {...gridSizeMdLg6} spacing={2}>
         <CustomTypoLabel text="Datos personales" />
 
-        <CustomAutocompleteArrString
+        {/* <CustomAutocompleteArrString
           label="Tipo de identificación"
           name="tipo_identificacion"
           control={form.control}
@@ -518,6 +519,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           onChangeValue={() => {
             clearForm();
           }}
+        /> */}
+        <CustomTextFieldNoForm
+          label="Tipo de identificación"
+          value={IdentificationTypeEnumChoice.CEDULA}
+          disabled
         />
         <InputAndBtnGridSpace
           inputNode={

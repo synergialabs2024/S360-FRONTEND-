@@ -10,6 +10,12 @@ export const IDENTIFICATION_TYPE_ARRAY_CHOICES = [
   IdentificationTypeEnumChoice.RUC,
   // IdentificationTypeEnumChoice.PASAPORTE,
 ];
+export const IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE = [
+  {
+    label: 'CEDULA',
+    value: IdentificationTypeEnumChoice.CEDULA,
+  },
+];
 
 export enum UserRolesEnumChoice {
   GERENCIA = 'GERENCIA', // all business
