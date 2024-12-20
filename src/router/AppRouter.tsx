@@ -932,6 +932,30 @@ const UpdateUbicacionPage = Loadable(
     () => import('@/app/inventario/ubicacion/pages/forms/UpdateUbicacionPage'),
   ),
 );
+const IngresoMaterialesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/ingreso-material/pages/tables/IngresoMaterialesPage'
+      ),
+  ),
+);
+const CreateIngresoMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/ingreso-material/pages/forms/CreateIngresoMaterialPage'
+      ),
+  ),
+);
+const UpdateIngresoMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/ingreso-material/pages/forms/UpdateIngresoMaterialPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -1975,6 +1999,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.ubicacionesEditar,
             element: <UpdateUbicacionPage />,
+          },
+
+          ///* Ingreso Material
+          {
+            path: ROUTER_PATHS.inventario.ingresoMateriales,
+            element: <IngresoMaterialesPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ingresoMaterialesCrear,
+            element: <CreateIngresoMaterialPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ingresoMaterialesEditar,
+            element: <UpdateIngresoMaterialPage />,
           },
         ],
       },

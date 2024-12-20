@@ -1,4 +1,5 @@
 export * from './bodega';
+export * from './ingreso-material';
 
 export * from './categoria-producto.schema';
 export * from './producto.schema';

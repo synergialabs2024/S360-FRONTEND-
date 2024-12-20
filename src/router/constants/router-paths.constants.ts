@@ -475,6 +475,12 @@ export const ROUTER_PATHS = {
     ubicacionesCrear: 'ubicaciones/crear',
     ubicacionesEditar: 'ubicaciones/editar/:uuid',
     ubicacionesNav: '/inventario/ubicaciones',
+
+    ///* Ingreso Material
+    ingresoMateriales: 'ingreso-materiales',
+    ingresoMaterialesCrear: 'ingreso-materiales/crear',
+    ingresoMaterialesEditar: 'ingreso-materiales/editar/:uuid',
+    ingresoMaterialesNav: '/inventario/ingreso-materiales',
   },
   // // LOGISTICA =================================
   logistica: {
