@@ -50,20 +50,18 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
     },
   });
 
-  const isCustomLoading = isLoadingPromociones || isRefetchingPromociones;
-
   ///* effects ----------------
   useEffect(() => {
-    if (!isCustomLoading) return;
-
     const firstPromocion = promocionesPagingRes?.data?.items?.at(0);
+
     if (firstPromocion) {
       form.setValue('promociones', [firstPromocion?.id!]);
     } else {
       form.setValue('promociones', []);
     }
-  }, [form, isCustomLoading, promocionesPagingRes?.data?.items]);
+  }, [form, promocionesPagingRes]);
 
+  const isCustomLoading = isLoadingPromociones || isRefetchingPromociones;
   useLoaders(isCustomLoading);
 
   if (
