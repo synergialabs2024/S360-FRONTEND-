@@ -1,3 +1,9 @@
+import { FiPlus } from 'react-icons/fi';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { Grid } from '@mui/material';
+
 import {
   CreateIngresoMaterialParamsBase,
   useCreateIngresoMaterial,
@@ -11,14 +17,9 @@ import {
   ingresoMaterialFormSchema,
   gridSizeMdLg6,
   Ubicacion,
-  UbicacionProducto,
-  ToastWrapper,
+  Producto,
 } from '@/shared';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
-import { useEffect, useState } from 'react';
 import {
   CustomAutocomplete,
   CustomMinimalTable,
@@ -29,24 +30,25 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { Grid } from '@mui/material';
-import { FiPlus } from 'react-icons/fi';
 import ProductosDisponiblesModal from '../../../pages/modal/ProductosDisponiblesModal';
 import { useColumnsProductosDisponibles } from '../../hooks';
 import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export interface SaveIngresoMaterialProps {
   title: string;
   ingresoMaterial?: IngresoMaterial;
 }
 
-export type ProductosDisponiblesTableType = UbicacionProducto & {
+export type ProductosDisponiblesTableType = Producto & {
   usedQuantity: number;
 
   containsSeries: boolean;
   selectedSeries: string[];
   savedSeries: string[];
   cantidad?: number;
+  series?: any[];
+  productos?: string[];
 };
 
 type SaveFormData = CreateIngresoMaterialParamsBase & {};
@@ -81,11 +83,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
 
   const watchedBodega = form.watch('bodega');
   const watchedUbicacion = form.watch('ubicacion');
-  /*
-  const watchedProductos = form.watch('productos');
 
-  console.log(watchedProductos);
-  */
   ///* fetch data ---------------------
   const {
     data: bodegasPagingRes,
@@ -124,40 +122,26 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    if (productosDisponibles.length === 0) {
-      ToastWrapper.error('La Tabla Productos no puede estar vacia');
-      return;
-    }
+    const mappedProductos = productosDisponibles.map(producto => ({
+      ...producto,
+      producto: producto.id,
+      series: producto.series ? producto.series : [],
+    }));
 
-    for (const producto of productosDisponibles) {
-      if (
-        producto.cantidad === undefined ||
-        isNaN(producto.cantidad) ||
-        producto.cantidad === 0
-      ) {
-        ToastWrapper.error('El campo cantidad de la tabla es requerido');
-        return;
-      }
-    }
-    const data2 = {
+    const preparedData = {
       ...data,
-      productos: productosDisponibles,
+      productos: mappedProductos,
     };
 
-    ///* upd
     if (ingresoMaterial?.id) {
       updateIngresoMaterialMutation.mutate({
-        id: ingresoMaterial.id!,
-        data: data2,
+        id: ingresoMaterial.id,
+        data: preparedData,
       });
       return;
     }
 
-    ///* create
-    createIngresoMaterialMutation.mutate({
-      ...data,
-      productos: productosDisponibles,
-    });
+    createIngresoMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
@@ -261,7 +245,6 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
           <ProductosDisponiblesModal
             open={openAddProducts}
             onClose={() => setOpenAddProducts(false)}
-            ubicacionIngresoMaterial={watchedUbicacion}
           />
         </>
       )}

@@ -1,33 +1,32 @@
 /* eslint-disable indent */
-import { emptyCellNested, formatQuantityCell, TABLE_CONSTANTS } from '@/shared';
+import { TextField } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
-import { SingleIconButton } from '@/shared/components';
 import { IoMdTrash } from 'react-icons/io';
+import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
+
+import { emptyCellOneLevel, TABLE_CONSTANTS } from '@/shared';
+import { SingleIconButton } from '@/shared/components';
 import {
   ProductosDisponiblesStoreKey,
   useProductosStore,
 } from '@/store/app/inventario/productos-disponible.store';
-import { TextField } from '@mui/material';
 import { ProductosDisponiblesTableType } from '../components/SaveIngresoMaterial/SaveIngresoMaterial';
+import SeriesProductoModal from '../../pages/modal/SeriesProductoModal';
 
 type UseColumnsEquiposIngresoMaterial = {
   showActionColumn?: boolean;
   onActionProductosRowNode?: (
     item: ProductosDisponiblesTableType,
   ) => React.ReactNode;
-
-  showCurrentStockColumn?: boolean;
 };
 
-type MRTUbicacionProductoTableType = {
+type MRTProductoTableType = {
   row: MRT_Row<ProductosDisponiblesTableType>;
 };
 
 export const useColumnsProductosDisponibles = ({
   showActionColumn = false,
   onActionProductosRowNode,
-  showCurrentStockColumn = true,
 }: UseColumnsEquiposIngresoMaterial = {}) => {
   ///* global state --------------------
   const removeSelectedItem = useProductosStore(s => s.removeSelectedItem);
@@ -50,28 +49,63 @@ export const useColumnsProductosDisponibles = ({
     [updateSelectedItemValue],
   );
 
+  const onChangeSerieInit = useCallback(
+    (value: string[], item: ProductosDisponiblesTableType) => {
+      updateSelectedItemValue({
+        keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
+        updatedItem: {
+          ...item,
+          series: value ? value : [],
+        } as any,
+      });
+    },
+    [updateSelectedItemValue],
+  );
+
   ///* base columns -------------------------------
   const baseColumnsProductosDisponibles01 = useMemo<
     MRT_ColumnDef<ProductosDisponiblesTableType>[]
   >(
     () => [
       {
-        accessorKey: 'producto__codigo',
+        accessorKey: 'codigo',
         header: 'CÓDIGO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
       {
-        accessorKey: 'producto__descripcion',
+        accessorKey: 'descripcion',
         header: 'DESCRIPCION',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['producto_data', 'descripcion']),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
       },
     ],
     [],
+  );
+
+  const baseColumnsProductosDisponibles02 = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
+      {
+        accessorKey: 'producto__series',
+        header: 'SERIES',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => {
+          return (
+            <SeriesProductoModal
+              dataArray={row?.original?.series || []}
+              modalTitle={`Serie para ${row?.original?.codigo}`}
+              onDataChange={newData => onChangeSerieInit(newData, row.original)}
+            />
+          );
+        },
+      },
+    ],
+    [onChangeSerieInit],
   );
 
   const modalMaterialColumns = useMemo<
@@ -80,32 +114,19 @@ export const useColumnsProductosDisponibles = ({
     () => [
       ...baseColumnsProductosDisponibles01,
 
-      ...(showCurrentStockColumn
-        ? [
-            {
-              accessorKey: 'stock_actual',
-              header: 'STOCK',
-              enableColumnFilter: false,
-              Cell: ({ row }: MRTUbicacionProductoTableType) =>
-                formatQuantityCell(row, 'stock_actual'),
-            },
-          ]
-        : []),
-
       ...(showActionColumn
         ? [
             {
               accessorKey: 'action',
               enableColumnFilter: false,
               header: 'ACCIÓN',
-              Cell: ({ row }: MRTUbicacionProductoTableType) =>
+              Cell: ({ row }: MRTProductoTableType) =>
                 onActionProductosRowNode?.(row.original),
             },
           ]
         : []),
     ],
     [
-      showCurrentStockColumn,
       baseColumnsProductosDisponibles01,
       onActionProductosRowNode,
       showActionColumn,
@@ -117,13 +138,6 @@ export const useColumnsProductosDisponibles = ({
   >(
     () => [
       ...baseColumnsProductosDisponibles01,
-      {
-        accessorKey: 'producto__categoria',
-        header: 'CATEGORIA',
-        enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'categoria']),
-      },
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -142,6 +156,7 @@ export const useColumnsProductosDisponibles = ({
           );
         },
       },
+      ...baseColumnsProductosDisponibles02,
       {
         accessorKey: 'remove',
         header: 'ACCIONES',
@@ -162,7 +177,12 @@ export const useColumnsProductosDisponibles = ({
         ),
       },
     ],
-    [baseColumnsProductosDisponibles01, onChangePuntaInit, removeSelectedItem],
+    [
+      baseColumnsProductosDisponibles01,
+      baseColumnsProductosDisponibles02,
+      onChangePuntaInit,
+      removeSelectedItem,
+    ],
   );
 
   return {

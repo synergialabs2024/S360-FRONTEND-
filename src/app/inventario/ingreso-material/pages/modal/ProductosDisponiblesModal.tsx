@@ -1,6 +1,11 @@
-import { useFetchUbicacionProductos } from '@/actions/app';
+import { useEffect } from 'react';
+
+import { useFetchProductos } from '@/actions/app';
 import {
-  UbicacionProducto,
+  CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
+  CodigoCategoriaProductoEnumChoiceType,
+  gridSizeMdLg6,
+  Producto,
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
@@ -11,23 +16,21 @@ import {
 } from '@/store/app/inventario/productos-disponible.store';
 import { useColumnsProductosDisponibles } from '../../shared/hooks';
 import {
+  CustomAutocompleteNoForm,
   CustomSearch,
   CustomSingleButton,
   ScrollableDialogProps,
   TableWithoutActions,
 } from '@/shared/components';
-import { useEffect } from 'react';
 
 export type ProductosDisponiblesModalProps = {
   open: boolean;
   onClose: () => void;
-  ubicacionIngresoMaterial: number;
 };
 
 const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   onClose,
   open,
-  ubicacionIngresoMaterial,
 }) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
@@ -36,7 +39,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   const {
     pagination,
     globalFilter,
-    searchTerm,
+    //searchTerm,
     setPagination,
     onChangeFilter,
   } = useTableFilter();
@@ -44,21 +47,25 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
 
   ///* global state ---------------------
   const addSelectedItem = useProductosStore(s => s.addSelectedItem);
+  const selectedCategoria = useProductosStore(s => s.selectedCategoriaModel);
+  const setSelectedCategoriaModel = useProductosStore(
+    s => s.setSelectedCategoriaModel,
+  );
 
   ///* fetch data ---------------------
   const {
     data: equiposDisponiblesPaging,
     isLoading: isLoadingItemsDisponibles,
     isRefetching: isRefetchingItemsDisponibles,
-  } = useFetchUbicacionProductos({
+  } = useFetchProductos({
     enabled: open,
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
 
       ...filterObject,
-      producto__codigo: searchTerm,
-      ubicacion: ubicacionIngresoMaterial,
+
+      //producto__categoria__uuid: selectedCategoria,
     },
   });
 
@@ -112,9 +119,28 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
             onChange={onChangeFilter}
             value={globalFilter}
             text="por código"
+            sxContainer={{
+              mb: 5,
+            }}
+            customSpaceNode={
+              <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
+                label="CATEGORIA"
+                value={selectedCategoria}
+                actualValueKey="value"
+                onChange={v => {
+                  setSelectedCategoriaModel(v as string);
+                }}
+                options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
+                getOptionLabel={o => o.label}
+                loading={false}
+                required
+                error={false}
+                disableClearable
+                size={gridSizeMdLg6}
+              />
+            }
           />
-
-          <TableWithoutActions<UbicacionProducto>
+          <TableWithoutActions<Producto>
             columns={modalMaterialColumns}
             data={equiposDisponiblesPaging?.data?.items || []}
             isLoading={isLoadingItemsDisponibles}

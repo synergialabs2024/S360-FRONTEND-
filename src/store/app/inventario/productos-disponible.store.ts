@@ -15,6 +15,10 @@ export interface ProductosDisponiblesState {
 
   setSelectedRow: (row: ProductosDisponiblesTableType | null) => void;
 
+  // helpers ------
+  selectedCategoriaModel: string | null;
+  setSelectedCategoriaModel: (model: string | null) => void;
+
   // operations functions ------
   addSelectedItem: ({
     item,
@@ -111,7 +115,12 @@ export const useProductosStore = create<ProductosDisponiblesState>()(
     clearAll: () => {
       set({
         productosDisponibles: [],
+        selectedCategoriaModel: null,
       });
     },
+
+    // helpers ------
+    selectedCategoriaModel: null,
+    setSelectedCategoriaModel: model => set({ selectedCategoriaModel: model }),
   }),
 );

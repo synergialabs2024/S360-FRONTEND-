@@ -571,6 +571,25 @@ export const CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA = [
   },
 ];
 
+export type CodigoCategoriaProductoEnumChoiceType = {
+  label: string;
+  value: InventarioEnumUUID;
+};
+export const CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO = [
+  {
+    label: 'EQUIPOS',
+    value: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
+  },
+  {
+    label: 'MATERIALES',
+    value: InventarioEnumUUID.CATEGORIA_PRODUCTO_MATERIALES,
+  },
+  {
+    label: 'VENTAS',
+    value: InventarioEnumUUID.CATEGORIA_PRODUCTO_VENTAS,
+  },
+];
+
 ///* ORDEN TRABAJO ==========================================
 export enum EstadoOrdenTrabajoEnumChoice {
   PENDIENTE = 'PENDIENTE',

@@ -1,5 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { UbicacionProducto } from '../ubicacion-producto.interface';
+import { Producto } from '../producto.interface';
 
 export interface IngresoMaterialesPaginatedRes {
   status: number;
@@ -14,7 +14,7 @@ export interface IngresoMaterial {
   state: boolean;
 
   observacion: string;
-  productos: UbicacionProducto[];
+  productos: Producto[];
 
   ///* fk
   bodega: number;
@@ -22,6 +22,10 @@ export interface IngresoMaterial {
 
   created_at?: string;
   modified_at?: string;
+}
+
+export interface IngresoMaterialSeries {
+  series: string;
 }
 
 export type IngresoMaterialLimitData = Pick<IngresoMaterial, 'uuid' | 'id'>;

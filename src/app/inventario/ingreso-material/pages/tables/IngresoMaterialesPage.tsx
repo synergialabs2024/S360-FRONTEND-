@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router';
+
 import { useFetchIngresoMateriales } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
@@ -16,7 +18,6 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { useNavigate } from 'react-router';
 
 export const returnUrlIngresoMaterialesPage =
   ROUTER_PATHS.inventario.ingresoMaterialesNav;
