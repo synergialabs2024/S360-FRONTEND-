@@ -51,9 +51,37 @@ export type BaseRubroDetail = {
   precio: string;
   cantidad: string;
 
+  // service
+  promociones?: BaseRubroPromocionDetail[];
+
+  // product
   producto_data?: BaseRubroDetailProductData;
+  descripcion?: string;
+  line_subtotal?: string;
+
+  // 3ra edad or discapacidad
+  es_tercera_edad?: boolean;
+  es_discapacitado?: boolean;
+  mayor_edad_discapacitado?: MayorEdadOrDiscapacidadDetail[];
 };
 export type BaseRubroDetailProductData = Pick<
   Producto,
   'id' | 'uuid' | 'nombre'
 >;
+export type BaseRubroPromocionDetail = {
+  promo_id?: number;
+  promo_name?: string;
+  descripcion?: string;
+  descuento_aplicado?: string;
+};
+export type MayorEdadOrDiscapacidadDetail =
+  | {
+      type: 'DESCUENTO';
+      valor_base_plan?: string;
+      valor_descuento?: string;
+      disccount_percentage?: string;
+    }
+  | {
+      type: 'ADICIONAL';
+      valor_adicional_instalaciones_tercera_edad?: string;
+    };

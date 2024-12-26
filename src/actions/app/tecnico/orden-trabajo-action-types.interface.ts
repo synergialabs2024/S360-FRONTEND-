@@ -41,6 +41,8 @@ export type UploadInstalacionOTAsignData = Pick<
   | 'url_foto_potencia_nap'
   | 'url_foto_test_speed'
   | 'modelo_fibra_utilizada'
+  // | 'hora_inicio'
+  | 'hora_fin'
   // | 'url_foto_ont_encontrado_casa'
   // | 'url_foto_premio'
   // | 'url_foto_acta_entrega_ups'

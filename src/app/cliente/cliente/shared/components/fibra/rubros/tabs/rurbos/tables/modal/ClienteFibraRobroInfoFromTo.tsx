@@ -15,7 +15,9 @@ const ClienteFibraRobroInfoFromTo: React.FC<
   const toInvoide = {
     billTo: customer?.razon_social,
     billToEmail: customer?.email,
-    billToAddress: rubro?.contrato_data?.direccion,
+    billToAddress:
+      rubro?.contrato_data?.direccion_referencia ||
+      rubro?.contrato_data?.direccion,
     billToPhone: customer?.celular,
   };
   const fromInvoice = {

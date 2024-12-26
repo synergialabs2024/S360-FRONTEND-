@@ -32,6 +32,8 @@ export type ClienteFibraRobroInfoTableDetailsProps = {
 
 type BaseRubroDetailProductData = BaseRubroDetail & {
   series?: string[];
+
+  nombre?: string; // helper to show the name of the product and cuota info if exist
 };
 
 const ClienteFibraRobroInfoTableDetails: React.FC<
@@ -40,6 +42,111 @@ const ClienteFibraRobroInfoTableDetails: React.FC<
   const detail: BaseRubroDetailProductData[] = rubro?.detalle;
   const hasName = detail?.some(item => item?.producto_data?.nombre);
   const rubroType = rubro?.tipo_rubro;
+  const hasPromociones = detail?.some(item => item?.promociones?.length);
+  const has3raEdadOrDiscapacidadDetail = detail?.some(
+    item =>
+      (item?.es_tercera_edad || item?.es_discapacitado) &&
+      item?.mayor_edad_discapacitado?.at(0)?.type,
+  );
+
+  const formattedDetailData = useMemo(() => {
+    if (!hasPromociones) {
+      if (rubroType === TipoRubroEnumChoice.PRODUCTOS) {
+        const mappedDetail = detail.map(item => {
+          const hasCuotaInfo =
+            item?.descripcion?.includes('Cuota') &&
+            +(item?.line_subtotal || 0) > 0;
+
+          return {
+            ...item,
+            nombre: hasCuotaInfo
+              ? `${item?.producto_data?.nombre} (${item?.descripcion})`
+              : item?.codigo,
+            precio: hasCuotaInfo ? item?.line_subtotal : item?.precio,
+            cantidad: item?.cantidad,
+          } as unknown as BaseRubroDetailProductData;
+        });
+
+        return mappedDetail;
+      } else if (
+        rubroType === TipoRubroEnumChoice.SERVICIO &&
+        has3raEdadOrDiscapacidadDetail
+      ) {
+        const newItems3raEdadOrDiscapacidad = [];
+        // agregar tanto el item original q ya tiene codigo, precio, cantidad, como los extras de mayor_edad_discapacitado array considerando el type, donde si es descuento seria q resta, si es adicional seria q suma
+        const is3raEdad = detail?.at(0)?.es_tercera_edad;
+        const isDiscapacidad = detail?.at(0)?.es_discapacitado;
+
+        for (let i = 0; i < detail.length; i++) {
+          const item = detail[i];
+          const mayorEdadDiscapacitado = item?.mayor_edad_discapacitado || [];
+
+          if (!mayorEdadDiscapacitado.length) {
+            newItems3raEdadOrDiscapacidad.push(item);
+            continue;
+          }
+
+          const mappedMayorEdadDiscapacitado = mayorEdadDiscapacitado
+            .map(mayorEdadItem => {
+              const type = mayorEdadItem?.type;
+              const isDescuento = type === 'DESCUENTO';
+              const isAdicional = type === 'ADICIONAL';
+              const codigo = isDescuento ? 'Descuento' : 'Adicional';
+              const codeLabel = is3raEdad
+                ? 'Tercera Edad'
+                : isDiscapacidad
+                  ? 'Discapacidad'
+                  : 'N/A';
+
+              const precio = isDescuento
+                ? -Number(mayorEdadItem?.valor_descuento)
+                : isAdicional
+                  ? Number(
+                      mayorEdadItem?.valor_adicional_instalaciones_tercera_edad,
+                    )
+                  : 0;
+
+              const isEmplyObject = Object.keys(mayorEdadItem).length === 0;
+              if ((!precio && isAdicional) || isEmplyObject) return null;
+
+              return {
+                codigo: `${codigo} ${'(' + codeLabel + ')'}`,
+                precio: precio,
+                cantidad: 1,
+              } as unknown as BaseRubroDetailProductData;
+            })
+            .filter(Boolean) as BaseRubroDetailProductData[];
+
+          newItems3raEdadOrDiscapacidad.push(
+            item,
+            ...mappedMayorEdadDiscapacitado,
+          );
+        }
+
+        return newItems3raEdadOrDiscapacidad;
+      }
+
+      return detail;
+    }
+
+    return detail.reduce((acc, item) => {
+      const promociones = item?.promociones || [];
+      if (!promociones.length) {
+        acc.push(item);
+        return acc;
+      }
+
+      const mappedPromociones = promociones.map(promo => ({
+        ...promo,
+        codigo: `${promo?.promo_name}  (${promo?.descripcion})`,
+        precio: '-' + promo?.descuento_aplicado,
+        cantidad: 1,
+      }));
+
+      acc.push(item, ...(mappedPromociones as unknown as BaseRubroDetail[]));
+      return acc;
+    }, [] as BaseRubroDetailProductData[]);
+  }, [detail, hasPromociones]);
 
   ///* local state -------------------
   const [openSeriesModal, setOpenSeriesModal] = useState<boolean>(false);
@@ -115,9 +222,9 @@ const ClienteFibraRobroInfoTableDetails: React.FC<
             </TableHead>
 
             <TableBody>
-              {detail.map(
+              {formattedDetailData.map(
                 (
-                  order: BaseRubroDetail,
+                  order: BaseRubroDetailProductData,
                   index: React.Key | null | undefined,
                 ) => (
                   <TableRow key={index}>
@@ -128,7 +235,8 @@ const ClienteFibraRobroInfoTableDetails: React.FC<
                     {hasName && (
                       <TableCell>
                         <Typography variant="body1">
-                          {order?.producto_data?.nombre || '-'}
+                          {/* {order?.producto_data?.nombre || '-'} */}
+                          {order?.nombre || '-'}
                         </Typography>
                       </TableCell>
                     )}

@@ -43,4 +43,6 @@ export type ClienteLimitData = Pick<
   | 'celular'
   | 'tipo_identificacion'
   | 'identificacion'
+  | 'es_tercera_edad'
+  | 'es_discapacitado'
 >;

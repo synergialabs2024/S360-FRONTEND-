@@ -56,7 +56,6 @@ const SaveActivacionInstallPendienteOT: React.FC<
   ///* form ---------------------
   const form = useForm<ActicacionInstallOTSaveFormData>({
     resolver: yupResolver(activacionInstallOTSchema) as any,
-    defaultValues: {},
   });
   const { handleSubmit } = form;
 
@@ -113,13 +112,10 @@ const SaveActivacionInstallPendienteOT: React.FC<
       );
 
     const selectedSerie = ont?.savedSeries?.at(0);
-    const currentDate = dayjs().format('YYYY-MM-DD');
-    const horaInicio = dayjs(`${currentDate} ${data.hora_inicio}`).format();
-    const horaFin = dayjs(`${currentDate} ${data.hora_fin}`).format();
 
     activateInstalacion.mutate({
-      hora_fin: horaFin,
-      hora_inicio: horaInicio,
+      hora_fin: data.hora_fin!,
+      hora_inicio: data.hora_inicio!,
       serie_ont: selectedSerie,
       ...(data.observacion_activacion && {
         observacion_activacion: data.observacion_activacion,
@@ -130,6 +126,27 @@ const SaveActivacionInstallPendienteOT: React.FC<
   };
 
   ///* effects -----------------
+  useEffect(() => {
+    if (
+      !ordentrabajo?.id ||
+      !ordentrabajo?.agendamiento_data?.fecha_hora_instalacion
+    )
+      return;
+
+    const fechaHoraInstalacion = dayjs(
+      ordentrabajo?.agendamiento_data?.fecha_hora_instalacion,
+    ).format();
+    const fechaHoraFinInstalacion = dayjs(fechaHoraInstalacion)
+      .add(1, 'hour')
+      .add(30, 'minute')
+      .format();
+
+    form.reset({
+      hora_inicio: fechaHoraInstalacion,
+      hora_fin: fechaHoraFinInstalacion,
+    });
+  }, [ordentrabajo]);
+
   useEffect(() => {
     return () => {
       clearAll();

@@ -20,6 +20,7 @@ export interface Contrato {
   identificacion_pago: string;
 
   direccion: string; // sol servicio
+  direccion_referencia: string; // sol servicio
 
   // profile classificator
   perfil_ingreso: string;
@@ -47,5 +48,11 @@ export interface Contrato {
 
 export type ContratoLimitData = Pick<
   Contrato,
-  'id' | 'uuid' | 'numero_contrato' | 'codigo' | 'estado_contrato' | 'direccion'
+  | 'id'
+  | 'uuid'
+  | 'numero_contrato'
+  | 'codigo'
+  | 'estado_contrato'
+  | 'direccion'
+  | 'direccion_referencia'
 >;

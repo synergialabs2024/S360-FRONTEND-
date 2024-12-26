@@ -5,9 +5,9 @@ import {
   DatosClienteTecnicoOTPart,
   DatosInstallOTFormTabPart,
 } from '@/app/tecnico/install-asignada/shared/components/form';
-import { gridSizeMdLg6, OrdenTrabajo } from '@/shared';
+import { OrdenTrabajo } from '@/shared';
 import {
-  CustomTimePicker,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   CustomTypoLabelEnum,
 } from '@/shared/components';
@@ -22,27 +22,26 @@ const ActivacionInstallOTGeneralInfoTab: React.FC<
   ActivacionInstallOTGeneralInfoTabProps
 > = ({ ordenTrabajo, form }) => {
   ///* form ---------------------
-  const { errors } = form.formState;
   const watchedHoraInicio = form.watch('hora_inicio');
+  const watchedHoraFin = form.watch('hora_fin');
 
   return (
     <>
       <DatosInstallOTFormTabPart ordenTrabajo={ordenTrabajo} />
 
       <>
-        <CustomTimePicker
+        <CustomTextFieldNoForm
           label="Hora de entrada técnico"
-          name="hora_inicio"
-          control={form.control}
-          defaultValue={ordenTrabajo?.hora_inicio}
-          error={errors.hora_inicio}
-          helperText={errors.hora_inicio?.message}
-          size={gridSizeMdLg6}
-          onChangeValue={() => {
-            form.setValue('hora_fin', undefined);
-          }}
+          value={dayjs(watchedHoraInicio).format('HH:mm:ss') || ''}
+          disabled
         />
-        <CustomTimePicker
+        <CustomTextFieldNoForm
+          label="Hora de salida técnico"
+          value={dayjs(watchedHoraFin).format('HH:mm:ss') || ''}
+          disabled
+        />
+
+        {/* <CustomTimePicker
           label="Hora de salida técnico"
           name="hora_fin"
           control={form.control}
@@ -51,7 +50,7 @@ const ActivacionInstallOTGeneralInfoTab: React.FC<
           helperText={errors.hora_fin?.message}
           size={gridSizeMdLg6}
           minTime={dayjs(watchedHoraInicio, 'HH:mm')}
-        />
+        /> */}
       </>
 
       <>

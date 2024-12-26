@@ -425,6 +425,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           createSolicitudServicioMutation.mutate({
             ...data,
             tiene_cobertura: !!watchedThereIsCoverage && !!watchedThereAreNaps,
+            email: data?.email || null,
           });
 
           return;
@@ -440,6 +441,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       createSolicitudServicioMutation.mutate({
         ...data,
         tiene_cobertura: !!watchedThereIsCoverage && !!watchedThereAreNaps,
+        email: data?.email || null,
       });
     }
   };
@@ -657,6 +659,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
               : 'Ingrese un correo válido al que se enviará el contrato'
           }
           size={gridSizeMdLg6}
+          required={false}
         />
         <CustomCellphoneTextField
           label="Celular"

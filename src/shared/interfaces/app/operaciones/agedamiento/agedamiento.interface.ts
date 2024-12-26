@@ -48,6 +48,10 @@ export interface Agendamiento {
   // observacion_llamada: string;
   user_gestiona?: number;
 
+  // properties helpers
+  fecha_hora_instalacion?: string;
+  can_be_recoordinated?: boolean;
+
   ///* fk
   linea_servicio?: number;
   solicitud_servicio?: number;

@@ -110,6 +110,9 @@ const AgendasAprobadasVentaPage: React.FC<
           PermissionsEnum.operaciones_change_agendamiento,
         ])}
         onEdit={onEdit}
+        onConditionEdit={(agendamiento: Agendamiento) => {
+          return !!agendamiento?.can_be_recoordinated;
+        }}
         editIcon={<MdEditCalendar />}
         editIconToolTipTitle="Solicitar recoordinación"
         canDelete={false}
