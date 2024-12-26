@@ -64,6 +64,17 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
   const isCustomLoading = isLoadingPromociones || isRefetchingPromociones;
   useLoaders(isCustomLoading);
 
+  if (watchedIs3raEdad)
+    return (
+      <>
+        <CustomCardAlert
+          sizeType="small"
+          alertMessage={'El cliente es de tercera edad, no aplica promociones.'}
+          alertSeverity="info"
+        />
+      </>
+    );
+
   if (
     !watchedInternetPlan ||
     !watchedPaymentMethod ||

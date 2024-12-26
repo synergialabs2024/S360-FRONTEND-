@@ -1,7 +1,8 @@
+import * as yup from 'yup';
+
 import { IdentificationTypeEnumChoice } from '@/shared/constants';
 import { validarCedulaEcuador } from '@/shared/utils/validators';
-import * as yup from 'yup';
-import { emailYupValidation } from '../../common';
+import { emailYupValidationOptional } from '../../common';
 
 export const solicitudServicioFormSchema = yup.object({
   estado_solicitud: yup
@@ -31,7 +32,7 @@ export const solicitudServicioFormSchema = yup.object({
     .string()
     .required('El campo razon social es requerido')
     .max(200, 'El campo razon social no debe exceder los 200 caracteres'),
-  email: emailYupValidation,
+  email: emailYupValidationOptional,
   celular: yup
     .string()
     .required('El campo celular es requerido')

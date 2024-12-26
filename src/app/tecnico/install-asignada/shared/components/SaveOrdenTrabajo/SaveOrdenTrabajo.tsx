@@ -42,6 +42,7 @@ import {
 import { useInstalacionesStore } from '@/store/app';
 import { useUiStore } from '@/store/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
+import dayjs from 'dayjs';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
 import { useONTInstallAsignadaOT } from '../../hooks';
 import {
@@ -486,6 +487,10 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
           url_foto_acta_entrega_ups: actaEntregaUPSPhoto?.streamUlr,
         }),
         ...(premioPhoto && { url_foto_premio: premioPhoto?.streamUlr }),
+
+        // upd hora inicio/fin ----------
+        // TODO: handle hora inicio (gestionar si refresca y cosas asi, la 1era vez q entra ya se upd)
+        hora_fin: dayjs().format(),
       });
       return;
     }

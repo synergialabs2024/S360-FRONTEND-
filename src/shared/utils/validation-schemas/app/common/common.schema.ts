@@ -11,6 +11,18 @@ export const emailYupValidation = yup
   .min(5, 'Min 5 caracteres')
   .max(48, 'Max 48 caracteres');
 
+export const emailYupValidationOptional = yup
+  .string()
+  .optional()
+  .nullable()
+  .test('is-email', 'Correo electrónico inválido', value => {
+    if (!value) return true;
+
+    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      value,
+    );
+  });
+
 export const fieldStateYupValidation = yup
   .boolean()
   .typeError('El estado es Requerido')
