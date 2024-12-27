@@ -25,6 +25,7 @@ export interface PersonaInformacion {
   es_tercera_edad: boolean;
   edad: number;
   registro_res?: CedulaCitizen;
+  registro_civil_down?: boolean;
 }
 
 export interface Buro {

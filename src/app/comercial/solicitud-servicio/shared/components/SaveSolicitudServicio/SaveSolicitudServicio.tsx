@@ -166,6 +166,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     const fechaNacimiento =
       nacimiento || personaInformacion?.registro_res?.fechaNacimiento;
 
+    if (personaInformacion?.registro_civil_down)
+      ToastWrapper.warning(
+        'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos faltantes manualmente',
+      );
+
     const applayCiudadanoValidation = !!personaInformacion?.registro_res;
     setCondicionCedulado(
       personaInformacion?.registro_res?.condicionCedulado || null,
