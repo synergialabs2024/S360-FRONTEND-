@@ -179,7 +179,7 @@ const UbicacionSaveAgendaStep: React.FC<UbicacionSaveAgendaStepProps> = ({
 
       <CustomTextArea
         label="Dirección"
-        name="direccion"
+        name="direccion_referencia"
         control={form.control}
         defaultValue={form.getValues().direccion_referencia}
         error={errors.direccion_referencia}

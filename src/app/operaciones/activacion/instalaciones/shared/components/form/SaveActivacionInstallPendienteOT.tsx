@@ -141,11 +141,9 @@ const SaveActivacionInstallPendienteOT: React.FC<
       .add(30, 'minute')
       .format();
 
-    form.reset({
-      hora_inicio: fechaHoraInstalacion,
-      hora_fin: fechaHoraFinInstalacion,
-    });
-  }, [ordentrabajo]);
+    form.setValue('hora_inicio', fechaHoraInstalacion);
+    form.setValue('hora_fin', fechaHoraFinInstalacion);
+  }, [form, ordentrabajo]);
 
   useEffect(() => {
     return () => {

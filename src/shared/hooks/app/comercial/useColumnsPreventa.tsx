@@ -62,12 +62,9 @@ export const useColumnsPreventa = () => {
     ],
     [],
   );
-  // const preventaMetaInfoBase = useMemo<MRT_ColumnDef<Preventa>[]>(() => [], []);
 
-  // table columns ---------------------
-  const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
+  const preventaBaseColumns02 = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
-      ...preventaBaseColumns01,
       {
         accessorKey: 'codigo',
         header: 'CODIGO',
@@ -265,7 +262,13 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
     ],
-    [preventaBaseColumns01],
+    [],
+  );
+
+  // table columns ---------------------
+  const preventaBaseColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
+    () => [...preventaBaseColumns01, ...preventaBaseColumns02],
+    [preventaBaseColumns01, preventaBaseColumns02],
   );
 
   const preventaRealizadas = useMemo<MRT_ColumnDef<Preventa>[]>(
@@ -410,9 +413,9 @@ export const useColumnsPreventa = () => {
           );
         },
       },
-      ...preventaBaseColumns,
+      ...preventaBaseColumns02,
     ],
-    [preventaBaseColumns, preventaBaseColumns01],
+    [preventaBaseColumns01, preventaBaseColumns02],
   );
 
   const preventaEsperaPagoColumns = useMemo<MRT_ColumnDef<Preventa>[]>(
