@@ -50,6 +50,9 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
   const changeState = useUpdateProducto({
     enableNavigate: false,
   });
+  const changeRequiereSerie = useUpdateProducto<{ requiere_series: boolean }>({
+    enableNavigate: false,
+  });
 
   ///* table
   const {
@@ -250,6 +253,44 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         },
       },
       {
+        accessorKey: 'requiere_series',
+        header: 'REQUIERE SERIE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.requiere_series === 'boolean' ? (
+            <CustomSwitch
+              title="requiere_series"
+              checked={row.original?.requiere_series}
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.inventario_change_producto))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar Requiere Series',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el Requiere Series de este registro?',
+                  onConfirm: () => {
+                    changeRequiereSerie.mutate({
+                      id: row.original.id!,
+                      data: {
+                        requiere_series: !row.original.requiere_series,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
+      },
+      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -266,7 +307,12 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
+    [
+      changeState,
+      changeRequiereSerie,
+      setConfirmDialog,
+      setConfirmDialogIsOpen,
+    ],
   );
 
   return (

@@ -948,14 +948,6 @@ const CreateIngresoMaterialPage = Loadable(
       ),
   ),
 );
-const UpdateIngresoMaterialPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/inventario/ingreso-material/pages/forms/UpdateIngresoMaterialPage'
-      ),
-  ),
-);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2009,10 +2001,6 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.ingresoMaterialesCrear,
             element: <CreateIngresoMaterialPage />,
-          },
-          {
-            path: ROUTER_PATHS.inventario.ingresoMaterialesEditar,
-            element: <UpdateIngresoMaterialPage />,
           },
         ],
       },
