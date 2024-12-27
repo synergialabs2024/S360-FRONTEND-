@@ -97,6 +97,7 @@ export const useColumnsProductosDisponibles = ({
         Cell: ({ row }) => {
           return (
             <SeriesProductoModal
+              requiereSerie={row?.original?.requiere_series}
               dataArray={row?.original?.series || []}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               onDataChange={newData => onChangeSerieInit(newData, row.original)}

@@ -114,7 +114,11 @@ export const useUpdateProducto = <T>({
 };
 
 ///* axios ---------------
-export type GetProductosParams = Partial<Producto> & PagingPartialParams;
+export type GetProductosParams = Partial<Producto> &
+  PagingPartialParams & {
+    categoria_uuid?: string;
+  };
+
 export type CreateProductoParams<T> = T;
 export type CreateProductoParamsBase = Omit<Producto, 'id'>;
 export interface UpdateProductoParams<T> {
