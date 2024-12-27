@@ -55,5 +55,5 @@ export const getAddressesPersonaInfo = (data: PersonaInformacion) => {
     addresses = addressesInit;
   }
 
-  return addresses;
+  return addresses?.trim();
 };

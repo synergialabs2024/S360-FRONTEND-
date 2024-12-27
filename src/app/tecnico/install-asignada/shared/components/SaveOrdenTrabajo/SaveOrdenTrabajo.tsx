@@ -535,9 +535,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       // action btns
       onCancel={() => navigate(returnUrlInstallAsignadasOT)}
       onSave={handleSubmit(onSave, errors => {
-        ToastWrapper.error(
-          `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
-        );
+        ToastWrapper.error(`Error en: ${getKeysFormErrorsMessage(errors)}`);
       })}
       onReject={() => {
         setIsOpenRejectModal(true);
