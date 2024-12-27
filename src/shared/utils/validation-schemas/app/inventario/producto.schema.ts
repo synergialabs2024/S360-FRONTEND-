@@ -33,6 +33,10 @@ export const productoFormSchema = yup.object().shape({
     .number()
     .typeError('El campo categoría es requerido')
     .required('El campo categoría es requerido'),
+  requiere_series: yup
+    .boolean()
+    .typeError('El campo requiere series es requerido')
+    .required('El campo requiere series es requerido'),
 
   // ======================================
   // validate prices array

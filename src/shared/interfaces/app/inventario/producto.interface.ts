@@ -19,6 +19,7 @@ export interface Producto {
   codigo_auxiliar: string;
   state: boolean;
   descripcion: string;
+  requiere_series: boolean;
 
   es_para_venta: boolean; // preventas
   metraje_relativo?: string; // to handle m in CodigoModeloProductoEnumChoice

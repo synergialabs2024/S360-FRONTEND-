@@ -24,7 +24,7 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { gridSizeMdLg2, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { CategoriaProducto, IVA, Producto } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
 import { returnUrlProductosPage } from '../../../pages/tables/ProductosPage';
@@ -46,6 +46,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     defaultValues: {
       state: true,
       es_para_venta: false,
+      requiere_series: false,
       // init with 1 default price
       precios: [
         {
@@ -235,18 +236,25 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         size={gridSizeMdLg6}
       />
       <SampleCheckbox
-        label="Es para venta"
-        name="es_para_venta"
-        control={control}
-        defaultValue={form.getValues().es_para_venta}
-        size={gridSizeMdLg3}
-      />
-      <SampleCheckbox
         label="Estado"
         name="state"
         control={control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg3}
+        size={gridSizeMdLg2}
+      />
+      <SampleCheckbox
+        label="Es para venta"
+        name="es_para_venta"
+        control={control}
+        defaultValue={form.getValues().es_para_venta}
+        size={gridSizeMdLg2}
+      />
+      <SampleCheckbox
+        label="Requiere Estado"
+        name="requiere_series"
+        control={control}
+        defaultValue={form.getValues().requiere_series}
+        size={gridSizeMdLg2}
       />
 
       {/* ------------ prices component ------------ */}
