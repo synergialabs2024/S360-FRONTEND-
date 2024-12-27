@@ -9,7 +9,6 @@ import {
   useCreateIngresoMaterial,
   useFetchBodegas,
   useFetchUbicacions,
-  useUpdateIngresoMaterial,
 } from '@/actions/app';
 import {
   Bodega,
@@ -18,6 +17,7 @@ import {
   gridSizeMdLg6,
   Ubicacion,
   Producto,
+  ToastWrapper,
 } from '@/shared';
 import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
 import {
@@ -112,11 +112,6 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
     returnUrl: returnUrlIngresoMaterialesPage,
     enableErrorNavigate: false,
   });
-  const updateIngresoMaterialMutation =
-    useUpdateIngresoMaterial<CreateIngresoMaterialParamsBase>({
-      navigate,
-      returnUrl: returnUrlIngresoMaterialesPage,
-    });
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
@@ -128,25 +123,19 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
       series: producto.series ? producto.series : [],
     }));
 
+    if (mappedProductos.length === 0) {
+      ToastWrapper.error('Campo Productos es requerido');
+      return;
+    }
     const preparedData = {
       ...data,
       productos: mappedProductos,
     };
-
-    if (ingresoMaterial?.id) {
-      updateIngresoMaterialMutation.mutate({
-        id: ingresoMaterial.id,
-        data: preparedData,
-      });
-      return;
-    }
-
     createIngresoMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
   useEffect(() => {
-    if (!ingresoMaterial?.id) return;
     if (ingresoMaterial?.productos) {
       const productosTransformados = ingresoMaterial.productos.map(
         producto => ({
