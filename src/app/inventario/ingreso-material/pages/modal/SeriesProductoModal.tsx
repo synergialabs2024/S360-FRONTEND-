@@ -16,6 +16,7 @@ import { IconBrandCodesandbox, IconUpload } from '@tabler/icons-react';
 
 export type SeriesProductoModalProps = {
   dataArray: string[];
+  requiereSerie: boolean;
   modalTitle?: string;
   viewMoreText?: string;
   onDataChange?: (data: any[]) => void; // Callback para enviar los datos
@@ -25,7 +26,9 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   dataArray = [],
   modalTitle = 'Serie',
   onDataChange,
+  requiereSerie,
 }) => {
+  console.log(requiereSerie);
   //* State local
   const [open, setOpen] = useState(false);
   const [dataExcel, setDataExcel] = useState<any[]>([]);
@@ -102,6 +105,25 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
     [eliminarSerie],
   );
 
+  const ExcelSection = () => (
+    <>
+      <Button onClick={handleButtonClick} startIcon={<IconUpload />}>
+        CARGAR EXCEL
+      </Button>
+
+      <Grid container spacing={2} mt={2} mb={3}>
+        <Grid item xs={12}>
+          <SimpleTable<IngresoMaterialSeries>
+            columns={columns}
+            data={dataExcel || []}
+            isLoading={false}
+            enableGlobalFilter={true}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
+
   return (
     <>
       <IconButton
@@ -121,22 +143,11 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
           onConfirm={() => setOpen(false)}
           title={modalTitle}
           contentNode={
-            <>
-              <Button onClick={handleButtonClick} startIcon={<IconUpload />}>
-                CARGAR EXCEL
-              </Button>
-
-              <Grid container spacing={2} mt={2} mb={3}>
-                <Grid item xs={12}>
-                  <SimpleTable<IngresoMaterialSeries>
-                    columns={columns}
-                    data={dataExcel || []}
-                    isLoading={false}
-                    enableGlobalFilter={true}
-                  />
-                </Grid>
-              </Grid>
-            </>
+            requiereSerie ? (
+              <ExcelSection />
+            ) : (
+              <>PRODUCTO NO REQUIERE DE SERIE</>
+            )
           }
         />
       )}

@@ -65,7 +65,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
 
       ...filterObject,
 
-      //producto__categoria__uuid: selectedCategoria,
+      categoria_uuid: selectedCategoria,
     },
   });
 
