@@ -1010,6 +1010,12 @@ export const useNestedMenu = () => {
             //   type: MenuItemType.ITEM,
             //   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
             // }),
+            renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+              id: 'lista-tickets',
+              title: 'Tickets',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.tickets.ticketsNav,
+            }),
             {
               id: 'parametros',
               title: 'Parametros',

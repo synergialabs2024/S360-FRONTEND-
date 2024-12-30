@@ -1178,6 +1178,21 @@ const UpdateConfiguracionPlantillaPage = Loadable(
 
 // Tickets
 
+const TicketTenicoPage = Loadable(
+  lazy(
+    () => import('@/app/tickets/ticket-tecnico/pages/tables/TicketTenicoPage'),
+  ),
+);
+
+const CreateTicketTecnicoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/ticket-tecnico/pages/forms/CreateTicketTecnicoPage'
+      ),
+  ),
+);
+
 const AsuntosPage = Loadable(
   lazy(
     () => import('@/app/tickets/parametros/asunto/pages/tables/AsuntosPage'),
@@ -2227,6 +2242,15 @@ const AppRouter = [
         path: ROUTER_PATHS.tickets.root,
         element: <TicketsModule />,
         children: [
+          {
+            path: ROUTER_PATHS.tickets.ticketsCrear,
+            element: <CreateTicketTecnicoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.ticketsNav,
+            element: <TicketTenicoPage />,
+          },
+
           ///* Parametro / Asunto
           {
             path: ROUTER_PATHS.tickets.parametrosAsuntos,

@@ -536,6 +536,9 @@ export const ROUTER_PATHS = {
   tickets: {
     root: 'tickets',
 
+    ticketsCrear: 'crear',
+    ticketsNav: '/tickets',
+
     ///* parametros
     parametrosAsuntos: 'parametros/asuntos',
     parametrosAsuntosCrear: 'parametros/asuntos/crear',
