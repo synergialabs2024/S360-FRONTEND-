@@ -19,7 +19,7 @@ export type ActivateInstalacionOTData = Pick<
   | 'observacion_activacion'
   | 'modelo_ont_wifi'
 > & {
-  producto: number;
+  producto_ont: number;
 };
 
 ///* INSTALACIONES - TECNICO ===================================
