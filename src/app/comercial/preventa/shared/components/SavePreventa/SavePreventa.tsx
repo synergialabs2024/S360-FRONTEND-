@@ -47,8 +47,8 @@ import {
   EquifaxEdentificationType,
   HTTPResStatusCodeEnum,
   IdentificationTypeEnumChoice,
-  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
+  InternetPlanInternetTypeEnumChoice,
   MetodoPago,
   MetodoPagoEnumUUID,
   Nullable,
@@ -76,6 +76,7 @@ import {
   CustomSingleButton,
   CustomTextArea,
   CustomTextField,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   CustomTypoLabelEnum,
   InputAndBtnGridSpace,
@@ -99,6 +100,7 @@ import {
   formatCountDownTimer,
   getKeysFormErrorsMessage,
   preventaFormSchema,
+  sanitizeDataResetForm,
 } from '@/shared/utils';
 import {
   GenericInventoryStoreKey,
@@ -237,6 +239,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       thereAreClientRefiere: false,
       es_referido: false,
       estadoOtp: null,
+
+      tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
     },
   });
 
@@ -476,6 +480,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       email: prevForm.email,
+      tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
     });
   };
 
@@ -739,12 +744,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   useEffect(() => {
     if (!solicitudServicio?.id) return;
 
+    const sanitizedSolicitudServicio = sanitizeDataResetForm(solicitudServicio);
+
     reset({
-      ...solicitudServicio,
+      ...sanitizedSolicitudServicio,
       estadoOtp:
         solicitudServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
 
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
+      tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
     });
   }, [solicitudServicio, reset]);
 
@@ -1152,7 +1160,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 form.setValue('plan_internet', '' as any);
               }}
             />
-            <CustomAutocompleteArrString
+            <CustomTextFieldNoForm
+              label="Tipo de plan"
+              value={InternetPlanInternetTypeEnumChoice.HOGAR}
+              disabled
+            />
+            {/* <CustomAutocompleteArrString
               label="Tipo de plan"
               name="tipo_plan"
               options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES}
@@ -1166,7 +1179,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 // reset related fields
                 form.setValue('plan_internet', '' as any);
               }}
-            />
+            /> */}
             <CustomAutocomplete<PlanInternet>
               label="Planes de internet"
               name="plan_internet"
@@ -1192,9 +1205,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               container
               {...gridSizeMdLg6}
               justifyContent="center"
-              alignItems="center"
+              alignItems="flex-end"
               spacing={1}
             >
+              {!suggestedPlansBuroKey?.length && (
+                <CustomCardAlert
+                  sizeType="small"
+                  alertMessage="Consultar Equifax para ver los planes"
+                  alertSeverity="info"
+                />
+              )}
+
               {suggestedPlansBuroKey?.map((plan, index) => (
                 <Grid item key={index}>
                   <ChipModelState label={plan} color="info" />

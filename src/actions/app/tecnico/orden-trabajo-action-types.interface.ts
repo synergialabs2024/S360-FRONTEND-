@@ -23,6 +23,7 @@ export type ActivateInstalacionOTData = Pick<
 };
 
 ///* INSTALACIONES - TECNICO ===================================
+export type UpdHoraInicioOTData = Pick<OrdenTrabajo, 'hora_inicio_real'>;
 export type UploadInstalacionOTAsignData = Pick<
   OrdenTrabajo,
   | 'equipos_utilizados'

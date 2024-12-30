@@ -1,6 +1,13 @@
+import dayjs from 'dayjs';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { useFetchOrdenTrabajos } from '@/actions/app';
+import {
+  OrdenTrabajoTSQEnum,
+  UpdHoraInicioOTData,
+  useFetchOrdenTrabajos,
+} from '@/actions/app';
+import { useGenericPATCH } from '@/actions/shared';
 import {
   EstadoActivacionEnumChoice,
   EstadoOrdenTrabajoEnumChoice,
@@ -21,7 +28,9 @@ import {
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useAuthStore } from '@/store/auth';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { InstallAsignPendienteTableBtns } from '../../shared/components/tables';
+import { returnUrlInstallAsignadasOT } from './InstalacionesAsignadasOTMainPage';
 
 export type InstalacionAsignadaEsperaTablePageProps = {};
 
@@ -36,6 +45,14 @@ const InstalacionAsignadaEsperaTablePage: React.FC<
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
 
+  ///* local states ---------------------
+  const [selectedOT, setSelectedOT] = useState<OrdenTrabajo | null>(null);
+
+  ///* global state ---------------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
   const user = useAuthStore(s => s.user);
 
   ///* table ---------------------
@@ -72,20 +89,59 @@ const InstalacionAsignadaEsperaTablePage: React.FC<
     },
   });
 
+  ///* mutations ---------------------
+  const updOt = useGenericPATCH<UpdHoraInicioOTData, OrdenTrabajo>(
+    `/orden-trabajo/${selectedOT?.id!}/`,
+    OrdenTrabajoTSQEnum.ORDENTRABAJOS,
+    {
+      customMessageToast: 'Hora de inicio registrada correctamente',
+      // navigate,
+      returnUrl: returnUrlInstallAsignadasOT,
+      customOnSuccess() {
+        navigate(`/tecnico/instalaciones-asignadas/${selectedOT?.uuid}`);
+        setConfirmDialogIsOpen(false);
+      },
+      customOnError() {
+        setConfirmDialogIsOpen(false);
+      },
+    },
+  );
+
   ///* handlers ---------------------
   const onEdit = (row: OrdenTrabajo) => {
-    // requiere gestion de activaciones para poder subir cambios
-    if (
-      row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
-      user?.role === UserRolesEnumChoice.TECNICO
-    ) {
-      ToastWrapper.error(
-        'La instalación asignada aún no ha sido gestionada por activaciones.',
-      );
-      return;
-    }
+    setSelectedOT(row);
 
-    navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
+    const needSetHoraInicio = !row?.hora_inicio_real;
+
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Gestionar instalación asignada',
+      subtitle:
+        'Una vez ingreses en el formulario se registrará la hora de inicio de la gestión y esta no podrá ser modificada. ¿Estás seguro de continuar?',
+      onConfirm: () => {
+        // requiere gestion de activaciones para poder subir cambios
+        if (
+          row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
+          user?.role === UserRolesEnumChoice.TECNICO
+        ) {
+          ToastWrapper.error(
+            'La instalación asignada aún no ha sido gestionada por activaciones.',
+          );
+          return;
+        }
+
+        if (needSetHoraInicio) {
+          updOt.mutate({
+            hora_inicio_real: dayjs().format(),
+          });
+
+          return;
+        }
+
+        navigate(`/tecnico/instalaciones-asignadas/${row.uuid}`);
+        setConfirmDialogIsOpen(false);
+      },
+    });
   };
 
   ///* columns ---------------------

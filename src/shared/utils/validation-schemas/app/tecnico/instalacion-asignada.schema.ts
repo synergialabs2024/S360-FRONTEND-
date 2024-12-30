@@ -10,6 +10,9 @@ export const ordenTrabajoFormSchema = yup.object({
     .string()
     .required('La hora de inicio de instalación es requerida'),
   hora_fin: yup.string().required('La hora de fin de instalación es requerida'),
+  hora_inicio_real: yup
+    .string()
+    .required('La hora de fin real de instalación es requerida'),
   // .test(
   //   'is-greater',
   //   'La hora de fin debe ser posterior a la hora de inicio',
@@ -76,15 +79,15 @@ export const ordenTrabajoFormSchema = yup.object({
         schema
           .required('El campo punta final fibra es requerido')
           .typeError('El campo punta final fibra debe ser un número')
-          .positive('El campo punta final fibra debe ser un número positivo')
-          .min(1, 'El campo punta final fibra debe ser mayor a 0')
-          .test(
-            'punta_final_fibra',
-            'La punta final fibra debe ser mayor a la punta inicial fibra',
-            function (value) {
-              return value > this.parent.punta_inicial_fibra;
-            },
-          ),
+          .positive('El campo punta final fibra debe ser un número positivo'),
+      // .min(1, 'El campo punta final fibra debe ser mayor a 0')
+      // .test(
+      //   'punta_final_fibra',
+      //   'La punta final fibra debe ser mayor a la punta inicial fibra',
+      //   function (value) {
+      //     return value > this.parent.punta_inicial_fibra;
+      //   },
+      // ),
     }),
   metraje_utilizado_fibra: yup.string().when('modelo_fibra_utilizada', {
     is: (value: any) => value === CodigoModeloProductoEnumChoice.FIBRA_GRANEL,

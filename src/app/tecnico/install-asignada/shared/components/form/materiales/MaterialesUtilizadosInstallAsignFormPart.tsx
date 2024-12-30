@@ -71,52 +71,40 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
         return;
       }
 
+      const isFibraGranel = item.isFibra;
+      const puntaFin = +(item.puntaInicio || 0) - +value;
+
       updateSelectedItemValue({
         keyStore: InstalacionesStoreKey.materialesUtilizados,
         updatedItem: {
           ...item,
           usedQuantity: +value,
+
+          ...(isFibraGranel && {
+            puntaFin: puntaFin > 0 ? puntaFin : 0,
+          }),
         },
       });
     },
     [updateSelectedItemValue],
   );
 
-  const onChangePuntaInit = useCallback(
-    (value: string, item: MaterialesUtilizadosOTTableType) => {
-      const usedQuantity = (item.puntaFin || 0) - +value;
+  // // ya NO -------
+  // const onChangePuntaInit = useCallback(
+  //   (value: string, item: MaterialesUtilizadosOTTableType) => {
+  //     const usedQuantity = (item.puntaFin || 0) - +value;
 
-      updateSelectedItemValue({
-        keyStore: InstalacionesStoreKey.materialesUtilizados,
-        updatedItem: {
-          ...item,
-          puntaInicio: +value,
-          usedQuantity: usedQuantity > 0 ? usedQuantity : 0,
-        } as any,
-      });
-    },
-    [updateSelectedItemValue],
-  );
-  const onChangePuntaFin = useCallback(
-    (value: string, item: MaterialesUtilizadosOTTableType) => {
-      const currentStock = item?.stock_actual || 0;
-      const usedQuantity = +value - (item.puntaInicio || 0);
-      if (usedQuantity > currentStock) {
-        ToastWrapper.error(`La cantidad máxima permitida es ${currentStock}`);
-        return;
-      }
-
-      updateSelectedItemValue({
-        keyStore: InstalacionesStoreKey.materialesUtilizados,
-        updatedItem: {
-          ...item,
-          puntaFin: +value,
-          usedQuantity: usedQuantity > 0 ? usedQuantity : 0,
-        } as any,
-      });
-    },
-    [updateSelectedItemValue],
-  );
+  //     updateSelectedItemValue({
+  //       keyStore: InstalacionesStoreKey.materialesUtilizados,
+  //       updatedItem: {
+  //         ...item,
+  //         puntaInicio: +value,
+  //         usedQuantity: usedQuantity > 0 ? usedQuantity : 0,
+  //       } as any,
+  //     });
+  //   },
+  //   [updateSelectedItemValue],
+  // );
 
   ///* effects --------------------
   useEffect(() => {
@@ -183,15 +171,11 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
         accessorKey: 'usedQuantity',
         header: 'CANTIDAD ',
         Cell: ({ row }) => {
-          const isFibra = row.original?.isFibra;
-
           return (
             <TextField
               variant="outlined"
               value={row.original?.usedQuantity?.toString() || ''}
               onChange={e => {
-                if (isFibra) return;
-
                 const value = e.target.value;
                 const intValue = parseInt(value, 10);
 
@@ -203,7 +187,6 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
                 max: row.original?.stock_actual || 0,
                 step: 1,
               }}
-              disabled={isFibra}
             />
           );
         },
@@ -212,20 +195,18 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
         accessorKey: 'punta_inicio',
         header: 'PUNTA INICIAL',
         Cell: ({ row }) => {
-          // fibra granel requires puntas
-          const isFibraGranel = row.original?.isFibra;
+          // fibra granel requires puntas - ya NO
+          const item = row.original;
 
           return (
             <TextField
               variant="outlined"
-              value={row.original.puntaInicio || ''}
-              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              value={item.puntaInicio || ''}
+              // onChange={e => onChangePuntaInit(e.target.value, row.original)}
               type="number"
-              inputProps={{
-                min: 0,
-                step: 1,
+              InputProps={{
+                readOnly: true,
               }}
-              disabled={!isFibraGranel}
             />
           );
         },
@@ -234,19 +215,14 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
         accessorKey: 'punta_fin',
         header: 'PUNTA FINAL',
         Cell: ({ row }) => {
-          const isFibraGranel = row.original?.isFibra;
-
           return (
             <TextField
               variant="outlined"
               value={row.original.puntaFin || ''}
-              onChange={e => onChangePuntaFin(e.target.value, row.original)}
               type="number"
-              inputProps={{
-                min: 0,
-                step: 1,
+              InputProps={{
+                readOnly: true,
               }}
-              disabled={!isFibraGranel}
             />
           );
         },
@@ -274,8 +250,6 @@ const MaterialesUtilizadosInstallAsignFormPart: React.FC<
     ],
     [
       baseColumnsEquiposMaterialesInstallOT01,
-      onChangePuntaFin,
-      onChangePuntaInit,
       onChangeQuantity,
       removeSelectedItem,
     ],

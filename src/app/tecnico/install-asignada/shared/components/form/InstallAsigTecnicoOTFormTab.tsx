@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { UseFormReturn } from 'react-hook-form';
 import { IoMdClock } from 'react-icons/io';
 
@@ -33,8 +34,10 @@ const InstallAsigTecnicoOTFormTab: React.FC<
         <CustomTextFieldNoForm
           label="Hora de inicio"
           value={
-            ordenTrabajo?.hora_inicio
-              ? formatDateWithTime(ordenTrabajo.hora_inicio)
+            ordenTrabajo?.hora_inicio_real || ordenTrabajo?.hora_inicio
+              ? formatDateWithTime(
+                  ordenTrabajo?.hora_inicio_real || ordenTrabajo.hora_inicio,
+                )
               : ''
           }
           disabled

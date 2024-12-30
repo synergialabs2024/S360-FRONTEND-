@@ -102,6 +102,10 @@ const MaterialesDisponiblesOTTecModal: React.FC<
                   usedQuantity: usedQuantity,
                   isFibra: isFibraGranel,
                   isFibraPreconect,
+
+                  ...(isFibraGranel && {
+                    puntaInicio: item?.stock_actual || 0,
+                  }),
                 },
                 showToast: true,
               });

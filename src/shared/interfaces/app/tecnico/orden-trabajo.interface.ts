@@ -41,6 +41,7 @@ export interface OrdenTrabajo {
 
   hora_inicio: string; // timestamp
   hora_fin: string; // timestamp
+  hora_inicio_real?: string; // timestamp - tecnico
 
   // INVENTARIO -------------------
   equipos_utilizados: EquipoUtilizadosInstallOT[];
