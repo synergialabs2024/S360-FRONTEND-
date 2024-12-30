@@ -421,6 +421,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.inventario.ubicacionesNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'solicitud-material',
+              title: 'Solicitud de Material',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.solicitudMaterialNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-materiales-bodega',
               title: 'Recepción de solicitudes de materiales',
               type: MenuItemType.ITEM,
@@ -475,7 +481,7 @@ export const useNestedMenu = () => {
               id: 'solicitud-materiales-tecnico',
               title: 'Solicitud de materiales',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.tecnico.instalacionesSolicitudMateriales,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'detalle-materiales',

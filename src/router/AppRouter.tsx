@@ -8,6 +8,8 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
+import SolicitudMaterial from '@/app/tecnico/SolicitudMaterial';
+import SolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialPage';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -1993,6 +1995,20 @@ const AppRouter = [
             element: <UpdateUbicacionPage />,
           },
 
+          ///* solicitud material
+          {
+            path: ROUTER_PATHS.inventario.solicitudMaterial,
+            element: <SolicitudMaterialPage />,
+          },
+          /* {
+            path: ROUTER_PATHS.inventario.ubicacionesCrear,
+            element: <CreateUbicacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.ubicacionesEditar,
+            element: <UpdateUbicacionPage />,
+          }, */
+
           ///* Ingreso Material
           {
             path: ROUTER_PATHS.inventario.ingresoMateriales,
@@ -2192,6 +2208,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tecnico.instalacionesCorreccionFotos,
             element: <UpdateCorreccionTec />,
+          },
+          {
+            path: ROUTER_PATHS.tecnico.instalacionesOrdenTrabajo,
+            element: <div>Orden de trabajo</div>,
+          },
+          {
+            path: ROUTER_PATHS.tecnico.instalacionesSolicitudMateriales,
+            element: (
+              <SolicitudMaterial title="Crear Solicitud de Materiales" />
+            ),
           },
         ],
       },

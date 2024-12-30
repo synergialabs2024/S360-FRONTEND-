@@ -366,6 +366,8 @@ export const ROUTER_PATHS = {
 
     instalPendingUpdDatos: 'correccion-datos/:uuid',
     instalacionesCorreccionFotos: 'coreccion-fotos/:uuid',
+    instalacionesOrdenTrabajo: '/tecnico/orden-trabajo',
+    instalacionesSolicitudMateriales: '/tecnico/solicitud-materiales',
   },
 
   /////* Supervision Comercial ----------------
@@ -475,7 +477,12 @@ export const ROUTER_PATHS = {
     ubicacionesCrear: 'ubicaciones/crear',
     ubicacionesEditar: 'ubicaciones/editar/:uuid',
     ubicacionesNav: '/inventario/ubicaciones',
-
+    ///* solicitud material
+    solicitudMaterial: 'solicitud-material',
+    solicitudMaterialCrear: 'solicitud-material/crear',
+    solicitudMaterialEditar: 'solicitud-material/editar/:uuid',
+    solicitudMaterialNav: '/inventario/solicitud-material',
+    //ingresoMaterialesNav: '/inventario/ingreso-materiales',
     ///* Ingreso Material
     ingresoMateriales: 'ingreso-materiales',
     ingresoMaterialesCrear: 'ingreso-materiales/crear',
