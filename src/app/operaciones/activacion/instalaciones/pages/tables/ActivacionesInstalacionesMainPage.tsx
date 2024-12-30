@@ -60,7 +60,7 @@ const ActivacionesInstalacionesMainPage: React.FC<
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <ActivacionInstalacionOTByState
           activacionState={EstadoActivacionEnumChoice.GESTIONADA}
-          otState={EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA}
+          otState={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>
