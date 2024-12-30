@@ -88,6 +88,7 @@ export enum SidenavModulesEnum {
   CLIENTE_FIBRA = 'CLIENTE.FIBRA',
 
   // TICKETS_PARAMETROS = 'TICKETS.TICKETS_PARAMETROS',
+  TICKETS = 'TICKETS.TICKETS',
   TICKETS_PARAMETROS = 'TICKETS.TICKETS_PARAMETROS',
 
   // TODO: modulo temporal visto solo por admin
