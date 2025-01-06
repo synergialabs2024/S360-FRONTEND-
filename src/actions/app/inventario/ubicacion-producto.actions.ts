@@ -138,6 +138,7 @@ export type GetUbicacionProductosParams = Partial<UbicacionProducto> &
     bodega__centro_costo__nombre?: string;
     producto__modelo__nombre?: string;
     producto__modelo__codigo?: string;
+    ubicacion__pk?: number;
   };
 export type CreateUbicacionProductoParams<T> = T;
 export type CreateUbicacionProductoParamsBase = Omit<UbicacionProducto, 'id'>;

@@ -5,21 +5,21 @@ import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
 import {
-  CreateIngresoMaterialParamsBase,
-  useCreateIngresoMaterial,
+  CreateEgresoMaterialParamsBase,
+  useCreateEgresoMaterial,
   useFetchBodegas,
   useFetchUbicacions,
 } from '@/actions/app';
 import {
   Bodega,
-  IngresoMaterial,
-  ingresoMaterialFormSchema,
+  EgresoMaterial,
+  egresoMaterialFormSchema,
   gridSizeMdLg6,
   Ubicacion,
-  Producto,
   ToastWrapper,
+  UbicacionProducto,
 } from '@/shared';
-import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
+import { returnUrlEgresoMaterialesPage } from '../../../pages/tables/EgresoMaterialesPage';
 import {
   CustomAutocomplete,
   CustomMinimalTable,
@@ -30,17 +30,17 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import ProductosDisponiblesModal from '../../../pages/modal/ProductosDisponiblesModal';
-import { useColumnsProductosDisponibles } from '../../hooks';
-import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useUbicacionProductosStore } from '@/store/app';
+import { useColumnsUbicacionProductosDisponibles } from '../../hooks';
+import UbicacionProductosDisponiblesModal from '../../../pages/modal/UbicacionProductosDisponiblesModal';
 
-export interface SaveIngresoMaterialProps {
+export interface SaveEgresoMaterialProps {
   title: string;
-  ingresoMaterial?: IngresoMaterial;
+  egresoMaterial?: EgresoMaterial;
 }
 
-export type ProductosDisponiblesTableType = Producto & {
+export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
   usedQuantity: number;
 
   containsSeries: boolean;
@@ -51,25 +51,29 @@ export type ProductosDisponiblesTableType = Producto & {
   productos?: string[];
 };
 
-type SaveFormData = CreateIngresoMaterialParamsBase & {};
+type SaveFormData = CreateEgresoMaterialParamsBase & {};
 
-const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
+const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
   title,
-  ingresoMaterial,
+  egresoMaterial,
 }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
   ///* global state --------------------
-  const productosDisponibles = useProductosStore(s => s.productosDisponibles);
-  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const ubicacionProductosDisponibles = useUbicacionProductosStore(
+    s => s.ubicacionProductosDisponibles,
+  );
+  const ubicacionProductosEnviar = useUbicacionProductosStore(
+    s => s.setUbicacionProductosDisponibles,
+  );
 
   ///* hooks ---------------
   const navigate = useNavigate();
 
   ///* form
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(ingresoMaterialFormSchema) as any,
+    resolver: yupResolver(egresoMaterialFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -107,9 +111,9 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   });
 
   ///* mutations
-  const createIngresoMaterialMutation = useCreateIngresoMaterial({
+  const createEgresoMaterialMutation = useCreateEgresoMaterial({
     navigate,
-    returnUrl: returnUrlIngresoMaterialesPage,
+    returnUrl: returnUrlEgresoMaterialesPage,
     enableErrorNavigate: false,
   });
 
@@ -117,11 +121,12 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    const mappedProductos = productosDisponibles.map(producto => ({
-      ...producto,
-      producto: producto.id,
-      series: producto.series ? producto.series : [],
-    }));
+    const mappedProductos = ubicacionProductosDisponibles.map(
+      ubicacionproducto => ({
+        ...ubicacionproducto,
+        series: ubicacionproducto.series ? ubicacionproducto.series : [],
+      }),
+    );
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
@@ -131,26 +136,26 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
       ...data,
       productos: mappedProductos,
     };
-    createIngresoMaterialMutation.mutate(preparedData);
+
+    createEgresoMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
   useEffect(() => {
-    if (ingresoMaterial?.productos) {
-      const productosTransformados = ingresoMaterial.productos.map(
-        producto => ({
-          ...producto,
-          usedQuantity: 0,
-          containsSeries: false,
-          selectedSeries: [],
-          savedSeries: [],
-        }),
-      );
+    if (egresoMaterial?.productos) {
+      const productosTransformados = egresoMaterial.productos.map(producto => ({
+        ...producto,
+        usedQuantity: 0,
+        containsSeries: false,
+        selectedSeries: [],
+        savedSeries: [],
+      }));
 
-      productosEnviar(productosTransformados);
+      ubicacionProductosEnviar(productosTransformados);
     }
-    reset(ingresoMaterial);
-  }, [ingresoMaterial, reset, productosEnviar]);
+
+    reset(egresoMaterial);
+  }, [egresoMaterial, reset, ubicacionProductosEnviar]);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)
@@ -167,12 +172,12 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   ]);
 
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsProductosDisponibles();
+  const { crearMaterialColumns } = useColumnsUbicacionProductosDisponibles();
 
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlIngresoMaterialesPage)}
+      onCancel={() => navigate(returnUrlEgresoMaterialesPage)}
       onSave={handleSubmit(onSave, () => {})}
     >
       <CustomAutocomplete<Bodega>
@@ -190,7 +195,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
         helperText={errors.bodega?.message}
         onChangeRawValue={() => {
           form.setValue('ubicacion', '' as any);
-          productosEnviar([]);
+          ubicacionProductosEnviar([]);
         }}
       />
       <CustomAutocomplete<Ubicacion>
@@ -209,7 +214,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
         helperText={errors.ubicacion?.message}
         size={gridSizeMdLg6}
         onChangeRawValue={() => {
-          productosEnviar([]);
+          ubicacionProductosEnviar([]);
         }}
       />
       <SampleCheckbox
@@ -239,13 +244,14 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
               justifyContent="flex-end"
             />
           </Grid>
-          <CustomMinimalTable<ProductosDisponiblesTableType>
+          <CustomMinimalTable<UbicacionProductosDisponiblesTableType>
             columns={crearMaterialColumns}
-            data={productosDisponibles || []}
+            data={ubicacionProductosDisponibles || []}
             enablePagination
             density="comfortable"
           />
-          <ProductosDisponiblesModal
+          <UbicacionProductosDisponiblesModal
+            pk_ubicacion={watchedUbicacion}
             open={openAddProducts}
             onClose={() => setOpenAddProducts(false)}
           />
@@ -264,4 +270,4 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   );
 };
 
-export default SaveIngresoMaterial;
+export default SaveEgresoMaterial;
