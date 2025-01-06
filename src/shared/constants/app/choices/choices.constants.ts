@@ -584,10 +584,6 @@ export const CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO = [
     label: 'MATERIALES',
     value: InventarioEnumUUID.CATEGORIA_PRODUCTO_MATERIALES,
   },
-  {
-    label: 'VENTAS',
-    value: InventarioEnumUUID.CATEGORIA_PRODUCTO_VENTAS,
-  },
 ];
 
 ///* ORDEN TRABAJO ==========================================
