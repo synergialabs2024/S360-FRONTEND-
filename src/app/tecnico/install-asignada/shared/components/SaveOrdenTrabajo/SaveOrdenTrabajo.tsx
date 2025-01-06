@@ -489,7 +489,6 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         ...(premioPhoto && { url_foto_premio: premioPhoto?.streamUlr }),
 
         // upd hora inicio/fin ----------
-        // TODO: handle hora inicio (gestionar si refresca y cosas asi, la 1era vez q entra ya se upd)
         hora_fin: dayjs().format(),
       });
       return;

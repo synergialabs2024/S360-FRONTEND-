@@ -125,8 +125,8 @@ const InstallAsigTecnicoOTClienteFibraPart: React.FC<
           <CustomTextFieldNoForm
             label="Hora de inicio"
             value={
-              ordenTrabajo?.hora_inicio
-                ? formatDateWithTime(ordenTrabajo.hora_inicio)
+              ordenTrabajo?.hora_inicio_real
+                ? formatDateWithTime(ordenTrabajo.hora_inicio_real)
                 : ''
             }
             disabled
