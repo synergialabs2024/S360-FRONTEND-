@@ -483,11 +483,18 @@ export const ROUTER_PATHS = {
     solicitudMaterialEditar: 'solicitud-material/editar/:uuid',
     solicitudMaterialNav: '/inventario/solicitud-material',
     //ingresoMaterialesNav: '/inventario/ingreso-materiales',
+
     ///* Ingreso Material
     ingresoMateriales: 'ingreso-materiales',
     ingresoMaterialesCrear: 'ingreso-materiales/crear',
     ingresoMaterialesEditar: 'ingreso-materiales/editar/:uuid',
     ingresoMaterialesNav: '/inventario/ingreso-materiales',
+
+    ///* Egreso Material
+    egresoMateriales: 'egreso-materiales',
+    egresoMaterialesCrear: 'egreso-materiales/crear',
+    egresoMaterialesEditar: 'egreso-materiales/editar/:uuid',
+    egresoMaterialesNav: '/inventario/egreso-materiales',
   },
   // // LOGISTICA =================================
   logistica: {

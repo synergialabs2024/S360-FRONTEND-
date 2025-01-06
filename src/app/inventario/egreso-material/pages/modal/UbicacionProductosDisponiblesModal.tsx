@@ -1,16 +1,18 @@
-import { useEffect } from 'react';
-
-import { useFetchProductos } from '@/actions/app';
+import { useFetchUbicacionProductos } from '@/actions/app';
 import {
   CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
   CodigoCategoriaProductoEnumChoiceType,
   gridSizeMdLg6,
-  Producto,
+  UbicacionProducto,
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
-import { useColumnsProductosDisponibles } from '../../shared/hooks';
+import {
+  UbicacionProductosDisponiblesStoreKey,
+  useUbicacionProductosStore,
+} from '@/store/app';
+import { useColumnsUbicacionProductosDisponibles } from '../../shared/hooks/useColumnsUbicacionProductosDisponibles';
 import {
   CustomAutocompleteNoForm,
   CustomSearch,
@@ -18,17 +20,17 @@ import {
   ScrollableDialogProps,
   TableWithoutActions,
 } from '@/shared/components';
-import { ProductosDisponiblesStoreKey, useProductosStore } from '@/store/app';
+import { useEffect } from 'react';
 
-export type ProductosDisponiblesModalProps = {
+export type UbicacionProductosDisponiblesModalProps = {
   open: boolean;
+  pk_ubicacion: number;
   onClose: () => void;
 };
 
-const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
-  onClose,
-  open,
-}) => {
+const UbicacionProductosDisponiblesModal: React.FC<
+  UbicacionProductosDisponiblesModalProps
+> = ({ onClose, open, pk_ubicacion }) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -43,9 +45,11 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   const { pageIndex, pageSize } = pagination;
 
   ///* global state ---------------------
-  const addSelectedItem = useProductosStore(s => s.addSelectedItem);
-  const selectedCategoria = useProductosStore(s => s.selectedCategoriaModel);
-  const setSelectedCategoriaModel = useProductosStore(
+  const addSelectedItem = useUbicacionProductosStore(s => s.addSelectedItem);
+  const selectedCategoria = useUbicacionProductosStore(
+    s => s.selectedCategoriaModel,
+  );
+  const setSelectedCategoriaModel = useUbicacionProductosStore(
     s => s.setSelectedCategoriaModel,
   );
 
@@ -54,7 +58,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
     data: equiposDisponiblesPaging,
     isLoading: isLoadingItemsDisponibles,
     isRefetching: isRefetchingItemsDisponibles,
-  } = useFetchProductos({
+  } = useFetchUbicacionProductos({
     enabled: open,
     params: {
       page: pageIndex + 1,
@@ -62,7 +66,8 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
 
       ...filterObject,
 
-      categoria_uuid: selectedCategoria,
+      producto__categoria__uuid: selectedCategoria,
+      ubicacion: pk_ubicacion,
     },
   });
 
@@ -72,7 +77,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   };
 
   ///* columns ---------------------
-  const { modalMaterialColumns } = useColumnsProductosDisponibles({
+  const { modalMaterialColumns } = useColumnsUbicacionProductosDisponibles({
     showActionColumn: true,
     onActionProductosRowNode(item) {
       return (
@@ -82,7 +87,8 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
           color="primary"
           onClick={() => {
             addSelectedItem({
-              keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
+              keyStore:
+                UbicacionProductosDisponiblesStoreKey.ubicacionProductosDisponibles,
               item: {
                 ...item,
                 usedQuantity: 1,
@@ -137,7 +143,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
               />
             }
           />
-          <TableWithoutActions<Producto>
+          <TableWithoutActions<UbicacionProducto>
             columns={modalMaterialColumns}
             data={equiposDisponiblesPaging?.data?.items || []}
             isLoading={isLoadingItemsDisponibles}
@@ -161,4 +167,4 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   );
 };
 
-export default ProductosDisponiblesModal;
+export default UbicacionProductosDisponiblesModal;

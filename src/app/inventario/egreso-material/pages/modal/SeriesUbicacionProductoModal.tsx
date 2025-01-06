@@ -5,28 +5,30 @@ import { IoMdTrash } from 'react-icons/io';
 import { Button, Grid, IconButton } from '@mui/material';
 import { IconBrandCodesandbox, IconUpload } from '@tabler/icons-react';
 
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { ScrollableDialogProps, SingleIconButton } from '@/shared/components';
 import {
+  EgresoMaterialSeries,
   emptyCellOneLevel,
-  IngresoMaterialSeries,
   TABLE_CONSTANTS,
-  Producto,
+  UbicacionProducto,
 } from '@/shared';
+import { ScrollableDialogProps, SingleIconButton } from '@/shared/components';
+import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 
-export type SeriesProductoModalProps = {
+export type SeriesUbicacionProductoModalProps = {
   dataArray: string[];
-  requiereSerie: boolean;
+  requiereSerie?: boolean;
   modalTitle?: string;
   viewMoreText?: string;
   onDataChange?: (data: any[]) => void; // Callback para enviar los datos
 };
 
-const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
+const SeriesUbicacionProductoModal: React.FC<
+  SeriesUbicacionProductoModalProps
+> = ({
   dataArray = [],
   modalTitle = 'Serie',
   onDataChange,
-  requiereSerie,
+  requiereSerie = false,
 }) => {
   //* State local
   const [open, setOpen] = useState(false);
@@ -78,7 +80,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
     setDataExcel(newData);
   };
 
-  const columns = useMemo<MRT_ColumnDef<Producto>[]>(
+  const columns = useMemo<MRT_ColumnDef<UbicacionProducto>[]>(
     () => [
       {
         accessorKey: 'series',
@@ -112,7 +114,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
 
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
-          <SimpleTable<IngresoMaterialSeries>
+          <SimpleTable<EgresoMaterialSeries>
             columns={columns}
             data={dataExcel || []}
             isLoading={false}
@@ -154,4 +156,4 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   );
 };
 
-export default SeriesProductoModal;
+export default SeriesUbicacionProductoModal;

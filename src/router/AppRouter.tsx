@@ -950,6 +950,22 @@ const CreateIngresoMaterialPage = Loadable(
       ),
   ),
 );
+const EgresoMaterialesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/egreso-material/pages/tables/EgresoMaterialesPage'
+      ),
+  ),
+);
+const CreateEgresoMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/egreso-material/pages/forms/CreateEgresoMaterialPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2032,6 +2048,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.ingresoMaterialesCrear,
             element: <CreateIngresoMaterialPage />,
+          },
+
+          ///* Egreso Material
+          {
+            path: ROUTER_PATHS.inventario.egresoMateriales,
+            element: <EgresoMaterialesPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.egresoMaterialesCrear,
+            element: <CreateEgresoMaterialPage />,
           },
         ],
       },

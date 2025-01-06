@@ -436,7 +436,7 @@ export const useNestedMenu = () => {
               id: 'egreso-mercaderia',
               title: 'Egreso de Inventario',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.egresoMaterialesNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'ingreso-mercaderia',
