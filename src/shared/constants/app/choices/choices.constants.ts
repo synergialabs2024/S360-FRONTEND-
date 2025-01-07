@@ -154,11 +154,14 @@ export enum MotivoRechazoModuloEnumChoice {
   SOLICITUD_SERVICIO = 'SOLICITUD DE SERVICIO',
   PREVENTA = 'PREVENTA',
   TECNICO = 'TECNICO',
+  VISITAS = 'VISITAS',
   GENERICO = 'GENERICO',
 }
 export const MOTIVO_RECHAZO_MODULO_ARRAY_CHOICES = [
   MotivoRechazoModuloEnumChoice.SOLICITUD_SERVICIO,
   MotivoRechazoModuloEnumChoice.PREVENTA,
+  MotivoRechazoModuloEnumChoice.TECNICO,
+  MotivoRechazoModuloEnumChoice.VISITAS,
   MotivoRechazoModuloEnumChoice.GENERICO,
 ];
 export enum MotivoActualizacionModuloEnumChoice {
