@@ -59,6 +59,8 @@ export type RejectInstalacionOTData = Pick<
   'observacion_prerechazo' | 'motivo_prerechazo' | 'descripcion'
 >;
 
+export type UploadInstalacionONTData = Pick<OrdenTrabajo, 'serie_ont'>;
+
 ///* INSTALACIONES - TECNICO - CORRECCION FOTOS ===================================
 export type UploadCorreccionFotosInstalacionOTAsignData = Pick<
   OrdenTrabajo,

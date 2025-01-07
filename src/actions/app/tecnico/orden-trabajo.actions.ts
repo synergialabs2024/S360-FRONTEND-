@@ -136,6 +136,9 @@ export type GetOrdenTrabajosParams = Partial<OrdenTrabajo> &
   };
 export type CreateOrdenTrabajoParams<T> = T;
 export type CreateOrdenTrabajoParamsBase = Omit<OrdenTrabajo, 'id'>;
+export type UpdateSerieOnt = Partial<OrdenTrabajo> & {
+  new_serie_ont: string;
+};
 export interface UpdateOrdenTrabajoParams<T> {
   id: number;
   data: T;

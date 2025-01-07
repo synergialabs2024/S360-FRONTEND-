@@ -84,10 +84,22 @@ const ActivacionInstalacionOTByState: React.FC<
     const isActivacionPending =
       activacionState === EstadoActivacionEnumChoice.PENDIENTE;
 
-    return otStateIsPending && isActivacionPending;
+    const isActivacionGestionada =
+      activacionState === EstadoActivacionEnumChoice.GESTIONADA;
+
+    const showEditButtonAsignadas = otStateIsPending && isActivacionPending;
+
+    const showEditButtonInstalacionesGestionadas =
+      otStateIsPending && isActivacionGestionada;
+
+    return showEditButtonAsignadas || showEditButtonInstalacionesGestionadas;
   };
   const onEdit = (row: OrdenTrabajo) => {
-    navigate(`/operaciones/activaciones/instalacion/${row.uuid}`);
+    activacionState === EstadoActivacionEnumChoice.PENDIENTE
+      ? navigate(`/operaciones/activaciones/instalacion/${row.uuid}`)
+      : navigate(
+        `/operaciones/activaciones/instalacion/actualizacion-serie-onu/${row.uuid}`,
+      );
   };
 
   ///* columns
