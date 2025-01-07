@@ -41,6 +41,7 @@ const ActivacionesInstalacionesMainPage: React.FC<
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
         <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
         <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} />
+        <Tab label={'INSTALACIONES REALIZADAS'} value={5} {...a11yProps(5)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -61,6 +62,13 @@ const ActivacionesInstalacionesMainPage: React.FC<
         <ActivacionInstalacionOTByState
           activacionState={EstadoActivacionEnumChoice.GESTIONADA}
           otState={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <ActivacionInstalacionOTByState
+          activacionState={EstadoActivacionEnumChoice.GESTIONADA}
+          otState={EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>

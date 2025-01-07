@@ -1112,6 +1112,15 @@ const ActivateInstalacionOTPage = Loadable(
       ),
   ),
 );
+
+const SaveActualizacionSerieOnuOTPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/activacion/instalaciones/pages/forms/SaveActualizacionSerieOnuOTPage'
+      ),
+  ),
+);
 ///* auditoria ------------
 const AuditoriaInstalacionesMainPage = Loadable(
   lazy(
@@ -1916,6 +1925,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.operaciones.activacionesInstalacion,
             element: <ActivateInstalacionOTPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.activacionesInstalacionGestionada,
+            element: <SaveActualizacionSerieOnuOTPage />,
           },
 
           ///* auditoria

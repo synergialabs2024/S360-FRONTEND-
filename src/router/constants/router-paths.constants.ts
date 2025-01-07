@@ -286,6 +286,8 @@ export const ROUTER_PATHS = {
     ///* activaciones
     activaciones: 'activaciones',
     activacionesInstalacion: 'activaciones/instalacion/:uuid',
+    activacionesInstalacionGestionada:
+      'activaciones/instalacion/actualizacion-serie-onu/:uuid',
     activacionesNav: '/operaciones/activaciones',
 
     ///* auditoria
