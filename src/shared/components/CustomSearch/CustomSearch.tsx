@@ -66,7 +66,7 @@ const CustomSearch: React.FC<CustomSearchInterface> = ({
               sx={{ maxWidth: 500 }}
               className="custom-search-form__input"
               value={value}
-              onChange={onChange}
+              onChange={e => onChange(e.target.value)}
             />
           </Card>
           <span className="spacer"></span>
