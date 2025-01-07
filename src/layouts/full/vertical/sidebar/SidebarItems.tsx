@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Box, List, useMediaQuery, Typography } from '@mui/material';
 
 import { CustomSearch } from '@/shared/components';
 import { useNestedMenu } from './useNestedMenuItems';
 import NavGroup from './components/NavGroup';
 import { useUiStore } from '@/store/ui/ui.store';
+import { useTableFilter } from '@/shared';
 
 const normalizeText = (text: string) => {
   return text
@@ -14,6 +15,8 @@ const normalizeText = (text: string) => {
 };
 
 const SidebarItems = () => {
+  const { globalFilter, onChangeFilter } = useTableFilter();
+
   const { menuItems } = useNestedMenu();
   const customizer = useUiStore(state => state.state);
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
@@ -21,19 +24,17 @@ const SidebarItems = () => {
     ? customizer.isCollapse && !customizer.isSidebarHover
     : '';
 
-  const [searchTerm, setSearchTerm] = useState('');
-
   const filteredItems = useMemo(() => {
     return menuItems
       .map(item => {
-        if (searchTerm === '') return item;
+        if (globalFilter === '') return item;
         if (item.type === 'group' && item.children) {
           const filteredChildren = item.children
             .map(child => {
               if (child.children) {
                 const nestedFiltered = child.children.filter(nestedChild =>
                   normalizeText(nestedChild.title).includes(
-                    normalizeText(searchTerm),
+                    normalizeText(globalFilter),
                   ),
                 );
                 if (nestedFiltered.length > 0) {
@@ -56,7 +57,7 @@ const SidebarItems = () => {
         return null;
       })
       .filter(item => item !== null);
-  }, [menuItems, searchTerm]);
+  }, [menuItems, globalFilter]);
 
   const navItems = filteredItems.map(item => {
     if (item && item.type === 'group') {
@@ -69,15 +70,11 @@ const SidebarItems = () => {
     );
   });
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value); // No necesitas verificar si el valor cambió
-  };
-
   return (
     <Box sx={{ px: 3 }}>
       <CustomSearch
-        onChange={handleSearchChange}
-        value={searchTerm}
+        onChange={onChangeFilter}
+        value={globalFilter}
         text="modulos"
         hideMenu={hideMenu}
       />
