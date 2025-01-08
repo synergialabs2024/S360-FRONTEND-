@@ -9,16 +9,11 @@ import {
 } from '@mui/material';
 
 import { IconMenu2 } from '@tabler/icons-react';
-import Notifications from './Notification';
 import Profile from './Profile';
-import Search from './Search';
-import Navigation from './Navigation';
-import MobileRightSidebar from './MobileRightSidebar';
 import { useUiStore } from '@/store/ui/ui.store';
 
 const Header = () => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
-  const lgDown = useMediaQuery((theme: any) => theme.breakpoints.down('lg'));
 
   // drawer
   const customizer = useUiStore(state => state.state);
@@ -62,23 +57,19 @@ const Header = () => {
         {/* ------------------------------------------- */}
         {/* Search Dropdown */}
         {/* ------------------------------------------- */}
-        <Search />
-        {lgUp ? (
-          <>
-            <Navigation />
-          </>
-        ) : null}
+        {/* <Search /> */}
+        {lgUp ? <>{/* <Navigation /> */}</> : null}
 
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
           {/* ------------------------------------------- */}
           {/* End Ecommerce Dropdown */}
           {/* ------------------------------------------- */}
-          <Notifications />
+          {/* <Notifications /> */}
           {/* ------------------------------------------- */}
           {/* Toggle Right Sidebar for mobile */}
           {/* ------------------------------------------- */}
-          {lgDown ? <MobileRightSidebar /> : null}
+          {/* {lgDown ? <MobileRightSidebar /> : null} */}
           <Profile />
         </Stack>
       </ToolbarStyled>
