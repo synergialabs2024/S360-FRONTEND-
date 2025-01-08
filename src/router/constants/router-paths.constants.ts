@@ -140,6 +140,12 @@ export const ROUTER_PATHS = {
     configuracionPlantillasEditar: 'configuracion-plantillas/editar/:uuid',
     configuracionPlantillasNav: '/parametrizacion/configuracion-plantillas',
 
+    ///* score limit ventas
+    scoreLimitVentas: 'score-limit-ventas',
+    scoreLimitVentasCrear: 'score-limit-ventas/crear',
+    scoreLimitVentasEditar: 'score-limit-ventas/editar/:uuid',
+    scoreLimitVentasNav: '/parametrizacion/score-limit-ventas',
+
     // // =================================
     ///* usuarios
     usuarios: 'usuarios',

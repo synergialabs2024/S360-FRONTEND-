@@ -14,6 +14,7 @@ export * from './motivo-rechazo.interface';
 export * from './pais';
 export * from './parametro-sistema';
 export * from './provincia';
+export * from './score-limit-ventas';
 export * from './sector';
 export * from './system-group';
 export * from './system-user';

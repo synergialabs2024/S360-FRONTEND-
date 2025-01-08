@@ -4,7 +4,7 @@ export interface ScoreLimitVentasPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  data: ScoreLimitVentas[];
+  items: ScoreLimitVentas[];
 }
 
 export interface ScoreLimitVentas {

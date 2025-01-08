@@ -14,6 +14,7 @@ export * from './motivo-rechazo.schema';
 export * from './pais';
 export * from './parametro-sistema';
 export * from './provincia';
+export * from './score-limit-ventas.schema';
 export * from './system-group';
 export * from './system-user/system-user.schema';
 export * from './tipo-comprobante';

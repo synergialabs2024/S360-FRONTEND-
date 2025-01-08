@@ -217,6 +217,13 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.administracion.calendariofacturacionesNav,
             }),
 
+            renderByModule(SidenavModulesEnum.ADMIN_SCORE_LIMIT_VENTAS, {
+              id: 'score-limit-ventas',
+              title: 'Score Limit Ventas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.scoreLimitVentasNav,
+            }),
+
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {
               id: 'empresas',

@@ -2,14 +2,14 @@
 import { lazy } from 'react';
 
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
+import CreateSolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/forms/CreateSolicitudMaterialPage';
+import SolicitudMaterialMainPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialMainPage';
 import TecnicoModule from '@/app/tecnico/TecnicoModule';
 import TicketsModule from '@/app/tickets/TicketsModule';
 import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
-import SolicitudMaterialMainPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialMainPage';
-import CreateSolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/forms/CreateSolicitudMaterialPage';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -1261,6 +1261,22 @@ const UpdateOrigenPage = Loadable(
       import('@/app/tickets/parametros/origen/pages/forms/UpdateOrigenPage'),
   ),
 );
+const ScoresLimitVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/score-limit-ventas/pages/tables/ScoresLimitVentasPage'
+      ),
+  ),
+);
+const UpdateScoreLimitVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/score-limit-ventas/pages/forms/UpdateScoreLimitVentasPage'
+      ),
+  ),
+);
 
 const AppRouter = [
   ////* Auth
@@ -1563,6 +1579,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.calendariofacturacionesEditar,
             element: <UpdateCalendarioFacturacionPage />,
+          },
+
+          ///* Score Limit Ventas
+          {
+            path: ROUTER_PATHS.administracion.scoreLimitVentas,
+            element: <ScoresLimitVentasPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.scoreLimitVentasEditar,
+            element: <UpdateScoreLimitVentasPage />,
           },
 
           ///* USER ----------

@@ -265,6 +265,21 @@ export enum OtpStatesEnumChoice {
   ESPERA_APROBACION = 'ESPERA_APROBACION',
 }
 
+export enum ScoreBuroEnumChoice {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+}
+export const SCORE_BURO_ARRAY_CHOICES = [
+  ScoreBuroEnumChoice.A,
+  ScoreBuroEnumChoice.B,
+  ScoreBuroEnumChoice.C,
+  ScoreBuroEnumChoice.D,
+  ScoreBuroEnumChoice.E,
+];
+
 export enum ClasificacionPlanesScoreBuroEnumChoice {
   BASICO = 'BASICO',
   MEDIO = 'MEDIO',
