@@ -76,3 +76,6 @@ export type UploadCorreccionFotosInstalacionOTAsignData = Pick<
 > & {
   orden_trabajo: number;
 };
+
+///* DAR POR FALLIDA INSTALACION ===================================
+export type FailInstalacionOTData = Pick<OrdenTrabajo, 'id'>;

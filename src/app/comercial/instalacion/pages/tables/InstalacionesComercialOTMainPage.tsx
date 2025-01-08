@@ -49,7 +49,7 @@ const InstalacionesComercialOTMainPage: React.FC<
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <InstalacionComercialOTByState
-          state={EstadoOrdenTrabajoEnumChoice.EN_PROCESO}
+          state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
           isRecoordinada
         />
       </CustomTabPanel>

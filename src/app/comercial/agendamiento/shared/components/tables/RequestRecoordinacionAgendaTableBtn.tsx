@@ -17,6 +17,7 @@ import {
   ToastWrapper,
 } from '@/shared';
 import { CustomTextArea, ScrollableDialogProps } from '@/shared/components';
+import { useNavigate } from 'react-router';
 
 export type RequestRecoordinacionAgendaTableBtnProps = {
   agendamiento: Agendamiento;
@@ -24,6 +25,7 @@ export type RequestRecoordinacionAgendaTableBtnProps = {
   onClose(): void;
 
   customUrl?: string;
+  urlRedirect?: string;
 };
 
 type SaveFormData = SolicitudRecoordinacionAgenda & {};
@@ -35,7 +37,10 @@ const RequestRecoordinacionAgendaTableBtn: React.FC<
   onClose,
   agendamiento,
   customUrl = '/solicitud-recoordinacion-agenda/',
+  urlRedirect,
 }) => {
+  const navigate = useNavigate();
+
   const queryClient = useQueryClient();
 
   ///* form ---------------------
@@ -52,6 +57,7 @@ const RequestRecoordinacionAgendaTableBtn: React.FC<
     customUrl,
     SolicitudRecoordinacionAgendaTSQEnum.SOLICITUDRECOORDINACIONAGENDAS,
     {
+      returnUrl: urlRedirect,
       customMessageToast:
         'Se ha solicitado la recoordinación de agenda con éxito',
     },
@@ -72,6 +78,8 @@ const RequestRecoordinacionAgendaTableBtn: React.FC<
     });
 
     handleCloseModal();
+
+    if (urlRedirect) navigate(urlRedirect);
   };
 
   const handleCloseModal = () => {

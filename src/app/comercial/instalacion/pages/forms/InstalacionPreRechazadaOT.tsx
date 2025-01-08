@@ -7,8 +7,8 @@ import { CustomTitleRefNumber } from '@/shared/components';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { SaveInstalacionPreRechazada } from '../../shared/components';
 import { returnUrlInstallPreRechazadasOT } from '../tables/InstalacionesComercialOTMainPage';
+import SaveInstalacionPreRechazada from '../../shared/components/SaveInstalacionPreRechazada/SaveInstalacionPreRechazada';
 
 export type InstalacionPreRechazadaOTProps = {};
 
