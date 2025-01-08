@@ -123,6 +123,7 @@ export enum PermissionsEnum {
   users_view_profile = 'users.view_profile',
   users_view_user = 'users.view_usuario',
   comercial_view_scorelimitventas = 'comercial.view_scorelimitventas',
+  comercial_view_scoremonthlyusageventas = 'comercial.view_scoremonthlyusageventas',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -238,6 +239,7 @@ export enum PermissionsEnum {
   tecnico_add_asuntoticket = 'tecnico.add_asuntoticket',
   tecnico_add_origenticket = 'tecnico.add_origenticket',
   comercial_add_scorelimitventas = 'comercial.add_scorelimitventas',
+  comercial_add_scoremonthlyusageventas = 'comercial.add_scoremonthlyusageventas',
 
   user_add_user = 'user.add_user',
   users_add_customgroup = 'users.add_customgroup',
@@ -361,6 +363,7 @@ export enum PermissionsEnum {
   users_change_profile = 'users.change_profile',
   users_change_user = 'users.change_usuario',
   comercial_change_scorelimitventas = 'comercial.change_scorelimitventas',
+  comercial_change_scoremonthlyusageventas = 'comercial.change_scoremonthlyusageventas',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',
@@ -483,6 +486,7 @@ export enum PermissionsEnum {
   users_delete_profile = 'users.delete_profile',
   users_delete_user = 'users.delete_usuario',
   comercial_delete_scorelimitventas = 'comercial.delete_scorelimitventas',
+  comercial_delete_scoremonthlyusageventas = 'comercial.delete_scoremonthlyusageventas',
 
   // // // // PRINT ---------------------------
   billing_print_credit_note = 'billing.print_credit_note',
