@@ -14,12 +14,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 const { get, post, patch } = erpAPI();
 
 export enum IngresoMaterialTSQEnum {
-  INGRESOMATERIALES = 'ingreso-materiales',
-  INGRESOMATERIAL = 'ingreso-material',
+  INGRESOMATERIALES = 'solicitud-material',
+  SOLICITUDMATERIAL = 'solicitud-materiales',
 }
 
 ///* tanStack query
-export const useFetchIngresoMateriales = ({
+export const useFetchSolicitudMaterial = ({
   enabled = true,
   params,
 }: UseFetchEnabledParams<GetIngresoMaterialesParams>) => {
@@ -35,7 +35,7 @@ export const useFetchIngresoMateriales = ({
 
 export const useGetIngresoMaterial = (uuid: string) => {
   return useQuery({
-    queryKey: [IngresoMaterialTSQEnum.INGRESOMATERIAL, uuid],
+    queryKey: [IngresoMaterialTSQEnum.SOLICITUDMATERIAL, uuid],
     queryFn: () => getIngresoMaterial(uuid),
     retry: false,
   });

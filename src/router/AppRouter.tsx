@@ -8,8 +8,8 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
-import SolicitudMaterial from '@/app/tecnico/SolicitudMaterial';
-import SolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialPage';
+import SolicitudMaterialMainPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialMainPage';
+import CreateSolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/forms/CreateSolicitudMaterialPage';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -2050,13 +2050,13 @@ const AppRouter = [
           ///* solicitud material
           {
             path: ROUTER_PATHS.inventario.solicitudMaterial,
-            element: <SolicitudMaterialPage />,
-          },
-          /* {
-            path: ROUTER_PATHS.inventario.ubicacionesCrear,
-            element: <CreateUbicacionPage />,
+            element: <SolicitudMaterialMainPage />,
           },
           {
+            path: ROUTER_PATHS.inventario.solicitudMaterialCrear,
+            element: <CreateSolicitudMaterialPage />,
+          },
+          /*  {
             path: ROUTER_PATHS.inventario.ubicacionesEditar,
             element: <UpdateUbicacionPage />,
           }, */
@@ -2283,9 +2283,7 @@ const AppRouter = [
           },
           {
             path: ROUTER_PATHS.tecnico.instalacionesSolicitudMateriales,
-            element: (
-              <SolicitudMaterial title="Crear Solicitud de Materiales" />
-            ),
+            element: <SolicitudMaterialMainPage />,
           },
         ],
       },

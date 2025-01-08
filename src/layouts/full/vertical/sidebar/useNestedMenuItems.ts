@@ -479,9 +479,9 @@ export const useNestedMenu = () => {
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-materiales-tecnico',
-              title: 'Solicitud de materiales',
+              title: 'Solicitud de materiales tecnico',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.tecnico.instalacionesSolicitudMateriales,
+              url: ROUTER_PATHS.inventario.solicitudMaterialNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'detalle-materiales',
