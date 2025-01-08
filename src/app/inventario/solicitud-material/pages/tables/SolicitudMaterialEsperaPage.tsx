@@ -81,11 +81,7 @@ const SolicitudMaterialEsperaPage: React.FC<
         rowCount={preventasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={true}
-        // crud
-        canEdit={true}
-        canDelete={false}
-        showCustomButtonsSpace
+        enableActionsColumn={false}
       />
     </GridTableTabsContainerOnly>
   );
