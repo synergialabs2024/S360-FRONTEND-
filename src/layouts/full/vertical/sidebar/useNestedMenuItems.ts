@@ -438,17 +438,17 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.egresoMaterialesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_INGRESO_MATERIAL, {
               id: 'ingreso-mercaderia',
               title: 'Ingreso de Inventario',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.ingresoMaterialesNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'movimiento-mercaderia',
-              title: 'Movimiento de Inventario',
+              id: 'movimiento-materiales',
+              title: 'Movimiento de Materiales',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.movimientoMaterialesNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solcitud-devoluciones',

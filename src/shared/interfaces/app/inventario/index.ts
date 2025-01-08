@@ -2,6 +2,7 @@ export * from './bodega';
 export * from './categoria-producto.interface';
 export * from './ingreso-material';
 export * from './egreso-material';
+export * from './movimiento-material';
 export * from './producto.interface';
 export * from './ubicacion-producto.interface';
 export * from './ubicacion.interface';

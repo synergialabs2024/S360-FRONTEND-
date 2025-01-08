@@ -966,6 +966,14 @@ const CreateEgresoMaterialPage = Loadable(
       ),
   ),
 );
+const MovimientoMaterialesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/movimiento-material/pages/tables/MovimientoMaterialesPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2071,6 +2079,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.egresoMaterialesCrear,
             element: <CreateEgresoMaterialPage />,
+          },
+
+          ///* Movimiento Material
+          {
+            path: ROUTER_PATHS.inventario.movimientoMateriales,
+            element: <MovimientoMaterialesPage />,
           },
         ],
       },
