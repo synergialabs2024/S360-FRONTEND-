@@ -22,11 +22,7 @@ import AspectRatioTwoToneIcon from '@mui/icons-material/AspectRatioTwoTone';
 import CallToActionTwoToneIcon from '@mui/icons-material/CallToActionTwoTone';
 import ViewSidebarTwoToneIcon from '@mui/icons-material/ViewSidebarTwoTone';
 import WebAssetTwoToneIcon from '@mui/icons-material/WebAssetTwoTone';
-import {
-  ViewComfyTwoTone,
-  PaddingTwoTone,
-  BorderOuter,
-} from '@mui/icons-material';
+import { BorderOuter } from '@mui/icons-material';
 import { useUiStore } from '@/store/ui/ui.store';
 
 const SidebarWidth = '320px';
@@ -236,7 +232,7 @@ const Customizer: FC = () => {
             {/* ------------------------------------------- */}
             {/* ------------ Layout Horizontal / Vertical ------------- */}
             {/* ------------------------------------------- */}
-            <Typography variant="h6" gutterBottom>
+            {/* <Typography variant="h6" gutterBottom>
               Layout Type
             </Typography>
             <Stack direction={'row'} gap={2} my={2}>
@@ -264,7 +260,7 @@ const Customizer: FC = () => {
                 />
                 Horizontal
               </StyledBox>
-            </Stack>
+            </Stack> */}
             <Box pt={4} />
             {/* ------------------------------------------- */}
             {/* ------------ Layout Boxed / Full ------------- */}
