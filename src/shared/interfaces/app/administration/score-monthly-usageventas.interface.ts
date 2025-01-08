@@ -4,7 +4,7 @@ export interface ScoreMonthlyUsageVentasPaginatedRes {
   status: number;
   message: string;
   meta: PagingMetaResponse;
-  data: ScoreMonthlyUsageVentas;
+  items: ScoreMonthlyUsageVentas[];
 }
 
 export interface ScoreMonthlyUsageVentas {

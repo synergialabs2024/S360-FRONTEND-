@@ -223,6 +223,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.scoreLimitVentasNav,
             }),
+            renderByModule(
+              SidenavModulesEnum.ADMIN_SCORE_MONTHLY_USAGE_VENTAS,
+              {
+                id: 'score-mensual-ventas',
+                title: 'Cupo Mensual Ventas por Score',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.administracion.scoreMonthlyUsageVentasNav,
+              },
+            ),
 
             /*
             renderByModule(SidenavModulesEnum.ADMIN_EMPRESAS, {

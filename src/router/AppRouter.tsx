@@ -1277,6 +1277,14 @@ const UpdateScoreLimitVentasPage = Loadable(
       ),
   ),
 );
+const ScoresMonthlyUsageVentasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/score-monthly-usageventas/pages/tables/ScoresMonthlyUsageVentasPage'
+      ),
+  ),
+);
 
 const AppRouter = [
   ////* Auth
@@ -1589,6 +1597,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.scoreLimitVentasEditar,
             element: <UpdateScoreLimitVentasPage />,
+          },
+
+          ///* Score Monthly Usage Ventas
+          {
+            path: ROUTER_PATHS.administracion.scoreMonthlyUsageVentas,
+            element: <ScoresMonthlyUsageVentasPage />,
           },
 
           ///* USER ----------

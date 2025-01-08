@@ -15,6 +15,7 @@ export * from './pais';
 export * from './parametro-sistema';
 export * from './provincia';
 export * from './score-limit-ventas.actions';
+export * from './score-monthly-usageventas.actions';
 export * from './sector';
 export * from './system-group';
 export * from './system-user';

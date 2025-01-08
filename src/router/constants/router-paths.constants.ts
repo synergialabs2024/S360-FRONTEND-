@@ -146,6 +146,12 @@ export const ROUTER_PATHS = {
     scoreLimitVentasEditar: 'score-limit-ventas/editar/:uuid',
     scoreLimitVentasNav: '/parametrizacion/score-limit-ventas',
 
+    ///* score monthly usage ventas
+    scoreMonthlyUsageVentas: 'score-uso-mensual-ventas',
+    scoreMonthlyUsageVentasCrear: 'score-uso-mensual-ventas/crear',
+    scoreMonthlyUsageVentasEditar: 'score-uso-mensual-ventas/editar/:uuid',
+    scoreMonthlyUsageVentasNav: '/parametrizacion/score-uso-mensual-ventas',
+
     // // =================================
     ///* usuarios
     usuarios: 'usuarios',
