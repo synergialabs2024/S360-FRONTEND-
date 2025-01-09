@@ -22,6 +22,17 @@ import {
 } from '@/shared/components';
 import { useEffect } from 'react';
 
+export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
+  usedQuantity: number;
+
+  containsSeries: boolean;
+  selectedSeries: string[];
+  savedSeries: string[];
+  cantidad?: number;
+  series?: any[];
+  productos?: string[];
+};
+
 export type UbicacionProductosDisponiblesModalProps = {
   open: boolean;
   pk_ubicacion: number;

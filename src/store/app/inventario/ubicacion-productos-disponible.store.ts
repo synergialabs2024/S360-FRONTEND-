@@ -1,4 +1,4 @@
-import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-material/shared/components/SaveEgresoMaterial/SaveEgresoMaterial';
+import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
 import { ToastWrapper } from '@/shared';
 import { create } from 'zustand';
 

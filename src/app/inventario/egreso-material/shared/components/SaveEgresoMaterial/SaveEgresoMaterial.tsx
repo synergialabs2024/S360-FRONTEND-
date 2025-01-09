@@ -17,7 +17,6 @@ import {
   gridSizeMdLg6,
   Ubicacion,
   ToastWrapper,
-  UbicacionProducto,
 } from '@/shared';
 import { returnUrlEgresoMaterialesPage } from '../../../pages/tables/EgresoMaterialesPage';
 import {
@@ -27,29 +26,19 @@ import {
   CustomTextArea,
   CustomTypoLabel,
   CustomTypoLabelEnum,
-  SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useUbicacionProductosStore } from '@/store/app';
 import { useColumnsUbicacionProductosDisponibles } from '../../hooks';
-import UbicacionProductosDisponiblesModal from '../../../pages/modal/UbicacionProductosDisponiblesModal';
+import UbicacionProductosDisponiblesModal, {
+  UbicacionProductosDisponiblesTableType,
+} from '../../../pages/modal/UbicacionProductosDisponiblesModal';
 
 export interface SaveEgresoMaterialProps {
   title: string;
   egresoMaterial?: EgresoMaterial;
 }
-
-export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
-  usedQuantity: number;
-
-  containsSeries: boolean;
-  selectedSeries: string[];
-  savedSeries: string[];
-  cantidad?: number;
-  series?: any[];
-  productos?: string[];
-};
 
 type SaveFormData = CreateEgresoMaterialParamsBase & {};
 
@@ -122,16 +111,40 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
     if (!isValid) return;
 
     const mappedProductos = ubicacionProductosDisponibles.map(
-      ubicacionproducto => ({
-        ...ubicacionproducto,
-        series: ubicacionproducto.series ? ubicacionproducto.series : [],
-      }),
+      ubicacionproducto => {
+        const { series, ...resto } = ubicacionproducto;
+        return {
+          ...resto,
+          serie: series ? series : [],
+        };
+      },
     );
+
+    let hasError = false;
+
+    mappedProductos.forEach(producto => {
+      const cantidad = producto.cantidad ?? 0;
+      if (cantidad > producto.stock_actual) {
+        ToastWrapper.error(
+          `
+            El producto con código ${producto.producto_data?.codigo}
+            tiene una cantidad ${cantidad} mayor que el stock actual
+            ${producto.stock_actual}.
+          `,
+        );
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      return;
+    }
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
       return;
     }
+
     const preparedData = {
       ...data,
       productos: mappedProductos,
@@ -142,6 +155,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
+    ubicacionProductosEnviar([]);
     if (egresoMaterial?.productos) {
       const productosTransformados = egresoMaterial.productos.map(producto => ({
         ...producto,
@@ -197,6 +211,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
           form.setValue('ubicacion', '' as any);
           ubicacionProductosEnviar([]);
         }}
+        size={gridSizeMdLg6}
       />
       <CustomAutocomplete<Ubicacion>
         label="Ubicacion"
@@ -217,46 +232,6 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
           ubicacionProductosEnviar([]);
         }}
       />
-      <SampleCheckbox
-        label="state"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
-        size={gridSizeMdLg6}
-      />
-      {/* ==================== PRODUCTS ==================== */}
-      {!!watchedUbicacion && (
-        <>
-          <CustomTypoLabel
-            text="Productos"
-            pt={CustomTypoLabelEnum.ptMiddlePosition}
-          />
-          <Grid container justifyContent="flex-end">
-            <CustomSingleButton
-              label="AGREGAR PRODUCTO"
-              color="primary"
-              variant="text"
-              startIcon={<FiPlus />}
-              onClick={() => {
-                setOpenAddProducts(true);
-              }}
-              justifyContent="flex-end"
-            />
-          </Grid>
-          <CustomMinimalTable<UbicacionProductosDisponiblesTableType>
-            columns={crearMaterialColumns}
-            data={ubicacionProductosDisponibles || []}
-            enablePagination
-            density="comfortable"
-          />
-          <UbicacionProductosDisponiblesModal
-            pk_ubicacion={watchedUbicacion}
-            open={openAddProducts}
-            onClose={() => setOpenAddProducts(false)}
-          />
-        </>
-      )}
       <CustomTextArea
         label="Observación"
         name="observacion"
@@ -266,6 +241,36 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
         helperText={errors.observacion?.message}
         required={false}
       />
+      {/* ==================== PRODUCTS ==================== */}
+      <CustomTypoLabel
+        text="Productos"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
+      <Grid container justifyContent="flex-end">
+        {!!watchedUbicacion && (
+          <CustomSingleButton
+            label="AGREGAR PRODUCTO"
+            color="primary"
+            variant="text"
+            startIcon={<FiPlus />}
+            onClick={() => {
+              setOpenAddProducts(true);
+            }}
+            justifyContent="flex-end"
+          />
+        )}
+        <CustomMinimalTable<UbicacionProductosDisponiblesTableType>
+          columns={crearMaterialColumns}
+          data={ubicacionProductosDisponibles || []}
+          enablePagination
+          density="comfortable"
+        />
+        <UbicacionProductosDisponiblesModal
+          pk_ubicacion={watchedUbicacion}
+          open={openAddProducts}
+          onClose={() => setOpenAddProducts(false)}
+        />
+      </Grid>
     </SingleFormBoxScene>
   );
 };

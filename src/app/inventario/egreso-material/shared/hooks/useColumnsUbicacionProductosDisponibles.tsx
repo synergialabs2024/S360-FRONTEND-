@@ -1,8 +1,9 @@
 /* eslint-disable indent */
 import { TextField } from '@mui/material';
 import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
-import { UbicacionProductosDisponiblesTableType } from '../components/SaveEgresoMaterial/SaveEgresoMaterial';
 import { useCallback, useMemo } from 'react';
+import { IoMdTrash } from 'react-icons/io';
+
 import { emptyCellNested, formatQuantityCell, TABLE_CONSTANTS } from '@/shared';
 import {
   UbicacionProductosDisponiblesStoreKey,
@@ -10,7 +11,8 @@ import {
 } from '@/store/app';
 import SeriesUbicacionProductoModal from '../../pages/modal/SeriesUbicacionProductoModal';
 import { SingleIconButton } from '@/shared/components';
-import { IoMdTrash } from 'react-icons/io';
+import { UbicacionProductosDisponiblesTableType } from '../../pages/modal/UbicacionProductosDisponiblesModal';
+import ShowSeriesProductosModal from '../../pages/modal/ShowSeriesProductosModal';
 
 type UseColumnsEquiposEgresoMaterial = {
   showActionColumn?: boolean;
@@ -74,6 +76,13 @@ export const useColumnsUbicacionProductosDisponibles = ({
   >(
     () => [
       {
+        accessorKey: 'categoria_data__name',
+        header: 'CATEGORIA',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
+      },
+      {
         accessorKey: 'codigo',
         header: 'CÓDIGO',
         enableColumnFilter: false,
@@ -91,7 +100,7 @@ export const useColumnsUbicacionProductosDisponibles = ({
         ? [
             {
               accessorKey: 'stock_actual',
-              header: 'STOCK',
+              header: 'STOCK ACTUAL',
               enableColumnFilter: false,
               Cell: ({ row }: MRTUbicacionProductoTableType) =>
                 formatQuantityCell(row, 'stock_actual'),
@@ -101,10 +110,76 @@ export const useColumnsUbicacionProductosDisponibles = ({
     ],
     [showCurrentStockColumn],
   );
+  const baseColumnsUbicacionProductosDisponibles05 = useMemo<
+    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
+  >(
+    () => [
+      {
+        accessorKey: 'producto_data.requiere_series',
+        header: 'CONTIENE SERIE',
+        Cell: ({ row }) => {
+          const requiereSeries = row?.original?.producto_data?.requiere_series;
+          return <>{requiereSeries ? 'Con permiso' : 'Sin permiso'}</>;
+        },
+      },
+    ],
+    [],
+  );
+
   const baseColumnsUbicacionProductosDisponibles02 = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
+      ...baseColumnsUbicacionProductosDisponibles05,
+      {
+        accessorKey: 'producto__series',
+        header: 'SERIES',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => {
+          const stockActual = row.original.stock_actual;
+          const cantidad = row.original.cantidad;
+
+          function obtenerValor(
+            valueCantidad: number | undefined,
+            stockActual: number,
+          ): boolean {
+            if (valueCantidad === undefined) {
+              return true;
+            }
+
+            if (valueCantidad > stockActual) {
+              return true;
+            }
+
+            if (valueCantidad < stockActual) {
+              return false;
+            }
+
+            return true;
+          }
+
+          return (
+            <SeriesUbicacionProductoModal
+              Arrays={row.original}
+              cantidadBoolean={obtenerValor(cantidad, stockActual)}
+              modalTitle={`Serie para ${row?.original?.producto_data?.codigo}`}
+              onDataChange={newData => {
+                onChangeSerieInit(newData, row.original);
+              }}
+            />
+          );
+        },
+      },
+    ],
+    [onChangeSerieInit, baseColumnsUbicacionProductosDisponibles05],
+  );
+
+  const baseColumnsUbicacionProductosDisponibles03 = useMemo<
+    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsUbicacionProductosDisponibles05,
       {
         accessorKey: 'producto__series',
         header: 'SERIES',
@@ -112,17 +187,37 @@ export const useColumnsUbicacionProductosDisponibles = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         Cell: ({ row }) => {
           return (
-            <SeriesUbicacionProductoModal
-              requiereSerie={row.original.producto_data?.requiere_series}
-              dataArray={row?.original?.series || []}
-              modalTitle={`Serie para ${row?.original?.producto_data?.codigo}`}
-              onDataChange={newData => onChangeSerieInit(newData, row.original)}
+            <ShowSeriesProductosModal
+              Arrays={row.original}
+              serieBoolean={true}
             />
           );
         },
       },
     ],
-    [onChangeSerieInit],
+    [baseColumnsUbicacionProductosDisponibles05],
+  );
+  const baseColumnsUbicacionProductosDisponibles04 = useMemo<
+    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsUbicacionProductosDisponibles05,
+      {
+        accessorKey: 'producto__series',
+        header: 'SERIES',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => {
+          return (
+            <ShowSeriesProductosModal
+              Arrays={row.original}
+              serieBoolean={false}
+            />
+          );
+        },
+      },
+    ],
+    [baseColumnsUbicacionProductosDisponibles05],
   );
 
   const modalMaterialColumns = useMemo<
@@ -163,7 +258,9 @@ export const useColumnsUbicacionProductosDisponibles = ({
             <TextField
               variant="outlined"
               value={row.original.cantidad || ''}
-              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              onChange={e => {
+                onChangePuntaInit(e.target.value, row.original);
+              }}
               type="number"
               inputProps={{
                 min: 0,
@@ -203,9 +300,81 @@ export const useColumnsUbicacionProductosDisponibles = ({
     ],
   );
 
+  const seriesIngresoColumns = useMemo<
+    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsUbicacionProductosDisponibles01,
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              disabled={true}
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              onChange={e => {
+                onChangePuntaInit(e.target.value, row.original);
+              }}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      ...baseColumnsUbicacionProductosDisponibles03,
+    ],
+    [
+      baseColumnsUbicacionProductosDisponibles01,
+      baseColumnsUbicacionProductosDisponibles03,
+      onChangePuntaInit,
+    ],
+  );
+
+  const seriesEgresoColumns = useMemo<
+    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsUbicacionProductosDisponibles01,
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              disabled={true}
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              onChange={e => {
+                onChangePuntaInit(e.target.value, row.original);
+              }}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      ...baseColumnsUbicacionProductosDisponibles04,
+    ],
+    [
+      baseColumnsUbicacionProductosDisponibles01,
+      baseColumnsUbicacionProductosDisponibles04,
+      onChangePuntaInit,
+    ],
+  );
+
   return {
     baseColumnsUbicacionProductosDisponibles01,
     modalMaterialColumns,
     crearMaterialColumns,
+    seriesIngresoColumns,
+    seriesEgresoColumns,
   };
 };

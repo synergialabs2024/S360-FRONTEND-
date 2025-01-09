@@ -1,5 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { Producto } from '../producto.interface';
+import { UbicacionProducto } from '../ubicacion-producto.interface';
 
 export interface IngresoMaterialesPaginatedRes {
   status: number;
@@ -14,7 +14,7 @@ export interface IngresoMaterial {
   state: boolean;
 
   observacion: string;
-  productos: Producto[];
+  productos: UbicacionProducto[];
 
   ///* fk
   bodega: number;

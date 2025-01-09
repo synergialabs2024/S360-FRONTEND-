@@ -1,5 +1,5 @@
 export * from './bodega';
+export * from './inventario';
 
-export * from './useColumnsIngresoMaterial';
 export * from './useColumnsMovimientoMaterial';
 export * from './useColumnsUbicacionProducto';
