@@ -7,7 +7,7 @@ export interface ClienteExistResponse {
 
 export interface ClienteExist {
   name: string;
-  nexgt_line: number;
+  next_linea: number;
   services: Service[];
 }
 
@@ -33,8 +33,15 @@ export interface Service {
   FORMA_DE_PAGO: string;
   mantenimiento: boolean;
   fecha_suspendido: string;
-  servicios: Servicio[];
+  services: Servicio[];
   facturacion: Facturacion;
+  deuda: number;
+  estado_linea: string;
+  contrato_data: ContratoData;
+}
+
+export interface ContratoData {
+  numero_contrato: string;
 }
 
 export interface Facturacion {
@@ -78,4 +85,5 @@ export interface Servicio {
 
   // helper
   estado?: string;
+  estado_linea: string;
 }

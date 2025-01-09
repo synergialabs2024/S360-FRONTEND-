@@ -1,4 +1,4 @@
-import { Box, Chip, Divider, Grid, Typography } from '@mui/material';
+import { Alert, Box, Chip, Divider, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
 
 import { gridSize } from '@/shared';
@@ -51,6 +51,7 @@ const ServicesAlertModal: React.FC<ServicesAlertModalProps> = ({
       )}
 
       {/* ============== modals ============== */}
+
       <ScrollableDialogProps
         open={isOpenServicesModal}
         onClose={() => setIsOpenServicesModal(false)}
@@ -72,26 +73,29 @@ const ServicesAlertModal: React.FC<ServicesAlertModalProps> = ({
               </Typography>
 
               {formatDataClienteMikro(clientData as any)
-                ?.services?.at(-1)
-                ?.servicios?.map((servicio, index) => (
+                //?.services?.at(-1)
+                ?.services?.map((servicio, index) => (
                   <Box key={servicio?.id} my={1}>
-                    <Typography variant="body2">
-                      {`${servicio?.perfil}`}{' '}
-                      <Chip
-                        label={servicio?.estado}
-                        color={
-                          servicio?.estado === 'ACTIVO'
-                            ? 'success'
-                            : servicio?.estado === 'SUSPENDIDO'
-                              ? 'warning'
-                              : 'error'
-                        }
-                        variant="outlined"
-                      />
-                    </Typography>
+                    <Alert variant="outlined" severity="info">
+                      <Typography fontWeight="bold">
+                        {`${servicio?.contrato_data?.numero_contrato} `}
+                        <Chip
+                          label={servicio?.estado_linea}
+                          color={
+                            servicio?.estado_linea === 'ACTIVO'
+                              ? 'success'
+                              : servicio?.estado_linea === 'SUSPENDIDO'
+                                ? 'warning'
+                                : 'error'
+                          }
+                          variant="outlined"
+                        />
+                        {` $${servicio?.deuda?.toFixed(2)}`}{' '}
+                      </Typography>
+                    </Alert>
 
                     {index <
-                      (clientData?.services?.at(-1)?.servicios?.length ?? 0) -
+                      (clientData?.services?.at(-1)?.services?.length ?? 0) -
                         1 && <Divider sx={{ my: 1 }} />}
                   </Box>
                 ))}
@@ -100,7 +104,7 @@ const ServicesAlertModal: React.FC<ServicesAlertModalProps> = ({
             {/* Línea a activar */}
             <Grid item xs={12}>
               <Typography variant="body2" fontWeight="bold">
-                {`Línea a contratar: #${clientData?.nexgt_line}`}
+                {`Línea a contratar: #${clientData?.next_linea}`}
               </Typography>
             </Grid>
           </Grid>

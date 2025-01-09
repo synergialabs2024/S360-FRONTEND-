@@ -106,7 +106,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const [condicionCedulado, setCondicionCedulado] =
     useState<CondicionCedulado | null>(null);
   const [isDefuncion, setIsDefuncion] = useState<boolean>(false);
-
+  const [haveDebt, setHaveDebt] = useState<boolean>(false);
   ///* global state -----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -320,7 +320,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       const currentCountry = paisesPaging?.data.items.find(
         country => country.nationality === data?.nacionalidad,
       );
+      const haveDebt = data?.have_debt;
 
+      setHaveDebt(haveDebt);
+      if (data?.have_debt) {
+        ToastWrapper.error(
+          'Este cliente tiene una deuda pendiente. No se puede proceder con la contratación de un nuevo servicio.',
+        );
+      }
       form.reset({
         ...form.getValues(),
         es_cliente: true,
@@ -333,10 +340,10 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         direccion_referencia: data?.domicilio,
         isFormBlocked: false,
         isValidIdentificacion: true,
-
         pais: currentCountry?.id,
         nacionalidad: data?.nacionalidad,
       });
+
       setClientData(data);
     } else {
       form.reset({
@@ -494,6 +501,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         ToastWrapper.error(`Errores en: ${keys}`);
       })}
       disableSubmitBtn={
+        haveDebt ||
         watchedIsFormBlocked ||
         !watchedIsValidIdentificacion ||
         (aplicaRestriccionCiudadano && isExtranjeroCedulado) ||
