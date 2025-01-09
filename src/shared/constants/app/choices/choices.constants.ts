@@ -604,6 +604,11 @@ export const CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO = [
   },
 ];
 
+export enum CodigoProductosEnumChoice {
+  WIFIMESH = 'WIFIMESH',
+  MINI_UPS = 'MINI UPS',
+}
+
 ///* ORDEN TRABAJO ==========================================
 export enum EstadoOrdenTrabajoEnumChoice {
   PENDIENTE = 'PENDIENTE',

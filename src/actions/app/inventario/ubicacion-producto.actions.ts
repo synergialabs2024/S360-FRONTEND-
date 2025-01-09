@@ -139,6 +139,9 @@ export type GetUbicacionProductosParams = Partial<UbicacionProducto> &
     producto__modelo__nombre?: string;
     producto__modelo__codigo?: string;
     ubicacion__pk?: number;
+
+    // helpers
+    unique_centro_costo_equipos_venta?: boolean;
   };
 export type CreateUbicacionProductoParams<T> = T;
 export type CreateUbicacionProductoParamsBase = Omit<UbicacionProducto, 'id'>;

@@ -69,6 +69,9 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
       producto__es_para_venta: true,
       producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
       bodega__centro_costo__pk: user?.centro_costo!,
+
+      // filtrar productos distincts por bodega del centro costo
+      unique_centro_costo_equipos_venta: true,
     },
   });
 
