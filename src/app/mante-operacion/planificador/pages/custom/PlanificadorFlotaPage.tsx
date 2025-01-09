@@ -120,7 +120,7 @@ const PlanificadorFlotaPage: React.FC<PlanificadorFlotaPageProps> = () => {
     // using global state to prevent re-registering ✅
     const selectedFleet = usePlanificadoresStore.getState().selectedFleet;
     if (!selectedFleet) return;
-    socket.emit('register_fleet', selectedFleet?.id!);
+    socket.emit('register_fleet', selectedFleet?.uuid!);
 
     socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
       // update planificadoresArray with new data for the same day
