@@ -4,14 +4,24 @@ import { useCallback, useMemo } from 'react';
 import { IoMdTrash } from 'react-icons/io';
 import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 
-import { emptyCellOneLevel, TABLE_CONSTANTS } from '@/shared';
+import { emptyCellOneLevel, Producto, TABLE_CONSTANTS } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 import {
   ProductosDisponiblesStoreKey,
   useProductosStore,
 } from '@/store/app/inventario/productos-disponible.store';
-import { ProductosDisponiblesTableType } from '../components/SaveIngresoMaterial/SaveIngresoMaterial';
 import SeriesProductoModal from '../../pages/modal/SeriesProductoModal';
+
+export type ProductosDisponiblesTableType = Producto & {
+  usedQuantity: number;
+
+  containsSeries: boolean;
+  selectedSeries: string[];
+  savedSeries: string[];
+  cantidad?: number;
+  series?: any[];
+  productos?: string[];
+};
 
 type UseColumnsEquiposIngresoMaterial = {
   showActionColumn?: boolean;

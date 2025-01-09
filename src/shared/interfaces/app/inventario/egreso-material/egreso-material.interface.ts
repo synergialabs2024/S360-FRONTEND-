@@ -24,8 +24,4 @@ export interface EgresoMaterial {
   modified_at?: string;
 }
 
-export interface EgresoMaterialSeries {
-  series: string;
-}
-
 export type EgresoMaterialLimitData = Pick<EgresoMaterial, 'uuid' | 'id'>;

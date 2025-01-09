@@ -11,6 +11,7 @@ export interface SimpleTableProps<T extends MRT_RowData> {
   data: T[];
   isLoading?: boolean;
   enableGlobalFilter?: boolean;
+  centerColumns?: boolean; // Nuevo prop
 }
 
 function SimpleTable<T extends MRT_RowData>({
@@ -18,6 +19,7 @@ function SimpleTable<T extends MRT_RowData>({
   data,
   isLoading = false,
   enableGlobalFilter = true,
+  centerColumns = false, // Predeterminado en false
 }: SimpleTableProps<T>) {
   const theme = useTheme();
 
@@ -27,22 +29,26 @@ function SimpleTable<T extends MRT_RowData>({
 
     muiTableHeadCellProps: {
       sx: {
-        fontSize: '1rem', // Same as variant h6
-        fontWeight: 600, // Same as variant h6
-        lineHeight: '1.6', // Same as variant h6
-        letterSpacing: '0.0075em', // Same as variant h6
+        fontSize: '1rem',
+        fontWeight: 600,
+        lineHeight: '1.6',
+        letterSpacing: '0.0075em',
         padding: '16px',
         textTransform: 'capitalize',
+        textAlign: centerColumns ? 'center' : 'left', // Centrar el título
+      },
+    },
+
+    muiTableBodyCellProps: {
+      sx: {
+        textAlign: centerColumns ? 'center' : 'left', // Centrar las celdas
       },
     },
 
     localization: MRT_Localization_ES,
     enableTopToolbar: true,
-
-    ///* search
     enableGlobalFilter: enableGlobalFilter,
     positionGlobalFilter: 'left',
-
     enablePagination: true,
     enableFullScreenToggle: false,
     muiTablePaperProps: {

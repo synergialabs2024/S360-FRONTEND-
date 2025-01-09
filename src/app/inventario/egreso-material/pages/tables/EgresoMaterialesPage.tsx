@@ -3,7 +3,7 @@ import { ROUTER_PATHS } from '@/router/constants';
 import {
   EgresoMaterial,
   PermissionsEnum,
-  useColumnsIngresoMaterial,
+  useColumnsEgresoMaterial,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -54,7 +54,7 @@ const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
   });
 
   ///* columns
-  const { ingresoMaterialColumns } = useColumnsIngresoMaterial();
+  const { egresoMaterialColumns } = useColumnsEgresoMaterial();
 
   return (
     <SingleTableBoxScene
@@ -71,7 +71,7 @@ const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
       />
 
       <CustomTable<EgresoMaterial>
-        columns={ingresoMaterialColumns}
+        columns={egresoMaterialColumns}
         data={egresoMaterialPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

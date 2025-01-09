@@ -1,62 +1,65 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
 import * as XLSX from 'xlsx';
-import { IoMdTrash } from 'react-icons/io';
-import { Button, Grid, IconButton } from '@mui/material';
-import { IconBrandCodesandbox, IconUpload } from '@tabler/icons-react';
+import { Box, Button, Grid, IconButton, TextField } from '@mui/material';
 
 import {
-  EgresoMaterialSeries,
+  IconArrowsShuffle2,
+  IconBrandCodesandbox,
+  IconUpload,
+} from '@tabler/icons-react';
+
+import {
   emptyCellOneLevel,
   TABLE_CONSTANTS,
   UbicacionProducto,
 } from '@/shared';
-import { ScrollableDialogProps, SingleIconButton } from '@/shared/components';
+import { ScrollableDialogProps } from '@/shared/components';
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { useUiStore } from '@/store/ui';
 
 export type SeriesUbicacionProductoModalProps = {
-  dataArray: string[];
-  requiereSerie?: boolean;
+  Arrays: any;
+  cantidadBoolean: boolean;
   modalTitle?: string;
   viewMoreText?: string;
-  onDataChange?: (data: any[]) => void; // Callback para enviar los datos
+  onDataChange?: (data: any[]) => void;
 };
 
 const SeriesUbicacionProductoModal: React.FC<
   SeriesUbicacionProductoModalProps
-> = ({
-  dataArray = [],
-  modalTitle = 'Serie',
-  onDataChange,
-  requiereSerie = false,
-}) => {
+> = ({ Arrays = [], modalTitle = 'Serie', onDataChange, cantidadBoolean }) => {
   //* State local
   const [open, setOpen] = useState(false);
   const [dataExcel, setDataExcel] = useState<any[]>([]);
-
-  ///* Effects
-  useEffect(() => {
-    const transformedArray = dataArray.map(item => ({ series: item }));
-    setDataExcel(transformedArray);
-  }, [dataArray]);
-
-  useEffect(() => {
-    if (onDataChange && dataExcel.length > 0) {
-      const transformedData = dataExcel.map(item => item.series);
-      onDataChange(transformedData);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataExcel]);
+  const [cantidadTF, setCantidadTF] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [data, setData] = useState<any[]>(Arrays.series);
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   const handleUploadFile = async (file: File) => {
+    setIsGlobalLoading(true);
     try {
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data, { type: 'array' });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
-      setDataExcel(jsonData);
+
+      const jsonData = XLSX.utils.sheet_to_json(worksheet) as {
+        [key: string]: string;
+      }[];
+
+      const transformedData = jsonData.map(item => {
+        const firstKey = Object.keys(item)[0];
+        return item[firstKey];
+      });
+
+      const limitedData = transformedData.slice(0, Arrays.cantidad);
+
+      setDataExcel(limitedData);
+      setIsGlobalLoading(false);
     } catch (error) {
       console.error('Error al procesar el archivo:', error);
+      setIsGlobalLoading(false);
     }
   };
 
@@ -73,51 +76,104 @@ const SeriesUbicacionProductoModal: React.FC<
     input.click();
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const eliminarSerie = (index: number) => {
-    // Eliminamos la serie del estado
-    const newData = dataExcel.filter((_, idx) => idx !== index);
-    setDataExcel(newData);
+  const cargarSeries = () => {
+    setIsGlobalLoading(true);
+    const copiaSeries = [...data];
+    if (Arrays.cantidad) {
+      if (data && data.length > 0) {
+        for (let i = copiaSeries.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copiaSeries[i], copiaSeries[j]] = [copiaSeries[j], copiaSeries[i]];
+        }
+        const cantidadReal = Math.min(Arrays.cantidad, copiaSeries.length);
+        const primerosDatos = copiaSeries.slice(0, cantidadReal);
+        setDataExcel(primerosDatos);
+      }
+    }
+    setIsGlobalLoading(false);
   };
+  const serieIndividualRef = useRef<HTMLInputElement>(null);
+
+  const handleSeriesChange = () => {
+    setIsGlobalLoading(true);
+    if (serieIndividualRef.current) {
+      const value = serieIndividualRef.current.value;
+
+      if (!value) return setIsGlobalLoading(false);
+      if (dataExcel.length >= Arrays.cantidad) return setIsGlobalLoading(false);
+
+      setDataExcel(prevData => [...prevData, value]);
+      setIsGlobalLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (onDataChange) {
+      onDataChange(dataExcel);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataExcel]);
+
+  useEffect(() => {
+    // Actualizamos cantidadBoolean dependiendo de la longitud de dataExcel
+    if (dataExcel.length >= Arrays.cantidad) {
+      setCantidadTF(true); // Deshabilita el botón si se alcanzó el límite
+    } else {
+      setCantidadTF(false); // Habilita el botón si no se ha alcanzado el límite
+    }
+  }, [dataExcel, Arrays.cantidad]);
 
   const columns = useMemo<MRT_ColumnDef<UbicacionProducto>[]>(
     () => [
       {
-        accessorKey: 'series',
-        header: 'SERIES',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        header: 'NUMERO SERIE',
+        size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH_LARGE,
         Cell: ({ row }) => emptyCellOneLevel(row, 'series'),
       },
-      {
-        accessorKey: 'remove',
-        header: 'ACCIONES',
-        Cell: ({ row }) => (
-          <SingleIconButton
-            label="Remover"
-            startIcon={<IoMdTrash />}
-            color="error"
-            tooltipPlacement="right-end"
-            onClick={() => eliminarSerie(row.index)}
-            justifyContent="center"
-          />
-        ),
-      },
     ],
-    [eliminarSerie],
+    [],
   );
 
-  const ExcelSection = () => (
+  const Section = () => (
     <>
-      <Button onClick={handleButtonClick} startIcon={<IconUpload />}>
-        CARGAR EXCEL
-      </Button>
-
+      <Box display="flex" gap={2}>
+        <Button
+          onClick={handleButtonClick}
+          startIcon={<IconUpload />}
+          disabled={cantidadBoolean}
+        >
+          CARGAR EXCEL
+        </Button>
+        <Button
+          onClick={cargarSeries}
+          startIcon={<IconArrowsShuffle2 />}
+          disabled={cantidadBoolean}
+        >
+          ALEATORIO
+        </Button>
+        <TextField
+          inputRef={serieIndividualRef}
+          label="Número de Serie"
+          variant="outlined"
+        />
+        <Button
+          onClick={handleSeriesChange}
+          disabled={cantidadBoolean || cantidadTF}
+        >
+          Añadir
+        </Button>
+      </Box>
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
-          <SimpleTable<EgresoMaterialSeries>
+          <SimpleTable<{ series: string }>
             columns={columns}
-            data={dataExcel || []}
+            data={
+              dataExcel.map(serie => ({
+                series: serie,
+              })) || []
+            }
             isLoading={false}
+            centerColumns={true}
             enableGlobalFilter={true}
           />
         </Grid>
@@ -144,8 +200,8 @@ const SeriesUbicacionProductoModal: React.FC<
           onConfirm={() => setOpen(false)}
           title={modalTitle}
           contentNode={
-            requiereSerie ? (
-              <ExcelSection />
+            Arrays?.producto_data?.requiere_series ? (
+              <Section />
             ) : (
               <>PRODUCTO NO REQUIERE DE SERIE</>
             )
