@@ -2,11 +2,7 @@ import { Grid } from '@mui/material';
 import { useState } from 'react';
 import { MdCancel } from 'react-icons/md';
 
-import {
-  EstadoOrdenTrabajoEnumChoice,
-  OrdenTrabajo,
-  UserRolesEnumChoice,
-} from '@/shared';
+import { OrdenTrabajo, UserRolesEnumChoice } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 import { useAuthStore } from '@/store/auth';
 import { PrerejectInstalacionAsignadaOTModal } from '../form';
@@ -27,10 +23,11 @@ const InstallAsignPendienteTableBtns: React.FC<
   const cabPreRejectTech = () => {
     if (user?.role !== UserRolesEnumChoice.TECNICO) return true;
 
-    return (
-      ot.estado_orden_trabajo === EstadoOrdenTrabajoEnumChoice.PENDIENTE &&
-      !!ot?.can_be_managed
-    );
+    return true;
+    // return (
+    //   ot.estado_orden_trabajo === EstadoOrdenTrabajoEnumChoice.PENDIENTE &&
+    //   !!ot?.can_be_managed
+    // );
   };
 
   return (
