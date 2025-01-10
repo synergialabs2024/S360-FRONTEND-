@@ -19,11 +19,6 @@ import SeriesProductoModal from '../../pages/modal/SeriesProductoModal';
 import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesProductosModal';
 
 export type ProductosDisponiblesTableType = Producto & {
-  usedQuantity: number;
-
-  containsSeries: boolean;
-  selectedSeries: string[];
-  savedSeries: string[];
   cantidad?: number;
   series?: any[];
   productos?: string[];

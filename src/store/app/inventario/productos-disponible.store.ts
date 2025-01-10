@@ -1,4 +1,4 @@
-import { ProductosDisponiblesTableType } from '@/app/inventario/ingreso-material/shared/components/SaveIngresoMaterial/SaveIngresoMaterial';
+import { ProductosDisponiblesTableType } from '@/app/inventario/ingreso-material/shared/hooks';
 import { ToastWrapper } from '@/shared';
 import { create } from 'zustand';
 

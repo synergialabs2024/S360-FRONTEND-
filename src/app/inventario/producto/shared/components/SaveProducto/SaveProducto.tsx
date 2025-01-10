@@ -255,6 +255,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         defaultValue={form.getValues().requiere_series}
         size={gridSizeMdLg2}
+        disabled={!!producto}
       />
 
       {/* ------------ prices component ------------ */}

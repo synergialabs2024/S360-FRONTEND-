@@ -44,7 +44,6 @@ type SaveFormData = CreateTransferenciaMaterialParamsBase & {};
 
 const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
   title,
-  transferenciaMaterial,
 }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
@@ -70,7 +69,6 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
 
   const {
     handleSubmit,
-    reset,
     formState: { errors, isValid },
   } = form;
 
@@ -133,11 +131,26 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     if (!isValid) return;
 
     const mappedProductos = ubicacionProductosDisponibles.map(producto => ({
-      ...producto,
+      cantidad: producto.cantidad,
+      categoria_data: producto.categoria_data,
+      producto: producto.producto,
+      stock_actual: producto.stock_actual,
+      producto_data: producto.producto_data,
       series: producto.series ? producto.series : [],
     }));
 
     let hasError = false;
+
+    for (const producto of mappedProductos) {
+      if (producto.producto_data?.requiere_series === true) {
+        if (producto.cantidad !== producto.series.length) {
+          ToastWrapper.error(
+            'Las series deben tener la misma cifra que la cantidad',
+          );
+          return;
+        }
+      }
+    }
 
     mappedProductos.forEach(producto => {
       const cantidad = producto.cantidad ?? 0;
@@ -167,29 +180,14 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       productos: mappedProductos,
     };
 
-    console.log(preparedData);
     createTransferenciaMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
   useEffect(() => {
     ubicacionProductosEnviar([]);
-    if (transferenciaMaterial?.productos) {
-      const productosTransformados = transferenciaMaterial.productos.map(
-        transferencia => ({
-          ...transferencia,
-          usedQuantity: 0,
-          containsSeries: false,
-          selectedSeries: [],
-          savedSeries: [],
-        }),
-      );
-
-      ubicacionProductosEnviar(productosTransformados);
-    }
-
-    reset(transferenciaMaterial);
-  }, [transferenciaMaterial, reset, ubicacionProductosEnviar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   ///* columns --------------------
   const { crearEgresoMaterialColumns } =

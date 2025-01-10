@@ -43,10 +43,7 @@ export interface SaveIngresoMaterialProps {
 
 type SaveFormData = CreateIngresoMaterialParamsBase & {};
 
-const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
-  title,
-  ingresoMaterial,
-}) => {
+const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
@@ -67,7 +64,6 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
 
   const {
     handleSubmit,
-    reset,
     formState: { errors, isValid },
   } = form;
 
@@ -108,29 +104,27 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
     if (!isValid) return;
 
     const mappedProductos = productosDisponibles.map(producto => ({
-      ...producto,
       producto: producto.id,
+      cantidad: producto.cantidad,
+      nombre: producto.nombre,
+      codigo: producto.codigo,
+      codigo_auxiliar: producto.codigo_auxiliar,
+      categoria: producto.categoria,
+      categoria_data: producto.categoria_data,
       series: producto.series ? producto.series : [],
+      requiere_series: producto.requiere_series,
+      tipo: producto.tipo,
     }));
 
-    let hasError = false;
-
-    mappedProductos.forEach(producto => {
-      const cantidad = producto.cantidad ?? 0;
-      if (cantidad > producto.stock_actual) {
-        ToastWrapper.error(
-          `
-            El producto con código ${producto.producto_data?.codigo}
-            tiene una cantidad ${cantidad} mayor que el stock actual
-            ${producto.stock_actual}.
-          `,
-        );
-        hasError = true;
+    for (const producto of mappedProductos) {
+      if (producto.requiere_series === true) {
+        if (producto.cantidad !== producto.series.length) {
+          ToastWrapper.error(
+            'Las series deben tener la misma cifra que la cantidad',
+          );
+          return;
+        }
       }
-    });
-
-    if (hasError) {
-      return;
     }
 
     if (mappedProductos.length === 0) {
@@ -149,22 +143,8 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   ///* effects
   useEffect(() => {
     productosEnviar([]);
-    if (ingresoMaterial?.productos) {
-      const productosTransformados = ingresoMaterial.productos.map(
-        producto => ({
-          ...producto,
-          usedQuantity: 0,
-          containsSeries: false,
-          selectedSeries: [],
-          savedSeries: [],
-        }),
-      );
-
-      productosEnviar(productosTransformados);
-    }
-
-    reset(ingresoMaterial);
-  }, [ingresoMaterial, reset, productosEnviar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)

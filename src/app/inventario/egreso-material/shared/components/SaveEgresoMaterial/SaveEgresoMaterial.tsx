@@ -42,10 +42,7 @@ export interface SaveEgresoMaterialProps {
 
 type SaveFormData = CreateEgresoMaterialParamsBase & {};
 
-const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
-  title,
-  egresoMaterial,
-}) => {
+const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
@@ -70,7 +67,6 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
 
   const {
     handleSubmit,
-    reset,
     formState: { errors, isValid },
   } = form;
 
@@ -114,13 +110,28 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
       ubicacionproducto => {
         const { series, ...resto } = ubicacionproducto;
         return {
-          ...resto,
+          cantidad: resto.cantidad,
+          categoria_data: resto.categoria_data,
+          producto: resto.producto,
+          stock_actual: resto.stock_actual,
+          producto_data: resto.producto_data,
           serie: series ? series : [],
         };
       },
     );
 
     let hasError = false;
+
+    for (const producto of mappedProductos) {
+      if (producto.producto_data?.requiere_series === true) {
+        if (producto.cantidad !== producto.serie.length) {
+          ToastWrapper.error(
+            'Las series deben tener la misma cifra que la cantidad',
+          );
+          return;
+        }
+      }
+    }
 
     mappedProductos.forEach(producto => {
       const cantidad = producto.cantidad ?? 0;
@@ -166,20 +177,8 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
   ///* effects
   useEffect(() => {
     ubicacionProductosEnviar([]);
-    if (egresoMaterial?.productos) {
-      const productosTransformados = egresoMaterial.productos.map(producto => ({
-        ...producto,
-        usedQuantity: 0,
-        containsSeries: false,
-        selectedSeries: [],
-        savedSeries: [],
-      }));
-
-      ubicacionProductosEnviar(productosTransformados);
-    }
-
-    reset(egresoMaterial);
-  }, [egresoMaterial, reset, ubicacionProductosEnviar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)

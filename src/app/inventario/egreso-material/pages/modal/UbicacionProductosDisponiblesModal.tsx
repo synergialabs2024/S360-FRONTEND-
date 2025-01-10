@@ -31,6 +31,7 @@ export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
   cantidad?: number;
   series?: any[];
   productos?: string[];
+  categoria_data?: string[];
 };
 
 export type UbicacionProductosDisponiblesModalProps = {
