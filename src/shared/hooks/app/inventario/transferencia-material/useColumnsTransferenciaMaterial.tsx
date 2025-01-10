@@ -3,7 +3,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 
 import { ViewMoreTextModalTableCell } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
-import { IngresoMaterial } from '@/shared/interfaces';
+import { TransferenciaMaterial } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
@@ -11,8 +11,10 @@ import {
 } from '@/shared/utils';
 import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
 
-export const useColumnsIngresoMaterial = () => {
-  const ingresoProductoBaseColumns = useMemo<MRT_ColumnDef<IngresoMaterial>[]>(
+export const useColumnsTransferenciaMaterial = () => {
+  const transferenciaProductoBaseColumns = useMemo<
+    MRT_ColumnDef<TransferenciaMaterial>[]
+  >(
     () => [
       {
         accessorKey: 'uuid',
@@ -28,7 +30,7 @@ export const useColumnsIngresoMaterial = () => {
         Cell: ({ row }) => {
           return (
             <ShowSeriesModal
-              productoBoolean={true}
+              productoBoolean={false}
               Arrays={row.original.productos}
             />
           );
@@ -38,8 +40,8 @@ export const useColumnsIngresoMaterial = () => {
     [],
   );
 
-  const ingresoMaterialBaseColumns01 = useMemo<
-    MRT_ColumnDef<IngresoMaterial>[]
+  const transferenciaMaterialBaseColumns01 = useMemo<
+    MRT_ColumnDef<TransferenciaMaterial>[]
   >(
     () => [
       {
@@ -62,25 +64,43 @@ export const useColumnsIngresoMaterial = () => {
         },
       },
       {
-        accessorKey: 'bodega__name',
-        header: 'BODEGA',
+        accessorKey: 'bodega_origen__name',
+        header: 'BODEGA ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['bodega_origen_data', 'nombre']),
       },
       {
-        accessorKey: 'ubicacion__name',
-        header: 'UBICACIÓN',
+        accessorKey: 'ubicacion_origen__name',
+        header: 'UBICACIÓN ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['ubicacion_origen_data', 'nombre']),
+      },
+      {
+        accessorKey: 'bodega_destino__name',
+        header: 'BODEGA DESTINO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['bodega_destino_data', 'nombre']),
+      },
+      {
+        accessorKey: 'ubicacion_destino__name',
+        header: 'UBICACIÓN DESTINO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['ubicacion_destino_data', 'nombre']),
       },
     ],
     [],
   );
 
-  const ingresoMaterialColumns = useMemo<MRT_ColumnDef<IngresoMaterial>[]>(
+  const transferenciaMaterialColumns = useMemo<
+    MRT_ColumnDef<TransferenciaMaterial>[]
+  >(
     () => [
-      ...ingresoProductoBaseColumns,
-      ...ingresoMaterialBaseColumns01,
+      ...transferenciaProductoBaseColumns,
+      ...transferenciaMaterialBaseColumns01,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -98,9 +118,9 @@ export const useColumnsIngresoMaterial = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [ingresoMaterialBaseColumns01, ingresoProductoBaseColumns],
+    [transferenciaMaterialBaseColumns01, transferenciaProductoBaseColumns],
   );
   return {
-    ingresoMaterialColumns,
+    transferenciaMaterialColumns,
   };
 };

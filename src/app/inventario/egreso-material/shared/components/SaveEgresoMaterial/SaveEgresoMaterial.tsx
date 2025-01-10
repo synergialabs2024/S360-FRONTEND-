@@ -127,9 +127,19 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
       if (cantidad > producto.stock_actual) {
         ToastWrapper.error(
           `
-            El producto con código ${producto.producto_data?.codigo}
+            El producto de ${producto.producto_data?.codigo}
             tiene una cantidad ${cantidad} mayor que el stock actual
             ${producto.stock_actual}.
+          `,
+        );
+        hasError = true;
+      }
+
+      if (producto.serie.length > cantidad) {
+        ToastWrapper.error(
+          `
+            Las series de ${producto.producto_data?.codigo}
+            tiene una cantidad ${cantidad} menor que la series dada.
           `,
         );
         hasError = true;

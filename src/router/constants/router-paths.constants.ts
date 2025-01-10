@@ -515,6 +515,12 @@ export const ROUTER_PATHS = {
     movimientoMaterialesCrear: 'movimiento-materiales/crear',
     movimientoMaterialesEditar: 'movimiento-materiales/editar/:uuid',
     movimientoMaterialesNav: '/inventario/movimiento-materiales',
+
+    ///* Transferencia Material
+    transferenciaMateriales: 'transferencia-materiales',
+    transferenciaMaterialesCrear: 'transferencia-materiales/crear',
+    transferenciaMaterialesEditar: 'transferencia-materiales/editar/:uuid',
+    transferenciaMaterialesNav: '/inventario/transferencia-materiales',
   },
   // // LOGISTICA =================================
   logistica: {

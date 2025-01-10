@@ -974,6 +974,22 @@ const MovimientoMaterialesPage = Loadable(
       ),
   ),
 );
+const TransferenciaMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage'
+      ),
+  ),
+);
+const CreateTransferenciaMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/transferencia-material/pages/forms/CreateTransferenciaMaterialPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2125,6 +2141,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.movimientoMateriales,
             element: <MovimientoMaterialesPage />,
+          },
+
+          ///* Egreso Material
+          {
+            path: ROUTER_PATHS.inventario.transferenciaMateriales,
+            element: <TransferenciaMaterialPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.transferenciaMaterialesCrear,
+            element: <CreateTransferenciaMaterialPage />,
           },
         ],
       },

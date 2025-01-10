@@ -3,6 +3,7 @@ export * from './ingreso-material';
 export * from './egreso-material';
 export * from './movimiento-material';
 export * from './solicitud-material';
+export * from './transferencia-material';
 
 export * from './categoria-producto.schema';
 export * from './producto.schema';

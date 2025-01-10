@@ -4,19 +4,21 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { ViewMoreTextModalTableCell } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { EgresoMaterial } from '@/shared/interfaces';
-import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
 
 export const useColumnsEgresoMaterial = () => {
   const egresoProductoBaseColumns = useMemo<MRT_ColumnDef<EgresoMaterial>[]>(
     () => [
       {
-        accessorKey: 'created_at',
-        header: 'FECHA CREADA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+        accessorKey: 'uuid',
+        header: 'REFERENCIA',
+        size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
       },
       {
         accessorKey: 'productos',
@@ -77,6 +79,14 @@ export const useColumnsEgresoMaterial = () => {
     () => [
       ...egresoProductoBaseColumns,
       ...egresoMaterialBaseColumns01,
+      {
+        accessorKey: 'created_at',
+        header: 'CREADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',

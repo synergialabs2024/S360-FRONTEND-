@@ -1,0 +1,95 @@
+import { useFetchTransferenciaMateriales } from '@/actions/app';
+import { ROUTER_PATHS } from '@/router/constants';
+import {
+  PermissionsEnum,
+  TransferenciaMaterial,
+  useColumnsTransferenciaMaterial,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared';
+import {
+  CustomSearch,
+  CustomTable,
+  SingleTableBoxScene,
+} from '@/shared/components';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { hasPermission } from '@/shared/utils/auth';
+
+export const returnUrlTransferenciaMaterialesPage =
+  ROUTER_PATHS.inventario.transferenciaMaterialesNav;
+
+export type TransferenciaMaterialesPageProps = {};
+
+const TransferenciaMaterialesPage: React.FC<
+  TransferenciaMaterialesPageProps
+> = () => {
+  useCheckPermission(PermissionsEnum.inventario_view_transferenciamaterial);
+
+  // server side filters - colums table
+  const { filterObject, columnFilters, setColumnFilters } =
+    useTableServerSideFiltering();
+
+  ///* table
+  const {
+    globalFilter,
+    pagination,
+    searchTerm,
+    onChangeFilter,
+    setPagination,
+  } = useTableFilter();
+  const { pageIndex, pageSize } = pagination;
+
+  ///* fetch data
+  const {
+    data: transferenciaMaterialPagingRes,
+    isLoading,
+    isRefetching,
+  } = useFetchTransferenciaMateriales({
+    enabled: true,
+    params: {
+      page: pageIndex + 1,
+      page_size: pageSize,
+      name: searchTerm,
+      ...filterObject,
+      filterByState: false,
+    },
+  });
+
+  ///* columns
+  const { transferenciaMaterialColumns } = useColumnsTransferenciaMaterial();
+
+  return (
+    <SingleTableBoxScene
+      title="Transferencia Materiales"
+      createPageUrl={`${returnUrlTransferenciaMaterialesPage}/crear`}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.inventario_add_transferenciamaterial,
+      )}
+    >
+      <CustomSearch
+        onChange={onChangeFilter}
+        value={globalFilter}
+        text="por nombre"
+      />
+      <CustomTable<TransferenciaMaterial>
+        columns={transferenciaMaterialColumns}
+        data={transferenciaMaterialPagingRes?.data?.items || []}
+        isLoading={isLoading}
+        isRefetching={isRefetching}
+        // // filters - server side
+        enableManualFiltering={true}
+        columnFilters={columnFilters}
+        onColumnFiltersChange={setColumnFilters}
+        // // search
+        enableGlobalFilter={false}
+        // // pagination
+        pagination={pagination}
+        onPaging={setPagination}
+        rowCount={transferenciaMaterialPagingRes?.data?.meta?.count}
+        enableActionsColumn={false}
+      />
+    </SingleTableBoxScene>
+  );
+};
+
+export default TransferenciaMaterialesPage;
