@@ -1,18 +1,20 @@
 /* eslint-disable indent */
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import {
-  emptyCellNested,
-  formatQuantityCell,
-  IngresoMaterial,
-  TABLE_CONSTANTS,
-} from '@/shared';
-import { ScrollableDialogProps } from '@/shared/components';
 import { Grid, IconButton, TextField } from '@mui/material';
 import { IconBrandCodesandbox } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
+
+import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatQuantityCell,
+  IngresoMaterial,
+  TABLE_CONSTANTS,
+  UbicacionProducto,
+} from '@/shared';
+import { ScrollableDialogProps } from '@/shared/components';
 import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
-import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesProductosModal';
 
 export type ShowTransferenciaSeriesModalProps = {
   Arrays: any;
@@ -28,6 +30,7 @@ const ShowTransferenciaSeriesModal: React.FC<
 > = ({ Arrays = [], showCurrentStockColumn = true }) => {
   //* State local
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
 
   ///* columns
   const seriesTransferenciaColumns = useMemo<
@@ -68,14 +71,6 @@ const ShowTransferenciaSeriesModal: React.FC<
           ]
         : []),
       {
-        accessorKey: 'producto__requiere_series',
-        header: 'CONTIENE SERIE',
-        Cell: ({ row }) => {
-          const requiereSeries = row?.original?.producto_data?.requiere_series;
-          return <>{requiereSeries ? 'Con permiso' : 'Sin permiso'}</>;
-        },
-      },
-      {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
         Cell: ({ row }) => {
@@ -94,21 +89,82 @@ const ShowTransferenciaSeriesModal: React.FC<
         },
       },
       {
+        accessorKey: 'producto__requiere_series',
+        header: 'CONTIENE SERIE',
+        Cell: ({ row }) => {
+          const requiereSeries = row?.original?.producto_data?.requiere_series;
+          return <>{requiereSeries ? 'Con permiso' : 'Sin permiso'}</>;
+        },
+      },
+      {
         accessorKey: 'producto__series',
         header: 'SERIES',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         Cell: ({ row }) => {
+          const columns = useMemo<MRT_ColumnDef<UbicacionProducto>[]>(
+            () => [
+              {
+                header: 'NUMERO SERIE',
+                size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH_LARGE,
+                Cell: ({ row }) => emptyCellOneLevel(row, 'series'),
+              },
+            ],
+            [],
+          );
+          const Section = () => (
+            <>
+              <Grid container spacing={2} mt={2} mb={3}>
+                <Grid item xs={12}>
+                  <SimpleTable<{ series: string }>
+                    columns={columns}
+                    data={
+                      row.original.series.map((serie: any) => ({
+                        series: serie,
+                      })) || []
+                    }
+                    isLoading={false}
+                    centerColumns={true}
+                    enableGlobalFilter={true}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          );
+
           return (
-            <ShowSeriesProductosModal
-              Arrays={row.original}
-              serieBoolean={true}
-            />
+            <>
+              <IconButton
+                component="span"
+                color="primary"
+                size="small"
+                onClick={() => setOpen2(!open2)}
+                style={{ cursor: 'pointer' }}
+              >
+                <IconBrandCodesandbox />
+              </IconButton>
+              {open2 && (
+                <ScrollableDialogProps
+                  open={open2}
+                  onClose={() => setOpen2(false)}
+                  confirmTextBtn="Aceptar"
+                  onConfirm={() => setOpen2(false)}
+                  title="Series"
+                  contentNode={
+                    row.original.producto_data?.requiere_series ? (
+                      <Section />
+                    ) : (
+                      <>PRODUCTO NO REQUIERE DE SERIE</>
+                    )
+                  }
+                />
+              )}
+            </>
           );
         },
       },
     ],
-    [showCurrentStockColumn],
+    [open2, showCurrentStockColumn],
   );
 
   const Section = () => (
