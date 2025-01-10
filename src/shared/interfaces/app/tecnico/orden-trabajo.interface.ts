@@ -65,7 +65,8 @@ export interface OrdenTrabajo {
   url_foto_potencia_nap: string;
   url_foto_premio: string;
   url_foto_test_speed: string;
-  url_foto_acta_entrega_ups: string;
+  url_foto_acta_entrega_ups?: string;
+  url_foto_wifi_mesh?: string;
 
   // ACTIVACION -------------------
   estado_activacion: EstadoActivacionEnumChoice;

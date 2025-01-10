@@ -31,6 +31,11 @@ export interface InstalacionesState {
   selectedFibraModel: string | null; // fibra model
   setSelectedFibraModel: (model: string | null) => void;
 
+  isRequiredMiniUPS: boolean;
+  setIsRequiredMiniUPS: (value: boolean) => void;
+  isRequiredMesh: boolean;
+  setIsRequiredMesh: (value: boolean) => void;
+
   // operations functions ------
   addSelectedItem: ({
     item,
@@ -132,6 +137,8 @@ export const useInstalacionesStore = create<InstalacionesState>()(
         materialesUtilizados: [],
         selectedProductModel: null,
         selectedFibraModel: null,
+        isRequiredMiniUPS: false,
+        isRequiredMesh: false,
       });
     },
 
@@ -140,5 +147,10 @@ export const useInstalacionesStore = create<InstalacionesState>()(
     setSelectedProductModel: model => set({ selectedProductModel: model }),
     selectedFibraModel: null,
     setSelectedFibraModel: model => set({ selectedFibraModel: model }),
+
+    isRequiredMiniUPS: false,
+    setIsRequiredMiniUPS: value => set({ isRequiredMiniUPS: value }),
+    isRequiredMesh: false,
+    setIsRequiredMesh: value => set({ isRequiredMesh: value }),
   }),
 );

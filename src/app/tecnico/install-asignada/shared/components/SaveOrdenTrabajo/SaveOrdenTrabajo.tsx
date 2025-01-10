@@ -1,4 +1,6 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab } from '@mui/material';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -41,8 +43,6 @@ import {
 } from '@/shared/utils';
 import { useInstalacionesStore } from '@/store/app';
 import { useUiStore } from '@/store/ui';
-import { yupResolver } from '@hookform/resolvers/yup';
-import dayjs from 'dayjs';
 import { returnUrlInstallAsignadasOT } from '../../../pages/tables/InstalacionesAsignadasOTMainPage';
 import { useONTInstallAsignadaOT } from '../../hooks';
 import {
@@ -95,8 +95,11 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
     setImage7: setFotoPremio,
     image8: fotoTestSpeed,
     setImage8: setFotoTestSpeed,
+
     image9: fotoActaEntregaUPS,
     setImage9: setFotoActaEntregaUPS,
+    image10: fotoWifiMesh,
+    setImage10: setFotoWifiMesh,
   } = useUploadImageGeneric();
   const requiredImages = [
     {
@@ -143,12 +146,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       setImage: setFotoONTEncontradoCasa,
       isRequired: false,
     },
-    {
-      label: 'Foto Acta Entrega UPS',
-      image: fotoActaEntregaUPS,
-      setImage: setFotoActaEntregaUPS,
-      isRequired: false,
-    },
+
     {
       label: 'Foto Premio',
       image: fotoPremio,
@@ -386,6 +384,14 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       return;
     }
 
+    const isRequiredMesh = useInstalacionesStore.getState().isRequiredMesh;
+    const isRequiredMiniUPS =
+      useInstalacionesStore.getState().isRequiredMiniUPS;
+    if (isRequiredMesh && !fotoWifiMesh)
+      return ToastWrapper.error('La foto de Wifi Mesh es requerida');
+    if (isRequiredMiniUPS && !fotoActaEntregaUPS)
+      return ToastWrapper.error('La foto de Acta de entrega UPS es requerida');
+
     setIsGlobalLoading(true);
     // upload images ---
     // required
@@ -438,6 +444,15 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
       });
     }
+    let premioPhoto = null;
+    if (fotoPremio) {
+      premioPhoto = await uploadFileToBucket({
+        file: fotoPremio!,
+        file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
+        bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
+      });
+    }
+
     let actaEntregaUPSPhoto = null;
     if (fotoActaEntregaUPS) {
       actaEntregaUPSPhoto = await uploadFileToBucket({
@@ -446,10 +461,10 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
       });
     }
-    let premioPhoto = null;
-    if (fotoPremio) {
-      premioPhoto = await uploadFileToBucket({
-        file: fotoPremio!,
+    let wifiMeshPhoto = null;
+    if (fotoWifiMesh) {
+      wifiMeshPhoto = await uploadFileToBucket({
+        file: fotoWifiMesh!,
         file_name: BucketKeyNameEnumChoice.INSTALL_ASIGNADA_OT,
         bucketDir: BucketTypeEnumChoice.IMAGES_ORDENTRABAJO_INSTALACION,
       });
@@ -483,10 +498,11 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         ...(ontEncontradoPhoto && {
           url_foto_ont_encontrado_casa: ontEncontradoPhoto?.streamUlr,
         }),
+        ...(premioPhoto && { url_foto_premio: premioPhoto?.streamUlr }),
         ...(actaEntregaUPSPhoto && {
           url_foto_acta_entrega_ups: actaEntregaUPSPhoto?.streamUlr,
         }),
-        ...(premioPhoto && { url_foto_premio: premioPhoto?.streamUlr }),
+        ...(wifiMeshPhoto && { url_foto_wifi_mesh: wifiMeshPhoto?.streamUlr }),
 
         // upd hora inicio/fin ----------
         hora_fin: dayjs().format(),
@@ -571,7 +587,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         />
       </CustomTabPanel>
 
-      {/* ========================= Fotos ========================= */}
+      {/* ========================= Photos ========================= */}
       <CustomTabPanel index={4} value={tabValue}>
         {requiredImages.map(({ label, image, setImage }) => (
           <UploadImageDropZoneComponent
@@ -581,6 +597,21 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
             setSelectedImage={setImage as any}
           />
         ))}
+
+        {useInstalacionesStore.getState().isRequiredMesh && (
+          <UploadImageDropZoneComponent
+            buttonLabel="Foto Wifi Mesh"
+            selectedImage={fotoWifiMesh}
+            setSelectedImage={setFotoWifiMesh}
+          />
+        )}
+        {useInstalacionesStore.getState().isRequiredMiniUPS && (
+          <UploadImageDropZoneComponent
+            buttonLabel="Foto Acta de entrega UPS"
+            selectedImage={fotoActaEntregaUPS}
+            setSelectedImage={setFotoActaEntregaUPS}
+          />
+        )}
       </CustomTabPanel>
 
       {/* ========================= modals ========================= */}

@@ -184,6 +184,17 @@ const LocationZonePolygonFormPart: React.FC<
     latLng?.lat,
     latLng?.lng,
   ]);
+  // sectores available
+  useEffect(() => {
+    if (!watchedZone) return;
+    if (isLoadingSectores || isRefetchingSectores) return;
+    const thereAreSectores = !!sectoresPaging?.data?.items.length;
+    if (!thereAreSectores) {
+      ToastWrapper.warning(
+        'No se encontraron sectores para la zona seleccionada',
+      );
+    }
+  }, [watchedZone, sectoresPaging, isLoadingSectores, isRefetchingSectores]);
 
   const customLoading =
     isLoadingNaps || isRefetchingNaps || isLoadingZonas || isRefetchingZonas;

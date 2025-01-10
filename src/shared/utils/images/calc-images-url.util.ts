@@ -85,6 +85,7 @@ export const calcImageListOrdenTrabajoFromUrls = (
     ordenTrabajo?.url_foto_premio,
     ordenTrabajo?.url_foto_test_speed,
     ordenTrabajo?.url_foto_acta_entrega_ups,
+    ordenTrabajo?.url_foto_wifi_mesh,
   ];
 
   return [
@@ -166,6 +167,15 @@ export const calcImageListOrdenTrabajoFromUrls = (
             title: 'Acta entrega UPS',
             imgUrl: fotosUrls[8],
             id: 8,
+          },
+        ]
+      : []),
+    ...(fotosUrls[9]
+      ? [
+          {
+            title: 'WiFi Mesh',
+            imgUrl: fotosUrls[9],
+            id: 9,
           },
         ]
       : []),
