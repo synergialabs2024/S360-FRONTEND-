@@ -29,11 +29,12 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useUbicacionProductosStore } from '@/store/app';
-import { useColumnsUbicacionProductosDisponibles } from '@/app/inventario/egreso-material/shared/hooks';
-import UbicacionProductosDisponiblesModal, {
-  UbicacionProductosDisponiblesTableType,
-} from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
+import { useProductosStore } from '@/store/app';
+import {
+  ProductosDisponiblesTableType,
+  useColumnsProductosDisponibles,
+} from '../../hooks';
+import ProductosDisponiblesModal from '../../../pages/modal/ProductosDisponiblesModal';
 
 export interface SaveIngresoMaterialProps {
   title: string;
@@ -50,12 +51,8 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
   ///* global state --------------------
-  const ubicacionProductosDisponibles = useUbicacionProductosStore(
-    s => s.ubicacionProductosDisponibles,
-  );
-  const ubicacionProductosEnviar = useUbicacionProductosStore(
-    s => s.setUbicacionProductosDisponibles,
-  );
+  const productosDisponibles = useProductosStore(s => s.productosDisponibles);
+  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -110,12 +107,11 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    const mappedProductos = ubicacionProductosDisponibles.map(
-      ubicacionproducto => ({
-        ...ubicacionproducto,
-        series: ubicacionproducto.series ? ubicacionproducto.series : [],
-      }),
-    );
+    const mappedProductos = productosDisponibles.map(producto => ({
+      ...producto,
+      producto: producto.id,
+      series: producto.series ? producto.series : [],
+    }));
 
     let hasError = false;
 
@@ -152,7 +148,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
-    ubicacionProductosEnviar([]);
+    productosEnviar([]);
     if (ingresoMaterial?.productos) {
       const productosTransformados = ingresoMaterial.productos.map(
         producto => ({
@@ -164,11 +160,11 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
         }),
       );
 
-      ubicacionProductosEnviar(productosTransformados);
+      productosEnviar(productosTransformados);
     }
 
     reset(ingresoMaterial);
-  }, [ingresoMaterial, reset, ubicacionProductosEnviar]);
+  }, [ingresoMaterial, reset, productosEnviar]);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)
@@ -185,7 +181,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
   ]);
 
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsUbicacionProductosDisponibles();
+  const { crearMaterialColumns } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -208,7 +204,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
         helperText={errors.bodega?.message}
         onChangeRawValue={() => {
           form.setValue('ubicacion', '' as any);
-          ubicacionProductosEnviar([]);
+          productosEnviar([]);
         }}
         size={gridSizeMdLg6}
       />
@@ -228,7 +224,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
         helperText={errors.ubicacion?.message}
         size={gridSizeMdLg6}
         onChangeRawValue={() => {
-          ubicacionProductosEnviar([]);
+          productosEnviar([]);
         }}
       />
       <CustomTextArea
@@ -259,14 +255,13 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({
           />
         )}
       </Grid>
-      <CustomMinimalTable<UbicacionProductosDisponiblesTableType>
+      <CustomMinimalTable<ProductosDisponiblesTableType>
         columns={crearMaterialColumns}
-        data={ubicacionProductosDisponibles || []}
+        data={productosDisponibles || []}
         enablePagination
         density="comfortable"
       />
-      <UbicacionProductosDisponiblesModal
-        pk_ubicacion={watchedUbicacion}
+      <ProductosDisponiblesModal
         open={openAddProducts}
         onClose={() => setOpenAddProducts(false)}
       />

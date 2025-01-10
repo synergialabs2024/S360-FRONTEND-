@@ -33,9 +33,9 @@ import {
 import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlSolicitudMaterialPage } from '../../../pages/tables/SolicitudMaterialMainPage';
-import { useColumnsProductosDisponibles } from '@/app/inventario/ingreso-material/shared/hooks';
 import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
 import { useCreateSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
+import { useColumnsProductosDisponibles } from '@/app/inventario/ingreso-material/shared/hooks';
 
 export interface SaveIngresoMaterialProps {
   title: string;

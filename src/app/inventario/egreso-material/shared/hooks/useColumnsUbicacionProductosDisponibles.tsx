@@ -71,7 +71,7 @@ export const useColumnsUbicacionProductosDisponibles = ({
   );
 
   ///* base columns -------------------------------
-  const baseColumnsUbicacionProductosDisponibles01 = useMemo<
+  const baseColumnsEgreso01 = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
@@ -94,7 +94,8 @@ export const useColumnsUbicacionProductosDisponibles = ({
         header: 'DESCRIPCION',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'codigo']),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['producto_data', 'descripcion']),
       },
       ...(showCurrentStockColumn
         ? [
@@ -110,12 +111,13 @@ export const useColumnsUbicacionProductosDisponibles = ({
     ],
     [showCurrentStockColumn],
   );
-  const baseColumnsUbicacionProductosDisponibles05 = useMemo<
+
+  const baseColumnsEgreso02 = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
       {
-        accessorKey: 'producto_data.requiere_series',
+        accessorKey: 'producto__requiere_series',
         header: 'CONTIENE SERIE',
         Cell: ({ row }) => {
           const requiereSeries = row?.original?.producto_data?.requiere_series;
@@ -126,11 +128,11 @@ export const useColumnsUbicacionProductosDisponibles = ({
     [],
   );
 
-  const baseColumnsUbicacionProductosDisponibles02 = useMemo<
+  const baseColumnsEgreso03 = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
-      ...baseColumnsUbicacionProductosDisponibles05,
+      ...baseColumnsEgreso02,
       {
         accessorKey: 'producto__series',
         header: 'SERIES',
@@ -162,8 +164,8 @@ export const useColumnsUbicacionProductosDisponibles = ({
           return (
             <SeriesUbicacionProductoModal
               Arrays={row.original}
-              cantidadBoolean={obtenerValor(cantidad, stockActual)}
               modalTitle={`Serie para ${row?.original?.producto_data?.codigo}`}
+              cantidadBoolean={obtenerValor(cantidad, stockActual)}
               onDataChange={newData => {
                 onChangeSerieInit(newData, row.original);
               }}
@@ -172,36 +174,13 @@ export const useColumnsUbicacionProductosDisponibles = ({
         },
       },
     ],
-    [onChangeSerieInit, baseColumnsUbicacionProductosDisponibles05],
+    [onChangeSerieInit, baseColumnsEgreso02],
   );
 
-  const baseColumnsUbicacionProductosDisponibles03 = useMemo<
+  const baseColumnsEgreso04 = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
-      ...baseColumnsUbicacionProductosDisponibles05,
-      {
-        accessorKey: 'producto__series',
-        header: 'SERIES',
-        enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }) => {
-          return (
-            <ShowSeriesProductosModal
-              Arrays={row.original}
-              serieBoolean={true}
-            />
-          );
-        },
-      },
-    ],
-    [baseColumnsUbicacionProductosDisponibles05],
-  );
-  const baseColumnsUbicacionProductosDisponibles04 = useMemo<
-    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
-  >(
-    () => [
-      ...baseColumnsUbicacionProductosDisponibles05,
       {
         accessorKey: 'producto__series',
         header: 'SERIES',
@@ -217,14 +196,14 @@ export const useColumnsUbicacionProductosDisponibles = ({
         },
       },
     ],
-    [baseColumnsUbicacionProductosDisponibles05],
+    [],
   );
 
-  const modalMaterialColumns = useMemo<
+  const modalEgresoMaterialColumns = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
-      ...baseColumnsUbicacionProductosDisponibles01,
+      ...baseColumnsEgreso01,
 
       ...(showActionColumn
         ? [
@@ -238,18 +217,14 @@ export const useColumnsUbicacionProductosDisponibles = ({
           ]
         : []),
     ],
-    [
-      baseColumnsUbicacionProductosDisponibles01,
-      onActionProductosRowNode,
-      showActionColumn,
-    ],
+    [baseColumnsEgreso01, onActionProductosRowNode, showActionColumn],
   );
 
-  const crearMaterialColumns = useMemo<
+  const crearEgresoMaterialColumns = useMemo<
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
-      ...baseColumnsUbicacionProductosDisponibles01,
+      ...baseColumnsEgreso01,
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -270,7 +245,7 @@ export const useColumnsUbicacionProductosDisponibles = ({
           );
         },
       },
-      ...baseColumnsUbicacionProductosDisponibles02,
+      ...baseColumnsEgreso03,
       {
         accessorKey: 'remove',
         header: 'ACCIONES',
@@ -293,45 +268,10 @@ export const useColumnsUbicacionProductosDisponibles = ({
       },
     ],
     [
-      baseColumnsUbicacionProductosDisponibles01,
-      baseColumnsUbicacionProductosDisponibles02,
+      baseColumnsEgreso01,
+      baseColumnsEgreso03,
       onChangePuntaInit,
       removeSelectedItem,
-    ],
-  );
-
-  const seriesIngresoColumns = useMemo<
-    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
-  >(
-    () => [
-      ...baseColumnsUbicacionProductosDisponibles01,
-      {
-        accessorKey: 'cantidad',
-        header: 'CANTIDAD',
-        Cell: ({ row }) => {
-          return (
-            <TextField
-              disabled={true}
-              variant="outlined"
-              value={row.original.cantidad || ''}
-              onChange={e => {
-                onChangePuntaInit(e.target.value, row.original);
-              }}
-              type="number"
-              inputProps={{
-                min: 0,
-                step: 1,
-              }}
-            />
-          );
-        },
-      },
-      ...baseColumnsUbicacionProductosDisponibles03,
-    ],
-    [
-      baseColumnsUbicacionProductosDisponibles01,
-      baseColumnsUbicacionProductosDisponibles03,
-      onChangePuntaInit,
     ],
   );
 
@@ -339,7 +279,8 @@ export const useColumnsUbicacionProductosDisponibles = ({
     MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
   >(
     () => [
-      ...baseColumnsUbicacionProductosDisponibles01,
+      ...baseColumnsEgreso01,
+      ...baseColumnsEgreso02,
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -349,9 +290,6 @@ export const useColumnsUbicacionProductosDisponibles = ({
               disabled={true}
               variant="outlined"
               value={row.original.cantidad || ''}
-              onChange={e => {
-                onChangePuntaInit(e.target.value, row.original);
-              }}
               type="number"
               inputProps={{
                 min: 0,
@@ -361,20 +299,14 @@ export const useColumnsUbicacionProductosDisponibles = ({
           );
         },
       },
-      ...baseColumnsUbicacionProductosDisponibles04,
+      ...baseColumnsEgreso04,
     ],
-    [
-      baseColumnsUbicacionProductosDisponibles01,
-      baseColumnsUbicacionProductosDisponibles04,
-      onChangePuntaInit,
-    ],
+    [baseColumnsEgreso01, baseColumnsEgreso02, baseColumnsEgreso04],
   );
 
   return {
-    baseColumnsUbicacionProductosDisponibles01,
-    modalMaterialColumns,
-    crearMaterialColumns,
-    seriesIngresoColumns,
+    modalEgresoMaterialColumns,
+    crearEgresoMaterialColumns,
     seriesEgresoColumns,
   };
 };
