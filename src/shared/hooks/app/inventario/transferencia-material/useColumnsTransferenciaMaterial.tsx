@@ -9,7 +9,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
+import ShowTransferenciaSeriesModal from '@/app/inventario/transferencia-material/pages/modal/ShowTransferenciaSeriesModal';
 
 export const useColumnsTransferenciaMaterial = () => {
   const transferenciaProductoBaseColumns = useMemo<
@@ -29,10 +29,7 @@ export const useColumnsTransferenciaMaterial = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
           return (
-            <ShowSeriesModal
-              productoBoolean={true}
-              Arrays={row.original.productos}
-            />
+            <ShowTransferenciaSeriesModal Arrays={row.original.productos} />
           );
         },
       },
