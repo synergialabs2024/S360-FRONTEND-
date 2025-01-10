@@ -35,6 +35,7 @@ const SeriesUbicacionProductoModal: React.FC<
   const [cantidadTF, setCantidadTF] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setData] = useState<any[]>(Arrays.series);
+
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   const handleUploadFile = async (file: File) => {

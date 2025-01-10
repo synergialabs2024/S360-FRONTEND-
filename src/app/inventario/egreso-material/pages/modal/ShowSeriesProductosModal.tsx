@@ -22,12 +22,15 @@ const ShowSeriesProductosModal: React.FC<ShowSeriesProductosModalProps> = ({
   //* State local
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
+  const [serieR, setSerieR] = useState(false);
 
   useEffect(() => {
     if (serieBoolean === true) {
       setData(Arrays.series);
+      setSerieR(Arrays?.requiere_series);
     } else {
       setData(Arrays.serie);
+      setSerieR(Arrays?.producto_data?.requiere_series);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serieBoolean]);
@@ -82,11 +85,7 @@ const ShowSeriesProductosModal: React.FC<ShowSeriesProductosModalProps> = ({
           onConfirm={() => setOpen(false)}
           title="Series"
           contentNode={
-            Arrays?.producto_data?.requiere_series ? (
-              <Section />
-            ) : (
-              <>PRODUCTO NO REQUIERE DE SERIE</>
-            )
+            serieR ? <Section /> : <>PRODUCTO NO REQUIERE DE SERIE</>
           }
         />
       )}

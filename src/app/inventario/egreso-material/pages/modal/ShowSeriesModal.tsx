@@ -5,6 +5,7 @@ import { Grid, IconButton } from '@mui/material';
 import { IconBrandCodesandbox } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useColumnsUbicacionProductosDisponibles } from '../../shared/hooks';
+import { useColumnsProductosDisponibles } from '@/app/inventario/ingreso-material/shared/hooks';
 
 export type ShowSeriesModalProps = {
   Arrays: any;
@@ -19,8 +20,8 @@ const ShowSeriesModal: React.FC<ShowSeriesModalProps> = ({
   const [open, setOpen] = useState(false);
 
   ///* columns
-  const { seriesIngresoColumns, seriesEgresoColumns } =
-    useColumnsUbicacionProductosDisponibles();
+  const { seriesEgresoColumns } = useColumnsUbicacionProductosDisponibles();
+  const { seriesIngresoColumns } = useColumnsProductosDisponibles();
 
   const Section = () => (
     <>

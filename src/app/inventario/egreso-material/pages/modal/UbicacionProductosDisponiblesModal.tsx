@@ -88,31 +88,32 @@ const UbicacionProductosDisponiblesModal: React.FC<
   };
 
   ///* columns ---------------------
-  const { modalMaterialColumns } = useColumnsUbicacionProductosDisponibles({
-    showActionColumn: true,
-    onActionProductosRowNode(item) {
-      return (
-        <CustomSingleButton
-          label="AGREGAR"
-          variant="text"
-          color="primary"
-          onClick={() => {
-            addSelectedItem({
-              keyStore:
-                UbicacionProductosDisponiblesStoreKey.ubicacionProductosDisponibles,
-              item: {
-                ...item,
-                usedQuantity: 1,
-                selectedSeries: [],
-                savedSeries: [],
-              },
-              showToast: true,
-            });
-          }}
-        />
-      );
-    },
-  });
+  const { modalEgresoMaterialColumns } =
+    useColumnsUbicacionProductosDisponibles({
+      showActionColumn: true,
+      onActionProductosRowNode(item) {
+        return (
+          <CustomSingleButton
+            label="AGREGAR"
+            variant="text"
+            color="primary"
+            onClick={() => {
+              addSelectedItem({
+                keyStore:
+                  UbicacionProductosDisponiblesStoreKey.ubicacionProductosDisponibles,
+                item: {
+                  ...item,
+                  usedQuantity: 1,
+                  selectedSeries: [],
+                  savedSeries: [],
+                },
+                showToast: true,
+              });
+            }}
+          />
+        );
+      },
+    });
   ///* effects ---------------------
   const isCustomLoading =
     isLoadingItemsDisponibles || isRefetchingItemsDisponibles;
@@ -155,7 +156,7 @@ const UbicacionProductosDisponiblesModal: React.FC<
             }
           />
           <TableWithoutActions<UbicacionProducto>
-            columns={modalMaterialColumns}
+            columns={modalEgresoMaterialColumns}
             data={equiposDisponiblesPaging?.data?.items || []}
             isLoading={isLoadingItemsDisponibles}
             isRefetching={isRefetchingItemsDisponibles}

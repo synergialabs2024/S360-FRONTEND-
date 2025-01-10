@@ -186,7 +186,8 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
   ]);
 
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsUbicacionProductosDisponibles();
+  const { crearEgresoMaterialColumns } =
+    useColumnsUbicacionProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -260,7 +261,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({
           />
         )}
         <CustomMinimalTable<UbicacionProductosDisponiblesTableType>
-          columns={crearMaterialColumns}
+          columns={crearEgresoMaterialColumns}
           data={ubicacionProductosDisponibles || []}
           enablePagination
           density="comfortable"
