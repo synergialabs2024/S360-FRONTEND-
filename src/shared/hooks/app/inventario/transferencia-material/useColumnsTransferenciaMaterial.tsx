@@ -30,7 +30,7 @@ export const useColumnsTransferenciaMaterial = () => {
         Cell: ({ row }) => {
           return (
             <ShowSeriesModal
-              productoBoolean={false}
+              productoBoolean={true}
               Arrays={row.original.productos}
             />
           );
