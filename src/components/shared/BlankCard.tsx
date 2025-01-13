@@ -3,7 +3,7 @@ import { Card } from '@mui/material';
 // @ts-ignore
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { AppState, useSelector } from '@/store/Store';
+import { useUiStore } from '@/store/ui';
 
 type Props = {
   className?: string;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const BlankCard = ({ children, className, sx }: Props) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
 
   const theme = useTheme();
   const borderColor = theme.palette.divider;

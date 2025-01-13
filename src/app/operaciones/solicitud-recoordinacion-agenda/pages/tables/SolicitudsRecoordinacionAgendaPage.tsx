@@ -1,6 +1,5 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import {
   useFetchSolicitudRecoordinacionAgendas,
@@ -77,9 +76,7 @@ const SolicitudsRecoordinacionAgendaPage: React.FC<
   });
 
   ///* handlers
-  const onEdit = (
-    solicitudrecoordinacionagenda: SolicitudRecoordinacionAgenda,
-  ) => {};
+  const onEdit = () => {};
 
   ///* columns
   const columns = useMemo<MRT_ColumnDef<SolicitudRecoordinacionAgenda>[]>(

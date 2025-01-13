@@ -5,11 +5,10 @@ import user3 from '@/assets/images/profile/user-3.jpg';
 import user4 from '@/assets/images/profile/user-4.jpg';
 import user5 from '@/assets/images/profile/user-5.jpg';
 import { Chance } from 'chance';
-import { TicketType } from '@/types/apps/ticket';
 
 const chance = new Chance();
 
-const TicketData: TicketType[] = [
+const TicketData = [
   {
     Id: 1,
     ticketTitle: 'Sed ut perspiciatis unde omnis iste',

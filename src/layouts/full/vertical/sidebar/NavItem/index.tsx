@@ -14,9 +14,8 @@ import {
   Typography,
   ListItemButton,
 } from '@mui/material';
-import { useSelector } from '@/store/Store';
 import { useTranslation } from 'react-i18next';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui';
 
 type NavGroup = {
   [x: string]: any;
@@ -44,7 +43,7 @@ interface ItemType {
 }
 
 const NavItem = ({ item, level, pathDirect, hideMenu, onClick }: ItemType) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const Icon = item?.icon;
   const theme = useTheme();
   const { t } = useTranslation();

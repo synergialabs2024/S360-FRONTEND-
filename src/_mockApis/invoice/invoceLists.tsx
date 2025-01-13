@@ -1,7 +1,6 @@
-import { InvoiceList } from '@/types/apps/invoice';
 import mock from '../mock';
 
-export const invoceLists: InvoiceList[] = [
+export const invoceLists = [
   {
     id: 101,
     billFrom: 'PineappleInc.',

@@ -3,8 +3,7 @@
 import React from 'react';
 
 import { Card, CardHeader, CardContent, Divider } from '@mui/material';
-import { useSelector } from '@/store/Store';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui';
 
 type Props = {
   title: string;
@@ -12,7 +11,7 @@ type Props = {
 };
 
 const BaseCard = ({ title, children }: Props) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
 
   return (
     <Card

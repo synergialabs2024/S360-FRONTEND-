@@ -320,6 +320,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       asunto_ticket: data.asunto_ticket,
       detalle_adicional_ticket: data.detalle_adicional_ticket,
       fecha_sugerida_visita: data.fecha_sugerida_visita,
+      turno: data.turno,
     });
   };
 

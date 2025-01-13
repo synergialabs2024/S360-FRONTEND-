@@ -2,11 +2,11 @@
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { Card, CardHeader, Tooltip, Divider, IconButton } from '@mui/material';
-import { useSelector } from 'react-redux';
 import { IconDownload } from '@tabler/icons-react';
+import { useUiStore } from '@/store/ui';
 
 const DownloadCard = ({ title, children, onDownload }: any) => {
-  const customizer = useSelector((state: any) => state.customizer);
+  const customizer = useUiStore(state => state.state);
 
   const theme = useTheme();
   const borderColor = theme.palette.divider;

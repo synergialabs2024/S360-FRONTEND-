@@ -196,4 +196,5 @@ export type CreateSolTicket = Pick<
   | 'url_foto_vivienda'
   | 'url_foto_opcional'
   | 'fecha_sugerida_visita'
+  | 'turno'
 >;

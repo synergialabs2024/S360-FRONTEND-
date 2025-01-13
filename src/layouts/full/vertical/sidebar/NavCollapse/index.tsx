@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { useState } from 'react';
-import { useSelector } from '@/store/Store';
 import { useLocation } from 'react-router-dom';
 
 // mui imports
@@ -22,7 +21,7 @@ import NavItem from '../NavItem';
 // plugins
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { AppState } from '@/store/Store';
+import { useUiStore } from '@/store/ui';
 
 type NavGroupProps = {
   [x: string]: any;
@@ -51,7 +50,7 @@ const NavCollapse = ({
   hideMenu,
   onClick,
 }: NavCollapseProps) => {
-  const customizer = useSelector((state: AppState) => state.customizer);
+  const customizer = useUiStore(state => state.state);
   const Icon = menu?.icon;
   const theme = useTheme();
   const { pathname } = useLocation();
@@ -97,7 +96,7 @@ const NavCollapse = ({
     color:
       open && level < 2
         ? 'white'
-        : 'inherit' && level > 1 && open
+        : level > 1 && open
           ? theme.palette.primary.main
           : theme.palette.text.secondary,
     borderRadius: `${customizer.borderRadius}px`,
