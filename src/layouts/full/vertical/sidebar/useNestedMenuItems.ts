@@ -478,6 +478,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'recepcion-materiales',
+              title: 'Recepción de materiales',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------

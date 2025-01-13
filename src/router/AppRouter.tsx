@@ -990,6 +990,14 @@ const CreateTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
+const RecepcionMaterialMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-material/pages/tables/RecepcionMaterialMainPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2151,6 +2159,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.transferenciaMaterialesCrear,
             element: <CreateTransferenciaMaterialPage />,
+          },
+
+          ///* Recepcion Material
+          {
+            path: ROUTER_PATHS.inventario.RecepcionMateriales,
+            element: <RecepcionMaterialMainPage />,
           },
         ],
       },
