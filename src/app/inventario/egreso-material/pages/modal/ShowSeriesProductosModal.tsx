@@ -25,11 +25,10 @@ const ShowSeriesProductosModal: React.FC<ShowSeriesProductosModalProps> = ({
   const [serieR, setSerieR] = useState(false);
 
   useEffect(() => {
+    setData(Arrays.series);
     if (serieBoolean === true) {
-      setData(Arrays.series);
       setSerieR(Arrays?.requiere_series);
     } else {
-      setData(Arrays.serie);
       setSerieR(Arrays?.producto_data?.requiere_series);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

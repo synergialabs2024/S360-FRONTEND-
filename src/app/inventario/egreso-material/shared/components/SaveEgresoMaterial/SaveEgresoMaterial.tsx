@@ -115,7 +115,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
           producto: resto.producto,
           stock_actual: resto.stock_actual,
           producto_data: resto.producto_data,
-          serie: series ? series : [],
+          series: series ? series : [],
         };
       },
     );
@@ -124,7 +124,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
 
     for (const producto of mappedProductos) {
       if (producto.producto_data?.requiere_series === true) {
-        if (producto.cantidad !== producto.serie.length) {
+        if (producto.cantidad !== producto.series.length) {
           ToastWrapper.error(
             'Las series deben tener la misma cifra que la cantidad',
           );
@@ -146,7 +146,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
         hasError = true;
       }
 
-      if (producto.serie.length > cantidad) {
+      if (producto.series.length > cantidad) {
         ToastWrapper.error(
           `
             Las series de ${producto.producto_data?.codigo}
