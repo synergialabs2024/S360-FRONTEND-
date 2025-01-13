@@ -17,7 +17,10 @@ import {
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { Rubro } from '@/shared/interfaces';
-import { getKeysFormErrorsMessage, rubroFormSchema } from '@/shared/utils';
+import {
+  createRubroClienteFormSchema,
+  getKeysFormErrorsMessage,
+} from '@/shared/utils';
 import { returnUrlRubrosPage } from '../../../pages/tables/RubrosPage';
 
 // TODO: implement this RUBROS form in actual page
@@ -34,7 +37,7 @@ const SaveRubro: React.FC<SaveRubroProps> = ({ title, rubro }) => {
 
   ///* form ---------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(rubroFormSchema) as any,
+    resolver: yupResolver(createRubroClienteFormSchema) as any,
     defaultValues: {},
   });
 

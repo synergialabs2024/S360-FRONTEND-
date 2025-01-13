@@ -1,16 +1,11 @@
 import { Theme } from '@emotion/react';
-import {
-  FormControl,
-  Grid,
-  InputAdornment,
-  SxProps,
-  TextField,
-} from '@mui/material';
-import { Controller, FieldError } from 'react-hook-form';
+import { FormControl, Grid, SxProps, TextField } from '@mui/material';
 import { useState } from 'react';
-import { CustomFormLabel } from '../Labels';
+import { Controller, FieldError } from 'react-hook-form';
+
 import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType, SxPropsThemeType } from '@/shared/interfaces';
+import { CustomFormLabel } from '../Labels';
 
 type CustomExpirateDateTextFieldProps = {
   label: string;

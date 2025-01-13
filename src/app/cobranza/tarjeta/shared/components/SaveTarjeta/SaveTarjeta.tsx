@@ -29,7 +29,7 @@ const SaveTarjeta: React.FC<SaveTarjetaProps> = ({ title, tarjeta }) => {
 
   ///* form
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(tarjetaFormSchema),
+    resolver: yupResolver(tarjetaFormSchema) as any,
     defaultValues: {
       state: true,
     },

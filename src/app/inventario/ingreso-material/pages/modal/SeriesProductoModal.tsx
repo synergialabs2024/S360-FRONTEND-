@@ -1,21 +1,21 @@
-import { useMemo, useState, useEffect, useRef } from 'react';
-import { MRT_ColumnDef } from 'material-react-table';
-import * as XLSX from 'xlsx';
 import { Box, Button, Grid, IconButton, TextField } from '@mui/material';
 import {
   IconArrowsShuffle2,
   IconBrandCodesandbox,
   IconUpload,
 } from '@tabler/icons-react';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as XLSX from 'xlsx';
 
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { ScrollableDialogProps } from '@/shared/components';
 import {
   emptyCellOneLevel,
   IngresoMaterialSeries,
-  TABLE_CONSTANTS,
   Producto,
+  TABLE_CONSTANTS,
 } from '@/shared';
+import { ScrollableDialogProps } from '@/shared/components';
 import { useUiStore } from '@/store/ui';
 
 export type SeriesProductoModalProps = {
@@ -35,8 +35,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   const [open, setOpen] = useState(false);
   const [dataExcel, setDataExcel] = useState<any[]>([]);
   const [cantidadTF, setCantidadTF] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState<any[]>(Arrays.series);
+  const [data] = useState<any[]>(Arrays.series);
 
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   const serieIndividualRef = useRef<HTMLInputElement>(null);

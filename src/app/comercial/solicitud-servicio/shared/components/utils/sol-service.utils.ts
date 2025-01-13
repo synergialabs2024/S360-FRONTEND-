@@ -8,7 +8,7 @@ export const formatDataClienteMikro = (
   const globalServiceStatesArray = globalServices.map(
     service => service.estado,
   );
-  const lastServiciosServices = globalServices?.at(-1)?.servicios || [];
+  const lastServiciosServices = globalServices?.at(-1)?.services || [];
 
   // asignar estado a los servicios
   if (globalServices.length > 0 && lastServiciosServices.length > 0) {

@@ -1,7 +1,7 @@
-import { useMemo, useState, useEffect, useRef } from 'react';
-import { MRT_ColumnDef } from 'material-react-table';
-import * as XLSX from 'xlsx';
 import { Box, Button, Grid, IconButton, TextField } from '@mui/material';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as XLSX from 'xlsx';
 
 import {
   IconArrowsShuffle2,
@@ -9,13 +9,13 @@ import {
   IconUpload,
 } from '@tabler/icons-react';
 
+import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import {
   emptyCellOneLevel,
   TABLE_CONSTANTS,
   UbicacionProducto,
 } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import { useUiStore } from '@/store/ui';
 
 export type SeriesUbicacionProductoModalProps = {
@@ -34,7 +34,7 @@ const SeriesUbicacionProductoModal: React.FC<
   const [dataExcel, setDataExcel] = useState<any[]>([]);
   const [cantidadTF, setCantidadTF] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState<any[]>(Arrays.series);
+  const [data] = useState<any[]>(Arrays.series);
 
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 

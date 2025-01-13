@@ -22,6 +22,9 @@ export type ProductosDisponiblesTableType = Producto & {
   cantidad?: number;
   series?: any[];
   productos?: string[];
+  usedQuantity?: number;
+  selectedSeries?: string[];
+  savedSeries?: string[];
 };
 
 type UseColumnsEquiposIngresoMaterial = {
