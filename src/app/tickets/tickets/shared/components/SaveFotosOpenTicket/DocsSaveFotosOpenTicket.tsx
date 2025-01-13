@@ -6,11 +6,11 @@ import { Grid } from '@mui/material';
 export type DocsSaveFotosOpenTicketProps = {
   viviendaImg: File | null;
   setViviendaImg: any;
-  viviendaImgLabel: JSX.Element;
+  viviendaImgLabel?: JSX.Element;
 
   opcionalImg: File | null;
   setOpcionalImg: any;
-  opcionalImgLabel: JSX.Element;
+  opcionalImgLabel?: JSX.Element;
 
   UploadImageDropZoneComponent: React.FC<UploadImagePreviewBtnProps>;
 };
@@ -47,7 +47,7 @@ const DocsSaveFotosOpenTicket: React.FC<DocsSaveFotosOpenTicketProps> = ({
       >
         {viviendaImg != null ? <></> : viviendaImgLabel}
         <UploadImageDropZoneComponent
-          buttonLabel="Foto vivienda"
+          buttonLabel="Foto vivienda *"
           selectedImage={viviendaImg}
           setSelectedImage={setViviendaImg}
         />

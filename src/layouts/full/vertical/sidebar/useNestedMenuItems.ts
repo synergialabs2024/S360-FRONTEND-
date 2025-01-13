@@ -526,6 +526,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'tickets-tecnico',
+              title: 'Tickets',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.tecnico.ticketsAsignados,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Operaciones ----------------

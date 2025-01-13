@@ -992,3 +992,58 @@ export const CALENDARIO_FACTURA_TYPE_ARRAY_CHOICES = [
   CalendarioFacturaTypeEnumChoice.VEINTISIETE,
   CalendarioFacturaTypeEnumChoice.VEINTIOCHO,
 ];
+
+// Tickets
+
+export enum EstadoTicketEnumChoice {
+  ESPERA = 'ESPERA',
+  EN_PROCESO = 'EN_PROCESO',
+  CERRADO = 'CERRADO',
+}
+
+export enum EstadoTicketTecnicoEnumChoice {
+  ESPERA = 'ESPERA',
+  REALIZADA = 'REALIZADA',
+  RECORDINADA = 'RECORDINADA',
+}
+
+export enum TurnosTicketEnumChoice {
+  MATUTINO = 'MATUTINO',
+  VESPERTINO = 'VESPERTINO',
+}
+export const TURNOS_TICKETS_ARRAY_CHOICES = [
+  TurnosTicketEnumChoice.MATUTINO,
+  TurnosTicketEnumChoice.VESPERTINO,
+];
+
+export enum BucketTicketEnumChoice {
+  BUCKET_BASE = VITE_MINIO_BUCKET_NAME,
+
+  // preventa
+  IMAGES_IDENTIFICACION = 'images/identificacion',
+  IMAGES_VIVIENDA = 'images/vivienda',
+  IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
+  IMAGES_ACEPTACION_CONTRATO = 'images/aceptacioncontrato',
+  IMAGES_ACEPTACION_CONTRATO_CORRECCIONES = 'images/aceptacioncontrato/correcciones',
+  IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
+  IMAGES_ONT_MODEL = 'images/ont-model',
+  IMAGES_DOCUMENTO_BANCARIOS = 'images/documentos-bancarios',
+
+  IMAGES_ORDENTRABAJO_INSTALACION = 'images/orden-trabajo/instalaciones',
+}
+
+export enum BucketKeyTicketEnumChoice {
+  FOTO_VIVIENDA = 'foto_vivienda',
+  FOTO_OPCIONAL = 'foto_opcional',
+
+  FOTO_ANTES_SOLUCION = 'foto_antes_solucion',
+  FOTO_DESPUES_SOLUCION = 'foto_despues_solucion',
+  FOTO_TEST_VELOCIDAD = 'foto_test_velocidad',
+  FOTO_POTENCIA_ANTES_SOLUCION = 'foto_potencia_antes_solucion',
+  FOTO_POTENCIA_DESPUES_SOLUCION = 'foto_potencia_despues_solucion',
+  FOTO_PROBLEMA_ENCONTRADO = 'foto_problema_encontrado',
+  FOTO_SOLUCION = 'foto_solucion',
+
+  FOTO_ENTREGA_MESH = 'foto_entrega_mesh',
+  FOTO_ENTREGA_UPS = 'foto_entrega_ups',
+}

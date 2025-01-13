@@ -1,37 +1,40 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { returnUrlTicketsCrear } from '../../../pages/tables/TicketTenicoPage';
+import { returnUrlTicketsCrear } from '../../../pages/tables/TicketsPage';
 import {
   ApiResponse,
+  BucketKeyTicketEnumChoice,
+  BucketTypeEnumChoice,
   ContratoData,
   FindByIdentification,
   getKeysFormErrorsMessage,
   gridSizeMdLg6,
   IdentificationTypeEnumChoice,
   ToastWrapper,
-  useIsMediaQuery,
+  TURNOS_TICKETS_ARRAY_CHOICES,
   useLoaders,
   useUploadImageGeneric,
 } from '@/shared';
 import { useEffect, useState } from 'react';
 import {
   CustomAutocomplete,
+  CustomDatePicker,
   CustomIdentificacionTextField,
   CustomScanLoad,
   CustomTextArea,
   CustomTextField,
-  CustomTypoLabel,
-  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
+  SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
 
 import { CiSearch } from 'react-icons/ci';
-import { ticketTecnicoFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket-tecnico.schema';
+import { ticketFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket.schema';
 import {
+  CreateSolTicket,
   CreateTicketParamsBase,
-  useCreateTicket,
+  TicketTSQEnum,
   useFetchAsuntos,
   useFetchOrigenes,
   useSearchCedulaMutation,
@@ -42,10 +45,12 @@ import { ServicesAlertModal } from '@/app/comercial/solicitud-servicio/shared/co
 import { Grid } from '@mui/material';
 import { Asunto, Origen } from '@/shared/interfaces/app/ticket';
 import DocsSaveFotosOpenTicket from '../SaveFotosOpenTicket/DocsSaveFotosOpenTicket';
-import { SingleImageModal } from '@/shared/components/ui';
+import { useGenericPOST } from '@/actions/shared';
+import { uploadFileToBucket } from '@/actions/statics-api';
 
 export type SaveTicketTecnicoProps = {
   title: string;
+  onClose?: () => void;
   ticket?: Ticket;
 };
 
@@ -74,11 +79,9 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
 
   const [isDefuncion] = useState<boolean>(false);
 
-  ///* global state -----------------
-
   ///* form ---------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(ticketTecnicoFormSchema) as any,
+    resolver: yupResolver(ticketFormSchema) as any,
     defaultValues: {
       tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
       // reset es cliente modal alert
@@ -89,18 +92,13 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
   const {
     handleSubmit,
     reset,
-    formState: { errors, isValid },
+    formState: { errors },
   } = form;
 
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const watchedIdentification = form.watch('identificacion');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
-  const watchedIsValidIdentificacion = form.watch('isValidIdentificacion');
   const watchedIsCliente = form.watch('es_cliente');
-
-  // const { data, isLoading, isRefetching } = useGetClientTicket(
-  //   watchedIdentification!,
-  // );
 
   ///* fetch data ---------------------
 
@@ -128,27 +126,36 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
 
   const searchCedulaMutation = useSearchCedulaMutation();
 
-  const createAsuntoMutation = useCreateTicket({
-    navigate,
-    returnUrl: returnUrlTicketsCrear,
-    enableErrorNavigate: false,
-  });
-
   ///* handlers ---------------------
 
-  // handlers ------------
-  const onSave = async (data: SaveFormData) => {
-    if (!isValid) return;
+  const {
+    UploadImageDropZoneComponent,
+    image1: viviendaImg,
+    setImage1: setViviendaImg,
+    image2: opcionalImg,
+    setImage2: setOpcionalImg,
+  } = useUploadImageGeneric();
 
-    ///* create
-    createAsuntoMutation.mutate(data);
-  };
+  // handlers ------------
 
   const clearForm = () => {
     form.reset({
       ...form.getValues(),
-      identificacion: '',
-      origen: undefined,
+      origen_ticket: undefined,
+      asunto_ticket: undefined,
+      numero_contrato: '',
+      razon_social: '',
+      coordenadas: '',
+      turno: '',
+      fecha_sugerida_visita: '',
+      zona: '',
+      telefono: '',
+      celular_adicional: '',
+      nap: '',
+      valor_a_cobrar: '',
+      detalle_adicional_ticket: '',
+      url_foto_vivienda: '',
+      url_foto_opcional: '',
     });
 
     setAplicaRestriccionCiudadano(false);
@@ -210,44 +217,23 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
     }
   }, [searchCedulaMutation.data]);
 
-  const {
-    UploadImageDropZoneComponent,
-    image1: viviendaImg,
-    setImage1: setViviendaImg,
-    image2: opcionalImg,
-    setImage2: setOpcionalImg,
-  } = useUploadImageGeneric();
-
-  const isMobile = useIsMediaQuery('sm');
-
-  const titleAndImage = (title: string, imgUrl: string) => {
-    return (
-      <Grid item xs={isMobile ? 8 : 6} sx={isMobile ? { mb: 2 } : {}} pb={2}>
-        <CustomTypoLabel
-          text={title}
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
-        />
-        <SingleImageModal
-          image={{
-            id: 1,
-            imgUrl: imgUrl || '',
-            title: title,
-          }}
-          widthPercentage={isMobile ? '100%' : '60%'}
-        />
-      </Grid>
-    );
-  };
-
   const [numeroContrato, setNumeroContrato] = useState<string | undefined>(
     undefined,
   );
 
   useEffect(() => {
-    if (cedulaData?.data) {
+    if (Array.isArray(cedulaData?.data)) {
+      console.log('cedulaData.data', cedulaData.data);
+
+      if (cedulaData.data.length === 0) {
+        ToastWrapper.error('No existen lineas para la cedula digitada');
+      }
+
       const contrato = cedulaData.data.find(
         item => item.contrato_data.numero_contrato === numeroContrato,
       );
+
+      console.log('contrato', contrato);
 
       if (contrato) {
         form.setValue(
@@ -269,7 +255,73 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
         console.log('No se encontró el contrato con el número especificado.');
       }
     }
-  }, [numeroContrato, cedulaData]);
+  }, [numeroContrato, cedulaData, form]);
+
+  const requestUpdOT = useGenericPOST<CreateSolTicket, Ticket>(
+    '/ticket-tecnico/',
+    TicketTSQEnum.TICKETS,
+    {
+      customMessageToast: 'Ticket creado con éxito',
+      navigate,
+      returnUrl: returnUrlTicketsCrear,
+      customOnSuccess() {
+        navigate(returnUrlTicketsCrear);
+      },
+    },
+  );
+
+  const requiredImages = [
+    {
+      label: 'Foto vivienda',
+      image: viviendaImg,
+      setImage: setViviendaImg,
+      isRequired: true,
+    },
+    {
+      label: 'Foto opcional',
+      image: viviendaImg,
+      setImage: setOpcionalImg,
+      isRequired: false,
+    },
+  ];
+
+  const onSave = async (data: SaveFormData) => {
+    let atLeastOneImageUploaded = false;
+
+    requiredImages.forEach(({ isRequired, image }) => {
+      if (isRequired && image) {
+        atLeastOneImageUploaded = true;
+      }
+    });
+
+    if (!atLeastOneImageUploaded) {
+      ToastWrapper.error('No se ha subido ninguna imagen requerida.');
+      return;
+    }
+
+    const [viviendaUrl, opcionalUrl] = await Promise.all([
+      uploadFileToBucket({
+        file: viviendaImg!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_VIVIENDA,
+        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+      }),
+      uploadFileToBucket({
+        file: opcionalImg!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_OPCIONAL,
+        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+      }),
+    ]);
+
+    await requestUpdOT.mutate({
+      url_foto_vivienda: viviendaUrl?.streamUlr || '',
+      url_foto_opcional: opcionalUrl?.streamUlr || '',
+      linea_servicio: parseInt(data?.numero_contrato),
+      origen_ticket: data.origen_ticket,
+      asunto_ticket: data.asunto_ticket,
+      detalle_adicional_ticket: data.detalle_adicional_ticket,
+      fecha_sugerida_visita: data.fecha_sugerida_visita,
+    });
+  };
 
   return (
     <SingleFormBoxScene
@@ -282,7 +334,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       })}
       disableSubmitBtn={
         watchedIsFormBlocked ||
-        !watchedIsValidIdentificacion ||
+        // !watchedIsValidIdentificacion ||
         (aplicaRestriccionCiudadano && isExtranjeroCedulado) ||
         isDefuncion
       }
@@ -290,7 +342,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       <Grid item container>
         <ServicesAlertModal
           clientData={clientData}
-          watchedIsCliente={watchedIsCliente}
+          watchedIsCliente={watchedIsCliente!}
         />
       </Grid>
       <InputAndBtnGridSpace
@@ -299,7 +351,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
             label="Identificación"
             name="identificacion"
             control={form.control}
-            selectedDocumentType={watchedIdentificationType}
+            selectedDocumentType={watchedIdentificationType!}
             defaultValue={form.getValues('identificacion')}
             error={errors.identificacion}
             helperText={errors.identificacion?.message}
@@ -309,8 +361,9 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
             }}
             disabled={!watchedIdentificationType}
             onChangeValue={value => {
-              if (!value?.length) {
+              if (!value?.length || value.length === 10) {
                 clearForm();
+                setNumeroContrato(undefined);
               }
             }}
           />
@@ -341,13 +394,15 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
 
       <CustomAutocomplete<ContratoData>
         label="Numero de contrato"
-        name="numero contrato"
+        name="numero_contrato"
         // options
         options={
-          cedulaData?.data?.map(item => ({
-            ...item,
-            numero_contrato: item?.contrato_data?.numero_contrato,
-          })) || []
+          Array.isArray(cedulaData?.data)
+            ? cedulaData.data.map(item => ({
+              ...item,
+              numero_contrato: item?.contrato_data?.numero_contrato,
+            }))
+            : []
         }
         valueKey="numero_contrato"
         actualValueKey="id"
@@ -363,137 +418,162 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
         }}
       />
 
-      <CustomTextField
-        label={
-          watchedIdentificationType === IdentificationTypeEnumChoice.RUC
-            ? 'Razón social'
-            : 'Nombre y Apellido'
-        }
-        name="razon_social"
-        control={form.control}
-        defaultValue={form.getValues().razon_social}
-        error={errors.razon_social}
-        helperText={errors.razon_social?.message}
-        size={gridSizeMdLg6}
-      />
+      {numeroContrato === undefined ? (
+        <></>
+      ) : (
+        <>
+          <CustomTextField
+            label={
+              watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+                ? 'Razón social'
+                : 'Nombre y Apellido'
+            }
+            name="razon_social"
+            control={form.control}
+            defaultValue={form.getValues().razon_social}
+            error={errors.razon_social}
+            helperText={errors.razon_social?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-      <CustomTextField
-        label={'Coordenadas'}
-        name="coordenadas"
-        control={form.control}
-        defaultValue={form.getValues().razon_social}
-        error={errors.razon_social}
-        helperText={errors.razon_social?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomTextField
+            label={'Coordenadas'}
+            name="coordenadas"
+            control={form.control}
+            defaultValue={form.getValues().razon_social}
+            error={errors.razon_social}
+            helperText={errors.razon_social?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-      <CustomTextField
-        label={'Zona'}
-        name="zona"
-        control={form.control}
-        defaultValue={form.getValues().zona}
-        error={errors.zona}
-        helperText={errors.zona?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomTextField
+            label={'Zona'}
+            name="zona"
+            control={form.control}
+            defaultValue={form.getValues().zona}
+            error={errors.zona}
+            helperText={errors.zona?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-      <CustomTextField
-        label={'Telefono'}
-        name="telefono"
-        control={form.control}
-        defaultValue={form.getValues().telefono}
-        error={errors.telefono}
-        helperText={errors.telefono?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomTextField
+            label={'Telefono'}
+            name="telefono"
+            control={form.control}
+            defaultValue={form.getValues().telefono}
+            error={errors.telefono}
+            helperText={errors.telefono?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-      <CustomTextField
-        label={'Celular adicional'}
-        name="celular_adicional"
-        control={form.control}
-        defaultValue={form.getValues().celular_adicional}
-        error={errors.celular_adicional}
-        helperText={errors.celular_adicional?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomTextField
+            label={'Celular adicional'}
+            name="celular_adicional"
+            control={form.control}
+            defaultValue={form.getValues().celular_adicional}
+            error={errors.celular_adicional}
+            helperText={errors.celular_adicional?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-      <CustomTextField
-        label={'Caja'}
-        name="nap"
-        control={form.control}
-        defaultValue={form.getValues().nap}
-        error={errors.nap}
-        helperText={errors.nap?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomTextField
+            label={'Caja'}
+            name="nap"
+            control={form.control}
+            defaultValue={form.getValues().nap}
+            error={errors.nap}
+            helperText={errors.nap?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-      <CustomAutocomplete<Origen>
-        label="Origen"
-        name="origen"
-        valueKey="name"
-        actualValueKey="id"
-        control={form.control}
-        defaultValue={form.getValues().origen}
-        options={origenesPaginatedRes?.data.items || []}
-        isLoadingData={isLoadingOrigenes}
-        error={errors.origen}
-        helperText={errors.origen?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomAutocomplete<Origen>
+            label="Origen"
+            name="origen_ticket"
+            valueKey="name"
+            actualValueKey="id"
+            control={form.control}
+            defaultValue={form.getValues().origen_ticket}
+            options={origenesPaginatedRes?.data.items || []}
+            isLoadingData={isLoadingOrigenes}
+            error={errors.origen_ticket}
+            helperText={errors.origen_ticket?.message}
+            size={gridSizeMdLg6}
+          />
 
-      <CustomAutocomplete<Asunto>
-        label="Asunto"
-        name="asunto"
-        valueKey="name"
-        actualValueKey="id"
-        control={form.control}
-        defaultValue={form.getValues().asunto}
-        options={asuntosPaginatedRes?.data.items || []}
-        isLoadingData={isLoadingAsuntos}
-        error={errors.asunto}
-        helperText={errors.asunto?.message}
-        size={gridSizeMdLg6}
-        onChangeRawValue={e => {
-          form.setValue('valor_a_cobrar', e.valor_cobrar.toString());
-        }}
-      />
+          <CustomAutocomplete<Asunto>
+            label="Asunto"
+            name="asunto_ticket"
+            valueKey="name"
+            actualValueKey="id"
+            control={form.control}
+            defaultValue={form.getValues().asunto_ticket}
+            options={asuntosPaginatedRes?.data.items || []}
+            isLoadingData={isLoadingAsuntos}
+            error={errors.asunto_ticket}
+            helperText={errors.asunto_ticket?.message}
+            size={gridSizeMdLg6}
+            onChangeRawValue={e => {
+              form.setValue('valor_a_cobrar', e.valor_cobrar.toString());
+            }}
+          />
 
-      <CustomTextField
-        label={'Valor a cobrar'}
-        name="valor_a_cobrar"
-        control={form.control}
-        defaultValue={form.getValues().valor_a_cobrar}
-        error={errors.valor_a_cobrar}
-        helperText={errors.valor_a_cobrar?.message}
-        size={gridSizeMdLg6}
-      />
+          <CustomTextField
+            label={'Valor a cobrar'}
+            name="valor_a_cobrar"
+            control={form.control}
+            defaultValue={form.getValues().valor_a_cobrar}
+            error={errors.valor_a_cobrar}
+            helperText={errors.valor_a_cobrar?.message}
+            disabled
+          />
 
-      <CustomTextArea
-        label={'Detalle Adicional Ticket'}
-        name="detalle_adicional_ticket"
-        control={form.control}
-        defaultValue={form.getValues().detalle_adicional_ticket}
-        error={errors.detalle_adicional_ticket}
-        helperText={errors.detalle_adicional_ticket?.message}
-      />
+          <SelectArrayString
+            label="Turno"
+            name="turno"
+            control={form.control}
+            defaultValue={form.getValues().turno}
+            error={errors.turno}
+            helperText={errors.turno?.message}
+            options={TURNOS_TICKETS_ARRAY_CHOICES}
+            gridSize={gridSizeMdLg6}
+          />
 
-      {/* ============= Corrección Docs ============= */}
-      <DocsSaveFotosOpenTicket
-        viviendaImg={viviendaImg}
-        setViviendaImg={setViviendaImg}
-        viviendaImgLabel={titleAndImage(
-          'Foto Vivienda Cliente',
-          ticket?.url_foto_vivienda || '',
-        )}
-        // cedula no rostro
-        opcionalImg={opcionalImg}
-        setOpcionalImg={setOpcionalImg}
-        opcionalImgLabel={titleAndImage(
-          'Foto Opcional',
-          ticket?.url_foto_opcional || '',
-        )}
-        UploadImageDropZoneComponent={UploadImageDropZoneComponent}
-      />
+          <CustomDatePicker
+            label="Fecha Sugerida Visita"
+            name="fecha_sugerida_visita"
+            control={form.control}
+            defaultValue={form.getValues().fecha_sugerida_visita ?? ''}
+            error={errors.fecha_sugerida_visita}
+            helperText={errors.fecha_sugerida_visita?.message}
+            size={gridSizeMdLg6}
+          />
+
+          <CustomTextArea
+            label={'Detalle Adicional Ticket'}
+            name="detalle_adicional_ticket"
+            control={form.control}
+            defaultValue={form.getValues().detalle_adicional_ticket}
+            error={errors.detalle_adicional_ticket}
+            helperText={errors.detalle_adicional_ticket?.message}
+          />
+
+          {/* ============= Corrección Docs ============= */}
+          <DocsSaveFotosOpenTicket
+            UploadImageDropZoneComponent={UploadImageDropZoneComponent}
+            viviendaImg={viviendaImg}
+            setViviendaImg={setViviendaImg}
+            // cedula no rostro
+            opcionalImg={opcionalImg}
+            setOpcionalImg={setOpcionalImg}
+          />
+        </>
+      )}
 
       {/* ============= loaders ============= */}
       <CustomScanLoad isOpen={isCheckingIdentificacion} name="cedula" />

@@ -185,3 +185,15 @@ export const updateTicket = async <T>({ id, data }: UpdateTicketParams<T>) => {
 
   return patch<Ticket>(`/ticket-tecnico/${id}/`, data, true);
 };
+
+///* action types ---------------
+export type CreateSolTicket = Pick<
+  Ticket,
+  | 'linea_servicio'
+  | 'origen_ticket'
+  | 'asunto_ticket'
+  | 'detalle_adicional_ticket'
+  | 'url_foto_vivienda'
+  | 'url_foto_opcional'
+  | 'fecha_sugerida_visita'
+>;

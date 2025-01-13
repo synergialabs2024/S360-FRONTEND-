@@ -382,6 +382,10 @@ export const ROUTER_PATHS = {
     instalacionesCorreccionFotos: 'coreccion-fotos/:uuid',
     instalacionesOrdenTrabajo: '/tecnico/orden-trabajo',
     instalacionesSolicitudMateriales: '/tecnico/solicitud-materiales',
+
+    //
+    ticketsAsignados: 'tickets',
+    ticketsNav: '/tecnico/tickets',
   },
 
   /////* Supervision Comercial ----------------

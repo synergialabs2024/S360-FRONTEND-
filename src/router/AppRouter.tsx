@@ -1127,6 +1127,13 @@ const UpdateCorreccionTec = Loadable(
   ),
 );
 
+const TicketTenicoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tecnico/tickets-tecnico/pages/tables/TicketsTecnicoPage'),
+  ),
+);
+
 //* activaciones ---------
 const ActivacionesInstalacionesMainPage = Loadable(
   lazy(
@@ -1235,18 +1242,13 @@ const UpdateConfiguracionPlantillaPage = Loadable(
 
 // Tickets
 
-const TicketTenicoPage = Loadable(
-  lazy(
-    () => import('@/app/tickets/ticket-tecnico/pages/tables/TicketTenicoPage'),
-  ),
+const TicketsPage = Loadable(
+  lazy(() => import('@/app/tickets/tickets/pages/tables/TicketsPage')),
 );
 
 const CreateTicketTecnicoPage = Loadable(
   lazy(
-    () =>
-      import(
-        '@/app/tickets/ticket-tecnico/pages/forms/CreateTicketTecnicoPage'
-      ),
+    () => import('@/app/tickets/tickets/pages/forms/CreateTicketTecnicoPage'),
   ),
 );
 
@@ -2365,6 +2367,10 @@ const AppRouter = [
             path: ROUTER_PATHS.tecnico.instalacionesSolicitudMateriales,
             element: <SolicitudMaterialMainPage />,
           },
+          {
+            path: ROUTER_PATHS.tecnico.ticketsAsignados,
+            element: <TicketTenicoPage />,
+          },
         ],
       },
 
@@ -2379,7 +2385,7 @@ const AppRouter = [
           },
           {
             path: ROUTER_PATHS.tickets.ticketsNav,
-            element: <TicketTenicoPage />,
+            element: <TicketsPage />,
           },
 
           ///* Parametro / Asunto
