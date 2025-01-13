@@ -39,8 +39,11 @@ const ActivacionesInstalacionesMainPage: React.FC<
         isMainTableStates
       >
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
-        <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
+        {/* <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} /> */}
         <Tab label={'GESTIONADAS'} value={2} {...a11yProps(2)} />
+
+        <Tab label={'PRE RECHAZADAS'} value={3} {...a11yProps(3)} />
+
         <Tab label={'INSTALACIONES REALIZADAS'} value={5} {...a11yProps(5)} />
       </BoxFormTabsOnly>
 
@@ -50,18 +53,25 @@ const ActivacionesInstalacionesMainPage: React.FC<
           activacionState={EstadoActivacionEnumChoice.PENDIENTE}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+      {/* <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <ActivacionInstalacionOTByState
           otState={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
           isRecoordinada
           activacionState={EstadoActivacionEnumChoice.PENDIENTE}
         />
-      </CustomTabPanel>
+      </CustomTabPanel> */}
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <ActivacionInstalacionOTByState
           activacionState={EstadoActivacionEnumChoice.GESTIONADA}
           otState={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={3} ptGrid="0">
+        <ActivacionInstalacionOTByState
+          activacionState={EstadoActivacionEnumChoice.PENDIENTE}
+          otState={EstadoOrdenTrabajoEnumChoice.PRE_RECHAZADO}
         />
       </CustomTabPanel>
 

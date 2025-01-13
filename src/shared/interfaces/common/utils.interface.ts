@@ -15,6 +15,7 @@ export type UseMutationParams = {
 
   customOnSuccess?: (resData: unknown) => void;
   customOnError?: (error: unknown) => void;
+  overrideOnError?: boolean;
   customMessageErrorSeverityToast?: ToastSeverityType;
   customMessageSuccessSeverityToast?: ToastSeverityType;
 
@@ -24,6 +25,8 @@ export type UseMutationParams = {
 export interface UseFetchEnabledParams<T> {
   enabled?: boolean;
   params?: T;
+
+  refetchInterval?: number;
 }
 
 export type PhotosDBJSONType = {

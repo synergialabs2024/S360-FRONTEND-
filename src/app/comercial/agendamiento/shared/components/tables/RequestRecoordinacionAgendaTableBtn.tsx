@@ -60,6 +60,13 @@ const RequestRecoordinacionAgendaTableBtn: React.FC<
       returnUrl: urlRedirect,
       customMessageToast:
         'Se ha solicitado la recoordinación de agenda con éxito',
+      overrideOnError: false,
+      async customOnError() {
+        await queryClient.invalidateQueries({
+          queryKey: [AgendamientoTSQEnum.AGENDAMIENTOS],
+        });
+        handleCloseModal();
+      },
     },
   );
 

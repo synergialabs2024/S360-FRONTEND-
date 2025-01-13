@@ -87,6 +87,8 @@ const InstalacionAsignadaEsperaTablePage: React.FC<
         oneAtTime: true,
       }),
     },
+
+    refetchInterval: 5000, // 5s
   });
 
   ///* mutations ---------------------
@@ -113,23 +115,22 @@ const InstalacionAsignadaEsperaTablePage: React.FC<
 
     const needSetHoraInicio = !row?.hora_inicio_real;
 
+    const canNotHandleTech =
+      row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
+      user?.role === UserRolesEnumChoice.TECNICO;
+    if (canNotHandleTech) {
+      ToastWrapper.warning(
+        'La instalación asignada aún no ha sido gestionada por activaciones.',
+      );
+      return;
+    }
+
     setConfirmDialog({
       isOpen: true,
       title: 'Gestionar instalación asignada',
       subtitle:
         'Una vez ingreses en el formulario se registrará la hora de inicio de la gestión y esta no podrá ser modificada. ¿Estás seguro de continuar?',
       onConfirm: () => {
-        // requiere gestion de activaciones para poder subir cambios
-        if (
-          row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
-          user?.role === UserRolesEnumChoice.TECNICO
-        ) {
-          ToastWrapper.error(
-            'La instalación asignada aún no ha sido gestionada por activaciones.',
-          );
-          return;
-        }
-
         if (needSetHoraInicio) {
           updOt.mutate({
             hora_inicio_real: dayjs().format(),
@@ -178,6 +179,7 @@ const InstalacionAsignadaEsperaTablePage: React.FC<
         enableActionsColumn={true}
         // crud
         canEdit={true}
+        editIconToolTipTitle="Gestionar"
         onEdit={onEdit}
         onConditionEdit={ot => {
           if (user?.role !== UserRolesEnumChoice.TECNICO) return true;

@@ -23,6 +23,7 @@ export enum AgendamientoTSQEnum {
 export const useFetchAgendamientos = ({
   enabled = true,
   params,
+  refetchInterval,
 }: UseFetchEnabledParams<GetAgendamientosParams>) => {
   return useQuery({
     queryKey: [
@@ -31,6 +32,8 @@ export const useFetchAgendamientos = ({
     ],
     queryFn: () => getAgendamientos(params),
     enabled: enabled,
+
+    ...(refetchInterval && { refetchInterval }),
   });
 };
 

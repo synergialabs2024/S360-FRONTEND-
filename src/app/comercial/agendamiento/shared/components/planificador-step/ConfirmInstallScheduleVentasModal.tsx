@@ -8,7 +8,11 @@ import {
   usePostPlanificador,
 } from '@/actions/app';
 import { useSetCacheRedis } from '@/actions/shared';
-import { Planificador, TimerAgendamientoCacheEnum } from '@/shared';
+import {
+  Planificador,
+  TimerAgendamientoCacheEnum,
+  ToastWrapper,
+} from '@/shared';
 import { CustomConfirmDialogProps } from '@/shared/components';
 import { ToastSeverityEnum } from '@/shared/interfaces/ui/alerts.interface';
 import { useAgendamientoVentasStore } from '@/store/app';
@@ -105,22 +109,41 @@ const ConfirmInstallScheduleVentasModal: React.FC<
           onSucessTempBlock(data as Planificador);
         },
       },
-      '/slot/',
+      '/slot/temp-block/',
     );
 
   ///* handlers ---------------------
   const onSave = async () => {
+    if (!selectedHour) return ToastWrapper.error('Debe seleccionar un horario');
+
+    const timeMap = [
+      {
+        hora: selectedHour!,
+        preventa: preventaId,
+        user: user?.id,
+        motivo: 'Bloqueo temporal de horario de instalación',
+      },
+    ];
+
+    // temp block all 3 slots
+    const timeMapLength = timeMap.length;
+    for (let i = 0; i < 3 - timeMapLength; i++) {
+      const nextHour = dayjs(selectedHour, 'HH:mm:ss').add(
+        30 * (i + 1),
+        'minute',
+      );
+      timeMap.push({
+        hora: nextHour.format('HH:mm:ss'),
+        preventa: preventaId,
+        user: user?.id,
+        motivo: 'Bloqueo temporal de horario de instalación',
+      });
+    }
+
     await tempBlockHourPlanificador.mutateAsync({
       fecha: watchFechaInstalacion,
       flota: watchFlota!,
-      time_map: [
-        {
-          hora: selectedHour!,
-          preventa: preventaId,
-          user: user?.id,
-          motivo: 'Bloqueo temporal de horario de instalación',
-        },
-      ],
+      time_map: timeMap,
     });
   };
 

@@ -38,7 +38,6 @@ const HourInstallSchedulePaperAndCountdown: React.FC<
   ///* handlers ---------------------
   const onChangeFechaInstalacion = (date: string | null) => {
     if (!date) return;
-    console.log('date', date);
   };
 
   return (

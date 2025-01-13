@@ -14,7 +14,7 @@ import {
   CustomNumberTextField,
   CustomTextArea,
   CustomTextField,
-  CustomTimeClockPicker,
+  CustomTimePicker,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
@@ -143,16 +143,13 @@ const SaveParametroSistema: React.FC<SaveParametroSistemaProps> = ({
     case 'HORA':
       sizeComponente = gridSizeMdLg6;
       valorComponente = (
-        <CustomTimeClockPicker
+        <CustomTimePicker
           label="VALUE"
           name="value"
           control={form.control}
           defaultValue={form.getValues().value}
           error={errors.value}
           helperText={errors.value?.message}
-          onChangeValue={time => {
-            console.log(time);
-          }}
           size={gridSizeMdLg6}
         />
       );

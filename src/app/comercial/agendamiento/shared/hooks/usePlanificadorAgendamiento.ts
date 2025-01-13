@@ -245,6 +245,17 @@ export const usePlanificadorAgendamiento = ({
         tmEntry &&
         tmEntry.estado !== SlotAgendamientoEstadosEnumChoice.DESBLOQUEADO
       ) {
+        // validate block_until with now
+        if (tmEntry?.block_until) {
+          const now = dayjs().format();
+          const blockUntil = dayjs(tmEntry.block_until).format();
+
+          if (blockUntil > now) {
+            return false;
+          }
+          return true;
+        }
+
         return false;
       }
 
@@ -414,9 +425,9 @@ export const usePlanificadorAgendamiento = ({
 
       setAvailableTimeMap(availableSlots);
 
-      console.log('-------------- receive_fleet_schedule --------------', {
-        planificador: dayPlanificador,
-      });
+      // console.log('-------------- receive_fleet_schedule --------------', {
+      //   planificador: dayPlanificador,
+      // });
     });
 
     return () => {

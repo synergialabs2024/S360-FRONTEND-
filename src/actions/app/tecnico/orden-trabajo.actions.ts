@@ -23,6 +23,7 @@ export enum OrdenTrabajoTSQEnum {
 export const useFetchOrdenTrabajos = ({
   enabled = true,
   params,
+  refetchInterval,
 }: UseFetchEnabledParams<GetOrdenTrabajosParams>) => {
   return useQuery({
     queryKey: [
@@ -31,6 +32,8 @@ export const useFetchOrdenTrabajos = ({
     ],
     queryFn: () => getOrdenTrabajos(params),
     enabled: enabled,
+
+    ...(refetchInterval && { refetchInterval }),
   });
 };
 

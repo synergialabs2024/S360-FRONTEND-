@@ -22,6 +22,7 @@ export const useGenericPOST = <T, R>(
     enableToast = true,
     customOnSuccess,
     customOnError,
+    overrideOnError = true,
   }: UseMutationParams,
 ) => {
   const queryClient = useQueryClient();
@@ -48,7 +49,10 @@ export const useGenericPOST = <T, R>(
 
       if (customOnError) {
         customOnError(error);
-        return;
+
+        if (overrideOnError) {
+          return;
+        }
       }
       handleAxiosError(error, customMessageErrorToast);
     },

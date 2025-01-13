@@ -63,6 +63,8 @@ const AgendasAprobadasVentaPage: React.FC<
 
       estado_agendamiento: EstadoAgendamientoEnumChoice.APROBADO,
     },
+
+    refetchInterval: 5000,
   });
 
   ///* handlers -------------

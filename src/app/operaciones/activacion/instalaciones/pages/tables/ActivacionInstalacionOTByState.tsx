@@ -69,6 +69,8 @@ const ActivacionInstalacionOTByState: React.FC<
       // apply only to PENDIENTE
       is_recoordinada: isRecoordinada,
     },
+
+    refetchInterval: 5000,
   });
 
   ///* handlers

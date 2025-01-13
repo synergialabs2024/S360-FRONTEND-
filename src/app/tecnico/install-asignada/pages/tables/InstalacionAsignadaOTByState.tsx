@@ -119,23 +119,23 @@ const InstalacionAsignadaOTByState: React.FC<
 
     const needSetHoraInicio = !row?.hora_inicio_real;
 
+    // requiere gestion de activaciones para poder subir cambios
+    if (
+      row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
+      user?.role === UserRolesEnumChoice.TECNICO
+    ) {
+      ToastWrapper.error(
+        'La instalación asignada aún no ha sido gestionada por activaciones.',
+      );
+      return;
+    }
+
     setConfirmDialog({
       isOpen: true,
       title: 'Gestionar instalación asignada',
       subtitle:
         'Una vez ingreses en el formulario se registrará la hora de inicio de la gestión y esta no podrá ser modificada. ¿Estás seguro de continuar?',
       onConfirm: () => {
-        // requiere gestion de activaciones para poder subir cambios
-        if (
-          row?.estado_activacion !== EstadoActivacionEnumChoice.GESTIONADA &&
-          user?.role === UserRolesEnumChoice.TECNICO
-        ) {
-          ToastWrapper.error(
-            'La instalación asignada aún no ha sido gestionada por activaciones.',
-          );
-          return;
-        }
-
         if (needSetHoraInicio) {
           updOt.mutate({
             hora_inicio_real: dayjs().format(),
@@ -196,6 +196,7 @@ const InstalacionAsignadaOTByState: React.FC<
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={calcEnableActionsColumn()}
         // crud
+        editIconToolTipTitle="Gestionar"
         canEdit={calcEnableActionsColumn()}
         onEdit={onEdit}
         onConditionEdit={ot => {
