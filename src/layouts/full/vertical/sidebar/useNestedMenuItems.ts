@@ -448,7 +448,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_EGRESO_MATERIAL, {
               id: 'egreso-mercaderia',
               title: 'Egreso de Inventario',
               type: MenuItemType.ITEM,
@@ -460,7 +460,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.ingresoMaterialesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_MOVIMIENTO_MATERIAL, {
               id: 'movimiento-materiales',
               title: 'Movimiento de Materiales',
               type: MenuItemType.ITEM,
@@ -472,13 +472,16 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'transferencia-materiales',
-              title: 'Transferencia de materiales',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_TRANSFERENCIA_MATERIAL,
+              {
+                id: 'transferencia-materiales',
+                title: 'Transferencia de materiales',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
+              },
+            ),
+            renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
               id: 'recepcion-materiales',
               title: 'Recepción de materiales',
               type: MenuItemType.ITEM,

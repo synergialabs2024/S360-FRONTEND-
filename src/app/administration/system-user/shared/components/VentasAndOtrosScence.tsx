@@ -34,7 +34,17 @@ export type VentasAndOtrosScenceProps = {
   systemUserItem?: SystemUserItem;
 };
 
-const roleFieldsMapping = {
+type RoleFieldsMappingKeys =
+  | UserRolesEnumChoice.ADMINISTRADOR
+  | UserRolesEnumChoice.COORDINADOR
+  | UserRolesEnumChoice.SUPERVISOR
+  | UserRolesEnumChoice.AGENTE
+  | UserRolesEnumChoice.GERENCIA;
+
+const roleFieldsMapping: Record<
+  RoleFieldsMappingKeys,
+  { area: boolean; departamento: boolean; canal_venta: boolean }
+> = {
   [UserRolesEnumChoice.ADMINISTRADOR]: {
     area: true,
     departamento: false,
@@ -82,12 +92,13 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
 
   useEffect(() => {
     const roleFields = roleFieldsMapping[
-      watchedRole as UserRolesEnumChoice
+      watchedRole as keyof typeof roleFieldsMapping
     ] || {
       area: false,
       departamento: false,
       canal_venta: false,
     };
+
     setFieldVisibility(roleFields);
     // Reset form fields when role changes
     form.reset({
@@ -143,8 +154,9 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
     if (!systemUserItem) return;
     const { user } = systemUserItem;
     const userRole = user?.role; // choice
-    if (userRole) {
-      const roleFields = roleFieldsMapping[userRole];
+
+    if (userRole && userRole in roleFieldsMapping) {
+      const roleFields = roleFieldsMapping[userRole as RoleFieldsMappingKeys];
       setFieldVisibility(roleFields);
       form.setValue('canal_venta', user?.canal_venta);
     }
