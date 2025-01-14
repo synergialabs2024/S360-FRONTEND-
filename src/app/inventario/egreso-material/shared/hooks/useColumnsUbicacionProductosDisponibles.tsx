@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { TextField } from '@mui/material';
 import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
@@ -99,14 +98,14 @@ export const useColumnsUbicacionProductosDisponibles = ({
       },
       ...(showCurrentStockColumn
         ? [
-            {
-              accessorKey: 'stock_actual',
-              header: 'STOCK ACTUAL',
-              enableColumnFilter: false,
-              Cell: ({ row }: MRTUbicacionProductoTableType) =>
-                formatQuantityCell(row, 'stock_actual'),
-            },
-          ]
+          {
+            accessorKey: 'stock_actual',
+            header: 'STOCK ACTUAL',
+            enableColumnFilter: false,
+            Cell: ({ row }: MRTUbicacionProductoTableType) =>
+              formatQuantityCell(row, 'stock_actual'),
+          },
+        ]
         : []),
     ],
     [showCurrentStockColumn],
@@ -154,7 +153,7 @@ export const useColumnsUbicacionProductosDisponibles = ({
               return true;
             }
 
-            if (valueCantidad < stockActual) {
+            if (valueCantidad <= stockActual) {
               return false;
             }
 
@@ -207,14 +206,14 @@ export const useColumnsUbicacionProductosDisponibles = ({
 
       ...(showActionColumn
         ? [
-            {
-              accessorKey: 'action',
-              enableColumnFilter: false,
-              header: 'ACCIÓN',
-              Cell: ({ row }: MRTUbicacionProductoTableType) =>
-                onActionProductosRowNode?.(row.original),
-            },
-          ]
+          {
+            accessorKey: 'action',
+            enableColumnFilter: false,
+            header: 'ACCIÓN',
+            Cell: ({ row }: MRTUbicacionProductoTableType) =>
+              onActionProductosRowNode?.(row.original),
+          },
+        ]
         : []),
     ],
     [baseColumnsEgreso01, onActionProductosRowNode, showActionColumn],
