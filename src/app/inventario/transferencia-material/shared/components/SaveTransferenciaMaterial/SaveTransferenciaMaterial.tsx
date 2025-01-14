@@ -136,14 +136,14 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       producto: producto.producto,
       stock_actual: producto.stock_actual,
       producto_data: producto.producto_data,
-      series: producto.series ? producto.series : [],
+      serie: producto.series ? producto.series : [],
     }));
 
     let hasError = false;
 
     for (const producto of mappedProductos) {
       if (producto.producto_data?.requiere_series === true) {
-        if (producto.cantidad !== producto.series.length) {
+        if (producto.cantidad !== producto.serie.length) {
           ToastWrapper.error(
             'Las series deben tener la misma cifra que la cantidad',
           );

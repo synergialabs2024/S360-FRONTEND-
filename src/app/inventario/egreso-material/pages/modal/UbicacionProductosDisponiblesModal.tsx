@@ -30,6 +30,7 @@ export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
   savedSeries: string[];
   cantidad?: number;
   series?: any[];
+  serie?: any[];
   productos?: string[];
   categoria_data?: string[];
 };

@@ -119,9 +119,11 @@ const ShowTransferenciaSeriesModal: React.FC<
                   <SimpleTable<{ series: string }>
                     columns={columns}
                     data={
-                      row.original.series.map((serie: any) => ({
-                        series: serie,
-                      })) || []
+                      row.original.serie
+                        ? row.original.serie.map((serie: any) => ({
+                            series: serie,
+                          }))
+                        : []
                     }
                     isLoading={false}
                     centerColumns={true}
