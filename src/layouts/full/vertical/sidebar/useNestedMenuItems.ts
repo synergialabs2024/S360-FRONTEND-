@@ -436,7 +436,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.ubicacionesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.TECNICO_SOLICITUD_MATERIAL, {
               id: 'solicitud-material',
               title: 'Solicitud de Material',
               type: MenuItemType.ITEM,
