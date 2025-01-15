@@ -52,7 +52,10 @@ export const useColumnsUbicacionProducto = ({
   // // clientes -------------------------
   const baseColumnsRubroClienteUbicacionProducto = useMemo<
     MRT_ColumnDef<ClienteRubroLibreTableType>[]
-  >(() => [...baseColumnsUbicacionProducto], [baseColumnsUbicacionProducto]);
+  >(
+    () => [...(baseColumnsUbicacionProducto as any)],
+    [baseColumnsUbicacionProducto],
+  );
 
   return {
     baseColumnsUbicacionProducto,
