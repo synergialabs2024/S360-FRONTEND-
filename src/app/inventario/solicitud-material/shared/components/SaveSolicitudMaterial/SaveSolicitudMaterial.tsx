@@ -138,19 +138,6 @@ const SaveSolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
-    if (ingresoMaterial?.productos) {
-      const productosTransformados = ingresoMaterial.productos.map(
-        producto => ({
-          ...producto,
-          usedQuantity: 0,
-          containsSeries: false,
-          selectedSeries: [],
-          savedSeries: [],
-        }),
-      );
-
-      productosEnviar(productosTransformados);
-    }
     reset(ingresoMaterial);
   }, [ingresoMaterial, reset, productosEnviar]);
 
