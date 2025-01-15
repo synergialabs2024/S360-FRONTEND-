@@ -1,6 +1,4 @@
 import {
-  IngresoMaterial,
-  IngresoMaterialesPaginatedRes,
   getUrlParams,
   ToastWrapper,
   UseFetchEnabledParams,
@@ -8,35 +6,39 @@ import {
 } from '@/shared';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
+import {
+  SolicitudMaterial,
+  SolicitudMaterialPaginatedRes,
+} from '@/shared/interfaces/app/inventario/solicitud-material.ts';
 import { useUiStore } from '@/store/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const { get, post, patch } = erpAPI();
 
-export enum IngresoMaterialTSQEnum {
-  INGRESOMATERIALES = 'solicitud-material',
-  SOLICITUDMATERIAL = 'solicitud-materiales',
+export enum solicitudMaterialTSQEnum {
+  SOLICITUDMATERIAL = 'solicitud-material',
+  SOLICITUDMATERIALES = 'solicitud-materiales',
 }
 
 ///* tanStack query
 export const useFetchSolicitudMaterial = ({
   enabled = true,
   params,
-}: UseFetchEnabledParams<GetIngresoMaterialesParams>) => {
+}: UseFetchEnabledParams<GetSolicitudMaterialParams>) => {
   return useQuery({
     queryKey: [
-      IngresoMaterialTSQEnum.INGRESOMATERIALES,
+      solicitudMaterialTSQEnum.SOLICITUDMATERIAL,
       ...Object.values(params || {}),
     ],
-    queryFn: () => getIngresoMateriales(params),
+    queryFn: () => getSolicitudMaterial(params),
     enabled: enabled,
   });
 };
 
-export const useGetIngresoMaterial = (uuid: string) => {
+export const useGetsolicitudMaterial = (uuid: string) => {
   return useQuery({
-    queryKey: [IngresoMaterialTSQEnum.SOLICITUDMATERIAL, uuid],
-    queryFn: () => getIngresoMaterial(uuid),
+    queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL, uuid],
+    queryFn: () => getsolicitudMaterial(uuid),
     retry: false,
   });
 };
@@ -55,16 +57,16 @@ export const useCreateSolicitudMaterial = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: CreateIngresoMaterialParams<T>) =>
-      createIngresoMaterial(params),
+    mutationFn: (params: CreatesolicitudMaterialParams<T>) =>
+      createsolicitudMaterial(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [IngresoMaterialTSQEnum.INGRESOMATERIALES],
+        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL],
       });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Ingreso Material creado correctamente',
+          customMessageToast || 'Solicitud de Material creado correctamente',
         );
     },
     onError: error => {
@@ -81,7 +83,7 @@ export const useCreateSolicitudMaterial = <T>({
   });
 };
 
-export const useUpdateIngresoMaterial = <T>({
+export const useUpdatesolicitudMaterial = <T>({
   navigate,
   returnUrl,
   returnErrorUrl,
@@ -95,16 +97,17 @@ export const useUpdateIngresoMaterial = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: UpdateIngresoMaterialParams<T>) =>
-      updateIngresoMaterial(params),
+    mutationFn: (params: UpdatesolicitudMaterialParams<T>) =>
+      updatesolicitudMaterial(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [IngresoMaterialTSQEnum.INGRESOMATERIALES],
+        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL],
       });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Ingreso Material actualizado correctamente',
+          customMessageToast ||
+            'Solicitud de Material actualizado correctamente',
         );
     },
     onError: error => {
@@ -121,22 +124,22 @@ export const useUpdateIngresoMaterial = <T>({
   });
 };
 ///* axios
-export type GetIngresoMaterialesParams = Partial<IngresoMaterial> & {
+export type GetSolicitudMaterialParams = Partial<SolicitudMaterial> & {
   page?: number;
   page_size?: number;
 
   filterByState?: boolean;
 };
 
-export type CreateIngresoMaterialParams<T> = T;
-export type CreateIngresoMaterialParamsBase = Omit<IngresoMaterial, 'id'>;
-export interface UpdateIngresoMaterialParams<T> {
+export type CreatesolicitudMaterialParams<T> = T;
+export type CreatesolicitudMaterialParamsBase = Omit<SolicitudMaterial, 'id'>;
+export interface UpdatesolicitudMaterialParams<T> {
   id: number;
   data: T;
 }
 
-export const getIngresoMateriales = async (
-  params?: GetIngresoMaterialesParams,
+export const getSolicitudMaterial = async (
+  params?: GetSolicitudMaterialParams,
 ) => {
   const stateParams = { ...params };
 
@@ -149,35 +152,35 @@ export const getIngresoMateriales = async (
   delete stateParams.filterByState;
 
   const queryParams = getUrlParams(stateParams);
-  return get<IngresoMaterialesPaginatedRes>(
+  return get<SolicitudMaterialPaginatedRes>(
     `/solicitud-material/?${queryParams}`,
     true,
   );
 };
 
-export const getIngresoMaterial = async (uuid: string) => {
+export const getsolicitudMaterial = async (uuid: string) => {
   try {
-    return await get<IngresoMaterial>(`/solicitud-material/${uuid}`, true);
+    return await get<SolicitudMaterial>(`/solicitud-material/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
 };
 
-export const createIngresoMaterial = async <T>(
-  data: CreateIngresoMaterialParams<T>,
+export const createsolicitudMaterial = async <T>(
+  data: CreatesolicitudMaterialParams<T>,
 ) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<IngresoMaterial>('/solicitud-material/', data, true);
+  return post<SolicitudMaterial>('/solicitud-material/', data, true);
 };
 
-export const updateIngresoMaterial = async <T>({
+export const updatesolicitudMaterial = async <T>({
   id,
   data,
-}: UpdateIngresoMaterialParams<T>) => {
+}: UpdatesolicitudMaterialParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<IngresoMaterial>(`/solicitud-material/${id}/`, data, true);
+  return patch<SolicitudMaterial>(`/solicitud-material/${id}/`, data, true);
 };

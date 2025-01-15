@@ -4,19 +4,14 @@ import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
-import {
-  CreateIngresoMaterialParamsBase,
-  useFetchBodegas,
-  useFetchUbicacions,
-} from '@/actions/app';
+import { useFetchBodegas, useFetchUbicacions } from '@/actions/app';
 import {
   Bodega,
-  IngresoMaterial,
-  ingresoMaterialFormSchema,
   gridSizeMdLg6,
   Ubicacion,
   Producto,
   ToastWrapper,
+  solicitudMaterialFormSchema,
 } from '@/shared';
 
 import {
@@ -33,13 +28,17 @@ import {
 import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlSolicitudMaterialPage } from '../../../pages/tables/SolicitudMaterialMainPage';
+import {
+  CreatesolicitudMaterialParamsBase,
+  useCreateSolicitudMaterial,
+} from '@/actions/app/inventario/solicitud-material';
+import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
 import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
-import { useCreateSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 import { useColumnsProductosDisponibles } from '@/app/inventario/ingreso-material/shared/hooks';
 
-export interface SaveIngresoMaterialProps {
+export interface SaveSolicitudMaterialProps {
   title: string;
-  ingresoMaterial?: IngresoMaterial;
+  SolicitudMaterial?: SolicitudMaterial;
 }
 
 export type ProductosDisponiblesTableType = Producto & {
@@ -53,11 +52,11 @@ export type ProductosDisponiblesTableType = Producto & {
   productos?: string[];
 };
 
-type SaveFormData = CreateIngresoMaterialParamsBase & {};
+type SaveFormData = CreatesolicitudMaterialParamsBase & {};
 
-const SaveSolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
+const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   title,
-  ingresoMaterial,
+  SolicitudMaterial,
 }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
@@ -71,7 +70,7 @@ const SaveSolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
 
   ///* form
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(ingresoMaterialFormSchema) as any,
+    resolver: yupResolver(solicitudMaterialFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -109,7 +108,7 @@ const SaveSolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
   });
 
   ///* mutations
-  const createIngresoMaterialMutation = useCreateSolicitudMaterial({
+  const createSolicitudMaterialMutation = useCreateSolicitudMaterial({
     navigate,
     returnUrl: returnUrlSolicitudMaterialPage,
     enableErrorNavigate: false,
@@ -133,13 +132,13 @@ const SaveSolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
       ...data,
       productos: mappedProductos,
     };
-    createIngresoMaterialMutation.mutate(preparedData);
+    createSolicitudMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
   useEffect(() => {
-    reset(ingresoMaterial);
-  }, [ingresoMaterial, reset, productosEnviar]);
+    reset(SolicitudMaterial);
+  }, [SolicitudMaterial, reset, productosEnviar]);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)
