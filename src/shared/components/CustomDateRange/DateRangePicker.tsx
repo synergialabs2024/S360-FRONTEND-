@@ -1,6 +1,5 @@
 import { Theme } from '@emotion/react';
 import React, { useState, useRef } from 'react';
-import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Spanish } from 'flatpickr/dist/l10n/es.js';
 import { FormControl, TextField, Grid, SxProps } from '@mui/material';
@@ -8,6 +7,7 @@ import { Controller } from 'react-hook-form';
 import { GridSizeType, SxPropsThemeType } from '@/shared/interfaces';
 import { gridSize } from '@/shared/constants';
 import { CustomFormLabel } from '../Labels';
+import FlatGrafic from '../common/FlatGrafic/FlatGrafic';
 
 interface DateRangePickerProps {
   label: string;
@@ -144,11 +144,11 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                       : ''
                   }
                 />
-                <Flatpickr
-                  ref={flatpickrRef} // Referencia al Flatpickr
+                <FlatGrafic
+                  ref={flatpickrRef}
                   options={options}
                   value={selectedDates}
-                  style={{ width: '0', height: '0', opacity: '0' }} // Hacer el input nativo transparente
+                  style={{ width: '0', height: '0', opacity: '0' }}
                 />
               </>
             );
