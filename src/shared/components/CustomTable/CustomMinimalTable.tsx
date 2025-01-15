@@ -3,7 +3,6 @@ import {
   MRT_RowData,
   MaterialReactTable,
   useMaterialReactTable, //import alternative sub-component if we do not want toolbars
-  type MRT_ColumnDef,
 } from 'material-react-table';
 
 import type { MRT_TableOptions } from 'material-react-table';
@@ -14,8 +13,10 @@ import { DensityTableType, GridSizeType } from '@/shared/interfaces';
 
 interface CustomMinimalTableProps<T extends MRT_RowData>
   extends MRT_TableOptions<T> {
-  columns: MRT_ColumnDef<T>[];
-  data: T[];
+  // columns: MRT_ColumnDef<T>[];
+  columns: any;
+  // data: T[];
+  data: any[];
   enablePagination?: boolean;
   density?: DensityTableType;
   rowNumber?: boolean;
