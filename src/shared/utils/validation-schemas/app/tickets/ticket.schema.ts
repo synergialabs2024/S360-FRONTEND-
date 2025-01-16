@@ -29,9 +29,9 @@ export const ticketFormSchema = yup.object({
       'El campo tipo identificacion no debe exceder los 200 caracteres',
     ),
 
-  turno: yup
+  franja_horaria: yup
     .string()
-    .required('El campo turno es requerido')
+    .required('El campo franja_horaria es requerido')
     .max(
       200,
       'El campo tipo identificacion no debe exceder los 200 caracteres',

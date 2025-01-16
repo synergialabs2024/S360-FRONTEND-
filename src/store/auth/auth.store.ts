@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 import { logOutAxios } from '@/actions/auth';
 import { Nullable, UserLoginResponse } from '@/shared/interfaces';
 import { ToastWrapper } from '@/shared/wrappers';
-import { useUiStore } from '../ui';
+import { useUiStore } from '../ui/ui.store';
 
 export type UserLoginResponseType = UserLoginResponse;
 interface AuthState {

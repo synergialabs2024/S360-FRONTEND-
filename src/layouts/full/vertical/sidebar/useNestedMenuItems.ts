@@ -530,7 +530,7 @@ export const useNestedMenu = () => {
               id: 'tickets-tecnico',
               title: 'Tickets',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.tecnico.ticketsAsignados,
+              url: ROUTER_PATHS.tecnico.ticketsNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

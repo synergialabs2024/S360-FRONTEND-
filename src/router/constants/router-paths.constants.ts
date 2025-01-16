@@ -385,7 +385,13 @@ export const ROUTER_PATHS = {
 
     //
     ticketsAsignados: 'tickets',
+    ticketsAsignadosOV: 'tickets/:uuid',
     ticketsNav: '/tecnico/tickets',
+
+    ///* upload
+    // parametrosAsuntos: 'orden-visita',
+    // parametrosAsuntosEditar: '/tecnico/tickets/orden-visita:uuid',
+    // parametrosAsuntosNav: '/tecnico/tickets/orden-visita',
   },
 
   /////* Supervision Comercial ----------------

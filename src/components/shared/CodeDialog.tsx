@@ -1,7 +1,5 @@
 import React from 'react';
 import { IconCode, IconX } from '@tabler/icons-react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,6 +12,7 @@ const CodeDialog = ({ children }: any) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
+    console.log(children);
     setOpen(true);
   };
 
@@ -49,11 +48,7 @@ const CodeDialog = ({ children }: any) => {
           </Box>
         </DialogTitle>
 
-        <DialogContent className="code-dialog">
-          <SyntaxHighlighter language="typescript" style={docco}>
-            {children}
-          </SyntaxHighlighter>
-        </DialogContent>
+        <DialogContent className="code-dialog"></DialogContent>
       </Dialog>
     </div>
   );

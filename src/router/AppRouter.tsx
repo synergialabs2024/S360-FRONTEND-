@@ -1134,6 +1134,10 @@ const TicketTenicoPage = Loadable(
   ),
 );
 
+const VisitaTecnico = Loadable(
+  lazy(() => import('@/app/tecnico/tickets-tecnico/pages/forms/VisitaTecnico')),
+);
+
 //* activaciones ---------
 const ActivacionesInstalacionesMainPage = Loadable(
   lazy(
@@ -2370,6 +2374,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tecnico.ticketsAsignados,
             element: <TicketTenicoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tecnico.ticketsAsignadosOV,
+            element: <VisitaTecnico />,
           },
         ],
       },

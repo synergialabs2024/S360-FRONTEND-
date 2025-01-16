@@ -15,6 +15,7 @@ import {
   Ticket,
   TicketPaginatedRes,
 } from '@/shared/interfaces/app/ticket/ticket.interface';
+import { Soluciones } from '@/shared/interfaces/app/ticket/solucion/solucion.interface';
 
 const { get, post, patch } = erpAPI();
 
@@ -30,6 +31,17 @@ export const useFetchTickets = ({
   return useQuery({
     queryKey: [TicketTSQEnum.TICKETS, ...Object.values(params || {})],
     queryFn: () => getTickets(params),
+    enabled: enabled,
+  });
+};
+
+export const useFetchSolucionesTickets = ({
+  enabled = true,
+  params,
+}: UseFetchEnabledParams<GetTicketsParams>) => {
+  return useQuery({
+    queryKey: [TicketTSQEnum.TICKETS, ...Object.values(params || {})],
+    queryFn: () => getSolucionesTicket(),
     enabled: enabled,
   });
 };
@@ -137,6 +149,7 @@ export const useUpdateTicket = <T>({
 
 ///* axios ---------------
 export type GetTicketsParams = Partial<Ticket> & PagingPartialParams;
+export type GetSolucionesTicketsParams = string[];
 export type CreateTicketParams<T> = T;
 export type CreateTicketParamsBase = Omit<Ticket, 'id'>;
 export interface UpdateTicketParams<T> {
@@ -172,6 +185,14 @@ export const getClient = async (uuid: string) => {
   }
 };
 
+export const getSolucionesTicket = async () => {
+  try {
+    return await get<Soluciones>('/asunto-ticket/soluciones/', true);
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
 export const createTicket = async <T>(data: CreateTicketParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
@@ -196,5 +217,5 @@ export type CreateSolTicket = Pick<
   | 'url_foto_vivienda'
   | 'url_foto_opcional'
   | 'fecha_sugerida_visita'
-  | 'turno'
+  | 'franja_horaria'
 >;

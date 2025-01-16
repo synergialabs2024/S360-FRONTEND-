@@ -11,9 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { useState } from 'react';
-import { FiZoomIn } from 'react-icons/fi';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { useIsMediaQuery } from '@/shared/hooks';
 
@@ -26,12 +24,6 @@ const Img = styled('img')({
   maxHeight: '100%',
   maxWidth: '100%',
   cursor: 'pointer',
-});
-
-const ModalImg = styled('img')({
-  maxHeight: '100%',
-  maxWidth: '100%',
-  className: 'zoom-cursor',
 });
 
 const ModalContainer = styled('div')(() => ({
@@ -49,16 +41,6 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   top: '-45px', // position the close button
   color: theme.palette.error.contrastText,
 }));
-const ZoomIcon = styled(FiZoomIn)(({ theme }) => ({
-  position: 'absolute',
-  right: theme.spacing(2),
-  bottom: theme.spacing(2),
-  color: theme.palette.common.white,
-  fontSize: '2rem',
-  backgroundColor: theme.palette.primary.main,
-  borderRadius: '50%',
-  padding: theme.spacing(1),
-}));
 
 export type ImageListTitleBarType = {
   title: string;
@@ -75,14 +57,12 @@ const ImageListTitleBars: React.FC<ImageListTitleBarsProps> = ({ images }) => {
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('');
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleImageClick = (imgSrc: string) => {
-    setSelectedImage(imgSrc);
+  const handleImageClick = () => {
     setOpen(true);
   };
 
@@ -98,7 +78,7 @@ const ImageListTitleBars: React.FC<ImageListTitleBarsProps> = ({ images }) => {
               <Img
                 src={item.imgUrl}
                 alt={item.title}
-                onClick={() => handleImageClick(item.imgUrl)}
+                onClick={() => handleImageClick()}
               />
 
               <ImageListItemBar
@@ -128,13 +108,6 @@ const ImageListTitleBars: React.FC<ImageListTitleBarsProps> = ({ images }) => {
         <Fade in={open} timeout={500}>
           <ModalContainer>
             {/* ======== Image + zoom ======== */}
-            <TransformWrapper>
-              <TransformComponent>
-                <ModalImg src={selectedImage} alt="Imagen seleccionada" />
-
-                <ZoomIcon fontSize="large" />
-              </TransformComponent>
-            </TransformWrapper>
 
             {/* ======== Close Button ======== */}
             <Tooltip title="Cerrar" placement="right" arrow>

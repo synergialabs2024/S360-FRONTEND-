@@ -4,10 +4,10 @@ import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import DashboardCard from '@/components/shared/DashboardCard';
-import { UseFetchTraficosWithDebounceParams } from '../hooks/UseFetchTraficosWithDebounceParams';
 import CustomAutocompletSearchNoForm from '@/shared/components/CustomAutocompletes/CustomAutocompletSearchNoForm';
 import { gridSizeMdLg5, Trafico } from '@/shared';
 import { useGetTraficoConsulta } from '@/actions/app';
+import { UseFetchTraficosWithDebounceParams } from '../hooks/UseFetchTraficosWithDebounceParams';
 
 type ChartSeries = {
   name: string;

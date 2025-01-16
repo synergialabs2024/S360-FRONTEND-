@@ -14,6 +14,7 @@ import { useColumnsTickets } from '@/shared/hooks/app/tickets';
 import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useFetchTickets } from '@/actions/app/tickets';
+import { useNavigate } from 'react-router';
 
 export type TicketsTecnicoByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
@@ -22,6 +23,8 @@ export type TicketsTecnicoByStatePageProps = {
 const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   state,
 }) => {
+  const navigate = useNavigate();
+
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -55,6 +58,11 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
 
   ///* columns
   const { ticketBaseColumns } = useColumnsTickets();
+
+  const onEdit = (row: Ticket) => {
+    console.log('row', row);
+    navigate(`/tecnico/tickets/${row.uuid}`);
+  };
 
   return (
     <GridTableTabsContainerOnly>
@@ -92,11 +100,12 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
         rowCount={ticketsTecnicoPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={false}
+        enableActionsColumn={true}
         // crud
+        editIconToolTipTitle="Gestionar"
         canEdit={true}
-        canDelete={false}
-        // onEdit={onEdit}
+        // canDelete={false}
+        onEdit={onEdit}
         // customButtonsSpaceEnd={(preventa: Preventa) => {
         //   return <EsperaAgendaPreventaCustomButtons preventa={preventa!} />;
         // }}

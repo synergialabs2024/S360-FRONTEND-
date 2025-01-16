@@ -1,10 +1,10 @@
 import { Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { CreateOrdenTrabajoParamsBase } from '@/actions/app';
 import {
   getKeysFormErrorsMessage,
   gridSize,
+  gridSizeMdLg9,
   ToastWrapper,
   useTabsOnly,
   useUploadImageGeneric,
@@ -15,32 +15,36 @@ import {
   FormTabsOnly,
   TabsFormBoxScene,
 } from '@/shared/components';
-import { OrdenTrabajo } from '@/shared/interfaces';
 import { ROUTER_PATHS } from '@/router/constants';
-import { PrerejectInstalacionAsignadaOTModal } from '@/app/tecnico/install-asignada/shared/components/form';
-import { useState } from 'react';
+// import { PrerejectInstalacionAsignadaOTModal } from '@/app/tecnico/install-asignada/shared/components/form';
+// import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ticketTecnicoFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket-tecnico.schema';
+import { InstallAsigTicketMaterialesFormTab } from '../form';
+import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
+import InstallAsigTecnicoTicketFormTab from '../form/InstallAsigTecnicoTicketFormTab';
+import InstallAsigTicketSolucionFormTab from '../form/InstallAsigTicketSolucionFormTab';
+import { CreateTicketParamsBase } from '@/actions/app/tickets';
 
 export const returnUrlTicketTecnico = ROUTER_PATHS.tecnico.ticketsAsignados;
 
 export interface SaveVisitaProps {
   titleNode: React.ReactNode;
-  ordentrabajo?: OrdenTrabajo;
+  ticket?: Ticket;
 }
 
-export type InstallAsignOTSaveFormData = CreateOrdenTrabajoParamsBase & {};
+export type InstallAsignTicketTecnicoSaveFormData = CreateTicketParamsBase & {};
 
-const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ordentrabajo }) => {
+const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
   ///* form ---------------------
-  const form = useForm<InstallAsignOTSaveFormData>({
+  const form = useForm<Ticket>({
     resolver: yupResolver(ticketTecnicoFormSchema) as any,
   });
 
   const { handleSubmit } = form;
   ///* states ---------------------
-  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
+  // const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
   ///* hooks --------------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly({
@@ -129,7 +133,7 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ordentrabajo }) => {
   ];
 
   ///* handlers ---------------------
-  const onSave = async (data: InstallAsignOTSaveFormData) => {
+  const onSave = async (data: InstallAsignTicketTecnicoSaveFormData) => {
     console.log('data', data);
   };
 
@@ -147,11 +151,31 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ordentrabajo }) => {
       // tabs
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
-          <Tab label="Fotos" value={1} {...a11yProps(1)} />
+          <Tab label="Información general" value={1} {...a11yProps(1)} />
+          <Tab label="Materiales" value={2} {...a11yProps(2)} />
+          <Tab
+            label="Informacion sobre la visita"
+            value={3}
+            {...a11yProps(3)}
+          />
+          <Tab label="Fotos" value={4} {...a11yProps(4)} />
         </FormTabsOnly>
       }
       formSize={gridSize}
     >
+      {/* ========================= Datos Generales ========================= */}
+      <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg9}>
+        <InstallAsigTecnicoTicketFormTab form={form} ticket={ticket!} />
+      </CustomTabPanel>
+
+      {/* ========================= Materiales ========================= */}
+      <CustomTabPanel index={2} value={tabValue}>
+        <InstallAsigTicketMaterialesFormTab form={form} ticket={ticket!} />
+      </CustomTabPanel>
+      {/* ========================= Informacion sobre la visita ========================= */}
+      <CustomTabPanel index={3} value={tabValue}>
+        <InstallAsigTicketSolucionFormTab form={form} ticket={ticket!} />
+      </CustomTabPanel>
       {/* ========================= Fotos ========================= */}
       <CustomTabPanel index={4} value={tabValue}>
         {requiredImages.map(({ label, image, setImage }) => (
@@ -165,11 +189,11 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ordentrabajo }) => {
       </CustomTabPanel>
 
       {/* ========================= modals ========================= */}
-      <PrerejectInstalacionAsignadaOTModal
+      {/* <PrerejectInstalacionAsignadaOTModal
         open={isOpenRejectModal}
         onClose={() => setIsOpenRejectModal(false)}
         ordenTrabajo={ordentrabajo!}
-      />
+      /> */}
     </TabsFormBoxScene>
   );
 };

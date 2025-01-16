@@ -1,7 +1,9 @@
+/* eslint-disable indent */
 import { ToastWrapper } from '@/shared/wrappers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { handleAxiosError } from '@/shared/axios/axios.utils';
+
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
   PagingPartialParams,
@@ -9,17 +11,18 @@ import {
   UseMutationParams,
 } from '@/shared/interfaces';
 import { getUrlParams } from '@/shared/utils';
-import { useUiStore } from '@/store/ui';
+
 import {
   Asunto,
   AsuntosPaginatedRes,
 } from '@/shared/interfaces/app/ticket/parametros/asunto/asunto.interface';
+import { useUiStore } from '@/store/ui/ui.store';
 
 const { get, post, patch } = erpAPI();
 
 export enum AsuntoTSQEnum {
-  TICKETS = 'asuntos',
-  TICKET = 'asunto',
+  ASUNTOS = 'asuntos',
+  ASUNTO = 'asunto',
 }
 ///* tanStack query ---------------
 export const useFetchAsuntos = ({
@@ -27,7 +30,7 @@ export const useFetchAsuntos = ({
   params,
 }: UseFetchEnabledParams<GetAsuntosParams>) => {
   return useQuery({
-    queryKey: [AsuntoTSQEnum.TICKETS, ...Object.values(params || {})],
+    queryKey: [AsuntoTSQEnum.ASUNTOS, ...Object.values(params || {})],
     queryFn: () => getAsuntos(params),
     enabled: enabled,
   });
@@ -35,7 +38,7 @@ export const useFetchAsuntos = ({
 
 export const useGetAsunto = (uuid: string) => {
   return useQuery({
-    queryKey: [AsuntoTSQEnum.TICKET, uuid],
+    queryKey: [AsuntoTSQEnum.ASUNTO, uuid],
     queryFn: () => getAsunto(uuid),
     retry: false,
   });
@@ -55,11 +58,9 @@ export const useCreateAsunto = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: CreateAsuntoParams<T>) => createAsunto(params),
+    mutationFn: (data: CreateAsuntoParams<T>) => createAsunto(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [AsuntoTSQEnum.TICKETS],
-      });
+      queryClient.invalidateQueries({ queryKey: ['asuntos'] });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
@@ -97,7 +98,7 @@ export const useUpdateAsunto = <T>({
     mutationFn: (params: UpdateAsuntoParams<T>) => updateAsunto(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [AsuntoTSQEnum.TICKETS],
+        queryKey: [AsuntoTSQEnum.ASUNTOS],
       });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&

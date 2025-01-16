@@ -1,7 +1,7 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { CopyTextOnClickBtn, ImgModalComponent } from '@/shared/components';
+import { ImgModalComponent } from '@/shared/components';
 import {
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
@@ -14,6 +14,7 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
+import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
 
 type MRTSServiceType = { row: MRT_Row<Preventa> };
 

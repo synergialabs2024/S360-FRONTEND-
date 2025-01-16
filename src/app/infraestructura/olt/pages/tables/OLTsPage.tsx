@@ -22,9 +22,10 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
+
 import { SAVE_OLT_PERMISSIONS } from '@/shared';
 import { ConfigOLTCustomButtons } from '../../shared/components';
+import { useUiConfirmModalStore } from '@/store/ui/confirm-modal.store';
 
 export const returnUrlOLTsPage = ROUTER_PATHS.infraestructura.oltsNav;
 

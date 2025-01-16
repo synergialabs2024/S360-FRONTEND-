@@ -1,8 +1,6 @@
 import { Fade, Grid, IconButton, Modal, styled, Tooltip } from '@mui/material';
 import { useState } from 'react';
-import { FiZoomIn } from 'react-icons/fi';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { CustomCardAlert } from '../../CustomAlerts';
 
@@ -23,12 +21,6 @@ const Img = styled('img')({
   cursor: 'pointer',
 });
 
-const ModalImg = styled('img')({
-  maxHeight: '100%',
-  maxWidth: '100%',
-  className: 'zoom-cursor',
-});
-
 const ModalContent = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
@@ -43,18 +35,6 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   right: '-45px',
   top: '-45px', // position the close button
   color: theme.palette.error.contrastText,
-}));
-
-const ZoomIcon = styled(FiZoomIn)(({ theme }) => ({
-  position: 'absolute',
-  right: theme.spacing(2),
-  bottom: theme.spacing(2),
-  color: theme.palette.common.white,
-  fontSize: '2rem',
-  backgroundColor: theme.palette.primary.main,
-  borderRadius: '50%',
-  padding: theme.spacing(1),
-  cursor: 'pointer',
 }));
 
 // Tipo para cada imagen
@@ -77,7 +57,6 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
   heightPercentage = 'auto',
 }) => {
   const [open, setOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('');
   const [imageError, setImageError] = useState(false);
 
   const handleClose = () => {
@@ -85,8 +64,7 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
     setImageError(false);
   };
 
-  const handleImageClick = (imgSrc: string) => {
-    setSelectedImage(imgSrc);
+  const handleImageClick = () => {
     setOpen(true);
   };
 
@@ -108,7 +86,7 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
             <Img
               src={image.imgUrl}
               alt={image.title}
-              onClick={() => handleImageClick(image.imgUrl)}
+              onClick={() => handleImageClick()}
               onError={handleImageError}
             />
           )
@@ -135,23 +113,6 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
         <Fade in={open} timeout={500}>
           <ModalContent>
             {/* ======== Image + Zoom ======== */}
-            {!imageError && (
-              <TransformWrapper
-                initialScale={1}
-                initialPositionX={0}
-                initialPositionY={0}
-                wheel={{ step: 0.1 }}
-              >
-                {({ zoomIn }) => (
-                  <>
-                    <TransformComponent>
-                      <ModalImg src={selectedImage} alt="Imagen seleccionada" />
-                    </TransformComponent>
-                    <ZoomIcon onClick={() => zoomIn()} title="Acercar" />
-                  </>
-                )}
-              </TransformWrapper>
-            )}
 
             {/* ======== Close Button ======== */}
             <Tooltip title="Cerrar" placement="right" arrow>

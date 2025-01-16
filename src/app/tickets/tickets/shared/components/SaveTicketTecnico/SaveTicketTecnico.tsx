@@ -146,7 +146,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       numero_contrato: '',
       razon_social: '',
       coordenadas: '',
-      turno: '',
+      franja_horaria: '',
       fecha_sugerida_visita: '',
       zona: '',
       telefono: '',
@@ -320,7 +320,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       asunto_ticket: data.asunto_ticket,
       detalle_adicional_ticket: data.detalle_adicional_ticket,
       fecha_sugerida_visita: data.fecha_sugerida_visita,
-      turno: data.turno,
+      franja_horaria: data.franja_horaria,
     });
   };
 
@@ -353,7 +353,6 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
             name="identificacion"
             control={form.control}
             selectedDocumentType={watchedIdentificationType!}
-            defaultValue={form.getValues('identificacion')}
             error={errors.identificacion}
             helperText={errors.identificacion?.message}
             onFetchCedulaRucInfo={async value => {
@@ -535,12 +534,12 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
           />
 
           <SelectArrayString
-            label="Turno"
-            name="turno"
+            label="Franja Horaria"
+            name="franja_horaria"
             control={form.control}
-            defaultValue={form.getValues().turno}
-            error={errors.turno}
-            helperText={errors.turno?.message}
+            defaultValue={form.getValues().franja_horaria}
+            error={errors.franja_horaria}
+            helperText={errors.franja_horaria?.message}
             options={TURNOS_TICKETS_ARRAY_CHOICES}
             gridSize={gridSizeMdLg6}
           />
