@@ -2,9 +2,14 @@ import { Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  BucketKeyTicketEnumChoice,
+  BucketTypeEnumChoice,
+  EquipoUtilizadosInstallOT,
   getKeysFormErrorsMessage,
   gridSize,
   gridSizeMdLg9,
+  MaterialUtilizadosInstallOT,
+  TipoProductoEnumChoice,
   ToastWrapper,
   useTabsOnly,
   useUploadImageGeneric,
@@ -16,8 +21,6 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import { ROUTER_PATHS } from '@/router/constants';
-// import { PrerejectInstalacionAsignadaOTModal } from '@/app/tecnico/install-asignada/shared/components/form';
-// import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ticketTecnicoFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket-tecnico.schema';
@@ -25,9 +28,21 @@ import { InstallAsigTicketMaterialesFormTab } from '../form';
 import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
 import InstallAsigTecnicoTicketFormTab from '../form/InstallAsigTecnicoTicketFormTab';
 import InstallAsigTicketSolucionFormTab from '../form/InstallAsigTicketSolucionFormTab';
-import { CreateTicketParamsBase } from '@/actions/app/tickets';
+import {
+  CreateTicketParamsBase,
+  TicketTSQEnum,
+  UploadTicketVisitaAsignData,
+} from '@/actions/app/tickets';
+import { MaterialesUtilizadosOTTableType } from '../form/materiales/MaterialesUtilizadosTicketAsignFormPart';
+import { useInstalacionesStore } from '@/store/app';
+import { EquiposUtilizadosOTTableType } from '../form/EquiposUtilizadosTicketAsignFormPart';
+import { uploadFileToBucket } from '@/actions/statics-api';
+import { useUiStore } from '@/store/ui';
+import { useGenericPATCH } from '@/actions/shared';
+import { useState } from 'react';
+import AuditoriaTicketRequestUpd from '../form/AuditoriaTicketRequestUpd';
 
-export const returnUrlTicketTecnico = ROUTER_PATHS.tecnico.ticketsAsignados;
+export const returnUrlTicketVisitaTecnico = ROUTER_PATHS.tecnico.ticketsNav;
 
 export interface SaveVisitaProps {
   titleNode: React.ReactNode;
@@ -37,6 +52,26 @@ export interface SaveVisitaProps {
 export type InstallAsignTicketTecnicoSaveFormData = CreateTicketParamsBase & {};
 
 const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
+  ///* local states ---------------------
+  const [openRequestUpdOTModal, setOpenRequestUpdOTModal] = useState(false);
+  ///* mutations ---------------------
+  const uploadTicketVisitaTecnico = useGenericPATCH<
+    UploadTicketVisitaAsignData,
+    Ticket
+  >(`/ticket-tecnico/upload/${ticket?.id!}/`, TicketTSQEnum.TICKETS, {
+    customMessageToast: 'Ticket de visita gestionado con éxito',
+    // navigate,
+    returnUrl: returnUrlTicketVisitaTecnico,
+    customOnSuccess() {
+      clearAll();
+      navigate(returnUrlTicketVisitaTecnico);
+    },
+  });
+
+  ///* global states ---------------------
+  const clearAll = useInstalacionesStore(state => state.clearAll);
+  const setIsGlobalLoading = useUiStore(state => state.setIsGlobalLoading);
+
   ///* form ---------------------
   const form = useForm<Ticket>({
     resolver: yupResolver(ticketTecnicoFormSchema) as any,
@@ -134,19 +169,229 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
 
   ///* handlers ---------------------
   const onSave = async (data: InstallAsignTicketTecnicoSaveFormData) => {
-    console.log('data', data);
+    const equiposUtilizados: EquiposUtilizadosOTTableType[] =
+      useInstalacionesStore.getState().equiposUtilizados;
+    const materialesUtilizados: MaterialesUtilizadosOTTableType[] =
+      useInstalacionesStore.getState().materialesUtilizados;
+    const selectedFibraModel =
+      useInstalacionesStore.getState().selectedFibraModel;
+
+    // validate series in equipos ----------
+    let thereAreEmptySeries = false;
+    let equipo: EquiposUtilizadosOTTableType = null as any;
+    let thereAreEquiposWithoutQuantity = false;
+    equiposUtilizados.forEach(eq => {
+      if (eq.containsSeries && !eq.savedSeries.length) {
+        thereAreEmptySeries = true;
+        equipo = eq;
+      }
+      if (!eq.usedQuantity) {
+        thereAreEquiposWithoutQuantity = true;
+        equipo = eq;
+      }
+    });
+    if (thereAreEmptySeries)
+      return ToastWrapper.error(
+        `No se han seleccionado series en los equipos: ${equipo.producto_data?.codigo}`,
+      );
+    if (thereAreEquiposWithoutQuantity)
+      return ToastWrapper.error(
+        `No se puede guardar equipos sin cantidad utilizada: ${equipo.producto_data?.codigo}`,
+      );
+
+    // validate materiales =================
+    let thereAreMaterialsWithoutQuantity = false;
+    let material: MaterialesUtilizadosOTTableType = null as any;
+    console.log('materialesUtilizados', materialesUtilizados);
+    materialesUtilizados.forEach(mat => {
+      if (!mat.usedQuantity) {
+        thereAreMaterialsWithoutQuantity = true;
+        material = mat;
+      }
+    });
+    if (thereAreMaterialsWithoutQuantity)
+      return ToastWrapper.error(
+        `No se puede guardar materiales sin cantidad utilizada: ${material.producto_data?.codigo}`,
+      );
+
+    // fibra -------------
+    const fibraItems: MaterialesUtilizadosOTTableType[] =
+      materialesUtilizados.filter(
+        mat => mat?.producto_data?.tipo === TipoProductoEnumChoice.FIBRA,
+      ) || [];
+    if (fibraItems.length > 1) {
+      return ToastWrapper.error(
+        'Solo se puede seleccionar un item de tipo FIBRA',
+      );
+    }
+
+    const firstFibra = fibraItems?.[0];
+
+    if (firstFibra) {
+      if (firstFibra?.usedQuantity > 1 && firstFibra.isFibraPreconect) {
+        return ToastWrapper.error(
+          'Solo se puede seleccionar un item de tipo FIBRA modelo Preconecteriorizada',
+        );
+      }
+
+      if (firstFibra.modelo_data?.codigo !== selectedFibraModel) {
+        return ToastWrapper.error(
+          `El modelo de la fibra no coincide con el modelo seleccionado. Requedido: ${selectedFibraModel} - Provisto: ${firstFibra.modelo_data?.codigo}`,
+        );
+      }
+    }
+
+    const mappedEquiposUtilizados: EquipoUtilizadosInstallOT[] =
+      equiposUtilizados?.map(
+        eq =>
+          ({
+            cantidad: (eq.usedQuantity || 0).toString(),
+            producto: eq.producto_data?.id!,
+            series: eq.savedSeries?.map(s => s) || [],
+            codigo: eq.producto_data?.codigo!,
+            producto_data: {
+              codigo: eq.producto_data?.codigo!,
+              nombre: eq.producto_data?.nombre!,
+              tipo: eq.producto_data?.tipo!,
+              modeloName: eq.modelo_data?.nombre!,
+            },
+          }) as EquipoUtilizadosInstallOT,
+      ) || [];
+    const mappedMaterialesUtilizados: MaterialUtilizadosInstallOT[] =
+      materialesUtilizados?.map(
+        mat =>
+          ({
+            cantidad: (mat.usedQuantity || 0).toString(),
+            producto: mat.producto_data?.id!,
+            series: mat.savedSeries?.map(s => s) || [],
+            codigo: mat.producto_data?.codigo!,
+            producto_data: {
+              codigo: mat.producto_data?.codigo!,
+              nombre: mat.producto_data?.nombre!,
+              tipo: mat.producto_data?.tipo!,
+              modeloName: mat.modelo_data?.nombre!,
+            },
+          }) as MaterialUtilizadosInstallOT,
+      ) || [];
+
+    ///* upload images -------
+    // validate imgs
+    let thereAreEmptyRequiredImages = false;
+    let emptyImageName: string | undefined = undefined;
+    requiredImages.forEach(({ isRequired, image, label }) => {
+      if (isRequired && !image) {
+        thereAreEmptyRequiredImages = true;
+        emptyImageName = label;
+      }
+    });
+    if (thereAreEmptyRequiredImages) {
+      ToastWrapper.error(`La imagen ${emptyImageName} es requerida`);
+      return;
+    }
+
+    setIsGlobalLoading(true);
+    // upload images ---
+    // required
+    const [
+      antesSolucionPhoto,
+      despuesSolucionPhoto,
+      testVelocidadPhoto,
+      potenciaAntesSolucionPhoto,
+      potenciaDespuesSolucionPhoto,
+      problemaEncontradoPhoto,
+      solucionPhoto,
+    ] = await Promise.all([
+      uploadFileToBucket({
+        file: fotoAntesSolucion!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_ANTES_SOLUCION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: fotoDespuesSolucion!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_DESPUES_SOLUCION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: fotoTestVelocidad!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_TEST_VELOCIDAD,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: fotoPotenciaAntesSolucion!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_POTENCIA_ANTES_SOLUCION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: fotoPotenciaDespuesSolucion!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_POTENCIA_DESPUES_SOLUCION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: fotoProblemaEncontrado!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_PROBLEMA_ENCONTRADO,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: fotoSolucion!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_SOLUCION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+    ]);
+
+    let entregaMeshPhoto = null;
+    if (fotoEntregaMesh) {
+      entregaMeshPhoto = await uploadFileToBucket({
+        file: fotoEntregaMesh!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_ENTREGA_MESH,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      });
+    }
+
+    let entregaUpsPhoto = null;
+    if (fotoEntregaUps) {
+      entregaUpsPhoto = await uploadFileToBucket({
+        file: fotoEntregaUps!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_ENTREGA_UPS,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      });
+    }
+
+    uploadTicketVisitaTecnico.mutate({
+      solucion_tecnico: data.solucion_tecnico,
+      observacion_extra_solucion_visita: data.observacion_extra_solucion_visita,
+      url_foto_antes_solucion: antesSolucionPhoto?.streamUlr,
+      url_foto_despues_solucion: despuesSolucionPhoto?.streamUlr,
+      url_foto_test_velocidad: testVelocidadPhoto?.streamUlr,
+      url_foto_potencia_antes_solucion: potenciaAntesSolucionPhoto?.streamUlr,
+      url_foto_potencia_despues_solucion:
+        potenciaDespuesSolucionPhoto?.streamUlr,
+      url_foto_problema_encontrado: problemaEncontradoPhoto?.streamUlr,
+      url_foto_solucion: solucionPhoto?.streamUlr,
+
+      equipos_utilizados: mappedEquiposUtilizados,
+      materiales_utilizados: mappedMaterialesUtilizados,
+
+      asunto_ticket_tecnico: ticket?.asunto_ticket,
+
+      ...(entregaMeshPhoto && {
+        url_foto_entrega_mesh: entregaMeshPhoto?.streamUlr,
+      }),
+      ...(entregaUpsPhoto && {
+        url_foto_entrega_ups: entregaUpsPhoto?.streamUlr,
+      }),
+    });
   };
 
   return (
     <TabsFormBoxScene
       titlePageNode={titleNode}
       // action btns
-      onCancel={() => navigate(returnUrlTicketTecnico)}
+      onCancel={() => navigate(returnUrlTicketVisitaTecnico)}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(`Error en: ${getKeysFormErrorsMessage(errors)}`);
       })}
       onReject={() => {
-        // setIsOpenRejectModal(true);
+        setOpenRequestUpdOTModal(true);
       }}
       // tabs
       tabs={
@@ -194,6 +439,11 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
         onClose={() => setIsOpenRejectModal(false)}
         ordenTrabajo={ordentrabajo!}
       /> */}
+      <AuditoriaTicketRequestUpd
+        open={openRequestUpdOTModal}
+        onClose={() => setOpenRequestUpdOTModal(false)}
+        ticket={ticket!}
+      />
     </TabsFormBoxScene>
   );
 };

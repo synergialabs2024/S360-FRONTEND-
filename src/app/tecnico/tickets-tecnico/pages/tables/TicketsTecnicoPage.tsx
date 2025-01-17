@@ -28,8 +28,19 @@ const TicketsTecnicoPage: React.FC<TicketsTecnicoPageProps> = () => {
         isMainTableStates
       >
         <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
-        <Tab label={'REALIZADA'} value={2} {...a11yProps(2)} />
-        <Tab label={'RECOORDINADA'} value={3} {...a11yProps(3)} />
+        <Tab label={'REALIZADO'} value={2} {...a11yProps(2)} />
+        <Tab label={'CERRADO'} value={3} {...a11yProps(3)} />
+        <Tab label={'PENDIENTE RECOORDINACION'} value={4} {...a11yProps(4)} />
+        <Tab
+          label={'PENDIENTE CORRECCION AUDITORIA'}
+          value={5}
+          {...a11yProps(5)}
+        />
+        <Tab
+          label={'ESPERA CORREGIDOS AUDITORIA'}
+          value={6}
+          {...a11yProps(6)}
+        />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -40,13 +51,31 @@ const TicketsTecnicoPage: React.FC<TicketsTecnicoPageProps> = () => {
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <TicketsTecnicoByStatePage
-          state={EstadoTicketTecnicoEnumChoice.REALIZADA}
+          state={EstadoTicketTecnicoEnumChoice.REALIZADO}
         />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <TicketsTecnicoByStatePage
-          state={EstadoTicketTecnicoEnumChoice.RECORDINADA}
+          state={EstadoTicketTecnicoEnumChoice.CERRADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <TicketsTecnicoByStatePage
+          state={EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <TicketsTecnicoByStatePage
+          state={EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={6} ptGrid="0">
+        <TicketsTecnicoByStatePage
+          state={EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>

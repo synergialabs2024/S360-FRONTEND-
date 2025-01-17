@@ -52,7 +52,7 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      visita_realizada: state,
+      estado_ticket_tecnico: state,
     },
   });
 
@@ -60,8 +60,15 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   const { ticketBaseColumns } = useColumnsTickets();
 
   const onEdit = (row: Ticket) => {
-    console.log('row', row);
-    navigate(`/tecnico/tickets/${row.uuid}`);
+    console.log('row.estado_ticket', row.estado_ticket);
+    console.log('row.estado_ticket_tecnico', row.estado_ticket_tecnico);
+    if (row?.estado_ticket_tecnico === EstadoTicketTecnicoEnumChoice.ESPERA)
+      navigate(`/tecnico/tickets/${row.uuid}`);
+    if (
+      row?.estado_ticket_tecnico ===
+      EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
+    )
+      navigate(`/tecnico/tickets/${row.uuid}`);
   };
 
   return (
@@ -79,11 +86,20 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
         columns={
           state === EstadoTicketTecnicoEnumChoice.ESPERA
             ? ticketBaseColumns
-            : state === EstadoTicketTecnicoEnumChoice.REALIZADA
+            : state === EstadoTicketTecnicoEnumChoice.REALIZADO
               ? ticketBaseColumns
-              : state === EstadoTicketTecnicoEnumChoice.RECORDINADA
+              : state === EstadoTicketTecnicoEnumChoice.CERRADO
                 ? ticketBaseColumns
-                : ticketBaseColumns
+                : state ===
+                    EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION
+                  ? ticketBaseColumns
+                  : state ===
+                      EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
+                    ? ticketBaseColumns
+                    : state ===
+                        EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA
+                      ? ticketBaseColumns
+                      : ticketBaseColumns
         }
         data={ticketsTecnicoPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -105,6 +121,14 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
         editIconToolTipTitle="Gestionar"
         canEdit={true}
         // canDelete={false}
+        onConditionEdit={ticketVisita => {
+          return (
+            ticketVisita.estado_ticket_tecnico ===
+              EstadoTicketTecnicoEnumChoice.ESPERA ||
+            ticketVisita.estado_ticket_tecnico ===
+              EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
+          );
+        }}
         onEdit={onEdit}
         // customButtonsSpaceEnd={(preventa: Preventa) => {
         //   return <EsperaAgendaPreventaCustomButtons preventa={preventa!} />;

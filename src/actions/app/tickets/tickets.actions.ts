@@ -219,3 +219,21 @@ export type CreateSolTicket = Pick<
   | 'fecha_sugerida_visita'
   | 'franja_horaria'
 >;
+
+export type UploadTicketVisitaAsignData = Pick<
+  Ticket,
+  | 'solucion_tecnico'
+  | 'observacion_extra_solucion_visita'
+  | 'url_foto_antes_solucion'
+  | 'url_foto_despues_solucion'
+  | 'url_foto_test_velocidad'
+  | 'url_foto_potencia_antes_solucion'
+  | 'url_foto_potencia_despues_solucion'
+  | 'url_foto_problema_encontrado'
+  | 'url_foto_solucion'
+  | 'url_foto_entrega_mesh'
+  | 'url_foto_entrega_ups'
+  | 'equipos_utilizados'
+  | 'materiales_utilizados'
+  | 'asunto_ticket_tecnico'
+>;

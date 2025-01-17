@@ -29,8 +29,9 @@ const TicketTenicoPage: React.FC<TicketTenicoPageProps> = () => {
         isMainTableStates
       >
         <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
-        <Tab label={'EN PROCESO'} value={2} {...a11yProps(2)} />
+        <Tab label={'REALIZADO'} value={2} {...a11yProps(2)} />
         <Tab label={'CERRADO'} value={3} {...a11yProps(3)} />
+        <Tab label={'PENDIENTE RECOORDINACION'} value={4} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -38,11 +39,17 @@ const TicketTenicoPage: React.FC<TicketTenicoPageProps> = () => {
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <TicketsByStatePage state={EstadoTicketEnumChoice.EN_PROCESO} />
+        <TicketsByStatePage state={EstadoTicketEnumChoice.REALIZADO} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <TicketsByStatePage state={EstadoTicketEnumChoice.CERRADO} />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <TicketsByStatePage
+          state={EstadoTicketEnumChoice.PENDIENTE_RECOORDINACION}
+        />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );

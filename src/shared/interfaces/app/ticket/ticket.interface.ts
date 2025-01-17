@@ -1,6 +1,10 @@
 import { PagingMetaResponse } from '../../common';
 import { LineaServicio } from '../cliente';
 import { FlotaLimitData } from '../mante-operacion';
+import {
+  EquipoUtilizadosInstallOT,
+  MaterialUtilizadosInstallOT,
+} from '../tecnico';
 
 export interface TicketPaginatedRes {
   status: number;
@@ -24,6 +28,19 @@ export interface Ticket {
   franja_horaria?: string;
   telefono?: string;
   fecha_sugerida_visita?: string;
+
+  motivo_rechazo?: string;
+
+  url_foto_antes_solucion?: string;
+  url_foto_despues_solucion?: string;
+  url_foto_test_velocidad?: string;
+  url_foto_potencia_antes_solucion: string;
+  url_foto_potencia_despues_solucion: string;
+  url_foto_problema_encontrado?: string;
+  url_foto_solucion?: string;
+  url_foto_entrega_mesh?: string;
+  url_foto_entrega_ups?: string;
+
   url_foto_opcional?: string;
   url_foto_vivienda?: string;
   linea_servicio?: number;
@@ -37,11 +54,28 @@ export interface Ticket {
   valor_a_cobrar?: string;
 
   detalle_adicional_ticket?: string;
+  observacion_extra_solucion_visita?: string;
 
   // ESPERA - EN PROCESO - CERRADO
   estado_ticket?: string;
 
   estado_ticket_tecnico?: string;
+
+  // INVENTARIO -------------------
+  equipos_utilizados: EquipoUtilizadosInstallOT[];
+  materiales_utilizados: MaterialUtilizadosInstallOT[];
+
+  punta_inicial_fibra: string;
+  punta_final_fibra: string;
+  metraje_utilizado_fibra: string;
+  metraje_exedente_fibra: string;
+  serie_ont?: string;
+  potencia_ont: string;
+  observaciones_adicionales: string;
+  modelo_fibra_utilizada: string; // code
+  modelo_ont_wifi: string; // code
+
+  asunto_ticket_tecnico?: number;
 }
 
 export interface AsuntoTicketData {

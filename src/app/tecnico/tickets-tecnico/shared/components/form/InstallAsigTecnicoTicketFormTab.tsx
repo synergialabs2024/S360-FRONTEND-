@@ -120,7 +120,10 @@ const InstallAsigTecnicoTicketFormTab: React.FC<
 
         <CustomTextFieldNoForm
           label="Servicio contratado"
-          value={ticket?.flota_data?.name}
+          value={
+            ticket?.linea_servicio_data?.contrato_data
+              ?.plan_internet_actual_data?.name
+          }
           disabled
         />
       </>

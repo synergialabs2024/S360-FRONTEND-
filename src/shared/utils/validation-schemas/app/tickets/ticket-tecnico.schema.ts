@@ -8,4 +8,12 @@ export const ticketTecnicoFormSchema = yup.object({
       200,
       'El campo tipo identificacion no debe exceder los 200 caracteres',
     ),
+
+  observacion_extra_solucion_visita: yup
+    .string()
+    .required('El campo tipo identificacion es requerido')
+    .max(
+      200,
+      'El campo tipo identificacion no debe exceder los 200 caracteres',
+    ),
 });

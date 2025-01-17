@@ -303,12 +303,12 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       uploadFileToBucket({
         file: viviendaImg!,
         file_name: BucketKeyTicketEnumChoice.FOTO_VIVIENDA,
-        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
       }),
       uploadFileToBucket({
         file: opcionalImg!,
         file_name: BucketKeyTicketEnumChoice.FOTO_OPCIONAL,
-        bucketDir: BucketTypeEnumChoice.IMAGES_IDENTIFICACION,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
       }),
     ]);
 

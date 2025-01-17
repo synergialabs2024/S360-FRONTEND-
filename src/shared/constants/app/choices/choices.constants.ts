@@ -470,6 +470,7 @@ export enum BucketTypeEnumChoice {
   IMAGES_DOCUMENTO_BANCARIOS = 'images/documentos-bancarios',
 
   IMAGES_ORDENTRABAJO_INSTALACION = 'images/orden-trabajo/instalaciones',
+  IMAGES_TICKETS_VISITAS = 'images/tickets-visitas',
 }
 
 export enum BucketKeyNameEnumChoice {
@@ -999,14 +1000,18 @@ export const CALENDARIO_FACTURA_TYPE_ARRAY_CHOICES = [
 
 export enum EstadoTicketEnumChoice {
   ESPERA = 'ESPERA',
-  EN_PROCESO = 'EN_PROCESO',
+  REALIZADO = 'REALIZADO',
   CERRADO = 'CERRADO',
+  PENDIENTE_RECOORDINACION = 'PENDIENTE RECOORDINACION',
 }
 
 export enum EstadoTicketTecnicoEnumChoice {
   ESPERA = 'ESPERA',
-  REALIZADA = 'REALIZADA',
-  RECORDINADA = 'RECORDINADA',
+  REALIZADO = 'REALIZADO',
+  CERRADO = 'CERRADO',
+  PENDIENTE_RECOORDINACION = 'PENDIENTE RECOORDINACION',
+  PENDIENTE_CORRECCION_AUDITORIA = 'PENDIENTE CORRECCION AUDITORIA',
+  ESPERA_CORREGIDOS_AUDITORIA = 'ESPERA CORREGIDOS AUDITORIA',
 }
 
 export enum TurnosTicketEnumChoice {
@@ -1020,18 +1025,7 @@ export const TURNOS_TICKETS_ARRAY_CHOICES = [
 
 export enum BucketTicketEnumChoice {
   BUCKET_BASE = VITE_MINIO_BUCKET_NAME,
-
-  // preventa
-  IMAGES_IDENTIFICACION = 'images/identificacion',
-  IMAGES_VIVIENDA = 'images/vivienda',
-  IMAGES_PLANILLA_SERVICIOS = 'images/planilla-servicios',
-  IMAGES_ACEPTACION_CONTRATO = 'images/aceptacioncontrato',
-  IMAGES_ACEPTACION_CONTRATO_CORRECCIONES = 'images/aceptacioncontrato/correcciones',
-  IMAGES_COMPROBANTES_NO_PLANILLA = 'images/comprobantes/no-planilla',
-  IMAGES_ONT_MODEL = 'images/ont-model',
-  IMAGES_DOCUMENTO_BANCARIOS = 'images/documentos-bancarios',
-
-  IMAGES_ORDENTRABAJO_INSTALACION = 'images/orden-trabajo/instalaciones',
+  IMAGES_TICKETS_VISITAS = 'images/tickets-visitas',
 }
 
 export enum BucketKeyTicketEnumChoice {
