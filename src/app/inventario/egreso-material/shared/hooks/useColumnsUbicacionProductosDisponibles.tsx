@@ -40,15 +40,12 @@ export const useColumnsUbicacionProductosDisponibles = ({
 
   const onChangePuntaInit = useCallback(
     (value: string, item: UbicacionProductosDisponiblesTableType) => {
-      const usedQuantity = (item.cantidad || 0) - +value;
-
       updateSelectedItemValue({
         keyStore:
           UbicacionProductosDisponiblesStoreKey.ubicacionProductosDisponibles,
         updatedItem: {
           ...item,
           cantidad: +value,
-          usedQuantity: usedQuantity > 0 ? usedQuantity : 0,
         } as any,
       });
     },

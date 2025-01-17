@@ -998,6 +998,14 @@ const RecepcionMaterialMainPage = Loadable(
       ),
   ),
 );
+const UpdateRecepcionMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-material/pages/forms/UpdateRecepcionMaterialPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2171,6 +2179,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.RecepcionMateriales,
             element: <RecepcionMaterialMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.RecepcionMaterialesEditar,
+            element: <UpdateRecepcionMaterialPage />,
           },
         ],
       },

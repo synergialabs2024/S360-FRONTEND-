@@ -1,5 +1,12 @@
 import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared';
+import { ROUTER_PATHS } from '@/router/constants';
+import {
+  PermissionsEnum,
+  RecepcionMaterialEnumChoice,
+  TABLE_CONSTANTS,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared';
 import {
   CustomSearch,
   CustomTable,
@@ -7,6 +14,12 @@ import {
 } from '@/shared/components';
 import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
+import { hasPermission } from '@/shared/utils/auth';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { useNavigate } from 'react-router';
+
+export const returnUrlRecepcionMaterialPage =
+  ROUTER_PATHS.inventario.RecepcionMaterialesNav;
 
 export type RecepcionMaterialByStatePageProps = {
   state: string;
@@ -15,10 +28,11 @@ export type RecepcionMaterialByStatePageProps = {
 const RecepcionMaterialByStatePage: React.FC<
   RecepcionMaterialByStatePageProps
 > = ({ state }) => {
-  console.log(state);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  const navigate = useNavigate();
 
   ///* table
   const {
@@ -43,8 +57,40 @@ const RecepcionMaterialByStatePage: React.FC<
       name: searchTerm,
       ...filterObject,
       filterByState: false,
+
+      estado_solicitud: state,
     },
   });
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
+
+  ///* handlers
+  const calcEnableActionsColumn = () => {
+    hasPermission(PermissionsEnum.inventario_change_solicitudmaterial);
+    if (state === RecepcionMaterialEnumChoice.PENDIENTE) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const onEdit = (solicitudmaterial: SolicitudMaterial) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Cambiar estado solicitud',
+      subtitle: '¿Está seguro que desea editar este registro?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(
+          `${returnUrlRecepcionMaterialPage}/editar/${solicitudmaterial.uuid}`,
+        );
+      },
+    });
+  };
 
   ///* columns
   const { solicitudMaterialColumns } = useColumnsSolicitudMaterial();
@@ -71,7 +117,15 @@ const RecepcionMaterialByStatePage: React.FC<
         pagination={pagination}
         onPaging={setPagination}
         rowCount={solicitudMaterialPagingRes?.data?.meta?.count}
-        enableActionsColumn={false}
+        // // actions
+        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={calcEnableActionsColumn()}
+        // crud
+        canEdit={hasPermission(
+          PermissionsEnum.inventario_change_solicitudmaterial,
+        )}
+        onEdit={onEdit}
+        canDelete={false}
       />
     </GridTableTabsContainerOnly>
   );

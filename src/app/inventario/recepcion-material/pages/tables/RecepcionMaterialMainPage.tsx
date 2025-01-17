@@ -1,6 +1,5 @@
 import { Tab } from '@mui/material';
 
-import { ROUTER_PATHS } from '@/router/constants';
 import { RecepcionMaterialEnumChoice, useTabsOnly } from '@/shared';
 import {
   a11yProps,
@@ -10,9 +9,6 @@ import {
 } from '@/shared/components';
 import RecepcionMaterialByStatePage from './RecepcionMaterialByStatePage';
 
-export const returnUrlRecepcionMaterialPage =
-  ROUTER_PATHS.inventario.RecepcionMaterialesNav;
-
 export type RecepcionMaterialPageProps = {};
 
 const RecepcionMaterialMainPage: React.FC<RecepcionMaterialPageProps> = () => {
@@ -20,7 +16,7 @@ const RecepcionMaterialMainPage: React.FC<RecepcionMaterialPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Recepcion de Materiales"
+      title="Recepcion de solicitud de materiales"
       showCreateBtn={false}
       isMainTableStates
     >

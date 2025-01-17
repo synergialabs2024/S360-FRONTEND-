@@ -23,11 +23,6 @@ import {
 import { useEffect } from 'react';
 
 export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
-  usedQuantity: number;
-
-  containsSeries: boolean;
-  selectedSeries: string[];
-  savedSeries: string[];
   cantidad?: number;
   series?: any[];
   serie?: any[];
@@ -105,9 +100,6 @@ const UbicacionProductosDisponiblesModal: React.FC<
                   UbicacionProductosDisponiblesStoreKey.ubicacionProductosDisponibles,
                 item: {
                   ...item,
-                  usedQuantity: 1,
-                  selectedSeries: [],
-                  savedSeries: [],
                 },
                 showToast: true,
               });

@@ -442,11 +442,11 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudMaterialNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solicitud-materiales-bodega',
+            renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
+              id: 'recepcion-solicitud-materiales',
               title: 'Recepción de solicitudes de materiales',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
             }),
             renderByModule(SidenavModulesEnum.INVENTARIO_EGRESO_MATERIAL, {
               id: 'egreso-mercaderia',
@@ -481,12 +481,6 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
-              id: 'recepcion-materiales',
-              title: 'Recepción de materiales',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
-            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------

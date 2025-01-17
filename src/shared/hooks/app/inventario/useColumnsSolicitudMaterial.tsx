@@ -3,14 +3,29 @@ import { useMemo } from 'react';
 
 import { ViewMoreTextModalTableCell } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
-import { IngresoMaterial } from '@/shared/interfaces';
 import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
+import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
+import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
 
 export const useColumnsSolicitudMaterial = () => {
-  const ingresoMaterialBaseColumns01 = useMemo<
-    MRT_ColumnDef<IngresoMaterial>[]
+  const solicitudMaterialBaseColumns01 = useMemo<
+    MRT_ColumnDef<SolicitudMaterial>[]
   >(
     () => [
+      {
+        accessorKey: 'productos',
+        header: 'PRODUCTOS',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          return (
+            <ShowSeriesModal
+              productoBoolean={false}
+              Arrays={row.original.productos}
+            />
+          );
+        },
+      },
       {
         accessorKey: 'observacion',
         header: 'OBSERVACIÓN',
@@ -34,8 +49,8 @@ export const useColumnsSolicitudMaterial = () => {
     [],
   );
 
-  const ingresoMaterialBaseColumns02 = useMemo<
-    MRT_ColumnDef<IngresoMaterial>[]
+  const solicitudMaterialBaseColumns02 = useMemo<
+    MRT_ColumnDef<SolicitudMaterial>[]
   >(
     () => [
       {
@@ -54,10 +69,10 @@ export const useColumnsSolicitudMaterial = () => {
     [],
   );
 
-  const solicitudMaterialColumns = useMemo<MRT_ColumnDef<IngresoMaterial>[]>(
+  const solicitudMaterialColumns = useMemo<MRT_ColumnDef<SolicitudMaterial>[]>(
     () => [
-      ...ingresoMaterialBaseColumns01,
-      ...ingresoMaterialBaseColumns02,
+      ...solicitudMaterialBaseColumns01,
+      ...solicitudMaterialBaseColumns02,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -75,7 +90,7 @@ export const useColumnsSolicitudMaterial = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [ingresoMaterialBaseColumns01, ingresoMaterialBaseColumns02],
+    [solicitudMaterialBaseColumns01, solicitudMaterialBaseColumns02],
   );
   return {
     solicitudMaterialColumns,

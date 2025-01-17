@@ -17,6 +17,7 @@ import {
   gridSizeMdLg6,
   Ubicacion,
   ToastWrapper,
+  PermissionsEnum,
 } from '@/shared';
 import { returnUrlEgresoMaterialesPage } from '../../../pages/tables/EgresoMaterialesPage';
 import {
@@ -34,6 +35,7 @@ import { useColumnsUbicacionProductosDisponibles } from '../../hooks';
 import UbicacionProductosDisponiblesModal, {
   UbicacionProductosDisponiblesTableType,
 } from '../../../pages/modal/UbicacionProductosDisponiblesModal';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export interface SaveEgresoMaterialProps {
   title: string;
@@ -43,6 +45,8 @@ export interface SaveEgresoMaterialProps {
 type SaveFormData = CreateEgresoMaterialParamsBase & {};
 
 const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
+  useCheckPermission(PermissionsEnum.inventario_view_egresomaterial);
+
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
