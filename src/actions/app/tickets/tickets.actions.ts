@@ -15,7 +15,7 @@ import {
   Ticket,
   TicketPaginatedRes,
 } from '@/shared/interfaces/app/ticket/ticket.interface';
-import { Soluciones } from '@/shared/interfaces/app/ticket/solucion/solucion.interface';
+import { SolucionesPaginatedRes } from '@/shared/interfaces/app/ticket/solucion/solucion.interface';
 
 const { get, post, patch } = erpAPI();
 
@@ -187,7 +187,10 @@ export const getClient = async (uuid: string) => {
 
 export const getSolucionesTicket = async () => {
   try {
-    return await get<Soluciones>('/asunto-ticket/soluciones/', true);
+    return await get<SolucionesPaginatedRes>(
+      '/asunto-ticket/soluciones/',
+      true,
+    );
   } catch (error) {
     handleAxiosError(error);
   }

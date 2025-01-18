@@ -69,11 +69,13 @@ const TicketsByStatePage: React.FC<TicketsByStatePageProps> = ({ state }) => {
         columns={
           state === EstadoTicketEnumChoice.ESPERA
             ? ticketBaseColumns
-            : state === EstadoTicketEnumChoice.EN_PROCESO
+            : state === EstadoTicketEnumChoice.REALIZADO
               ? ticketBaseColumns
               : state === EstadoTicketEnumChoice.CERRADO
                 ? ticketBaseColumns
-                : ticketBaseColumns
+                : state === EstadoTicketEnumChoice.PENDIENTE_RECOORDINACION
+                  ? ticketBaseColumns
+                  : ticketBaseColumns
         }
         data={ticketsPagingRes?.data?.items || []}
         isLoading={isLoading}
