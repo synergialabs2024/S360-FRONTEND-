@@ -716,6 +716,12 @@ export const useNestedMenu = () => {
           icon: IconWallet,
           children: [
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'cambioplan',
+              title: 'Cambio de plan',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.cambioplanNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'promesapago',
               title: 'Promesa de pago',
               type: MenuItemType.ITEM,

@@ -748,6 +748,9 @@ const CreatePromesaPagoPage = Loadable(
       import('@/app/cartera/promesa-pago/pages/forms/CreatePromesaPagoPage'),
   ),
 );
+const CreateCambioPlanPage = Loadable(
+  lazy(() => import('@/app/cartera/cambio-plan/pages/forms/CambioPlanPage')),
+);
 const CambioPropietarioPagoPage = Loadable(
   lazy(
     () =>
@@ -1757,6 +1760,11 @@ const AppRouter = [
         path: ROUTER_PATHS.cartera.root,
         element: <CarteraModule />,
         children: [
+          ///* cambio plan
+          {
+            path: ROUTER_PATHS.cartera.cambioplanNav,
+            element: <CreateCambioPlanPage />,
+          },
           ///* promesa pago
           {
             path: ROUTER_PATHS.cartera.promesapagoNav,

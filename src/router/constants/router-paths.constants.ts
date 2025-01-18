@@ -229,6 +229,12 @@ export const ROUTER_PATHS = {
     root: 'cartera',
 
     ///* promesa de pago
+    cambioplan: 'cambioplan',
+    cambioplanCrear: 'cambioplan/crear',
+    cambioplanEditar: 'cambioplan/editar/:uuid',
+    cambioplanNav: '/cartera/cambioplan',
+
+    ///* promesa de pago
     promesapago: 'promesapago',
     promesapagoCrear: 'promesapago/crear',
     promesapagoEditar: 'promesapago/editar/:uuid',
