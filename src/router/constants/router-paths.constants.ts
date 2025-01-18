@@ -224,7 +224,16 @@ export const ROUTER_PATHS = {
     clientesFibraVer: 'fibra-optica/:uuid',
     clientesFibraNav: '/clientes/fibra-optica',
   },
+  /////* Cartera ----------------
+  cartera: {
+    root: 'cartera',
 
+    ///* promesa de pago
+    promesapago: 'promesapago',
+    promesapagoCrear: 'promesapago/crear',
+    promesapagoEditar: 'promesapago/editar/:uuid',
+    promesapagoNav: '/cartera/promesapago',
+  },
   /////* Cobranza ----------------
   cobranza: {
     root: 'cobranza',

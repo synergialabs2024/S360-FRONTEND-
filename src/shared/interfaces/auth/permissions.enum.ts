@@ -171,6 +171,7 @@ export enum PermissionsEnum {
   clientes_add_contrato = 'clientes.add_contrato',
   clientes_add_lineaservicio = 'clientes.add_lineaservicio',
   clientes_add_servicioadicional = 'clientes.add_servicioadicional',
+  cartera_add_promesapago = 'cartera.add_promesapago',
   cobranza_add_deudacuotaequiposventa = 'cobranza.add_deudacuotaequiposventa',
   cobranza_add_factura = 'cobranza.add_factura',
   cobranza_add_planpagocuota = 'cobranza.add_planpagocuota',

@@ -738,7 +738,16 @@ const CreateFlotaPage = Loadable(
 const UpdateFlotaPage = Loadable(
   lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
 );
-
+///* Cartera ------------
+const CarteraModule = Loadable(
+  lazy(() => import('@/app/cartera/CarteraModule')),
+);
+const CreatePromesaPagoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/promesa-pago/pages/forms/CreatePromesaPagoPage'),
+  ),
+);
 ///* Cobranza ------------
 const CobranzaModule = Loadable(
   lazy(() => import('@/app/cobranza/CobranzaModule')),
@@ -1735,7 +1744,18 @@ const AppRouter = [
           },
         ],
       },
-
+      //////////* Cartera ------------
+      {
+        path: ROUTER_PATHS.cartera.root,
+        element: <CarteraModule />,
+        children: [
+          ///* promesa pago
+          {
+            path: ROUTER_PATHS.cartera.promesapagoNav,
+            element: <CreatePromesaPagoPage />,
+          },
+        ],
+      },
       //////////* Cobranza ------------
       {
         path: ROUTER_PATHS.cobranza.root,

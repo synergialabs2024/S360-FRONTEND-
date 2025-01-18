@@ -14,6 +14,7 @@ import {
   IconUserCog,
   IconUsersGroup,
   IconUserShield,
+  IconWallet,
 } from '@tabler/icons-react';
 import { useCallback, useMemo } from 'react';
 
@@ -704,6 +705,21 @@ export const useNestedMenu = () => {
               title: 'Contratos',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+        /////* Cartera ----------------
+        {
+          id: 'cartera',
+          title: 'Cartera',
+          type: MenuItemType.COLLAPSE,
+          icon: IconWallet,
+          children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'promesapago',
+              title: 'Promesa de pago',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.promesapagoNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
