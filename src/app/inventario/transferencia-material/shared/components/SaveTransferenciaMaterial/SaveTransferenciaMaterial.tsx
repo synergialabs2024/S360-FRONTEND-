@@ -1,5 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { FiPlus } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
 
 import {
   CreateTransferenciaMaterialParamsBase,
@@ -24,12 +28,8 @@ import {
   CustomTypoLabelEnum,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlTransferenciaMaterialesPage } from '../../../pages/tables/TransferenciaMaterialPage';
-import { Grid } from '@mui/material';
-import { FiPlus } from 'react-icons/fi';
 import { useUbicacionProductosStore } from '@/store/app';
-import { useEffect, useState } from 'react';
 import UbicacionProductosDisponiblesModal, {
   UbicacionProductosDisponiblesTableType,
 } from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
@@ -256,6 +256,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         size={gridSizeMdLg6}
         onChangeRawValue={value => {
           form.setValue('ubicacion_origen', Number(value?.id));
+          form.setValue('ubicacion_origen', '' as any);
           ubicacionProductosEnviar([]);
         }}
       />
