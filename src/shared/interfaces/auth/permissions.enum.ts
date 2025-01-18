@@ -287,7 +287,6 @@ export enum PermissionsEnum {
   billing_change_category = 'billing.change_category',
   billing_change_contract = 'billing.change_contract',
   billing_change_customer = 'billing.change_customer',
-  billing_change_invoice_admin = 'billing.change_invoice_admin',
   billing_change_invoice_payment = 'billing.change_invoice_payment',
   billing_change_product = 'billing.change_product',
   billing_change_receipt = 'billing.change_receipt',
