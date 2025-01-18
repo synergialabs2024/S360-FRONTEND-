@@ -289,6 +289,11 @@ export const ROUTER_PATHS = {
     preventasCrear: 'preventas/crear/:uuid', // open solicitud_servicio
     preventasNav: '/comercial/preventas',
 
+    ///* televentas
+    televentas: 'televentas',
+    televentasCrear: 'televentas/crear/:uuid', // open solicitud_servicio
+    televentasNav: '/comercial/televentas',
+
     ///* correccion preventa
     correccionPreventas: 'correcciones-preventas',
     // correccionPreventasCrear: 'preventas/crear/:uuid', // open solicitud_servicio

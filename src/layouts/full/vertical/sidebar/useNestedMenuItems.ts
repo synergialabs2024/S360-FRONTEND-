@@ -312,6 +312,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'televentas',
+              title: 'Televentas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.comercial.televentasNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'venta-orporativas',
               title: 'Ventas Corporativas',
               type: MenuItemType.ITEM,

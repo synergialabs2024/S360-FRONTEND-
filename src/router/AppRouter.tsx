@@ -551,7 +551,11 @@ const TrazabilidadVentasPage = Loadable(
       ),
   ),
 );
-
+const TeleventasMainPage = Loadable(
+  lazy(
+    () => import('@/app/comercial/televentas/pages/tables/TeleventasMainPage'),
+  ),
+);
 const PreventasMainPage = Loadable(
   lazy(() => import('@/app/comercial/preventa/pages/tables/PreventasMainPage')),
 );
@@ -1995,6 +1999,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.comercial.preventasCrear,
             element: <CreatePreventaPage />,
+          },
+
+          ///* televentas
+          {
+            path: ROUTER_PATHS.comercial.televentas,
+            element: <TeleventasMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.televentasNav,
+            element: <CorreccionPreventasMainPage />,
           },
 
           ///* correccion preventas
