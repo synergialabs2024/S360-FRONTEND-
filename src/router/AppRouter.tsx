@@ -748,6 +748,14 @@ const CreatePromesaPagoPage = Loadable(
       import('@/app/cartera/promesa-pago/pages/forms/CreatePromesaPagoPage'),
   ),
 );
+const CambioPropietarioPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/cambio-propietario/pages/forms/CambioPropietarioPagoPage'
+      ),
+  ),
+);
 ///* Cobranza ------------
 const CobranzaModule = Loadable(
   lazy(() => import('@/app/cobranza/CobranzaModule')),
@@ -1753,6 +1761,11 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.promesapagoNav,
             element: <CreatePromesaPagoPage />,
+          },
+          ///* Cambio propietario
+          {
+            path: ROUTER_PATHS.cartera.cambiopropietarioNav,
+            element: <CambioPropietarioPagoPage />,
           },
         ],
       },

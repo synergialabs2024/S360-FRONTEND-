@@ -233,6 +233,12 @@ export const ROUTER_PATHS = {
     promesapagoCrear: 'promesapago/crear',
     promesapagoEditar: 'promesapago/editar/:uuid',
     promesapagoNav: '/cartera/promesapago',
+
+    ///* cambio propietario
+    cambiopropietario: 'cambiopropietario',
+    cambiopropietarioCrear: 'cambiopropietario/crear',
+    cambiopropietarioEditar: 'cambiopropietario/editar/:uuid',
+    cambiopropietarioNav: '/cartera/cambiopropietario',
   },
   /////* Cobranza ----------------
   cobranza: {

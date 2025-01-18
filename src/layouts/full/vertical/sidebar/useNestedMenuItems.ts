@@ -721,6 +721,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.promesapagoNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'cambiopropietario',
+              title: 'Cambio Propietario',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.cambiopropietarioNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Cobranza ----------------
