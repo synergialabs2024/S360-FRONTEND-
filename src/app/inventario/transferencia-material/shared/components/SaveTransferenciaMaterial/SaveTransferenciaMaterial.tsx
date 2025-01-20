@@ -256,7 +256,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         size={gridSizeMdLg6}
         onChangeRawValue={value => {
           form.setValue('ubicacion_origen', Number(value?.id));
-          form.setValue('ubicacion_origen', '' as any);
+          form.setValue('ubicacion_destino', '' as any);
           ubicacionProductosEnviar([]);
         }}
       />
