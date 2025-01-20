@@ -111,6 +111,7 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
             .map(item => item?.codename)
             .filter(Boolean) as any[],
           system_modules: selectedSystemModules,
+          codigo: data.codigo,
         },
       });
       return;
@@ -122,6 +123,7 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
       description: data.description,
       permissions: selectedPermissions.map(item => item?.codename) as any[],
       system_modules: selectedSystemModules,
+      codigo: data.codigo,
     });
   };
 
@@ -180,6 +182,14 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
           defaultValue={form.getValues().name}
           error={errors.name}
           helperText={errors.name?.message}
+        />
+        <CustomTextField
+          label="Código"
+          name="codigo"
+          control={form.control}
+          defaultValue={form.getValues().codigo}
+          error={errors.codigo}
+          helperText={errors.codigo?.message}
         />
         <CustomTextArea
           label="Descripción"

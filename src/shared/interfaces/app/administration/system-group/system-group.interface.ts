@@ -11,6 +11,7 @@ export interface SystemGroup {
   id?: number;
   uuid?: string;
   name: string;
+  codigo: string;
   description?: string;
 
   system_modules: string[];

@@ -5,6 +5,10 @@ export const systemGroupFormSchema = yup.object({
     .string()
     .required('El campo name es requerido')
     .max(200, 'El campo name no debe exceder los 200 caracteres'),
+  codigo: yup
+    .string()
+    .required('El campo codigo es requerido')
+    .max(200, 'El campo codigo no debe exceder los 200 caracteres'),
   description: yup
     .string()
     .optional()
