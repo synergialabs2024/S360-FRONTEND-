@@ -1,36 +1,27 @@
-import { useUpdateMovimientoMaterial } from '@/actions/app';
-import { CustomSwitch, ViewMoreTextModalTableCell } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
-import {
-  ChangeModelStateData,
-  MovimientoMaterial,
-  PermissionsEnum,
-} from '@/shared/interfaces';
+import { ViewMoreTextModalTableCell } from '@/shared/components';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { MovimientoMaterial } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
 export const useColumnsMovimientoMaterial = () => {
   ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
-  const changeState = useUpdateMovimientoMaterial<ChangeModelStateData>({
-    enableNavigate: false,
-  });
 
   const movimientoMaterialBaseColumns01 = useMemo<
     MRT_ColumnDef<MovimientoMaterial>[]
   >(
     () => [
+      {
+        accessorKey: 'uuid',
+        header: 'REFERENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['uuid']),
+      },
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -80,74 +71,80 @@ export const useColumnsMovimientoMaterial = () => {
         accessorKey: 'bodega_origen',
         header: 'BODEGA ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['bodega_origen_data', 'nombre']),
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.bodega_origen_data?.nombre
+            ? row.original.bodega_origen_data.nombre
+            : 'No contiene';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle="Bodega Origen"
+            />
+          );
+        },
       },
       {
         accessorKey: 'ubicacion_origen',
         header: 'UBICACIÓN ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['ubicacion_origen_data', 'nombre']),
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.ubicacion_origen_data?.nombre
+            ? row.original.ubicacion_origen_data.nombre
+            : 'No contiene';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle="Ubicacion Origen"
+            />
+          );
+        },
       },
       {
         accessorKey: 'bodega_destino',
         header: 'BODEGA DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['bodega_destino_data', 'nombre']),
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.bodega_destino_data?.nombre
+            ? row.original.bodega_destino_data.nombre
+            : 'No contiene';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle="Bodega Destino"
+            />
+          );
+        },
       },
       {
         accessorKey: 'ubicacion_destino',
         header: 'UBICACIÓN DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['ubicacion_destino_data', 'nombre']),
-      },
-      {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableSorting: false,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => {
-          return typeof row.original?.state === 'boolean' ? (
-            <CustomSwitch
-              title="state"
-              checked={row.original?.state}
-              onChangeChecked={() => {
-                if (
-                  !hasPermission(
-                    PermissionsEnum.inventario_change_movimientomaterial,
-                  )
-                )
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar state',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el state de este registro?',
-                  onConfirm: () => {
-                    changeState.mutate({
-                      id: row.original.id!,
-                      data: {
-                        state: !row.original.state,
-                      },
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
+          const str = row?.original?.ubicacion_destino_data?.nombre
+            ? row.original.ubicacion_destino_data.nombre
+            : 'No contiene';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle="Ubicacion Destino"
             />
-          ) : (
-            'N/A'
           );
         },
       },
     ],
-    [setConfirmDialog, setConfirmDialogIsOpen, changeState],
+    [],
   );
 
   const movimientoMaterialColumns = useMemo<

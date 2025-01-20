@@ -5,12 +5,11 @@ import * as XLSX from 'xlsx';
 import { useFetchMovimientoMateriales } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
-  Bodega,
   gridSizeMdLg6,
   MovimientoMaterial,
   PermissionsEnum,
+  TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO,
   useColumnsMovimientoMaterial,
-  useFetchBodegaWithDebounce,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -35,9 +34,7 @@ const MovimientoMaterialesPage: React.FC<
   useCheckPermission(PermissionsEnum.inventario_view_movimientomaterial);
 
   ///* local state
-  const [selectedBodegaArray, setSelectedBodegaArray] = useState<Bodega | null>(
-    null,
-  );
+  const [selectedTipoM, setSelectedTipoM] = useState<string | null>(null);
 
   const { control, watch } = useForm({
     defaultValues: {
@@ -61,9 +58,6 @@ const MovimientoMaterialesPage: React.FC<
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
 
-  const { bodegas, isLoadingBodega, selectedBodega, onChangeFilterBodega } =
-    useFetchBodegaWithDebounce();
-
   ///* fetch data
   const {
     data: movimientoMaterialPagingRes,
@@ -78,7 +72,7 @@ const MovimientoMaterialesPage: React.FC<
       ...filterObject,
       filterByState: false,
 
-      bodega_origen: selectedBodegaArray?.id,
+      tipo_movimiento: selectedTipoM,
       created_at__gte: selectedDateRange.date_1,
       created_at__lte: selectedDateRange.date_2,
     },
@@ -120,43 +114,41 @@ const MovimientoMaterialesPage: React.FC<
         }}
         customSpaceNode={
           <>
-            <CustomAutocompletSearchNoForm<Bodega>
-              label="Buscar por bodega"
-              options={
-                (bodegas.map(u => ({
-                  id: u?.id || 0,
-                  nombre: u?.nombre || '',
-                })) as unknown as Bodega[]) || []
-              }
+            <CustomAutocompletSearchNoForm<{ id: number; nombre: string }>
+              label="Buscar por Tipo producto"
+              options={TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO.map(u => ({
+                id: u.value,
+                nombre: u.nombre,
+              }))}
               valueKey="nombre"
               actualValueKey="id"
-              defaultValue={selectedBodega?.id?.toString() || ''}
-              optionLabelForEdit={selectedBodega?.nombre || ''}
-              isLoadingData={isLoadingBodega}
-              onChangeInputText={onChangeFilterBodega}
+              defaultValue={
+                TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO[0]?.value.toString() || ''
+              }
+              optionLabelForEdit={
+                TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO[0]?.nombre || ''
+              }
+              isLoadingData={false}
               size={gridSizeMdLg6}
-              onChangeRawValue={bodega => {
-                setSelectedBodegaArray(bodega);
+              onChangeRawValue={tm => {
+                setSelectedTipoM(tm?.nombre || null);
               }}
               required={false}
             />
+            <Grid sx={{ m: '5px' }}>
+              <Button onClick={handleDownloadExcel}>Descargar Excel</Button>
+            </Grid>
           </>
         }
       />
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
-          <DateRangePicker
-            sxGrid={{ m: [0, 0, 3, 1.5], width: '12.5cm' }}
-            label="RANGO FECHA"
-            name="fecha_rango"
-            control={control}
-            size={gridSizeMdLg6}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <Button onClick={handleDownloadExcel}>Descargar Excel</Button>
-        </Grid>
-      </Grid>
+      <DateRangePicker
+        sxGrid={{ m: [0, 0, 3, 1.5], width: '12.5cm' }}
+        label="RANGO FECHA"
+        name="fecha_rango"
+        control={control}
+        required={false}
+        size={gridSizeMdLg6}
+      />
 
       <CustomTable<MovimientoMaterial>
         columns={movimientoMaterialColumns}

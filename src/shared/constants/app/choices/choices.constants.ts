@@ -607,6 +607,25 @@ export const CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO = [
   },
 ];
 
+export type CodigoTipoProductoEnumChoiceType = {
+  id: number;
+  nombre: string;
+};
+export const TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO = [
+  {
+    value: 1,
+    nombre: 'INGRESO',
+  },
+  {
+    value: 2,
+    nombre: 'EGRESO',
+  },
+  {
+    value: 3,
+    nombre: 'TRANSFERENCIA',
+  },
+];
+
 export enum CodigoProductosEnumChoice {
   WIFIMESH = 'WIFIMESH',
   MINI_UPS = 'MINI UPS',
