@@ -5,7 +5,7 @@ import { ViewMoreTextModalTableCell } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
-import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
+import ShowSolicitudMaterialModal from '@/app/inventario/solicitud-material/pages/modal/ShowSolicitudMaterialModal';
 
 export const useColumnsSolicitudMaterial = () => {
   const solicitudMaterialBaseColumns01 = useMemo<
@@ -18,12 +18,7 @@ export const useColumnsSolicitudMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
-          return (
-            <ShowSeriesModal
-              productoBoolean={false}
-              Arrays={row.original.productos}
-            />
-          );
+          return <ShowSolicitudMaterialModal Arrays={row.original.productos} />;
         },
       },
       {

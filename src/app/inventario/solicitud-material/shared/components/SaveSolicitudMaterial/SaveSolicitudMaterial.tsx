@@ -4,24 +4,14 @@ import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
-import { useFetchBodegas, useFetchUbicacions } from '@/actions/app';
-import {
-  Bodega,
-  gridSizeMdLg6,
-  Ubicacion,
-  Producto,
-  ToastWrapper,
-  solicitudMaterialFormSchema,
-} from '@/shared';
+import { Producto, ToastWrapper, solicitudMaterialFormSchema } from '@/shared';
 
 import {
-  CustomAutocomplete,
   CustomMinimalTable,
   CustomSingleButton,
   CustomTextArea,
   CustomTypoLabel,
   CustomTypoLabelEnum,
-  SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 
@@ -34,7 +24,8 @@ import {
 } from '@/actions/app/inventario/solicitud-material';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
 import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
-import { useColumnsProductosDisponibles } from '@/app/inventario/ingreso-material/shared/hooks';
+import { useAuthStore } from '@/store/auth';
+import { useColumnsSolicitudMaterialProductos } from '../../hooks/useColumnsSolicitudMaterialProductos';
 
 export interface SaveSolicitudMaterialProps {
   title: string;
@@ -58,6 +49,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   title,
   SolicitudMaterial,
 }) => {
+  const user = useAuthStore(s => s.user);
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
@@ -72,6 +64,8 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   const form = useForm<SaveFormData>({
     resolver: yupResolver(solicitudMaterialFormSchema) as any,
     defaultValues: {
+      bodega: user?.flota_data?.ubicacion_data?.bodega,
+      ubicacion: user?.flota_data?.ubicacion_data?.id,
       state: true,
     },
   });
@@ -79,33 +73,8 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   const {
     handleSubmit,
     reset,
-    formState: { errors, isValid },
+    formState: { errors },
   } = form;
-
-  const watchedBodega = form.watch('bodega');
-  const watchedUbicacion = form.watch('ubicacion');
-
-  ///* fetch data ---------------------
-  const {
-    data: bodegasPagingRes,
-    isLoading: isLoadingBodegas,
-    isRefetching: isRefetchingBodegas,
-  } = useFetchBodegas({
-    params: {
-      page_size: 600,
-    },
-  });
-  const {
-    data: ubicacionesPaging,
-    isLoading: isLoadingUbicaciones,
-    isRefetching: isRefetchingUbicaciones,
-  } = useFetchUbicacions({
-    enabled: !!watchedBodega,
-    params: {
-      page_size: 1200,
-      bodega: watchedBodega!,
-    },
-  });
 
   ///* mutations
   const createSolicitudMaterialMutation = useCreateSolicitudMaterial({
@@ -116,8 +85,6 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
-    if (!isValid) return;
-
     const mappedProductos = productosDisponibles.map(producto => ({
       ...producto,
       producto: producto.id,
@@ -140,22 +107,9 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
     reset(SolicitudMaterial);
   }, [SolicitudMaterial, reset, productosEnviar]);
 
-  useEffect(() => {
-    if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)
-      return;
-    !ubicacionesPaging?.data?.items?.length &&
-      ToastWrapper.error(
-        'No se encontraron ubicaciones para la bodega seleccionada',
-      );
-  }, [
-    watchedBodega,
-    ubicacionesPaging,
-    isLoadingUbicaciones,
-    isRefetchingUbicaciones,
-  ]);
-
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsProductosDisponibles();
+  const { crearSolicitudMaterialColumns } =
+    useColumnsSolicitudMaterialProductos();
 
   return (
     <SingleFormBoxScene
@@ -163,82 +117,34 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
       onCancel={() => navigate(returnUrlSolicitudMaterialPage)}
       onSave={handleSubmit(onSave, () => {})}
     >
-      <CustomAutocomplete<Bodega>
-        label="Bodega"
-        name="bodega"
-        // options
-        options={bodegasPagingRes?.data?.items || []}
-        valueKey="nombre"
-        actualValueKey="id"
-        defaultValue={form.getValues().bodega}
-        isLoadingData={isLoadingBodegas || isRefetchingBodegas}
-        // vaidation
-        control={form.control}
-        error={errors.bodega}
-        helperText={errors.bodega?.message}
-        onChangeRawValue={() => {
-          form.setValue('ubicacion', '' as any);
-          productosEnviar([]);
-        }}
-      />
-      <CustomAutocomplete<Ubicacion>
-        label="Ubicacion"
-        name="ubicacion"
-        defaultValue={form.getValues().ubicacion || ''}
-        // options
-        valueKey="nombre"
-        actualValueKey="id"
-        options={ubicacionesPaging?.data.items || []}
-        isLoadingData={isLoadingUbicaciones || isRefetchingUbicaciones}
-        disableClearable
-        // errors
-        control={form.control}
-        error={errors.ubicacion as any}
-        helperText={errors.ubicacion?.message}
-        size={gridSizeMdLg6}
-        onChangeRawValue={() => {
-          productosEnviar([]);
-        }}
-      />
-      <SampleCheckbox
-        label="state"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
-        size={gridSizeMdLg6}
-      />
       {/* ==================== PRODUCTS ==================== */}
-      {!!watchedUbicacion && (
-        <>
-          <CustomTypoLabel
-            text="Productos"
-            pt={CustomTypoLabelEnum.ptMiddlePosition}
-          />
-          <Grid container justifyContent="flex-end">
-            <CustomSingleButton
-              label="AGREGAR PRODUCTO"
-              color="primary"
-              variant="text"
-              startIcon={<FiPlus />}
-              onClick={() => {
-                setOpenAddProducts(true);
-              }}
-              justifyContent="flex-end"
-            />
-          </Grid>
-          <CustomMinimalTable<ProductosDisponiblesTableType>
-            columns={crearMaterialColumns}
-            data={productosDisponibles || []}
-            enablePagination
-            density="comfortable"
-          />
-          <ProductosDisponiblesModal
-            open={openAddProducts}
-            onClose={() => setOpenAddProducts(false)}
-          />
-        </>
-      )}
+      <CustomTypoLabel
+        text="Productos"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
+      <Grid container justifyContent="flex-end">
+        <CustomSingleButton
+          label="AGREGAR PRODUCTO"
+          color="primary"
+          variant="text"
+          startIcon={<FiPlus />}
+          onClick={() => {
+            setOpenAddProducts(true);
+          }}
+          justifyContent="flex-end"
+        />
+      </Grid>
+      <CustomMinimalTable<ProductosDisponiblesTableType>
+        columns={crearSolicitudMaterialColumns}
+        data={productosDisponibles || []}
+        enablePagination
+        density="comfortable"
+      />
+      <ProductosDisponiblesModal
+        open={openAddProducts}
+        onClose={() => setOpenAddProducts(false)}
+      />
+
       <CustomTextArea
         label="Observación"
         name="observacion"

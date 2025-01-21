@@ -12,12 +12,14 @@ import {
 
 import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
+import { useAuthStore } from '@/store/auth';
 
 export type PreventaEsperaAgendaPageProps = {};
 
 const SolicitudMaterialEsperaPage: React.FC<
   PreventaEsperaAgendaPageProps
 > = () => {
+  const user = useAuthStore(s => s.user);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -44,12 +46,15 @@ const SolicitudMaterialEsperaPage: React.FC<
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
-      // estado_preventa: EstadoPreventaEnumChoice.ESPERA,
-      // contrato_aceptado: true,
       por_agendar: true,
     },
   });
 
+  const bodegaFilter = user?.flota_data?.ubicacion_data?.bodega;
+  const ubicacionFilter = user?.flota_data?.ubicacion_data?.id;
+  const filteredItems = preventasPagingRes?.data?.items.filter(
+    item => item.bodega === bodegaFilter && item.ubicacion === ubicacionFilter,
+  );
   ///* columns ------------------------
   const { solicitudMaterialColumns } = useColumnsSolicitudMaterial();
 
@@ -66,7 +71,7 @@ const SolicitudMaterialEsperaPage: React.FC<
 
       <CustomTable<Preventa>
         columns={solicitudMaterialColumns}
-        data={preventasPagingRes?.data?.items || []}
+        data={filteredItems || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side

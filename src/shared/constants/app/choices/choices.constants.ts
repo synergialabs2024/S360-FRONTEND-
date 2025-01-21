@@ -330,6 +330,15 @@ export enum EstadoPreventaEnumChoice {
   SIN_GESTION = 'SIN_GESTION', // unblock sale approved
 }
 
+export enum EstadoSolicitudMaterialEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  APROBADO = 'APROBADO',
+  RECHAZADO = 'RECHAZADO',
+  CANCELADO = 'CANCELADO',
+  FINALIZADO = 'FINALIZADO',
+  SIN_GESTION = 'SIN_GESTION',
+}
+
 export enum EstadoCorreccionPreventaEnumChoice {
   EXPIRADO = 'EXPIRADO',
   CORREGIDO = 'CORREGIDO',

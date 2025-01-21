@@ -7,7 +7,7 @@ import {
   SingleTableBoxScene,
   a11yProps,
 } from '@/shared/components';
-import { EstadoPreventaEnumChoice } from '@/shared/constants/app';
+import { EstadoSolicitudMaterialEnumChoice } from '@/shared/constants/app';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
 import PreventaByStatePage from './SolicitudMaterialByStatePage';
 import SolicitudMaterialEsperaPage from './SolicitudMaterialEsperaPage';
@@ -44,34 +44,22 @@ const SolicitudMaterialMainPage: React.FC<PreventasMainPageProps> = () => {
 
       <CustomTabPanel value={tabValue} index={6} ptGrid="0">
         <PreventaByStatePage
-          state={EstadoPreventaEnumChoice.ESPERA}
+          state={EstadoSolicitudMaterialEnumChoice.APROBADO}
           noAceptados
         />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={7} ptGrid="0">
         <SolicitudMaterialByStatePage
-          state={EstadoPreventaEnumChoice.ESPERA}
+          state={EstadoSolicitudMaterialEnumChoice.RECHAZADO}
           pedingPayment
         />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <PreventaByStatePage state={EstadoPreventaEnumChoice.FINALIZADO} />
-      </CustomTabPanel>
-
-      {/*
-      <CustomTabPanel value={tabValue} index={3} ptGrid="0">
-        <PreventaByStatePage state={EstadoPreventaEnumChoice.RECHAZADO} />
-      </CustomTabPanel>
-        */}
-
-      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
-        <PreventaByStatePage state={EstadoPreventaEnumChoice.SIN_GESTION} />
-      </CustomTabPanel>
-
-      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
-        <PreventaByStatePage state={EstadoPreventaEnumChoice.FALLIDO} />
+        <PreventaByStatePage
+          state={EstadoSolicitudMaterialEnumChoice.FINALIZADO}
+        />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );

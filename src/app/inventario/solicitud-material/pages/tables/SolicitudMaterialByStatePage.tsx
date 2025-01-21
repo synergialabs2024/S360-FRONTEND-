@@ -1,6 +1,6 @@
 import {
   EstadoPagoEnumChoice,
-  EstadoPreventaEnumChoice,
+  EstadoSolicitudMaterialEnumChoice,
   PermissionsEnum,
   Preventa,
   TABLE_CONSTANTS,
@@ -18,7 +18,7 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 
 export type PreventaByStatePageProps = {
-  state: EstadoPreventaEnumChoice;
+  state: EstadoSolicitudMaterialEnumChoice;
   noAceptados?: boolean;
   pedingPayment?: boolean;
 };
@@ -91,15 +91,16 @@ const SolicitudMaterialByStatePage: React.FC<PreventaByStatePageProps> = ({
 
       <CustomTable<Preventa>
         columns={
-          state === EstadoPreventaEnumChoice.ESPERA && noAceptados
+          state === EstadoSolicitudMaterialEnumChoice.PENDIENTE && noAceptados
             ? preventasEsperaAceptacionColumns
-            : state === EstadoPreventaEnumChoice.ESPERA && pedingPayment
+            : state === EstadoSolicitudMaterialEnumChoice.APROBADO &&
+                pedingPayment
               ? preventaEsperaPagoColumns
-              : state === EstadoPreventaEnumChoice.FINALIZADO
+              : state === EstadoSolicitudMaterialEnumChoice.RECHAZADO
                 ? preventaRealizadas
-                : state === EstadoPreventaEnumChoice.FALLIDO
+                : state === EstadoSolicitudMaterialEnumChoice.FINALIZADO
                   ? preventaFallidas
-                  : state === EstadoPreventaEnumChoice.SIN_GESTION
+                  : state === EstadoSolicitudMaterialEnumChoice.SIN_GESTION
                     ? preventaSinGestion
                     : preventaBaseColumns
         }
