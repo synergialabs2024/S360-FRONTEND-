@@ -1196,6 +1196,52 @@ const SaveActualizacionSerieOnuOTPage = Loadable(
       ),
   ),
 );
+
+const TicketsVisitaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/tickets-visita/recoordinacion/pages/tables/TicketsVisitaPage'
+      ),
+  ),
+);
+
+const RecoordinacionTicketVisita = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/tickets-visita/recoordinacion/pages/forms/RecoordinacionTicketVisita'
+      ),
+  ),
+);
+
+const AprobacionTicketsVisitaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/tickets-visita/aprobacion/pages/tables/AprobacionTicketsVisitaPage'
+      ),
+  ),
+);
+
+const AprobacionTicketVisita = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/tickets-visita/aprobacion/pages/forms/AprobacionTicketVisita'
+      ),
+  ),
+);
+
+const UpdateCorreccionFotosTv = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tecnico/tickets-tecnico/pages/forms/UpdateCorreccionFotosTv'
+      ),
+  ),
+);
+
 ///* auditoria ------------
 const AuditoriaInstalacionesMainPage = Loadable(
   lazy(
@@ -2089,6 +2135,29 @@ const AppRouter = [
             path: ROUTER_PATHS.operaciones.auditOtInstallFixedPhotos,
             element: <AuditoriaInstallActualizadasPage />,
           },
+
+          ///* tickets visita
+
+          {
+            path: ROUTER_PATHS.operaciones.ticketsVisita,
+            element: <TicketsVisitaPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones.ticketsVisitaRecoordinacion,
+            element: <RecoordinacionTicketVisita />,
+          },
+
+          {
+            path: ROUTER_PATHS.operaciones.aprobacionTicketsVisita,
+            element: <AprobacionTicketsVisitaPage />,
+          },
+          {
+            path: ROUTER_PATHS.operaciones
+              .aprobacionTicketsVisitaRecoordinacion,
+            element: <AprobacionTicketVisita />,
+          },
+
+          //
         ],
       },
 
@@ -2445,6 +2514,18 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tecnico.ticketsAsignadosOV,
             element: <VisitaTecnico />,
+          },
+
+          //
+
+          {
+            path: ROUTER_PATHS.tecnico.auditTvFixedData,
+            element: <AprobacionTicketVisita />,
+          },
+
+          {
+            path: ROUTER_PATHS.tecnico.auditTvFixedPhotos,
+            element: <UpdateCorreccionFotosTv />,
           },
         ],
       },

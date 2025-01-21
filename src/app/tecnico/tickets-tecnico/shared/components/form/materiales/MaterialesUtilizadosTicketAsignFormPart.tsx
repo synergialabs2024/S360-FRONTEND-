@@ -1,12 +1,13 @@
 import { Grid, TextField } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
 import { IoMdTrash } from 'react-icons/io';
 
 import {
   CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA,
+  CodigoModeloProductoEnumChoice,
   CodigoModeloProductoEnumChoiceType,
   gridSizeMdLg6,
   ToastWrapper,
@@ -44,7 +45,7 @@ export type MaterialesUtilizadosOTTableType = EquiposUtilizadosOTTableType & {
 
 const MaterialesUtilizadosTicketAsignFormPart: React.FC<
   MaterialesUtilizadosTicketAsignFormPartProps
-> = ({ ticket }) => {
+> = ({ ticket, form }) => {
   ///* local state --------------------
   const [openMaterialesDisponiblesModal, setOpenMaterialesDisponiblesModal] =
     useState<boolean>(false);
@@ -105,6 +106,55 @@ const MaterialesUtilizadosTicketAsignFormPart: React.FC<
   //   },
   //   [updateSelectedItemValue],
   // );
+
+  ///* effects --------------------
+  useEffect(() => {
+    if (!ticket) return;
+    if (!selectedFibraModel) return;
+
+    if (selectedFibraModel === CodigoModeloProductoEnumChoice.FIBRA_GRANEL) {
+      const metrajeAutorizado = +(ticket?.ciudad_data?.metraje_autorizado || 0);
+      const fibraItem = useInstalacionesStore
+        .getState()
+        .materialesUtilizados.find(item => item.isFibra);
+
+      const metrajeUtilizadoFibra = fibraItem?.usedQuantity || 0;
+      const metrajeExedenteFibra = metrajeUtilizadoFibra - metrajeAutorizado;
+
+      form.setValue(
+        'punta_inicial_fibra',
+        fibraItem?.puntaInicio?.toString() || '0.00',
+      );
+      form.setValue(
+        'punta_final_fibra',
+        fibraItem?.puntaFin?.toString() || '0.00',
+      );
+      form.setValue(
+        'metraje_utilizado_fibra',
+        metrajeUtilizadoFibra.toString() || '0.00',
+      );
+      form.setValue(
+        'metraje_exedente_fibra',
+        metrajeExedenteFibra < 0
+          ? '0.00'
+          : metrajeExedenteFibra?.toString() || '0.00',
+      );
+    }
+
+    if (
+      selectedFibraModel ===
+      CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA
+    ) {
+      const fibraItem = useInstalacionesStore
+        .getState()
+        .materialesUtilizados.find(item => item.isFibraPreconect);
+
+      form.setValue(
+        'metraje_utilizado_fibra',
+        fibraItem?.producto_data?.metraje_relativo || '0.00',
+      );
+    }
+  }, [form, materialesUtilizados, ticket, selectedFibraModel]);
 
   ///* columns --------------------
   const { baseColumnsEquiposMaterialesInstallOT01 } =
@@ -222,6 +272,12 @@ const MaterialesUtilizadosTicketAsignFormPart: React.FC<
               actualValueKey="value"
               onChange={v => {
                 setSelectedFibraModel(v as string);
+                form.setValue('modelo_fibra_utilizada', v as any);
+
+                form.setValue('punta_inicial_fibra', '0.00');
+                form.setValue('punta_final_fibra', '0.00');
+                form.setValue('metraje_utilizado_fibra', '0.00');
+                form.setValue('metraje_exedente_fibra', '0.00');
               }}
               options={CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA}
               getOptionLabel={o => o.label}

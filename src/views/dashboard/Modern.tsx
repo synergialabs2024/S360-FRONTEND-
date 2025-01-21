@@ -8,10 +8,7 @@ import SectionTrafico from '@/components/dashboards/sections/trafico/pages/Secti
 
 const Modern = () => {
   return (
-    <PageContainer
-      title="Modern Dashboard"
-      description="this is Modern Dashboard page"
-    >
+    <PageContainer title="S360" description="Sistema empresarial S360">
       <Box>
         <Grid container spacing={3}>
           {/* column */}

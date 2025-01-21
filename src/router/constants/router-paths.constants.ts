@@ -335,6 +335,15 @@ export const ROUTER_PATHS = {
     auditOtInstallFixedData: 'auditoria/instalaciones-actualizadas/datos/:uuid',
     auditOtInstallFixedPhotos:
       'auditoria/instalaciones-actualizadas/fotos/:uuid',
+
+    ///* tickets visita
+    ticketsVisita: 'tickets-visita/recoordinacion',
+    ticketsVisitaRecoordinacion: 'tickets-visita/recoordinacion/:uuid',
+    ticketsVisitaNav: '/operaciones/tickets-visita/recoordinacion',
+
+    aprobacionTicketsVisita: 'tickets-visita/aprobacion',
+    aprobacionTicketsVisitaRecoordinacion: 'tickets-visita/aprobacion/:uuid',
+    aprobacionicketsVisitaNav: '/operaciones/tickets-visita/aprobacion',
   },
 
   /////* Infraestructura ----------------
@@ -413,6 +422,11 @@ export const ROUTER_PATHS = {
     ticketsAsignados: 'tickets',
     ticketsAsignadosOV: 'tickets/:uuid',
     ticketsNav: '/tecnico/tickets',
+
+    //
+
+    auditTvFixedData: 'auditoria/instalaciones-actualizadas/datos/:uuid',
+    auditTvFixedPhotos: 'auditoria/instalaciones-actualizadas/fotos/:uuid',
 
     ///* upload
     // parametrosAsuntos: 'orden-visita',

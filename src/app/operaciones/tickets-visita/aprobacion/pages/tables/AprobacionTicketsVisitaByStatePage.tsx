@@ -1,6 +1,5 @@
 import {
   EstadoTicketTecnicoEnumChoice,
-  MotivoCorreccionOTAuditoriaEnumChoice,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -17,13 +16,13 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { useFetchTickets } from '@/actions/app/tickets';
 import { useNavigate } from 'react-router';
 
-export type TicketsTecnicoByStatePageProps = {
+export type AprobacionTicketsVisitaByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
 };
 
-const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
-  state,
-}) => {
+const AprobacionTicketsVisitaByStatePage: React.FC<
+  AprobacionTicketsVisitaByStatePageProps
+> = ({ state }) => {
   const navigate = useNavigate();
 
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
@@ -61,18 +60,13 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   const { ticketBaseColumns } = useColumnsTickets();
 
   const onEdit = (row: Ticket) => {
-    if (row?.estado_ticket_tecnico === EstadoTicketTecnicoEnumChoice.ESPERA)
-      navigate(`/tecnico/tickets/${row.uuid}`);
+    if (row?.estado_ticket_tecnico === EstadoTicketTecnicoEnumChoice.REALIZADO)
+      navigate(`/operaciones/tickets-visita/aprobacion/${row.uuid}`);
     if (
       row?.estado_ticket_tecnico ===
-      EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
-    ) {
-      if (MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS) {
-        navigate(
-          `/tecnico/auditoria/instalaciones-actualizadas/fotos/${row.uuid}`,
-        );
-      }
-    }
+      EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA
+    )
+      navigate(`/operaciones/tickets-visita/aprobacion/${row.uuid}`);
   };
 
   return (
@@ -88,22 +82,15 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
 
       <CustomTable<Ticket>
         columns={
-          state === EstadoTicketTecnicoEnumChoice.ESPERA
+          EstadoTicketTecnicoEnumChoice.REALIZADO
             ? ticketBaseColumns
-            : state === EstadoTicketTecnicoEnumChoice.REALIZADO
+            : EstadoTicketTecnicoEnumChoice.CERRADO
               ? ticketBaseColumns
-              : state === EstadoTicketTecnicoEnumChoice.CERRADO
+              : EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
                 ? ticketBaseColumns
-                : state ===
-                    EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION
+                : EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA
                   ? ticketBaseColumns
-                  : state ===
-                      EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
-                    ? ticketBaseColumns
-                    : state ===
-                        EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA
-                      ? ticketBaseColumns
-                      : ticketBaseColumns
+                  : ticketBaseColumns
         }
         data={ticketsTecnicoPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -128,9 +115,9 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
         onConditionEdit={ticketVisita => {
           return (
             ticketVisita.estado_ticket_tecnico ===
-              EstadoTicketTecnicoEnumChoice.ESPERA ||
+              EstadoTicketTecnicoEnumChoice.REALIZADO ||
             ticketVisita.estado_ticket_tecnico ===
-              EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
+              EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA
           );
         }}
         onEdit={onEdit}
@@ -142,4 +129,4 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   );
 };
 
-export default TicketsTecnicoByStatePage;
+export default AprobacionTicketsVisitaByStatePage;

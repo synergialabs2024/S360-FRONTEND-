@@ -239,4 +239,23 @@ export type UploadTicketVisitaAsignData = Pick<
   | 'equipos_utilizados'
   | 'materiales_utilizados'
   | 'asunto_ticket_tecnico'
+  | 'modelo_fibra_utilizada'
+  | 'punta_inicial_fibra'
+  | 'punta_final_fibra'
+>;
+
+export type UploadTicketVisitaCorreccionFotosData = Pick<
+  Ticket,
+  | 'linea_servicio'
+  | 'url_foto_antes_solucion'
+  | 'url_foto_despues_solucion'
+  | 'url_foto_test_velocidad'
+  | 'url_foto_potencia_antes_solucion'
+  | 'url_foto_potencia_despues_solucion'
+  | 'url_foto_problema_encontrado'
+  | 'url_foto_solucion'
+  | 'url_foto_entrega_mesh'
+  | 'url_foto_entrega_ups'
+  | 'linea_servicio'
+  | 'asunto_ticket_tecnico'
 >;

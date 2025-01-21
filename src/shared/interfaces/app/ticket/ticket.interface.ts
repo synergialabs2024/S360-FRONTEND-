@@ -1,4 +1,6 @@
+import { MotivoCorreccionOTAuditoriaEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '../../common';
+import { Ciudad } from '../administration';
 import { LineaServicio } from '../cliente';
 import { FlotaLimitData } from '../mante-operacion';
 import {
@@ -28,14 +30,15 @@ export interface Ticket {
   franja_horaria?: string;
   telefono?: string;
   fecha_sugerida_visita?: string;
+  fecha_hora_visita?: string;
 
   motivo_rechazo?: string;
 
   url_foto_antes_solucion?: string;
   url_foto_despues_solucion?: string;
   url_foto_test_velocidad?: string;
-  url_foto_potencia_antes_solucion: string;
-  url_foto_potencia_despues_solucion: string;
+  url_foto_potencia_antes_solucion?: string;
+  url_foto_potencia_despues_solucion?: string;
   url_foto_problema_encontrado?: string;
   url_foto_solucion?: string;
   url_foto_entrega_mesh?: string;
@@ -72,10 +75,18 @@ export interface Ticket {
   serie_ont?: string;
   potencia_ont: string;
   observaciones_adicionales: string;
-  modelo_fibra_utilizada: string; // code
+  modelo_fibra_utilizada?: string; // code
   modelo_ont_wifi: string; // code
 
   asunto_ticket_tecnico?: number;
+
+  nombre_persona_referencia?: string;
+  parentesco_referencia?: string;
+
+  ciudad_data?: Ciudad;
+
+  motivo_correccion?: MotivoCorreccionOTAuditoriaEnumChoice;
+  observacion_correccion?: string;
 }
 
 export interface AsuntoTicketData {

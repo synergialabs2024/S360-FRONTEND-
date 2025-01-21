@@ -359,6 +359,9 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
     uploadTicketVisitaTecnico.mutate({
       solucion_tecnico: data.solucion_tecnico,
       observacion_extra_solucion_visita: data.observacion_extra_solucion_visita,
+      modelo_fibra_utilizada: data.modelo_fibra_utilizada,
+      punta_inicial_fibra: data.punta_inicial_fibra,
+      punta_final_fibra: data.punta_final_fibra,
       url_foto_antes_solucion: antesSolucionPhoto?.streamUlr,
       url_foto_despues_solucion: despuesSolucionPhoto?.streamUlr,
       url_foto_test_velocidad: testVelocidadPhoto?.streamUlr,

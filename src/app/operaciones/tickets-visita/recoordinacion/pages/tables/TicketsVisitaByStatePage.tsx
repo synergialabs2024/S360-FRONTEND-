@@ -1,6 +1,5 @@
 import {
   EstadoTicketTecnicoEnumChoice,
-  MotivoCorreccionOTAuditoriaEnumChoice,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -17,11 +16,11 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { useFetchTickets } from '@/actions/app/tickets';
 import { useNavigate } from 'react-router';
 
-export type TicketsTecnicoByStatePageProps = {
+export type TicketsVisitaByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
 };
 
-const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
+const TicketsVisitaByStatePage: React.FC<TicketsVisitaByStatePageProps> = ({
   state,
 }) => {
   const navigate = useNavigate();
@@ -61,18 +60,7 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   const { ticketBaseColumns } = useColumnsTickets();
 
   const onEdit = (row: Ticket) => {
-    if (row?.estado_ticket_tecnico === EstadoTicketTecnicoEnumChoice.ESPERA)
-      navigate(`/tecnico/tickets/${row.uuid}`);
-    if (
-      row?.estado_ticket_tecnico ===
-      EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
-    ) {
-      if (MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS) {
-        navigate(
-          `/tecnico/auditoria/instalaciones-actualizadas/fotos/${row.uuid}`,
-        );
-      }
-    }
+    navigate(`/operaciones/tickets-visita/recoordinacion/${row.uuid}`);
   };
 
   return (
@@ -88,22 +76,9 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
 
       <CustomTable<Ticket>
         columns={
-          state === EstadoTicketTecnicoEnumChoice.ESPERA
+          EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION
             ? ticketBaseColumns
-            : state === EstadoTicketTecnicoEnumChoice.REALIZADO
-              ? ticketBaseColumns
-              : state === EstadoTicketTecnicoEnumChoice.CERRADO
-                ? ticketBaseColumns
-                : state ===
-                    EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION
-                  ? ticketBaseColumns
-                  : state ===
-                      EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
-                    ? ticketBaseColumns
-                    : state ===
-                        EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA
-                      ? ticketBaseColumns
-                      : ticketBaseColumns
+            : ticketBaseColumns
         }
         data={ticketsTecnicoPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -128,9 +103,7 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
         onConditionEdit={ticketVisita => {
           return (
             ticketVisita.estado_ticket_tecnico ===
-              EstadoTicketTecnicoEnumChoice.ESPERA ||
-            ticketVisita.estado_ticket_tecnico ===
-              EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
+            EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION
           );
         }}
         onEdit={onEdit}
@@ -142,4 +115,4 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   );
 };
 
-export default TicketsTecnicoByStatePage;
+export default TicketsVisitaByStatePage;
