@@ -259,3 +259,10 @@ export type UploadTicketVisitaCorreccionFotosData = Pick<
   | 'linea_servicio'
   | 'asunto_ticket_tecnico'
 >;
+
+export type UploadTicketVisitaCorreccionData = Pick<
+  Ticket,
+  | 'solucion_tecnico'
+  | 'observacion_extra_solucion_visita'
+  | 'asunto_ticket_tecnico'
+>;

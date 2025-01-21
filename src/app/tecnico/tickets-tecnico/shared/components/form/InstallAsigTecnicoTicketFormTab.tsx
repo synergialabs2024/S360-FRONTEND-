@@ -10,6 +10,7 @@ import {
 } from '@/shared/components';
 import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
 import { InstallAsignTicketTecnicoSaveFormData } from '../SaveVisita/SaveVisita';
+import { SingleImageModal } from '@/shared/components/ui';
 
 export type InstallAsigTecnicoTicketFormTabProps = {
   form: UseFormReturn<InstallAsignTicketTecnicoSaveFormData>;
@@ -100,6 +101,22 @@ const InstallAsigTecnicoTicketFormTab: React.FC<
           disabled
           startAdornment={<IoMdClock />}
         />
+
+        <>
+          <CustomTypoLabel
+            text="Vivienda del cliente"
+            pt={CustomTypoLabelEnum.ptMiddlePosition}
+          />
+
+          <SingleImageModal
+            image={{
+              id: 1,
+              imgUrl: ticket?.url_foto_vivienda!,
+              title: 'Foto de la vivienda',
+            }}
+            widthPercentage="70%"
+          />
+        </>
 
         <CustomTypoLabel
           text="Hora de instalación"

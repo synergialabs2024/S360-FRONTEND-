@@ -1242,6 +1242,15 @@ const UpdateCorreccionFotosTv = Loadable(
   ),
 );
 
+const UpdateCorreccionDatosTv = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tecnico/tickets-tecnico/pages/forms/UpdateCorreccionDatosTv'
+      ),
+  ),
+);
+
 ///* auditoria ------------
 const AuditoriaInstalacionesMainPage = Loadable(
   lazy(
@@ -2520,7 +2529,7 @@ const AppRouter = [
 
           {
             path: ROUTER_PATHS.tecnico.auditTvFixedData,
-            element: <AprobacionTicketVisita />,
+            element: <UpdateCorreccionDatosTv />,
           },
 
           {

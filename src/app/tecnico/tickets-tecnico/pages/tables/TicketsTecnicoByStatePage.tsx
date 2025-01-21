@@ -63,11 +63,16 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
   const onEdit = (row: Ticket) => {
     if (row?.estado_ticket_tecnico === EstadoTicketTecnicoEnumChoice.ESPERA)
       navigate(`/tecnico/tickets/${row.uuid}`);
+
     if (
       row?.estado_ticket_tecnico ===
       EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
     ) {
-      if (MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS) {
+      if (MotivoCorreccionOTAuditoriaEnumChoice.INFORMACION_INCORRECTA) {
+        navigate(
+          `/tecnico/auditoria/instalaciones-actualizadas/datos/${row.uuid}`,
+        );
+      } else if (MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS) {
         navigate(
           `/tecnico/auditoria/instalaciones-actualizadas/fotos/${row.uuid}`,
         );
