@@ -142,6 +142,18 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     let hasError = false;
 
     for (const producto of mappedProductos) {
+      if (producto.stock_actual <= 0) {
+        ToastWrapper.error(
+          `
+          El producto de código ${producto.producto_data?.codigo} no
+          puede ser procesado por su carencia de stock.
+          `,
+        );
+        return;
+      }
+    }
+
+    for (const producto of mappedProductos) {
       if (producto.producto_data?.requiere_series === true) {
         if (producto.cantidad !== producto.serie.length) {
           ToastWrapper.error(
@@ -323,7 +335,6 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
           density="comfortable"
         />
         <UbicacionProductosDisponiblesModal
-          pk_ubicacion={watchedUbicacionOrigen}
           open={openAddProducts}
           onClose={() => setOpenAddProducts(false)}
         />

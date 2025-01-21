@@ -3,6 +3,7 @@ import {
   CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
   CodigoCategoriaProductoEnumChoiceType,
   gridSizeMdLg6,
+  ToastWrapper,
   UbicacionProducto,
   useLoaders,
   useTableFilter,
@@ -32,13 +33,13 @@ export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
 
 export type UbicacionProductosDisponiblesModalProps = {
   open: boolean;
-  pk_ubicacion: number;
+  pk_ubicacion?: number | undefined;
   onClose: () => void;
 };
 
 const UbicacionProductosDisponiblesModal: React.FC<
   UbicacionProductosDisponiblesModalProps
-> = ({ onClose, open, pk_ubicacion }) => {
+> = ({ onClose, open, pk_ubicacion = undefined }) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -95,6 +96,10 @@ const UbicacionProductosDisponiblesModal: React.FC<
             variant="text"
             color="primary"
             onClick={() => {
+              if (item.stock_actual <= 0) {
+                ToastWrapper.error('No existe stock disponible');
+                return;
+              }
               addSelectedItem({
                 keyStore:
                   UbicacionProductosDisponiblesStoreKey.ubicacionProductosDisponibles,

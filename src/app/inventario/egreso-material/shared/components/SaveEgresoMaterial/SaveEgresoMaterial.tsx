@@ -127,6 +127,18 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     let hasError = false;
 
     for (const producto of mappedProductos) {
+      if (producto.stock_actual <= 0) {
+        ToastWrapper.error(
+          `
+            El producto de código ${producto.producto_data?.codigo} no
+            puede ser procesado porque su stock actual es 0 o menor.
+          `,
+        );
+        return;
+      }
+    }
+
+    for (const producto of mappedProductos) {
       if (producto.producto_data?.requiere_series === true) {
         if (producto.cantidad !== producto.series.length) {
           ToastWrapper.error(

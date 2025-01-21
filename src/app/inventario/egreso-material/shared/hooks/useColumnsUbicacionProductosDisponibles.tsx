@@ -3,7 +3,7 @@ import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
 import { IoMdTrash } from 'react-icons/io';
 
-import { emptyCellNested, formatQuantityCell, TABLE_CONSTANTS } from '@/shared';
+import { emptyCellNested, emptyCellOneLevel, TABLE_CONSTANTS } from '@/shared';
 import {
   UbicacionProductosDisponiblesStoreKey,
   useUbicacionProductosStore,
@@ -28,7 +28,6 @@ type MRTUbicacionProductoTableType = {
 export const useColumnsUbicacionProductosDisponibles = ({
   showActionColumn = false,
   onActionProductosRowNode,
-  showCurrentStockColumn = true,
 }: UseColumnsEquiposEgresoMaterial = {}) => {
   ///* global state --------------------
   const removeSelectedItem = useUbicacionProductosStore(
@@ -93,19 +92,14 @@ export const useColumnsUbicacionProductosDisponibles = ({
         Cell: ({ row }) =>
           emptyCellNested(row, ['producto_data', 'descripcion']),
       },
-      ...(showCurrentStockColumn
-        ? [
-          {
-            accessorKey: 'stock_actual',
-            header: 'STOCK ACTUAL',
-            enableColumnFilter: false,
-            Cell: ({ row }: MRTUbicacionProductoTableType) =>
-              formatQuantityCell(row, 'stock_actual'),
-          },
-        ]
-        : []),
+      {
+        accessorKey: 'stock_actual',
+        header: 'STOCK ACTUAL',
+        enableColumnFilter: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'stock_actual'),
+      },
     ],
-    [showCurrentStockColumn],
+    [],
   );
 
   const baseColumnsEgreso02 = useMemo<

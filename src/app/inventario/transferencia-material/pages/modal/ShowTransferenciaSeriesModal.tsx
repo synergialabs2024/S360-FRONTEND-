@@ -2,13 +2,12 @@
 import { Grid, IconButton, TextField } from '@mui/material';
 import { IconBrandCodesandbox } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
-import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
+import { MRT_ColumnDef } from 'material-react-table';
 
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import {
   emptyCellNested,
   emptyCellOneLevel,
-  formatQuantityCell,
   IngresoMaterial,
   TABLE_CONSTANTS,
   UbicacionProducto,
@@ -18,16 +17,11 @@ import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-
 
 export type ShowTransferenciaSeriesModalProps = {
   Arrays: any;
-  showCurrentStockColumn?: boolean;
-};
-
-type MRTUbicacionProductoTableType = {
-  row: MRT_Row<UbicacionProductosDisponiblesTableType>;
 };
 
 const ShowTransferenciaSeriesModal: React.FC<
   ShowTransferenciaSeriesModalProps
-> = ({ Arrays = [], showCurrentStockColumn = true }) => {
+> = ({ Arrays = [] }) => {
   //* State local
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -59,17 +53,12 @@ const ShowTransferenciaSeriesModal: React.FC<
         Cell: ({ row }) =>
           emptyCellNested(row, ['producto_data', 'descripcion']),
       },
-      ...(showCurrentStockColumn
-        ? [
-            {
-              accessorKey: 'stock_actual',
-              header: 'STOCK ACTUAL',
-              enableColumnFilter: false,
-              Cell: ({ row }: MRTUbicacionProductoTableType) =>
-                formatQuantityCell(row, 'stock_actual'),
-            },
-          ]
-        : []),
+      {
+        accessorKey: 'stock_actual',
+        header: 'STOCK ACTUAL',
+        enableColumnFilter: false,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'stock_actual'),
+      },
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -166,7 +155,7 @@ const ShowTransferenciaSeriesModal: React.FC<
         },
       },
     ],
-    [open2, showCurrentStockColumn],
+    [open2],
   );
 
   const Section = () => (
