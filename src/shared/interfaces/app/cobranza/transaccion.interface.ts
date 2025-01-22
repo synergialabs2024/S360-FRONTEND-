@@ -18,6 +18,7 @@ export interface Transaccion {
   monto: string;
 
   codigo_transaccion: string;
+  numero_transaccion: string;
 
   created_at: string;
   modified_at: string;

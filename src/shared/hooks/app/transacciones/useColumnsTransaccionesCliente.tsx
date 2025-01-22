@@ -6,6 +6,8 @@ import { Transaccion } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
+  formatCurrency,
+  formatCurrencyCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 
@@ -13,10 +15,41 @@ export const useColumnsTransaccionesCliente = () => {
   const baseColums01 = useMemo<MRT_ColumnDef<Transaccion>[]>(
     () => [
       {
-        accessorKey: 'monto',
-        header: 'MONTO',
+        accessorKey: 'factura',
+        header: 'N° FACTURA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'monto'),
+        Cell: ({ row }) => {
+          const rubro = row.original?.rubro_data;
+          const factura = rubro?.factura_data;
+
+          return factura?.numero || '-';
+        },
+      },
+      {
+        accessorKey: 'fecha_pago_rubro',
+        header: 'FECHA PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          const rubro = row.original?.rubro_data;
+          return rubro?.fecha_pago || '-';
+        },
+      },
+      {
+        accessorKey: 'monto',
+        header: 'TOTAL PAGADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => formatCurrencyCell(row, 'monto'),
+      },
+      {
+        accessorKey: 'saldo',
+        header: 'SALDO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          const saldo = row.original?.saldo_data;
+          return saldo ? formatCurrency(saldo?.monto) : '0.00';
+        },
       },
 
       {
@@ -25,21 +58,11 @@ export const useColumnsTransaccionesCliente = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo_transaccion'),
       },
-
       {
-        accessorKey: 'rubro',
-        header: 'RUBRO',
+        accessorKey: 'numero_transaccion',
+        header: 'NUMERO TRANSACCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'rubro'),
-      },
-
-      {
-        accessorKey: 'saldo',
-        header: 'SALDO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'saldo'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_transaccion'),
       },
 
       {
