@@ -132,7 +132,7 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   };
 
   return (
-    <Grid item container spacing={2} alignItems="center">
+    <Grid item container spacing={2} alignItems="center" mb={4}>
       <Grid item {...gridSizeMdLg6}>
         <Typography
           variant="subtitle2"

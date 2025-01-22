@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 import { gridSize, gridSizeMdLg6, LineaServicio } from '@/shared';
 import { CustomTextFieldNoForm, CustomTypoLabel } from '@/shared/components';
-import ClienteFibraPerfilPagos from './ClienteFibraPerfilPagos';
 import FibraClientInfoPart from './FibraClientInfoPart';
 import LineStateFibraClient from './LineStateFibraClient';
 
@@ -17,7 +16,7 @@ const ContractFibraClientPart: React.FC<ContractFibraClientPartProps> = ({
       <CustomTypoLabel text="Datos del contrato" />
 
       <LineStateFibraClient serviceLine={serviceLine} />
-      <ClienteFibraPerfilPagos serviceLine={serviceLine} />
+      {/* <ClienteFibraPerfilPagos serviceLine={serviceLine} /> */}
 
       <CustomTextFieldNoForm
         label="Número de contrato"
