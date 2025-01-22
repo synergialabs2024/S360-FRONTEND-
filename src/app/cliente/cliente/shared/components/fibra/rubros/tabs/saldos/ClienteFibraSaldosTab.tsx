@@ -1,3 +1,5 @@
+import { Grid } from '@mui/material';
+
 import { useFetchSaldos } from '@/actions/app';
 import {
   LineaServicio,
@@ -8,7 +10,6 @@ import {
   useTableServerSideFiltering,
 } from '@/shared';
 import { CustomTable } from '@/shared/components';
-import { Grid } from '@mui/material';
 
 export type ClienteFibraSaldosTabProps = {
   serviceLine?: LineaServicio;

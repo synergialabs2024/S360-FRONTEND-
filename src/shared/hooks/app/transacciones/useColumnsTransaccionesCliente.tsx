@@ -12,6 +12,8 @@ import {
 } from '@/shared/utils';
 
 export const useColumnsTransaccionesCliente = () => {
+  // const baseColumsActions = useMemo<MRT_ColumnDef<Transaccion>[]>(() => [], []);
+
   const baseColums01 = useMemo<MRT_ColumnDef<Transaccion>[]>(
     () => [
       {
@@ -93,7 +95,7 @@ export const useColumnsTransaccionesCliente = () => {
       {
         accessorKey: 'uuid',
         header: 'Identificador',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
       },
 
