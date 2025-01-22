@@ -12,6 +12,7 @@ import {
 } from '@/shared/interfaces';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
+import { getClient } from '../tickets';
 
 const { get, post, patch } = erpAPI();
 
@@ -35,6 +36,14 @@ export const useGetCliente = (uuid: string) => {
   return useQuery({
     queryKey: [ClienteTSQEnum.CLIENTE, uuid],
     queryFn: () => getCliente(uuid),
+    retry: false,
+  });
+};
+
+export const useGetClienteByIdentificacion = (identificacion: string) => {
+  return useQuery({
+    queryKey: [ClienteTSQEnum.CLIENTE, identificacion],
+    queryFn: () => getClient(identificacion),
     retry: false,
   });
 };

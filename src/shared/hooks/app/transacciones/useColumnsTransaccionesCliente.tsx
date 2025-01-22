@@ -10,9 +10,30 @@ import {
   formatCurrencyCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+import { ClienteFibraTransaccionesActionBtnColumns } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/transacciones';
 
 export const useColumnsTransaccionesCliente = () => {
-  // const baseColumsActions = useMemo<MRT_ColumnDef<Transaccion>[]>(() => [], []);
+  const baseColumsActions = useMemo<MRT_ColumnDef<Transaccion>[]>(
+    () => [
+      {
+        accessorKey: 'url_pdf',
+        header: 'DOCUMENTOS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          const facturaUrl = row.original?.rubro_data?.factura_data?.url_pdf;
+          if (!facturaUrl) return '-';
+
+          return (
+            <ClienteFibraTransaccionesActionBtnColumns
+              transaccion={row.original}
+            />
+          );
+          // return <PDFIconButton url={facturaUrl} />;
+        },
+      },
+    ],
+    [],
+  );
 
   const baseColums01 = useMemo<MRT_ColumnDef<Transaccion>[]>(
     () => [
@@ -121,8 +142,8 @@ export const useColumnsTransaccionesCliente = () => {
 
   // main columns ----------------------
   const transaccionClienteTabColumns = useMemo<MRT_ColumnDef<Transaccion>[]>(
-    () => [...baseColums01, ...auditColumns],
-    [baseColums01, auditColumns],
+    () => [...baseColumsActions, ...baseColums01, ...auditColumns],
+    [baseColumsActions, baseColums01, auditColumns],
   );
 
   return { transaccionClienteTabColumns };
