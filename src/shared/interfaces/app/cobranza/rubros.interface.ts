@@ -2,6 +2,7 @@ import { EstadoRubroEnumChoice, TipoRubroEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { ClienteLimitData, ContratoLimitData } from '../cliente';
 import { Producto } from '../inventario';
+import { Factura } from './factura.interface';
 
 export interface RubrosPaginatedRes {
   status: number;
@@ -44,6 +45,7 @@ export interface Rubro {
 
   cliente_data?: ClienteLimitData;
   contrato_data?: ContratoLimitData;
+  factura_data?: Factura;
 }
 
 export type BaseRubroDetail = {
