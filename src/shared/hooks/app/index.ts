@@ -9,5 +9,6 @@ export * from './mantenimiento-ope';
 export * from './netconnect';
 export * from './operaciones';
 export * from './rubros';
+export * from './saldos';
 export * from './tecnico';
 export * from './transacciones';
