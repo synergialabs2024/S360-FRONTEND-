@@ -1,19 +1,25 @@
 import { FaFilePdf } from 'react-icons/fa';
+import { TbFileTypeXml } from 'react-icons/tb';
 
 import { SingleIconButton } from '../../CustomButtons';
 
 export type PDFIconButtonProps = {
   url: string;
   onClick?: () => void;
+  isXml?: boolean;
 };
 
-const PDFIconButton: React.FC<PDFIconButtonProps> = ({ onClick, url }) => {
+const PDFIconButton: React.FC<PDFIconButtonProps> = ({
+  onClick,
+  url,
+  isXml = false,
+}) => {
   return (
     <>
       <SingleIconButton
-        label="Ver PDF"
-        startIcon={<FaFilePdf />}
-        color="error"
+        label={`Ver ${isXml ? 'XML' : 'PDF'}`}
+        startIcon={isXml ? <TbFileTypeXml /> : <FaFilePdf />}
+        color={isXml ? 'inherit' : 'error'}
         onClick={() => {
           if (onClick) {
             onClick();

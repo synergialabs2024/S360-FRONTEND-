@@ -1,6 +1,7 @@
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
+import { ClienteFibraTransaccionesActionBtnColumns } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/transacciones';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Transaccion } from '@/shared/interfaces';
 import {
@@ -10,14 +11,13 @@ import {
   formatCurrencyCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { ClienteFibraTransaccionesActionBtnColumns } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/transacciones';
 
 export const useColumnsTransaccionesCliente = () => {
   const baseColumsActions = useMemo<MRT_ColumnDef<Transaccion>[]>(
     () => [
       {
         accessorKey: 'url_pdf',
-        header: 'DOCUMENTOS',
+        header: 'ACCIONES',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
           const facturaUrl = row.original?.rubro_data?.factura_data?.url_pdf;
