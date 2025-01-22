@@ -1,0 +1,39 @@
+import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { MetodoPago } from '../administration';
+import { Cliente, LineaServicio } from '../cliente';
+import { Rubro } from './rubros.interface';
+
+export interface TransaccionesPaginatedRes {
+  status: number;
+  message: string;
+  meta: PagingMetaResponse;
+  items: Transaccion[];
+}
+
+export interface Transaccion {
+  id: number;
+  uuid: string;
+
+  monto: string;
+
+  codigo_transaccion: string;
+
+  created_at: string;
+  modified_at: string;
+
+  ///* fk ----------
+  rubro?: number;
+  saldo?: number;
+  metodo_pago?: number;
+  cliente?: number;
+  linea_servicio?: number;
+
+  // switch
+  id_switch?: string;
+  entidad_financiera?: string;
+
+  rubro_data?: Rubro;
+  cliente_data?: Cliente;
+  linea_servicio_data?: LineaServicio;
+  metodo_pago_data?: MetodoPago;
+}

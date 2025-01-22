@@ -261,6 +261,12 @@ export const ROUTER_PATHS = {
     rubrosCrear: 'rubros/crear',
     rubrosEditar: 'rubros/editar/:uuid',
     rubrosNav: '/cobranza/rubros',
+
+    ///* transacciones
+    transacciones: 'transacciones',
+    transaccionesCrear: 'transacciones/crear',
+    transaccionesEditar: 'transacciones/editar/:uuid',
+    transaccionesNav: '/cobranza/transacciones',
   },
 
   /////* Comercial ----------------

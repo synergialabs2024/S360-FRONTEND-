@@ -9,3 +9,4 @@ export * from './netconnect';
 export * from './operaciones';
 export * from './rubros';
 export * from './tecnico';
+export * from './transacciones';
