@@ -4,12 +4,18 @@ import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
-import { Producto, ToastWrapper, solicitudMaterialFormSchema } from '@/shared';
+import {
+  Producto,
+  ToastWrapper,
+  getKeysFormErrorsMessage,
+  solicitudMaterialFormSchema,
+} from '@/shared';
 
 import {
   CustomMinimalTable,
   CustomSingleButton,
   CustomTextArea,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   CustomTypoLabelEnum,
   SingleFormBoxScene,
@@ -55,6 +61,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
 
   ///* hooks ---------------
@@ -81,6 +88,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
     navigate,
     returnUrl: returnUrlSolicitudMaterialPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => clearAllStore(),
   });
 
   ///* handlers
@@ -115,8 +123,21 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
     <SingleFormBoxScene
       titlePage={title}
       onCancel={() => navigate(returnUrlSolicitudMaterialPage)}
-      onSave={handleSubmit(onSave, () => {})}
+      onSave={handleSubmit(onSave, errors => {
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Errores en: ${keys}`);
+      })}
     >
+      <CustomTextFieldNoForm
+        label="Bodega"
+        value={user?.flota_data?.bodega_data?.nombre}
+        disabled
+      />
+      <CustomTextFieldNoForm
+        label="Ubicacion"
+        disabled
+        value={user?.flota_data?.ubicacion_data?.nombre}
+      />
       {/* ==================== PRODUCTS ==================== */}
       <CustomTypoLabel
         text="Productos"

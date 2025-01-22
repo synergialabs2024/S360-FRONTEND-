@@ -52,6 +52,7 @@ export const useCreateSolicitudMaterial = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
@@ -59,10 +60,11 @@ export const useCreateSolicitudMaterial = <T>({
   return useMutation({
     mutationFn: (params: CreatesolicitudMaterialParams<T>) =>
       createsolicitudMaterial(params),
-    onSuccess: () => {
+    onSuccess: resp => {
       queryClient.invalidateQueries({
         queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL],
       });
+      customOnSuccess && customOnSuccess(resp.data);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
