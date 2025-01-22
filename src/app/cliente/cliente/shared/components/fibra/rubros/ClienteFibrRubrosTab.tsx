@@ -8,6 +8,8 @@ import {
   NestedTabsScene,
 } from '@/shared/components';
 import { ClienteFibraRubroTab } from './tabs/rurbos';
+import { ClienteFibraSaldosTab } from './tabs/saldos';
+import { ClienteFibraTransaccionesTab } from './tabs/transacciones';
 
 export type ClienteFibrRubrosTabProps = {
   serviceLine?: LineaServicio;
@@ -17,7 +19,9 @@ const ClienteFibrRubrosTab: React.FC<ClienteFibrRubrosTabProps> = ({
   serviceLine,
 }) => {
   ///* hooks ---------------------
-  const { tabValue, handleTabChange } = useTabsOnly();
+  const { tabValue, handleTabChange } = useTabsOnly({
+    initialTabValue: 2,
+  });
 
   return (
     <>
@@ -42,12 +46,12 @@ const ClienteFibrRubrosTab: React.FC<ClienteFibrRubrosTabProps> = ({
 
         {/* ========================= transacciones ========================= */}
         <CustomTabPanel index={2} value={tabValue}>
-          TRANSACCIONES
+          <ClienteFibraTransaccionesTab serviceLine={serviceLine} />
         </CustomTabPanel>
 
         {/* ========================= saldos ========================= */}
         <CustomTabPanel index={3} value={tabValue}>
-          SALDOS
+          <ClienteFibraSaldosTab serviceLine={serviceLine} />
         </CustomTabPanel>
       </NestedTabsScene>
     </>
