@@ -950,6 +950,19 @@ export const ESTADO_RUBRO_ARRAY_CHOICES = [
   EstadoRubroEnumChoice.ANULADO,
 ];
 
+export enum EstadoSaldoEnumChoice {
+  NO_APLICADO = 'NO_APLICADO', // solo creado y libre para aplicar
+  APLICADO = 'APLICADO', // afecto a un rubro (service & libre)
+  PAGADO = 'PAGADO', // se hizo un pago a ese rubro
+  FACTURADO = 'FACTURADO',
+}
+export const ESTADO_SALDO_ARRAY_CHOICES = [
+  EstadoSaldoEnumChoice.NO_APLICADO,
+  EstadoSaldoEnumChoice.APLICADO,
+  EstadoSaldoEnumChoice.PAGADO,
+  EstadoSaldoEnumChoice.FACTURADO,
+];
+
 // // Configuracion de plantilla --------------
 export enum RecordatorioPagoTiposEnumChoice {
   EMAIL = 'EMAIL',

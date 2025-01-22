@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Saldo } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { formatCurrencyCell, formatDateWithTimeCell } from '@/shared/utils';
 
 export const useColumnsSaldos = () => {
   const columnsBase01 = useMemo<MRT_ColumnDef<Saldo>[]>(
@@ -12,14 +12,28 @@ export const useColumnsSaldos = () => {
         accessorKey: 'monto',
         header: 'MONTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'monto'),
+        Cell: ({ row }) => formatCurrencyCell(row, 'monto'),
       },
 
       {
         accessorKey: 'fecha_consumo',
         header: 'FECHA CONSUMO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_consumo'),
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_consumo'),
+      },
+
+      {
+        accessorKey: 'estado_saldo',
+        header: 'ESTADO SALDO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => row.original?.estado_saldo || '-',
+      },
+
+      {
+        accessorKey: 'descripcion',
+        header: 'DESCRIPCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => row.original?.descripcion || '-',
       },
     ],
     [],

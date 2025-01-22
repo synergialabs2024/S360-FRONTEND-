@@ -20,7 +20,7 @@ const ClienteFibrRubrosTab: React.FC<ClienteFibrRubrosTabProps> = ({
 }) => {
   ///* hooks ---------------------
   const { tabValue, handleTabChange } = useTabsOnly({
-    initialTabValue: 2,
+    initialTabValue: 1,
   });
 
   return (
