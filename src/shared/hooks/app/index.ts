@@ -2,6 +2,7 @@ export * from './administracion-red';
 export * from './administration';
 export * from './clientes';
 export * from './comercial';
+export * from './factura';
 export * from './infraestructura';
 export * from './inventario';
 export * from './mantenimiento-ope';

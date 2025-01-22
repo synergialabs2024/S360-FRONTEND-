@@ -8,8 +8,8 @@ export interface FacturasPaginatedRes {
 }
 
 export interface Factura {
-  id: number;
-  uuid: string;
+  id?: number;
+  uuid?: string;
 
   fecha_emision: string;
 
@@ -20,6 +20,6 @@ export interface Factura {
   clave_acceso: string;
   numero: string;
 
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
 }

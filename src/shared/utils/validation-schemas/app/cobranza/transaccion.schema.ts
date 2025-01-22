@@ -1,10 +1,6 @@
 import * as yup from 'yup';
 
 export const transaccionFormSchema = yup.object({
-  id: yup
-    .number()
-    .typeError('El campo id es requerido')
-    .required('El campo id es requerido'),
   monto: yup
     .string()
     .required('El campo monto es requerido')
