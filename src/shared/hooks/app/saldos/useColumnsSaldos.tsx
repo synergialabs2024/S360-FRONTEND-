@@ -1,11 +1,28 @@
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
+import { ClienteFibraSaldosActionBtnColumn } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/saldos';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Saldo } from '@/shared/interfaces';
 import { formatCurrencyCell, formatDateWithTimeCell } from '@/shared/utils';
 
 export const useColumnsSaldos = () => {
+  const baseColumsActions = useMemo<MRT_ColumnDef<Saldo>[]>(
+    () => [
+      {
+        accessorKey: 'acciones',
+        header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return <ClienteFibraSaldosActionBtnColumn saldo={row.original} />;
+        },
+      },
+    ],
+    [],
+  );
+
   const columnsBase01 = useMemo<MRT_ColumnDef<Saldo>[]>(
     () => [
       {
@@ -63,8 +80,8 @@ export const useColumnsSaldos = () => {
 
   /// main columns ------------
   const genericColumns = useMemo<MRT_ColumnDef<Saldo>[]>(
-    () => [...columnsBase01, ...auditColumns],
-    [auditColumns, columnsBase01],
+    () => [...baseColumsActions, ...columnsBase01, ...auditColumns],
+    [auditColumns, baseColumsActions, columnsBase01],
   );
 
   return {

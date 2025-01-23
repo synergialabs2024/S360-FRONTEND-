@@ -951,7 +951,7 @@ export const ESTADO_RUBRO_ARRAY_CHOICES = [
 ];
 
 export enum EstadoSaldoEnumChoice {
-  NO_APLICADO = 'NO_APLICADO', // solo creado y libre para aplicar
+  NO_APLICADO = 'NO APLICADO', // solo creado y libre para aplicar
   APLICADO = 'APLICADO', // afecto a un rubro (service & libre)
   PAGADO = 'PAGADO', // se hizo un pago a ese rubro
   FACTURADO = 'FACTURADO',
