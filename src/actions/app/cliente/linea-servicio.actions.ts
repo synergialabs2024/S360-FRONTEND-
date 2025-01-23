@@ -34,11 +34,12 @@ export const useFetchLineaServicios = ({
   });
 };
 
-export const useGetLineaServicio = (uuid: string) => {
+export const useGetLineaServicio = (uuid: string, enabledQr = true) => {
   return useQuery({
     queryKey: [LineaServicioTSQEnum.LINEASERVICIO, uuid],
     queryFn: () => getLineaServicio(uuid),
     retry: false,
+    enabled: enabledQr,
   });
 };
 
