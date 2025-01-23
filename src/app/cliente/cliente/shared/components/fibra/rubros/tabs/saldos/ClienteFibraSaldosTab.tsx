@@ -50,7 +50,7 @@ const ClienteFibraSaldosTab: React.FC<ClienteFibraSaldosTabProps> = ({
   const isCustomLoading = isSaldosLoading || isSaldosRefetching;
   useLoaders(isCustomLoading);
 
-  ///* columns ----------------------
+  ///* columns -----------------------
   const { genericColumns } = useColumnsSaldos();
 
   return (
