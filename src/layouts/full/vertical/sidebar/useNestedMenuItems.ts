@@ -575,12 +575,15 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
 
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'recoordinacion-tickets-visita',
-              title: 'Recoordinación de tickets visita',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.OPERACIONES_RECOORDINACION_TICKET_VISITA,
+              {
+                id: 'recoordinacion-tickets-visita',
+                title: 'Recoordinación de tickets visita',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
+              },
+            ),
 
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rechazo-agendas',
@@ -600,12 +603,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'aprobacion-ticket-visita',
-              title: 'Aprobación de Ticket visita',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.OPERACIONES_APROBACION_TICKET_VISITA,
+              {
+                id: 'aprobacion-ticket-visita',
+                title: 'Aprobación de Ticket visita',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Logistica ----------------

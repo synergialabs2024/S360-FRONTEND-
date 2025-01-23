@@ -1,0 +1,168 @@
+import dayjs from 'dayjs';
+import { UseFormReturn } from 'react-hook-form';
+
+import {
+  COUNTDOWN_TICKETS_VISITAS_ID,
+  InstallScheduleCacheData,
+  TempBlockPlanificadorTicketVisitaData,
+  usePostPlanificador,
+} from '@/actions/app';
+import { useSetCacheRedis } from '@/actions/shared';
+import {
+  PlanificadorTicketVisita,
+  TimerAgendamientoCacheEnum,
+  ToastWrapper,
+} from '@/shared';
+import { CustomConfirmDialogProps } from '@/shared/components';
+import { ToastSeverityEnum } from '@/shared/interfaces/ui/alerts.interface';
+import { useAgendamientoVentasStore } from '@/store/app';
+import { useAuthStore } from '@/store/auth';
+import { useGenericCountdownStore } from '@/store/ui';
+import { SaveFormDataAgendaTicketsVisita } from '../SaveRecoordinacionTicketVisita';
+
+export type ConfirmTicketVisitaScheduleModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+
+  preventaId: number;
+  form: UseFormReturn<SaveFormDataAgendaTicketsVisita>;
+
+  cacheKey: string;
+};
+
+const ConfirmTicketVisitaScheduleModal: React.FC<
+  ConfirmTicketVisitaScheduleModalProps
+> = ({ isOpen, onClose, form, preventaId, cacheKey }) => {
+  ///* form ---------------------
+  //const watchFechaInstalacion = form.watch('fecha_instalacion');
+  const watchFechaInstalacion = form.watch('fecha_instalacion');
+  const watchFlota = form.watch('flota');
+  const watchedRawFleet = form.watch('rawFlota');
+  const watchFlotaUUID = form.watch('flotaUUID');
+
+  ///* global state ---------------------
+  const selectedHour = useAgendamientoVentasStore(s => s.selectedHour);
+  const user = useAuthStore(s => s.user);
+  const startTimer = useGenericCountdownStore(s => s.start);
+  const setIsComponentBlocked = useAgendamientoVentasStore(
+    s => s.setIsComponentBlocked,
+  );
+
+  // handlers --------
+  const onSucessTempBlock = async (data: PlanificadorTicketVisita) => {
+    const selectedHourUUID = data.time_map?.find(
+      t => t.hora === selectedHour,
+    )?.uuid;
+
+    /// set cache ------------
+    await setCache.mutateAsync({
+      key: cacheKey,
+      value: {
+        selectedDate: watchFechaInstalacion!,
+        selectedHour: selectedHour!,
+        selectedHourUUID,
+
+        flotaId: watchFlota!,
+        userId: user?.id!,
+        preventaId,
+        limitDate: dayjs()
+          .add(TimerAgendamientoCacheEnum.initialAgendamientoMinutes, 'minutes')
+          .format(),
+
+        rawFlota: watchedRawFleet,
+        flotaUUID: watchFlotaUUID,
+      },
+    });
+
+    // start timer ------------
+    startTimer(
+      COUNTDOWN_TICKETS_VISITAS_ID,
+      TimerAgendamientoCacheEnum.initialAgendamientoSeconds,
+
+      // custom clear cb
+      async () => {
+        useGenericCountdownStore.getState().clearAll();
+        setIsComponentBlocked(false);
+        await setCacheClear.mutateAsync({
+          key: cacheKey,
+          value: null,
+        });
+      },
+    );
+
+    onClose();
+    setIsComponentBlocked(true);
+  };
+
+  ///* mutations ---------------------
+  const setCache = useSetCacheRedis<InstallScheduleCacheData>({
+    customMessageToast: 'Horario de instalación apartado durante 10 minutos',
+  });
+  const setCacheClear = useSetCacheRedis<null>({
+    customMessageToast: 'Tiempo agotado, seleccione nuevamente el horario',
+    customMessageSuccessSeverityToast: ToastSeverityEnum.info,
+  });
+  const tempBlockHourPlanificador =
+    usePostPlanificador<TempBlockPlanificadorTicketVisitaData>(
+      {
+        enableToast: false,
+        customOnSuccess: data => {
+          onSucessTempBlock(data as PlanificadorTicketVisita);
+        },
+      },
+      '/slot/temp-block/',
+    );
+
+  ///* handlers ---------------------
+  const onSave = async () => {
+    if (!selectedHour) return ToastWrapper.error('Debe seleccionar un horario');
+
+    const timeMap = [
+      {
+        hora: selectedHour!,
+        ticket: preventaId,
+        user: user?.id,
+        motivo: 'Bloqueo temporal de horario de instalación',
+      },
+    ];
+
+    // temp block all 3 slots
+    const timeMapLength = timeMap.length;
+    for (let i = 0; i < 3 - timeMapLength; i++) {
+      const nextHour = dayjs(selectedHour, 'HH:mm:ss').add(
+        30 * (i + 1),
+        'minute',
+      );
+      timeMap.push({
+        hora: nextHour.format('HH:mm:ss'),
+        ticket: preventaId,
+        user: user?.id,
+        motivo: 'Bloqueo temporal de horario de instalación',
+      });
+    }
+
+    await tempBlockHourPlanificador.mutateAsync({
+      fecha: watchFechaInstalacion!,
+      flota: watchFlota!,
+      time_map: timeMap,
+    });
+  };
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  return (
+    <CustomConfirmDialogProps
+      open={isOpen}
+      title="Confirmar Horario de Instalación"
+      subtitle="¿Está seguro de que desea agendar la instalación en este horario?"
+      text2="Una vez seleccionado este horario, no podrá ser modificado durante los próximos 10 minutos y el horario se bloqueará hasta entonces."
+      confirmTextBtn="Sí, confirmar horario"
+      onClose={handleClose}
+      onConfirm={onSave}
+    />
+  );
+};
+
+export default ConfirmTicketVisitaScheduleModal;

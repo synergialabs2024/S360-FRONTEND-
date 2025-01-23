@@ -6,6 +6,7 @@ import {
   getKeysFormErrorsMessage,
   gridSize,
   gridSizeMdLg9,
+  SolicitudServicio,
   ToastWrapper,
   useTabsOnly,
 } from '@/shared';
@@ -18,11 +19,21 @@ import {
 import { ROUTER_PATHS } from '@/router/constants';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ticketTecnicoFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket-tecnico.schema';
 import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
-import { CreateTicketParamsBase } from '@/actions/app/tickets';
+import {
+  CreateRecoordinacionTicketVisitaFormData,
+  CreateTicketParamsBase,
+  TicketTSQEnum,
+} from '@/actions/app/tickets';
 import RecoordinacionAsigTicketVisitaFormTab from './form/RecoordinacionAsigTicketVisitaFormTab';
 import RecoordinacionUbicacionTicketVisitaFormTab from './form/RecoordinacionUbicacionTicketVisitaFormTab';
+import TicketVisitaSaveAgenda from './SaveAgendamiento/form/TicketVisitaSaveAgenda';
+import { usePlanificadorAgendamientoTv } from '../hooks/usePlanificadorAgendamientoTv';
+import { CacheBaseKeysPreventaEnum } from '@/actions/app';
+import { useEffect } from 'react';
+import { useAgendamientoVentasStore } from '@/store/app';
+import { useGenericPATCH } from '@/actions/shared';
+import { reAgendamientoTicketVisitaFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket.schema';
 
 export const returnUrlTicketVisitaTecnico = ROUTER_PATHS.tecnico.ticketsNav;
 
@@ -31,32 +42,43 @@ export interface SaveRecoordinacionTicketVisitaProps {
   ticket?: Ticket;
 }
 
-export type SaveFormDataTicketsVisita = CreateTicketParamsBase & {
-  // helpers
-  provinceName?: string;
-  cityName?: string;
-  zoneName?: string;
-  sectorName?: string;
-  planName?: string;
-  entidadFinancieraName?: string;
-  tarjetaName?: string;
-  paymentMethodName?: string;
+export type SaveFormDataAgendaTicketsVisita = CreateTicketParamsBase &
+  Partial<SolicitudServicio> &
+  Partial<Ticket> & {
+    // helpers
+    provinceName?: string;
+    cityName?: string;
+    zoneName?: string;
+    sectorName?: string;
+    planName?: string;
+    entidadFinancieraName?: string;
+    tarjetaName?: string;
+    paymentMethodName?: string;
 
-  rawFlota?: Flota;
-  flotaUUID?: string;
-};
-
-export type InstallAsignTicketTecnicoSaveFormData = CreateTicketParamsBase & {};
+    rawFlota?: Flota;
+    flotaUUID?: string;
+  };
 
 const SaveRecoordinacionTicketVisita: React.FC<
   SaveRecoordinacionTicketVisitaProps
 > = ({ titleNode, ticket }) => {
+  ///* global state ---------------------
+  const setActiveTicketVisita = useAgendamientoVentasStore(
+    s => s.setActiveTicketVisita,
+  );
+
   ///* form ---------------------
-  const form = useForm<Ticket>({
-    resolver: yupResolver(ticketTecnicoFormSchema) as any,
+  const form = useForm<SaveFormDataAgendaTicketsVisita>({
+    resolver: yupResolver(reAgendamientoTicketVisitaFormSchema) as any,
   });
 
-  const { handleSubmit } = form;
+  const { handleSubmit, reset } = form;
+
+  usePlanificadorAgendamientoTv({
+    cackeKey: `${CacheBaseKeysPreventaEnum.HORARIO_VISITA_AGENDA_VENTAS}_${ticket?.uuid!}`,
+    form,
+  });
+
   ///* states ---------------------
   // const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
   ///* hooks --------------------
@@ -65,9 +87,43 @@ const SaveRecoordinacionTicketVisita: React.FC<
     initialTabValue: 1,
   });
 
-  ///* handlers ---------------------
-  const onSave = async (data: InstallAsignTicketTecnicoSaveFormData) => {
-    console.log('data', data);
+  ///* effects ---------------------
+  useEffect(() => {
+    if (!ticket?.id) return;
+    const { solicitud_servicio_data, ...rest } = ticket || {};
+    setActiveTicketVisita(ticket);
+
+    reset({
+      ...rest,
+      ...solicitud_servicio_data,
+
+      sectorName: solicitud_servicio_data?.sector_data?.name,
+      zoneName: solicitud_servicio_data?.zona_data?.name,
+      cityName: solicitud_servicio_data?.ciudad_data?.name,
+      provinceName: solicitud_servicio_data?.provincia_data?.name,
+      flotaUUID: ticket?.flota_data?.uuid,
+      zona: ticket?.linea_servicio_data?.solicitud_servicio_data?.zona,
+    } as SaveFormDataAgendaTicketsVisita);
+  }, [ticket, reset, setActiveTicketVisita]);
+
+  const uploadTicketVisitaTecnico = useGenericPATCH<
+    CreateRecoordinacionTicketVisitaFormData,
+    Ticket
+  >(`/ticket-tecnico/rearrange/${ticket?.id!}/`, TicketTSQEnum.TICKETS, {
+    customMessageToast: 'Ticket de visita recoordinado con éxito',
+    // navigate,
+    returnUrl: returnUrlTicketVisitaTecnico,
+    customOnSuccess() {
+      navigate(returnUrlTicketVisitaTecnico);
+    },
+  });
+
+  const onSave = async (data: SaveFormDataAgendaTicketsVisita) => {
+    uploadTicketVisitaTecnico.mutate({
+      flota: data.flota,
+      fecha: data.fecha_instalacion,
+      hora: data.hora_instalacion,
+    });
   };
 
   return (
@@ -76,7 +132,8 @@ const SaveRecoordinacionTicketVisita: React.FC<
       // action btns
       onCancel={() => navigate(returnUrlTicketVisitaTecnico)}
       onSave={handleSubmit(onSave, errors => {
-        ToastWrapper.error(`Error en: ${getKeysFormErrorsMessage(errors)}`);
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
       // tabs
       tabs={
@@ -96,6 +153,11 @@ const SaveRecoordinacionTicketVisita: React.FC<
       {/* ========================= Ubicacion ========================= */}
       <CustomTabPanel index={2} value={tabValue} gridSizeChild={gridSizeMdLg9}>
         <RecoordinacionUbicacionTicketVisitaFormTab ticket={ticket!} />
+      </CustomTabPanel>
+
+      {/* ========================= Agenda - Planificador ========================= */}
+      <CustomTabPanel index={3} value={tabValue} gridSizeChild={gridSizeMdLg9}>
+        <TicketVisitaSaveAgenda form={form} ticket={ticket!} />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

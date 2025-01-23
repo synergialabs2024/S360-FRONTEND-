@@ -266,3 +266,8 @@ export type UploadTicketVisitaCorreccionData = Pick<
   | 'observacion_extra_solucion_visita'
   | 'asunto_ticket_tecnico'
 >;
+
+export type CreateRecoordinacionTicketVisitaFormData = Pick<
+  Ticket,
+  'flota' | 'fecha' | 'hora'
+> & {};

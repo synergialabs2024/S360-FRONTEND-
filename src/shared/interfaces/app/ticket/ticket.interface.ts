@@ -7,6 +7,7 @@ import {
   EquipoUtilizadosInstallOT,
   MaterialUtilizadosInstallOT,
 } from '../tecnico';
+import { SolicitudServicio } from '../comercial';
 
 export interface TicketPaginatedRes {
   status: number;
@@ -31,6 +32,8 @@ export interface Ticket {
   telefono?: string;
   fecha_sugerida_visita?: string;
   fecha_hora_visita?: string;
+  fecha_instalacion: string;
+  hora_instalacion: string;
 
   motivo_rechazo?: string;
 
@@ -52,6 +55,7 @@ export interface Ticket {
   solucion_tecnico?: number;
   asunto_ticket_data?: AsuntoTicketData;
   linea_servicio_data?: LineaServicio;
+  flota?: number; // fk
   flota_data?: FlotaLimitData;
 
   valor_a_cobrar?: string;
@@ -87,6 +91,11 @@ export interface Ticket {
 
   motivo_correccion?: MotivoCorreccionOTAuditoriaEnumChoice;
   observacion_correccion?: string;
+
+  solicitud_servicio_data?: SolicitudServicio;
+
+  fecha: string;
+  hora: string;
 }
 
 export interface AsuntoTicketData {

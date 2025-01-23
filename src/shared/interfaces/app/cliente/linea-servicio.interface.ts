@@ -49,6 +49,8 @@ export interface LineaServicio {
   cliente_data?: Cliente;
   contrato_data?: Contrato;
 
+  distancia_nap?: string;
+
   // sales serializer -------------
   solicitud_servicio_data?: SolicitudServicio;
   pais_data?: PaisLimitData;

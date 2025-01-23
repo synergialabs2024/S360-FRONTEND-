@@ -37,3 +37,32 @@ export interface TimeMapPlanificador {
   user?: number;
   block_until?: string | null; // timestamp
 }
+
+export interface PlanificadorTicketVisita {
+  id?: number;
+  uuid?: string;
+
+  fecha: string; // YYYY-MM-DD
+  time_map?: TimeMapTicketVisitaPlanificador[];
+
+  created_at?: string;
+  modified_at?: string;
+
+  ///* fk
+  // flota?: number;
+  flota?: string; // uuid
+
+  flota_data?: FlotaLimitData;
+}
+
+export interface TimeMapTicketVisitaPlanificador {
+  uuid: string;
+  hora: string; // HH:MM:SS
+
+  estado?: SlotAgendamientoEstadosEnumChoice | null;
+  motivo?: string | null;
+
+  ticket?: number;
+  user?: number;
+  block_until?: string | null; // timestamp
+}

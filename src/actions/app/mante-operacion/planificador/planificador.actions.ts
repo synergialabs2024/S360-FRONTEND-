@@ -9,6 +9,7 @@ import {
   Planificador,
   PlanificadorPaginatedRes,
   TimeMapPlanificador,
+  TimeMapTicketVisitaPlanificador,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
@@ -179,7 +180,6 @@ export const postPlanificador = async <T>(
 ) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
-
   return post<Planificador>(`/planificador${url}`, data, true);
 };
 
@@ -199,6 +199,15 @@ export type TempBlockPlanificadorData = {
   time_map: Pick<
     TimeMapPlanificador,
     'hora' | 'user' | 'preventa' | 'motivo'
+  >[];
+  flota: number;
+};
+
+export type TempBlockPlanificadorTicketVisitaData = {
+  fecha: string; // YYYY-MM-DD
+  time_map: Pick<
+    TimeMapTicketVisitaPlanificador,
+    'hora' | 'user' | 'ticket' | 'motivo'
   >[];
   flota: number;
 };

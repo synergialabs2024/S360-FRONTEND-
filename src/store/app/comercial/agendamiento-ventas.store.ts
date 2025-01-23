@@ -8,10 +8,14 @@ import {
   Preventa,
   TimeMapPlanificador,
 } from '@/shared';
+import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
 
 interface AgendamientoVentasState {
   activePreventa: Preventa | null;
   setActivePreventa: (value: Preventa | null) => void;
+
+  activeTicketVisita: Ticket | null;
+  setActiveTicketVisita: (value: Ticket | null) => void;
 
   isComponentBlocked: boolean;
   setIsComponentBlocked: (value: boolean) => void;
@@ -48,6 +52,9 @@ export const useAgendamientoVentasStore = create<AgendamientoVentasState>()(
   set => ({
     activePreventa: null,
     setActivePreventa: value => set({ activePreventa: value }),
+
+    activeTicketVisita: null,
+    setActiveTicketVisita: value => set({ activeTicketVisita: value }),
 
     isComponentBlocked: false,
     setIsComponentBlocked: value => set({ isComponentBlocked: value }),
