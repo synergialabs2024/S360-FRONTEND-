@@ -77,6 +77,7 @@ export interface OrdenTrabajo {
   observacion_activacion?: string | null;
   observacion_prerechazo?: string | null;
   descripcion?: string | null;
+  luz_verde: boolean;
 
   // cambio puerto ya no va, tecnico lo upd ---------------
   tipo_actualizacion_puerto?: TipoActualizacionActivacionesEnumChoice;
