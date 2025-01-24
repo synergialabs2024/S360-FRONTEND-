@@ -1,3 +1,5 @@
+import { formatDateWithTime } from '@/shared';
+import { IoMdClock } from 'react-icons/io';
 import {
   CustomTextFieldNoForm,
   CustomTypoLabel,
@@ -16,7 +18,7 @@ const RecoordinacionAsigTicketVisitaFormTab: React.FC<
     <>
       <>
         <CustomTypoLabel
-          text="Datos cliente"
+          text="Datos generales ticket"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
 
@@ -49,19 +51,7 @@ const RecoordinacionAsigTicketVisitaFormTab: React.FC<
             }
             disabled
           />
-          <CustomTextFieldNoForm
-            label="Direccion"
-            value={
-              ticket?.linea_servicio_data?.solicitud_servicio_data?.direccion
-            }
-            disabled
-          />
 
-          <CustomTextFieldNoForm
-            label="Caja"
-            value={ticket?.linea_servicio_data?.nap_data?.name}
-            disabled
-          />
           <CustomTextFieldNoForm
             label="Telefono"
             value={
@@ -73,6 +63,43 @@ const RecoordinacionAsigTicketVisitaFormTab: React.FC<
           <CustomTextFieldNoForm
             label="Email"
             value={ticket?.linea_servicio_data?.solicitud_servicio_data?.email}
+            disabled
+          />
+
+          <CustomTypoLabel
+            text="Fecha y Flota de visita"
+            pt={CustomTypoLabelEnum.ptMiddlePosition}
+          />
+
+          <CustomTextFieldNoForm
+            label="Fecha y Hora de Visita"
+            value={
+              ticket?.fecha_hora_visita
+                ? formatDateWithTime(ticket?.fecha_hora_visita)
+                : ''
+            }
+            disabled
+            startAdornment={<IoMdClock />}
+          />
+
+          <CustomTextFieldNoForm
+            label="Flota"
+            value={ticket?.flota_data?.name}
+            disabled
+          />
+
+          <CustomTextFieldNoForm
+            label="Tecnico responsable"
+            value={ticket?.flota_data?.lider_data?.razon_social}
+            disabled
+          />
+
+          <CustomTextFieldNoForm
+            label="Servicio contratado"
+            value={
+              ticket?.linea_servicio_data?.contrato_data
+                ?.plan_internet_actual_data?.name
+            }
             disabled
           />
         </>

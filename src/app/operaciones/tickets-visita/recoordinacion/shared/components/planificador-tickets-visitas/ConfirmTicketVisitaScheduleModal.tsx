@@ -122,13 +122,13 @@ const ConfirmTicketVisitaScheduleModal: React.FC<
         hora: selectedHour!,
         ticket: preventaId,
         user: user?.id,
-        motivo: 'Bloqueo temporal de horario de instalación',
+        motivo: 'Bloqueo temporal de horario de visita',
       },
     ];
 
-    // temp block all 3 slots
+    // temp block all 2 slots
     const timeMapLength = timeMap.length;
-    for (let i = 0; i < 3 - timeMapLength; i++) {
+    for (let i = 0; i < 2 - timeMapLength; i++) {
       const nextHour = dayjs(selectedHour, 'HH:mm:ss').add(
         30 * (i + 1),
         'minute',
@@ -137,7 +137,7 @@ const ConfirmTicketVisitaScheduleModal: React.FC<
         hora: nextHour.format('HH:mm:ss'),
         ticket: preventaId,
         user: user?.id,
-        motivo: 'Bloqueo temporal de horario de instalación',
+        motivo: 'Bloqueo temporal de horario de visita',
       });
     }
 

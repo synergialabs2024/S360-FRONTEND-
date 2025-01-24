@@ -16,7 +16,6 @@ import {
   FormTabsOnly,
   TabsFormBoxScene,
 } from '@/shared/components';
-import { ROUTER_PATHS } from '@/router/constants';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
@@ -34,8 +33,8 @@ import { useEffect } from 'react';
 import { useAgendamientoVentasStore } from '@/store/app';
 import { useGenericPATCH } from '@/actions/shared';
 import { reAgendamientoTicketVisitaFormSchema } from '@/shared/utils/validation-schemas/app/tickets/ticket.schema';
-
-export const returnUrlTicketVisitaTecnico = ROUTER_PATHS.tecnico.ticketsNav;
+import { returnUrlTicketsRecoordinacion } from '../../pages/tables/TicketsVisitaPage';
+import { useGenericCountdownStore } from '@/store/ui';
 
 export interface SaveRecoordinacionTicketVisitaProps {
   titleNode: React.ReactNode;
@@ -66,6 +65,8 @@ const SaveRecoordinacionTicketVisita: React.FC<
   const setActiveTicketVisita = useAgendamientoVentasStore(
     s => s.setActiveTicketVisita,
   );
+  const clearAllAgendaVentaStore = useAgendamientoVentasStore(s => s.clearAll);
+  const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
 
   ///* form ---------------------
   const form = useForm<SaveFormDataAgendaTicketsVisita>({
@@ -106,15 +107,22 @@ const SaveRecoordinacionTicketVisita: React.FC<
     } as SaveFormDataAgendaTicketsVisita);
   }, [ticket, reset, setActiveTicketVisita]);
 
+  // hanlers helpers -----
+  const onClearAll = () => {
+    clearAllAgendaVentaStore();
+    clearAllTimers();
+  };
+  ///* mutations ---------------------
   const uploadTicketVisitaTecnico = useGenericPATCH<
     CreateRecoordinacionTicketVisitaFormData,
     Ticket
   >(`/ticket-tecnico/rearrange/${ticket?.id!}/`, TicketTSQEnum.TICKETS, {
     customMessageToast: 'Ticket de visita recoordinado con éxito',
     // navigate,
-    returnUrl: returnUrlTicketVisitaTecnico,
+    returnUrl: returnUrlTicketsRecoordinacion,
     customOnSuccess() {
-      navigate(returnUrlTicketVisitaTecnico);
+      onClearAll();
+      navigate(returnUrlTicketsRecoordinacion);
     },
   });
 
@@ -130,7 +138,7 @@ const SaveRecoordinacionTicketVisita: React.FC<
     <TabsFormBoxScene
       titlePageNode={titleNode}
       // action btns
-      onCancel={() => navigate(returnUrlTicketVisitaTecnico)}
+      onCancel={() => navigate(returnUrlTicketsRecoordinacion)}
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);

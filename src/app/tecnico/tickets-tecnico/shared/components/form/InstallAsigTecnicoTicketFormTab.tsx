@@ -86,22 +86,6 @@ const InstallAsigTecnicoTicketFormTab: React.FC<
           disabled
         />
 
-        <CustomTextFieldNoForm
-          label="Flota"
-          value={ticket?.franja_horaria}
-          disabled
-        />
-        <CustomTextFieldNoForm
-          label="Hora de inicio"
-          value={
-            ticket?.fecha_sugerida_visita
-              ? formatDateWithTime(ticket?.fecha_sugerida_visita)
-              : ''
-          }
-          disabled
-          startAdornment={<IoMdClock />}
-        />
-
         <>
           <CustomTypoLabel
             text="Vivienda del cliente"
@@ -119,19 +103,36 @@ const InstallAsigTecnicoTicketFormTab: React.FC<
         </>
 
         <CustomTypoLabel
-          text="Hora de instalación"
+          text="Fecha y Flota de visita"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+
+        <CustomTextFieldNoForm
+          label="Franja horaria"
+          value={ticket?.franja_horaria}
+          disabled
+        />
+
+        <CustomTextFieldNoForm
+          label="Fecha y Hora de Visita"
+          value={
+            ticket?.fecha_hora_visita
+              ? formatDateWithTime(ticket?.fecha_hora_visita)
+              : ''
+          }
+          disabled
+          startAdornment={<IoMdClock />}
+        />
+
+        <CustomTextFieldNoForm
+          label="Flota"
+          value={ticket?.flota_data?.name}
+          disabled
         />
 
         <CustomTextFieldNoForm
           label="Tecnico responsable"
           value={ticket?.flota_data?.lider_data?.razon_social}
-          disabled
-        />
-
-        <CustomTextFieldNoForm
-          label="Flota de instalacion"
-          value={ticket?.flota_data?.name}
           disabled
         />
 

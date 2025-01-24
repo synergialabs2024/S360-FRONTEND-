@@ -521,7 +521,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.TECNICO_TICKETS, {
               id: 'tickets-tecnico',
               title: 'Tickets',
               type: MenuItemType.ITEM,

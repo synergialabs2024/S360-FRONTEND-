@@ -103,7 +103,9 @@ const TicketsVisitaByStatePage: React.FC<TicketsVisitaByStatePageProps> = ({
         onConditionEdit={ticketVisita => {
           return (
             ticketVisita.estado_ticket_tecnico ===
-            EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION
+              EstadoTicketTecnicoEnumChoice.PENDIENTE_RECOORDINACION ||
+            ticketVisita.estado_ticket_tecnico ===
+              EstadoTicketTecnicoEnumChoice.ESPERA
           );
         }}
         onEdit={onEdit}

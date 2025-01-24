@@ -19,7 +19,7 @@ import {
   defaultSystemParamsValues,
   HTTPResStatusCodeEnum,
   Nullable,
-  Planificador,
+  PlanificadorTicketVisita,
   SlotAgendamientoEstadosEnumChoice,
   SystemParamsSlugsEnum,
   TimeMapTicketVisitaPlanificador,
@@ -404,30 +404,33 @@ export const usePlanificadorAgendamientoTv = ({
     socket.emit('register_fleet', watchedFleetUUID);
 
     // listen fleet schedule -------
-    socket.on('receive_fleet_schedule', (dayPlanificador: Planificador) => {
-      if (dayPlanificador?.flota_data?.uuid !== watchedFleetUUID) return;
-      const cachedData: Nullable<InstallScheduleCacheData> =
-        useAgendamientoVentasStore.getState().cachedData;
+    socket.on(
+      'receive_fleet_schedule',
+      (dayPlanificador: PlanificadorTicketVisita) => {
+        if (dayPlanificador?.flota_data?.uuid !== watchedFleetUUID) return;
+        const cachedData: Nullable<InstallScheduleCacheData> =
+          useAgendamientoVentasStore.getState().cachedData;
 
-      const timeMapArray: TimeMapTicketVisitaPlanificador[] =
-        dayPlanificador?.time_map || [];
+        const timeMapArray: TimeMapTicketVisitaPlanificador[] =
+          dayPlanificador?.time_map || [];
 
-      // Calculamos las horas disponibles utilizando la función helper
-      const availableSlots = calculateAvailableTimeSlots(
-        cachedData,
-        timeMapArray,
-        startInstallHour,
-        endInstallHour,
-        watchedFechaInstalacion,
-        userId!,
-      );
+        // Calculamos las horas disponibles utilizando la función helper
+        const availableSlots = calculateAvailableTimeSlots(
+          cachedData,
+          timeMapArray,
+          startInstallHour,
+          endInstallHour,
+          watchedFechaInstalacion,
+          userId!,
+        );
 
-      setAvailableTimeMap(availableSlots);
+        setAvailableTimeMap(availableSlots);
 
-      // console.log('-------------- receive_fleet_schedule --------------', {
-      //   planificador: dayPlanificador,
-      // });
-    });
+        // console.log('-------------- receive_fleet_schedule --------------', {
+        //   planificador: dayPlanificador,
+        // });
+      },
+    );
 
     return () => {
       socket.off('receive_fleet_schedule');
