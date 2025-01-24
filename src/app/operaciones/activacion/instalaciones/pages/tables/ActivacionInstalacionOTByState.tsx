@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { MdArrowRightAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 
@@ -19,17 +20,24 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import ModalAuthorizateOrdenTrabajo from '@/shared/hooks/app/tecnico/ModalAuthorizateOrdenTrabajo';
 
 export type ActivacionInstalacionOTByStateProps = {
   activacionState: EstadoActivacionEnumChoice;
   otState?: EstadoOrdenTrabajoEnumChoice;
 
   isRecoordinada?: boolean;
+  onAuthorizate?: boolean;
 };
 
 const ActivacionInstalacionOTByState: React.FC<
   ActivacionInstalacionOTByStateProps
-> = ({ otState, activacionState, isRecoordinada = false }) => {
+> = ({
+  otState,
+  activacionState,
+  isRecoordinada = false,
+  onAuthorizate = false,
+}) => {
   useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
 
   const navigate = useNavigate();
@@ -96,16 +104,18 @@ const ActivacionInstalacionOTByState: React.FC<
 
     return showEditButtonAsignadas || showEditButtonInstalacionesGestionadas;
   };
+
   const onEdit = (row: OrdenTrabajo) => {
     activacionState === EstadoActivacionEnumChoice.PENDIENTE
       ? navigate(`/operaciones/activaciones/instalacion/${row.uuid}`)
       : navigate(
-        `/operaciones/activaciones/instalacion/actualizacion-serie-onu/${row.uuid}`,
-      );
+          `/operaciones/activaciones/instalacion/actualizacion-serie-onu/${row.uuid}`,
+        );
   };
 
   ///* columns
-  const { installAsignadasEsperaOTColumns } = useColumnsOrdenTrabajo();
+  const { installAsignadasEsperaOTColumns, installGestionadasOTColumns } =
+    useColumnsOrdenTrabajo();
 
   return (
     <GridTableTabsContainerOnly>
@@ -121,9 +131,11 @@ const ActivacionInstalacionOTByState: React.FC<
       <CustomTable<OrdenTrabajo>
         columns={
           // solicitudServicioBase
-          otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE
-            ? installAsignadasEsperaOTColumns
-            : installAsignadasEsperaOTColumns
+          otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE && onAuthorizate
+            ? installGestionadasOTColumns
+            : otState === EstadoOrdenTrabajoEnumChoice.PENDIENTE
+              ? installAsignadasEsperaOTColumns
+              : installAsignadasEsperaOTColumns
         }
         data={OrdensTrabajoPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -147,6 +159,18 @@ const ActivacionInstalacionOTByState: React.FC<
         editIcon={<MdArrowRightAlt />}
         // editIconToolTipTitle="Crear preventa"
         canDelete={false}
+        showCustomButtonsSpace
+        customButtonsSpace={row => {
+          if (row?.luz_verde) {
+            return (
+              <ModalAuthorizateOrdenTrabajo
+                authOnu={row}
+                titleButton="AUTHORIZATE"
+              />
+            );
+          }
+          return null;
+        }}
       />
     </GridTableTabsContainerOnly>
   );

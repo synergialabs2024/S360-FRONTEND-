@@ -54,7 +54,6 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
   } = form;
 
   const watchIdOLT = form.watch('olt_data');
-  console.log(watchIdOLT);
 
   ///* mutations
   const createAutorizacionONUMutation = useCreateAuthONUs({

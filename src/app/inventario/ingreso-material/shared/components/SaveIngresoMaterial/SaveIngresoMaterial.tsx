@@ -106,6 +106,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     const mappedProductos = productosDisponibles.map(producto => ({
       producto: producto.id,
       cantidad: producto.cantidad,
+      descripcion: producto.descripcion,
       nombre: producto.nombre,
       codigo: producto.codigo,
       codigo_auxiliar: producto.codigo_auxiliar,

@@ -65,6 +65,7 @@ const ActivacionesInstalacionesMainPage: React.FC<
         <ActivacionInstalacionOTByState
           activacionState={EstadoActivacionEnumChoice.GESTIONADA}
           otState={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
+          onAuthorizate
         />
       </CustomTabPanel>
 

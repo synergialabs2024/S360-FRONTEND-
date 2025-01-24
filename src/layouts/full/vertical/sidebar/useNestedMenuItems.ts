@@ -467,12 +467,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.movimientoMaterialesNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solcitud-devoluciones',
               title: 'Recepción de solicitud de devolución',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(
               SidenavModulesEnum.INVENTARIO_TRANSFERENCIA_MATERIAL,
               {
