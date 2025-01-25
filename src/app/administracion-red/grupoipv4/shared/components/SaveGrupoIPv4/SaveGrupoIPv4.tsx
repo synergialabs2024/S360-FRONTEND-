@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import {
 } from '@/actions/app';
 import {
   IP_USES_TYPE_ARRAY_CHOICES,
+  IpsDetalleModal,
   PermissionsEnum,
   Router,
   ToastWrapper,
@@ -22,9 +23,14 @@ import {
   SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg10,
+  gridSizeMdLg12,
+  gridSizeMdLg2,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { Brass, GrupoIPv4 } from '@/shared/interfaces';
+import { Brass, GrupoIPv4, IPv4Detail } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, grupoIPv4FormSchema } from '@/shared/utils';
 import { returnUrlGruposIPv4Page } from '../../../pages/tables/GruposIPv4Page';
 
@@ -39,6 +45,7 @@ type SaveFormData = CreateGrupoIPv4ParamsBase & {
 
 const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
   useCheckPermission(PermissionsEnum.infraestructura_view_router);
+  const [ipsDetail, setIpsDetail] = useState<IPv4Detail[]>([]);
 
   const navigate = useNavigate();
 
@@ -109,6 +116,7 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
           ipv_4: rest.ipv_4,
           cidr: rest.cidr,
           tipo_uso: rest.tipo_uso,
+          ips_detalle: ipsDetail,
 
           ...((!grupoipv4?.routers_data?.length && {
             routers: routers_data?.map(router => router?.id),
@@ -212,7 +220,18 @@ const SaveGrupoIPv4: React.FC<SaveGrupoIPv4Props> = ({ title, grupoipv4 }) => {
           }
           required={false}
           disabled={!!grupoipv4?.id}
+          size={grupoipv4 ? gridSizeMdLg10 : gridSizeMdLg12}
         />
+        {grupoipv4?.id && (
+          <IpsDetalleModal
+            data={grupoipv4}
+            size={gridSizeMdLg2}
+            modalTitle={`Lista de IPS de ${grupoipv4?.name}`}
+            onDataChange={e => {
+              setIpsDetail(e);
+            }}
+          />
+        )}
       </>
 
       <>

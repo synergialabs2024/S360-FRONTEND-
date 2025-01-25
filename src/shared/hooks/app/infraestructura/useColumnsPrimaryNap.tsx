@@ -3,7 +3,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { useUpdatePrimaryNap } from '@/actions/app';
-import { CustomSwitch } from '@/shared/components';
+import { CustomSwitch, ViewMoreTextModalTableCell } from '@/shared/components';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
 import {
   ChangeModelStateData,
@@ -16,6 +16,7 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
+import PuertosListaModalPage from './modal/PuertosListaModalPage';
 
 export const useColumnsPrimaryNap = () => {
   ///* global state
@@ -56,7 +57,18 @@ export const useColumnsPrimaryNap = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'coordenadas'),
+        Cell: ({ row }) => {
+          const str = row?.original?.coordenadas
+            ? row.original.coordenadas
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Coordenadas de ${row?.original?.name}`}
+            />
+          );
+        },
       },
       {
         accessorKey: 'puertos',
@@ -89,6 +101,14 @@ export const useColumnsPrimaryNap = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'proyecto_cod'),
+      },
+      {
+        accessorKey: 'puertos_list',
+        header: 'DETALLE LISTA DE PUERTOS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => <PuertosListaModalPage data={row.original} />,
       },
     ],
     [],

@@ -19,6 +19,7 @@ import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
+import { PuertosListaModalPage } from './modal';
 
 export const useColumnsSecondaryNap = () => {
   ///* global state
@@ -95,6 +96,14 @@ export const useColumnsSecondaryNap = () => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => emptyCellOneLevel(row, 'puertos'),
+      },
+      {
+        accessorKey: 'puertos_list',
+        header: 'DETALLE LISTA DE PUERTOS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => <PuertosListaModalPage data={row.original} />,
       },
     ],
     [],

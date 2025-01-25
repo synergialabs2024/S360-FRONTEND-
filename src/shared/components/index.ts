@@ -1,3 +1,5 @@
+export * from './app';
+
 export * from './CustomButtons';
 export * from './CustomMaps';
 export * from './CustomSearch';

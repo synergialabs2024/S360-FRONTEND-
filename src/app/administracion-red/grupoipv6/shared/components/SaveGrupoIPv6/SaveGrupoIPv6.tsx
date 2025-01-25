@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import {
 } from '@/actions/app';
 import {
   IP_USES_TYPE_ARRAY_CHOICES,
+  IpsDetalleModal,
   PermissionsEnum,
   Router,
   ToastWrapper,
@@ -23,9 +24,14 @@ import {
   SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg10,
+  gridSizeMdLg12,
+  gridSizeMdLg2,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { Brass, GrupoIPv6 } from '@/shared/interfaces';
+import { Brass, GrupoIPv6, IPv6Detail } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, grupoIPv6FormSchema } from '@/shared/utils';
 import { returnUrlGruposIPv6Page } from '../../../pages/tables/GruposIPv6Page';
 
@@ -40,6 +46,7 @@ type SaveFormData = CreateGrupoIPv6ParamsBase & {
 
 const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
   useCheckPermission(PermissionsEnum.infraestructura_view_router);
+  const [ipsDetail, setIpsDetail] = useState<IPv6Detail[]>([]);
 
   const navigate = useNavigate();
 
@@ -109,6 +116,7 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
           cidr: data.cidr,
           tipo_uso: data.tipo_uso,
           brass: data.brass,
+          ips_detalle: ipsDetail,
         } as any,
       });
       return;
@@ -208,7 +216,18 @@ const SaveGrupoIPv6: React.FC<SaveGrupoIPv6Props> = ({ title, grupoipv6 }) => {
           }
           required={false}
           disabled={!!grupoipv6?.id}
+          size={grupoipv6 ? gridSizeMdLg10 : gridSizeMdLg12}
         />
+        {grupoipv6?.id && (
+          <IpsDetalleModal
+            data={grupoipv6}
+            size={gridSizeMdLg2}
+            modalTitle={`Lista de IPS de ${grupoipv6?.name}`}
+            onDataChange={e => {
+              setIpsDetail(e);
+            }}
+          />
+        )}
       </>
 
       <>

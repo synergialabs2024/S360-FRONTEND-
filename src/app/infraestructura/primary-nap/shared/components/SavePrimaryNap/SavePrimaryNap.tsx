@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +17,7 @@ import {
 } from '@/actions/app';
 import {
   NAPS_PORTS_QUANTITY_ARRAY,
+  PuertosListaModal,
   SAVE_NAP_PRIMARY_PERMISSIONS,
   ToastWrapper,
   useLoaders,
@@ -30,12 +31,19 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg10,
+  gridSizeMdLg12,
+  gridSizeMdLg2,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
   Ciudad,
+  NapPortSecondPrimaryType,
+  NapPortType,
   Nodo,
   OLT,
   PrimaryNap,
@@ -60,6 +68,9 @@ const SavePrimaryNap: React.FC<SavePrimaryNapProps> = ({
   primarynap,
 }) => {
   useCheckPermissionsArray(SAVE_NAP_PRIMARY_PERMISSIONS);
+  const [PuertoLists, setPuertoLists] = useState<NapPortSecondPrimaryType[]>(
+    [],
+  );
 
   ///* hooks -----------------------
   const navigate = useNavigate();
@@ -83,9 +94,6 @@ const SavePrimaryNap: React.FC<SavePrimaryNapProps> = ({
   const watchedSector = form.watch('sector');
   const watchedNodo = form.watch('nodo');
   const watchedOlt = form.watch('olt');
-  const watchedPP = form.watch('port_pon');
-
-  console.log(watchedPP);
 
   const {
     Map,
@@ -185,8 +193,10 @@ const SavePrimaryNap: React.FC<SavePrimaryNapProps> = ({
 
     ///* upd
     if (primarynap?.id) {
-      delete data.puertos;
-      delete data.puertos_list;
+      data.puertos_list = PuertoLists.map(pl => ({
+        puerto: String(pl.puerto),
+        estado: pl.estado ?? false,
+      })) as NapPortType[];
 
       updatePrimaryNapMutation.mutate({
         id: primarynap.id!,
@@ -411,7 +421,18 @@ const SavePrimaryNap: React.FC<SavePrimaryNapProps> = ({
           const s = value.split(',');
           setLatLng({ lat: s[0], lng: s[1] });
         }}
+        size={primarynap ? gridSizeMdLg10 : gridSizeMdLg12}
       />
+      {primarynap?.id && (
+        <PuertosListaModal
+          data={primarynap}
+          size={gridSizeMdLg2}
+          modalTitle={`Lista de puertos de ${primarynap?.name}`}
+          onDataChange={e => {
+            setPuertoLists(e);
+          }}
+        />
+      )}
       <Map
         coordenadas={latLng}
         setLatLng={setLatLng}

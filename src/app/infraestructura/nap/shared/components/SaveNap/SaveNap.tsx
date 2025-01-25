@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ import {
   NAP_STATUS_ARRAY_CHOICES,
   NAPS_PORTS_QUANTITY_ARRAY,
   NapStatusEnumChoice,
+  PuertosListaModal,
   SAVE_NAP_PERMISSIONS,
   ToastWrapper,
   useLoaders,
@@ -31,7 +32,12 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg10,
+  gridSizeMdLg12,
+  gridSizeMdLg2,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
@@ -59,6 +65,10 @@ type SaveFormData = CreateNapParamsBase & {
 
 const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
   useCheckPermissionsArray(SAVE_NAP_PERMISSIONS);
+
+  const [PuertoLists, setPuertoLists] = useState<NapPortSecondPrimaryType[]>(
+    [],
+  );
 
   ///* hooks -----------------------
   const navigate = useNavigate();
@@ -183,8 +193,10 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
 
     ///* upd
     if (nap?.id) {
-      delete data.puertos;
-      delete data.puertos_list;
+      data.puertos_list = PuertoLists.map(pl => ({
+        puerto: String(pl.puerto),
+        estado: pl.estado ?? false,
+      })) as NapPortType[];
 
       updateNapMutation.mutate({
         id: nap.id!,
@@ -450,7 +462,18 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
           const s = value.split(',');
           setLatLng({ lat: s[0], lng: s[1] });
         }}
+        size={nap ? gridSizeMdLg10 : gridSizeMdLg12}
       />
+      {nap?.id && (
+        <PuertosListaModal
+          data={nap}
+          size={gridSizeMdLg2}
+          modalTitle={`Lista de puertos de ${nap?.name}`}
+          onDataChange={e => {
+            setPuertoLists(e);
+          }}
+        />
+      )}
       <Map
         coordenadas={latLng}
         setLatLng={setLatLng}
