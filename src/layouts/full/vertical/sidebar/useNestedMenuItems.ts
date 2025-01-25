@@ -181,12 +181,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cobranza.tarjetasNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'cooperativas-ahorro-credito',
               title: 'Cooperativas de ahorro y crédito',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.ADMIN_TIPO_COMPROBANTE, {
               id: 'tipo-comprobantes',
               title: 'Tipo de comprobante',
@@ -299,6 +301,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.agendamientosNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'seguimiento-cliente',
               title: 'Seguimiento a clientes',
@@ -311,18 +314,21 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'televentas',
               title: 'Televentas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.televentasNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'venta-orporativas',
               title: 'Ventas Corporativas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.COMERCIAL_INSTALACION, {
               id: 'instalaciones',
               title: 'Instalaciones',
@@ -364,12 +370,14 @@ export const useNestedMenu = () => {
                   .solicitudDesbloqueoPreventaNav,
               },
             ),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloqueo-cliente-agendas',
               title: 'Desbloqueo de clientes agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(
               SidenavModulesEnum.SUPERVISIONCOMERCIAL_REASIGNACION_VENTAS,
               {
@@ -499,18 +507,21 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.tecnico.instalacionesAsignadasNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'registro-orden-trabajo',
               title: 'Registro de Orden de Trabajo',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.TECNICO_SOLICITUD_MATERIAL, {
               id: 'solicitud-material',
               title: 'Solicitud de Material',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudMaterialNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'detalle-materiales',
               title: 'Detalle de Materiales',
@@ -523,6 +534,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.TECNICO_TICKETS, {
               id: 'tickets-tecnico',
               title: 'Tickets',
@@ -569,14 +581,14 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.operaciones.auditoriaNav,
               },
             ),
-
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'recoordinacion-agendas',
               title: 'Recoordinación de agendas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-
+            */
             renderByModule(
               SidenavModulesEnum.OPERACIONES_RECOORDINACION_TICKET_VISITA,
               {
@@ -586,7 +598,7 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
               },
             ),
-
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rechazo-agendas',
               title: 'Rechazo de agendas',
@@ -605,6 +617,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(
               SidenavModulesEnum.OPERACIONES_APROBACION_TICKET_VISITA,
               {
@@ -710,6 +723,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.clientes.clientesFibraNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'configuracion-plantillas',
               title: 'Configuración de plantilla',
@@ -728,6 +742,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Cartera ----------------
@@ -764,6 +779,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconPigMoney,
           children: [
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'facturas',
               title: 'Facturas',
@@ -812,6 +828,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(
               SidenavModulesEnum.SUPERVISIONCOMERCIAL_CONSULTA_BURO,
               {
@@ -821,6 +838,7 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
               },
             ),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'activacion-clientes-temporales',
               title: 'Activación de clientes temporales',
@@ -833,6 +851,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Administracion de Red ----------------
@@ -866,12 +885,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracionRed.gruposIPv6Nav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'monitoreos',
               title: 'Monitoreo',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_TRAFICO, {
               id: 'traficos',
               title: 'Tráfico',
@@ -911,12 +932,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.netconnect.gestionOnusNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'estado-caidas',
               title: 'Estado de caídas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.NETCONNECT_ONUS_CONFIGURADA, {
               id: 'registro-onus-configuracion',
               title: 'Registro de ONUs configuradas',
@@ -929,6 +952,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.netconnect.vlansNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'profiles',
               title: 'Profiles',
@@ -941,6 +965,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'auditoria-consumos',
               title: 'Auditoría de consumos',
@@ -962,6 +987,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconHeartHandshake,
           children: [
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'desbloquear-usuarios',
               title: 'Desbloquear usuarios',
@@ -975,6 +1001,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Nomina ----------------
@@ -1017,6 +1044,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconCashRegister,
           children: [
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'metodo-transaccionar',
               title: 'Método de Transaccionar',
@@ -1035,6 +1063,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
@@ -1045,6 +1074,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rubros-finanza',
               title: 'Rubros financieros',
@@ -1075,6 +1105,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
