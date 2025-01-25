@@ -190,6 +190,7 @@ const SaveSystemGroup: React.FC<SaveSystemGroupProps> = ({
           defaultValue={form.getValues().codigo}
           error={errors.codigo}
           helperText={errors.codigo?.message}
+          disabled={!!systemgroup?.id}
         />
         <CustomTextArea
           label="Descripción"
