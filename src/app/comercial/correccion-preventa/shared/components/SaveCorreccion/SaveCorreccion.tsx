@@ -32,6 +32,7 @@ import DocsSaveCorreccion from './DocsSaveCorreccion';
 import { SingleImageModal } from '@/shared/components/ui';
 import { Grid } from '@mui/material';
 import { useGenericPATCH } from '@/actions/shared';
+import { hasExceededHours } from '@/shared/helpers/calculators/elapsed-hours-calculator.helpers';
 
 export interface SaveCorreccionProps {
   title: String;
@@ -89,6 +90,22 @@ const SaveCorreccion: React.FC<SaveCorreccionProps> = ({ title, preventa }) => {
   ///* handlers ---------------------
   const onSave = async () => {
     // validate images -----------
+
+    const fechaAceptacion = preventa?.fecha_aceptacion;
+    const fechaLimiteValidacionAceptacion =
+      preventa?.fecha_limite_validacion_aceptacion;
+
+    const isExceeded72 = hasExceededHours(
+      fechaAceptacion!,
+      fechaLimiteValidacionAceptacion!,
+    );
+
+    if (!isExceeded72) {
+      ToastWrapper.error(
+        'EL tiempo limite para la correccion ha vencido y tu venta ha sido considerada como venta cortesia',
+      );
+    }
+
     if (
       preventa.estado_validacion_aceptacion?.toString() ===
       EstadoCorreccionPreventaEnumChoice.FOTO_CEDULA_NO_ROSTRO

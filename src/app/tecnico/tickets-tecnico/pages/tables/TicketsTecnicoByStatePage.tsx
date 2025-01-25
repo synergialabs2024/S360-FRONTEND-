@@ -68,11 +68,17 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
       row?.estado_ticket_tecnico ===
       EstadoTicketTecnicoEnumChoice.PENDIENTE_CORRECCION_AUDITORIA
     ) {
-      if (MotivoCorreccionOTAuditoriaEnumChoice.INFORMACION_INCORRECTA) {
+      if (
+        row?.motivo_correccion ===
+        MotivoCorreccionOTAuditoriaEnumChoice.INFORMACION_INCORRECTA
+      ) {
         navigate(
           `/tecnico/auditoria/instalaciones-actualizadas/datos/${row.uuid}`,
         );
-      } else if (MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS) {
+      } else if (
+        row?.motivo_correccion ===
+        MotivoCorreccionOTAuditoriaEnumChoice.FOTOS_INCORRECTAS
+      ) {
         navigate(
           `/tecnico/auditoria/instalaciones-actualizadas/fotos/${row.uuid}`,
         );

@@ -1,14 +1,6 @@
-import {
-  EstadoCorreccionPreventaEnumChoice,
-  Preventa,
-  ToastWrapper,
-} from '@/shared';
+import { EstadoCorreccionPreventaEnumChoice, Preventa } from '@/shared';
 import { CustomTypoLabel, CustomTypoLabelEnum } from '@/shared/components';
 import type { UploadImagePreviewBtnProps } from '@/shared/components/CustomButtons/UploadImageDropZone';
-import { hasExceededHours } from '@/shared/helpers/calculators/elapsed-hours-calculator.helpers';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { returnUrlCorreccionPreventasPage } from '../../../pages/tables/CorreccionPreventasMainPage';
 
 export type DocsSaveCorreccionProps = {
   preventa?: Preventa;
@@ -24,7 +16,6 @@ export type DocsSaveCorreccionProps = {
 };
 
 const DocsSaveCorreccion: React.FC<DocsSaveCorreccionProps> = ({
-  preventa,
   estadoValidacionAceptacion,
   cedulaNoRostroImg,
   setCedulaNoRostroImg,
@@ -32,28 +23,6 @@ const DocsSaveCorreccion: React.FC<DocsSaveCorreccionProps> = ({
   setFotoAceptacionNoRostroImg,
   UploadImageDropZoneComponent,
 }) => {
-  const navigate = useNavigate();
-
-  const fechaAceptacion = preventa?.fecha_aceptacion;
-  const fechaLimiteValidacionAceptacion =
-    preventa?.fecha_limite_validacion_aceptacion;
-
-  useEffect(() => {
-    const isExceeded72 = hasExceededHours(
-      fechaAceptacion!,
-      fechaLimiteValidacionAceptacion!,
-    );
-    // Si no esta dentro del tiempo de aceptacion y limite de validacion aceptacion
-    if (!isExceeded72) {
-      navigate(returnUrlCorreccionPreventasPage);
-      ToastWrapper.error(
-        'EL tiempo limite para la correccion ha vencido y tu venta ha sido considerada como venta cortesia',
-      );
-    }
-    console.log(isExceeded72);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fechaAceptacion, fechaLimiteValidacionAceptacion]);
-
   return (
     <>
       <CustomTypoLabel

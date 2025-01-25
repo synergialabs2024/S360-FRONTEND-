@@ -10,6 +10,7 @@ import {
   MotivoRechazo,
   MotivoRechazoModuloEnumChoice,
   Preventa,
+  ToastWrapper,
   useLoaders,
 } from '@/shared';
 import {
@@ -27,6 +28,7 @@ import {
 import { useGenericPATCH } from '@/actions/shared';
 
 import { returnUrlAgendamientoVentasPage } from '@/app/comercial/agendamiento/pages/tables/AgendamientoVentasMainPage';
+import { hasExceededHours } from '@/shared/helpers/calculators/elapsed-hours-calculator.helpers';
 
 export type RequiereCorreccionAgendaPreventaCustomButtonsProps = {
   preventa: Preventa;
@@ -88,6 +90,30 @@ const RequiereCorreccionAgendaPreventaCustomButtons: React.FC<
   ///* hooks ------------------------
   const navigate = useNavigate();
 
+  const fechaAceptacion = preventa?.fecha_aceptacion;
+  const fechaLimiteValidacionAceptacion =
+    preventa?.fecha_limite_validacion_aceptacion;
+
+  const isExceeded72 = hasExceededHours(
+    fechaAceptacion!,
+    fechaLimiteValidacionAceptacion!,
+  );
+
+  const validateTimeCorreccion = () => {
+    if (fechaAceptacion && fechaLimiteValidacionAceptacion) {
+      // Si, no es true
+      if (!isExceeded72) {
+        ToastWrapper.error(
+          'El tiempo límite para la corrección ha vencido y tu venta ha sido considerada como venta cortesía',
+        );
+      } else {
+        navigate(
+          `${returnUrlAgendamientoVentasPage}/correcciones/${preventa?.uuid}`,
+        );
+      }
+    }
+  };
+
   return (
     <>
       <Grid item xs={2}>
@@ -95,12 +121,7 @@ const RequiereCorreccionAgendaPreventaCustomButtons: React.FC<
           startIcon={<HiDocumentPlus />}
           label="Crear agenda"
           color="inherit"
-          onClick={() => {
-            console.log('preventa?.uuid', preventa?.uuid);
-            navigate(
-              `${returnUrlAgendamientoVentasPage}/correcciones/${preventa?.uuid}`,
-            );
-          }}
+          onClick={() => validateTimeCorreccion()}
         />
       </Grid>
 
