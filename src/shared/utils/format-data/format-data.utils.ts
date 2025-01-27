@@ -99,3 +99,46 @@ export const formatExpirationDateCreditCard = (date: string): string => {
 export const capitalizeFirstLetterOfEachWord = (str: string): string => {
   return str.replace(/(?:^|\s)\S/g, char => char.toUpperCase());
 };
+
+// // // Data to send to backend ========================================
+export const sanitizeDataForSend = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    // Si es un array, aplicar la sanitización a cada elemento
+    return obj.map(sanitizeDataForSend).filter(item => item !== undefined); // Opcional: eliminar elementos undefined si es necesario
+  } else if (obj !== null && typeof obj === 'object') {
+    // Si es un objeto, crear un nuevo objeto sanitizado
+    const sanitizedObj: any = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const value = obj[key];
+        if (typeof value === 'string' && value.trim() === '') {
+          // **Eliminar** propiedades con cadenas vacías
+          continue;
+        }
+        if (value === null) {
+          // **Eliminar** propiedades con null
+          continue;
+        }
+        if (
+          key.endsWith('_data') &&
+          (typeof value === 'object' || Array.isArray(value))
+        ) {
+          // **Eliminar** propiedades que terminan con _data y son objetos o arrays
+          continue;
+        }
+        // **Eliminar** todo lo q empieza con `raw`y sigue de algo en mayuscula
+        if (key.match(/raw[A-Z]/)) {
+          continue;
+        }
+        // Aplicar sanitización recursivamente
+        const sanitizedValue = sanitizeDataForSend(value);
+        // **Mantener** propiedades con otros valores, incluyendo undefined
+        sanitizedObj[key] = sanitizedValue;
+      }
+    }
+    return sanitizedObj;
+  } else {
+    // Para valores primitivos que no son cadenas vacías, retornarlos tal cual
+    return obj;
+  }
+};

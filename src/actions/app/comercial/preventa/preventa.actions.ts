@@ -23,11 +23,13 @@ export enum PreventaTSQEnum {
 export const useFetchPreventas = ({
   enabled = true,
   params,
+  refetchInterval,
 }: UseFetchEnabledParams<GetPreventasParams>) => {
   return useQuery({
     queryKey: [PreventaTSQEnum.PREVENTAS, ...Object.values(params || {})],
     queryFn: () => getPreventas(params),
     enabled: enabled,
+    ...(refetchInterval && { refetchInterval }),
   });
 };
 

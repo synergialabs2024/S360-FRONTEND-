@@ -48,6 +48,7 @@ const PreventaEsperaAgendaPage: React.FC<
       // contrato_aceptado: true,
       por_agendar: true,
     },
+    refetchInterval: 3000,
   });
 
   ///* columns ------------------------

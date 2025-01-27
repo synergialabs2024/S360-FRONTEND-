@@ -100,6 +100,7 @@ import {
   formatCountDownTimer,
   getKeysFormErrorsMessage,
   preventaFormSchema,
+  sanitizeDataForSend,
   sanitizeDataResetForm,
 } from '@/shared/utils';
 import {
@@ -621,10 +622,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         series: [],
       }),
     );
+    const sanitizedDataToSend = sanitizeDataForSend(data);
 
     // create
     await createPreventaMutation.mutateAsync({
-      ...data,
+      ...sanitizedDataToSend,
       solicitud_servicio: solicitudServicio?.id!,
       url_foto_cedula_frontal: cedulaFrontalUrl?.streamUlr || '',
       url_foto_cedula_trasera: cedulaPosteriorUrl?.streamUlr || '',

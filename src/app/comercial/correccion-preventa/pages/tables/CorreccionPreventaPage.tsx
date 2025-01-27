@@ -44,6 +44,7 @@ const CorreccionPreventaPage: React.FC<CorreccionPreventaPageProps> = () => {
       ...filterObject,
       correcciones_aceptacion_pendientes: true,
     },
+    refetchInterval: 3000,
   });
 
   ///* columns ------------------------

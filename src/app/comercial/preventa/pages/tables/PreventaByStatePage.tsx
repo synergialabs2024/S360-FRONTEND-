@@ -65,6 +65,7 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
         contrato_aceptado: true,
       }),
     },
+    refetchInterval: 3000,
   });
 
   ///* columns

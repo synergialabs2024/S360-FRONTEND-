@@ -13,10 +13,12 @@ import {
   REFERIDO_TYPE_ARRAY_CHOICES,
   ReferidoTypeEnumChoice,
   ToastWrapper,
+  useDebouncer,
+  useLoaders,
   validarCedulaEcuador,
 } from '@/shared';
 import {
-  CustomAutocomplete,
+  CustomAutocompleteSearch,
   CustomCellphoneTextField,
   CustomIdentificacionTextField,
   CustomTextField,
@@ -39,6 +41,16 @@ const GeneralDataSavePreventaStep: React.FC<
 > = ({ form }) => {
   ///* local state -------------------
   const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
+  const [floataSearchTerm, setFloataSearchTerm] = useState<string>('');
+
+  ///* hooks -------------------
+  const {
+    onChangeFilter: onChangeFilterFloata,
+    searchTerm: debouncedFloataTerm,
+  } = useDebouncer({
+    searchTerm: floataSearchTerm,
+    setSearchTerm: setFloataSearchTerm,
+  });
 
   ///* form ----------------
   const { errors } = form.formState;
@@ -58,7 +70,9 @@ const GeneralDataSavePreventaStep: React.FC<
       !!watchedTipoReferido &&
       watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA,
     params: {
-      page_size: 1200,
+      page_size: 20,
+      filterByState: false,
+      name: debouncedFloataTerm,
     },
   });
 
@@ -118,6 +132,9 @@ const GeneralDataSavePreventaStep: React.FC<
     isRefetchingFlotas,
     watchedTipoReferido,
   ]);
+
+  const isCustomLoading = isLoadingFlotas || isRefetchingFlotas;
+  useLoaders(isCustomLoading);
 
   return (
     <>
@@ -309,7 +326,7 @@ const GeneralDataSavePreventaStep: React.FC<
                 </>
               ) : watchedTipoReferido === ReferidoTypeEnumChoice.FLOTA ? (
                 <>
-                  <CustomAutocomplete<Flota>
+                  <CustomAutocompleteSearch<Flota>
                     label="Flota"
                     name="flota_refiere"
                     // options
@@ -317,12 +334,13 @@ const GeneralDataSavePreventaStep: React.FC<
                     valueKey="name"
                     actualValueKey="id"
                     defaultValue={form.getValues().flota_refiere}
-                    isLoadingData={isLoadingFlotas || isRefetchingFlotas}
+                    isLoading={isLoadingFlotas || isRefetchingFlotas}
                     // vaidation
                     control={form.control}
                     error={errors.flota_refiere}
                     helperText={errors.flota_refiere?.message}
-                    size={gridSizeMdLg6}
+                    // debouncer
+                    onChangeInputText={onChangeFilterFloata}
                   />
                 </>
               ) : null}
