@@ -752,6 +752,14 @@ const CreatePromesaPagoPage = Loadable(
       import('@/app/cartera/promesa-pago/pages/forms/CreatePromesaPagoPage'),
   ),
 );
+const CreateVentaConvenioPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/venta-convenio/pages/forms/CreateVentaConvenioPage'
+      ),
+  ),
+);
 const CreateCambioPlanPage = Loadable(
   lazy(() => import('@/app/cartera/cambio-plan/pages/forms/CambioPlanPage')),
 );
@@ -1819,6 +1827,11 @@ const AppRouter = [
         path: ROUTER_PATHS.cartera.root,
         element: <CarteraModule />,
         children: [
+          ///* venta convenio
+          {
+            path: ROUTER_PATHS.cartera.ventaconvenioNav,
+            element: <CreateVentaConvenioPage />,
+          },
           ///* cambio plan
           {
             path: ROUTER_PATHS.cartera.cambioplanNav,

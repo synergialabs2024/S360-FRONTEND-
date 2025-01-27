@@ -228,6 +228,12 @@ export const ROUTER_PATHS = {
   cartera: {
     root: 'cartera',
 
+    ///* venta convenio
+    ventaconvenio: 'ventaconvenio',
+    ventaconvenioCrear: 'ventaconvenio/crear',
+    ventaconvenioEditar: 'ventaconvenio/editar/:uuid',
+    ventaconvenioNav: '/cartera/ventaconvenio',
+
     ///* promesa de pago
     cambioplan: 'cambioplan',
     cambioplanCrear: 'cambioplan/crear',

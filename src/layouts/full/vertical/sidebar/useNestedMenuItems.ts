@@ -759,6 +759,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.cartera.cambioplanNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'ventaconvenio',
+              title: 'Venta convenio',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.ventaconvenioNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'promesapago',
               title: 'Promesa de pago',
               type: MenuItemType.ITEM,

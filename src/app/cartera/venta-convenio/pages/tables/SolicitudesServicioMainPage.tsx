@@ -1,0 +1,84 @@
+import { Tab } from '@mui/material';
+
+import { ROUTER_PATHS } from '@/router/constants';
+import {
+  BoxFormTabsOnly,
+  CustomTabPanel,
+  SingleTableBoxScene,
+  a11yProps,
+} from '@/shared/components';
+import { EstadoSolicitudServicioEnumChoice } from '@/shared/constants/app';
+import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
+import { PermissionsEnum } from '@/shared/interfaces';
+import { hasAllPermissions } from '@/shared/utils/auth';
+import SolicitudServicioByStatePage from './SolicitudServicioByStatePage';
+
+export const returnUrlSolicitudsServicioPage =
+  ROUTER_PATHS.comercial.solicitudServicioNav;
+
+export type SolicitudesServicioMainPageProps = {};
+
+const SolicitudesServicioMainPage: React.FC<
+  SolicitudesServicioMainPageProps
+> = () => {
+  const { tabValue, handleTabChange } = useTabsOnly();
+
+  return (
+    <SingleTableBoxScene
+      title="Solicitudes de Servicio"
+      showCreateBtn={hasAllPermissions([
+        PermissionsEnum.comercial_add_solicitudservicio,
+      ])}
+      createPageUrl={`${returnUrlSolicitudsServicioPage}/crear`}
+      isMainTableStates
+    >
+      <BoxFormTabsOnly
+        tabValue={tabValue}
+        handleTabChange={handleTabChange}
+        isMainTableStates
+      >
+        <Tab label={'INGRESADAS'} value={1} {...a11yProps(1)} />
+        <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
+
+        <Tab label={'FALLIDAS'} value={5} {...a11yProps(5)} />
+        <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
+
+        {/* desbloqueadas para crear un nuevo proceso desde sol_service: */}
+        <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} />
+      </BoxFormTabsOnly>
+
+      <CustomTabPanel value={tabValue} index={1} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.INGRESADO}
+        />
+      </CustomTabPanel>
+
+      {/* NO hay Factibilidad */}
+      <CustomTabPanel value={tabValue} index={2} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.GESTIONANDO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={3} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.RECHAZADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.CANCELADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <SolicitudServicioByStatePage
+          state={EstadoSolicitudServicioEnumChoice.SIN_GESTION}
+        />
+      </CustomTabPanel>
+    </SingleTableBoxScene>
+  );
+};
+
+export default SolicitudesServicioMainPage;
