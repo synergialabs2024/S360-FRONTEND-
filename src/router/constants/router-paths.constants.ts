@@ -290,6 +290,12 @@ export const ROUTER_PATHS = {
     facturasCrear: 'facturas/crear',
     facturasEditar: 'facturas/editar/:uuid',
     facturasNav: '/cobranza/facturas',
+
+    ///* motivo rubro adicional (rubro libre)
+    motivoRubroAdicional: 'motivo-rubro-adicional',
+    motivoRubroAdicionalCrear: 'motivo-rubro-adicional/crear',
+    motivoRubroAdicionalEditar: 'motivo-rubro-adicional/editar/:uuid',
+    motivoRubroAdicionalNav: '/cobranza/motivo-rubro-adicional',
   },
 
   /////* Comercial ----------------

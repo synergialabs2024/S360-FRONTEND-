@@ -1,3 +1,4 @@
+export * from './motivo-rubro-adicional.schema';
 export * from './rubros.schema';
 export * from './saldo.schema';
 export * from './tarjeta';

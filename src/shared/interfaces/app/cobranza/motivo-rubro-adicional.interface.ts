@@ -15,6 +15,7 @@ export interface MotivoRubroAdicional {
   codigo: string;
   valor: string;
   descripcion?: string;
+  state: boolean;
 
   created_at?: string;
   modified_at?: string;
