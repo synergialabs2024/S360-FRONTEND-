@@ -30,6 +30,13 @@ export enum UserRolesEnumChoice {
   OPERADOR_ACTIVACIONES = 'OPERADOR ACTIVACIONES', // all orden trabajo
   // no filters (pool ips, netconect):
   OPERADOR_NETWORKING = 'OPERADOR NETWORKING',
+
+  BODEGA = 'BODEGA',
+  COORDINADOR_LOGISTICA = 'COORDINADOR_LOGISTICA',
+  COORDINADOR_VENTAS = 'COORDINADOR_VENTAS',
+  AUXILIAR = 'AUXILIAR',
+  INVENTARIO_GENERAL = 'INVENTARIO_GENERAL',
+  OPERADOR = 'OPERADOR',
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
@@ -43,6 +50,13 @@ export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.INVENTARIO,
   UserRolesEnumChoice.OPERADOR_ACTIVACIONES,
   UserRolesEnumChoice.OPERADOR_NETWORKING,
+
+  UserRolesEnumChoice.BODEGA,
+  UserRolesEnumChoice.COORDINADOR_LOGISTICA,
+  UserRolesEnumChoice.COORDINADOR_VENTAS,
+  UserRolesEnumChoice.AUXILIAR,
+  UserRolesEnumChoice.INVENTARIO_GENERAL,
+  UserRolesEnumChoice.OPERADOR,
 ];
 
 export enum InternetServiceTypeEnumChoice {
