@@ -15,6 +15,7 @@ export interface MotivoRechazo {
   name: string;
   description: string;
   state: boolean;
+  codigo: string;
 
   modulo: MotivoRechazoModuloEnumChoice;
 

@@ -101,6 +101,15 @@ const SaveMotivoRechazo: React.FC<SaveMotivoRechazoProps> = ({
         error={errors.name}
         helperText={errors.name?.message}
       />
+      <CustomTextField
+        label="Código"
+        name="codigo"
+        control={form.control}
+        defaultValue={form.getValues().codigo}
+        error={errors.codigo}
+        helperText={errors.codigo?.message}
+        disabled={!!motivorechazo?.id}
+      />
       <CustomTextArea
         label="Descripción"
         name="description"
