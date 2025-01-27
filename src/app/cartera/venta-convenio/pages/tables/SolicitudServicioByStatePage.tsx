@@ -16,7 +16,6 @@ import {
   useTableServerSideFiltering,
 } from '@/shared/hooks';
 import { SolicitudServicio } from '@/shared/interfaces';
-import { EsperaSolServiceCellButtons } from '../../shared/components';
 
 export type SolicitudServicioByStatePageProps = {
   state: string;
@@ -130,9 +129,6 @@ const SolicitudServicioByStatePage: React.FC<
         editIconToolTipTitle="Crear preventa"
         canDelete={false}
         showCustomButtonsSpaceEnd={calcEnableActionsColumn()}
-        customButtonsSpaceEnd={(solService: SolicitudServicio) => {
-          return <EsperaSolServiceCellButtons solService={solService} />;
-        }}
       />
     </GridTableTabsContainerOnly>
   );

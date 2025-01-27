@@ -760,6 +760,12 @@ const CreateVentaConvenioPage = Loadable(
       ),
   ),
 );
+const CreateCambioDomicilioPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/cambio-domicilio/pages/forms/CambioDomicilioPage'),
+  ),
+);
 const CreateCambioPlanPage = Loadable(
   lazy(() => import('@/app/cartera/cambio-plan/pages/forms/CambioPlanPage')),
 );
@@ -1827,6 +1833,11 @@ const AppRouter = [
         path: ROUTER_PATHS.cartera.root,
         element: <CarteraModule />,
         children: [
+          ///* cambio domiclio
+          {
+            path: ROUTER_PATHS.cartera.cambiodomicilioNav,
+            element: <CreateCambioDomicilioPage />,
+          },
           ///* venta convenio
           {
             path: ROUTER_PATHS.cartera.ventaconvenioNav,

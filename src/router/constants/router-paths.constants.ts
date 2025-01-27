@@ -227,6 +227,11 @@ export const ROUTER_PATHS = {
   /////* Cartera ----------------
   cartera: {
     root: 'cartera',
+    ///* cambio domicilio
+    cambiodomicilio: 'cambiodomicilio',
+    cambiodomicilioCrear: 'cambiodomicilio/crear',
+    cambiodomicilioEditar: 'cambiodomicilio/editar/:uuid',
+    cambiodomicilioNav: '/cartera/cambiodomicilio',
 
     ///* venta convenio
     ventaconvenio: 'ventaconvenio',
