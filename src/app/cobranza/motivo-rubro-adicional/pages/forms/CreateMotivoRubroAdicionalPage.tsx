@@ -7,7 +7,7 @@ const CreateMotivoRubroAdicionalPage: React.FC<
 > = () => {
   // useCheckPermission(PermissionsEnum.cobranza_add_motivo_rubro_adicional);
 
-  return <SaveMotivoRubroAdicional title="Crear MotivoRubroAdicional" />;
+  return <SaveMotivoRubroAdicional title="Crear Motivo Rubro Adicional" />;
 };
 
 export default CreateMotivoRubroAdicionalPage;

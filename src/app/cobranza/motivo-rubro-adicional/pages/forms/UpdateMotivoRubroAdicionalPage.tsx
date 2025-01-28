@@ -22,7 +22,7 @@ const UpdateMotivoRubroAdicionalPage: React.FC<
 
   return (
     <SaveMotivoRubroAdicional
-      title="Editar MotivoRubroAdicional"
+      title="Editar Motivo Rubro Adicional"
       motivorubroadicional={data.data}
     />
   );

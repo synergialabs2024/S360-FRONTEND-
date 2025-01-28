@@ -78,7 +78,7 @@ const MotivosRubroAdicionalPage: React.FC<
   const onEdit = (motivorubroadicional: MotivoRubroAdicional) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar MotivoRubroAdicional',
+      title: 'Editar Motivo Rubro Adicional',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
