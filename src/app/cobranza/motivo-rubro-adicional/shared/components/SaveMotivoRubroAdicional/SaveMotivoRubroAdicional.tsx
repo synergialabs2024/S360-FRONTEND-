@@ -112,6 +112,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         helperText={errors.codigo?.message}
         defaultHelperText="El código debe ser único"
         disabled={!!motivorubroadicional?.id}
+        size={gridSizeMdLg6}
       />
 
       <CustomNumberTextField
@@ -122,6 +123,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         error={errors.valor}
         helperText={errors.valor?.message}
         size={gridSizeMdLg6}
+        min={0}
       />
 
       <CustomTextArea
@@ -131,7 +133,6 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         defaultValue={form.getValues().descripcion}
         error={errors.descripcion}
         helperText={errors.descripcion?.message}
-        size={gridSizeMdLg6}
       />
     </SingleFormBoxScene>
   );
