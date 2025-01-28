@@ -152,7 +152,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
   return (
     <>
       <Grid container item xs={12} spacing={4}>
-        {authOnu.luz_verde && (
+        {!authOnu.luz_verde && (
           <Grid item xs={2}>
             <SingleIconButton
               startIcon={<IconRouteSquare2 />}
