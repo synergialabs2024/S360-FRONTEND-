@@ -153,6 +153,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   useEffect(() => {
     if (!zona?.id) return;
     reset(zona);
+    setCoordsArray((zona?.coordenadas as any) || []);
   }, [zona, reset]);
   // alets: not found province by country
   useEffect(() => {
