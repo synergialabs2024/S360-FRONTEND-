@@ -77,16 +77,33 @@ export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES = [
   InternetPlanInternetTypeEnumChoice.CORPORATIVO,
 ];
 
+/* 
+INTERNET_UNIT_VELOCITY = (
+    ('Kbps', 'Kbps'),
+    ('Mbps', 'Mbps'),
+    ('Gbps', 'Gbps'),
+)
+*/
 export enum InternetUnitVelocityEnumChoice {
-  KB = 'KB',
-  MB = 'MB',
-  GB = 'GB',
+  KBPS = 'Kbps',
+  MBPS = 'Mbps',
+  GBPS = 'Gbps',
 }
 export const INTERNET_UNIT_VELOCITY_ARRAY_CHOICES = [
-  InternetUnitVelocityEnumChoice.KB,
-  InternetUnitVelocityEnumChoice.MB,
-  InternetUnitVelocityEnumChoice.GB,
+  InternetUnitVelocityEnumChoice.KBPS,
+  InternetUnitVelocityEnumChoice.MBPS,
+  InternetUnitVelocityEnumChoice.GBPS,
 ];
+// export enum InternetUnitVelocityEnumChoice {
+//   KB = 'KB',
+//   MB = 'MB',
+//   GB = 'GB',
+// }
+// export const INTERNET_UNIT_VELOCITY_ARRAY_CHOICES = [
+//   InternetUnitVelocityEnumChoice.KB,
+//   InternetUnitVelocityEnumChoice.MB,
+//   InternetUnitVelocityEnumChoice.GB,
+// ];
 
 export enum IpUsesTypeEnumChoice {
   ESTATICO = 'ESTATICO',
