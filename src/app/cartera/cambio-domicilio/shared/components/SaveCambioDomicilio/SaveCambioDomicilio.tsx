@@ -30,7 +30,7 @@ import {
 import { CiSearch } from 'react-icons/ci';
 import { useState } from 'react';
 import { Grid } from '@mui/material';
-import { cambioPlanFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-plan/cambioplan.schema';
+import { cambioPlanFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-plan';
 
 export interface SavePromesaPagoProps {
   title: string;

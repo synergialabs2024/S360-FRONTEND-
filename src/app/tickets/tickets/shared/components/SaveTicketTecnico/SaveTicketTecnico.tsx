@@ -178,9 +178,8 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
         const response = await searchCedulaMutation.mutateAsync({
           identificacion: value,
         });
-        // Ahora puedes acceder a la respuesta
+        // Respuesta
         setCedulaData(response ?? null);
-        console.log(response); // Aquí obtienes la data
       } catch (error) {
         // Manejo de errores si la mutación falla
         ToastWrapper.error('Error al obtener los datos');
@@ -382,7 +381,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
             watchedIdentificationType == IdentificationTypeEnumChoice.CEDULA &&
             watchedIdentification?.length < 10
           )
-            return ToastWrapper.warning('Ingrese una cécula válida');
+            return ToastWrapper.warning('Ingrese una cédula válida');
           if (
             watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
             watchedIdentification?.length < 13

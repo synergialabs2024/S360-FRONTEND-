@@ -766,9 +766,17 @@ const CreateCambioDomicilioPage = Loadable(
       import('@/app/cartera/cambio-domicilio/pages/forms/CambioDomicilioPage'),
   ),
 );
-const CreateCambioPlanPage = Loadable(
+const CambioPlanPage = Loadable(
   lazy(() => import('@/app/cartera/cambio-plan/pages/forms/CambioPlanPage')),
 );
+
+const CambioPlanByStatePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/cambio-plan/pages/tables/CambioPlanByStatePage'),
+  ),
+);
+
 const CambioPropietarioPagoPage = Loadable(
   lazy(
     () =>
@@ -1870,7 +1878,11 @@ const AppRouter = [
           ///* cambio plan
           {
             path: ROUTER_PATHS.cartera.cambioplanNav,
-            element: <CreateCambioPlanPage />,
+            element: <CambioPlanByStatePage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.cambioplanCrear,
+            element: <CambioPlanPage />,
           },
           ///* promesa pago
           {

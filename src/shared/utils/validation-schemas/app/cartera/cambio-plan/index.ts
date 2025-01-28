@@ -1,1 +1,1 @@
-export * from '../cambio-plan/cambioplan.schema';
+export * from './cambio-plan.schema';
