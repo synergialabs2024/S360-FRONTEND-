@@ -2,29 +2,34 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchMotivoRubroAdicionals } from '@/actions/app';
+import {
+  useFetchMotivoRubroAdicionals,
+  useUpdateMotivoRubroAdicional,
+} from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
+  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { MotivoRubroAdicional } from '@/shared/interfaces';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { MotivoRubroAdicional, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-// TODO: change this to the correct url
 export const returnUrlMotivosRubroAdicionalPage =
-  ROUTER_PATHS.administracion.areasNav;
+  ROUTER_PATHS.cobranza.motivoRubroAdicionalNav;
 
 export type MotivosRubroAdicionalPageProps = {};
 
 const MotivosRubroAdicionalPage: React.FC<
   MotivosRubroAdicionalPageProps
 > = () => {
-  // useCheckPermission(PermissionsEnum.cobranza_view_motivo_rubro_adicional);
+  useCheckPermission(PermissionsEnum.cobranza_view_motivorubroadicional);
 
   const navigate = useNavigate();
 
@@ -39,9 +44,9 @@ const MotivosRubroAdicionalPage: React.FC<
   );
 
   ///* mutations ---------------------
-  // const changeState = useUpdateMotivoRubroAdicional({
-  //   enableNavigate: false,
-  // });
+  const changeState = useUpdateMotivoRubroAdicional({
+    enableNavigate: false,
+  });
 
   ///* table ---------------------
   const {
@@ -88,13 +93,6 @@ const MotivosRubroAdicionalPage: React.FC<
   const columns = useMemo<MRT_ColumnDef<MotivoRubroAdicional>[]>(
     () => [
       {
-        accessorKey: 'uuid',
-        header: 'UUID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
-      },
-
-      {
         accessorKey: 'nombre',
         header: 'NOMBRE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -113,6 +111,45 @@ const MotivosRubroAdicionalPage: React.FC<
         header: 'VALOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'valor'),
+      },
+
+      {
+        accessorKey: 'state',
+        header: 'ESTADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.state === 'boolean' ? (
+            <CustomSwitch
+              title="state"
+              checked={row.original?.state}
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.administration_change_iva))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar state',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el state de este registro?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        state: !row.original.state,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
       },
 
       {
@@ -140,7 +177,7 @@ const MotivosRubroAdicionalPage: React.FC<
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [],
+    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
   return (

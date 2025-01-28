@@ -125,7 +125,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
       />
 
       <CustomTextArea
-        label="Descripcion"
+        label="Descripción"
         name="descripcion"
         control={form.control}
         defaultValue={form.getValues().descripcion}

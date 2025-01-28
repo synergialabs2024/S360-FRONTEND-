@@ -850,6 +850,12 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.supervisionComercial.consultasBuroNav,
               },
             ),
+            renderByModule(SidenavModulesEnum.COBRANZA_MOTIVO_RUBRO_ADICIONAL, {
+              id: 'motivo-rubro-adicional',
+              title: 'Motivo Rubro Adicional',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.motivoRubroAdicionalNav,
+            }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'activacion-clientes-temporales',

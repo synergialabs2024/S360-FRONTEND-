@@ -790,6 +790,30 @@ const CreateTarjetaPage = Loadable(
 const UpdateTarjetaPage = Loadable(
   lazy(() => import('@/app/cobranza/tarjeta/pages/forms/UpdateTarjetaPage')),
 );
+const MotivosRubroAdicionalPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/motivo-rubro-adicional/pages/tables/MotivosRubroAdicionalPage'
+      ),
+  ),
+);
+const CreateMotivoRubroAdicionalPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/motivo-rubro-adicional/pages/forms/CreateMotivoRubroAdicionalPage'
+      ),
+  ),
+);
+const UpdateMotivoRubroAdicionalPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/motivo-rubro-adicional/pages/forms/UpdateMotivoRubroAdicionalPage'
+      ),
+  ),
+);
 
 const ConsultasBuroPage = Loadable(
   lazy(() => import('@/app/comercial/consultas-buro/pages/ConsultasBuroPage')),
@@ -1877,6 +1901,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.tarjetasEditar,
             element: <UpdateTarjetaPage />,
+          },
+
+          ///* motivo rubro adicional
+          {
+            path: ROUTER_PATHS.cobranza.motivoRubroAdicional,
+            element: <MotivosRubroAdicionalPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.motivoRubroAdicionalCrear,
+            element: <CreateMotivoRubroAdicionalPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.motivoRubroAdicionalEditar,
+            element: <UpdateMotivoRubroAdicionalPage />,
           },
         ],
       },
