@@ -2,7 +2,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchMotivoRubroAdicionals } from '@/actions/app/cobranza/motivo-rubro-adicional';
+import { useFetchMotivoRubroAdicionals } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,

@@ -1,10 +1,8 @@
 import { Navigate, useParams } from 'react-router-dom';
 
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { useLoaders } from '@/shared/hooks';
-import { PermissionsEnum } from '@/shared/interfaces';
-import { SaveMotivoRubroAdicional } from '../../shared/components';
 import { useGetMotivoRubroAdicional } from '@/actions/app';
+import { useLoaders } from '@/shared/hooks';
+import { SaveMotivoRubroAdicional } from '../../shared/components';
 import { returnUrlMotivosRubroAdicionalPage } from '../tables/MotivosRubroAdicionalPage';
 
 export type UpdateMotivoRubroAdicionalPageProps = {};
@@ -12,7 +10,7 @@ export type UpdateMotivoRubroAdicionalPageProps = {};
 const UpdateMotivoRubroAdicionalPage: React.FC<
   UpdateMotivoRubroAdicionalPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cobranza_change_motivo_rubro_adicional);
+  // useCheckPermission(PermissionsEnum.cobranza_change_motivo_rubro_adicional);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetMotivoRubroAdicional(uuid!);

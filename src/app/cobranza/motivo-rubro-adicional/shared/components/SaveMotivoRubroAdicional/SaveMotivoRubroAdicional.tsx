@@ -4,23 +4,24 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  CreateMotivoRubroAdicionalParamsBase,
+  useCreateMotivoRubroAdicional,
+  useUpdateMotivoRubroAdicional,
+} from '@/actions/app';
+import { ToastWrapper } from '@/shared';
+import {
   CustomNumberTextField,
+  CustomTextArea,
   CustomTextField,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { ToastWrapper } from '@/shared';
 import { MotivoRubroAdicional } from '@/shared/interfaces';
 import {
-  motivoRubroAdicionalFormSchema,
   getKeysFormErrorsMessage,
+  motivoRubroAdicionalFormSchema,
 } from '@/shared/utils';
-import {
-  useCreateMotivoRubroAdicional,
-  useUpdateMotivoRubroAdicional,
-  CreateMotivoRubroAdicionalParamsBase,
-} from '@/actions/app';
-import { returnUrlMotivosRubroAdicionalPage } from '../../../pages';
+import { returnUrlMotivosRubroAdicionalPage } from '../../../pages/tables/MotivosRubroAdicionalPage';
 
 export interface SaveMotivoRubroAdicionalProps {
   title: string;
@@ -94,27 +95,6 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         );
       })}
     >
-      <CustomNumberTextField
-        label="Id"
-        name="id"
-        control={form.control}
-        defaultValue={form.getValues().id}
-        error={errors.id}
-        helperText={errors.id?.message}
-        size={gridSizeMdLg6}
-        min={0}
-      />
-
-      <CustomTextField
-        label="Uuid"
-        name="uuid"
-        control={form.control}
-        defaultValue={form.getValues().uuid}
-        error={errors.uuid}
-        helperText={errors.uuid?.message}
-        size={gridSizeMdLg6}
-      />
-
       <CustomTextField
         label="Nombre"
         name="nombre"
@@ -122,9 +102,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         defaultValue={form.getValues().nombre}
         error={errors.nombre}
         helperText={errors.nombre?.message}
-        size={gridSizeMdLg6}
       />
-
       <CustomTextField
         label="Código"
         name="codigo"
@@ -132,13 +110,11 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         defaultValue={form.getValues().codigo}
         error={errors.codigo}
         helperText={errors.codigo?.message}
-        size={gridSizeMdLg6}
         defaultHelperText="El código debe ser único"
-        // TODO: revisar
-        disabled={!!motivorubroadicional?.false}
+        disabled={!!motivorubroadicional?.id}
       />
 
-      <CustomTextField
+      <CustomNumberTextField
         label="Valor"
         name="valor"
         control={form.control}
@@ -148,7 +124,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         size={gridSizeMdLg6}
       />
 
-      <CustomTextField
+      <CustomTextArea
         label="Descripcion"
         name="descripcion"
         control={form.control}
