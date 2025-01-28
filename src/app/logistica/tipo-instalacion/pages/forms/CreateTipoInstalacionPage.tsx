@@ -1,6 +1,6 @@
+import { PermissionsEnum } from '@/shared';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { SaveTipoInstalacion } from '../../shared/components';
-import { PermissionsEnum } from '@/shared';
 
 export type CreateTipoInstalacionPageProps = {};
 
@@ -9,7 +9,7 @@ const CreateTipoInstalacionPage: React.FC<
 > = () => {
   useCheckPermission(PermissionsEnum.mantenimientoope_add_tipoinstalacion);
 
-  return <SaveTipoInstalacion title="Crear Tipo Instalacion" />;
+  return <SaveTipoInstalacion title="Crear Tipo Instalación" />;
 };
 
 export default CreateTipoInstalacionPage;

@@ -23,7 +23,7 @@ const UpdateTipoInstalacionPage: React.FC<
 
   return (
     <SaveTipoInstalacion
-      title="Editar Tipo Instalacion"
+      title="Editar Tipo Instalación"
       tipoInstalacion={data.data}
     />
   );

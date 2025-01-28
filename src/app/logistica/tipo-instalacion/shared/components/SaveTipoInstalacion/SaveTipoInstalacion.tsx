@@ -1,19 +1,19 @@
 import {
+  CreateTipoInstalacionParams,
+  useCreateTipoInstalacion,
+  useUpdateTipoInstalacion,
+} from '@/actions/app/logistica';
+import {
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 import { TipoInstalacion } from '@/shared/interfaces';
+import { tipoInstalacionFormSchema } from '@/shared/utils/validation-schemas/app/logistica';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import {
-  CreateTipoInstalacionParams,
-  useCreateTipoInstalacion,
-  useUpdateTipoInstalacion,
-} from '@/actions/app/logistica';
-import { tipoInstalacionFormSchema } from '@/shared/utils/validation-schemas/app/logistica';
 import { returnUrlTipoInstalacionesPage } from '../../../pages/tables/TipoInstalacionesPage';
 
 export interface SaveTipoInstalacionProps {
@@ -96,6 +96,7 @@ const SaveTipoInstalacion: React.FC<SaveTipoInstalacionProps> = ({
         defaultValue={form.getValues().codigo}
         error={errors.codigo}
         helperText={errors.codigo?.message}
+        disabled={!!tipoInstalacion?.id}
       />
       <CustomTextField
         label="Descripcion"

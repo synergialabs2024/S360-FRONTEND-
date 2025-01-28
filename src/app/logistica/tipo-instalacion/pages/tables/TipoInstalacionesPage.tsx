@@ -2,6 +2,10 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import {
+  useFetchTipoInstalaciones,
+  useUpdateTipoInstalacion,
+} from '@/actions/app/logistica';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
@@ -9,21 +13,17 @@ import {
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
+import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import { useCheckPermission } from '@/shared/hooks/auth';
 import {
   ChangeModelStateData,
   PermissionsEnum,
   TipoInstalacion,
 } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import {
-  useFetchTipoInstalaciones,
-  useUpdateTipoInstalacion,
-} from '@/actions/app/logistica';
 
 export const returnUrlTipoInstalacionesPage =
   ROUTER_PATHS.logistica.tipoinstalacionesNav;
@@ -95,12 +95,12 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
   const columns = useMemo<MRT_ColumnDef<TipoInstalacion>[]>(
     () => [
       {
-        accessorKey: 'nombre',
+        accessorKey: 'name',
         header: 'NOMBRE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
         accessorKey: 'codigo',
@@ -174,7 +174,7 @@ const TipoInstalacionesPage: React.FC<TipoInstalacionesPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Tipo Instalacion"
+      title="Tipos de Instalación"
       createPageUrl={`${returnUrlTipoInstalacionesPage}/crear`}
       showCreateBtn={hasAllPermissions([
         PermissionsEnum.mantenimientoope_add_tipoinstalacion,
