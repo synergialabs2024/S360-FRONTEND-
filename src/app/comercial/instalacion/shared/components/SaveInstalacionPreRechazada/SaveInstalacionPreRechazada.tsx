@@ -174,6 +174,7 @@ const SaveInstalacionPreRechazada: React.FC<
         onClose={() => setOpenModal(false)}
         agendamiento={ordentrabajo.agendamiento_data!}
         urlRedirect={returnUrlInstalacionesPage}
+        customUrl={`/solicitud-recoordinacion-agenda/orden-trabajo/${ordentrabajo.id}/`}
       />
 
       <CustomConfirmDialogProps
