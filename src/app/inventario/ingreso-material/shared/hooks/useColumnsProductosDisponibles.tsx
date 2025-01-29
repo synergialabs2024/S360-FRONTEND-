@@ -28,17 +28,7 @@ export type ProductosDisponiblesTableType = Producto & {
   selectedSeries?: string[];
   savedSeries?: string[];
   stock_up?: number;
-  ubicaciones_producto?: UProducto[];
 };
-
-export interface UProducto {
-  stock: any;
-  uuid: string;
-  series: string[];
-  bodega: string;
-  stock_up: number;
-  ubicacion: string;
-}
 
 type UseColumnsEquiposIngresoMaterial = {
   showActionColumn?: boolean;
