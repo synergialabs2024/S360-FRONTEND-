@@ -589,15 +589,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(
-              SidenavModulesEnum.OPERACIONES_RECOORDINACION_TICKET_VISITA,
-              {
-                id: 'recoordinacion-tickets-visita',
-                title: 'Recoordinación de tickets visita',
-                type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
-              },
-            ),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'recoordinacion-tickets-visita',
+              title: 'Recoordinación de tickets visita',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
+            }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rechazo-agendas',
@@ -618,15 +615,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(
-              SidenavModulesEnum.OPERACIONES_APROBACION_TICKET_VISITA,
-              {
-                id: 'aprobacion-ticket-visita',
-                title: 'Aprobación de Ticket visita',
-                type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
-              },
-            ),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'aprobacion-ticket-visita',
+              title: 'Aprobación de Ticket visita',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Logistica ----------------
@@ -1166,13 +1160,13 @@ export const useNestedMenu = () => {
               children: [
                 renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
                   id: 'asuntos',
-                  title: 'Asunto ticker',
+                  title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
                 renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
                   id: 'origenes',
-                  title: 'Origen ticker',
+                  title: 'Origen ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosOrigenesNav,
                 }),
