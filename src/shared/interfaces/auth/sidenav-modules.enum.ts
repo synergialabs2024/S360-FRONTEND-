@@ -109,4 +109,7 @@ export enum SidenavModulesEnum {
 
   // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   INDEFINIDO = 'USUARIOS.GRUPOS',
+
+  CARTERA_CAMBIO_PLAN = 'CARTERA.CAMBIO_PLAN',
+  CARTERA_BUZON_TAREAS = 'CARTERA.BUZON_TAREAS',
 }

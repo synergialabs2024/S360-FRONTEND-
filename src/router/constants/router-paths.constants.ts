@@ -239,7 +239,7 @@ export const ROUTER_PATHS = {
     ventaconvenioEditar: 'ventaconvenio/editar/:uuid',
     ventaconvenioNav: '/cartera/ventaconvenio',
 
-    ///* promesa de pago
+    ///* cambio de plan
     cambioplan: 'cambioplan',
     cambioplanCrear: 'cambioplan/crear',
     cambioplanEditar: 'cambioplan/editar/:uuid',
@@ -256,6 +256,24 @@ export const ROUTER_PATHS = {
     cambiopropietarioCrear: 'cambiopropietario/crear',
     cambiopropietarioEditar: 'cambiopropietario/editar/:uuid',
     cambiopropietarioNav: '/cartera/cambiopropietario',
+
+    ///* buzon de tareas
+    buzontareas: 'buzontareas',
+    buzontareasCrear: 'buzontareas/crear',
+    buzontareasEditar: 'buzontareas/editar/:uuid',
+    buzontareasNav: '/cartera/buzontareas',
+
+    ///* promesas de pago
+    promesaspago: 'promesaspago',
+    promesaspagoCrear: 'promesaspago/crear',
+    promesaspagoEditar: 'promesaspago/editar/:uuid',
+    promesaspagoNav: '/cartera/promesaspago',
+
+    ///* promesas de pago
+    mantenedorActivaciones: 'mantenedorActivaciones',
+    mantenedorActivacionesCrear: 'mantenedorActivaciones/crear',
+    mantenedorActivacionesEditar: 'mantenedorActivaciones/editar/:uuid',
+    mantenedorActivacionesNav: '/cartera/mantenedorActivaciones',
   },
   /////* Cobranza ----------------
   cobranza: {

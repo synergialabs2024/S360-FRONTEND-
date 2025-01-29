@@ -746,12 +746,6 @@ const UpdateFlotaPage = Loadable(
 const CarteraModule = Loadable(
   lazy(() => import('@/app/cartera/CarteraModule')),
 );
-const CreatePromesaPagoPage = Loadable(
-  lazy(
-    () =>
-      import('@/app/cartera/promesa-pago/pages/forms/CreatePromesaPagoPage'),
-  ),
-);
 const CreateVentaConvenioPage = Loadable(
   lazy(
     () =>
@@ -774,6 +768,47 @@ const CambioPlanByStatePage = Loadable(
   lazy(
     () =>
       import('@/app/cartera/cambio-plan/pages/tables/CambioPlanByStatePage'),
+  ),
+);
+
+const BuzonTareasByStatePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/buzon-tareas/pages/tables/BuzonTareasByStatePage'),
+  ),
+);
+const BuzonTareasPage = Loadable(
+  lazy(() => import('@/app/cartera/buzon-tareas/pages/forms/BuzonTareasPage')),
+);
+
+const PromesaPagoByStatePage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/promesa-pago/pages/tables/PromesaPagoByStatePage'),
+  ),
+);
+
+const CreatePromesaPagoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/promesa-pago/pages/forms/CreatePromesaPagoPage'),
+  ),
+);
+
+const MantenedorAplicacionesByStatePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/pages/tables/MantenedorAplicacionesByStatePage'
+      ),
+  ),
+);
+const MantenedorAplicacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/pages/forms/MantenedorAplicacionesPage'
+      ),
   ),
 );
 
@@ -1884,15 +1919,37 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera.cambioplanCrear,
             element: <CambioPlanPage />,
           },
-          ///* promesa pago
-          {
-            path: ROUTER_PATHS.cartera.promesapagoNav,
-            element: <CreatePromesaPagoPage />,
-          },
           ///* Cambio propietario
           {
             path: ROUTER_PATHS.cartera.cambiopropietarioNav,
             element: <CambioPropietarioPagoPage />,
+          },
+          ///* Buzon de Tareas
+          {
+            path: ROUTER_PATHS.cartera.buzontareasNav,
+            element: <BuzonTareasByStatePage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.buzontareasCrear,
+            element: <BuzonTareasPage />,
+          },
+          ///* Promesas pago
+          {
+            path: ROUTER_PATHS.cartera.promesapagoNav,
+            element: <PromesaPagoByStatePage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.promesapagoCrear,
+            element: <CreatePromesaPagoPage />,
+          },
+          ///* Mantenedor aplicaciones
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesNav,
+            element: <MantenedorAplicacionesByStatePage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesCrear,
+            element: <MantenedorAplicacionesPage />,
           },
         ],
       },

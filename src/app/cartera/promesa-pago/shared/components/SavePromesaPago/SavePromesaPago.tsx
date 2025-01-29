@@ -9,6 +9,7 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { promesapagoFormSchema } from '@/shared/utils/validation-schemas/app/cartera/promesa-pago';
+import { returnUrlPromesaPagoPage } from '../../../pages/tables/PromesaPagoByStatePage';
 export interface SavePromesaPagoProps {
   title: string;
 }
@@ -23,7 +24,7 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({ title }) => {
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate('')}
+      onCancel={() => navigate(returnUrlPromesaPagoPage)}
       onSave={handleSubmit(onSave, () => {})}
       maxWidth="xl"
       gridSizeForm={gridSizeMdLg12}

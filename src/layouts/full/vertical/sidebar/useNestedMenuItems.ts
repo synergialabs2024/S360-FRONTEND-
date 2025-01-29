@@ -758,7 +758,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.cambiodomicilioNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_CAMBIO_PLAN, {
               id: 'cambioplan',
               title: 'Cambio de plan',
               type: MenuItemType.ITEM,
@@ -781,6 +781,18 @@ export const useNestedMenu = () => {
               title: 'Cambio Propietario',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.cambiopropietarioNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'buzontareas',
+              title: 'Buzon de Tareas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.buzontareasNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'mantenedorActivaciones',
+              title: 'Mantenedor Activaciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.mantenedorActivacionesNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
