@@ -14,12 +14,15 @@ import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-ma
 import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
 import { useAuthStore } from '@/store/auth';
 
-export type PreventaEsperaAgendaPageProps = {};
+export type PreventaEsperaAgendaPageProps = {
+  state: string;
+};
 
-const SolicitudMaterialEsperaPage: React.FC<
-  PreventaEsperaAgendaPageProps
-> = () => {
+const SolicitudMaterialEsperaPage: React.FC<PreventaEsperaAgendaPageProps> = ({
+  state,
+}) => {
   const user = useAuthStore(s => s.user);
+
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -46,7 +49,9 @@ const SolicitudMaterialEsperaPage: React.FC<
       page_size: pageSize,
       name: searchTerm,
       ...filterObject,
+
       por_agendar: true,
+      estado_solicitud: state,
     },
   });
 

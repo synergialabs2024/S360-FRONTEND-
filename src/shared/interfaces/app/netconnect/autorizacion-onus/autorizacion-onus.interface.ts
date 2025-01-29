@@ -60,6 +60,7 @@ export interface AutorizacionOnu {
   userppoe: string;
   passppoe: string;
   nombre_cliente: string;
+  cedula_cliente: string;
 
   vlans: string;
   line_profile: string;

@@ -2,6 +2,7 @@ import { Box, Button, Grid, IconButton, TextField } from '@mui/material';
 import {
   IconArrowsShuffle2,
   IconBrandCodesandbox,
+  IconTrash,
   IconUpload,
 } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'material-react-table';
@@ -23,6 +24,7 @@ export type SeriesProductoModalProps = {
   modalTitle?: string;
   cantidadBoolean: boolean;
   onDataChange?: (data: any[]) => void;
+  tipoSerie?: boolean;
 };
 
 const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
@@ -30,12 +32,26 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   modalTitle = 'Serie',
   onDataChange,
   cantidadBoolean,
+  tipoSerie = true,
 }) => {
   //* State local
   const [open, setOpen] = useState(false);
   const [dataExcel, setDataExcel] = useState<any[]>([]);
   const [cantidadTF, setCantidadTF] = useState(false);
-  const [data] = useState<any[]>(Arrays.series);
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (tipoSerie) {
+      setData(
+        Array.isArray(Arrays?.ubicaciones_producto) &&
+          Arrays?.ubicaciones_producto[0]?.series
+          ? Arrays.ubicaciones_producto[0].series
+          : [],
+      );
+    } else {
+      setData([]);
+    }
+  }, [Arrays.ubicaciones_producto, tipoSerie]);
 
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   const serieIndividualRef = useRef<HTMLInputElement>(null);
@@ -93,11 +109,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         const primerosDatos = copiaSeries.slice(0, cantidadReal);
 
         setDataExcel(primerosDatos);
-      } else {
-        console.log("El array 'data' está vacío o no es válido.");
       }
-    } else {
-      console.log('La cantidad no es válida o es 0.');
     }
   };
 
@@ -112,6 +124,18 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
       setDataExcel(prevData => [...prevData, value]);
       setIsGlobalLoading(false);
     }
+  };
+
+  const handleDeleteRow = (index: number) => {
+    setDataExcel(prevData => {
+      const updatedData = [...prevData];
+      updatedData.splice(index, 1); // Elimina la fila específica
+      return updatedData;
+    });
+  };
+
+  const handleDeleteAll = () => {
+    setDataExcel([]); // Elimina todas las filas
   };
 
   useEffect(() => {
@@ -138,13 +162,23 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'series'),
       },
+      {
+        id: 'acciones', // Columna para acciones
+        header: 'Acciones',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => (
+          <IconButton color="error" onClick={() => handleDeleteRow(row.index)}>
+            <IconTrash />
+          </IconButton>
+        ),
+      },
     ],
     [],
   );
 
   const ExcelSection = () => (
     <>
-      <Box display="flex" gap={2}>
+      <Box display="flex" gap={2} mb={2}>
         <Button
           onClick={handleButtonClick}
           startIcon={<IconUpload />}
@@ -185,6 +219,16 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
             enableGlobalFilter={true}
             centerColumns={true}
           />
+        </Grid>
+        <Grid item xs={12} display="flex" justifyContent="flex-end">
+          <Button
+            onClick={handleDeleteAll}
+            color="error"
+            variant="contained"
+            startIcon={<IconTrash />}
+          >
+            Eliminar Todo
+          </Button>
         </Grid>
       </Grid>
     </>

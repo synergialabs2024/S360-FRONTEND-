@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
 import {
-  Producto,
   ToastWrapper,
   getKeysFormErrorsMessage,
   solicitudMaterialFormSchema,
@@ -31,23 +30,15 @@ import {
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
 import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
 import { useAuthStore } from '@/store/auth';
-import { useColumnsSolicitudMaterialProductos } from '../../hooks/useColumnsSolicitudMaterialProductos';
+import {
+  ProductosDisponiblesTableType,
+  useColumnsProductosDisponibles,
+} from '@/app/inventario/ingreso-material/shared/hooks';
 
 export interface SaveSolicitudMaterialProps {
   title: string;
   SolicitudMaterial?: SolicitudMaterial;
 }
-
-export type ProductosDisponiblesTableType = Producto & {
-  usedQuantity: number;
-
-  containsSeries: boolean;
-  selectedSeries: string[];
-  savedSeries: string[];
-  cantidad?: number;
-  series?: any[];
-  productos?: string[];
-};
 
 type SaveFormData = CreatesolicitudMaterialParamsBase & {};
 
@@ -80,7 +71,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   const {
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form;
 
   ///* mutations
@@ -93,11 +84,56 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
+    if (!isValid) return;
+
     const mappedProductos = productosDisponibles.map(producto => ({
-      ...producto,
+      id: producto.id,
       producto: producto.id,
+      cantidad_recibida: producto.cantidad,
+      cantidad: producto.cantidad,
+      descripcion: producto.descripcion,
+      nombre: producto.nombre,
+      codigo: producto.codigo,
+      codigo_auxiliar: producto.codigo_auxiliar,
+      categoria: producto.categoria,
+      categoria_data: producto.categoria_data,
       series: producto.series ? producto.series : [],
+      requiere_series: producto.requiere_series,
+      tipo: producto.tipo,
+      stock_up: producto.stock_up || 0,
     }));
+
+    let hasError = false;
+
+    for (const producto of mappedProductos) {
+      if (producto.stock_up <= 0) {
+        ToastWrapper.error(
+          `
+            El producto de código ${producto.codigo} no
+            puede ser procesado porque su stock actual es 0 o menor.
+          `,
+        );
+        return;
+      }
+    }
+
+    mappedProductos.forEach(producto => {
+      const cantidad = producto.cantidad ?? 0;
+      if (cantidad > producto.stock_up) {
+        ToastWrapper.error(
+          `
+            El producto de ${producto.codigo}
+            tiene una cantidad ${cantidad} mayor que el stock actual
+            ${producto.stock_up}.
+          `,
+        );
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      return;
+    }
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
@@ -107,7 +143,9 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
       ...data,
       productos: mappedProductos,
     };
+
     createSolicitudMaterialMutation.mutate(preparedData);
+    productosEnviar([]);
   };
 
   ///* effects
@@ -116,8 +154,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   }, [SolicitudMaterial, reset, productosEnviar]);
 
   ///* columns --------------------
-  const { crearSolicitudMaterialColumns } =
-    useColumnsSolicitudMaterialProductos();
+  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -138,34 +175,6 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
         disabled
         value={user?.flota_data?.ubicacion_data?.nombre}
       />
-      {/* ==================== PRODUCTS ==================== */}
-      <CustomTypoLabel
-        text="Productos"
-        pt={CustomTypoLabelEnum.ptMiddlePosition}
-      />
-      <Grid container justifyContent="flex-end">
-        <CustomSingleButton
-          label="AGREGAR PRODUCTO"
-          color="primary"
-          variant="text"
-          startIcon={<FiPlus />}
-          onClick={() => {
-            setOpenAddProducts(true);
-          }}
-          justifyContent="flex-end"
-        />
-      </Grid>
-      <CustomMinimalTable<ProductosDisponiblesTableType>
-        columns={crearSolicitudMaterialColumns}
-        data={productosDisponibles || []}
-        enablePagination
-        density="comfortable"
-      />
-      <ProductosDisponiblesModal
-        open={openAddProducts}
-        onClose={() => setOpenAddProducts(false)}
-      />
-
       <CustomTextArea
         label="Observación"
         name="observacion"
@@ -175,6 +184,37 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
         helperText={errors.observacion?.message}
         required={false}
       />
+      {/* ==================== PRODUCTS ==================== */}
+      <CustomTypoLabel
+        text="Productos"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
+      <Grid container justifyContent="flex-end">
+        {!!user?.flota_data?.ubicacion_data?.id && (
+          <CustomSingleButton
+            label="AGREGAR PRODUCTO"
+            color="primary"
+            variant="text"
+            startIcon={<FiPlus />}
+            onClick={() => {
+              setOpenAddProducts(true);
+            }}
+            justifyContent="flex-end"
+          />
+        )}
+        <CustomMinimalTable<ProductosDisponiblesTableType>
+          columns={crearMaterialColumnsSinSerie}
+          data={productosDisponibles || []}
+          enablePagination
+          density="comfortable"
+        />
+        <ProductosDisponiblesModal
+          askADD={true}
+          pk_ubicacion={user?.flota_data?.ubicacion_data?.uuid}
+          open={openAddProducts}
+          onClose={() => setOpenAddProducts(false)}
+        />
+      </Grid>
     </SingleFormBoxScene>
   );
 };

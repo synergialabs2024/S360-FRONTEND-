@@ -294,9 +294,38 @@ export const useColumnsUbicacionProductosDisponibles = ({
     [baseColumnsEgreso01, baseColumnsEgreso02, baseColumnsEgreso04],
   );
 
+  const sinSeriesColumns = useMemo<
+    MRT_ColumnDef<UbicacionProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsEgreso01,
+      ...baseColumnsEgreso02,
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              disabled={true}
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+    ],
+    [baseColumnsEgreso01, baseColumnsEgreso02],
+  );
+
   return {
     modalEgresoMaterialColumns,
     crearEgresoMaterialColumns,
     seriesEgresoColumns,
+    sinSeriesColumns,
   };
 };

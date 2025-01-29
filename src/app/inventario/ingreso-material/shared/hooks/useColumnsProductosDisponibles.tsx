@@ -20,12 +20,25 @@ import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/mod
 
 export type ProductosDisponiblesTableType = Producto & {
   cantidad?: number;
+  cantidad_recibida?: number;
+  stock?: number;
   series?: any[];
   productos?: string[];
   usedQuantity?: number;
   selectedSeries?: string[];
   savedSeries?: string[];
+  stock_up?: number;
+  ubicaciones_producto?: UProducto[];
 };
+
+export interface UProducto {
+  stock: any;
+  uuid: string;
+  series: string[];
+  bodega: string;
+  stock_up: number;
+  ubicacion: string;
+}
 
 type UseColumnsEquiposIngresoMaterial = {
   showActionColumn?: boolean;
@@ -85,19 +98,19 @@ export const useColumnsProductosDisponibles = ({
         accessorKey: 'categoria_data__name',
         header: 'CATEGORIA',
         enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
       },
       {
         accessorKey: 'codigo',
         header: 'CÓDIGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
       },
     ],
@@ -111,6 +124,7 @@ export const useColumnsProductosDisponibles = ({
       {
         accessorKey: 'producto__requiere_series',
         header: 'CONTIENE SERIE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
           const requiereSeries = row?.original?.requiere_series;
           return <>{requiereSeries ? 'Con permiso' : 'Sin permiso'}</>;
@@ -129,7 +143,7 @@ export const useColumnsProductosDisponibles = ({
         accessorKey: 'producto__series',
         header: 'SERIES',
         enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
           const cantidad = row.original.cantidad;
 
@@ -142,6 +156,7 @@ export const useColumnsProductosDisponibles = ({
 
           return (
             <SeriesProductoModal
+              tipoSerie={true}
               Arrays={row.original}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               cantidadBoolean={obtenerValor(cantidad)}
@@ -159,10 +174,10 @@ export const useColumnsProductosDisponibles = ({
   >(
     () => [
       ...baseColumnsIngreso01,
-      ...baseColumnsIngreso02,
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
+        size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH_LARGE,
         Cell: ({ row }) => {
           return (
             <TextField
@@ -178,11 +193,12 @@ export const useColumnsProductosDisponibles = ({
           );
         },
       },
+      ...baseColumnsIngreso02,
       {
         accessorKey: 'producto__series',
         header: 'SERIES',
         enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
           return (
             <ShowSeriesProductosModal
@@ -201,12 +217,19 @@ export const useColumnsProductosDisponibles = ({
   >(
     () => [
       ...baseColumnsIngreso01,
+      {
+        accessorKey: 'stock_up',
+        header: 'STOCK',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'stock_up'),
+      },
 
       ...(showActionColumn
         ? [
             {
               accessorKey: 'action',
               enableColumnFilter: false,
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
               header: 'ACCIÓN',
               Cell: ({ row }: MRTProductoTableType) =>
                 onActionProductosRowNode?.(row.original),
@@ -225,6 +248,7 @@ export const useColumnsProductosDisponibles = ({
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
           return (
             <TextField
@@ -244,6 +268,7 @@ export const useColumnsProductosDisponibles = ({
       {
         accessorKey: 'remove',
         header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => (
           <SingleIconButton
             label="Remover"
@@ -269,9 +294,122 @@ export const useColumnsProductosDisponibles = ({
     ],
   );
 
+  const crearMaterialColumnsSinSerie = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsIngreso01,
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'remove',
+        header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => (
+          <SingleIconButton
+            label="Remover"
+            startIcon={<IoMdTrash />}
+            color="error"
+            tooltipPlacement="right-end"
+            onClick={() => {
+              removeSelectedItem({
+                item: row.original,
+                keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
+              });
+            }}
+            justifyContent="center"
+          />
+        ),
+      },
+    ],
+    [baseColumnsIngreso01, onChangePuntaInit, removeSelectedItem],
+  );
+
+  const crearMaterialColumnsRecepcion = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsIngreso01,
+      {
+        accessorKey: 'cantidad_pedida',
+        header: 'CANTIDAD PEDIDA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              variant="outlined"
+              value={row.original.cantidad_recibida || ''}
+              type="number"
+              disabled
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'cantidad_aprobada',
+        header: 'CANTIDAD APROBADA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'remove',
+        header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => (
+          <SingleIconButton
+            label="Remover"
+            startIcon={<IoMdTrash />}
+            color="error"
+            tooltipPlacement="right-end"
+            onClick={() => {
+              removeSelectedItem({
+                item: row.original,
+                keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
+              });
+            }}
+            justifyContent="center"
+          />
+        ),
+      },
+    ],
+    [baseColumnsIngreso01, onChangePuntaInit, removeSelectedItem],
+  );
+
   return {
     modalMaterialColumns,
     crearMaterialColumns,
+    crearMaterialColumnsSinSerie,
+    crearMaterialColumnsRecepcion,
     seriesIngresoColumns,
   };
 };

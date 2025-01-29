@@ -3,7 +3,11 @@ import { useMemo } from 'react';
 
 import { ViewMoreTextModalTableCell } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
-import { emptyCellNested, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
 import ShowSolicitudMaterialModal from '@/app/inventario/solicitud-material/pages/modal/ShowSolicitudMaterialModal';
 
@@ -12,6 +16,12 @@ export const useColumnsSolicitudMaterial = () => {
     MRT_ColumnDef<SolicitudMaterial>[]
   >(
     () => [
+      {
+        accessorKey: 'secuencial',
+        header: 'REFERENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
+      },
       {
         accessorKey: 'productos',
         header: 'PRODUCTOS',

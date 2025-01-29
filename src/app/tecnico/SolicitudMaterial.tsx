@@ -224,6 +224,7 @@ const SolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
             density="comfortable"
           />
           <ProductosDisponiblesModal
+            askADD={true}
             open={openAddProducts}
             onClose={() => setOpenAddProducts(false)}
           />

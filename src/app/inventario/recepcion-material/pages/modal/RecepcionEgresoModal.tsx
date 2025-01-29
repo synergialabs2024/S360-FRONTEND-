@@ -32,18 +32,17 @@ const RecepcionEgresoModal: React.FC<RecepcionEgresoModalProps> = ({
   const navigate = useNavigate();
 
   ///* mutations
-  const updateRecepcionMaterialMutation =
-    useUpdateRecepcionMaterial<CreateRecepcionMaterialParamsBase>({
-      navigate,
-      returnUrl: returnUrlRecepcionMaterialPage,
-    });
-
-  ///* mutations
   const createEgresoMaterialMutation = useCreateEgresoMaterial({
     navigate,
     returnUrl: returnUrlEgresoMaterialesPage,
     enableErrorNavigate: false,
   });
+
+  const updateRecepcionMaterialMutation =
+    useUpdateRecepcionMaterial<CreateRecepcionMaterialParamsBase>({
+      navigate,
+      returnUrl: returnUrlRecepcionMaterialPage,
+    });
 
   const onAceptar = () => {
     addDataEgreso(Arrays.productos);

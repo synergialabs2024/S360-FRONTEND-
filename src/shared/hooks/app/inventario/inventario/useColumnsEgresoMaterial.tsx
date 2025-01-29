@@ -15,20 +15,20 @@ export const useColumnsEgresoMaterial = () => {
   const egresoProductoBaseColumns = useMemo<MRT_ColumnDef<EgresoMaterial>[]>(
     () => [
       {
-        accessorKey: 'uuid',
+        accessorKey: 'secuencial',
         header: 'REFERENCIA',
-        size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH_LARGE,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
         accessorKey: 'productos',
         header: 'PRODUCTOS',
         enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
           return (
             <ShowSeriesModal
-              productoBoolean={false}
+              productoBoolean={true}
               Arrays={row.original.productos}
             />
           );

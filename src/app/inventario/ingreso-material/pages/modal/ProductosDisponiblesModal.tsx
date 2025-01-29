@@ -6,6 +6,7 @@ import {
   CodigoCategoriaProductoEnumChoiceType,
   gridSizeMdLg6,
   Producto,
+  ToastWrapper,
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
@@ -22,12 +23,16 @@ import { ProductosDisponiblesStoreKey, useProductosStore } from '@/store/app';
 
 export type ProductosDisponiblesModalProps = {
   open: boolean;
+  askADD: boolean;
+  pk_ubicacion?: string | undefined;
   onClose: () => void;
 };
 
 const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   onClose,
   open,
+  pk_ubicacion = '',
+  askADD = true,
 }) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
@@ -61,9 +66,29 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
       page_size: pageSize,
 
       ...filterObject,
-
       categoria_uuid: selectedCategoria,
     },
+  });
+
+  const resultado = equiposDisponiblesPaging?.data?.items?.map(producto => {
+    if (!Array.isArray(producto.ubicaciones_producto)) {
+      return {
+        id: producto.id,
+        uuid: producto.uuid,
+        stock_ubicacion_producto: 0,
+        nombre: producto.nombre,
+      };
+    }
+
+    // Buscar la ubicación que coincida
+    const ubicacionEncontrada = producto.ubicaciones_producto.find(
+      u => u.ubicacion === pk_ubicacion,
+    );
+
+    return {
+      ...producto,
+      stock_up: ubicacionEncontrada ? ubicacionEncontrada.stock : 0,
+    };
   });
 
   ///* handlers ---------------------
@@ -81,6 +106,10 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
           variant="text"
           color="primary"
           onClick={() => {
+            if (askADD && (item.stock_up === undefined || item.stock_up <= 0)) {
+              ToastWrapper.error('No existe stock disponible');
+              return;
+            }
             addSelectedItem({
               keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
               item: {
@@ -120,26 +149,27 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
               mb: 5,
             }}
             customSpaceNode={
-              <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
-                label="CATEGORIA"
-                value={selectedCategoria}
-                actualValueKey="value"
-                onChange={v => {
-                  setSelectedCategoriaModel(v as string);
-                }}
-                options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
-                getOptionLabel={o => o.label}
-                loading={false}
-                required
-                error={false}
-                disableClearable
-                size={gridSizeMdLg6}
-              />
+              <>
+                <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
+                  label=""
+                  value={selectedCategoria}
+                  actualValueKey="value"
+                  onChange={v => {
+                    setSelectedCategoriaModel(v as string);
+                  }}
+                  options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
+                  getOptionLabel={o => o.label}
+                  loading={false}
+                  error={false}
+                  disableClearable
+                  size={gridSizeMdLg6}
+                />
+              </>
             }
           />
           <TableWithoutActions<Producto>
             columns={modalMaterialColumns}
-            data={equiposDisponiblesPaging?.data?.items || []}
+            data={selectedCategoria != null ? resultado || [] : []}
             isLoading={isLoadingItemsDisponibles}
             isRefetching={isRefetchingItemsDisponibles}
             rowCount={equiposDisponiblesPaging?.data?.meta?.count || 0}

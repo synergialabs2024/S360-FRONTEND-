@@ -1,5 +1,4 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { UbicacionProducto } from '../ubicacion-producto.interface';
 import { Bodega } from '../bodega';
 import { Ubicacion } from '../ubicacion.interface';
 
@@ -16,7 +15,7 @@ export interface RecepcionMaterial {
   state: boolean;
 
   observacion: string;
-  productos: UbicacionProducto[];
+  productos: Productos[];
   estado_solicitud: string;
 
   ///* fk
@@ -28,6 +27,14 @@ export interface RecepcionMaterial {
 
   created_at?: string;
   modified_at?: string;
+}
+
+interface Productos {
+  stock_up: number;
+  requiere_series: boolean;
+  cantidad: number;
+  series: any[];
+  codigo: string;
 }
 
 export type RecepcionMaterialLimitData = Pick<RecepcionMaterial, 'uuid' | 'id'>;

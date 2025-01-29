@@ -7,11 +7,9 @@ import {
   SingleTableBoxScene,
   a11yProps,
 } from '@/shared/components';
-import { EstadoSolicitudMaterialEnumChoice } from '@/shared/constants/app';
+import { RecepcionMaterialEnumChoice } from '@/shared/constants/app';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
-import PreventaByStatePage from './SolicitudMaterialByStatePage';
 import SolicitudMaterialEsperaPage from './SolicitudMaterialEsperaPage';
-import SolicitudMaterialByStatePage from './SolicitudMaterialByStatePage';
 
 export const returnUrlSolicitudMaterialPage =
   ROUTER_PATHS.inventario.solicitudMaterialNav;
@@ -33,32 +31,32 @@ const SolicitudMaterialMainPage: React.FC<PreventasMainPageProps> = () => {
         isMainTableStates
       >
         <Tab label={'PENDIENTES'} value={1} {...a11yProps(1)} />
-        <Tab label={'APROBADAS'} value={6} {...a11yProps(6)} />
-        <Tab label={'RECHAZADAS'} value={7} {...a11yProps(7)} />
-        <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
+        <Tab label={'APROBADAS'} value={2} {...a11yProps(2)} />
+        <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
+        <Tab label={'FINALIZADAS'} value={4} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <SolicitudMaterialEsperaPage />
-      </CustomTabPanel>
-
-      <CustomTabPanel value={tabValue} index={6} ptGrid="0">
-        <PreventaByStatePage
-          state={EstadoSolicitudMaterialEnumChoice.APROBADO}
-          noAceptados
-        />
-      </CustomTabPanel>
-
-      <CustomTabPanel value={tabValue} index={7} ptGrid="0">
-        <SolicitudMaterialByStatePage
-          state={EstadoSolicitudMaterialEnumChoice.RECHAZADO}
-          pedingPayment
+        <SolicitudMaterialEsperaPage
+          state={RecepcionMaterialEnumChoice.PENDIENTE}
         />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <PreventaByStatePage
-          state={EstadoSolicitudMaterialEnumChoice.FINALIZADO}
+        <SolicitudMaterialEsperaPage
+          state={RecepcionMaterialEnumChoice.APROBADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={3} ptGrid="0">
+        <SolicitudMaterialEsperaPage
+          state={RecepcionMaterialEnumChoice.RECHAZADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <SolicitudMaterialEsperaPage
+          state={RecepcionMaterialEnumChoice.FINALIZADO}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>

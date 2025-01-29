@@ -17,10 +17,10 @@ export const useColumnsMovimientoMaterial = () => {
   >(
     () => [
       {
-        accessorKey: 'uuid',
+        accessorKey: 'secuencial',
         header: 'REFERENCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['uuid']),
+        Cell: ({ row }) => emptyCellNested(row, ['secuencial']),
       },
       {
         accessorKey: 'cantidad',

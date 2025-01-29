@@ -74,7 +74,6 @@ const RecepcionMaterialByStatePage: React.FC<
     if (state === RecepcionMaterialEnumChoice.PENDIENTE) {
       return true;
     }
-
     return false;
   };
 

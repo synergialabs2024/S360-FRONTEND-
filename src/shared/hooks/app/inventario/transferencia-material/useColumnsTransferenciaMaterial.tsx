@@ -9,7 +9,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import ShowTransferenciaSeriesModal from '@/app/inventario/transferencia-material/pages/modal/ShowTransferenciaSeriesModal';
+import ShowSolicitudMaterialModal from '@/app/inventario/solicitud-material/pages/modal/ShowSolicitudMaterialModal';
 
 export const useColumnsTransferenciaMaterial = () => {
   const transferenciaProductoBaseColumns = useMemo<
@@ -17,10 +17,10 @@ export const useColumnsTransferenciaMaterial = () => {
   >(
     () => [
       {
-        accessorKey: 'uuid',
+        accessorKey: 'secuencial',
         header: 'REFERENCIA',
-        size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH_LARGE,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
         accessorKey: 'productos',
@@ -28,9 +28,7 @@ export const useColumnsTransferenciaMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
-          return (
-            <ShowTransferenciaSeriesModal Arrays={row.original.productos} />
-          );
+          return <ShowSolicitudMaterialModal Arrays={row.original.productos} />;
         },
       },
     ],

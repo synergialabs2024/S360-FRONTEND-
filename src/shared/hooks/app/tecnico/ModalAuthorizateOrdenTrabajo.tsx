@@ -271,6 +271,19 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
                     required={false}
                     disabled
                   />
+                  <CustomTextField
+                    label="CEDULA CLIENTE"
+                    name="cedula_cliente"
+                    control={form.control}
+                    defaultValue={
+                      authOnu?.solicitud_servicio_data?.identificacion || ''
+                    }
+                    error={errors.cedula_cliente}
+                    helperText={errors.cedula_cliente?.message}
+                    size={gridSizeMdLg6}
+                    required={false}
+                    disabled
+                  />
 
                   {/* =============== Autocompletes =============== */}
                   <CustomTypoLabel

@@ -30,12 +30,14 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useUbicacionProductosStore } from '@/store/app';
-import { useColumnsUbicacionProductosDisponibles } from '../../hooks';
-import UbicacionProductosDisponiblesModal, {
-  UbicacionProductosDisponiblesTableType,
-} from '../../../pages/modal/UbicacionProductosDisponiblesModal';
+import { useProductosStore } from '@/store/app';
+
 import { useCheckPermission } from '@/shared/hooks/auth';
+import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
+import {
+  ProductosDisponiblesTableType,
+  useColumnsProductosDisponibles,
+} from '@/app/inventario/ingreso-material/shared/hooks';
 
 export interface SaveEgresoMaterialProps {
   title: string;
@@ -49,14 +51,11 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
+  const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
 
   ///* global state --------------------
-  const ubicacionProductosDisponibles = useUbicacionProductosStore(
-    s => s.ubicacionProductosDisponibles,
-  );
-  const ubicacionProductosEnviar = useUbicacionProductosStore(
-    s => s.setUbicacionProductosDisponibles,
-  );
+  const productosDisponibles = useProductosStore(s => s.productosDisponibles);
+  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -110,27 +109,29 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
-    const mappedProductos = ubicacionProductosDisponibles.map(
-      ubicacionproducto => {
-        const { series, ...resto } = ubicacionproducto;
-        return {
-          cantidad: resto.cantidad,
-          categoria_data: resto.categoria_data,
-          producto: resto.producto,
-          stock_actual: resto.stock_actual,
-          producto_data: resto.producto_data,
-          series: series ? series : [],
-        };
-      },
-    );
+    const mappedProductos = productosDisponibles.map(producto => ({
+      id: producto.id,
+      producto: producto.id,
+      cantidad: producto.cantidad,
+      descripcion: producto.descripcion,
+      nombre: producto.nombre,
+      codigo: producto.codigo,
+      codigo_auxiliar: producto.codigo_auxiliar,
+      categoria: producto.categoria,
+      categoria_data: producto.categoria_data,
+      series: producto.series ? producto.series : [],
+      requiere_series: producto.requiere_series,
+      tipo: producto.tipo,
+      stock_up: producto.stock_up || 0,
+    }));
 
     let hasError = false;
 
     for (const producto of mappedProductos) {
-      if (producto.stock_actual <= 0) {
+      if (producto.stock_up <= 0) {
         ToastWrapper.error(
           `
-            El producto de código ${producto.producto_data?.codigo} no
+            El producto de código ${producto.codigo} no
             puede ser procesado porque su stock actual es 0 o menor.
           `,
         );
@@ -139,7 +140,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     }
 
     for (const producto of mappedProductos) {
-      if (producto.producto_data?.requiere_series === true) {
+      if (producto.requiere_series === true) {
         if (producto.cantidad !== producto.series.length) {
           ToastWrapper.error(
             'Las series deben tener la misma cifra que la cantidad',
@@ -151,22 +152,12 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
 
     mappedProductos.forEach(producto => {
       const cantidad = producto.cantidad ?? 0;
-      if (cantidad > producto.stock_actual) {
+      if (cantidad > producto.stock_up) {
         ToastWrapper.error(
           `
-            El producto de ${producto.producto_data?.codigo}
+            El producto de ${producto.codigo}
             tiene una cantidad ${cantidad} mayor que el stock actual
-            ${producto.stock_actual}.
-          `,
-        );
-        hasError = true;
-      }
-
-      if (producto.series.length > cantidad) {
-        ToastWrapper.error(
-          `
-            Las series de ${producto.producto_data?.codigo}
-            tiene una cantidad ${cantidad} menor que la series dada.
+            ${producto.stock_up}.
           `,
         );
         hasError = true;
@@ -188,11 +179,12 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     };
 
     createEgresoMaterialMutation.mutate(preparedData);
+    productosEnviar([]);
   };
 
   ///* effects
   useEffect(() => {
-    ubicacionProductosEnviar([]);
+    productosEnviar([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -211,8 +203,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
   ]);
 
   ///* columns --------------------
-  const { crearEgresoMaterialColumns } =
-    useColumnsUbicacionProductosDisponibles();
+  const { crearMaterialColumns } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -235,7 +226,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
         helperText={errors.bodega?.message}
         onChangeRawValue={() => {
           form.setValue('ubicacion', '' as any);
-          ubicacionProductosEnviar([]);
+          productosEnviar([]);
         }}
         size={gridSizeMdLg6}
       />
@@ -254,8 +245,9 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
         error={errors.ubicacion as any}
         helperText={errors.ubicacion?.message}
         size={gridSizeMdLg6}
-        onChangeRawValue={() => {
-          ubicacionProductosEnviar([]);
+        onChangeRawValue={row => {
+          setUUIDUbicacion(row?.uuid);
+          productosEnviar([]);
         }}
       />
       <CustomTextArea
@@ -285,14 +277,15 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
             justifyContent="flex-end"
           />
         )}
-        <CustomMinimalTable<UbicacionProductosDisponiblesTableType>
-          columns={crearEgresoMaterialColumns}
-          data={ubicacionProductosDisponibles || []}
+        <CustomMinimalTable<ProductosDisponiblesTableType>
+          columns={crearMaterialColumns}
+          data={productosDisponibles || []}
           enablePagination
           density="comfortable"
         />
-        <UbicacionProductosDisponiblesModal
-          pk_ubicacion={watchedUbicacion}
+        <ProductosDisponiblesModal
+          askADD={true}
+          pk_ubicacion={uuidUbicacion}
           open={openAddProducts}
           onClose={() => setOpenAddProducts(false)}
         />

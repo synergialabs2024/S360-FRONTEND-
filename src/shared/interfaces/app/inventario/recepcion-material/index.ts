@@ -1,1 +1,1 @@
-export * from './recepcion-material';
+export * from './recepcion-material.interface';

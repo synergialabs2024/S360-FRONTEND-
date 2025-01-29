@@ -46,6 +46,7 @@ type SaveFormData = CreateIngresoMaterialParamsBase & {};
 const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
+  const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
@@ -104,7 +105,9 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     if (!isValid) return;
 
     const mappedProductos = productosDisponibles.map(producto => ({
+      id: producto.id,
       producto: producto.id,
+      producto_uuid: producto.uuid,
       cantidad: producto.cantidad,
       descripcion: producto.descripcion,
       nombre: producto.nombre,
@@ -139,6 +142,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     };
 
     createIngresoMaterialMutation.mutate(preparedData);
+    productosEnviar([]);
   };
 
   ///* effects
@@ -204,7 +208,8 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
         error={errors.ubicacion as any}
         helperText={errors.ubicacion?.message}
         size={gridSizeMdLg6}
-        onChangeRawValue={() => {
+        onChangeRawValue={row => {
+          setUUIDUbicacion(row?.uuid);
           productosEnviar([]);
         }}
       />
@@ -243,6 +248,8 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
         density="comfortable"
       />
       <ProductosDisponiblesModal
+        askADD={false}
+        pk_ubicacion={uuidUbicacion}
         open={openAddProducts}
         onClose={() => setOpenAddProducts(false)}
       />
