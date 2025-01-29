@@ -36,6 +36,8 @@ export interface Producto {
 
   iva_data?: IVA;
   categoria_data?: CategoriaProducto;
+
+  ubicaciones_producto?: UProducto;
 }
 
 export interface PrecioProducto {
@@ -43,4 +45,13 @@ export interface PrecioProducto {
   valor: number;
   default: boolean;
   descripcion?: string;
+}
+
+export interface UProducto {
+  stock: any;
+  uuid: string;
+  series: string[];
+  bodega: string;
+  stock_up: number;
+  ubicacion: string;
 }
