@@ -47,12 +47,6 @@ const RecepcionEgresoModal: React.FC<RecepcionEgresoModalProps> = ({
   const onAceptar = () => {
     addDataEgreso(Arrays.productos);
     ///* upd
-    Arrays.estado_solicitud = 'APROBADO';
-    updateRecepcionMaterialMutation.mutate({
-      id: Arrays.id!,
-      data: Arrays,
-    });
-
     const preparedData = {
       state: Arrays.state,
       observacion: Arrays.observacion,
@@ -62,6 +56,12 @@ const RecepcionEgresoModal: React.FC<RecepcionEgresoModalProps> = ({
     };
 
     createEgresoMaterialMutation.mutate(preparedData);
+
+    Arrays.estado_solicitud = 'APROBADO';
+    updateRecepcionMaterialMutation.mutate({
+      id: Arrays.id!,
+      data: Arrays,
+    });
   };
 
   const onRechazar = () => {

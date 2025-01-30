@@ -122,22 +122,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
       series: producto.series ? producto.series : [],
       requiere_series: producto.requiere_series,
       tipo: producto.tipo,
-      stock_up: producto.stock_up || 0,
     }));
-
-    let hasError = false;
-
-    for (const producto of mappedProductos) {
-      if (producto.stock_up <= 0) {
-        ToastWrapper.error(
-          `
-            El producto de código ${producto.codigo} no
-            puede ser procesado porque su stock actual es 0 o menor.
-          `,
-        );
-        return;
-      }
-    }
 
     for (const producto of mappedProductos) {
       if (producto.requiere_series === true) {
@@ -148,24 +133,6 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
           return;
         }
       }
-    }
-
-    mappedProductos.forEach(producto => {
-      const cantidad = producto.cantidad ?? 0;
-      if (cantidad > producto.stock_up) {
-        ToastWrapper.error(
-          `
-            El producto de ${producto.codigo}
-            tiene una cantidad ${cantidad} mayor que el stock actual
-            ${producto.stock_up}.
-          `,
-        );
-        hasError = true;
-      }
-    });
-
-    if (hasError) {
-      return;
     }
 
     if (mappedProductos.length === 0) {

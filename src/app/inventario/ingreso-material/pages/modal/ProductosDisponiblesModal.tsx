@@ -107,9 +107,13 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
           color="primary"
           onClick={() => {
             if (askADD && (item.stock_up === undefined || item.stock_up <= 0)) {
-              ToastWrapper.error('No existe stock disponible');
+              ToastWrapper.error(`
+              El producto de código ${item.codigo} no
+              puede ser procesado porque su stock actual es 0 o menor.
+            `);
               return;
             }
+
             addSelectedItem({
               keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
               item: {
