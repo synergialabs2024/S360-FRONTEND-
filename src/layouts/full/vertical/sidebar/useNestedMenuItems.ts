@@ -797,6 +797,12 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconPigMoney,
           children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'plan-pago-cuota',
+              title: 'Plan Pago Cuota',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.planpagocuotasNav,
+            }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'facturas',

@@ -1,0 +1,123 @@
+import { useFetchPlanPagoCuota } from '@/actions/app';
+import { ROUTER_PATHS } from '@/router/constants';
+import {
+  PermissionsEnum,
+  PlanPagoCuota,
+  TABLE_CONSTANTS,
+  useColumnsPlanPagoCuota,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared';
+import {
+  CustomSearch,
+  CustomTable,
+  SingleTableBoxScene,
+} from '@/shared/components';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { hasPermission } from '@/shared/utils/auth';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { useNavigate } from 'react-router';
+
+export const returnUrlPlanPagoCuotasPage =
+  ROUTER_PATHS.cobranza.planpagocuotasNav;
+
+export type PlanPagoCuotasPageProps = {};
+
+const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
+  useCheckPermission(PermissionsEnum.cobranza_view_planpagocuota);
+
+  const navigate = useNavigate();
+
+  // server side filters - colums table
+  const { filterObject, columnFilters, setColumnFilters } =
+    useTableServerSideFiltering();
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
+
+  ///* table
+  const {
+    globalFilter,
+    pagination,
+    searchTerm,
+    onChangeFilter,
+    setPagination,
+  } = useTableFilter();
+  const { pageIndex, pageSize } = pagination;
+
+  ///* fetch data
+  const {
+    data: planPagoCuotaPagingRes,
+    isLoading,
+    isRefetching,
+  } = useFetchPlanPagoCuota({
+    enabled: true,
+    params: {
+      page: pageIndex + 1,
+      page_size: pageSize,
+      name: searchTerm,
+      ...filterObject,
+    },
+  });
+
+  ///* handlers
+  const onEdit = (planpagocuota: PlanPagoCuota) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Editar Plan Pago Cuota',
+      subtitle: '¿Está seguro que desea editar este registro?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(`${returnUrlPlanPagoCuotasPage}/editar/${planpagocuota.uuid}`);
+      },
+    });
+  };
+
+  ///* columns
+  const { planPagoMaterialColumns } = useColumnsPlanPagoCuota();
+
+  return (
+    <SingleTableBoxScene
+      title="Plan pago cuota"
+      createPageUrl={`${returnUrlPlanPagoCuotasPage}/crear`}
+      showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_planpagocuota)}
+    >
+      <CustomSearch
+        onChange={onChangeFilter}
+        value={globalFilter}
+        text="por nombre"
+      />
+
+      <CustomTable<PlanPagoCuota>
+        columns={planPagoMaterialColumns}
+        data={planPagoCuotaPagingRes?.data?.items || []}
+        isLoading={isLoading}
+        isRefetching={isRefetching}
+        // // filters - server side
+        enableManualFiltering={true}
+        columnFilters={columnFilters}
+        onColumnFiltersChange={setColumnFilters}
+        // // search
+        enableGlobalFilter={false}
+        // // pagination
+        pagination={pagination}
+        onPaging={setPagination}
+        rowCount={planPagoCuotaPagingRes?.data?.meta?.count}
+        // // actions
+        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasPermission(
+          PermissionsEnum.cobranza_change_planpagocuota,
+        )}
+        // crud
+        canEdit={hasPermission(PermissionsEnum.cobranza_change_planpagocuota)}
+        onEdit={onEdit}
+        canDelete={false}
+      />
+    </SingleTableBoxScene>
+  );
+};
+
+export default PlanPagoCuotasPage;

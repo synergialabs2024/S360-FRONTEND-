@@ -1115,3 +1115,15 @@ export enum BucketKeyTicketEnumChoice {
   FOTO_ENTREGA_MESH = 'foto_entrega_mesh',
   FOTO_ENTREGA_UPS = 'foto_entrega_ups',
 }
+
+// Cartera
+export enum estadoDeudaTypeEnumChoice {
+  ACTIVO = 'ACTIVO',
+  COMPLETADO = 'COMPLETADO',
+  CANCELADO = 'CANCELADO ',
+}
+export const ESTADO_DEUDA_TYPE_ARRAY_CHOICES = [
+  estadoDeudaTypeEnumChoice.ACTIVO,
+  estadoDeudaTypeEnumChoice.COMPLETADO,
+  estadoDeudaTypeEnumChoice.CANCELADO,
+];

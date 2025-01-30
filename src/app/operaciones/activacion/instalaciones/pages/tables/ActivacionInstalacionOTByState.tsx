@@ -161,7 +161,7 @@ const ActivacionInstalacionOTByState: React.FC<
         canDelete={false}
         showCustomButtonsSpace
         customButtonsSpace={row => {
-          if (!row?.luz_verde) {
+          if (!row?.luz_verde && onAuthorizate) {
             return (
               <ModalAuthorizateOrdenTrabajo
                 authOnu={row}

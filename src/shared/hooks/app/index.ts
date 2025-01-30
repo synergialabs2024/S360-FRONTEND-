@@ -1,6 +1,7 @@
 export * from './administracion-red';
 export * from './administration';
 export * from './clientes';
+export * from './cobranza';
 export * from './comercial';
 export * from './factura';
 export * from './infraestructura';

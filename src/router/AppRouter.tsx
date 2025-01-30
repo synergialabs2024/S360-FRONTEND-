@@ -862,6 +862,27 @@ const ConsultasBuroPage = Loadable(
   lazy(() => import('@/app/comercial/consultas-buro/pages/ConsultasBuroPage')),
 );
 
+const PlanPagoCuotasPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cobranza/plan-pago-cuota/pages/tables/PlanPagoCuotasPage'),
+  ),
+);
+const CreatePlanPagoCuotaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/plan-pago-cuota/pages/forms/CreatePlanPagoCuotaPage'
+      ),
+  ),
+);
+const PlanPagoCuotaPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cobranza/plan-pago-cuota/pages/forms/UpdatePlanPagoCuota'),
+  ),
+);
+
 ///* Operaciones ------------
 // const AgendamientosMainPage = Loadable(
 //   lazy(
@@ -1984,6 +2005,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.motivoRubroAdicionalEditar,
             element: <UpdateMotivoRubroAdicionalPage />,
+          },
+
+          ///* Plan Pago Cuota
+          {
+            path: ROUTER_PATHS.cobranza.planpagocuotas,
+            element: <PlanPagoCuotasPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.planpagocuotasCrear,
+            element: <CreatePlanPagoCuotaPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.planpagocuotasEditar,
+            element: <PlanPagoCuotaPage />,
           },
         ],
       },

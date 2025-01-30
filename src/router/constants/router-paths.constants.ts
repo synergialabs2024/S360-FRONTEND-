@@ -314,6 +314,12 @@ export const ROUTER_PATHS = {
     motivoRubroAdicionalCrear: 'motivo-rubro-adicional/crear',
     motivoRubroAdicionalEditar: 'motivo-rubro-adicional/editar/:uuid',
     motivoRubroAdicionalNav: '/cobranza/motivo-rubro-adicional',
+
+    ///* cambio propietario
+    planpagocuotas: 'plan_pago_cuota',
+    planpagocuotasCrear: 'plan_pago_cuota/crear',
+    planpagocuotasEditar: 'plan_pago_cuota/editar/:uuid',
+    planpagocuotasNav: '/cobranza/plan_pago_cuota',
   },
 
   /////* Comercial ----------------
