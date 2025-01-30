@@ -100,7 +100,7 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
       {
         accessorKey: 'name',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
