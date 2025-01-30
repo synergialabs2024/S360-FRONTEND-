@@ -13,6 +13,7 @@ export interface CategoriaProducto {
 
   nombre: string;
   state: boolean;
+  code: string;
 
   created_at?: string;
   modified_at?: string;
