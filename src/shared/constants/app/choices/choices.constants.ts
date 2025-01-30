@@ -492,6 +492,11 @@ export enum InventarioEnumUUID {
 export enum enumAdministracionParamsUUID {
   MOTIVO_UPD__NO_CONTESTA = 'c3bf752f-d1ee-4023-91b3-55ec4f56980b',
 }
+export enum InvetarioCodesEnum {
+  DIGITAL = 'DIGITAL',
+  MATERIALES = 'MATERIALES',
+  EQUIPOS = 'EQUIPOS',
+}
 
 // // Bucket ==============================================
 const { VITE_MINIO_BUCKET_NAME } = getEnvs();

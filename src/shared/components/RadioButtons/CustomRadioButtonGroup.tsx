@@ -22,6 +22,7 @@ export interface SampleRadioButtonsGroupProps {
   options?: { value: string; label: string; checked?: boolean }[];
   onChangeValue?: (e?: string) => void;
   value?: string;
+  disabled?: boolean;
 }
 
 const CustomRadioButtonGroup: React.FC<SampleRadioButtonsGroupProps> = ({
@@ -34,6 +35,7 @@ const CustomRadioButtonGroup: React.FC<SampleRadioButtonsGroupProps> = ({
   optionsNode,
   showOptionsNode = false,
   onChangeValue,
+  disabled = true,
 }) => {
   return (
     <Grid item {...size}>
@@ -65,6 +67,7 @@ const CustomRadioButtonGroup: React.FC<SampleRadioButtonsGroupProps> = ({
                       control={<Radio />}
                       label={option.label}
                       checked={option.checked}
+                      disabled={disabled}
                     />
                   ))}
             </RadioGroup>

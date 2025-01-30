@@ -18,7 +18,6 @@ import {
 } from '@/actions/app';
 import {
   a11yProps,
-  CustomAutocompleteArrString,
   CustomAutocompleteMultiple,
   CustomDatePicker,
   CustomNumberTextField,
@@ -34,7 +33,6 @@ import {
   DiscountTypeEnumChoice,
   FACTURAS_CUOTAS_ARRAY_OBJECT,
   FacturasCuotasObjArray,
-  RECURRENCE_ARRAY_CHOICES,
   SAVE_PROMOCION_PERMISSIONS,
 } from '@/shared/constants/app';
 import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
@@ -51,6 +49,7 @@ import type {
 } from '@/shared/interfaces';
 import { promocionFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlPromocionsPage } from '../../../pages/tables/PromocionsPage';
 
 export interface SavePromocionProps {
@@ -73,6 +72,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const [loadingArray, setLoadingArray] = useState(true);
 
   useCheckPermissionsArray(SAVE_PROMOCION_PERMISSIONS);
+
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* hooks ----------------
   const navigate = useNavigate();
@@ -220,10 +225,20 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     }
 
     ///* create
-    createPromocionMutation.mutate({
-      ...restData,
-      ...(fecha_fin && { fecha_fin }),
-    } as unknown as CreatePromocionParamsBase);
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Crear Promoción',
+      subtitle:
+        'Una vez creada la promoción, esta no podrá ser modificada más allá de su fecha de finalización y/o estado. ¿Está seguro de proceder cons la creación de la promoción?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+
+        createPromocionMutation.mutate({
+          ...restData,
+          ...(fecha_fin && { fecha_fin }),
+        } as unknown as CreatePromocionParamsBase);
+      },
+    });
   };
 
   ///* effects
@@ -289,6 +304,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           defaultValue={form.getValues().name}
           error={errors.name}
           helperText={errors.name?.message}
+          disabled={!!promocion?.id}
         />
 
         {/* ============== tipo descuento ============== */}
@@ -307,6 +323,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           onChangeValue={() => {
             form.setValue('valor_descuento', '');
           }}
+          disabled={!!promocion?.id}
         />
         {watchedTipoDescuento === DiscountTypeEnumChoice.PORCENTAJE ? (
           <CustomNumberTextField
@@ -317,6 +334,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
             error={errors.valor_descuento}
             helperText={errors.valor_descuento?.message}
             customType="percentage"
+            disabled={!!promocion?.id}
           />
         ) : (
           <CustomNumberTextField
@@ -327,31 +345,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
             error={errors.valor_descuento}
             helperText={errors.valor_descuento?.message}
             customType="currency"
+            disabled={!!promocion?.id}
           />
         )}
-
-        <CustomNumberTextField
-          label="Prioridad"
-          name="prioridad"
-          control={form.control}
-          defaultValue={form.getValues().prioridad}
-          error={errors.prioridad}
-          helperText={errors.prioridad?.message}
-          size={gridSizeMdLg6}
-          min={1}
-        />
-        <CustomAutocompleteArrString
-          label="Recurrencia"
-          name="recurrencia"
-          control={form.control}
-          defaultValue={form.getValues('recurrencia')}
-          options={RECURRENCE_ARRAY_CHOICES}
-          isLoadingData={false}
-          error={errors.recurrencia}
-          helperText={errors.recurrencia?.message}
-          size={gridSizeMdLg6}
-          disableClearable
-        />
 
         {/* ----- Meses Gratuitos ----- */}
         <CustomAutocompleteMultiple<FacturasCuotasObjArray>
@@ -380,6 +376,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           onlyActualValueKey
           required={false}
           size={gridSizeMdLg6}
+          disabled={!!promocion?.id}
         />
 
         {/* ----- Meses Descuento ----- */}
@@ -409,6 +406,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           onlyActualValueKey
           required={false}
           size={gridSizeMdLg6}
+          disabled={!!promocion?.id}
         />
 
         <CustomDatePicker
@@ -419,6 +417,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           error={errors.fecha_inicio}
           helperText={errors.fecha_inicio?.message}
           size={gridSizeMdLg6}
+          disabled={!!promocion?.id}
         />
         <CustomDatePicker
           label="Fecha fin"
@@ -470,7 +469,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.provincias?.message}
-              disabled={watchedAllProvincias}
+              disabled={watchedAllProvincias || !!promocion?.id}
               onlyActualValueKey
               required={false}
             />
@@ -487,8 +486,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 form.setValue('provincias', []);
               }}
               // disabled
-              disabled={!provinciasPaging?.data?.items?.length}
+              disabled={
+                !provinciasPaging?.data?.items?.length || !!promocion?.id
+              }
               onClickDisabled={() => {
+                if (promocion?.id) return;
+
                 ToastWrapper.warning(
                   'No se puede seleccionar todas las provincias ya que no se tienen registros disponibles',
                 );
@@ -523,7 +526,11 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.ciudades?.message}
-              disabled={watchedAllCities || !watchedProvincias?.length}
+              disabled={
+                watchedAllCities ||
+                !watchedProvincias?.length ||
+                !!promocion?.id
+              }
               onlyActualValueKey
               required={false}
             />
@@ -542,9 +549,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               // disabled
               disabled={
                 !provinciasPaging?.data?.items?.length ||
-                !watchedProvincias?.length
+                !watchedProvincias?.length ||
+                !!promocion?.id
               }
               onClickDisabled={() => {
+                if (promocion?.id) return;
+
                 if (!watchedProvincias?.length)
                   return ToastWrapper.warning(
                     'Seleccione al menos una provincia',
@@ -582,7 +592,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.zonas?.message}
-              disabled={watchedAllZones || !watchedCiudades?.length}
+              disabled={
+                watchedAllZones || !watchedCiudades?.length || !!promocion?.id
+              }
               onlyActualValueKey
               required={false}
             />
@@ -600,9 +612,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               }}
               // disabled
               disabled={
-                !ciudadesPaging?.data?.items?.length || !watchedCiudades?.length
+                !ciudadesPaging?.data?.items?.length ||
+                !watchedCiudades?.length ||
+                !!promocion?.id
               }
               onClickDisabled={() => {
+                if (promocion?.id) return;
+
                 if (!watchedCiudades?.length)
                   return ToastWrapper.warning('Seleccione al menos una ciudad');
 
@@ -640,7 +656,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.sectores?.message}
-              disabled={watchedAllSectores || !watchedZonas?.length}
+              disabled={
+                watchedAllSectores || !watchedZonas?.length || !!promocion?.id
+              }
               onlyActualValueKey
               required={false}
             />
@@ -658,9 +676,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               }}
               // disabled
               disabled={
-                !zonasPaging?.data?.items?.length || !watchedZonas?.length
+                !zonasPaging?.data?.items?.length ||
+                !watchedZonas?.length ||
+                !!promocion?.id
               }
               onClickDisabled={() => {
+                if (promocion?.id) return;
+
                 if (!watchedZonas?.length)
                   return ToastWrapper.warning('Seleccione al menos una zona');
 
@@ -696,7 +718,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               control={form.control}
               error={undefined}
               helperText={errors.planes?.message}
-              disabled={watchedAllPlanes}
+              disabled={watchedAllPlanes || !!promocion?.id}
               onlyActualValueKey
               required={false}
             />
@@ -713,8 +735,10 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 form.setValue('planes', []);
               }}
               // disabled
-              disabled={!planesPaging?.data?.items?.length}
+              disabled={!planesPaging?.data?.items?.length || !!promocion?.id}
               onClickDisabled={() => {
+                if (promocion?.id) return;
+
                 ToastWrapper.warning(
                   'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
                 );
@@ -752,7 +776,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               helperText={errors.metodo_pagos?.message}
               onlyActualValueKey
               required={false}
-              disabled={watchedAllMetodosPago}
+              disabled={watchedAllMetodosPago || !!promocion?.id}
             />
           }
           overrideBtnNode
@@ -767,8 +791,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 form.setValue('metodo_pagos', []);
               }}
               // disabled
-              disabled={!metodoPagosPaging?.data?.items?.length}
+              disabled={
+                !metodoPagosPaging?.data?.items?.length || !!promocion?.id
+              }
               onClickDisabled={() => {
+                if (promocion?.id) return;
+
                 ToastWrapper.warning(
                   'No se puede seleccionar todos los métodos de pago ya que no se tienen registros disponibles',
                 );

@@ -35,14 +35,7 @@ export const promocionFormSchema = yup.object({
     .optional()
     .nullable()
     .max(200, 'El campo fecha fin no debe exceder los 200 caracteres'),
-  prioridad: yup
-    .number()
-    .typeError('El campo prioridad es requerido')
-    .required('El campo prioridad es requerido'),
-  recurrencia: yup
-    .string()
-    .required('El campo recurrencia es requerido')
-    .max(200, 'El campo recurrencia no debe exceder los 200 caracteres'),
+
   state: fieldStateYupValidation,
 
   paises: yup.array().optional().nullable(),
