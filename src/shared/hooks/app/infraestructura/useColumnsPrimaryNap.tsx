@@ -126,7 +126,7 @@ export const useColumnsPrimaryNap = () => {
         accessorKey: 'olt__name',
         header: 'OLT',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'olt'),
+        Cell: ({ row }) => emptyCellNested(row, ['olt_data', 'name']),
       },
       {
         accessorKey: 'puerto_pon__name',
