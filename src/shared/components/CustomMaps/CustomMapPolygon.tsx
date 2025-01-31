@@ -1,9 +1,10 @@
 import L from 'leaflet';
+import 'leaflet-draw/dist/leaflet.draw.css'; // polygon
 import 'leaflet-geosearch/dist/geosearch.css'; // search
 import 'leaflet/dist/leaflet.css';
+
 import { useEffect, useRef, useState } from 'react';
 import { MdCancel, MdSaveAs } from 'react-icons/md';
-import { PiPolygonBold } from 'react-icons/pi';
 import {
   FeatureGroup,
   MapContainer,
@@ -12,21 +13,23 @@ import {
   useMap,
 } from 'react-leaflet';
 
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
 // polygon
 import { EditControl } from 'react-leaflet-draw';
 
 // search
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-import { ToastWrapper, useMapPolygonComponent } from '@/shared';
-import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { Box, Grid, Paper, Typography } from '@mui/material';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+import { CustomSingleButton } from '@/shared/components';
+import { gridSize, gridSizeMdLg6 } from '@/shared/constants';
+import { useMapPolygonComponent } from '@/shared/hooks';
 import { GridSizeType } from '@/shared/interfaces';
-import { CustomSingleButton } from '..';
+import { ToastWrapper } from '@/shared/wrappers';
+import { FaVectorSquare } from 'react-icons/fa';
 
 // @ts-expect-error
 delete L.Icon.Default.prototype._getIconUrl;
@@ -130,13 +133,13 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   };
 
   return (
-    <Grid item {...size} sx={{ pb: 4 }}>
+    <Grid item {...size} sx={{ pb: 4, mt: 3 }}>
       <>
         {!canDrawPolygon ? (
           <CustomSingleButton
-            label="Dibujar área"
-            startIcon={<PiPolygonBold />}
-            variant="contained"
+            label="Trazar polígono"
+            startIcon={<FaVectorSquare />}
+            variant="text"
             onClick={() => {
               setCanDrawPolygon(true);
               if (isEdittingAlredySavedPolygon) {
@@ -149,13 +152,13 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
           <Grid item container xs={12}>
             <Grid item {...gridSizeMdLg6}>
               <CustomSingleButton
-                label="Guardar área"
+                label="Guardar trazo"
                 startIcon={<MdSaveAs />}
                 variant="contained"
                 onClick={() => {
                   // validate if there is a polygon
                   if (!coordsArray.length) {
-                    ToastWrapper.warning('Debe trazar un área de cobertura');
+                    ToastWrapper.warning('Debe trazar al menos un polígono');
                     return;
                   }
 
@@ -294,7 +297,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
             <Box
               width="40px"
               height="5px"
-              bgcolor="purple"
+              bgcolor="orange"
               marginRight="5px"
             ></Box>
             <Typography variant="body2">Área Asignada</Typography>

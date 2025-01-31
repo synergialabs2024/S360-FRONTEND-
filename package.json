@@ -33,6 +33,7 @@
     "flatpickr": "^4.6.13",
     "i18next": "^23.16.0",
     "leaflet": "^1.9.4",
+    "leaflet-draw": "^1.0.4",
     "leaflet-geosearch": "^4.0.0",
     "lodash": "^4.17.21",
     "material-react-table": "^2.13.0",
@@ -66,7 +67,7 @@
   "devDependencies": {
     "@eslint/js": "^9.12.0",
     "@tanstack/eslint-plugin-query": "^5.35.6",
-    "@types/leaflet": "^1.9.14",
+    "@types/leaflet": "^1.9.9",
     "@types/lodash": "^4.17.10",
     "@types/node": "^22.7.5",
     "@types/prop-types": "^15.7.14",
