@@ -9,7 +9,7 @@ import {
   useFetchBodegas,
   useUpdateUbicacion,
 } from '@/actions/app';
-import { ToastWrapper, useLoaders } from '@/shared';
+import { gridSizeMdLg6, ToastWrapper, useLoaders } from '@/shared';
 import {
   CustomAutocomplete,
   CustomTextField,
@@ -108,6 +108,16 @@ const SaveUbicacion: React.FC<SaveUbicacionProps> = ({ title, ubicacion }) => {
         defaultValue={form.getValues().nombre}
         error={errors.nombre}
         helperText={errors.nombre?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Codigo"
+        name="codigo"
+        control={form.control}
+        defaultValue={form.getValues().codigo}
+        error={errors.codigo}
+        helperText={errors.codigo?.message}
+        size={gridSizeMdLg6}
       />
 
       <CustomAutocomplete<Bodega>

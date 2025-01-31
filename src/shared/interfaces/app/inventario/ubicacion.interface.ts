@@ -13,6 +13,7 @@ export interface Ubicacion {
   uuid?: string;
 
   nombre: string;
+  codigo: string;
   state: boolean;
 
   created_at?: string;

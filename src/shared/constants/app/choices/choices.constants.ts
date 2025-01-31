@@ -37,6 +37,7 @@ export enum UserRolesEnumChoice {
   AUXILIAR = 'AUXILIAR',
   INVENTARIO_GENERAL = 'INVENTARIO_GENERAL',
   OPERADOR = 'OPERADOR',
+  PRODUCTO = 'PRODUCTO',
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,

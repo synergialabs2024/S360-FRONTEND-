@@ -96,6 +96,14 @@ const UbicacionsPage: React.FC<UbicacionsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
 
       {
         accessorKey: 'bodega__nombre',
