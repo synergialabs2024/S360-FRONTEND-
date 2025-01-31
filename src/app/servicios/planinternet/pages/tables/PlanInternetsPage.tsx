@@ -106,7 +106,7 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
 
       {
         accessorKey: 'valor',
-        header: 'VALOR',
+        header: 'VALOR BASE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
@@ -161,6 +161,15 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
             'N/A'
           );
         },
+      },
+
+      {
+        accessorKey: 'costo_instalacion',
+        header: 'COSTO INSTALACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatCurrencyCell(row, 'costo_instalacion'),
       },
 
       {

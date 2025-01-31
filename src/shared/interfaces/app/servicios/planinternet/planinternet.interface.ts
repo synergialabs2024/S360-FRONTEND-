@@ -15,7 +15,7 @@ export interface PlanInternet {
   name: string;
   codigo: string;
   description: string;
-  valor: string;
+  valor: string; // base price
   velocidad_descarga_minima: string;
   velocidad_descarga_maxima: string;
   velocidad_subida_minima: string;
@@ -23,7 +23,8 @@ export interface PlanInternet {
   comparticion: string;
   prioridad: number;
 
-  es_plan_base: boolean; // only one
+  es_plan_base: boolean; // only one para rubro x 3ra edad
+  costo_instalacion: string;
 
   created_at?: string;
   modified_at?: string;

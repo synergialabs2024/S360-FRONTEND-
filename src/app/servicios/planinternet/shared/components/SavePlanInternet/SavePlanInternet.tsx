@@ -117,15 +117,6 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         size={gridSizeMdLg6}
         disabled={!!planinternet?.id}
       />
-      <CustomTextArea
-        label="Descripción"
-        name="description"
-        control={form.control}
-        defaultValue={form.getValues().description}
-        error={errors.description}
-        helperText={errors.description?.message}
-        required={false}
-      />
 
       <CustomNumberTextField
         label="Valor base"
@@ -138,6 +129,18 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         customType="currency"
         min={0}
       />
+      <CustomNumberTextField
+        label="Costo instalación"
+        name="costo_instalacion"
+        control={form.control}
+        defaultValue={form.getValues().costo_instalacion}
+        error={errors.costo_instalacion}
+        helperText={errors.costo_instalacion?.message}
+        size={gridSizeMdLg6}
+        customType="currency"
+        min={0}
+      />
+
       <CustomAutocompleteArrString
         label="Clasificación score buro"
         name="clasificacion_score_buro"
@@ -147,7 +150,16 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
         defaultValue={form.getValues().clasificacion_score_buro}
         error={errors.clasificacion_score_buro}
         helperText={errors.clasificacion_score_buro?.message}
-        size={gridSizeMdLg6}
+      />
+
+      <CustomTextArea
+        label="Descripción"
+        name="description"
+        control={form.control}
+        defaultValue={form.getValues().description}
+        error={errors.description}
+        helperText={errors.description?.message}
+        required={false}
       />
       <CustomTextField
         label="Compartición"

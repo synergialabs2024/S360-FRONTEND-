@@ -13,7 +13,26 @@ export const planinternetFormSchema = yup.object({
   valor: yup
     .string()
     .required('El campo valor es requerido')
-    .max(200, 'El campo valor no debe exceder los 200 caracteres'),
+    .max(200, 'El campo valor no debe exceder los 200 caracteres')
+    .test(
+      'is-valid-number',
+      'El campo valor debe ser un número positivo valido, 0 es valido',
+      value => {
+        return !isNaN(parseFloat(value)) && parseFloat(value) >= 0;
+      },
+    ),
+  costo_instalacion: yup
+    .string()
+    .required('El campo costo instalacion es requerido')
+    .max(200, 'El campo costo instalacion no debe exceder los 200 caracteres')
+    .test(
+      'is-valid-number',
+      'El campo costo instalacion debe ser un número positivo valido, 0 es valido',
+      value => {
+        return !isNaN(parseFloat(value)) && parseFloat(value) >= 0;
+      },
+    ),
+
   velocidad_descarga_minima: yup
     .string()
     .required('El campo velocidad descarga minima es requerido')
