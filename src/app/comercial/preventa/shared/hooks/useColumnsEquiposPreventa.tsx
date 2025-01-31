@@ -6,20 +6,26 @@ import {
   emptyCellNested,
   emptyCellOneLevel,
   formatQuantityCell,
+  Producto,
 } from '@/shared';
 import { EquiposSeleccionadosTableType } from '../components/SavePreventa/form/equipos/EquiposSeleccionadosPreventa';
 
 type MRTUbicacionProductoTableType = {
   row: MRT_Row<EquiposSeleccionadosTableType>;
 };
+type MRTProductoTableType = {
+  row: MRT_Row<Producto>;
+};
 
 type UseColumnsEquiposPreventa = {
   showActionColumn?: boolean;
   onActionRowNode?: (item: EquiposSeleccionadosTableType) => React.ReactNode;
+  onActionRowNodeProducto?: (item: Producto) => React.ReactNode;
 };
 export const useColumnsEquiposPreventa = ({
   showActionColumn = true,
   onActionRowNode,
+  onActionRowNodeProducto,
 }: UseColumnsEquiposPreventa = {}) => {
   ///* base columns -------------------------------
   const baseColumnsPreventa01 = useMemo<
@@ -74,8 +80,38 @@ export const useColumnsEquiposPreventa = ({
     [],
   );
 
+  ///* productos ------------------------
+  const productsBaseColumns = useMemo<MRT_ColumnDef<Producto>[]>(
+    () => [
+      {
+        accessorKey: 'codigo',
+        header: 'CÓDIGO',
+        enableColumnFilter: false,
+      },
+      {
+        accessorKey: 'nombre',
+        header: 'NOMBRE',
+      },
+
+      ...(showActionColumn
+        ? [
+            {
+              accessorKey: 'action',
+              enableColumnFilter: false,
+              header: 'ACCIÓN',
+              Cell: ({ row }: MRTProductoTableType) =>
+                onActionRowNodeProducto?.(row.original),
+            },
+          ]
+        : []),
+    ],
+    [onActionRowNodeProducto, showActionColumn],
+  );
+
   return {
     baseColumnsPreventa01,
     savedEquiposPreventaColumns,
+
+    productsBaseColumns,
   };
 };

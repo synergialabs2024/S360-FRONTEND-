@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-import { useFetchUbicacionProductos } from '@/actions/app';
+import { useFetchProductos } from '@/actions/app';
 import {
-  InventarioEnumUUID,
+  InvetarioCodesEnum,
+  Producto,
   ToastWrapper,
-  UbicacionProducto,
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
@@ -53,25 +53,43 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
     );
 
   ///* fetch data ---------------------
+  // const {
+  //   data: itemsDisponiblesPaging,
+  //   isLoading: isLoadingItemsDisponibles,
+  //   isRefetching: isRefetchingItemsDisponibles,
+  // } = useFetchUbicacionProductos({
+  //   enabled: open && !!user?.centro_costo,
+  //   params: {
+  //     page: pageIndex + 1,
+  //     page_size: pageSize,
+
+  //     ...filterObject,
+  //     producto__codigo: searchTerm,
+
+  //     producto__es_para_venta: true,
+  //     producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
+  //     bodega__centro_costo__pk: user?.centro_costo!,
+
+  //     // filtrar productos distincts por bodega del centro costo
+  //     unique_centro_costo_equipos_venta: true,
+  //   },
+  // });
+
   const {
     data: itemsDisponiblesPaging,
     isLoading: isLoadingItemsDisponibles,
     isRefetching: isRefetchingItemsDisponibles,
-  } = useFetchUbicacionProductos({
-    enabled: open && !!user?.centro_costo,
+  } = useFetchProductos({
+    enabled: open,
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
 
       ...filterObject,
-      producto__codigo: searchTerm,
 
-      producto__es_para_venta: true,
-      producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
-      bodega__centro_costo__pk: user?.centro_costo!,
-
-      // filtrar productos distincts por bodega del centro costo
-      unique_centro_costo_equipos_venta: true,
+      codigo: searchTerm,
+      es_para_venta: true,
+      categoria__code: InvetarioCodesEnum.EQUIPOS,
     },
   });
 
@@ -81,7 +99,7 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
   };
 
   ///* columns ---------------------
-  const { baseColumnsPreventa01 } = useColumnsEquiposPreventa({
+  const { productsBaseColumns } = useColumnsEquiposPreventa({
     onActionRowNode(item) {
       return (
         <CustomSingleButton
@@ -141,8 +159,8 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
               text="por código"
             />
 
-            <TableWithoutActions<UbicacionProducto>
-              columns={baseColumnsPreventa01}
+            <TableWithoutActions<Producto>
+              columns={productsBaseColumns}
               data={itemsDisponiblesPaging?.data?.items || []}
               isLoading={isLoadingItemsDisponibles}
               isRefetching={isRefetchingItemsDisponibles}
