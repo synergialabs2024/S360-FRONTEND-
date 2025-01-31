@@ -21,7 +21,7 @@ import {
 } from '@/store/app';
 import { useAuthStore } from '@/store/auth';
 import { useColumnsEquiposPreventa } from '../../../../hooks';
-import { EquiposSeleccionadosTableType } from './EquiposSeleccionadosPreventa';
+import { EquiposSeleccionadosProductoType } from './EquiposSeleccionadosPreventa';
 
 export type EquiposPreventaModalProps = {
   open: boolean;
@@ -48,7 +48,7 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
   ///* global state ---------------------
   const user = useAuthStore(s => s.user);
   const { addSelectedItem } =
-    useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
+    useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
       GenericInventoryStoreKey.equiposVentaPreventa,
     );
 
@@ -100,7 +100,7 @@ const EquiposPreventaModal: React.FC<EquiposPreventaModalProps> = ({
 
   ///* columns ---------------------
   const { productsBaseColumns } = useColumnsEquiposPreventa({
-    onActionRowNode(item) {
+    onActionRowNodeProducto(item) {
       return (
         <CustomSingleButton
           label="AGREGAR"

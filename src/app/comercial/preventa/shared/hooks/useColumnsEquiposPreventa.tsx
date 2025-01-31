@@ -6,21 +6,25 @@ import {
   emptyCellNested,
   emptyCellOneLevel,
   formatQuantityCell,
-  Producto,
 } from '@/shared';
-import { EquiposSeleccionadosTableType } from '../components/SavePreventa/form/equipos/EquiposSeleccionadosPreventa';
+import {
+  EquiposSeleccionadosProductoType,
+  EquiposSeleccionadosTableType,
+} from '../components/SavePreventa/form/equipos/EquiposSeleccionadosPreventa';
 
 type MRTUbicacionProductoTableType = {
   row: MRT_Row<EquiposSeleccionadosTableType>;
 };
 type MRTProductoTableType = {
-  row: MRT_Row<Producto>;
+  row: MRT_Row<EquiposSeleccionadosProductoType>;
 };
 
 type UseColumnsEquiposPreventa = {
   showActionColumn?: boolean;
   onActionRowNode?: (item: EquiposSeleccionadosTableType) => React.ReactNode;
-  onActionRowNodeProducto?: (item: Producto) => React.ReactNode;
+  onActionRowNodeProducto?: (
+    item: EquiposSeleccionadosProductoType,
+  ) => React.ReactNode;
 };
 export const useColumnsEquiposPreventa = ({
   showActionColumn = true,
@@ -81,7 +85,9 @@ export const useColumnsEquiposPreventa = ({
   );
 
   ///* productos ------------------------
-  const productsBaseColumns = useMemo<MRT_ColumnDef<Producto>[]>(
+  const productsBaseColumns = useMemo<
+    MRT_ColumnDef<EquiposSeleccionadosProductoType>[]
+  >(
     () => [
       {
         accessorKey: 'codigo',

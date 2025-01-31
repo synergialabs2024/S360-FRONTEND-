@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { MdDelete, MdOutlineAddShoppingCart } from 'react-icons/md';
 
 import {
+  Producto,
   SystemParamsSlugsEnum,
   ToastWrapper,
   UbicacionProducto,
@@ -26,6 +27,9 @@ export type EquiposSeleccionadosPreventaProps = {};
 export type EquiposSeleccionadosTableType = UbicacionProducto & {
   usedQuantity: number;
 };
+export type EquiposSeleccionadosProductoType = Producto & {
+  usedQuantity: number;
+};
 
 const EquiposSeleccionadosPreventa: React.FC<
   EquiposSeleccionadosPreventaProps
@@ -39,7 +43,7 @@ const EquiposSeleccionadosPreventa: React.FC<
     items: equiposUtilizados,
     removeSelectedItem,
     updateSelectedItemValue,
-  } = useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
+  } = useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
     GenericInventoryStoreKey.equiposVentaPreventa,
   );
   const scoreServicio = usePreventaStore(s => s.scoreServicio);
@@ -48,7 +52,7 @@ const EquiposSeleccionadosPreventa: React.FC<
 
   ///* handlers ---------------------
   const onChangeQuantity = useCallback(
-    (value: string, item: EquiposSeleccionadosTableType) => {
+    (value: string, item: EquiposSeleccionadosProductoType) => {
       if (+value > 2) {
         ToastWrapper.warning('La cantidad máxima permitida es de 2');
         return;
@@ -84,15 +88,15 @@ const EquiposSeleccionadosPreventa: React.FC<
   };
 
   ///* columns ---------------------
-  const { baseColumnsPreventa01 } = useColumnsEquiposPreventa({
+  const { productsBaseColumns } = useColumnsEquiposPreventa({
     showActionColumn: false,
   });
 
   const selectedItemsColumns = useMemo<
-    MRT_ColumnDef<EquiposSeleccionadosTableType>[]
+    MRT_ColumnDef<EquiposSeleccionadosProductoType>[]
   >(
     () => [
-      ...baseColumnsPreventa01,
+      ...productsBaseColumns,
       {
         accessorKey: 'quantity',
         header: 'CANTIDAD',
@@ -138,7 +142,7 @@ const EquiposSeleccionadosPreventa: React.FC<
         ),
       },
     ],
-    [baseColumnsPreventa01, onChangeQuantity, removeSelectedItem],
+    [productsBaseColumns, onChangeQuantity, removeSelectedItem],
   );
 
   return (
