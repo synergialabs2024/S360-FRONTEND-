@@ -75,6 +75,13 @@ export enum InternetPlanInternetTypeEnumChoice {
   CONVENIOS = 'CONVENIOS',
   PYMES = 'PYMES',
 }
+export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_ALL = [
+  InternetPlanInternetTypeEnumChoice.HOGAR,
+  InternetPlanInternetTypeEnumChoice.CORPORATIVO,
+  InternetPlanInternetTypeEnumChoice.CONVENIOS,
+  InternetPlanInternetTypeEnumChoice.PYMES,
+];
+
 export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES = [
   InternetPlanInternetTypeEnumChoice.HOGAR,
   InternetPlanInternetTypeEnumChoice.CORPORATIVO,
