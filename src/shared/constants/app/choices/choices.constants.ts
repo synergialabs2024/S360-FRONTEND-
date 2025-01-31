@@ -1142,3 +1142,9 @@ export const ESTADO_DEUDA_TYPE_ARRAY_CHOICES = [
   estadoDeudaTypeEnumChoice.COMPLETADO,
   estadoDeudaTypeEnumChoice.CANCELADO,
 ];
+export enum YesNoEnumChoice {
+  SI = 'SI',
+  NO = 'NO',
+}
+
+export const YES_NO_ARRAY_CHOICES = [YesNoEnumChoice.SI, YesNoEnumChoice.NO];

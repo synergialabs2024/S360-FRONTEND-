@@ -771,16 +771,6 @@ const CambioPlanByStatePage = Loadable(
   ),
 );
 
-const BuzonTareasByStatePage = Loadable(
-  lazy(
-    () =>
-      import('@/app/cartera/buzon-tareas/pages/tables/BuzonTareasByStatePage'),
-  ),
-);
-const BuzonTareasPage = Loadable(
-  lazy(() => import('@/app/cartera/buzon-tareas/pages/forms/BuzonTareasPage')),
-);
-
 const PromesaPagoByStatePage = Loadable(
   lazy(
     () =>
@@ -803,6 +793,84 @@ const MantenedorAplicacionesByStatePage = Loadable(
       ),
   ),
 );
+
+// Buzon tareas
+
+const BuzonTareasByStatePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/buzon-tarea/pages/tables/BuzonTareasByStatePage'
+      ),
+  ),
+);
+
+const BuzonTareasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/buzon-tarea/pages/forms/BuzonTareasPage'
+      ),
+  ),
+);
+
+// Tipo mantenedor aplicaciones
+const TipoMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios/pages/tables/TipoMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+const CreateTipoMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios/pages/forms/CreateTipoMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+// Subtipo mantenedor aplicaciones
+const SubtipoMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios/pages/tables/SubtipoMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+const CreateSubtipoMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios/pages/forms/CreateSubtipoMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+// Beneficio mantenedor aplicaciones
+const BeneficioMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios/pages/tables/BeneficioMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+const CreateBeneficioMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios/pages/forms/CreateBeneficioMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
 const MantenedorAplicacionesPage = Loadable(
   lazy(
     () =>
@@ -1957,6 +2025,7 @@ const AppRouter = [
             element: <CambioPropietarioPagoPage />,
           },
           ///* Buzon de Tareas
+
           {
             path: ROUTER_PATHS.cartera.buzontareasNav,
             element: <BuzonTareasByStatePage />,
@@ -1965,6 +2034,43 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera.buzontareasCrear,
             element: <BuzonTareasPage />,
           },
+
+          // Tipo mantenedor aplicaciones
+
+          {
+            path: ROUTER_PATHS.cartera.parametrosTipoMantenedorBeneficiosNav,
+            element: <TipoMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.parametrosTipoMantenedorBeneficiosCrear,
+            element: <CreateTipoMantenedorBeneficiosPage />,
+          },
+
+          // Subtipo mantenedor aplicaciones
+
+          {
+            path: ROUTER_PATHS.cartera.parametrosSubtipoMantenedorBeneficiosNav,
+            element: <SubtipoMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosSubtipoMantenedorBeneficiosCrear,
+            element: <CreateSubtipoMantenedorBeneficiosPage />,
+          },
+
+          // Beneficio mantenedor aplicaciones
+
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosBeneficioMantenedorBeneficiosNav,
+            element: <BeneficioMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosBeneficioMantenedorBeneficiosCrear,
+            element: <CreateBeneficioMantenedorBeneficiosPage />,
+          },
+
           ///* Promesas pago
           {
             path: ROUTER_PATHS.cartera.promesapagoNav,
