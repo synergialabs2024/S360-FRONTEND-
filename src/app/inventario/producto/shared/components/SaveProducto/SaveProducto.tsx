@@ -51,6 +51,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       state: true,
       es_para_venta: false,
       requiere_series: false,
+      aplica_promocion: false,
       // init with 1 default price
       precios: [
         {
