@@ -117,7 +117,7 @@ import DocsSavePreventaStep from './DocsSavePreventaStep';
 import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
 import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
-import { EquiposSeleccionadosTableType } from './form/equipos/EquiposSeleccionadosPreventa';
+import { EquiposSeleccionadosProductoType } from './form/equipos/EquiposSeleccionadosPreventa';
 
 import Cards from 'react-credit-cards-2';
 import { PromocionPreventaFormPart } from './promocion';
@@ -214,7 +214,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const {
     items: equiposSeleccionados,
     clearOneRecord: clearAllEquiposSelecStore,
-  } = useTypedGenericInventoryStore<EquiposSeleccionadosTableType>(
+  } = useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
     GenericInventoryStoreKey.equiposVentaPreventa,
   );
   const selectedCuotas = usePreventaStore(s => s.selectedCuotas);
@@ -617,7 +617,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     const detalleEquipos: EquipoVentasDetalle[] = equiposSeleccionados?.map(
       equipo => ({
         cantidad: equipo?.usedQuantity?.toFixed(2),
-        codigo: equipo?.producto_data?.codigo!,
+        codigo: equipo?.codigo!,
         cuotas: selectedCuotas,
         series: [],
       }),
