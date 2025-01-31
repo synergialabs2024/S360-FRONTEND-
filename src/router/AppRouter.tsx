@@ -820,6 +820,14 @@ const CambioPropietarioPagoPage = Loadable(
       ),
   ),
 );
+const RubrosPage = Loadable(
+  lazy(() => import('@/app/cobranza/rubros/pages/tables/RubrosPage')),
+);
+const TransaccionsPage = Loadable(
+  lazy(
+    () => import('@/app/cobranza/transaccion/pages/tables/TransaccionsPage'),
+  ),
+);
 ///* Cobranza ------------
 const CobranzaModule = Loadable(
   lazy(() => import('@/app/cobranza/CobranzaModule')),
@@ -1971,6 +1979,18 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesCrear,
             element: <MantenedorAplicacionesPage />,
+          },
+
+          ///* rubros
+          {
+            path: ROUTER_PATHS.cobranza.rubros,
+            element: <RubrosPage />,
+          },
+
+          ///* transacciones
+          {
+            path: ROUTER_PATHS.cartera.transacciones,
+            element: <TransaccionsPage />,
           },
         ],
       },

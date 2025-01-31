@@ -746,6 +746,19 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconWallet,
           children: [
+            renderByModule(SidenavModulesEnum.CARTERA_RUBROS, {
+              id: 'rubros',
+              title: 'Rubros',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.rubrosNav,
+            }),
+            renderByModule(SidenavModulesEnum.CARTERA_TRANSACCIONES, {
+              id: 'transacciones',
+              title: 'Transacciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.transaccionesNav,
+            }),
+
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'cambiodomicilio',
               title: 'Cambio de domicilio',

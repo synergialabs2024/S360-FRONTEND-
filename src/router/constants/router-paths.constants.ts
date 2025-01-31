@@ -274,6 +274,10 @@ export const ROUTER_PATHS = {
     mantenedorActivacionesCrear: 'mantenedorActivaciones/crear',
     mantenedorActivacionesEditar: 'mantenedorActivaciones/editar/:uuid',
     mantenedorActivacionesNav: '/cartera/mantenedorActivaciones',
+
+    ///* transacciones
+    transacciones: 'transacciones',
+    transaccionesNav: '/cartera/transacciones',
   },
   /////* Cobranza ----------------
   cobranza: {
@@ -289,13 +293,7 @@ export const ROUTER_PATHS = {
     rubros: 'rubros',
     rubrosCrear: 'rubros/crear',
     rubrosEditar: 'rubros/editar/:uuid',
-    rubrosNav: '/cobranza/rubros',
-
-    ///* transacciones
-    transacciones: 'transacciones',
-    transaccionesCrear: 'transacciones/crear',
-    transaccionesEditar: 'transacciones/editar/:uuid',
-    transaccionesNav: '/cobranza/transacciones',
+    rubrosNav: '/cartera/rubros',
 
     ///* saldos
     saldos: 'saldos',

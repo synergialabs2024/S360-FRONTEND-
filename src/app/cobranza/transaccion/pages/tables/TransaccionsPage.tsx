@@ -1,5 +1,3 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useFetchTransaccions } from '@/actions/app';
@@ -10,13 +8,17 @@ import {
   SingleTableBoxScene,
 } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import {
+  useColumnsTransaccionesCliente,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Transaccion } from '@/shared/interfaces';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-export const returnUrlTransaccionsPage = ROUTER_PATHS.cobranza.transaccionesNav;
+export const returnUrlTransaccionsPage = ROUTER_PATHS.cartera.transaccionesNav;
 
 export type TransaccionsPageProps = {};
 
@@ -75,13 +77,14 @@ const TransaccionsPage: React.FC<TransaccionsPageProps> = () => {
   };
 
   ///* columns -----------------
-  const columns = useMemo<MRT_ColumnDef<Transaccion>[]>(() => [], []);
+  const { transaccionClienteTabColumns } = useColumnsTransaccionesCliente();
 
   return (
     <SingleTableBoxScene
       title="Transacciones"
       createPageUrl={`${returnUrlTransaccionsPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_transaccion)}
+      // showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_transaccion)}
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -90,7 +93,7 @@ const TransaccionsPage: React.FC<TransaccionsPageProps> = () => {
       />
 
       <CustomTable<Transaccion>
-        columns={columns}
+        columns={transaccionClienteTabColumns}
         data={TransaccionsPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
