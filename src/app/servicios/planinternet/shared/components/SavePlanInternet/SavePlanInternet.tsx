@@ -20,7 +20,7 @@ import {
 import {
   CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES,
   INTERNET_PERMANENCE_ARRAY_CHOICES,
-  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
+  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_ALL,
   INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   INTERNET_UNIT_VELOCITY_ARRAY_CHOICES,
 } from '@/shared/constants/app';
@@ -252,7 +252,7 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
       <CustomAutocompleteArrString
         label="Tipo de plan"
         name="tipo_plan"
-        options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES}
+        options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_ALL}
         isLoadingData={false}
         control={form.control}
         defaultValue={form.getValues().tipo_plan}
