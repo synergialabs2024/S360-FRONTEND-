@@ -91,7 +91,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
 
   ///* local state --------------------
   const [isEdittingAlredySavedPolygon, setIsEdittingAlredySavedPolygon] =
-    useState<boolean>(!!polygon?.length);
+    useState<boolean>(+(polygon?.length || 0) > 0);
 
   const savedPolygonArray = !isEdittingAlredySavedPolygon ? [] : polygon;
   const savedMultiPolygonArray = !isEdittingAlredySavedPolygon
@@ -113,6 +113,27 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
   // polygon view --------------------
   const purpleOptions = { color: 'purple' };
   const greenOptions = { color: 'green' };
+
+  // ese useref es el problema para q se pueda editar el poligono a la primera
+  useEffect(() => {
+    if (
+      isEdittingAlredySavedPolygon &&
+      polygon.length &&
+      featureGroupRef.current
+    ) {
+      featureGroupRef.current.clearLayers();
+      const lPolygon = L.polygon(
+        polygon.map(coord => [coord.lat, coord.lng]),
+        purpleOptions,
+      );
+      featureGroupRef.current.addLayer(lPolygon);
+      const latlngs = lPolygon.getLatLngs();
+      if (latlngs && latlngs[0]) {
+        setCoordsArray(latlngs[0] as any);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdittingAlredySavedPolygon, polygon]);
 
   ///* search --------------------
   const Search = (props: any) => {
