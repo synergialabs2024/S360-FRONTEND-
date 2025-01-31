@@ -5,7 +5,11 @@ export const ubicacionFormSchema = yup.object({
   nombre: yup
     .string()
     .required('El campo nombre es requerido')
-    .max(200, 'El campo nombre no debe exceder los 200 caracteres'),
+    .max(100, 'El campo nombre no debe exceder los 200 caracteres'),
+  codigo: yup
+    .string()
+    .required('El campo codigo es requerido')
+    .max(100, 'El campo codigo no debe exceder los 200 caracteres'),
   state: fieldStateYupValidation,
 
   bodega: yup
