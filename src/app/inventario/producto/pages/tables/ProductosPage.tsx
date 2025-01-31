@@ -50,7 +50,12 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
   const changeState = useUpdateProducto({
     enableNavigate: false,
   });
-  const changeRequiereSerie = useUpdateProducto<{ requiere_series: boolean }>({
+  const changeEsParaVenta = useUpdateProducto<{ es_para_venta: boolean }>({
+    enableNavigate: false,
+  });
+  const changeAplicaPromocion = useUpdateProducto<{
+    aplica_promocion: boolean;
+  }>({
     enableNavigate: false,
   });
 
@@ -99,7 +104,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
       {
         accessorKey: 'nombre',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
@@ -156,10 +161,50 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
                   subtitle:
                     '¿Está seguro que desea cambiar el es_para_venta de este registro?',
                   onConfirm: () => {
-                    changeState.mutate({
+                    changeEsParaVenta.mutate({
                       id: row.original.id!,
                       data: {
                         es_para_venta: !row.original.es_para_venta,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
+      },
+      {
+        accessorKey: 'aplica_promocion',
+        header: 'ES PARA VENTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableSorting: false,
+        enableColumnFilter: true,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.aplica_promocion === 'boolean' ? (
+            <CustomSwitch
+              title="aplica_promocion"
+              checked={row.original?.aplica_promocion}
+              isSimpleBoolean
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.inventario_change_producto))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar Aplica Promocion',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el aplica_promocion de este registro?',
+                  onConfirm: () => {
+                    changeAplicaPromocion.mutate({
+                      id: row.original.id!,
+                      data: {
+                        aplica_promocion: !row.original.aplica_promocion,
                       },
                     });
                     setConfirmDialogIsOpen(false);
@@ -264,26 +309,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
             <CustomSwitch
               title="requiere_series"
               checked={row.original?.requiere_series}
-              onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.inventario_change_producto))
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar Requiere Series',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el Requiere Series de este registro?',
-                  onConfirm: () => {
-                    changeRequiereSerie.mutate({
-                      id: row.original.id!,
-                      data: {
-                        requiere_series: !row.original.requiere_series,
-                      },
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
+              onChangeChecked={() => {}}
             />
           ) : (
             'N/A'
@@ -309,7 +335,8 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
     ],
     [
       changeState,
-      changeRequiereSerie,
+      changeEsParaVenta,
+      changeAplicaPromocion,
       setConfirmDialog,
       setConfirmDialogIsOpen,
     ],

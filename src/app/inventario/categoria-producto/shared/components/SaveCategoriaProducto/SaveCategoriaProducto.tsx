@@ -103,13 +103,21 @@ const SaveCategoriaProducto: React.FC<SaveCategoriaProductoProps> = ({
         helperText={errors.nombre?.message}
         size={gridSizeMdLg6}
       />
+      <CustomTextField
+        label="Code"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        size={gridSizeMdLg6}
+      />
 
       <SampleCheckbox
         label="state"
         name="state"
         control={form.control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg6}
         isState
       />
     </SingleFormBoxScene>

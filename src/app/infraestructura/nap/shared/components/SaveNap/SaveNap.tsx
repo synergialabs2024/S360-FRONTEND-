@@ -320,9 +320,6 @@ const SaveNap: React.FC<SaveNapProps> = ({ title, nap }) => {
           form.setValue('nodo', row.nodo as any);
           form.setValue('olt', row.olt as any);
           form.setValue('direccion', row.direccion as any);
-          form.setValue('coordenadas', row.coordenadas as any);
-          const s = row.coordenadas.split(',').map(Number);
-          setLatLng({ lat: s[0], lng: s[1] });
         }}
       />
       <CustomAutocomplete<NapPortType>

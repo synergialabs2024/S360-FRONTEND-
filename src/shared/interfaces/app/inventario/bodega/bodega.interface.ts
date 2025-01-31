@@ -13,6 +13,7 @@ export interface Bodega {
   state: boolean;
 
   nombre: string;
+  codigo: string;
   direccion: string;
   es_externa: boolean;
   centro_costo: number;

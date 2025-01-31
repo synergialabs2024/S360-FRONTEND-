@@ -17,7 +17,7 @@ import {
   useUpdateBodega,
 } from '@/actions/app/inventario';
 import { returnUrlBodegasPage } from '../../../pages/tables/BodegasPage';
-import { gridSizeMdLg6 } from '@/shared';
+import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared';
 import { useFetchCentroCostos } from '@/actions/app';
 
 export interface SaveBodegaProps {
@@ -102,6 +102,15 @@ const SaveBodega: React.FC<SaveBodegaProps> = ({ title, bodega }) => {
         helperText={errors.nombre?.message}
         size={gridSizeMdLg6}
       />
+      <CustomTextField
+        label="Codigo"
+        name="codigo"
+        control={form.control}
+        defaultValue={form.getValues().codigo}
+        error={errors.codigo}
+        helperText={errors.codigo?.message}
+        size={gridSizeMdLg6}
+      />
       <CustomAutocomplete<CentroCosto>
         label="Centro Costo"
         name="centro_costo"
@@ -117,6 +126,21 @@ const SaveBodega: React.FC<SaveBodegaProps> = ({ title, bodega }) => {
         helperText={errors.centro_costo?.message}
         size={gridSizeMdLg6}
       />
+      <SampleCheckbox
+        label="Estado"
+        name="state"
+        control={form.control}
+        defaultValue={form.getValues().state}
+        isState
+        size={gridSizeMdLg3}
+      />
+      <SampleCheckbox
+        label="Externa"
+        name="es_externa"
+        control={form.control}
+        defaultValue={form.getValues().es_externa}
+        size={gridSizeMdLg3}
+      />
       <CustomTextArea
         label="Direccion"
         name="direccion"
@@ -125,21 +149,6 @@ const SaveBodega: React.FC<SaveBodegaProps> = ({ title, bodega }) => {
         error={errors.direccion}
         helperText={errors.direccion?.message}
         required={false}
-      />
-      <SampleCheckbox
-        label="Estado"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
-        size={gridSizeMdLg6}
-      />
-      <SampleCheckbox
-        label="Externa"
-        name="es_externa"
-        control={form.control}
-        defaultValue={form.getValues().es_externa}
-        size={gridSizeMdLg6}
       />
     </SingleFormBoxScene>
   );

@@ -98,6 +98,14 @@ const CategoriasProductoPage: React.FC<CategoriasProductoPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
+      {
+        accessorKey: 'code',
+        header: 'CODE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
 
       {
         accessorKey: 'state',

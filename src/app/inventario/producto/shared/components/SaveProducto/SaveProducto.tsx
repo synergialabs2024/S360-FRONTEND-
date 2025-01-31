@@ -24,7 +24,11 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg2, gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg3,
+  gridSizeMdLg4,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
 import { CategoriaProducto, IVA, Producto } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
 import { returnUrlProductosPage } from '../../../pages/tables/ProductosPage';
@@ -204,7 +208,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.tipo}
         helperText={errors.tipo?.message}
-        gridSize={gridSizeMdLg6}
+        gridSize={gridSizeMdLg4}
       />
       <CustomAutocomplete<CategoriaProducto>
         label="Categoría"
@@ -217,7 +221,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.categoria}
         helperText={errors.categoria?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
 
       <CustomAutocomplete<IVA>
@@ -233,31 +237,38 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.iva}
         helperText={errors.iva?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
       <SampleCheckbox
         label="Estado"
         name="state"
         control={control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg2}
+        size={gridSizeMdLg3}
       />
       <SampleCheckbox
         label="Es para venta"
         name="es_para_venta"
         control={control}
         defaultValue={form.getValues().es_para_venta}
-        size={gridSizeMdLg2}
+        size={gridSizeMdLg3}
       />
       <SampleCheckbox
-        label="Requiere Serie"
+        label="Aplica promocion"
+        name="aplica_promocion"
+        control={control}
+        defaultValue={form.getValues().aplica_promocion}
+        size={gridSizeMdLg3}
+        disabled={!!producto}
+      />
+      <SampleCheckbox
+        label="Requiere serie"
         name="requiere_series"
         control={control}
         defaultValue={form.getValues().requiere_series}
-        size={gridSizeMdLg2}
+        size={gridSizeMdLg3}
         disabled={!!producto}
       />
-
       {/* ------------ prices component ------------ */}
       <PricesForm
         control={control}

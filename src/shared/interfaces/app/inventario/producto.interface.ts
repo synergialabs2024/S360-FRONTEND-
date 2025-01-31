@@ -20,6 +20,7 @@ export interface Producto {
   state: boolean;
   descripcion: string;
   requiere_series: boolean;
+  aplica_promocion: boolean;
 
   es_para_venta: boolean; // preventas
   metraje_relativo?: string; // to handle m in CodigoModeloProductoEnumChoice

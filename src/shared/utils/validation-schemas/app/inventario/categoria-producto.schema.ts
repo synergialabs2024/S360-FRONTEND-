@@ -7,4 +7,8 @@ export const categoriaProductoFormSchema = yup.object({
     .required('El campo nombre es requerido')
     .max(200, 'El campo nombre no debe exceder los 200 caracteres'),
   state: fieldStateYupValidation,
+  code: yup
+    .string()
+    .required('El campo code es requerido')
+    .max(255, 'El campo code no debe exceder los 255 caracteres'),
 });

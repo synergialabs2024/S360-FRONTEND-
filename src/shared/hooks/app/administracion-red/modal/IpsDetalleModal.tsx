@@ -84,6 +84,7 @@ const IpsDetalleModal: React.FC<IpsDetalleModalProps> = ({
           <CustomSwitchNaps
             title="Available"
             checked={row.original.available ?? false}
+            isInvertide
             onChangeChecked={() => {
               onChangeAvailable(row.original);
             }}
@@ -132,6 +133,7 @@ const IpsDetalleModal: React.FC<IpsDetalleModalProps> = ({
         <ScrollableDialogProps
           open={open}
           onClose={() => setOpen(false)}
+          cancelTextBtn="Guardar Cambios"
           title={modalTitle}
           contentNode={<ListaSection />}
         />

@@ -6,6 +6,10 @@ export const bodegaFormSchema = yup.object({
     .string()
     .required('El campo nombre es requerido')
     .max(100, 'El campo nombre no debe exceder los 100 caracteres'),
+  codigo: yup
+    .string()
+    .required('El campo codigo es requerido')
+    .max(100, 'El campo codigo no debe exceder los 100 caracteres'),
   direccion: yup
     .string()
     .required('El campo direccion es requerido')

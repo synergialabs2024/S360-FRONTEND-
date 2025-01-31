@@ -21,6 +21,7 @@ export type CustomSwitchNapsProps = {
   size?: GridSizeType;
 
   isSimpleBoolean?: boolean;
+  isInvertide?: boolean;
 };
 
 const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
@@ -30,8 +31,14 @@ const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
 
   size = gridSizeMdLg6,
   isSimpleBoolean = false,
+  isInvertide = false,
 }) => {
   const theme = useTheme();
+
+  // Determinar etiquetas según isInvertide
+  const activeLabel = isInvertide ? 'DISPONIBLE' : 'OCUPADO';
+  const inactiveLabel = isInvertide ? 'OCUPADO' : 'LIBRE';
+
   return (
     <Grid item {...size}>
       <FormControl fullWidth>
@@ -47,7 +54,13 @@ const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
           {/* ToggleButton Activo */}
           <Tooltip
             title={
-              isSimpleBoolean ? (checked ? '' : 'SI') : checked ? '' : 'ACTIVO'
+              isSimpleBoolean
+                ? checked
+                  ? ''
+                  : 'SI'
+                : checked
+                  ? ''
+                  : activeLabel
             }
           >
             <span>
@@ -62,12 +75,8 @@ const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
                 color={checked ? 'success' : 'primary'}
                 sx={{
                   '&:hover': {
-                    color: checked
-                      ? theme => theme.palette.success.main
-                      : theme => theme.palette.success.main,
-                    backgroundColor: checked
-                      ? theme => theme.palette.success.light
-                      : theme => theme.palette.success.light,
+                    color: theme => theme.palette.success.main,
+                    backgroundColor: theme => theme.palette.success.light,
                   },
                 }}
                 size="small"
@@ -85,7 +94,7 @@ const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
                   ? 'NO'
                   : ''
                 : checked
-                  ? 'INACTIVO'
+                  ? inactiveLabel
                   : ''
             }
           >
@@ -101,12 +110,8 @@ const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
                 color={checked ? 'primary' : 'info'}
                 sx={{
                   '&:hover': {
-                    color: !checked
-                      ? theme => theme.palette.info.main
-                      : theme => theme.palette.info.main,
-                    backgroundColor: !checked
-                      ? theme => theme.palette.info.main
-                      : theme => theme.palette.info.light,
+                    color: theme => theme.palette.info.main,
+                    backgroundColor: theme => theme.palette.info.light,
                   },
                 }}
                 size="small"
@@ -132,8 +137,8 @@ const CustomSwitchNaps: React.FC<CustomSwitchNapsProps> = ({
                 ? 'SI'
                 : 'NO'
               : checked
-                ? 'OCUPADO'
-                : 'LIBRE'}
+                ? activeLabel
+                : inactiveLabel}
           </Typography>
         </div>
       </FormControl>

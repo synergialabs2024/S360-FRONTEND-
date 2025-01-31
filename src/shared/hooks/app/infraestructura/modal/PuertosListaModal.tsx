@@ -129,6 +129,7 @@ const PuertosListaModal: React.FC<PuertosListaModalProps> = ({
       {open && (
         <ScrollableDialogProps
           open={open}
+          cancelTextBtn="Guardar Cambios"
           onClose={() => setOpen(false)}
           title={modalTitle}
           contentNode={<ListaSection />}

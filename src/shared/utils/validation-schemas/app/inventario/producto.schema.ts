@@ -37,6 +37,10 @@ export const productoFormSchema = yup.object().shape({
     .boolean()
     .typeError('El campo requiere series es requerido')
     .required('El campo requiere series es requerido'),
+  aplica_promocion: yup
+    .boolean()
+    .typeError('El campo aplica promocion es requerido')
+    .required('El campo aplica promocion es requerido'),
 
   // ======================================
   // validate prices array
