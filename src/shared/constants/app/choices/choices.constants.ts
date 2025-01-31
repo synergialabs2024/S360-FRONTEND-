@@ -72,6 +72,8 @@ export const INTERNET_SERVICE_TYPE_ARRAY_CHOICES = [
 export enum InternetPlanInternetTypeEnumChoice {
   HOGAR = 'HOGAR',
   CORPORATIVO = 'CORPORATIVO',
+  CONVENIOS = 'CONVENIOS',
+  PYMES = 'PYMES',
 }
 export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES = [
   InternetPlanInternetTypeEnumChoice.HOGAR,

@@ -40,6 +40,8 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
     preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.DEBITO;
   const isCredito =
     preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.CREDITO;
+  const isRecaudacion =
+    preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.RECAUDACIONES;
 
   ///* fetch data ---------------------
   const {
@@ -74,6 +76,21 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
           size={gridSizeMdLg6}
           disabled
         />
+
+        {isRecaudacion && (
+          <>
+            <CustomTextField
+              label="Entidad financiera"
+              name="entidadFinancieraName"
+              control={form.control}
+              defaultValue={form.getValues().entidadFinancieraName}
+              error={errors.entidadFinancieraName}
+              helperText={errors.entidadFinancieraName?.message}
+              size={gridSizeMdLg6}
+              disabled
+            />
+          </>
+        )}
 
         {isDebito && (
           <>
