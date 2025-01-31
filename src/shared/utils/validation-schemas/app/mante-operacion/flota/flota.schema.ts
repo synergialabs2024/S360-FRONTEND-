@@ -76,26 +76,26 @@ export const flotaFormSchema = yup.object({
         return !othertelefonos.includes(value);
       },
     ),
-  zonas: yup
-    .number()
-    .typeError('El campo zonas es requerido')
-    .optional()
-    .nullable(),
-  user: yup
-    .number()
-    .typeError('El campo user es requerido')
-    .optional()
-    .nullable(),
-  area: yup
-    .number()
-    .typeError('El campo area es requerido')
-    .optional()
-    .nullable(),
-  departamento: yup
-    .number()
-    .typeError('El campo departamento es requerido')
-    .optional()
-    .nullable(),
+  // zonas: yup
+  //   .number()
+  //   .typeError('El campo zonas es requerido')
+  //   .optional()
+  //   .nullable(),
+  // user: yup
+  //   .number()
+  //   .typeError('El campo user es requerido')
+  //   .optional()
+  //   .nullable(),
+  // area: yup
+  //   .number()
+  //   .typeError('El campo area es requerido')
+  //   .optional()
+  //   .nullable(),
+  // departamento: yup
+  //   .number()
+  //   .typeError('El campo departamento es requerido')
+  //   .optional()
+  //   .nullable(),
   lider: yup
     .number()
     .typeError('El campo lider es requerido')

@@ -24,6 +24,7 @@ import {
   emptyCellNested,
   emptyCellOneLevel,
   flotaFormSchema,
+  getKeysFormErrorsMessage,
   gridSize,
   gridSizeMdLg11,
   gridSizeMdLg6,
@@ -352,8 +353,9 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
         onFinalClear();
         navigate(returnUrlFlotasPage);
       }}
-      onSave={handleSubmit(onSave, () => {
-        ToastWrapper.error('Faltan campos requeridos por completar');
+      onSave={handleSubmit(onSave, errors => {
+        const keys = getKeysFormErrorsMessage(errors);
+        ToastWrapper.error(`Faltan campos por requeridos: ${keys}`);
       })}
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
