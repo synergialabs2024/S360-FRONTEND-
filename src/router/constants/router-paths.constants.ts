@@ -263,6 +263,38 @@ export const ROUTER_PATHS = {
     buzontareasEditar: 'buzontareas/editar/:uuid',
     buzontareasNav: '/cartera/buzontareas',
 
+    ///* parametros mantenedor de tareas
+    // Tipo
+    parametrosTipoMantenedorBeneficios: 'parametros/tipo-mantenedor-beneficios',
+    parametrosTipoMantenedorBeneficiosCrear:
+      'parametros/tipo-mantenedor-beneficios/crear',
+    parametrosTipoMantenedorBeneficiosEditar:
+      'parametros/tipo-mantenedor-beneficios/editar/:uuid',
+    parametrosTipoMantenedorBeneficiosNav:
+      '/cartera/parametros/tipo-mantenedor-beneficios',
+
+    // Subtipo
+
+    parametrosSubtipoMantenedorBeneficios:
+      'parametros/subtipo-mantenedor-beneficios',
+    parametrosSubtipoMantenedorBeneficiosCrear:
+      'parametros/subtipo-mantenedor-beneficios/crear',
+    parametrosSubtipoMantenedorBeneficiosEditar:
+      'parametros/subtipo-mantenedor-beneficios/editar/:uuid',
+    parametrosSubtipoMantenedorBeneficiosNav:
+      '/cartera/parametros/subtipo-mantenedor-beneficios',
+
+    // Beneficio
+
+    parametrosBeneficioMantenedorBeneficios:
+      'parametros/beneficio-mantenedor-beneficios',
+    parametrosBeneficioMantenedorBeneficiosCrear:
+      'parametros/beneficio-mantenedor-beneficios/crear',
+    parametrosBeneficioMantenedorBeneficiosEditar:
+      'parametros/beneficio-mantenedor-beneficios/editar/:uuid',
+    parametrosBeneficioMantenedorBeneficiosNav:
+      '/cartera/parametros/beneficio-mantenedor-beneficios',
+
     ///* promesas de pago
     promesaspago: 'promesaspago',
     promesaspagoCrear: 'promesaspago/crear',

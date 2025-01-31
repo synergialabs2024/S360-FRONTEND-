@@ -17,56 +17,45 @@ import {
 import {
   ApiResponse,
   ContratoData,
+  Departamento,
   FindByIdentification,
   getKeysFormErrorsMessage,
   IdentificationTypeEnumChoice,
   LineaServicio,
-  SolicitudServicio,
   ToastWrapper,
+  useLoaders,
 } from '@/shared';
 import { CiSearch } from 'react-icons/ci';
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import { cambioPlanFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-plan/cambio-plan.schema';
 import { useSearchCedulaMutation } from '@/actions/app/tickets';
-import {
-  CreateCambioPlanParamsBase,
-  useCreateCambioPlan,
-} from '@/actions/app/cartera/cambio-plan/cambio-plan.actions';
-import { CambioPlanComputeValores } from '@/shared/interfaces/app/cartera';
+import { useCreateCambioPlan } from '@/actions/app/cartera/cambio-plan/cambio-plan.actions';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlCambioPlanPage } from '../../../pages/forms/BuzonTareasPage';
+import { CreateBuzonTareaParamsBase } from '@/actions/app/cartera/buzon-tareas';
+import { useAuthStore } from '@/store/auth';
+import { useFetchDepartamentos } from '@/actions/app';
+import dayjs from 'dayjs';
+import { useFetchTipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
+import { useFetchSubtipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
+import { TipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
+import { SubtipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
 
 export interface SaveBuzonTareasProps {
   title: string;
 }
-type SaveFormData = CreateCambioPlanParamsBase & {
-  // helper
-  isFormBlocked?: boolean;
-  isValidIdentificacion?: boolean;
-  numero_contrato: string;
-  cityName?: string;
-  provinceName?: string;
-  zoneName?: string;
-  thereIsCoverage?: boolean;
-  thereAreNaps?: boolean;
-  tipo_servicio?: string;
-  tipo_plan?: string;
-  plan_internet?: string;
-
-  //
-
-  tipo_identificacion?: string;
-  identificacion?: string;
-  es_cliente?: boolean;
-  solicitud_servicio_data?: SolicitudServicio;
-  plan_actual?: string;
-  precio_plan_actual?: string;
+type SaveFormData = CreateBuzonTareaParamsBase & {
+  tipo_identificacion: string;
+  identificacion: string;
   linea_servicio_data?: LineaServicio;
-  cambio_plan_compute_valores_data?: CambioPlanComputeValores;
-  plan_nuevo_id: number;
   error_message: string;
-  valores_positivos: boolean;
+  numero_contrato: string;
+  //
+  cedula: string;
+  telefono: string;
+  correo: string;
+  //
 };
 const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
   const navigate = useNavigate();
@@ -76,6 +65,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
+  const user = useAuthStore(s => s.user);
 
   ///* local state -----------------
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
@@ -87,6 +77,18 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
   const [numeroContrato, setNumeroContrato] = useState<string | undefined>(
     undefined,
   );
+
+  const [fieldVisibility, setFieldVisibility] = useState(false);
+
+  ///* form -----------------
+  const form = useForm<SaveFormData>({
+    resolver: yupResolver(cambioPlanFormSchema) as any,
+    defaultValues: {
+      tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
+    },
+  });
+
+  const watchedTipoTarea = form.watch('tipo_tarea');
 
   ///* mutations ---------------------
 
@@ -100,16 +102,35 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
     returnUrl: returnUrlCambioPlanPage,
   });
 
-  ///* form -----------------
-  const form = useForm<SaveFormData>({
-    resolver: yupResolver(cambioPlanFormSchema) as any,
-    defaultValues: {
-      tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
-      isFormBlocked: false,
-      thereIsCoverage: false,
-      thereAreNaps: false,
-      es_cliente: false,
-      valores_positivos: false,
+  const {
+    data: departamentoPagingRes,
+    isLoading: isLoadingDepartamentos,
+    isRefetching: isRefetchingDepartamentos,
+  } = useFetchDepartamentos({
+    params: {
+      page_size: 1000,
+    },
+  });
+
+  const {
+    data: tipoMantenedorBeneficiosPaginatedRes,
+    isLoading: isLoadingTipoMantenedorBeneficios,
+    isRefetching: isRefetchingTipoMantenedorBeneficios,
+  } = useFetchTipoMantenedorBeneficios({
+    params: {
+      page_size: 200,
+    },
+  });
+
+  const {
+    data: subtipoMantenedorBeneficiosPaginatedRes,
+    isLoading: isLoadingSubtipoMantenedorBeneficios,
+    isRefetching: isRefetchingSubtipoMantenedorBeneficios,
+  } = useFetchSubtipoMantenedorBeneficios({
+    enabled: fieldVisibility,
+    params: {
+      tipo_mantenedor_beneficio: Number(watchedTipoTarea),
+      page_size: 200,
     },
   });
 
@@ -119,12 +140,12 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
   } = form;
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const watchedIdentification = form.watch('identificacion');
-  const watchedPlanNuevoId = form.watch('plan_nuevo_id');
   const watchedLineaServicio = form.watch('linea_servicio_data');
-  const watchedcambioPlanComputeValores = form.watch(
-    'cambio_plan_compute_valores_data',
-  );
   const watchedErrorMessage = form.watch('error_message');
+  //
+  const watchedCedula = form.watch('cedula');
+  const watchedTelefono = form.watch('telefono');
+  const watchedCorreo = form.watch('correo');
   //
 
   const onSave = async () => {
@@ -134,7 +155,6 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
       subtitle: '¿Está seguro que desea cambiar este plan?',
       onConfirm: () => {
         createCambioPlan.mutate({
-          plan_internet_nuevo: watchedPlanNuevoId,
           linea_servicio: watchedLineaServicio?.contrato_data?.id,
         });
         setConfirmDialogIsOpen(false);
@@ -178,13 +198,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
       ...form.getValues(),
       numero_contrato: '',
       error_message: '',
-      valores_positivos: false,
-      cambio_plan_compute_valores_data: undefined,
-      solicitud_servicio_data: undefined,
-      plan_actual: undefined,
-      precio_plan_actual: undefined,
       linea_servicio_data: undefined,
-      plan_nuevo_id: undefined,
     });
   };
 
@@ -198,29 +212,25 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
         item => item.contrato_data.numero_contrato === numeroContrato,
       );
 
-      form.setValue('linea_servicio_data', contrato);
-
       if (contrato) {
         form.setValue(
-          'plan_actual',
-          contrato.contrato_data.plan_internet_actual_data.name,
+          'cedula',
+          contrato.solicitud_servicio_data.identificacion,
         );
-        form.setValue(
-          'precio_plan_actual',
-          contrato.contrato_data.plan_internet_actual_data.valor,
-        );
-
-        if (
-          Number(watchedPlanNuevoId) >
-          Number(contrato?.contrato_data?.plan_internet_actual_data?.id)
-        ) {
-          form.setValue('valores_positivos', true);
-        } else {
-          form.setValue('valores_positivos', false);
-        }
+        form.setValue('telefono', contrato.solicitud_servicio_data.celular);
+        form.setValue('correo', contrato.solicitud_servicio_data.email);
       }
     }
-  }, [numeroContrato, cedulaData?.data, form, watchedPlanNuevoId]);
+  }, [numeroContrato, cedulaData?.data, form]);
+
+  const customLoader =
+    isLoadingTipoMantenedorBeneficios ||
+    isRefetchingTipoMantenedorBeneficios ||
+    isLoadingSubtipoMantenedorBeneficios ||
+    isRefetchingSubtipoMantenedorBeneficios ||
+    isLoadingDepartamentos ||
+    isRefetchingDepartamentos;
+  useLoaders(customLoader);
 
   return (
     <SingleFormBoxScene
@@ -245,111 +255,64 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
           />
         </>
       )}
-      <Grid item container {...gridSizeMdLg12} spacing={5}>
-        <InputAndBtnGridSpace
-          inputNode={
-            <CustomIdentificacionTextField
-              label="Identificación"
-              name="identificacion"
-              control={form.control}
-              selectedDocumentType={watchedIdentificationType!}
-              error={errors.identificacion}
-              helperText={errors.identificacion?.message}
-              onFetchCedulaRucInfo={async value => {
-                await handleFetchCedulaRucInfo(value);
-              }}
-              disabled={!watchedIdentificationType}
-              onChangeValue={value => {
-                if (!value?.length || value.length === 10) {
-                  clearForm();
-                  setNumeroContrato(undefined);
-                }
-              }}
-            />
-          }
-          btnLabel="Buscar"
-          iconBtn={<CiSearch />}
-          disabledBtn={
-            watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
-          }
-          onClick={() => {
-            if (!watchedIdentification)
-              return ToastWrapper.warning(
-                'Ingrese un número de identificación válido',
-              );
-            if (
-              watchedIdentificationType ==
-                IdentificationTypeEnumChoice.CEDULA &&
-              watchedIdentification?.length < 10
-            )
-              return ToastWrapper.warning('Ingrese una cécula válida');
-            if (
-              watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
-              watchedIdentification?.length < 13
-            )
-              return ToastWrapper.warning('Ingrese RUC válido');
-
-            handleFetchCedulaRucInfo(watchedIdentification);
-          }}
-        />
-        <CustomAutocomplete<ContratoData>
-          label="Línea de servicio"
-          name="numero_contrato"
-          options={
-            Array.isArray(cedulaData?.data)
-              ? cedulaData.data.map(item => ({
-                  ...item,
-                  numero_contrato: item?.contrato_data?.numero_contrato,
-                }))
-              : []
-          }
-          valueKey="numero_contrato"
-          actualValueKey="uuid"
-          defaultValue={form.getValues().numero_contrato}
-          isLoadingData={false}
-          // vaidation
-          control={form.control}
-          error={errors.numero_contrato}
-          helperText={errors.numero_contrato?.message}
-          size={gridSizeMdLg6}
-          onChangeRawValue={i => {
-            setNumeroContrato(i.numero_contrato);
-          }}
-        />
-      </Grid>
 
       <>
         <CustomTypoLabel text="Datos de solicitud" />
         <CustomTextFieldNoForm
           label="Responsable"
           size={gridSizeMdLg6}
-          value={''}
+          value={user?.username}
           disabled
         />
         {/* ============= Nuevo Plan ============= */}
         <CustomTextFieldNoForm
-          label="Fecha y hora de creacion"
+          label="Fecha creacion"
           size={gridSizeMdLg6}
-          value={''}
+          value={dayjs().format('YYYY-MM-DD')}
           disabled
         />
-        <CustomTextFieldNoForm
-          label="Dpto. para gestión"
+        <CustomAutocomplete<Departamento>
+          label="Departamento"
+          name="tipo_mantenedor_beneficio"
+          valueKey="name"
+          actualValueKey="id"
+          control={form.control}
+          defaultValue={form.getValues().departamento_asignado}
+          options={departamentoPagingRes?.data.items || []}
+          isLoadingData={isLoadingDepartamentos}
+          error={errors.departamento_asignado}
+          helperText={errors.departamento_asignado?.message}
           size={gridSizeMdLg6}
-          value={''}
-          disabled
         />
-        <CustomTextFieldNoForm
+        <CustomAutocomplete<TipoMantenedorBeneficios>
           label="Tipo de solicitud"
+          name="tipo_tarea"
+          valueKey="name"
+          actualValueKey="id"
+          control={form.control}
+          defaultValue={form.getValues().tipo_tarea}
+          options={tipoMantenedorBeneficiosPaginatedRes?.data.items || []}
+          isLoadingData={isLoadingTipoMantenedorBeneficios}
+          error={errors.tipo_tarea}
+          helperText={errors.tipo_tarea?.message}
           size={gridSizeMdLg6}
-          value={''}
-          disabled
+          onChangeValue={e => {
+            if (e) setFieldVisibility(true);
+            form.setValue('subtipo_tarea', '');
+          }}
         />
-        <CustomTextFieldNoForm
-          label="Subtipo"
+        <CustomAutocomplete<SubtipoMantenedorBeneficios>
+          label="Subtipo de solicitud"
+          name="subtipo_tarea"
+          valueKey="name"
+          actualValueKey="id"
+          control={form.control}
+          defaultValue={form.getValues().subtipo_tarea}
+          options={subtipoMantenedorBeneficiosPaginatedRes?.data.items || []}
+          isLoadingData={isLoadingSubtipoMantenedorBeneficios}
+          error={errors.subtipo_tarea}
+          helperText={errors.subtipo_tarea?.message}
           size={gridSizeMdLg6}
-          value={''}
-          disabled
         />
         <CustomTextFieldNoForm
           label="Aplica para beneficio segun perfil?"
@@ -366,95 +329,92 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
         />
 
         <>
-          <CustomTextFieldNoForm
-            label="Adicional prox factura"
-            value={watchedcambioPlanComputeValores?.diff_prices}
-            disabled
-          />
-        </>
-
-        <>
-          <CustomTypoLabel text="" />
+          <CustomTypoLabel text="Datos del cliente" />
           <Grid item container {...gridSizeMdLg12} spacing={2}>
-            <CustomTypoLabel text="Datos del cliente" />
-            <CustomTypoLabel text="PLAN ACTUAL" />
-            <CustomTextFieldNoForm
-              size={gridSizeMdLg6}
-              label="Precio plan actual (Valor base)"
-              value={watchedcambioPlanComputeValores?.current_plan.valor}
-              startAdornment="$"
-              disabled
-            />
-            <CustomTextFieldNoForm
-              size={gridSizeMdLg6}
-              label="Precio plan actual (Incl. Iva)"
-              value={watchedcambioPlanComputeValores?.current_plan.valor_total}
-              startAdornment="$"
-              disabled
-            />
-            <CustomTextFieldNoForm
-              size={gridSizeMdLg6}
-              label="Costo por dia (Plan actual)"
-              value={(
-                Number(
-                  watchedcambioPlanComputeValores?.current_plan.valor_total,
-                ) / 30
-              ).toFixed(2)}
-              startAdornment="$"
-              disabled
-            />
-            <CustomTypoLabel text="PLAN NUEVO" />
-            <CustomTextFieldNoForm
-              size={gridSizeMdLg6}
-              label="Precio plan nuevo (Valor base)"
-              value={watchedcambioPlanComputeValores?.new_plan.valor}
-              startAdornment="$"
-              disabled
-            />
-            <CustomTextFieldNoForm
-              size={gridSizeMdLg6}
-              label="Precio plan nuevo(Incl. Iva)"
-              value={watchedcambioPlanComputeValores?.new_plan.valor_total}
-              startAdornment="$"
-              disabled
-            />
-            <CustomTextFieldNoForm
-              size={gridSizeMdLg6}
-              label="Costo por dia plan nuevo"
-              value={(
-                Number(watchedcambioPlanComputeValores?.new_plan.valor_total) /
-                30
-              ).toFixed(2)}
-              startAdornment="$"
-              disabled
-            />
-          </Grid>
-          <CustomTypoLabel text="DETALLES ADICIONALES" />
-          <Grid item container {...gridSizeMdLg12} spacing={2}>
-            <CustomTextFieldNoForm
-              label="Cliente"
-              size={gridSizeMdLg6}
-              value={''}
-              disabled
-            />
+            <InputAndBtnGridSpace
+              inputNode={
+                <CustomIdentificacionTextField
+                  label="Cliente"
+                  name="identificacion"
+                  control={form.control}
+                  selectedDocumentType={watchedIdentificationType!}
+                  error={errors.identificacion}
+                  helperText={errors.identificacion?.message}
+                  onFetchCedulaRucInfo={async value => {
+                    await handleFetchCedulaRucInfo(value);
+                  }}
+                  disabled={!watchedIdentificationType}
+                  onChangeValue={value => {
+                    if (!value?.length || value.length === 10) {
+                      clearForm();
+                      setNumeroContrato(undefined);
+                    }
+                  }}
+                />
+              }
+              btnLabel="Buscar"
+              iconBtn={<CiSearch />}
+              disabledBtn={
+                watchedIdentificationType ===
+                IdentificationTypeEnumChoice.PASAPORTE
+              }
+              onClick={() => {
+                if (!watchedIdentification)
+                  return ToastWrapper.warning(
+                    'Ingrese un número de identificación válido',
+                  );
+                if (
+                  watchedIdentificationType ==
+                    IdentificationTypeEnumChoice.CEDULA &&
+                  watchedIdentification?.length < 10
+                )
+                  return ToastWrapper.warning('Ingrese una cécula válida');
+                if (
+                  watchedIdentificationType ==
+                    IdentificationTypeEnumChoice.RUC &&
+                  watchedIdentification?.length < 13
+                )
+                  return ToastWrapper.warning('Ingrese RUC válido');
 
-            <CustomTextFieldNoForm
+                handleFetchCedulaRucInfo(watchedIdentification);
+              }}
+            />
+            <CustomAutocomplete<ContratoData>
               label="Contrato"
+              name="numero_contrato"
+              options={
+                Array.isArray(cedulaData?.data)
+                  ? cedulaData.data.map(item => ({
+                      ...item,
+                      numero_contrato: item?.contrato_data?.numero_contrato,
+                    }))
+                  : []
+              }
+              valueKey="numero_contrato"
+              actualValueKey="uuid"
+              defaultValue={form.getValues().numero_contrato}
+              isLoadingData={false}
+              // vaidation
+              control={form.control}
+              error={errors.numero_contrato}
+              helperText={errors.numero_contrato?.message}
               size={gridSizeMdLg6}
-              value={''}
-              disabled
+              onChangeRawValue={i => {
+                setNumeroContrato(i.numero_contrato);
+              }}
             />
+
             <CustomTextFieldNoForm
               label="Cédula/Ruc"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedCedula}
               disabled
             />
 
             <CustomTextFieldNoForm
               label="Telefono"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedTelefono}
               disabled
             />
 
@@ -468,7 +428,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
             <CustomTextFieldNoForm
               label="Correo"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedCorreo}
               disabled
             />
 

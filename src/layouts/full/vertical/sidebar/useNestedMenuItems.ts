@@ -795,12 +795,47 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.cambiopropietarioNav,
             }),
+            /* renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'buzontareas',
+              title: 'Buzon de Tareas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.buzontareasNav,
+            }), */
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'buzontareas',
               title: 'Buzon de Tareas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.buzontareasNav,
             }),
+            {
+              id: 'parametros',
+              title: 'Parametros',
+              type: MenuItemType.COLLAPSE,
+              icon: IconBuildingWarehouse,
+              children: [
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                  id: 'parametrosTipoMantenedorBeneficios',
+                  title: 'Tipo mantenedor beneficios',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.cartera
+                    .parametrosTipoMantenedorBeneficiosNav,
+                }),
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                  id: 'parametrosSubtipoMantenedorBeneficios',
+                  title: 'Subipo mantenedor beneficios',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.cartera
+                    .parametrosSubtipoMantenedorBeneficiosNav,
+                }),
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                  id: 'parametrosBeneficioMantenedorBeneficios',
+                  title: 'Beneficio mantenedor beneficios',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.cartera
+                    .parametrosBeneficioMantenedorBeneficiosNav,
+                }),
+              ],
+            },
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'mantenedorActivaciones',
               title: 'Mantenedor Activaciones',
