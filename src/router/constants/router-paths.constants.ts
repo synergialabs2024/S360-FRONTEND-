@@ -278,6 +278,10 @@ export const ROUTER_PATHS = {
     ///* transacciones
     transacciones: 'transacciones',
     transaccionesNav: '/cartera/transacciones',
+
+    ///* saldos
+    saldos: 'saldos',
+    saldosNav: '/cartera/saldos',
   },
   /////* Cobranza ----------------
   cobranza: {
@@ -294,12 +298,6 @@ export const ROUTER_PATHS = {
     rubrosCrear: 'rubros/crear',
     rubrosEditar: 'rubros/editar/:uuid',
     rubrosNav: '/cartera/rubros',
-
-    ///* saldos
-    saldos: 'saldos',
-    saldosCrear: 'saldos/crear',
-    saldosEditar: 'saldos/editar/:uuid',
-    saldosNav: '/cobranza/saldos',
 
     ///* facturas
     facturas: 'facturas',

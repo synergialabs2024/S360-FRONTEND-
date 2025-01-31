@@ -18,7 +18,7 @@ import { PermissionsEnum, Saldo } from '@/shared/interfaces';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 
-export const returnUrlSaldosPage = ROUTER_PATHS.cobranza.saldosNav;
+export const returnUrlSaldosPage = ROUTER_PATHS.cartera.saldosNav;
 
 export type SaldosPageProps = {};
 
@@ -83,7 +83,8 @@ const SaldosPage: React.FC<SaldosPageProps> = () => {
     <SingleTableBoxScene
       title="Saldos"
       createPageUrl={`${returnUrlSaldosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_saldo)}
+      // showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_saldo)}
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}

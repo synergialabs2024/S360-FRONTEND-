@@ -758,6 +758,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.transaccionesNav,
             }),
+            renderByModule(SidenavModulesEnum.CARTERA_SALDOS, {
+              id: 'saldos',
+              title: 'Saldos',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.saldosNav,
+            }),
 
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'cambiodomicilio',

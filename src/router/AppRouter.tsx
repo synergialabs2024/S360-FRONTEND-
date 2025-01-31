@@ -828,6 +828,9 @@ const TransaccionsPage = Loadable(
     () => import('@/app/cobranza/transaccion/pages/tables/TransaccionsPage'),
   ),
 );
+const SaldosPage = Loadable(
+  lazy(() => import('@/app/cobranza/saldo/pages/tables/SaldosPage')),
+);
 ///* Cobranza ------------
 const CobranzaModule = Loadable(
   lazy(() => import('@/app/cobranza/CobranzaModule')),
@@ -1991,6 +1994,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.transacciones,
             element: <TransaccionsPage />,
+          },
+
+          ///* saldos
+          {
+            path: ROUTER_PATHS.cartera.saldos,
+            element: <SaldosPage />,
           },
         ],
       },
