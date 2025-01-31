@@ -3,9 +3,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { SaveAsunto } from '../../shared/components/SaveTipoMantenedorBeneficios';
 import { useGetAsunto } from '@/actions/app/tickets/parametros/asunto/asunto.actions';
 import { returnUrlTipoMantenedorBeneficiosPage } from '../tables/TipoMantenedorBeneficiosPage';
+import { SaveAsunto } from '@/app/tickets/parametros/asunto/shared/components';
 
 export type UpdateTipoMantenedorBeneficiosPageProps = {};
 
