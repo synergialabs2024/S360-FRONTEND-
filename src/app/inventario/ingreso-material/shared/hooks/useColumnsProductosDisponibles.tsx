@@ -146,7 +146,7 @@ export const useColumnsProductosDisponibles = ({
 
           return (
             <SeriesProductoModal
-              tipoSerie={true}
+              tipoSerie={row.original.requiere_series}
               Arrays={row.original}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               cantidadBoolean={obtenerValor(cantidad)}
