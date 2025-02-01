@@ -214,6 +214,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const {
     items: equiposSeleccionados,
     clearOneRecord: clearAllEquiposSelecStore,
+    clearAllStore,
   } = useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
     GenericInventoryStoreKey.equiposVentaPreventa,
   );
@@ -499,6 +500,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       setIsComponentBlocked(false);
       clearAllPreventaStore();
       clearAllEquiposSelecStore();
+      clearAllStore();
     },
     customOnError: err => {
       setIsCheckingCedula(false);

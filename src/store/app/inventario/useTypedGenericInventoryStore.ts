@@ -53,6 +53,10 @@ export const useTypedGenericInventoryStore = <T>(
     state => state.selectedRow,
   ) as T | null;
 
+  const clearAllStore = () => {
+    useGenericInventoryStore.getState().clearAll();
+  };
+
   return {
     items: (itemsRecord[keyStore] as T[]) || [],
     addSelectedItem,
@@ -62,5 +66,6 @@ export const useTypedGenericInventoryStore = <T>(
     selectedRow,
 
     clearOneRecord, // clear all of the keyStore
+    clearAllStore, // clear all of the store
   };
 };
