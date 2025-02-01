@@ -14,6 +14,7 @@ import {
 } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
+import ClienteFibraRubroLibreHeader from '../libre/ClienteFibraRubroLibreHeader';
 
 export type ClienteFibraRubroServiceModalProps = {
   open: boolean;
@@ -28,7 +29,7 @@ export type RubroServicioClienteFormData = Partial<Rubro> & {};
 
 const ClienteFibraRubroServiceModal: React.FC<
   ClienteFibraRubroServiceModalProps
-> = ({ onClose, open, isCreating = false, isEditing = false }) => {
+> = ({ open, serviceLine, onClose, isCreating = false, isEditing = false }) => {
   ///* global state --------------------------
   const activeRubro = useRubroStore(s => s.activeRubro); // to edit
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
@@ -66,6 +67,8 @@ const ClienteFibraRubroServiceModal: React.FC<
   ///* effects --------------------------
   useEffect(() => {
     if (!open) return;
+    // TODO:  computed in backend
+    form.setValue('fecha_vencimiento', dayjs().format());
 
     if (isCreating) {
       console.log({
@@ -82,7 +85,7 @@ const ClienteFibraRubroServiceModal: React.FC<
     console.log({
       activeRubro,
     });
-  }, [activeRubro, isCreating, isEditing, open]);
+  }, [activeRubro, form, isCreating, isEditing, open]);
 
   return (
     <>
@@ -102,7 +105,13 @@ const ClienteFibraRubroServiceModal: React.FC<
         contentNode={
           <>
             <Grid container spacing={3} mt={2} mb={1}>
-              Main content here
+              <Grid item xs={12}>
+                {/* ==================== headers ==================== */}
+                <ClienteFibraRubroLibreHeader
+                  form={form}
+                  serviceLine={serviceLine}
+                />
+              </Grid>
             </Grid>
           </>
         }
