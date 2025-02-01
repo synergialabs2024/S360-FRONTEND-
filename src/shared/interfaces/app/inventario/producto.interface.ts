@@ -2,6 +2,7 @@ import { TipoProductoEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '../../common';
 import { IVA } from '../administration';
 import { CategoriaProducto } from './categoria-producto.interface';
+import { ModeloInventario } from './modelo-inventario';
 
 export interface ProductosPaginatedRes {
   status: number;
@@ -33,9 +34,11 @@ export interface Producto {
 
   ///* fk
   iva?: number;
+  modelo?: number;
   categoria?: number;
 
   iva_data?: IVA;
+  modelo_data?: ModeloInventario;
   categoria_data?: CategoriaProducto;
 
   ubicaciones_producto?: UProducto;
