@@ -2,6 +2,7 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
+import { CustomRubroActionsBtn } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/rurbos/btns';
 import {
   ClienteFibraRubroChipState,
   ClienteFibraRubroInfoTableCell,
@@ -17,6 +18,7 @@ import {
 
 type UseColumnsRubrosCliente = {
   showNumberRubro?: boolean;
+  showActionColumn?: boolean;
 };
 
 type MRTRubrosType = {
@@ -25,10 +27,26 @@ type MRTRubrosType = {
 
 export const useColumnsRubrosCliente = ({
   showNumberRubro = true,
+  showActionColumn = false,
 }: UseColumnsRubrosCliente = {}) => {
   // columns ----------------------
   const rubroColumnsBase01 = useMemo<MRT_ColumnDef<Rubro>[]>(
     () => [
+      ...(showActionColumn
+        ? [
+            {
+              accessorKey: 'action',
+              enableColumnFilter: false,
+              header: 'ACCIONES',
+              size: TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH,
+              Cell: ({ row }: MRTRubrosType) => {
+                const rubro = row.original;
+
+                return <CustomRubroActionsBtn rubro={rubro} />;
+              },
+            },
+          ]
+        : []),
       {
         accessorKey: 'numero_referencia',
         header: 'NUM REFERENCIA',
@@ -95,7 +113,7 @@ export const useColumnsRubrosCliente = ({
         },
       },
     ],
-    [showNumberRubro],
+    [showActionColumn, showNumberRubro],
   );
 
   const rubroColumnsBase02Money = useMemo<MRT_ColumnDef<Rubro>[]>(

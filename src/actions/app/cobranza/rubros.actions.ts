@@ -164,3 +164,5 @@ export type CreateRubroLibreClienteData = Pick<
   | 'linea_servicio'
   | 'detalle'
 >;
+
+export type CreateRubroSerivicioClienteData = Partial<Rubro>;

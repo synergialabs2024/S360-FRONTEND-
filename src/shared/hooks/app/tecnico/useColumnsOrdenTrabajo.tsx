@@ -283,22 +283,6 @@ export const useColumnsOrdenTrabajo = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['olt_data', 'name']),
       },
-      {
-        accessorKey: 'router__name',
-        header: 'ROUTER',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellNested(row, ['router_data', 'name']),
-      },
-      {
-        accessorKey: 'router__tipo_router',
-        header: 'TIPO ROUTER',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellNested(row, ['router_data', 'tipo_router']),
-      },
     ],
     [],
   );
@@ -323,7 +307,7 @@ export const useColumnsOrdenTrabajo = () => {
       {
         accessorKey: 'ubicacion__zona',
         header: 'ZONA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['zona_data', 'name']),

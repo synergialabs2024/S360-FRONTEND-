@@ -1,7 +1,12 @@
 import { Tab } from '@mui/material';
 import { useEffect } from 'react';
 
-import { gridSize, gridSizeMdLg10, LineaServicio, useTabsOnly } from '@/shared';
+import {
+  gridSize,
+  gridSizeMdLg10,
+  LineaServicio,
+  useTabOnlyNuqs,
+} from '@/shared';
 import {
   a11yProps,
   CustomTabPanel,
@@ -23,9 +28,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
   serviceLine,
 }) => {
   ///* hooks ----------------
-  const { tabValue, handleTabChange } = useTabsOnly({
-    // initialTabValue: 3,
-  });
+  const { tabValue, handleTabChange } = useTabOnlyNuqs();
 
   ///* global state ----------------------
   const setOT = useRubroStore(s => s.setActiveOrdenTrabajo);

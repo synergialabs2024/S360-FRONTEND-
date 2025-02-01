@@ -1,83 +1,93 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { CreateRubroLibreClienteData, useCreateRubro } from '@/actions/app';
+import { CreateRubroSerivicioClienteData, useCreateRubro } from '@/actions/app';
 import {
-  createRubroClienteFormSchema,
+  createRubroServiceClienteFormSchema,
   getKeysFormErrorsMessage,
   LineaServicio,
   Rubro,
   ToastWrapper,
 } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
-import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
-import ClienteFibraRubroLibreItemsTable from './ClienteFibraRubroLibreItemsTable';
 
-export type ClienteFibraRubroLibreModalProps = {
+export type ClienteFibraRubroServiceModalProps = {
   open: boolean;
   onClose: () => void;
   serviceLine: LineaServicio;
+
+  isCreating?: boolean;
+  isEditing?: boolean;
 };
 
-export type RubrosClienteFormData = Partial<Rubro> & {
-  // helpers to fetch items ------------
-  bodega?: number;
-  ubicacion?: number;
-  categoria_producto?: number;
-};
+export type RubroServicioClienteFormData = Partial<Rubro> & {};
 
-const ClienteFibraRubroLibreModal: React.FC<
-  ClienteFibraRubroLibreModalProps
-> = ({ open, onClose, serviceLine }) => {
+const ClienteFibraRubroServiceModal: React.FC<
+  ClienteFibraRubroServiceModalProps
+> = ({ onClose, open, isCreating = false, isEditing = false }) => {
   ///* global state --------------------------
-  const activeRubro = useRubroStore(s => s.activeRubro);
+  const activeRubro = useRubroStore(s => s.activeRubro); // to edit
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
-  const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
 
   ///* form --------------------------
-  const form = useForm<RubrosClienteFormData>({
-    resolver: yupResolver(createRubroClienteFormSchema) as any,
+  const form = useForm<RubroServicioClienteFormData>({
+    resolver: yupResolver(createRubroServiceClienteFormSchema) as any,
     defaultValues: {
       fecha_emision: dayjs().format(),
     },
   });
 
   ///* mutations --------------------------
-  const createRurbo = useCreateRubro<CreateRubroLibreClienteData>({
+  const createRurbo = useCreateRubro<CreateRubroSerivicioClienteData>({
     customMessageToast: 'Rubro creado correctamente',
     customOnSuccess: () => {
-      form.reset();
+      // form.reset();
       handleClose();
     },
   });
 
   ///* handlers --------------------------
-  const onSave = (data: RubrosClienteFormData) => {
+  const onSave = (data: RubroServicioClienteFormData) => {
     createRurbo.mutate({
       detalle: data?.detalle!,
-      fecha_vencimiento: data?.fecha_vencimiento!,
-      subtotal: data?.subtotal!,
-      tipo_rubro: data?.tipo_rubro!,
-      valor_taxes: data?.valor_taxes!,
-      valor_total: data?.valor_total!,
-      linea_servicio: serviceLine.id,
     });
   };
 
   const handleClose = () => {
-    form.reset();
+    // form.reset();
     onClose();
     clearAllRubroStore();
-    clearAllItemsStore();
   };
+
+  ///* effects --------------------------
+  useEffect(() => {
+    if (!open) return;
+
+    if (isCreating) {
+      console.log({
+        isCreating: isCreating,
+      });
+    }
+
+    if (isEditing) {
+      console.log({
+        isEditing: isEditing,
+      });
+    }
+
+    console.log({
+      activeRubro,
+    });
+  }, [activeRubro, isCreating, isEditing, open]);
 
   return (
     <>
       <ScrollableDialogProps
-        title={`${activeRubro?.id ? 'Editar' : 'Crear'} Rubro Libre`}
+        title={`${isEditing ? 'Editar' : 'Crear'} Rubro de Servicio`}
         open={open}
         onClose={handleClose}
         minWidth="81%"
@@ -92,12 +102,7 @@ const ClienteFibraRubroLibreModal: React.FC<
         contentNode={
           <>
             <Grid container spacing={3} mt={2} mb={1}>
-              <ClienteFibraRubroLibreItemsTable
-                serviceLine={serviceLine}
-                form={form}
-              />
-
-              {/* ================== add item table ================== */}
+              Main content here
             </Grid>
           </>
         }
@@ -106,4 +111,4 @@ const ClienteFibraRubroLibreModal: React.FC<
   );
 };
 
-export default ClienteFibraRubroLibreModal;
+export default ClienteFibraRubroServiceModal;

@@ -16,6 +16,8 @@ import 'react-credit-cards-2/dist/es/styles-compiled.css';
 import 'simplebar-react/dist/simplebar.min.css';
 import { useUiStore } from './store/ui';
 
+import { NuqsAdapter } from 'nuqs/adapters/react';
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -24,38 +26,40 @@ function App() {
   const customizer = useUiStore(state => state.state);
 
   return (
-    <SocketProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <RTL direction={customizer.activeDir}>
-            {routing}
-            <CssBaseline />
-            {/* ----- modal ----- */}
-            <CustomConfirmDialog />
-            {/* ----- loader ----- */}
-            <CustomBackdropLoader />
+    <NuqsAdapter>
+      <SocketProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <RTL direction={customizer.activeDir}>
+              {routing}
+              <CssBaseline />
+              {/* ----- modal ----- */}
+              <CustomConfirmDialog />
+              {/* ----- loader ----- */}
+              <CustomBackdropLoader />
 
-            {/* ----- Toaster alerts ----- */}
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              limit={3}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              transition={Bounce}
-            />
+              {/* ----- Toaster alerts ----- */}
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                limit={3}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+              />
 
-            {/* <ScrollToTop>{routing}</ScrollToTop> */}
-          </RTL>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </SocketProvider>
+              {/* <ScrollToTop>{routing}</ScrollToTop> */}
+            </RTL>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </SocketProvider>
+    </NuqsAdapter>
   );
 }
 

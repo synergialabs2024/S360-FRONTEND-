@@ -13,6 +13,7 @@ import {
 } from '@/shared';
 import { CustomSingleButton, CustomTable } from '@/shared/components';
 import { ClienteFibraRubroLibreModal } from './libre';
+import { ClienteFibraRubroServiceModal } from './servicio';
 
 export type ClienteFibraRubroTabProps = {
   serviceLine?: LineaServicio;
@@ -24,6 +25,9 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   ///* local state -------------------------
   const [isOpenFreeRubroModal, setIsOpenFreeRubroModal] =
     useState<boolean>(false);
+  const [isOpenServiceRubroModal, setIsOpenServiceRubroModal] =
+    useState<boolean>(false);
+  const [isCreatingRubro, setIsCreatingRubro] = useState<boolean>(false);
 
   ///* table -------------------------
   // server side filters - colums table
@@ -63,6 +67,7 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   ///* columns -------------------------
   const { columnsRubrosClientView } = useColumnsRubrosCliente({
     showNumberRubro: false,
+    showActionColumn: true,
   });
 
   return (
@@ -90,7 +95,8 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
               startIcon={<FiPlus />}
               justifyContent="flex-end"
               onClick={() => {
-                console.log('open rubro de servicio');
+                setIsOpenServiceRubroModal(true);
+                setIsCreatingRubro(true);
               }}
             />
           </Grid>
@@ -127,6 +133,13 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
         open={isOpenFreeRubroModal}
         onClose={() => setIsOpenFreeRubroModal(false)}
         serviceLine={serviceLine!}
+      />
+
+      <ClienteFibraRubroServiceModal
+        open={isOpenServiceRubroModal}
+        onClose={() => setIsOpenServiceRubroModal(false)}
+        serviceLine={serviceLine!}
+        isCreating={isCreatingRubro}
       />
     </>
   );
