@@ -840,6 +840,20 @@ export const useNestedMenu = () => {
                   url: ROUTER_PATHS.cartera
                     .parametrosBeneficioMantenedorBeneficiosNav,
                 }),
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                  id: 'parametrosCausaMantenedorBeneficios',
+                  title: 'Causa mantenedor beneficios',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.cartera
+                    .parametrosCausaMantenedorBeneficiosNav,
+                }),
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                  id: 'parametrosSolucionMantenedorBeneficios',
+                  title: 'Solucion mantenedor beneficios',
+                  type: MenuItemType.ITEM,
+                  url: ROUTER_PATHS.cartera
+                    .parametrosSolucionMantenedorBeneficiosNav,
+                }),
               ],
             },
             renderByModule(SidenavModulesEnum.INDEFINIDO, {

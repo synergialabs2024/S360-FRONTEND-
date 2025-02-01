@@ -295,6 +295,28 @@ export const ROUTER_PATHS = {
     parametrosBeneficioMantenedorBeneficiosNav:
       '/cartera/parametros/beneficio-mantenedor-beneficios',
 
+    // Causa
+
+    parametrosCausaMantenedorBeneficios:
+      'parametros/causa-mantenedor-beneficios',
+    parametrosCausaMantenedorBeneficiosCrear:
+      'parametros/causa-mantenedor-beneficios/crear',
+    parametrosCausaMantenedorBeneficiosEditar:
+      'parametros/causa-mantenedor-beneficios/editar/:uuid',
+    parametrosCausaMantenedorBeneficiosNav:
+      '/cartera/parametros/causa-mantenedor-beneficios',
+
+    // Solucion
+
+    parametrosSolucionMantenedorBeneficios:
+      'parametros/solucion-mantenedor-beneficios',
+    parametrosSolucionMantenedorBeneficiosCrear:
+      'parametros/solucion-mantenedor-beneficios/crear',
+    parametrosSolucionMantenedorBeneficiosEditar:
+      'parametros/solucion-mantenedor-beneficios/editar/:uuid',
+    parametrosSolucionMantenedorBeneficiosNav:
+      '/cartera/parametros/solucion-mantenedor-beneficios',
+
     ///* promesas de pago
     promesaspago: 'promesaspago',
     promesaspagoCrear: 'promesaspago/crear',

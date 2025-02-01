@@ -871,6 +871,45 @@ const CreateBeneficioMantenedorBeneficiosPage = Loadable(
   ),
 );
 
+// Causa mantenedor aplicaciones
+
+const CausaMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios/pages/tables/CausaMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+const CreateCausaMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios/pages/forms/CreateCausaMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+// Solucion mantenedor aplicaciones
+const SolucionMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios/pages/tables/SolucionMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+const CreateSolucionMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios/pages/forms/CreateSolucionMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
 const MantenedorAplicacionesPage = Loadable(
   lazy(
     () =>
@@ -2093,6 +2132,30 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera
               .parametrosBeneficioMantenedorBeneficiosCrear,
             element: <CreateBeneficioMantenedorBeneficiosPage />,
+          },
+
+          // Causa mantenedor aplicaciones
+
+          {
+            path: ROUTER_PATHS.cartera.parametrosCausaMantenedorBeneficiosNav,
+            element: <CausaMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.parametrosCausaMantenedorBeneficiosCrear,
+            element: <CreateCausaMantenedorBeneficiosPage />,
+          },
+
+          // Solucion mantenedor aplicaciones
+
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosSolucionMantenedorBeneficiosNav,
+            element: <SolucionMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosSolucionMantenedorBeneficiosCrear,
+            element: <CreateSolucionMantenedorBeneficiosPage />,
           },
 
           ///* Promesas pago
