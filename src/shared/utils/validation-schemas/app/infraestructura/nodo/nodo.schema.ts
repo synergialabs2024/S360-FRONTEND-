@@ -21,6 +21,10 @@ export const nodoFormSchema = yup.object({
     .required('El campo descripcion es requerido')
     .max(700, 'El campo descripcion no debe exceder los 700 caracteres'),
 
+  brass: yup
+    .number()
+    .typeError('El campo brass es requerido')
+    .required('El campo brass es requerido'),
   pais: yup
     .number()
     .typeError('El campo pais es requerido')

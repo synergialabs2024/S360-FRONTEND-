@@ -136,6 +136,12 @@ const NodosPage: React.FC<NodosPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'coordenadas'),
       },
       {
+        accessorKey: 'brass__name',
+        header: 'BRASS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['brass_data', 'name']),
+      },
+      {
         accessorKey: 'pais__name',
         header: 'PAIS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

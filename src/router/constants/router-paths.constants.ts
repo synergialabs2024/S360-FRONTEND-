@@ -664,6 +664,12 @@ export const ROUTER_PATHS = {
     RecepcionMaterialesCrear: 'recepcion-materiales/crear',
     RecepcionMaterialesEditar: 'recepcion-materiales/editar/:uuid',
     RecepcionMaterialesNav: '/inventario/recepcion-materiales',
+
+    ///* Recepcion Material
+    modeloInventarios: 'modelo-inventarios',
+    modeloInventariosCrear: 'modelo-inventarios/crear',
+    modeloInventariosEditar: 'modelo-inventarios/editar/:uuid',
+    modeloInventariosNav: '/inventario/modelo-inventarios',
   },
   // // LOGISTICA =================================
   logistica: {
