@@ -21,6 +21,7 @@ export interface Nodo {
   modified_at?: string;
 
   ///* fk
+  brass: number;
   pais: number;
   provincia: number;
   ciudad: number;

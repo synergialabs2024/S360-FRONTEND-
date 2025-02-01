@@ -492,6 +492,12 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
               },
             ),
+            renderByModule(SidenavModulesEnum.INVENTARIO_MODELO_INVENTARIO, {
+              id: 'modelo-inventario',
+              title: 'Modelo Inventario',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.modeloInventariosNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------

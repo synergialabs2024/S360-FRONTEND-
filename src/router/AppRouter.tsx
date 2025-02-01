@@ -1211,6 +1211,30 @@ const UpdateRecepcionMaterialPage = Loadable(
       ),
   ),
 );
+const ModeloInventariosPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/modelo-inventario/pages/tables/ModeloInventariosPages'
+      ),
+  ),
+);
+const CreateModeloInventariosPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/modelo-inventario/pages/forms/CreateModeloInventariosPages'
+      ),
+  ),
+);
+const UpdateModeloInventariosPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/modelo-inventario/pages/forms/UpdateModeloInventariosPages'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2617,6 +2641,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.RecepcionMaterialesEditar,
             element: <UpdateRecepcionMaterialPage />,
+          },
+
+          ///* Modelo Inventario
+          {
+            path: ROUTER_PATHS.inventario.modeloInventarios,
+            element: <ModeloInventariosPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.modeloInventariosCrear,
+            element: <CreateModeloInventariosPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.modeloInventariosEditar,
+            element: <UpdateModeloInventariosPages />,
           },
         ],
       },

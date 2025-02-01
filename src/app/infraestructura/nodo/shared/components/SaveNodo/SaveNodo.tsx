@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  useFetchBrass,
   useFetchCiudades,
   useFetchPaises,
   useFetchProvincias,
@@ -16,6 +17,7 @@ import {
   useUpdateNodo,
 } from '@/actions/app/infraestructura';
 import {
+  Brass,
   Ciudad,
   gridSize,
   gridSizeMdLg1,
@@ -95,6 +97,15 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
   });
 
   ///* fetch data
+  const {
+    data: brassPagingRes,
+    isLoading: isLoadingBrass,
+    isRefetching: isRefetchingBrass,
+  } = useFetchBrass({
+    params: {
+      page_size: 1000,
+    },
+  });
   const {
     data: paisesPagingRes,
     isLoading: isLoadingPaises,
@@ -319,6 +330,21 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
         }
         btnGridSize={gridSizeMdLg1}
       />
+      <CustomAutocomplete<Brass>
+        label="Brass"
+        name="brass"
+        // options
+        options={brassPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().brass}
+        isLoadingData={isLoadingBrass || isRefetchingBrass}
+        // vaidation
+        control={form.control}
+        error={errors.brass}
+        helperText={errors.brass?.message}
+        size={gridSizeMdLg6}
+      />
       <CustomAutocomplete<Pais>
         label="Pais"
         name="pais"
@@ -401,7 +427,6 @@ const SaveNodo: React.FC<SaveNodoProps> = ({ title, nodo }) => {
         defaultValue={form.getValues().direccion}
         error={errors.direccion}
         helperText={errors.direccion?.message}
-        size={gridSizeMdLg6}
       />
       <CustomTextArea
         label="Descripcion"
