@@ -8,6 +8,7 @@ import {
   useCreateProducto,
   useFetchCategoriaProductos,
   useFetchIVAs,
+  useFetchModeloInventarios,
   useUpdateProducto,
 } from '@/actions/app';
 import {
@@ -24,12 +25,13 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
+import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared/constants/ui';
 import {
-  gridSizeMdLg3,
-  gridSizeMdLg4,
-  gridSizeMdLg6,
-} from '@/shared/constants/ui';
-import { CategoriaProducto, IVA, Producto } from '@/shared/interfaces';
+  CategoriaProducto,
+  IVA,
+  ModeloInventario,
+  Producto,
+} from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
 import { returnUrlProductosPage } from '../../../pages/tables/ProductosPage';
 import { PricesForm } from './PricesForm'; // Asegúrate de importar correctamente
@@ -74,6 +76,15 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
   } = form;
 
   ///* fetch data ---------------------
+  const {
+    data: modeloInventarioPaginatedRes,
+    isLoading: isLoadingModeloInventario,
+    isRefetching: isRefetchingModeloInventario,
+  } = useFetchModeloInventarios({
+    params: {
+      page_size: 300,
+    },
+  });
   const {
     data: ivasPaginatedRes,
     isLoading: isLoadingIVAs,
@@ -209,7 +220,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.tipo}
         helperText={errors.tipo?.message}
-        gridSize={gridSizeMdLg4}
+        gridSize={gridSizeMdLg6}
       />
       <CustomAutocomplete<CategoriaProducto>
         label="Categoría"
@@ -222,7 +233,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.categoria}
         helperText={errors.categoria?.message}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
       />
 
       <CustomAutocomplete<IVA>
@@ -238,7 +249,24 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.iva}
         helperText={errors.iva?.message}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<ModeloInventario>
+        label="Modelo"
+        name="modelo"
+        // options
+        options={modeloInventarioPaginatedRes?.data?.items || []}
+        valueKey="nombre"
+        actualValueKey="id"
+        defaultValue={form.getValues().modelo}
+        isLoadingData={
+          isLoadingModeloInventario || isRefetchingModeloInventario
+        }
+        // validation
+        control={control}
+        error={errors.modelo}
+        helperText={errors.modelo?.message}
+        size={gridSizeMdLg6}
       />
       <SampleCheckbox
         label="Estado"

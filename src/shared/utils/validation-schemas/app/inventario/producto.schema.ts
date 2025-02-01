@@ -29,6 +29,10 @@ export const productoFormSchema = yup.object().shape({
     .number()
     .typeError('El campo IVA es requerido')
     .required('El campo IVA es requerido'),
+  modelo: yup
+    .number()
+    .typeError('El campo modelo es requerido')
+    .required('El campo modelo es requerido'),
   categoria: yup
     .number()
     .typeError('El campo categoría es requerido')

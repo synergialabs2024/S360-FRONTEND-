@@ -237,7 +237,14 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo'),
       },
-
+      {
+        accessorKey: 'modelo',
+        header: 'MODELO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['modelo_data', 'nombre']),
+      },
       {
         accessorKey: 'categoria',
         header: 'CATEGORIA',
