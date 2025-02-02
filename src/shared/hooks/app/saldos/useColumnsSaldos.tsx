@@ -4,7 +4,11 @@ import { useMemo } from 'react';
 import { ClienteFibraSaldosActionBtnColumn } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/saldos';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Saldo } from '@/shared/interfaces';
-import { formatCurrencyCell, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  emptyCellNested,
+  formatCurrencyCell,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 
 export const useColumnsSaldos = () => {
   const baseColumsActions = useMemo<MRT_ColumnDef<Saldo>[]>(
@@ -78,13 +82,70 @@ export const useColumnsSaldos = () => {
     [],
   );
 
+  const clienteDataSaldoColumnsBase01 = useMemo<MRT_ColumnDef<Saldo>[]>(
+    () => [
+      {
+        accessorKey: 'cliente__razon_social',
+        header: 'CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['cliente_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'cliente__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['cliente_data', 'identificacion']),
+      },
+
+      {
+        accessorKey: 'contrato__numero_contrato',
+        header: 'NUM CONTRATO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['contrato_data', 'numero_contrato']),
+      },
+      {
+        accessorKey: 'contrato__identificacion_pago',
+        header: 'IDENTIFICACION PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['contrato_data', 'identificacion_pago']),
+      },
+    ],
+    [],
+  );
+
   /// main columns ------------
   const genericColumns = useMemo<MRT_ColumnDef<Saldo>[]>(
     () => [...baseColumsActions, ...columnsBase01, ...auditColumns],
     [auditColumns, baseColumsActions, columnsBase01],
   );
 
+  const generalSaldoColumns = useMemo<MRT_ColumnDef<Saldo>[]>(
+    () => [
+      ...baseColumsActions,
+      ...clienteDataSaldoColumnsBase01,
+      ...columnsBase01,
+      ...auditColumns,
+    ],
+    [
+      auditColumns,
+      baseColumsActions,
+      clienteDataSaldoColumnsBase01,
+      columnsBase01,
+    ],
+  );
+
   return {
     genericColumns,
+    generalSaldoColumns,
   };
 };

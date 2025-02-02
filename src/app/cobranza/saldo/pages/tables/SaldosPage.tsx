@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { useFetchSaldos } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
@@ -7,7 +5,6 @@ import {
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import {
   useColumnsSaldos,
   useTableFilter,
@@ -15,8 +12,6 @@ import {
 } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Saldo } from '@/shared/interfaces';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlSaldosPage = ROUTER_PATHS.cartera.saldosNav;
 
@@ -25,17 +20,9 @@ export type SaldosPageProps = {};
 const SaldosPage: React.FC<SaldosPageProps> = () => {
   useCheckPermission(PermissionsEnum.cobranza_view_saldo);
 
-  const navigate = useNavigate();
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state ---------------------
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table ---------------------
   const {
@@ -57,33 +44,19 @@ const SaldosPage: React.FC<SaldosPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      cliente__razon_social: searchTerm,
       ...filterObject,
       filterByState: false,
     },
   });
 
-  ///* handlers ---------------------
-  const onEdit = (saldo: Saldo) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Saldo',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlSaldosPage}/editar/${saldo.uuid}`);
-      },
-    });
-  };
-
   ///* columns ---------------------
-  const { genericColumns } = useColumnsSaldos();
+  const { generalSaldoColumns } = useColumnsSaldos();
 
   return (
     <SingleTableBoxScene
       title="Saldos"
       createPageUrl={`${returnUrlSaldosPage}/crear`}
-      // showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_saldo)}
       showCreateBtn={false}
     >
       <CustomSearch
@@ -93,7 +66,7 @@ const SaldosPage: React.FC<SaldosPageProps> = () => {
       />
 
       <CustomTable<Saldo>
-        columns={genericColumns}
+        columns={generalSaldoColumns}
         data={SaldosPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -108,13 +81,9 @@ const SaldosPage: React.FC<SaldosPageProps> = () => {
         onPaging={setPagination}
         rowCount={SaldosPagingRes?.data?.meta?.count}
         // // actions
-        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.cobranza_change_saldo,
-        )}
+        enableActionsColumn={false}
         // crud
-        canEdit={hasPermission(PermissionsEnum.cobranza_change_saldo)}
-        onEdit={onEdit}
+        canEdit={false}
       />
     </SingleTableBoxScene>
   );

@@ -10,6 +10,7 @@ import {
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { type Rubro } from '@/shared/interfaces';
 import {
+  emptyCellNested,
   emptyCellOneLevel,
   formatCurrencyCell,
   formatDateWithTimeCell,
@@ -197,6 +198,47 @@ export const useColumnsRubrosCliente = ({
     [],
   );
 
+  const clienteDataRubroColumnsBase01 = useMemo<MRT_ColumnDef<Rubro>[]>(
+    () => [
+      {
+        accessorKey: 'cliente__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['cliente_data', 'identificacion']),
+      },
+      {
+        accessorKey: 'cliente__razon_social',
+        header: 'CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['cliente_data', 'razon_social']),
+      },
+
+      {
+        accessorKey: 'contrato__numero_contrato',
+        header: 'NUM CONTRATO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['contrato_data', 'numero_contrato']),
+      },
+      {
+        accessorKey: 'contrato__identificacion_pago',
+        header: 'IDENTIFICACION PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['contrato_data', 'identificacion_pago']),
+      },
+    ],
+    [],
+  );
+
   // actual columns ----------------------
   const columnsRubrosClientView = useMemo<MRT_ColumnDef<Rubro>[]>(
     () => [
@@ -207,5 +249,20 @@ export const useColumnsRubrosCliente = ({
     [rubroColumnsBase01, rubroColumnsBase02Money, rubroColumnsBase03Audit],
   );
 
-  return { columnsRubrosClientView };
+  const columnsRubrosGeneric = useMemo<MRT_ColumnDef<Rubro>[]>(
+    () => [
+      ...clienteDataRubroColumnsBase01,
+      ...rubroColumnsBase01,
+      ...rubroColumnsBase02Money,
+      ...rubroColumnsBase03Audit,
+    ],
+    [
+      clienteDataRubroColumnsBase01,
+      rubroColumnsBase01,
+      rubroColumnsBase02Money,
+      rubroColumnsBase03Audit,
+    ],
+  );
+
+  return { columnsRubrosClientView, columnsRubrosGeneric };
 };

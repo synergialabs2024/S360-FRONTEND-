@@ -31,14 +31,9 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
   const { tabValue, handleTabChange } = useTabOnlyNuqs();
 
   ///* global state ----------------------
-  const setOT = useRubroStore(s => s.setActiveOrdenTrabajo);
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
 
   ///* effects ----------------
-  useEffect(() => {
-    if (!serviceLine) return;
-    setOT(serviceLine?.orden_trabajo_data || null);
-  }, [serviceLine, setOT]);
   useEffect(() => {
     return () => {
       clearAllRubroStore();

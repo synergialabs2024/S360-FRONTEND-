@@ -149,3 +149,43 @@ export type ProductDataLimitOT = {
 
   modeloName?: string;
 };
+
+// helpers
+export type OrdenTrabajoLimitData = Pick<
+  OrdenTrabajo,
+  | 'id'
+  | 'uuid'
+  | 'equipos_utilizados'
+  | 'materiales_utilizados'
+  | 'estado_orden_trabajo'
+  | 'tipo_orden_trabajo'
+  | 'numero_referencia'
+  | 'codigo'
+  | 'hora_inicio'
+  | 'hora_fin'
+  | 'hora_inicio_real'
+  | 'estado_activacion'
+  | 'ipv4'
+  | 'ipv6'
+  | 'pppoe'
+  | 'pppassword'
+  | 'luz_verde'
+  | 'estado_auditoria'
+  | 'motivo_correccion'
+  | 'observacion_correccion'
+  | 'flota'
+  | 'linea_servicio'
+  | 'solicitud_servicio'
+  | 'preventa'
+  | 'agendamiento'
+  | 'nodo'
+  | 'olt'
+  | 'router'
+  | 'pool_ipv4'
+  | 'pool_ipv6'
+  | 'area'
+  | 'departamento'
+  | 'canal_venta'
+  | 'vendedor'
+  | 'motivo_prerechazo'
+>;

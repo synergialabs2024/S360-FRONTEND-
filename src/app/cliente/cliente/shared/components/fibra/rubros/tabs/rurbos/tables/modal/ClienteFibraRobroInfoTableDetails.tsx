@@ -24,7 +24,6 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { InstalacionesStoreKey, useInstalacionesStore } from '@/store/app';
-import { useRubroStore } from '@/store/app/rubros';
 
 export type ClienteFibraRobroInfoTableDetailsProps = {
   rubro: Rubro;
@@ -179,7 +178,7 @@ const ClienteFibraRobroInfoTableDetails: React.FC<
   const [openSeriesModal, setOpenSeriesModal] = useState<boolean>(false);
 
   ///* global state ----------------------
-  const activeOT = useRubroStore(s => s.activeOrdenTrabajo);
+  const activeOT = rubro?.orden_trabajo_data;
   const equiposUtilizados = useMemo(
     () => activeOT?.equipos_utilizados || [],
     [activeOT],

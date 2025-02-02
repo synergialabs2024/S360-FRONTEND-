@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { useFetchRubros } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
@@ -7,7 +5,6 @@ import {
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import {
   useColumnsRubrosCliente,
   useTableFilter,
@@ -15,8 +12,6 @@ import {
 } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Rubro } from '@/shared/interfaces';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlRubrosPage = ROUTER_PATHS.cobranza.rubrosNav;
 
@@ -25,17 +20,9 @@ export type RubrosPageProps = {};
 const RubrosPage: React.FC<RubrosPageProps> = () => {
   useCheckPermission(PermissionsEnum.cobranza_view_rubro);
 
-  const navigate = useNavigate();
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table
   const {
@@ -57,27 +44,14 @@ const RubrosPage: React.FC<RubrosPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      cliente__razon_social: searchTerm,
       ...filterObject,
       filterByState: false,
     },
   });
 
-  ///* handlers
-  const onEdit = (rubro: Rubro) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Rubro',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlRubrosPage}/editar/${rubro.uuid}`);
-      },
-    });
-  };
-
   ///* columns -----
-  const { columnsRubrosClientView } = useColumnsRubrosCliente();
+  const { columnsRubrosGeneric } = useColumnsRubrosCliente();
   // const columns = useMemo<MRT_ColumnDef<Rubro>[]>(
   //   () => [
   //     {
@@ -250,7 +224,7 @@ const RubrosPage: React.FC<RubrosPageProps> = () => {
       />
 
       <CustomTable<Rubro>
-        columns={columnsRubrosClientView}
+        columns={columnsRubrosGeneric}
         data={RubrosPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -265,14 +239,8 @@ const RubrosPage: React.FC<RubrosPageProps> = () => {
         onPaging={setPagination}
         rowCount={RubrosPagingRes?.data?.meta?.count}
         // // actions
-        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.cobranza_change_rubro,
-        )}
+        enableActionsColumn={false}
         // crud
-        canEdit={hasPermission(PermissionsEnum.cobranza_change_rubro)}
-        onEdit={onEdit}
-        canDelete={false}
       />
     </SingleTableBoxScene>
   );

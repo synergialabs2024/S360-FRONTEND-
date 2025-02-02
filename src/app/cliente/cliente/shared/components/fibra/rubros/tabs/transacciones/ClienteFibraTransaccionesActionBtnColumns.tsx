@@ -18,10 +18,10 @@ const ClienteFibraTransaccionesActionBtnColumns: React.FC<
     <>
       <Grid item container xs={12} spacing={1}>
         <Grid item>
-          {facturaUrl ? <PDFIconButton url={facturaUrl} /> : '-'}
+          {facturaUrl ? <PDFIconButton url={facturaUrl} /> : null}
         </Grid>
 
-        <Grid item>{xmlUrl ? <PDFIconButton url={xmlUrl} isXml /> : '-'}</Grid>
+        <Grid item>{xmlUrl ? <PDFIconButton url={xmlUrl} isXml /> : null}</Grid>
       </Grid>
     </>
   );

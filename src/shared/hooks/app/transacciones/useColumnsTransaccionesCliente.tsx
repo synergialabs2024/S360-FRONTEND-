@@ -19,9 +19,11 @@ export const useColumnsTransaccionesCliente = () => {
         accessorKey: 'url_pdf',
         header: 'ACCIONES',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
         Cell: ({ row }) => {
           const facturaUrl = row.original?.rubro_data?.factura_data?.url_pdf;
-          if (!facturaUrl) return '-';
+          if (!facturaUrl) return null;
 
           return (
             <ClienteFibraTransaccionesActionBtnColumns
@@ -140,11 +142,69 @@ export const useColumnsTransaccionesCliente = () => {
     [],
   );
 
+  const clienteDataTransaccionColumnsBase01 = useMemo<
+    MRT_ColumnDef<Transaccion>[]
+  >(
+    () => [
+      {
+        accessorKey: 'cliente__razon_social',
+        header: 'CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['cliente_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'cliente__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['cliente_data', 'identificacion']),
+      },
+
+      {
+        accessorKey: 'contrato__numero_contrato',
+        header: 'NUM CONTRATO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['contrato_data', 'numero_contrato']),
+      },
+      {
+        accessorKey: 'contrato__identificacion_pago',
+        header: 'IDENTIFICACION PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['contrato_data', 'identificacion_pago']),
+      },
+    ],
+    [],
+  );
+
   // main columns ----------------------
   const transaccionClienteTabColumns = useMemo<MRT_ColumnDef<Transaccion>[]>(
     () => [...baseColumsActions, ...baseColums01, ...auditColumns],
     [baseColumsActions, baseColums01, auditColumns],
   );
 
-  return { transaccionClienteTabColumns };
+  const generalTransaccionesColumns = useMemo<MRT_ColumnDef<Transaccion>[]>(
+    () => [
+      ...baseColumsActions,
+      ...clienteDataTransaccionColumnsBase01,
+      ...baseColums01,
+      ...auditColumns,
+    ],
+    [
+      clienteDataTransaccionColumnsBase01,
+      baseColumsActions,
+      baseColums01,
+      auditColumns,
+    ],
+  );
+
+  return { transaccionClienteTabColumns, generalTransaccionesColumns };
 };

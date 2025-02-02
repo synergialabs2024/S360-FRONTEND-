@@ -162,7 +162,7 @@ const SectoresPage: React.FC<SectoresPageProps> = () => {
       {
         accessorKey: 'zona__name',
         header: 'ZONA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         Cell: ({ row }) => emptyCellNested(row, ['zona_data', 'name']),
       },
       {
