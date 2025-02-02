@@ -47,8 +47,8 @@ import {
   EquifaxEdentificationType,
   HTTPResStatusCodeEnum,
   IdentificationTypeEnumChoice,
-  INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   InternetPlanInternetTypeEnumChoice,
+  InternetServiceTypeEnumChoice,
   MetodoPago,
   MetodoPagoEnumUUID,
   Nullable,
@@ -66,7 +66,6 @@ import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
   ChipModelState,
   CustomAutocomplete,
-  CustomAutocompleteArrString,
   CustomCardAlert,
   CustomCellphoneTextField,
   CustomCoordsTextField,
@@ -243,6 +242,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       estadoOtp: null,
 
       tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
+      tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
     },
   });
 
@@ -483,6 +483,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       email: prevForm.email,
       tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
+      tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
     });
   };
 
@@ -757,6 +758,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
+      tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
     });
   }, [solicitudServicio, reset]);
 
@@ -1149,10 +1151,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               pt={CustomTypoLabelEnum.ptMiddlePosition}
             />
 
-            <CustomAutocompleteArrString
+            {/* <CustomAutocompleteArrString
               label="Tipo de servicio"
               name="tipo_servicio"
-              options={INTERNET_SERVICE_TYPE_ARRAY_CHOICES}
+              options={INTERNET_SERVICE_TYPE_ARRAY_CHOICES_VENTAHOME}
               isLoadingData={false}
               control={form.control}
               defaultValue={form.getValues().tipo_servicio}
@@ -1163,6 +1165,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 // reset related fields
                 form.setValue('plan_internet', '' as any);
               }}
+            /> */}
+            <CustomTextFieldNoForm
+              label="Tipo de servicio"
+              value={InternetServiceTypeEnumChoice.FIBRA}
+              disabled
             />
             <CustomTextFieldNoForm
               label="Tipo de plan"

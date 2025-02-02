@@ -12,6 +12,7 @@ import {
   Select,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { memo, useEffect, useMemo, useState } from 'react';
 import {
@@ -33,6 +34,7 @@ export type IPDetailsCellProps = {
 
 // memorized component for performance
 const Row = memo(({ index, style, data }: ListChildComponentProps) => {
+  const theme = useTheme();
   const { availableIps, columnCount } = data;
   const startIndex = index * columnCount;
   const items = availableIps.slice(startIndex, startIndex + columnCount);
@@ -45,9 +47,9 @@ const Row = memo(({ index, style, data }: ListChildComponentProps) => {
             <ListItem divider>
               <ListItemIcon>
                 {ip?.available ? (
-                  <LockOpenIcon color="success" />
+                  <LockOpenIcon color={theme.palette.success.main} size={16} />
                 ) : (
-                  <LockPersonIcon color="info" />
+                  <LockPersonIcon color={theme.palette.info.main} size={16} />
                 )}
               </ListItemIcon>
               <ListItemText

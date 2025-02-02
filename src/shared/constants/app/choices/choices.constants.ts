@@ -68,6 +68,9 @@ export const INTERNET_SERVICE_TYPE_ARRAY_CHOICES = [
   InternetServiceTypeEnumChoice.FIBRA,
   InternetServiceTypeEnumChoice.RADIO,
 ];
+export const INTERNET_SERVICE_TYPE_ARRAY_CHOICES_VENTAHOME = [
+  InternetServiceTypeEnumChoice.FIBRA,
+];
 
 export enum InternetPlanInternetTypeEnumChoice {
   HOGAR = 'HOGAR',
