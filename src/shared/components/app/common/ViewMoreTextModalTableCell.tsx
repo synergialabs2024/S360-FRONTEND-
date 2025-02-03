@@ -8,6 +8,7 @@ export type ViewMoreTextModalTableCellProps = {
   limit?: number;
   modalTitle?: string;
   viewMoreText?: string;
+  defaultText?: string;
 };
 
 const ViewMoreTextModalTableCell: React.FC<ViewMoreTextModalTableCellProps> = ({
@@ -15,11 +16,12 @@ const ViewMoreTextModalTableCell: React.FC<ViewMoreTextModalTableCellProps> = ({
   limit = 42,
   modalTitle = 'Texto completo',
   viewMoreText = 'Ver más',
+  defaultText = 'N/A',
 }) => {
   ///* local state -------------
   const [open, setOpen] = useState(false);
 
-  if (!longText) return 'N/A';
+  if (!longText) return defaultText;
 
   return (
     <>

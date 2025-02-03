@@ -605,12 +605,14 @@ export enum TipoProductoEnumChoice {
   FIBRA = 'FIBRA',
   UTP = 'UTP',
   ONT = 'ONT',
+  DIGITAL = 'DIGITAL',
 }
 export const TIPO_PRODUCTO_ARRAY_CHOICES = [
   TipoProductoEnumChoice.PRODUCTO,
   TipoProductoEnumChoice.FIBRA,
   TipoProductoEnumChoice.UTP,
   TipoProductoEnumChoice.ONT,
+  TipoProductoEnumChoice.DIGITAL,
 ];
 
 export enum CodigoModeloProductoEnumChoice {
@@ -618,12 +620,14 @@ export enum CodigoModeloProductoEnumChoice {
   ONT_WIFI_6 = 'ONT_WIFI_6',
   FIBRA_GRANEL = 'FIBRA_GRANEL',
   FIBRA_PRECONECTORIZADA = 'FIBRA_PRECONECTORIZADA',
+  DIGITAL = 'DIGITAL',
 }
 export const CODIGO_MODELO_PRODUCTO_ARRAY_CHOICES = [
   CodigoModeloProductoEnumChoice.ONT_WIFI_5,
   CodigoModeloProductoEnumChoice.ONT_WIFI_6,
   CodigoModeloProductoEnumChoice.FIBRA_GRANEL,
   CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA,
+  CodigoModeloProductoEnumChoice.DIGITAL,
 ];
 export type CodigoModeloProductoEnumChoiceType = {
   label: string;

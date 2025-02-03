@@ -9,6 +9,7 @@ import {
   CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
+  ViewMoreTextModalTableCell,
 } from '@/shared/components';
 import {
   MODEL_BOOLEAN,
@@ -104,7 +105,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
       {
         accessorKey: 'nombre',
         header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
@@ -116,25 +117,48 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+        Cell: ({ row }) => {
+          return (
+            <ViewMoreTextModalTableCell
+              longText={row?.original?.codigo}
+              limit={27}
+              modalTitle={`Código: ${row?.original?.nombre}`}
+            />
+          );
+        },
       },
-
       {
         accessorKey: 'codigo_auxiliar',
         header: 'CODIGO AUXILIAR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo_auxiliar'),
+        Cell: ({ row }) => {
+          return (
+            <ViewMoreTextModalTableCell
+              longText={row?.original?.codigo_auxiliar}
+              limit={27}
+              modalTitle={`Código Auxiliar: ${row?.original?.nombre}`}
+            />
+          );
+        },
       },
 
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
+        Cell: ({ row }) => {
+          return (
+            <ViewMoreTextModalTableCell
+              longText={row?.original?.descripcion}
+              limit={27}
+              modalTitle={`Descripción de ${row?.original?.nombre}`}
+            />
+          );
+        },
       },
 
       {

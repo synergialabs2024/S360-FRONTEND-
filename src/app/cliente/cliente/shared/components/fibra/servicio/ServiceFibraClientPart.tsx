@@ -1,6 +1,7 @@
 import { PromocionPreventaView } from '@/app/comercial/agendamiento/shared/components/SaveAgendamiento/form';
 import { LineaServicio } from '@/shared';
 import { CustomTypoLabel, CustomTypoLabelEnum } from '@/shared/components';
+import ClienteFibraAlquileresPart from './ClienteFibraAlquileresPart';
 import ClienteFibraOTServicePart from './ClienteFibraOTServicePart';
 import ClienteFibraServicePlanTable from './ClienteFibraServicePlanTable';
 
@@ -17,6 +18,9 @@ const ServiceFibraClientPart: React.FC<ServiceFibraClientPartProps> = ({
 
       {/* ---------------- service plan table ---------------- */}
       <ClienteFibraServicePlanTable serviceLine={serviceLine} />
+
+      {/* ---------------- alquileres ---------------- */}
+      <ClienteFibraAlquileresPart serviceLine={serviceLine} />
 
       {/* ---------------- Promociones ---------------- */}
       <CustomTypoLabel
