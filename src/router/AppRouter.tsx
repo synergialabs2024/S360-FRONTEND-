@@ -543,6 +543,15 @@ const ReasignacionVentasPage = Loadable(
   ),
 );
 
+const SolicitudsAprobacionIAPreventaMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/supervision-comercial/solicitud-aprobacion-ia-preventa/pages/tables/SolicitudsAprobacionIAPreventaMainPage'
+      ),
+  ),
+);
+
 const TrazabilidadVentasPage = Loadable(
   lazy(
     () =>
@@ -2417,6 +2426,13 @@ const AppRouter = [
             path: ROUTER_PATHS.supervisionComercial
               .solicitudRecoordinacionAgendaHandle,
             element: <HandleRecoordinacionAgendaSuperVentas />,
+          },
+
+          ///* solicitud aprobar preventa IA
+          {
+            path: ROUTER_PATHS.supervisionComercial
+              .solicitudAprobacionIAPreventa,
+            element: <SolicitudsAprobacionIAPreventaMainPage />,
           },
         ],
       },

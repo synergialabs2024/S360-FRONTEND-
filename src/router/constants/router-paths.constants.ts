@@ -575,6 +575,13 @@ export const ROUTER_PATHS = {
       'solicitud-recoordinacion-agenda/:uuid',
     solicitudRecoordinacionAgendaNav:
       '/supervision-comercial/solicitud-recoordinacion-agenda',
+
+    ///* solicitud aprobacion ia preventa
+    solicitudAprobacionIAPreventa: 'solicitud-aprobacion-ia-preventa',
+    solicitudAprobacionIAPreventaHandle:
+      'solicitud-aprobacion-ia-preventa/:uuid',
+    solicitudAprobacionIAPreventaNav:
+      '/supervision-comercial/solicitud-aprobacion-ia-preventa',
   },
 
   /////* Administración de Red ----------------

@@ -1,4 +1,7 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { SystemUserLimitData } from '../administration';
+import { ContratoLimitData } from '../cliente';
+import { Preventa } from '../comercial';
 
 export interface SolicitudesAprobacionIAPreventaPaginatedRes {
   status: number;
@@ -24,8 +27,9 @@ export interface SolicitudAprobacionIAPreventa {
   departamento: number;
   canal_venta: number;
   usuario_gestion: null;
+
+  preventa_data: Preventa & {
+    contrato_data: ContratoLimitData;
+  };
+  vendedor_data?: SystemUserLimitData;
 }
-
-// src/shared/interfaces/app/supervision-comercial/solicitud-aprobacion-ia-preventa/solicitud-aprobacion-ia-preventa.ts
-
-// bun ./__ts__/main.ts --ts_file="src/shared/interfaces/app/supervision-comercial/solicitud-aprobacion-ia-preventa/solicitud-aprobacion-ia-preventa.ts" --iname=SolicitudAprobacionIAPreventa --pm=app --fcm=supervision-comercial/solicitud-aprobacion-ia-preventa --ep="solicitud-aprobacion-ia-preventa" --idmk="id" --pcn="comercial___solicitud_aprobacion_ia_preventa"

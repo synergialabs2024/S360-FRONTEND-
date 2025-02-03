@@ -394,6 +394,17 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.supervisionComercial.codigosOtpNav,
             }),
             renderByModule(
+              SidenavModulesEnum.SUPERVISIONCOMERCIAL_SOLICITUD_APROBACION_IA_PREVENTA,
+              {
+                id: 'solicitud-aprobacion-ia-preventa',
+                title: 'Solicitud de aprobación IA preventa',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.supervisionComercial
+                  .solicitudAprobacionIAPreventaNav,
+              },
+            ),
+
+            renderByModule(
               SidenavModulesEnum.SUPERVISIONCOMERCIAL_RECOORDINACION_AGENDA,
               {
                 id: 'solicitud-recoordinacion-agendas',
