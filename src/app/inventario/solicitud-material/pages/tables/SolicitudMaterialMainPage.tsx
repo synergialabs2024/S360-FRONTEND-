@@ -7,16 +7,18 @@ import {
   SingleTableBoxScene,
   a11yProps,
 } from '@/shared/components';
-import { RecepcionMaterialEnumChoice } from '@/shared/constants/app';
+import { InventarioEnumChoice } from '@/shared/constants/app';
 import { useTabsOnly } from '@/shared/hooks/ui/useTabsOnly';
 import SolicitudMaterialEsperaPage from './SolicitudMaterialEsperaPage';
 
 export const returnUrlSolicitudMaterialPage =
   ROUTER_PATHS.inventario.solicitudMaterialNav;
 
-export type PreventasMainPageProps = {};
+export type SolicitudMaterialMainPageProps = {};
 
-const SolicitudMaterialMainPage: React.FC<PreventasMainPageProps> = () => {
+const SolicitudMaterialMainPage: React.FC<
+  SolicitudMaterialMainPageProps
+> = () => {
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
@@ -37,27 +39,19 @@ const SolicitudMaterialMainPage: React.FC<PreventasMainPageProps> = () => {
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <SolicitudMaterialEsperaPage
-          state={RecepcionMaterialEnumChoice.PENDIENTE}
-        />
+        <SolicitudMaterialEsperaPage state={InventarioEnumChoice.PENDIENTE} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <SolicitudMaterialEsperaPage
-          state={RecepcionMaterialEnumChoice.APROBADO}
-        />
+        <SolicitudMaterialEsperaPage state={InventarioEnumChoice.APROBADO} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
-        <SolicitudMaterialEsperaPage
-          state={RecepcionMaterialEnumChoice.RECHAZADO}
-        />
+        <SolicitudMaterialEsperaPage state={InventarioEnumChoice.RECHAZADO} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
-        <SolicitudMaterialEsperaPage
-          state={RecepcionMaterialEnumChoice.FINALIZADO}
-        />
+        <SolicitudMaterialEsperaPage state={InventarioEnumChoice.FINALIZADO} />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );

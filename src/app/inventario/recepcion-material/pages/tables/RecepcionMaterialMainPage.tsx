@@ -1,6 +1,6 @@
 import { Tab } from '@mui/material';
 
-import { RecepcionMaterialEnumChoice, useTabsOnly } from '@/shared';
+import { InventarioEnumChoice, useTabsOnly } from '@/shared';
 import {
   a11yProps,
   BoxFormTabsOnly,
@@ -8,6 +8,10 @@ import {
   SingleTableBoxScene,
 } from '@/shared/components';
 import RecepcionMaterialByStatePage from './RecepcionMaterialByStatePage';
+import { ROUTER_PATHS } from '@/router/constants';
+
+export const returnUrlRecepcionMaterialPage =
+  ROUTER_PATHS.inventario.RecepcionMaterialesNav;
 
 export type RecepcionMaterialPageProps = {};
 
@@ -31,21 +35,15 @@ const RecepcionMaterialMainPage: React.FC<RecepcionMaterialPageProps> = () => {
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
-        <RecepcionMaterialByStatePage
-          state={RecepcionMaterialEnumChoice.PENDIENTE}
-        />
+        <RecepcionMaterialByStatePage state={InventarioEnumChoice.PENDIENTE} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
-        <RecepcionMaterialByStatePage
-          state={RecepcionMaterialEnumChoice.APROBADO}
-        />
+        <RecepcionMaterialByStatePage state={InventarioEnumChoice.APROBADO} />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
-        <RecepcionMaterialByStatePage
-          state={RecepcionMaterialEnumChoice.RECHAZADO}
-        />
+        <RecepcionMaterialByStatePage state={InventarioEnumChoice.RECHAZADO} />
       </CustomTabPanel>
     </SingleTableBoxScene>
   );

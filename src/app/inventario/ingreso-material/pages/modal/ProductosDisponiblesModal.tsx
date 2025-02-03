@@ -108,9 +108,9 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
           onClick={() => {
             if (askADD && (item.stock_up === undefined || item.stock_up <= 0)) {
               ToastWrapper.error(`
-              El producto de código ${item.codigo} no
-              puede ser procesado porque su stock actual es 0 o menor.
-            `);
+                El producto de código ${item.codigo} no puede ser
+                procesado por su falta de stock.
+              `);
               return;
             }
 

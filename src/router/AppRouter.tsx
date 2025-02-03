@@ -1274,6 +1274,22 @@ const UpdateModeloInventariosPages = Loadable(
       ),
   ),
 );
+const SolicitudDevolucionMainPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/solicitud-devolucion/pages/tables/SolicitudDevolucionMainPages'
+      ),
+  ),
+);
+const CreateSolicitudDevolucionPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/solicitud-devolucion/pages/forms/CreateSolicitudDevolucionPages'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2718,6 +2734,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.modeloInventariosEditar,
             element: <UpdateModeloInventariosPages />,
+          },
+
+          ///* Solicitud Devolucion
+          {
+            path: ROUTER_PATHS.inventario.solicitudDevolucion,
+            element: <SolicitudDevolucionMainPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudDevolucionCrear,
+            element: <CreateSolicitudDevolucionPages />,
           },
         ],
       },

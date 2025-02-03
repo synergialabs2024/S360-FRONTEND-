@@ -4,8 +4,8 @@ import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { SaveRecepcionMaterial } from './../../shared/components';
-import { returnUrlRecepcionMaterialPage } from '../tables/RecepcionMaterialByStatePage';
 import { useGetRecepcionMaterial } from '@/actions/app';
+import { returnUrlRecepcionMaterialPage } from '../tables/RecepcionMaterialMainPage';
 
 export type UpdateRecepcionMaterialPageProps = {};
 

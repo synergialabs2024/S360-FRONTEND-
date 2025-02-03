@@ -18,6 +18,7 @@ import {
   Ubicacion,
   ToastWrapper,
   PermissionsEnum,
+  useLoaders,
 } from '@/shared';
 import { returnUrlEgresoMaterialesPage } from '../../../pages/tables/EgresoMaterialesPage';
 import {
@@ -168,6 +169,9 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     isLoadingUbicaciones,
     isRefetchingUbicaciones,
   ]);
+
+  const customLoader = isLoadingUbicaciones || isRefetchingUbicaciones;
+  useLoaders(customLoader);
 
   ///* columns --------------------
   const { crearMaterialColumns } = useColumnsProductosDisponibles();

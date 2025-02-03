@@ -29,7 +29,6 @@ import {
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useProductosStore } from '@/store/app';
-import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialByStatePage';
 import RecepcionEgresoModal from '../../../pages/modal/RecepcionEgresoModal';
 import {
   ProductosDisponiblesTableType,
@@ -37,6 +36,7 @@ import {
 } from '@/app/inventario/ingreso-material/shared/hooks';
 import { FiPlus } from 'react-icons/fi';
 import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
+import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
 
 export interface SaveRecepcionMaterialProps {
   title: string;

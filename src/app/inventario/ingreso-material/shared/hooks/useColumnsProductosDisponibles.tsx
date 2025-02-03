@@ -24,13 +24,14 @@ export type ProductosDisponiblesTableType = Producto & {
   stock?: number;
   series?: any[];
   productos?: string[];
+  stock_up?: number;
+
   usedQuantity?: number;
   selectedSeries?: string[];
   savedSeries?: string[];
-  stock_up?: number;
 };
 
-type UseColumnsEquiposIngresoMaterial = {
+type UseColumnsEquiposProductos = {
   showActionColumn?: boolean;
   onActionProductosRowNode?: (
     item: ProductosDisponiblesTableType,
@@ -44,7 +45,7 @@ type MRTProductoTableType = {
 export const useColumnsProductosDisponibles = ({
   showActionColumn = false,
   onActionProductosRowNode,
-}: UseColumnsEquiposIngresoMaterial = {}) => {
+}: UseColumnsEquiposProductos = {}) => {
   ///* global state --------------------
   const removeSelectedItem = useProductosStore(s => s.removeSelectedItem);
   const updateSelectedItemValue = useProductosStore(

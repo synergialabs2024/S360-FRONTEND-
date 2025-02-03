@@ -1,5 +1,8 @@
 export * from './bodega';
-export * from './inventario';
+export * from './egreso-material';
+export * from './ingreso-material';
+export * from './models';
+export * from './solicitud-devolucion';
 export * from './transferencia-material';
 
 export * from './useColumnsMovimientoMaterial';

@@ -22,4 +22,7 @@ export interface SolicitudMaterial {
   modified_at?: string;
 }
 
-export type BodegaLimitData = Pick<SolicitudMaterial, 'uuid' | 'bodega' | 'id'>;
+export type SolicitudMaterialLimitData = Pick<
+  SolicitudMaterial,
+  'uuid' | 'bodega' | 'id'
+>;

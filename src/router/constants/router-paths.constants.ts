@@ -650,12 +650,18 @@ export const ROUTER_PATHS = {
     ubicacionesCrear: 'ubicaciones/crear',
     ubicacionesEditar: 'ubicaciones/editar/:uuid',
     ubicacionesNav: '/inventario/ubicaciones',
+
+    ///* solicitud devolucion
+    solicitudDevolucion: 'solicitud-devolucion',
+    solicitudDevolucionCrear: 'solicitud-devolucion/crear',
+    solicitudDevolucionEditar: 'solicitud-devolucion/editar/:uuid',
+    solicitudDevolucionNav: '/inventario/solicitud-devolucion',
+
     ///* solicitud material
     solicitudMaterial: 'solicitud-material',
     solicitudMaterialCrear: 'solicitud-material/crear',
     solicitudMaterialEditar: 'solicitud-material/editar/:uuid',
     solicitudMaterialNav: '/inventario/solicitud-material',
-    //ingresoMaterialesNav: '/inventario/ingreso-materiales',
 
     ///* Ingreso Material
     ingresoMateriales: 'ingreso-materiales',

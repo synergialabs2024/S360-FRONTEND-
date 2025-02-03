@@ -5,6 +5,7 @@ import {
   ToastWrapper,
   UseFetchEnabledParams,
   UseMutationParams,
+  PagingPartialParams,
 } from '@/shared';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
@@ -121,12 +122,8 @@ export const useUpdateIngresoMaterial = <T>({
   });
 };
 ///* axios
-export type GetIngresoMaterialesParams = Partial<IngresoMaterial> & {
-  page?: number;
-  page_size?: number;
-
-  filterByState?: boolean;
-};
+export type GetIngresoMaterialesParams = Partial<IngresoMaterial> &
+  PagingPartialParams;
 export type CreateIngresoMaterialParams<T> = T;
 export type CreateIngresoMaterialParamsBase = Omit<IngresoMaterial, 'id'>;
 export interface UpdateIngresoMaterialParams<T> {

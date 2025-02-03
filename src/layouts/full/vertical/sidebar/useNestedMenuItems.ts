@@ -494,9 +494,15 @@ export const useNestedMenu = () => {
             ),
             renderByModule(SidenavModulesEnum.INVENTARIO_MODELO_INVENTARIO, {
               id: 'modelo-inventario',
-              title: 'Modelo Inventario',
+              title: 'Modelo de inventario',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.modeloInventariosNav,
+            }),
+            renderByModule(SidenavModulesEnum.INVENTARIO_SOLICITUD_DEVOLUCION, {
+              id: 'solicitud-devolucion',
+              title: 'Solcitud de devolucion',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

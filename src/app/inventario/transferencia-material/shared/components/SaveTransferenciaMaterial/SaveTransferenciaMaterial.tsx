@@ -18,6 +18,7 @@ import {
   TransferenciaMaterial,
   transferenciaMaterialFormSchema,
   Ubicacion,
+  useLoaders,
 } from '@/shared';
 import {
   CustomAutocomplete,
@@ -204,6 +205,14 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     watchedBodegaDestino,
     ubicacionDestinoPaging,
   ]);
+
+  const customLoader =
+    isLoadingUbicacionOrigen ||
+    isRefetchingUbicacionOrigen ||
+    isLoadingUbicacionDestino ||
+    isRefetchingUbicacionDestino;
+
+  useLoaders(customLoader);
 
   ///* columns --------------------
   const { crearMaterialColumns } = useColumnsProductosDisponibles();

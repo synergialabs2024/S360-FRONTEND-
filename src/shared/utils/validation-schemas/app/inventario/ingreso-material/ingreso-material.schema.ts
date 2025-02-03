@@ -1,15 +1,12 @@
 import * as yup from 'yup';
+import { fieldStateYupValidation } from '../../common';
 
 export const ingresoMaterialFormSchema = yup.object({
+  state: fieldStateYupValidation,
   observacion: yup
     .string()
     .typeError('El campo observacion es requerido')
     .required('El campo observacion es requerido'),
-
-  state: yup
-    .boolean()
-    .typeError('El campo state es requerido')
-    .required('El campo state es requerido'),
 
   bodega: yup
     .number()

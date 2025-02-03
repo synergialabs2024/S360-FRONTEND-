@@ -1,25 +1,22 @@
 import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   PermissionsEnum,
-  RecepcionMaterialEnumChoice,
+  InventarioEnumChoice,
   TABLE_CONSTANTS,
   useTableFilter,
   useTableServerSideFiltering,
+  SolicitudMaterial,
 } from '@/shared';
 import {
   CustomSearch,
   CustomTable,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
-import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
-import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useNavigate } from 'react-router';
-
-export const returnUrlRecepcionMaterialPage =
-  ROUTER_PATHS.inventario.RecepcionMaterialesNav;
+import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
+import { returnUrlRecepcionMaterialPage } from './RecepcionMaterialMainPage';
 
 export type RecepcionMaterialByStatePageProps = {
   state: string;
@@ -71,7 +68,7 @@ const RecepcionMaterialByStatePage: React.FC<
   ///* handlers
   const calcEnableActionsColumn = () => {
     hasPermission(PermissionsEnum.inventario_change_solicitudmaterial);
-    if (state === RecepcionMaterialEnumChoice.PENDIENTE) {
+    if (state === InventarioEnumChoice.PENDIENTE) {
       return true;
     }
     return false;

@@ -3,6 +3,7 @@ export * from './ingreso-material';
 export * from './egreso-material';
 export * from './modelo-inventario';
 export * from './movimiento-material';
+export * from './solicitud-devolucion';
 export * from './solicitud-material';
 export * from './transferencia-material';
 

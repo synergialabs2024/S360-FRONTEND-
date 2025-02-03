@@ -1,23 +1,22 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
+import { erpAPI } from '@/shared/axios/erp-api';
+import { useUiStore } from '@/store/ui';
+
 import {
   getUrlParams,
+  SolicitudMaterial,
+  SolicitudMaterialPaginatedRes,
   ToastWrapper,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared';
-import { handleAxiosError } from '@/shared/axios/axios.utils';
-import { erpAPI } from '@/shared/axios/erp-api';
-import {
-  SolicitudMaterial,
-  SolicitudMaterialPaginatedRes,
-} from '@/shared/interfaces/app/inventario/solicitud-material.ts';
-import { useUiStore } from '@/store/ui';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const { get, post, patch } = erpAPI();
 
 export enum solicitudMaterialTSQEnum {
-  SOLICITUDMATERIAL = 'solicitud-material',
   SOLICITUDMATERIALES = 'solicitud-materiales',
+  SOLICITUDMATERIAL = 'solicitud-material',
 }
 
 ///* tanStack query
@@ -27,7 +26,7 @@ export const useFetchSolicitudMaterial = ({
 }: UseFetchEnabledParams<GetSolicitudMaterialParams>) => {
   return useQuery({
     queryKey: [
-      solicitudMaterialTSQEnum.SOLICITUDMATERIAL,
+      solicitudMaterialTSQEnum.SOLICITUDMATERIALES,
       ...Object.values(params || {}),
     ],
     queryFn: () => getSolicitudMaterial(params),
@@ -62,7 +61,7 @@ export const useCreateSolicitudMaterial = <T>({
       createsolicitudMaterial(params),
     onSuccess: resp => {
       queryClient.invalidateQueries({
-        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL],
+        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIALES],
       });
       customOnSuccess && customOnSuccess(resp.data);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
@@ -103,7 +102,7 @@ export const useUpdatesolicitudMaterial = <T>({
       updatesolicitudMaterial(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL],
+        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIALES],
       });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&

@@ -14,13 +14,13 @@ import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-ma
 import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
 import { useAuthStore } from '@/store/auth';
 
-export type PreventaEsperaAgendaPageProps = {
+export type SolicitudMaterialStatePageProps = {
   state: string;
 };
 
-const SolicitudMaterialEsperaPage: React.FC<PreventaEsperaAgendaPageProps> = ({
-  state,
-}) => {
+const SolicitudMaterialEsperaPage: React.FC<
+  SolicitudMaterialStatePageProps
+> = ({ state }) => {
   const user = useAuthStore(s => s.user);
 
   // server side filters - colums table

@@ -17,6 +17,7 @@ import {
   gridSizeMdLg6,
   Ubicacion,
   ToastWrapper,
+  useLoaders,
 } from '@/shared';
 import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
 import {
@@ -109,6 +110,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
       producto: producto.id,
       producto_uuid: producto.uuid,
       cantidad: producto.cantidad,
+      cantidad_pedida: producto.cantidad,
       descripcion: producto.descripcion,
       nombre: producto.nombre,
       codigo: producto.codigo,
@@ -164,6 +166,9 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     isLoadingUbicaciones,
     isRefetchingUbicaciones,
   ]);
+
+  const customLoader = isLoadingUbicaciones || isRefetchingUbicaciones;
+  useLoaders(customLoader);
 
   ///* columns --------------------
   const { crearMaterialColumns } = useColumnsProductosDisponibles();

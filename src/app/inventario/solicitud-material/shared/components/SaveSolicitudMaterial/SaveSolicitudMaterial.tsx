@@ -27,7 +27,7 @@ import {
   CreatesolicitudMaterialParamsBase,
   useCreateSolicitudMaterial,
 } from '@/actions/app/inventario/solicitud-material';
-import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
+import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material';
 import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
 import { useAuthStore } from '@/store/auth';
 import {

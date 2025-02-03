@@ -8,7 +8,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material.ts';
+import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material';
 import ShowSolicitudMaterialModal from '@/app/inventario/solicitud-material/pages/modal/ShowSolicitudMaterialModal';
 
 export const useColumnsSolicitudMaterial = () => {

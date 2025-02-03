@@ -1,7 +1,7 @@
-import { ScrollableDialogProps } from '@/shared/components';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { returnUrlRecepcionMaterialPage } from '../tables/RecepcionMaterialByStatePage';
+
+import { ScrollableDialogProps } from '@/shared/components';
 import { returnUrlEgresoMaterialesPage } from '@/app/inventario/egreso-material/pages/tables/EgresoMaterialesPage';
 import { useRecepcionEgresoStore } from '@/store/app';
 import {
@@ -9,6 +9,7 @@ import {
   useCreateEgresoMaterial,
   useUpdateRecepcionMaterial,
 } from '@/actions/app';
+import { returnUrlRecepcionMaterialPage } from '../tables/RecepcionMaterialMainPage';
 
 export type RecepcionEgresoModalProps = {
   Arrays: any;

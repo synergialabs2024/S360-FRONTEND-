@@ -249,8 +249,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         <ScrollableDialogProps
           open={open}
           onClose={() => setOpen(false)}
-          confirmTextBtn="Aceptar"
-          onConfirm={() => setOpen(false)}
+          cancelTextBtn="Guardar cambios"
           title={modalTitle}
           contentNode={
             Arrays?.requiere_series ? (

@@ -689,20 +689,13 @@ export enum CodigoProductosEnumChoice {
   MINI_UPS = 'MINI UPS',
 }
 
-export enum RecepcionMaterialEnumChoice {
+export enum InventarioEnumChoice {
   PENDIENTE = 'PENDIENTE',
   APROBADO = 'APROBADO',
   RECHAZADO = 'RECHAZADO',
   CANCELADO = 'CANCELADO',
   FINALIZADO = 'FINALIZADO',
 }
-export const RECEPCION_MATERIAL_ARRAY_CHOICES = [
-  RecepcionMaterialEnumChoice.PENDIENTE,
-  RecepcionMaterialEnumChoice.APROBADO,
-  RecepcionMaterialEnumChoice.RECHAZADO,
-  RecepcionMaterialEnumChoice.CANCELADO,
-  RecepcionMaterialEnumChoice.FINALIZADO,
-];
 
 ///* ORDEN TRABAJO ==========================================
 export enum EstadoOrdenTrabajoEnumChoice {

@@ -11,8 +11,9 @@ export interface IngresoMaterialesPaginatedRes {
 export interface IngresoMaterial {
   id?: number;
   uuid?: string;
-  state: boolean;
+  secuencial?: string;
 
+  state: boolean;
   observacion: string;
   productos: UbicacionProducto[];
 
@@ -28,4 +29,7 @@ export interface IngresoMaterialSeries {
   series: string;
 }
 
-export type IngresoMaterialLimitData = Pick<IngresoMaterial, 'uuid' | 'id'>;
+export type IngresoMaterialLimitData = Pick<
+  IngresoMaterial,
+  'uuid' | 'id' | 'secuencial'
+>;
