@@ -21,6 +21,7 @@ export type ConfirmRejectCantelButtonsFormProps = {
   //
   confirmVariantBtn?: 'text' | 'contained' | 'outlined';
   cancelColorBtn?: ColorButtonType;
+  rejectColotBtn?: ColorButtonType;
 };
 
 const ConfirmRejectCantelButtonsForm: React.FC<
@@ -43,6 +44,7 @@ const ConfirmRejectCantelButtonsForm: React.FC<
 
   confirmVariantBtn = 'contained',
   cancelColorBtn = 'inherit',
+  rejectColotBtn = 'error',
 }) => {
   return (
     <Grid container spacing={1} sx={sxContainer} justifyContent="end" pt={6}>
@@ -62,7 +64,7 @@ const ConfirmRejectCantelButtonsForm: React.FC<
       {/* -------- REJECT --------  */}
       {showRejectBtn && (
         <Grid item>
-          <Button onClick={onReject} variant="text" color="error">
+          <Button onClick={onReject} variant="text" color={rejectColotBtn}>
             {rejectTextBtn}
           </Button>
         </Grid>

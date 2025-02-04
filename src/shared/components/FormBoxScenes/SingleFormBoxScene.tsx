@@ -2,7 +2,11 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 
 import { useIsMediaQuery } from '@/shared/hooks';
-import { GridSizeType, MaxWidthType } from '@/shared/interfaces';
+import {
+  ColorButtonType,
+  GridSizeType,
+  MaxWidthType,
+} from '@/shared/interfaces';
 import {
   ConfirmRejectCantelButtonsForm,
   CreateOrCancelButtonsForm,
@@ -29,6 +33,8 @@ export type SingleFormBoxSceneProps = {
   cancelTextBtn?: string;
   saveTextBtn?: string;
   rejectTextBtn?: string;
+  cancelColorBtn?: ColorButtonType;
+  rejectColotBtn?: ColorButtonType;
 };
 
 const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
@@ -44,6 +50,8 @@ const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
   cancelTextBtn = 'Cancelar',
   saveTextBtn = 'Guardar',
   rejectTextBtn = 'Rechazar',
+  cancelColorBtn = 'inherit',
+  rejectColotBtn = 'error',
 }) => {
   const isMobile = useIsMediaQuery('sm');
 
@@ -91,6 +99,8 @@ const SingleFormBoxScene: React.FC<SingleFormBoxSceneProps> = ({
                     cancelTextBtn={cancelTextBtn}
                     rejectTextBtn={rejectTextBtn}
                     confirmTextBtn={saveTextBtn}
+                    cancelColorBtn={cancelColorBtn}
+                    rejectColotBtn={rejectColotBtn}
                   />
                 ) : (
                   <CreateOrCancelButtonsForm
