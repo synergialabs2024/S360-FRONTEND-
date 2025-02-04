@@ -153,3 +153,9 @@ export const updateSaldo = async <T>({ id, data }: UpdateSaldoParams<T>) => {
 
   return patch<Saldo>(`/saldo/${id}/`, data, true);
 };
+
+// custom tipes --------------
+export type CreateSaldoClientePart = Pick<
+  Saldo,
+  'cliente' | 'monto' | 'linea_servicio' | 'descripcion'
+>;

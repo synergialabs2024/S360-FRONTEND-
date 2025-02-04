@@ -17,12 +17,12 @@ export interface Saldo {
   estado_saldo: EstadoSaldoEnumChoice;
   descripcion: string;
 
-  monto: string;
+  monto: string; // +/- ###.##
 
   fecha_consumo?: string;
 
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
 
   ///* fk
   rubro_origina?: number;

@@ -1,4 +1,6 @@
 import { Grid } from '@mui/material';
+import { useState } from 'react';
+import { FiPlus } from 'react-icons/fi';
 
 import { useFetchSaldos } from '@/actions/app';
 import {
@@ -9,7 +11,8 @@ import {
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
-import { CustomTable } from '@/shared/components';
+import { CustomSingleButton, CustomTable } from '@/shared/components';
+import { ClienteFibraCreateSaldoModal } from './custom';
 
 export type ClienteFibraSaldosTabProps = {
   serviceLine?: LineaServicio;
@@ -18,6 +21,9 @@ export type ClienteFibraSaldosTabProps = {
 const ClienteFibraSaldosTab: React.FC<ClienteFibraSaldosTabProps> = ({
   serviceLine,
 }) => {
+  ///* local state -------------------------
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
   ///* table -------------------------
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -55,7 +61,20 @@ const ClienteFibraSaldosTab: React.FC<ClienteFibraSaldosTabProps> = ({
 
   return (
     <>
-      <Grid item container xs={12}>
+      <Grid item container xs={12} spacing={3}>
+        <Grid item xs={12}>
+          <CustomSingleButton
+            label="SALDO"
+            color="primary"
+            variant="text"
+            startIcon={<FiPlus />}
+            onClick={() => {
+              setIsOpenModal(true);
+            }}
+            justifyContent="flex-end"
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <CustomTable<Saldo>
             columns={genericColumns}
@@ -80,6 +99,13 @@ const ClienteFibraSaldosTab: React.FC<ClienteFibraSaldosTabProps> = ({
           />
         </Grid>
       </Grid>
+
+      {/* ================= modal ================= */}
+      <ClienteFibraCreateSaldoModal
+        open={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        serviceLine={serviceLine!}
+      />
     </>
   );
 };
