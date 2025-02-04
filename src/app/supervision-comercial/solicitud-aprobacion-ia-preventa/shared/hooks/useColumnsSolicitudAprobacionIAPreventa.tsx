@@ -154,8 +154,13 @@ export const useColumnsSolicitudAprobacionIAPreventa = () => {
   const rechazadoColumns = useMemo<
     MRT_ColumnDef<SolicitudAprobacionIAPreventa>[]
   >(
-    () => [...columnsSolServicio, ...columnsBase01, ...columnsAudit],
-    [columnsBase01, columnsSolServicio, columnsAudit],
+    () => [
+      ...columnsSolServicio,
+      ...columnsBase01,
+      ...trazaModelColumns,
+      ...columnsAudit,
+    ],
+    [columnsSolServicio, columnsBase01, trazaModelColumns, columnsAudit],
   );
 
   return {
