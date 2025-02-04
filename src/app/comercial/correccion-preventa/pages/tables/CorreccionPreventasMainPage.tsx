@@ -35,8 +35,11 @@ const CorreccionPreventasMainPage: React.FC<
       >
         <Tab label={'REQUIERE CORRECCION'} value={1} {...a11yProps(1)} />
         <Tab label={'PREVENTAS CORREGIDAS'} value={2} {...a11yProps(2)} />
-
-        <Tab label={'PREVENTAS PASADAS 72H'} value={3} {...a11yProps(3)} />
+        <Tab
+          label={'PENDIENTES APROBACION MANUAL'}
+          value={3}
+          {...a11yProps(3)}
+        />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -51,7 +54,7 @@ const CorreccionPreventasMainPage: React.FC<
 
       <CustomTabPanel value={tabValue} index={3} ptGrid="0">
         <CorreccionPreventaByStatePage
-          state={EstadoCorreccionPreventaEnumChoice.EXPIRADO}
+          state={EstadoCorreccionPreventaEnumChoice.PENDIENTE_APROBACION_MANUAL}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>

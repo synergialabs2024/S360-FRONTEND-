@@ -390,11 +390,11 @@ export enum EstadoSolicitudMaterialEnumChoice {
 }
 
 export enum EstadoCorreccionPreventaEnumChoice {
-  EXPIRADO = 'EXPIRADO',
   CORREGIDO = 'CORREGIDO',
   FOTO_CEDULA_NO_ROSTRO = 'FOTO_CEDULA_NO_ROSTRO',
   FOTO_ACEPTACION_NO_ROSTRO = 'FOTO_ACEPTACION_NO_ROSTRO',
   ROSTROS_NO_COINCIDEN = 'ROSTROS_NO_COINCIDEN',
+  PENDIENTE_APROBACION_MANUAL = 'PENDIENTE APROBACION MANUAL',
 }
 
 // -----------------------------------------------
