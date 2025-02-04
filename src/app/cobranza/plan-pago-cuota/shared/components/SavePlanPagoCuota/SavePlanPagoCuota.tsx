@@ -125,17 +125,17 @@ const SavePlanPagoCuota: React.FC<SavePlanPagoCuotaProps> = ({
 
       <CustomAutocomplete<LineaServicio>
         label="Linea Servicio"
-        name="linea_servicio"
+        name="uuid"
         // options
         options={LineaServicioPagingRes?.data?.items || []}
-        valueKey="estado_linea"
+        valueKey="uuid"
         actualValueKey="id"
-        defaultValue={form.getValues().linea_servicio}
+        defaultValue={form.getValues().uuid}
         isLoadingData={isLoadingLineaServicio || isRefetchingLineaServicio}
         // vaidation
         control={form.control}
-        error={errors.linea_servicio}
-        helperText={errors.linea_servicio?.message}
+        error={errors.uuid}
+        helperText={errors.uuid?.message}
         size={gridSizeMdLg4}
       />
       <SelectArrayString

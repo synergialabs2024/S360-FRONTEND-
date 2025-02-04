@@ -336,6 +336,12 @@ export const ROUTER_PATHS = {
     ///* saldos
     saldos: 'saldos',
     saldosNav: '/cartera/saldos',
+
+    ///* promesas de pago
+    alquileres: 'alquileres',
+    alquileresCrear: 'alquileres/crear',
+    alquileresEditar: 'alquileres/editar/:uuid',
+    alquileresNav: '/cartera/alquileres',
   },
   /////* Cobranza ----------------
   cobranza: {

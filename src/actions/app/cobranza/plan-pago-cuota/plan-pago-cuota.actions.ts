@@ -65,7 +65,7 @@ export const useCreatePlanPagoCuota = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Ingreso Material creado correctamente',
+          customMessageToast || 'Plan Pago Cuota creado correctamente',
         );
     },
     onError: error => {
@@ -104,7 +104,7 @@ export const useUpdatePlanPagoCuota = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Ingreso Material actualizado correctamente',
+          customMessageToast || 'Plan Pago Cuota actualizado correctamente',
         );
     },
     onError: error => {

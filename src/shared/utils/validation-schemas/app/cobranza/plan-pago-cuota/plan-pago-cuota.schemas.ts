@@ -8,8 +8,4 @@ export const planPagoCuotaFormSchema = yup.object({
     .required('El campo total cuotas es requerido'),
   monto_total: yup.string().required('El campo monto total es requerido'),
   fecha_fin: yup.string().required('El campo fecha fin es requerido'),
-  linea_servicio: yup
-    .number()
-    .typeError('El campo linea servicio es requerido')
-    .required('El campo linea servicio es requerido'),
 });
