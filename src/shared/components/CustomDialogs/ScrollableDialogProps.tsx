@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
   Button,
   Dialog,
@@ -5,6 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   Typography,
 } from '@mui/material';
 
@@ -36,6 +38,12 @@ export interface ScrollableDialogPropsProps {
   customTitleNode?: React.ReactNode;
 
   disabledConfirmBtn?: boolean;
+
+  // 1 additional btn
+  additionalBtnLabel?: string;
+  additionalBtnColor?: ColorButtonType;
+  additionalBtnVariant?: ButtonVariantType;
+  onAdditionalBtn?: () => void;
 }
 
 const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
@@ -63,6 +71,12 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
   showCustomTitleNode = false,
   customTitleNode,
   disabledConfirmBtn = false,
+
+  // 1 additional btn
+  additionalBtnLabel,
+  additionalBtnColor = 'inherit',
+  additionalBtnVariant = 'text',
+  onAdditionalBtn,
 }) => {
   return (
     <>
@@ -98,6 +112,40 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
         <DialogActions>
           {showCustomActions ? (
             customActions
+          ) : additionalBtnLabel &&
+            additionalBtnColor &&
+            additionalBtnVariant &&
+            onAdditionalBtn ? (
+            <Grid container spacing={1} justifyContent="space-between">
+              <Grid item>
+                <Button
+                  onClick={onClose}
+                  variant={cancelVariantBtn}
+                  color={cancelColorBtn}
+                >
+                  {cancelTextBtn}
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button
+                  onClick={onAdditionalBtn}
+                  variant={additionalBtnVariant}
+                  color={additionalBtnColor}
+                >
+                  {additionalBtnLabel}
+                </Button>
+
+                <Button
+                  onClick={onConfirm}
+                  variant={confirmVariantBtn}
+                  color={confirmColorBtn}
+                  disabled={disabledConfirmBtn}
+                >
+                  {confirmTextBtn}
+                </Button>
+              </Grid>
+            </Grid>
           ) : (
             <>
               <Button
