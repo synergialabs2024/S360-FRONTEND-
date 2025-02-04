@@ -33,6 +33,8 @@ import { SingleImageModal } from '@/shared/components/ui';
 import { Grid } from '@mui/material';
 import { useGenericPATCH } from '@/actions/shared';
 import { hasExceededHours } from '@/shared/helpers/calculators/elapsed-hours-calculator.helpers';
+import { useState } from 'react';
+import RequestRecoordinacionPreventaTableBtn from '../tables/RequestRecoordinacionPreventaTableBtn';
 
 export interface SaveCorreccionProps {
   title: String;
@@ -45,6 +47,8 @@ export type SaveFormDataPreventa = CreatePreventaParamsBase &
   };
 
 const SaveCorreccion: React.FC<SaveCorreccionProps> = ({ title, preventa }) => {
+  ///* local state -------------
+  const [openModal, setOpenModal] = useState<boolean>(false);
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -203,6 +207,10 @@ const SaveCorreccion: React.FC<SaveCorreccionProps> = ({ title, preventa }) => {
       preventa?.estado_validacion_aceptacion?.toString()!
     ] || '';
 
+  const handleOpenRejected = () => {
+    setOpenModal(true);
+  };
+
   return (
     <SingleFormBoxScene
       titleNode={title}
@@ -215,6 +223,9 @@ const SaveCorreccion: React.FC<SaveCorreccionProps> = ({ title, preventa }) => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos por requeridos: ${keys}`);
       })}
+      onReject={() => handleOpenRejected()}
+      rejectColotBtn="secondary"
+      rejectTextBtn="Solicitar aprobacion manual"
     >
       <>
         <CustomTypoLabel
@@ -255,6 +266,14 @@ const SaveCorreccion: React.FC<SaveCorreccionProps> = ({ title, preventa }) => {
             </>
           )}
         </Grid>
+
+        {/* ============= modal ============= */}
+        <RequestRecoordinacionPreventaTableBtn
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          preventa={preventa!}
+          urlRedirect={returnUrlCorreccionPreventasPage}
+        />
 
         {/* ============= Corrección Docs ============= */}
         <DocsSaveCorreccion

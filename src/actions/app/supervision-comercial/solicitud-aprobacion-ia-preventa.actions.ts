@@ -196,3 +196,9 @@ export const updateSolicitudAprobacionIAPreventa = async <T>({
     true,
   );
 };
+
+///* action types ---------------
+export type CreateSolRecoordinacionAprobacionIAPreventa = Pick<
+  SolicitudAprobacionIAPreventa,
+  'descripcion'
+> & { preventa: number };

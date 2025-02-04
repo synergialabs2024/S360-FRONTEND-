@@ -1,1 +1,1 @@
-export * from './SaveSolicitudAprobacionIAPreventa';
+export * from './HandleApproveIAModal';
