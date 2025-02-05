@@ -14,7 +14,6 @@ import {
   IngresoMaterial,
   gridSizeMdLg6,
   Ubicacion,
-  Producto,
   solicitudMaterialFormSchema,
 } from '@/shared';
 import { returnUrlIngresoMaterialesPage } from '../inventario/ingreso-material/pages/tables/IngresoMaterialesPage';
@@ -29,7 +28,10 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import ProductosDisponiblesModal from '../inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
-import { useColumnsProductosDisponibles } from '../inventario/ingreso-material/shared/hooks';
+import {
+  ProductosDisponiblesTableType,
+  useColumnsProductosDisponibles,
+} from '../inventario/ingreso-material/shared/hooks';
 import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCreateSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
@@ -38,17 +40,6 @@ export interface SaveIngresoMaterialProps {
   title: string;
   ingresoMaterial?: IngresoMaterial;
 }
-
-export type ProductosDisponiblesTableType = Producto & {
-  usedQuantity: number;
-
-  containsSeries: boolean;
-  selectedSeries: string[];
-  savedSeries: string[];
-  cantidad?: number;
-  series?: any[];
-  productos?: string[];
-};
 
 type SaveFormData = CreateIngresoMaterialParamsBase & {};
 

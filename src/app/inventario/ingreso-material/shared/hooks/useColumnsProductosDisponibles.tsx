@@ -20,7 +20,7 @@ import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/mod
 
 export type ProductosDisponiblesTableType = Producto & {
   cantidad?: number;
-  cantidad_recibida?: number;
+  cantidad_pedida?: number;
   stock?: number;
   series?: any[];
   productos?: string[];
@@ -346,7 +346,7 @@ export const useColumnsProductosDisponibles = ({
           return (
             <TextField
               variant="outlined"
-              value={row.original.cantidad_recibida || ''}
+              value={row.original.cantidad_pedida || ''}
               type="number"
               disabled
             />

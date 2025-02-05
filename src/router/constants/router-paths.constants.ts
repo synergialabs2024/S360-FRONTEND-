@@ -711,6 +711,25 @@ export const ROUTER_PATHS = {
     modeloInventariosCrear: 'modelo-inventarios/crear',
     modeloInventariosEditar: 'modelo-inventarios/editar/:uuid',
     modeloInventariosNav: '/inventario/modelo-inventarios',
+
+    ///* solicitud material
+    solicitudTransferenciaMaterial: 'solicitud-transferencia-material',
+    solicitudTransferenciaMaterialCrear:
+      'solicitud-transferencia-material/crear',
+    solicitudTransferenciaMaterialEditar:
+      'solicitud-transferencia-material/editar/:uuid',
+    solicitudTransferenciaMaterialNav:
+      '/inventario/solicitud-transferencia-material',
+
+    ///* Recepcion solicitud material
+    recepcionSolicitudTransferenciaMateriales:
+      'recepcion-solicitud-transferencia-material',
+    recepcionSolicitudTransferenciaMaterialesCrear:
+      'recepcion-solicitud-transferencia-material/crear',
+    recepcionSolicitudTransferenciaMaterialesEditar:
+      'recepcion-solicitud-transferencia-material/editar/:uuid',
+    recepcionSolicitudTransferenciaMaterialesNav:
+      '/inventario/recepcion-solicitud-transferencia-material',
   },
   // // LOGISTICA =================================
   logistica: {
@@ -755,7 +774,7 @@ export const ROUTER_PATHS = {
     ontModelsNav: '/netconnect/ont-models',
   },
 
-  /////* Tecnico ----------------
+  /////* Tickets ----------------
   tickets: {
     root: 'tickets',
 

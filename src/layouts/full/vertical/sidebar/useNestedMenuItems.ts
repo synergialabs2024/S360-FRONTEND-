@@ -515,6 +515,19 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'solicitud-transferencia-material',
+              title: 'Solcitud de transferencia material',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'recepcion-solicitud-transferencia-material',
+              title: 'Recepcion solcitud de transferencia material',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario
+                .recepcionSolicitudTransferenciaMaterialesNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------
@@ -888,7 +901,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconPigMoney,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.COBRANZA_PLAN_PAGO_CUOTA, {
               id: 'plan-pago-cuota',
               title: 'Plan Pago Cuota',
               type: MenuItemType.ITEM,

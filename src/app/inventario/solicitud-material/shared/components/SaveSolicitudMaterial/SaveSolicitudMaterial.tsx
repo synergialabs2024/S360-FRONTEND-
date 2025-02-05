@@ -89,7 +89,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
     const mappedProductos = productosDisponibles.map(producto => ({
       id: producto.id,
       producto: producto.id,
-      cantidad_recibida: producto.cantidad,
+      cantidad_pedida: producto.cantidad,
       cantidad: producto.cantidad,
       descripcion: producto.descripcion,
       nombre: producto.nombre,

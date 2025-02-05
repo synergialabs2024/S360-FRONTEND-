@@ -5,6 +5,7 @@ export * from './modelo-inventario';
 export * from './movimiento-material';
 export * from './solicitud-devolucion';
 export * from './solicitud-material';
+export * from './solicitud-transferencia-material';
 export * from './transferencia-material';
 
 export * from './categoria-producto.schema';

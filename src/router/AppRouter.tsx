@@ -1299,6 +1299,38 @@ const CreateSolicitudDevolucionPages = Loadable(
       ),
   ),
 );
+const SolicitudTransferenciaMaterialMainPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/solicitud-transferencia-material/pages/tables/SolicitudTransferenciaMaterialMainPages'
+      ),
+  ),
+);
+const CreateSolicitudTransferenciaMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/solicitud-transferencia-material/pages/forms/CreateSolicitudTransferenciaMaterialPage'
+      ),
+  ),
+);
+const RecepcionSolicitudTransferenciaMaterialMainPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-transferencia/pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages'
+      ),
+  ),
+);
+const CreateRecepcionSolicitudTransferenciaMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-transferencia/pages/forms/CreateRecepcionSolicitudTransferenciaMaterialPage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2760,6 +2792,28 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.solicitudDevolucionCrear,
             element: <CreateSolicitudDevolucionPages />,
+          },
+
+          ///* Solicitud Transferencia Material
+          {
+            path: ROUTER_PATHS.inventario.solicitudTransferenciaMaterial,
+            element: <SolicitudTransferenciaMaterialMainPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialCrear,
+            element: <CreateSolicitudTransferenciaMaterialPage />,
+          },
+
+          ///* Recepcion Solicitud Transferencia Material
+          {
+            path: ROUTER_PATHS.inventario
+              .recepcionSolicitudTransferenciaMateriales,
+            element: <RecepcionSolicitudTransferenciaMaterialMainPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario
+              .recepcionSolicitudTransferenciaMaterialesEditar,
+            element: <CreateRecepcionSolicitudTransferenciaMaterialPage />,
           },
         ],
       },

@@ -7,6 +7,7 @@ export * from './movimiento-material';
 export * from './recepcion-material';
 export * from './solicitud-devolucion';
 export * from './solicitud-material';
+export * from './solicitud-transferencia-material';
 export * from './transferencia-material';
 export * from './producto.interface';
 export * from './ubicacion-producto.interface';

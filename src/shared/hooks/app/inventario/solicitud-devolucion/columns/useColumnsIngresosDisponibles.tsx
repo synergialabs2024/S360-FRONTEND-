@@ -12,7 +12,6 @@ import { SeriesIngresoModal } from '../modal';
 
 export type IngresosDisponiblesTableType = IngresoMaterial & {
   cantidad?: number;
-  cantidad_recibida?: number;
   cantidad_pedida?: number;
   requiere_series?: boolean;
   codigo?: string;

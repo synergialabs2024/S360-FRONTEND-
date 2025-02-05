@@ -41,7 +41,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
   const {
     pagination,
     globalFilter,
-    //searchTerm,
+    searchTerm,
     setPagination,
     onChangeFilter,
   } = useTableFilter();
@@ -64,6 +64,7 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
+      codigo: searchTerm,
 
       ...filterObject,
       categoria_uuid: selectedCategoria,

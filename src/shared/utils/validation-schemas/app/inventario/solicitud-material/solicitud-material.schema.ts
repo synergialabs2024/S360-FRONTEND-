@@ -5,8 +5,8 @@ export const solicitudMaterialFormSchema = yup.object({
   state: fieldStateYupValidation,
   observacion: yup
     .string()
-    .typeError('El campo centro costo es requerido')
-    .required('El campo centro costo es requerido'),
+    .typeError('El campo observacion es requerido')
+    .required('El campo observacion es requerido'),
 
   bodega: yup
     .number()

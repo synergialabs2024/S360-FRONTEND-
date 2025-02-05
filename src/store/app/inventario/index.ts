@@ -1,3 +1,4 @@
+export * from './recepcion-transferencia';
 export * from './solicitud-devolucion';
 
 export * from './generic-inventory-keys.interface';

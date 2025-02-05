@@ -77,6 +77,7 @@ const PaisesPage: React.FC<PaisesPageProps> = () => {
       page: pageIndex + 1,
       page_size: pageSize,
       name: searchTerm,
+
       ...filterObject,
       filterByState: false,
     },
