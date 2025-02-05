@@ -3,25 +3,18 @@ import { IconBrandCodesandbox } from '@tabler/icons-react';
 import { Grid, IconButton } from '@mui/material';
 
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { IngresoMaterial } from '@/shared';
+import { IngresoMaterial, useColumnsProductosDisponibles } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
-import { useColumnsUbicacionProductosDisponibles } from '../../shared/hooks';
-import { useColumnsProductosDisponibles } from '@/app/inventario/ingreso-material/shared/hooks';
 
 export type ShowSeriesModalProps = {
   Arrays: any;
-  productoBoolean: boolean;
 };
 
-const ShowSeriesModal: React.FC<ShowSeriesModalProps> = ({
-  Arrays = [],
-  productoBoolean,
-}) => {
+const ShowSeriesModal: React.FC<ShowSeriesModalProps> = ({ Arrays = [] }) => {
   //* State local
   const [open, setOpen] = useState(false);
 
   ///* columns
-  const { seriesEgresoColumns } = useColumnsUbicacionProductosDisponibles();
   const { seriesIngresoColumns } = useColumnsProductosDisponibles();
 
   const Section = () => (
@@ -29,9 +22,7 @@ const ShowSeriesModal: React.FC<ShowSeriesModalProps> = ({
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
           <SimpleTable<IngresoMaterial>
-            columns={
-              productoBoolean ? seriesIngresoColumns : seriesEgresoColumns
-            }
+            columns={seriesIngresoColumns}
             data={Arrays || []}
             isLoading={false}
             centerColumns={true}

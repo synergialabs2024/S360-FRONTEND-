@@ -5,9 +5,12 @@ import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
 import {
+  ProductosDisponiblesModal,
+  ProductosDisponiblesTableType,
   ToastWrapper,
   getKeysFormErrorsMessage,
   solicitudMaterialFormSchema,
+  useColumnsProductosDisponibles,
 } from '@/shared';
 
 import {
@@ -28,12 +31,7 @@ import {
   useCreateSolicitudMaterial,
 } from '@/actions/app/inventario/solicitud-material';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material';
-import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
 import { useAuthStore } from '@/store/auth';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '@/app/inventario/ingreso-material/shared/hooks';
 
 export interface SaveSolicitudMaterialProps {
   title: string;

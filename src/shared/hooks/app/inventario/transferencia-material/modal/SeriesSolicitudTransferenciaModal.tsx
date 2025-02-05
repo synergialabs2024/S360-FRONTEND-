@@ -2,7 +2,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, Grid, IconButton, TextField } from '@mui/material';
 
-import { IngresoMaterialSeries, Producto } from '@/shared/interfaces';
+import { Producto } from '@/shared/interfaces';
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import { ScrollableDialogProps } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
@@ -13,6 +13,7 @@ import {
   IconBrandCodesandbox,
   IconTrash,
 } from '@tabler/icons-react';
+import { MaterialSeries } from '@/shared/hooks/app/inventario/modals/SeriesProductoModal';
 
 export type SeriesSolicitudTranferenciaModalProps = {
   Arrays: any;
@@ -168,7 +169,7 @@ const SeriesSolicitudTranferenciaModal: React.FC<
 
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
-          <SimpleTable<IngresoMaterialSeries>
+          <SimpleTable<MaterialSeries>
             columns={columns}
             data={
               data.map(serie => ({

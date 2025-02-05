@@ -1,5 +1,4 @@
-import { ProductosDisponiblesTableType } from '@/app/inventario/ingreso-material/shared/hooks';
-import { ToastWrapper } from '@/shared';
+import { ProductosDisponiblesTableType, ToastWrapper } from '@/shared';
 import { create } from 'zustand';
 
 export enum ProductosDisponiblesStoreKey {

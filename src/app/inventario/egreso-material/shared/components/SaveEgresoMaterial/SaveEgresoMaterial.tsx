@@ -8,17 +8,22 @@ import {
   CreateEgresoMaterialParamsBase,
   useCreateEgresoMaterial,
   useFetchBodegas,
+  useFetchMotivoEgreso,
   useFetchUbicacions,
 } from '@/actions/app';
 import {
   Bodega,
   EgresoMaterial,
   egresoMaterialFormSchema,
-  gridSizeMdLg6,
   Ubicacion,
   ToastWrapper,
   PermissionsEnum,
   useLoaders,
+  ProductosDisponiblesModal,
+  useColumnsProductosDisponibles,
+  ProductosDisponiblesTableType,
+  gridSizeMdLg4,
+  MotivoEgreso,
 } from '@/shared';
 import { returnUrlEgresoMaterialesPage } from '../../../pages/tables/EgresoMaterialesPage';
 import {
@@ -34,11 +39,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useProductosStore } from '@/store/app';
 
 import { useCheckPermission } from '@/shared/hooks/auth';
-import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '@/app/inventario/ingreso-material/shared/hooks';
 
 export interface SaveEgresoMaterialProps {
   title: string;
@@ -96,6 +96,15 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     params: {
       page_size: 1200,
       bodega: watchedBodega!,
+    },
+  });
+  const {
+    data: motivoEgresoPaging,
+    isLoading: isLoadingMotivoEgreso,
+    isRefetching: isRefetchingMotivoEgreso,
+  } = useFetchMotivoEgreso({
+    params: {
+      page_size: 1200,
     },
   });
 
@@ -199,7 +208,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
           form.setValue('ubicacion', '' as any);
           productosEnviar([]);
         }}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
       <CustomAutocomplete<Ubicacion>
         label="Ubicacion"
@@ -215,11 +224,27 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
         control={form.control}
         error={errors.ubicacion as any}
         helperText={errors.ubicacion?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
         onChangeRawValue={row => {
           setUUIDUbicacion(row?.uuid);
           productosEnviar([]);
         }}
+      />
+      <CustomAutocomplete<MotivoEgreso>
+        label="Motivo Egreso"
+        name="motivo_egreso"
+        defaultValue={form.getValues().motivo_egreso}
+        // options
+        valueKey="nombre"
+        actualValueKey="id"
+        options={motivoEgresoPaging?.data.items || []}
+        isLoadingData={isLoadingMotivoEgreso || isRefetchingMotivoEgreso}
+        disableClearable
+        // errors
+        control={form.control}
+        error={errors.motivo_egreso as any}
+        helperText={errors.motivo_egreso?.message}
+        size={gridSizeMdLg4}
       />
       <CustomTextArea
         label="Observación"

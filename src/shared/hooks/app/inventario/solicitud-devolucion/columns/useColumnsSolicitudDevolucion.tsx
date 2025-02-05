@@ -9,7 +9,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
+import { ShowSeriesModal } from '../../modals';
 
 export const useColumnsSolicitudDevolucion = () => {
   const solicitudDevolucionBaseColumns01 = useMemo<
@@ -28,12 +28,7 @@ export const useColumnsSolicitudDevolucion = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return (
-            <ShowSeriesModal
-              productoBoolean={true}
-              Arrays={row.original.productos}
-            />
-          );
+          return <ShowSeriesModal Arrays={row.original.productos} />;
         },
       },
       {

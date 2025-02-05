@@ -9,7 +9,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
+import { ShowSeriesModal } from '../modals';
 
 export const useColumnsEgresoMaterial = () => {
   const egresoProductoBaseColumns = useMemo<MRT_ColumnDef<EgresoMaterial>[]>(
@@ -26,12 +26,7 @@ export const useColumnsEgresoMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return (
-            <ShowSeriesModal
-              productoBoolean={true}
-              Arrays={row.original.productos}
-            />
-          );
+          return <ShowSeriesModal Arrays={row.original.productos} />;
         },
       },
     ],
@@ -70,6 +65,13 @@ export const useColumnsEgresoMaterial = () => {
         header: 'UBICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
+      },
+      {
+        accessorKey: 'motivo_egreso__name',
+        header: 'EGRESO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['motivo_egreso_data', 'nombre']),
       },
     ],
     [],

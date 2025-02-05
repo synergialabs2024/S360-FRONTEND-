@@ -21,6 +21,7 @@ import {
   Ubicacion,
   useLoaders,
   useColumnsTransferenciaMaterial,
+  ProductosDisponiblesTableType,
 } from '@/shared';
 import {
   CustomAutocomplete,
@@ -32,8 +33,7 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { useProductosStore } from '@/store/app';
-import { ProductosDisponiblesTableType } from '@/app/inventario/ingreso-material/shared/hooks';
-import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
+import ProductosDisponiblesModal from '@/shared/hooks/app/inventario/modals/ProductosDisponiblesModal';
 import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
 import RecepcionTransferenciaModal from '@/shared/hooks/app/inventario/transferencia-material/modal/RecepcionTransferenciaModal';
 

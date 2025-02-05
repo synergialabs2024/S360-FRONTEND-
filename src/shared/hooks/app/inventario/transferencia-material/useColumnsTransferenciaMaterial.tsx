@@ -12,12 +12,12 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { ProductosDisponiblesTableType } from '@/app/inventario/ingreso-material/shared/hooks';
 import { TextField } from '@mui/material';
 import { ProductosDisponiblesStoreKey, useProductosStore } from '@/store/app';
 import { IoMdTrash } from 'react-icons/io';
-import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
 import SeriesSolicitudTranferenciaModal from './modal/SeriesSolicitudTransferenciaModal';
+import { ProductosDisponiblesTableType } from '../useColumnsProductosDisponibles';
+import { ShowSeriesModal } from '../modals';
 
 export const useColumnsTransferenciaMaterial = () => {
   ///* global state --------------------
@@ -70,12 +70,7 @@ export const useColumnsTransferenciaMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
-          return (
-            <ShowSeriesModal
-              productoBoolean={true}
-              Arrays={row.original.productos}
-            />
-          );
+          return <ShowSeriesModal Arrays={row.original.productos} />;
         },
       },
     ],
@@ -132,6 +127,13 @@ export const useColumnsTransferenciaMaterial = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ubicacion_destino_data', 'nombre']),
+      },
+      {
+        accessorKey: 'motivo_transferencia__name',
+        header: 'MOTIVO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['motivo_transferencia_data', 'nombre']),
       },
     ],
     [],

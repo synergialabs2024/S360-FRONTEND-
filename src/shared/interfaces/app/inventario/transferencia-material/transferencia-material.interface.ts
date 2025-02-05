@@ -25,6 +25,7 @@ export interface TransferenciaMaterial {
   ubicacion_origen: number;
   bodega_destino: number;
   ubicacion_destino: number;
+  motivo_transferencia?: number;
 
   producto_data?: Producto;
   bodega_origen_data?: Bodega;

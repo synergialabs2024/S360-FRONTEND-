@@ -1,10 +1,17 @@
-import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
-import { ToastWrapper } from '@/shared';
+import { ToastWrapper, UbicacionProducto } from '@/shared';
 import { create } from 'zustand';
 
 export enum UbicacionProductosDisponiblesStoreKey {
   ubicacionProductosDisponibles = 'ubicacionProductosDisponibles',
 }
+
+export type UbicacionProductosDisponiblesTableType = UbicacionProducto & {
+  cantidad?: number;
+  series?: any[];
+  serie?: any[];
+  productos?: string[];
+  categoria_data?: string[];
+};
 
 export interface UbicacionProductosDisponiblesState {
   ubicacionProductosDisponibles: UbicacionProductosDisponiblesTableType[];

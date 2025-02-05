@@ -27,4 +27,8 @@ export const transferenciaMaterialFormSchema = yup.object({
     .number()
     .typeError('El campo ubicacion destino es requerido')
     .nullable(),
+  motivo_transferencia: yup
+    .number()
+    .typeError('El campo motivo transferencia es requerido')
+    .nullable(),
 });

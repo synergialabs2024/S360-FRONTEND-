@@ -20,6 +20,9 @@ import {
   solicitudTransferenciaMaterialFormSchema,
   Ubicacion,
   useLoaders,
+  ProductosDisponiblesModal,
+  useColumnsProductosDisponibles,
+  ProductosDisponiblesTableType,
 } from '@/shared';
 import {
   CustomAutocomplete,
@@ -31,11 +34,7 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import { useProductosStore } from '@/store/app';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '@/app/inventario/ingreso-material/shared/hooks';
-import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
+
 import { returnUrlSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/SolicitudTransferenciaMaterialMainPages';
 
 export interface SaveSolicitudTransferenciaMaterialProps {

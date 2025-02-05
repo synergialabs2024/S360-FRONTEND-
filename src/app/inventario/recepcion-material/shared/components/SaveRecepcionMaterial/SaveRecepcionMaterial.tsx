@@ -13,10 +13,13 @@ import {
   Bodega,
   gridSizeMdLg6,
   PermissionsEnum,
+  ProductosDisponiblesModal,
+  ProductosDisponiblesTableType,
   RecepcionMaterial,
   solicitudMaterialFormSchema,
   ToastWrapper,
   Ubicacion,
+  useColumnsProductosDisponibles,
 } from '@/shared';
 import {
   CustomAutocomplete,
@@ -30,12 +33,8 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useProductosStore } from '@/store/app';
 import RecepcionEgresoModal from '../../../pages/modal/RecepcionEgresoModal';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '@/app/inventario/ingreso-material/shared/hooks';
+
 import { FiPlus } from 'react-icons/fi';
-import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
 import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
 
 export interface SaveRecepcionMaterialProps {

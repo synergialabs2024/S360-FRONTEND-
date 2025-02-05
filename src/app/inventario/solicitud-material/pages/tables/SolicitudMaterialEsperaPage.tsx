@@ -1,6 +1,7 @@
 import {
   Preventa,
   TABLE_CONSTANTS,
+  useColumnsSolicitudMaterial,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -11,7 +12,6 @@ import {
 } from '@/shared/components';
 
 import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
-import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
 import { useAuthStore } from '@/store/auth';
 
 export type SolicitudMaterialStatePageProps = {

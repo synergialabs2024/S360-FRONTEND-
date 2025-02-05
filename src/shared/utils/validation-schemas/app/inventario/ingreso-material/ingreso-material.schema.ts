@@ -18,4 +18,9 @@ export const ingresoMaterialFormSchema = yup.object({
     .typeError('El campo ubicacion es requerido')
     .optional()
     .nullable(),
+  motivo_ingreso: yup
+    .number()
+    .typeError('El campo motivo ingreso es requerido')
+    .optional()
+    .nullable(),
 });

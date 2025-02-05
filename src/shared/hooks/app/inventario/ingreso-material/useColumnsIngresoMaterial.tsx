@@ -9,7 +9,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import ShowSeriesModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesModal';
+import { ShowSeriesModal } from '../modals';
 
 export const useColumnsIngresoMaterial = () => {
   const ingresoProductoBaseColumns = useMemo<MRT_ColumnDef<IngresoMaterial>[]>(
@@ -26,12 +26,7 @@ export const useColumnsIngresoMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return (
-            <ShowSeriesModal
-              productoBoolean={true}
-              Arrays={row.original.productos}
-            />
-          );
+          return <ShowSeriesModal Arrays={row.original.productos} />;
         },
       },
     ],
@@ -72,6 +67,13 @@ export const useColumnsIngresoMaterial = () => {
         header: 'UBICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
+      },
+      {
+        accessorKey: 'motivo_ingreso__name',
+        header: 'MOTIVO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['motivo_ingreso_data', 'nombre']),
       },
     ],
     [],

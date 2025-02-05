@@ -1,11 +1,9 @@
 import { create } from 'zustand';
-import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
+import { ProductosDisponiblesTableType } from '@/shared';
 
 export interface RecepcionEgresoState {
-  recepcionEgresos: UbicacionProductosDisponiblesTableType[];
-  setRecepcionEgresos: (
-    items: UbicacionProductosDisponiblesTableType[],
-  ) => void;
+  recepcionEgresos: ProductosDisponiblesTableType[];
+  setRecepcionEgresos: (items: ProductosDisponiblesTableType[]) => void;
 }
 
 export const useRecepcionEgresoStore = create<RecepcionEgresoState>()(set => ({

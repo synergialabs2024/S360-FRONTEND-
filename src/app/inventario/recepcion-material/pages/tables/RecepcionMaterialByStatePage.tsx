@@ -6,6 +6,7 @@ import {
   useTableFilter,
   useTableServerSideFiltering,
   SolicitudMaterial,
+  useColumnsSolicitudMaterial,
 } from '@/shared';
 import {
   CustomSearch,
@@ -15,7 +16,6 @@ import {
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useNavigate } from 'react-router';
-import { useColumnsSolicitudMaterial } from '@/shared/hooks/app/inventario/useColumnsSolicitudMaterial';
 import { returnUrlRecepcionMaterialPage } from './RecepcionMaterialMainPage';
 
 export type RecepcionMaterialByStatePageProps = {

@@ -3,12 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button, Grid, IconButton } from '@mui/material';
 
 import { ScrollableDialogProps } from '@/shared/components';
-import { IngresoMaterialSeries } from '@/shared/interfaces';
 import { IconBrandCodesandbox, IconTrash } from '@tabler/icons-react';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import { IngresosDisponiblesTableType } from '../columns';
+import { MaterialSeries } from '@/shared/hooks/app/inventario/modals/SeriesProductoModal';
 
 export type SeriesIngresoModalProps = {
   Arrays: any;
@@ -74,7 +74,7 @@ const SeriesIngresoModal: React.FC<SeriesIngresoModalProps> = ({
     <>
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
-          <SimpleTable<IngresoMaterialSeries>
+          <SimpleTable<MaterialSeries>
             columns={columns}
             data={
               data.map(serie => ({

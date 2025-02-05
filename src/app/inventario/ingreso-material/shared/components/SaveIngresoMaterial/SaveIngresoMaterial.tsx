@@ -8,18 +8,22 @@ import {
   CreateIngresoMaterialParamsBase,
   useCreateIngresoMaterial,
   useFetchBodegas,
+  useFetchMotivoIngreso,
   useFetchUbicacions,
 } from '@/actions/app';
 import {
   Bodega,
   IngresoMaterial,
   ingresoMaterialFormSchema,
-  gridSizeMdLg6,
   Ubicacion,
   ToastWrapper,
   useLoaders,
+  ProductosDisponiblesModal,
+  MotivoIngreso,
+  useColumnsProductosDisponibles,
+  ProductosDisponiblesTableType,
+  gridSizeMdLg4,
 } from '@/shared';
-import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
 import {
   CustomAutocomplete,
   CustomMinimalTable,
@@ -31,11 +35,7 @@ import {
 } from '@/shared/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useProductosStore } from '@/store/app';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '../../hooks';
-import ProductosDisponiblesModal from '../../../pages/modal/ProductosDisponiblesModal';
+import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
 
 export interface SaveIngresoMaterialProps {
   title: string;
@@ -91,6 +91,16 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     params: {
       page_size: 1200,
       bodega: watchedBodega!,
+    },
+  });
+
+  const {
+    data: motivoIngresoPaging,
+    isLoading: isLoadingMotivoIngreso,
+    isRefetching: isRefetchingMotivoIngreso,
+  } = useFetchMotivoIngreso({
+    params: {
+      page_size: 1200,
     },
   });
 
@@ -196,7 +206,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
           form.setValue('ubicacion', '' as any);
           productosEnviar([]);
         }}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
       <CustomAutocomplete<Ubicacion>
         label="Ubicacion"
@@ -212,12 +222,29 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
         control={form.control}
         error={errors.ubicacion as any}
         helperText={errors.ubicacion?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
         onChangeRawValue={row => {
           setUUIDUbicacion(row?.uuid);
           productosEnviar([]);
         }}
       />
+      <CustomAutocomplete<MotivoIngreso>
+        label="Motivo Ingreso"
+        name="motivo_ingreso"
+        defaultValue={form.getValues().motivo_ingreso}
+        // options
+        valueKey="nombre"
+        actualValueKey="id"
+        options={motivoIngresoPaging?.data.items || []}
+        isLoadingData={isLoadingMotivoIngreso || isRefetchingMotivoIngreso}
+        disableClearable
+        // errors
+        control={form.control}
+        error={errors.motivo_ingreso as any}
+        helperText={errors.motivo_ingreso?.message}
+        size={gridSizeMdLg4}
+      />
+
       <CustomTextArea
         label="Observación"
         name="observacion"

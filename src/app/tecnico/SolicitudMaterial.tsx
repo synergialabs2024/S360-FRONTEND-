@@ -15,6 +15,9 @@ import {
   gridSizeMdLg6,
   Ubicacion,
   solicitudMaterialFormSchema,
+  ProductosDisponiblesModal,
+  useColumnsProductosDisponibles,
+  ProductosDisponiblesTableType,
 } from '@/shared';
 import { returnUrlIngresoMaterialesPage } from '../inventario/ingreso-material/pages/tables/IngresoMaterialesPage';
 import {
@@ -27,13 +30,8 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import ProductosDisponiblesModal from '../inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '../inventario/ingreso-material/shared/hooks';
-import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { useCreateSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 
 export interface SaveIngresoMaterialProps {

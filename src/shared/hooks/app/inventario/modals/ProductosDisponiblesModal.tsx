@@ -7,11 +7,11 @@ import {
   gridSizeMdLg6,
   Producto,
   ToastWrapper,
+  useColumnsProductosDisponibles,
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
-import { useColumnsProductosDisponibles } from '../../shared/hooks';
 import {
   CustomAutocompleteNoForm,
   CustomSearch,

@@ -9,15 +9,20 @@ import {
   CreateTransferenciaMaterialParamsBase,
   useCreateTransferenciaMaterial,
   useFetchBodegas,
+  useFetchMotivoTransferencia,
   useFetchUbicacions,
 } from '@/actions/app';
 import {
   Bodega,
-  gridSizeMdLg6,
+  gridSizeMdLg4,
+  MotivoTransferencia,
+  ProductosDisponiblesModal,
+  ProductosDisponiblesTableType,
   ToastWrapper,
   TransferenciaMaterial,
   transferenciaMaterialFormSchema,
   Ubicacion,
+  useColumnsProductosDisponibles,
   useLoaders,
 } from '@/shared';
 import {
@@ -31,11 +36,6 @@ import {
 } from '@/shared/components';
 import { returnUrlTransferenciaMaterialesPage } from '../../../pages/tables/TransferenciaMaterialPage';
 import { useProductosStore } from '@/store/app';
-import {
-  ProductosDisponiblesTableType,
-  useColumnsProductosDisponibles,
-} from '@/app/inventario/ingreso-material/shared/hooks';
-import ProductosDisponiblesModal from '@/app/inventario/ingreso-material/pages/modal/ProductosDisponiblesModal';
 
 export interface SaveTransferenciaMaterialProps {
   title: string;
@@ -115,6 +115,15 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     params: {
       page_size: 1200,
       bodega: watchedBodegaDestino!,
+    },
+  });
+  const {
+    data: motivoTransferenciaPaging,
+    isLoading: isLoadingMotivoTransferencia,
+    isRefetching: isRefetchingMotivoTransferencia,
+  } = useFetchMotivoTransferencia({
+    params: {
+      page_size: 1200,
     },
   });
 
@@ -241,7 +250,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
           form.setValue('ubicacion_origen', '' as any);
           productosEnviar([]);
         }}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
       <CustomAutocomplete<Bodega>
         label="Bodega Destino"
@@ -261,7 +270,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
           form.setValue('ubicacion_destino', '' as any);
           productosEnviar([]);
         }}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
       <CustomAutocomplete<Ubicacion>
         label="Ubicacion Origen"
@@ -277,7 +286,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         control={form.control}
         error={errors.ubicacion_origen as any}
         helperText={errors.ubicacion_origen?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
         onChangeRawValue={value => {
           setUUIDUbicacion(value?.uuid);
           form.setValue('ubicacion_origen', Number(value?.id));
@@ -307,11 +316,29 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         control={form.control}
         error={errors.ubicacion_destino as any}
         helperText={errors.ubicacion_destino?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
         onChangeRawValue={value => {
           form.setValue('ubicacion_destino', Number(value?.id));
           productosEnviar([]);
         }}
+      />
+      <CustomAutocomplete<MotivoTransferencia>
+        label="Motivo Egreso"
+        name="motivo_transferencia"
+        defaultValue={form.getValues().motivo_transferencia}
+        // options
+        valueKey="nombre"
+        actualValueKey="id"
+        options={motivoTransferenciaPaging?.data.items || []}
+        isLoadingData={
+          isLoadingMotivoTransferencia || isRefetchingMotivoTransferencia
+        }
+        disableClearable
+        // errors
+        control={form.control}
+        error={errors.motivo_transferencia as any}
+        helperText={errors.motivo_transferencia?.message}
+        size={gridSizeMdLg4}
       />
       <CustomTextArea
         label="Observación"

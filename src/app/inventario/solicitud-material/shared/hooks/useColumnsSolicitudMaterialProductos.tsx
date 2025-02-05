@@ -4,13 +4,17 @@ import { useCallback, useMemo } from 'react';
 import { IoMdTrash } from 'react-icons/io';
 import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 
-import { emptyCellNested, emptyCellOneLevel, TABLE_CONSTANTS } from '@/shared';
+import {
+  emptyCellNested,
+  emptyCellOneLevel,
+  ProductosDisponiblesTableType,
+  TABLE_CONSTANTS,
+} from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 import {
   ProductosDisponiblesStoreKey,
   useProductosStore,
 } from '@/store/app/inventario/productos-disponible.store';
-import { ProductosDisponiblesTableType } from '@/app/inventario/ingreso-material/shared/hooks';
 
 type UseColumnsEquiposSolicitudMaterial = {
   showActionColumn?: boolean;

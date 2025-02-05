@@ -19,6 +19,7 @@ export interface EgresoMaterial {
   ///* fk
   bodega: number;
   ubicacion: number;
+  motivo_egreso: number;
 
   created_at?: string;
   modified_at?: string;

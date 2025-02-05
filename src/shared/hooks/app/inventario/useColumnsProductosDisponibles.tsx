@@ -8,6 +8,7 @@ import {
   emptyCellNested,
   emptyCellOneLevel,
   Producto,
+  SeriesProductoModal,
   TABLE_CONSTANTS,
 } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
@@ -15,7 +16,6 @@ import {
   ProductosDisponiblesStoreKey,
   useProductosStore,
 } from '@/store/app/inventario/productos-disponible.store';
-import SeriesProductoModal from '../../pages/modal/SeriesProductoModal';
 import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesProductosModal';
 
 export type ProductosDisponiblesTableType = Producto & {

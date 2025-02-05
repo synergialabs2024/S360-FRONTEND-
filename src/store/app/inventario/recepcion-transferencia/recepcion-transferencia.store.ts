@@ -1,11 +1,9 @@
+import { ProductosDisponiblesTableType } from '@/shared';
 import { create } from 'zustand';
-import { UbicacionProductosDisponiblesTableType } from '@/app/inventario/egreso-material/pages/modal/UbicacionProductosDisponiblesModal';
 
 export interface RecepcionTransferenciaState {
-  recepcionTransferencias: UbicacionProductosDisponiblesTableType[];
-  setRecepcionTransferencias: (
-    items: UbicacionProductosDisponiblesTableType[],
-  ) => void;
+  recepcionTransferencias: ProductosDisponiblesTableType[];
+  setRecepcionTransferencias: (items: ProductosDisponiblesTableType[]) => void;
 }
 
 export const useRecepcionTransferenciaStore =

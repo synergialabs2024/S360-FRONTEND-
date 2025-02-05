@@ -6,11 +6,11 @@ import { IconBrandCodesandbox } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useColumnsSolicitudMaterialProductos } from '../../shared/hooks/useColumnsSolicitudMaterialProductos';
 
-export type ShowSeriesModalProps = {
+export type ShowSeriesModalMaterialProps = {
   Arrays: any;
 };
 
-const ShowSolicitudMaterialModal: React.FC<ShowSeriesModalProps> = ({
+const ShowSolicitudMaterialModal: React.FC<ShowSeriesModalMaterialProps> = ({
   Arrays = [],
 }) => {
   //* State local

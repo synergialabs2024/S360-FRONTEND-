@@ -20,13 +20,10 @@ export interface IngresoMaterial {
   ///* fk
   bodega: number;
   ubicacion: number;
+  motivo_ingreso: number;
 
   created_at?: string;
   modified_at?: string;
-}
-
-export interface IngresoMaterialSeries {
-  series: string;
 }
 
 export type IngresoMaterialLimitData = Pick<

@@ -10,12 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import {
-  emptyCellOneLevel,
-  IngresoMaterialSeries,
-  Producto,
-  TABLE_CONSTANTS,
-} from '@/shared';
+import { emptyCellOneLevel, Producto, TABLE_CONSTANTS } from '@/shared';
 import { ScrollableDialogProps } from '@/shared/components';
 import { useUiStore } from '@/store/ui';
 
@@ -26,6 +21,10 @@ export type SeriesProductoModalProps = {
   onDataChange?: (data: any[]) => void;
   tipoSerie?: boolean;
 };
+
+export interface MaterialSeries {
+  series: string;
+}
 
 const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   Arrays = [],
@@ -208,7 +207,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
 
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
-          <SimpleTable<IngresoMaterialSeries>
+          <SimpleTable<MaterialSeries>
             columns={columns}
             data={
               dataExcel.map(serie => ({
