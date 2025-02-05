@@ -515,18 +515,42 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
             }),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_SOLICITUD_TRANSFERENCIA_MATERIAL,
+              {
+                id: 'solicitud-transferencia-material',
+                title: 'Solcitud de transferencia material',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
+              {
+                id: 'recepcion-solicitud-transferencia-material',
+                title: 'Recepcion solcitud de transferencia material',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario
+                  .recepcionSolicitudTransferenciaMaterialesNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solicitud-transferencia-material',
-              title: 'Solcitud de transferencia material',
+              id: 'motivo-ingreso',
+              title: 'Motivo Ingreso',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
+              url: ROUTER_PATHS.inventario.motivoIngresosNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'recepcion-solicitud-transferencia-material',
-              title: 'Recepcion solcitud de transferencia material',
+              id: 'motivo-egreso',
+              title: 'Motivo Egreso',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario
-                .recepcionSolicitudTransferenciaMaterialesNav,
+              url: ROUTER_PATHS.inventario.motivoEgresosNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'motivo-transferencia',
+              title: 'Motivo Transferencia',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.motivoTransferenciasNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

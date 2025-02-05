@@ -1331,6 +1331,74 @@ const CreateRecepcionSolicitudTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
+const MotivoEgresoPages = Loadable(
+  lazy(
+    () =>
+      import('@/app/inventario/motivo-egreso/pages/tables/MotivoEgresoPages'),
+  ),
+);
+const CreateMotivoEgresoPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-egreso/pages/forms/CreateMotivoEgresoPages'
+      ),
+  ),
+);
+const UpdateMotivoEgresoPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-egreso/pages/forms/UpdateMotivoEgresoPages'
+      ),
+  ),
+);
+const MotivoIngresoPages = Loadable(
+  lazy(
+    () =>
+      import('@/app/inventario/motivo-ingreso/pages/tables/MotivoIngresoPages'),
+  ),
+);
+const CreateMotivoIngresoPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-ingreso/pages/forms/CreateMotivoIngresoPages'
+      ),
+  ),
+);
+const UpdateMotivoIngresoPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-ingreso/pages/forms/UpdateMotivoIngresoPages'
+      ),
+  ),
+);
+const MotivoTransferenciaPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-transferencia/pages/tables/MotivoTransferenciaPages'
+      ),
+  ),
+);
+const CreateMotivoTransferenciaPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-transferencia/pages/forms/CreateMotivoTransferenciaPages'
+      ),
+  ),
+);
+const UpdateMotivoTransferenciaPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/motivo-transferencia/pages/forms/UpdateMotivoTransferenciaPages'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2814,6 +2882,48 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario
               .recepcionSolicitudTransferenciaMaterialesEditar,
             element: <CreateRecepcionSolicitudTransferenciaMaterialPage />,
+          },
+
+          ///* Motivo Egreso
+          {
+            path: ROUTER_PATHS.inventario.motivoEgresos,
+            element: <MotivoEgresoPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.motivoEgresosCrear,
+            element: <CreateMotivoEgresoPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.motivoEgresosEditar,
+            element: <UpdateMotivoEgresoPages />,
+          },
+
+          ///* Motivo Ingreso
+          {
+            path: ROUTER_PATHS.inventario.motivoIngresos,
+            element: <MotivoIngresoPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.motivoIngresosCrear,
+            element: <CreateMotivoIngresoPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.motivoIngresosEditar,
+            element: <UpdateMotivoIngresoPages />,
+          },
+
+          ///* Motivo Transferencia
+          {
+            path: ROUTER_PATHS.inventario.motivoTransferencias,
+            element: <MotivoTransferenciaPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.motivoTransferenciasCrear,
+            element: <CreateMotivoTransferenciaPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.motivoTransferenciasEditar,
+            element: <UpdateMotivoTransferenciaPages />,
           },
         ],
       },

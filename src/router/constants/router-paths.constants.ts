@@ -730,6 +730,24 @@ export const ROUTER_PATHS = {
       'recepcion-solicitud-transferencia-material/editar/:uuid',
     recepcionSolicitudTransferenciaMaterialesNav:
       '/inventario/recepcion-solicitud-transferencia-material',
+
+    ///* Motivo Egreso
+    motivoEgresos: 'motivo-egreso',
+    motivoEgresosCrear: 'motivo-egreso/crear',
+    motivoEgresosEditar: 'motivo-egreso/editar/:uuid',
+    motivoEgresosNav: '/inventario/motivo-egreso',
+
+    ///* Motivo Ingreso
+    motivoIngresos: 'motivo-ingreso',
+    motivoIngresosCrear: 'motivo-ingreso/crear',
+    motivoIngresosEditar: 'motivo-ingreso/editar/:uuid',
+    motivoIngresosNav: '/inventario/motivo-ingreso',
+
+    ///* Motivo Transferencia
+    motivoTransferencias: 'motivo-transferencia',
+    motivoTransferenciasCrear: 'motivo-transferencia/crear',
+    motivoTransferenciasEditar: 'motivo-transferencia/editar/:uuid',
+    motivoTransferenciasNav: '/inventario/motivo-transferencia',
   },
   // // LOGISTICA =================================
   logistica: {
