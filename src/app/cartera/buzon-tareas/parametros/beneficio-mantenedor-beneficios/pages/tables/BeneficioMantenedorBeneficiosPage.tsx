@@ -12,7 +12,7 @@ import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel } from '@/shared/utils';
+import { emptyCellOneLevel, formatBooleanCell } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import {
@@ -102,6 +102,15 @@ const BeneficioMantenedorBeneficiosPage: React.FC<
       },
 
       {
+        accessorKey: 'code',
+        header: 'Codigo',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
+
+      {
         accessorKey: 'description',
         header: 'descripcion',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -111,12 +120,59 @@ const BeneficioMantenedorBeneficiosPage: React.FC<
       },
 
       {
-        accessorKey: 'code',
-        header: 'Codigo',
+        accessorKey: 'aplica_descuento_meses_posterior',
+        header: 'Aplica descuento meses posterior',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+        Cell: ({ row }) =>
+          formatBooleanCell(row, 'aplica_descuento_meses_posterior'),
+      },
+
+      {
+        accessorKey: 'aplica_descuento_meses_curso',
+        header: 'Aplica descuento meses curso',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          formatBooleanCell(row, 'aplica_descuento_meses_curso'),
+      },
+
+      {
+        accessorKey: 'discapacidad',
+        header: 'Discapacidad',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatBooleanCell(row, 'discapacidad'),
+      },
+
+      {
+        accessorKey: 'tercera_edad',
+        header: 'Tercera edad',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatBooleanCell(row, 'tercera_edad'),
+      },
+
+      {
+        accessorKey: 'plan_desarrollo_humano	',
+        header: 'Plan desarrollo humano	',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatBooleanCell(row, 'plan_desarrollo_humano	'),
+      },
+
+      {
+        accessorKey: 'plan_retencion',
+        header: 'Plan retencion',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatBooleanCell(row, 'plan_retencion'),
       },
 
       {

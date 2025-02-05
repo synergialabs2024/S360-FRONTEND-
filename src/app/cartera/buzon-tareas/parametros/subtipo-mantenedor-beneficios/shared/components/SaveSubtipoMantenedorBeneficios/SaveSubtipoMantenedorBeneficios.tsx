@@ -19,11 +19,17 @@ import { useFetchTipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-ta
 import { returnUrlSubtipoMantenedorBeneficiosPage } from '../../../pages/tables/SubtipoMantenedorBeneficiosPage';
 import { SubtipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
 import { subtipoMantenedorBeneficiosFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
-import { TipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
+import {
+  CausaMantenedorBeneficios,
+  SolucionMantenedorBeneficios,
+  TipoMantenedorBeneficios,
+} from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
 import {
   CreateSubtipoMantenedorBeneficioParamsBase,
   useCreateSubtipoMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
+import { useFetchCausaMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
+import { useFetchSolucionMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
 
 export type SaveSubtipoMantenedorBeneficiosProps = {
   title: string;
@@ -61,9 +67,25 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
     },
   });
 
-  const isCustomLoadingTipoMantenedorBeneficios =
-    isLoadingTipoMantenedorBeneficios || isRefetchingTipoMantenedorBeneficios;
-  useLoaders(isCustomLoadingTipoMantenedorBeneficios);
+  const {
+    data: causaMantenedorBeneficiosPaginatedRes,
+    isLoading: isLoadingCausaMantenedorBeneficios,
+    isRefetching: isRefetchingCausaMantenedorBeneficios,
+  } = useFetchCausaMantenedorBeneficios({
+    params: {
+      page_size: 200,
+    },
+  });
+
+  const {
+    data: solucionMantenedorBeneficiosPaginatedRes,
+    isLoading: isLoadingSolucionMantenedorBeneficios,
+    isRefetching: isRefetchingSolucionMantenedorBeneficios,
+  } = useFetchSolucionMantenedorBeneficios({
+    params: {
+      page_size: 200,
+    },
+  });
 
   ///* mutations ---------------------
   const createTipoMantenedorBeneficio = useCreateSubtipoMantenedorBeneficio({
@@ -74,10 +96,23 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
+    console.log(
+      'data.tipo_mantenedor_beneficio',
+      data.tipo_mantenedor_beneficio,
+    );
     if (!isValid) return;
 
     ///* create
-    createTipoMantenedorBeneficio.mutate(data);
+    createTipoMantenedorBeneficio.mutate({
+      name: data.name,
+      code: data.code,
+      state: data.state,
+      description: data.description,
+      motivo: data.motivo,
+      causa: data.causa,
+      solucion: data.solucion,
+      tipo_mantenedor_beneficio: data.tipo_mantenedor_beneficio,
+    });
   };
 
   ///* effects ---------------------
@@ -85,6 +120,15 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
     if (!subtipoMantenedorBeneficios?.id) return;
     reset(subtipoMantenedorBeneficios);
   }, [subtipoMantenedorBeneficios, reset]);
+
+  const customLoader =
+    isLoadingTipoMantenedorBeneficios ||
+    isRefetchingTipoMantenedorBeneficios ||
+    isLoadingCausaMantenedorBeneficios ||
+    isRefetchingCausaMantenedorBeneficios ||
+    isLoadingSolucionMantenedorBeneficios ||
+    isRefetchingSolucionMantenedorBeneficios;
+  useLoaders(customLoader);
 
   return (
     <SingleFormBoxScene
@@ -126,21 +170,29 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
         size={gridSizeMdLg6}
       />
 
-      <CustomTextField
+      <CustomAutocomplete<CausaMantenedorBeneficios>
         label="Causa"
         name="causa"
+        valueKey="name"
+        actualValueKey="id"
         control={form.control}
         defaultValue={form.getValues().causa}
+        options={causaMantenedorBeneficiosPaginatedRes?.data.items || []}
+        isLoadingData={isLoadingCausaMantenedorBeneficios}
         error={errors.causa}
         helperText={errors.causa?.message}
         size={gridSizeMdLg6}
       />
 
-      <CustomTextField
+      <CustomAutocomplete<SolucionMantenedorBeneficios>
         label="Solucion"
         name="solucion"
+        valueKey="name"
+        actualValueKey="id"
         control={form.control}
         defaultValue={form.getValues().solucion}
+        options={solucionMantenedorBeneficiosPaginatedRes?.data.items || []}
+        isLoadingData={isLoadingSolucionMantenedorBeneficios}
         error={errors.solucion}
         helperText={errors.solucion?.message}
         size={gridSizeMdLg6}
@@ -161,7 +213,7 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
       />
 
       <CustomTextArea
-        label="Description"
+        label="Descripcion"
         name="description"
         control={form.control}
         defaultValue={form.getValues().description}

@@ -15,3 +15,9 @@ export interface TipoMantenedorBeneficios {
   code: string;
   state: boolean;
 }
+
+export interface CuotasServicioInternet {
+  id?: number;
+  cuota?: string;
+  descuento?: string;
+}

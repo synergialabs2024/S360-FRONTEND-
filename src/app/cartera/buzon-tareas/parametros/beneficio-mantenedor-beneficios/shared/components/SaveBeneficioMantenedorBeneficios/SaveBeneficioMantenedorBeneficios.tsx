@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import {
   CanalVenta,
   getKeysFormErrorsMessage,
+  gridSizeMdLg12,
   gridSizeMdLg6,
   MetodoPago,
   PlanInternet,
@@ -16,28 +17,36 @@ import { useState } from 'react';
 import {
   CustomAutocomplete,
   CustomAutocompleteMultiple,
+  CustomTextArea,
   CustomTextField,
   SampleCheckbox,
   SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { tipoMantenedorBeneficiosFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
-import {
-  useCreateTipoMantenedorBeneficio,
-  useFetchTipoMantenedorBeneficios,
-} from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
+import { useFetchTipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
 import { returnUrlBeneficioMantenedorBeneficiosPage } from '../../../pages/tables/BeneficioMantenedorBeneficiosPage';
 import { SubtipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
 import { BeneficioMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
 import { TipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
 import { useFetchSubtipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
-import { CreateBeneficioMantenedorBeneficioParamsBase } from '@/actions/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
+import {
+  CreateBeneficioMantenedorBeneficioParamsBase,
+  useCreateBeneficioMantenedorBeneficio,
+} from '@/actions/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
 import {
   useFetchCanalVentas,
   useFetchMetodoPagos,
   useFetchPlanInternets,
   useFetchZonas,
 } from '@/actions/app';
+import EquiposBeneficioMantenedorBeneficios from './form/equipos/EquiposBeneficioMantenedorBeneficios';
+import CuotaServiciosBeneficioMantenedorBeneficios from './form/cuota-servicios/CuotaServiciosBeneficioMantenedorBeneficios';
+import { beneficioMantenedorBeneficiosFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
+import {
+  GenericInventoryStoreKey,
+  useTypedGenericInventoryStore,
+} from '@/store/app';
+import { EquiposSeleccionadosProductoType } from './form/equipos/EquiposSeleccionadosBeneficioMantenedorBeneficios';
 
 export type SaveBeneficioMantenedorBeneficiosProps = {
   title: string;
@@ -45,20 +54,10 @@ export type SaveBeneficioMantenedorBeneficiosProps = {
 };
 
 type SaveFormData = CreateBeneficioMantenedorBeneficioParamsBase & {
-  planes?: number[] | string[];
   allPlanes?: boolean;
-  metodo_pagos?: number[] | string[];
   allMetodosPago?: boolean;
-  zonas?: number[] | string[];
   allZones?: boolean;
-  canalVentas?: number[] | string[];
   allCanalesVentas?: boolean;
-  //
-
-  discapacidad_option: string | number;
-  tercera_edad_option: string | number;
-  plan_desarrollo_humano_option: string | number;
-  plan_retencion_option: string | number;
 };
 
 const SaveBeneficioMantenedorBeneficios: React.FC<
@@ -70,7 +69,7 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
 
   ///* form ---------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(tipoMantenedorBeneficiosFormSchema) as any,
+    resolver: yupResolver(beneficioMantenedorBeneficiosFormSchema) as any,
     defaultValues: {
       state: true,
     },
@@ -89,10 +88,13 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
   } = form;
 
   ///* mutations ---------------------
-  const createTipoMantenedorBeneficio = useCreateTipoMantenedorBeneficio({
+  const createTipoMantenedorBeneficio = useCreateBeneficioMantenedorBeneficio({
     navigate,
     returnUrl: returnUrlBeneficioMantenedorBeneficiosPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => {
+      clearAllStore();
+    },
   });
 
   const {
@@ -112,7 +114,7 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
   } = useFetchSubtipoMantenedorBeneficios({
     enabled: fieldVisibility,
     params: {
-      tipo_mantenedor_beneficio: Number(watchedTipoTarea),
+      tipo_mantenedor_beneficio: watchedTipoTarea,
       page_size: 200,
     },
   });
@@ -160,12 +162,81 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
     },
   });
 
+  const {
+    items: equiposSeleccionados,
+    clearOneRecord: clearAllEquiposSelecStore,
+    clearAllStore,
+  } = useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
+    GenericInventoryStoreKey.equiposVentaPreventa,
+  );
+
+  const {
+    items: serviciosInternet,
+    clearOneRecord: clearAllServiciosInternetSelecStore,
+  } = useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
+    GenericInventoryStoreKey.servicioInternet,
+  );
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
+    const productos: number[] =
+      equiposSeleccionados?.map(equipo => Number(equipo.id)) || [];
+
+    const detalleEquipos = equiposSeleccionados?.map(equipo => ({
+      id: equipo.id,
+      descuento: equipo?.usedQuantity,
+      /* categoria: equipo.categoria,
+      codigo_auxiliar: equipo.codigo_auxiliar,
+      iva: equipo.iva,
+      precio: equipo?.precios,
+      producto_data: {
+        id: equipo.id,
+        uuid: equipo.uuid,
+        nombre: equipo.nombre,
+      },
+      descripcion: equipo.descripcion,
+      descuento: equipo?.usedQuantity,
+      codigo: equipo?.codigo!,
+      cantidad: 1, */
+    }));
+
+    const serviciosInternetData = serviciosInternet?.map(equipo => ({
+      descuento: equipo?.usedQuantity,
+      cuota: equipo?.id!,
+      cantidad: 1,
+    }));
+
     ///* create
-    createTipoMantenedorBeneficio.mutate(data);
+    createTipoMantenedorBeneficio.mutate({
+      name: data.name, //
+      code: data.code, //
+      state: data.state, //
+      description: data.description, //
+      aplica_descuento_meses_posterior:
+        data.aplica_descuento_meses_posterior === 'SI' ? true : false, //
+      aplica_descuento_meses_curso:
+        data.aplica_descuento_meses_curso === 'SI' ? true : false, //
+      discapacidad: data.discapacidad === 'SI' ? true : false, //
+      tercera_edad: data.tercera_edad === 'SI' ? true : false, //
+      plan_desarrollo_humano:
+        data.plan_desarrollo_humano === 'SI' ? true : false, //
+      plan_retencion: data.plan_retencion === 'SI' ? true : false, //
+      categorizacion_perfil: data.categorizacion_perfil, //
+      categorizacion_pagos: data.categorizacion_pagos, //
+      //
+      descuentos_cuotas: serviciosInternetData,
+      //
+      tipo_mantenedor_beneficio: data.tipo_mantenedor_beneficio, //
+      subtipo_mantenedor_beneficio: data.subtipo_mantenedor_beneficio, //
+      metodos_pago: data.metodos_pago, //
+      planes_internet: data.planes_internet, //
+      zonas: data.zonas, //
+      canales_venta: data.canales_venta, //
+      productos_coutas: detalleEquipos,
+      productos: productos, //
+    });
   };
 
   const customLoader =
@@ -178,7 +249,11 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlBeneficioMantenedorBeneficiosPage)}
+      onCancel={() => {
+        navigate(returnUrlBeneficioMantenedorBeneficiosPage);
+        clearAllEquiposSelecStore();
+        clearAllServiciosInternetSelecStore();
+      }}
       onSave={handleSubmit(onSave, errors => {
         ToastWrapper.error(
           `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
@@ -186,9 +261,10 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
       })}
     >
       <CustomAutocomplete<TipoMantenedorBeneficios>
-        label="Tipo de solicitud"
+        label="Tipo"
         name="tipo_mantenedor_beneficio"
         valueKey="name"
+        actualValueKey="id"
         control={form.control}
         defaultValue={form.getValues().tipo_mantenedor_beneficio}
         options={tipoMantenedorBeneficiosPaginatedRes?.data.items || []}
@@ -198,11 +274,11 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
         size={gridSizeMdLg6}
         onChangeValue={e => {
           if (e) setFieldVisibility(true);
-          form.setValue('subtipo_mantenedor_beneficio', '');
+          form.setValue('subtipo_mantenedor_beneficio', 0);
         }}
       />
       <CustomAutocomplete<SubtipoMantenedorBeneficios>
-        label="Subtipo de solicitud"
+        label="Subtipo"
         name="subtipo_mantenedor_beneficio"
         valueKey="name"
         actualValueKey="id"
@@ -215,8 +291,28 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
         size={gridSizeMdLg6}
       />
 
+      <SelectArrayString
+        label="Aplica descuento meses posteriores"
+        name="aplica_descuento_meses_posterior"
+        control={form.control}
+        error={errors.aplica_descuento_meses_posterior}
+        helperText={errors.aplica_descuento_meses_posterior?.message}
+        options={YES_NO_ARRAY_CHOICES}
+        gridSize={gridSizeMdLg6}
+      />
+
+      <SelectArrayString
+        label="Aplica descuento o N/C a factura de servicio_mes en curso"
+        name="aplica_descuento_meses_curso"
+        control={form.control}
+        error={errors.aplica_descuento_meses_curso}
+        helperText={errors.aplica_descuento_meses_curso?.message}
+        options={YES_NO_ARRAY_CHOICES}
+        gridSize={gridSizeMdLg6}
+      />
+
       <CustomTextField
-        label="Nombre"
+        label="Nombre beneficio"
         name="name"
         control={form.control}
         defaultValue={form.getValues().name}
@@ -226,7 +322,7 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
       />
 
       <CustomTextField
-        label="Forma de pago"
+        label="Codigo beneficio"
         name="code"
         control={form.control}
         defaultValue={form.getValues().code}
@@ -235,46 +331,19 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
         size={gridSizeMdLg6}
       />
 
-      {/* --------- PLANES --------- */}
-      <CustomAutocompleteMultiple<PlanInternet>
-        label="Planes"
-        name="planes"
-        textFieldKey="nombre"
-        valueKey="name"
-        actualValueKey="id"
-        // options
-        options={planesPaging?.data?.items || []}
-        defaultValue={
-          form.getValues().planes?.length
-            ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
-              (form.getValues().planes as any[])?.includes(plan?.id!),
-            )
-            : []
-        }
-        isLoadingData={isLoadingPlanes || isRefetchingPlanes}
-        // errors
-        control={form.control}
-        error={undefined}
-        helperText={errors.planes?.message}
-        disabled={watchedAllPlanes}
-        onlyActualValueKey
-        required={false}
-        size={gridSizeMdLg6}
-      />
-
       {/* --------- Payment methods --------- */}
       <CustomAutocompleteMultiple<MetodoPago>
-        label="Métodos de pago"
-        name="metodo_pagos"
+        label="Forma de pago"
+        name="metodos_pago"
         textFieldKey="nombre"
         valueKey="name"
         actualValueKey="id"
         // options
         options={metodoPagosPaging?.data?.items || []}
         defaultValue={
-          form.getValues().metodo_pagos?.length
+          form.getValues().metodos_pago?.length
             ? metodoPagosPaging?.data?.items?.filter((metodoPago: MetodoPago) =>
-              (form.getValues().metodo_pagos as any[])?.includes(
+              (form.getValues().metodos_pago as any[])?.includes(
                   metodoPago?.id!,
               ),
             )
@@ -284,10 +353,129 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
         // errors
         control={form.control}
         error={undefined}
-        helperText={errors.metodo_pagos?.message}
+        helperText={errors.metodos_pago?.message}
         onlyActualValueKey
         required={false}
         disabled={watchedAllMetodosPago}
+        size={gridSizeMdLg6}
+      />
+
+      {/* --------- PLANES --------- */}
+      <CustomAutocompleteMultiple<PlanInternet>
+        label="Planes"
+        name="planes_internet"
+        textFieldKey="nombre"
+        valueKey="name"
+        actualValueKey="id"
+        // options
+        options={planesPaging?.data?.items || []}
+        defaultValue={
+          form.getValues().planes_internet?.length
+            ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
+              (form.getValues().planes_internet as any[])?.includes(
+                  plan?.id!,
+              ),
+            )
+            : []
+        }
+        isLoadingData={isLoadingPlanes || isRefetchingPlanes}
+        // errors
+        control={form.control}
+        error={undefined}
+        helperText={errors.planes_internet?.message}
+        disabled={watchedAllPlanes}
+        onlyActualValueKey
+        required={false}
+        size={gridSizeMdLg6}
+      />
+
+      <SelectArrayString
+        label="Discapacidad"
+        name="discapacidad"
+        control={form.control}
+        error={errors.discapacidad}
+        helperText={errors.discapacidad?.message}
+        options={YES_NO_ARRAY_CHOICES}
+        gridSize={gridSizeMdLg6}
+      />
+
+      <SelectArrayString
+        label="Tercera edad"
+        name="tercera_edad"
+        control={form.control}
+        error={errors.tercera_edad}
+        helperText={errors.tercera_edad?.message}
+        options={YES_NO_ARRAY_CHOICES}
+        gridSize={gridSizeMdLg6}
+      />
+
+      <SelectArrayString
+        label="Plan desarrollo humano"
+        name="plan_desarrollo_humano"
+        control={form.control}
+        error={errors.plan_desarrollo_humano}
+        helperText={errors.plan_desarrollo_humano?.message}
+        options={YES_NO_ARRAY_CHOICES}
+        gridSize={gridSizeMdLg6}
+      />
+
+      <SelectArrayString
+        label="Plan retención"
+        name="plan_retencion"
+        control={form.control}
+        error={errors.plan_retencion}
+        helperText={errors.plan_retencion?.message}
+        options={YES_NO_ARRAY_CHOICES}
+        gridSize={gridSizeMdLg6}
+      />
+
+      <CustomTextField
+        label="Perfil / cat"
+        name="categorizacion_perfil"
+        control={form.control}
+        defaultValue={form.getValues().categorizacion_perfil}
+        error={errors.categorizacion_perfil}
+        helperText={errors.categorizacion_perfil?.message}
+        size={gridSizeMdLg6}
+      />
+
+      <CustomTextField
+        label="Pagos / categ"
+        name="categorizacion_pagos"
+        control={form.control}
+        defaultValue={form.getValues().categorizacion_pagos}
+        error={errors.categorizacion_pagos}
+        helperText={errors.categorizacion_pagos?.message}
+        size={gridSizeMdLg6}
+      />
+
+      {/* --------- canal de ventas --------- */}
+      <CustomAutocompleteMultiple<CanalVenta>
+        label="Canal de venta"
+        name="canales_venta"
+        textFieldKey="nombre"
+        valueKey="name"
+        actualValueKey="id"
+        // options
+        options={canalesVentaPaging?.data?.items || []}
+        defaultValue={
+          form.getValues().canales_venta?.length
+            ? canalesVentaPaging?.data?.items?.filter(
+              (canalVenta: CanalVenta) =>
+                (form.getValues().canales_venta as any[])?.includes(
+                    canalVenta?.id!,
+                ),
+            )
+            : []
+        }
+        isLoadingData={isLoadingCanalesVenta || isRefetchingCanalesVenta}
+        // errors
+        control={form.control}
+        error={undefined}
+        helperText={errors.canales_venta?.message}
+        onlyActualValueKey
+        required={false}
+        disabled={watchedAllCanalesVentas}
         size={gridSizeMdLg6}
       />
 
@@ -318,85 +506,29 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
         size={gridSizeMdLg6}
       />
 
-      {/* --------- canal de ventas --------- */}
-      <CustomAutocompleteMultiple<CanalVenta>
-        label="Canal de venta"
-        name="canalVentas"
-        textFieldKey="nombre"
-        valueKey="name"
-        actualValueKey="id"
-        // options
-        options={canalesVentaPaging?.data?.items || []}
-        defaultValue={
-          form.getValues().canalVentas?.length
-            ? canalesVentaPaging?.data?.items?.filter(
-              (canalVenta: CanalVenta) =>
-                (form.getValues().canalVentas as any[])?.includes(
-                    canalVenta?.id!,
-                ),
-            )
-            : []
-        }
-        isLoadingData={isLoadingCanalesVenta || isRefetchingCanalesVenta}
-        // errors
+      <CustomTextArea
+        label="Descripcion"
+        name="description"
         control={form.control}
-        error={undefined}
-        helperText={errors.canalVentas?.message}
-        onlyActualValueKey
-        required={false}
-        disabled={watchedAllCanalesVentas}
-        size={gridSizeMdLg6}
+        defaultValue={form.getValues().description}
+        error={errors.description}
+        helperText={errors.description?.message}
+        size={gridSizeMdLg12}
       />
 
-      <SelectArrayString
-        label="Discapacidad"
-        name="discapacidad_option"
-        control={form.control}
-        defaultValue={form.getValues().discapacidad_option}
-        error={errors.discapacidad_option}
-        helperText={errors.discapacidad_option?.message}
-        options={YES_NO_ARRAY_CHOICES}
-        gridSize={gridSizeMdLg6}
-      />
+      <>
+        <EquiposBeneficioMantenedorBeneficios />
+      </>
 
-      <SelectArrayString
-        label="Tercera edad"
-        name="tercera_edad_option"
-        control={form.control}
-        defaultValue={form.getValues().tercera_edad_option}
-        error={errors.tercera_edad_option}
-        helperText={errors.tercera_edad_option?.message}
-        options={YES_NO_ARRAY_CHOICES}
-        gridSize={gridSizeMdLg6}
-      />
-
-      <SelectArrayString
-        label="Plan desarrollo humano"
-        name="plan_desarrollo_humano_option"
-        control={form.control}
-        defaultValue={form.getValues().plan_desarrollo_humano_option}
-        error={errors.plan_desarrollo_humano_option}
-        helperText={errors.plan_desarrollo_humano_option?.message}
-        options={YES_NO_ARRAY_CHOICES}
-        gridSize={gridSizeMdLg6}
-      />
-
-      <SelectArrayString
-        label="Plan retención"
-        name="plan_retencion_option"
-        control={form.control}
-        defaultValue={form.getValues().plan_retencion_option}
-        error={errors.plan_retencion_option}
-        helperText={errors.plan_retencion_option?.message}
-        options={YES_NO_ARRAY_CHOICES}
-        gridSize={gridSizeMdLg6}
-      />
+      <>
+        <CuotaServiciosBeneficioMantenedorBeneficios />
+      </>
 
       <SampleCheckbox
         label="state"
         name="state"
         control={form.control}
-        defaultValue={form.getValues().state}
+        defaultValue={form.getValues().state!}
         isState
       />
     </SingleFormBoxScene>

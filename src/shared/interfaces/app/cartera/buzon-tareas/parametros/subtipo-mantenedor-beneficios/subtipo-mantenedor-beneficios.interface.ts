@@ -15,7 +15,7 @@ export interface SubtipoMantenedorBeneficios {
   code: string;
   state: boolean;
   motivo: string;
-  causa: string;
-  solucion: string;
+  causa: number;
+  solucion: number;
   tipo_mantenedor_beneficio: number;
 }
