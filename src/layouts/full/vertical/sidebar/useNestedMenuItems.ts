@@ -825,7 +825,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.cartera.saldosNav,
             }),
 
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_CAMBIO_DOMICILIO, {
               id: 'cambiodomicilio',
               title: 'Cambio de domicilio',
               type: MenuItemType.ITEM,
@@ -837,19 +837,19 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.cambioplanNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_VENTA_CONVENIO, {
               id: 'ventaconvenio',
               title: 'Venta convenio',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.ventaconvenioNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_PROMESA_PAGO, {
               id: 'promesapago',
               title: 'Promesa de pago',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.promesapagoNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_CAMBIO_PROPIETARIO, {
               id: 'cambiopropietario',
               title: 'Cambio Propietario',
               type: MenuItemType.ITEM,
