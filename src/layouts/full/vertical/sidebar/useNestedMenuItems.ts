@@ -534,19 +534,19 @@ export const useNestedMenu = () => {
                   .recepcionSolicitudTransferenciaMaterialesNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_MOTIVO_INGRESO, {
               id: 'motivo-ingreso',
               title: 'Motivo Ingreso',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.motivoIngresosNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_MOTIVO_EGRESO, {
               id: 'motivo-egreso',
               title: 'Motivo Egreso',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.motivoEgresosNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_MOTIVO_TRANSFERENCIA, {
               id: 'motivo-transferencia',
               title: 'Motivo Transferencia',
               type: MenuItemType.ITEM,
@@ -1124,7 +1124,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.NETCONNECT_AUDITORIA_CONSUMO, {
               id: 'auditoria-consumos',
               title: 'Auditoría de consumos',
               type: MenuItemType.ITEM,
