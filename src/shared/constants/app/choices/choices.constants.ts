@@ -1290,3 +1290,11 @@ export const CANAL_REFERENCIA_MANTENEDORES_ARRAY_CHOICES = [
   canalReferenciaMantenedoresEnumChoice.CENTRO_DE_EXPERIENCIA,
   canalReferenciaMantenedoresEnumChoice.OTRO,
 ];
+
+export enum EstadoTareaEnumChoice {
+  EN_BORRADOR = 'EN BORRADOR',
+  ASIGNADO = 'ASIGNADO',
+  GESTIONADO = 'GESTIONADO',
+  RECHAZADO = 'RECHAZADO',
+  SEPARADO = 'SEPARADO',
+}

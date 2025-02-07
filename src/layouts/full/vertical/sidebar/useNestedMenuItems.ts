@@ -1323,6 +1323,22 @@ export const useNestedMenu = () => {
             },
           ].filter(item => !!item) as NestedMenuItem[],
         },
+
+        /////* Buzon Tareas ----------------
+        {
+          id: 'buzon-tareas',
+          title: 'Buzon tareas',
+          type: MenuItemType.COLLAPSE,
+          icon: IconRouter,
+          children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'tareas',
+              title: 'Tareas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
       ],
     };
 

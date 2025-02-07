@@ -33,7 +33,6 @@ import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import { useSearchCedulaWithDebtMutation } from '@/actions/app/tickets';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { returnUrlCambioPlanPage } from '../../../pages/forms/BuzonTareasPage';
 import {
   CreateBuzonTareaParamsBase,
   useCreateBuzonTarea,
@@ -50,6 +49,7 @@ import {
 import { SubtipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
 import { useFetchCausaMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
 import { buzonTareaFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/buzon-tareas.schema';
+import { returnUrlBuzonTareasPage } from '../../../pages/tables/BuzonTareasByStatePage';
 
 export interface SaveBuzonTareasProps {
   title: string;
@@ -106,7 +106,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
 
   const createBuzonTarea = useCreateBuzonTarea({
     navigate,
-    returnUrl: returnUrlCambioPlanPage,
+    returnUrl: returnUrlBuzonTareasPage,
     enableErrorNavigate: false,
     customOnSuccess: () => {},
   });
@@ -297,7 +297,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate(returnUrlCambioPlanPage)}
+      onCancel={() => navigate(returnUrlBuzonTareasPage)}
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Errores en: ${keys}`);

@@ -1,4 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { LineaServicio } from '../../cliente';
 
 export interface BuzonTareaPaginatedRes {
   status: number;
@@ -40,4 +41,20 @@ export interface BuzonTarea {
   aplica_beneficio_segun_perfil: string;
   //
   deuda: string;
+
+  //
+
+  departamento_asignado_data: {
+    name: string;
+  };
+  tipo_tarea_data: {
+    name: string;
+  };
+  subtipo_tarea_data: {
+    name: string;
+  };
+  causa_tarea_data: {
+    name: string;
+  };
+  linea_servicio_data: LineaServicio;
 }

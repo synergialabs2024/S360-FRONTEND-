@@ -812,4 +812,16 @@ export const ROUTER_PATHS = {
     parametrosOrigenesEditar: 'parametros/origenes/editar/:uuid',
     parametrosOrigenesNav: '/tickets/parametros/origenes',
   },
+
+  /////* Buzon Tareas ----------------
+  buzonTareas: {
+    root: 'buzon-tareas',
+
+    ticketsNav: '/buzon-tareas',
+
+    ///* parametros
+    buzonTareasAsignadas: 'tareas-asignadas',
+    buzonTareasAsignada: 'tareas-asignadas/:uuid',
+    buzonTareasAsignadasNav: '/buzon-tareas/tareas-asignadas',
+  },
 };

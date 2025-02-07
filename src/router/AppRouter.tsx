@@ -10,6 +10,7 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
+import BuzonTareasModule from '@/app/buzon-tareas/BuzonTareasModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -1782,6 +1783,16 @@ const ScoresMonthlyUsageVentasPage = Loadable(
   ),
 );
 
+// Buzon Tareas
+
+const TareasPage = Loadable(
+  lazy(() => import('@/app/buzon-tareas/tareas/pages/tables/TareasPage')),
+);
+
+const CreateTareaPage = Loadable(
+  lazy(() => import('@/app/buzon-tareas/tareas/pages/forms/CreateTareaPage')),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -3210,6 +3221,22 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.parametrosOrigenesEditar,
             element: <UpdateOrigenPage />,
+          },
+        ],
+      },
+
+      //////////* Buzon Tareas ------------
+      {
+        path: ROUTER_PATHS.buzonTareas.root,
+        element: <BuzonTareasModule />,
+        children: [
+          {
+            path: ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav,
+            element: <TareasPage />,
+          },
+          {
+            path: ROUTER_PATHS.buzonTareas.buzonTareasAsignada,
+            element: <CreateTareaPage />,
           },
         ],
       },

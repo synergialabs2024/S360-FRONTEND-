@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 import { useFetchCambioPlanes } from '@/actions/app/cartera';
 import { ROUTER_PATHS } from '@/router/constants';
 
-export const returnUrlCambioPlanPage = ROUTER_PATHS.cartera.buzontareasNav;
+export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
 
 export type BuzonTareasByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
@@ -78,7 +78,7 @@ const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
   return (
     <SingleTableBoxScene
       title="Buzon de Tareas"
-      createPageUrl={`${returnUrlCambioPlanPage}/crear`}
+      createPageUrl={`${returnUrlBuzonTareasPage}/crear`}
       showCreateBtn={true}
     >
       <CustomSearch

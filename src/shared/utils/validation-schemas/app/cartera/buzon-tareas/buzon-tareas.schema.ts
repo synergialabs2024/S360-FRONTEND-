@@ -51,3 +51,18 @@ export const buzonTareaFormSchema = yup.object({
     .typeError('El campo aplica beneficio segun perfil es requerido')
     .required('El campo aplica beneficio segun perfil es requerido'),
 });
+
+export const tareaFormSchema = yup.object({
+  departamento_escalado: yup
+    .number()
+    .required('El campo departamento escalado prerechazo es requerido')
+    .typeError('El campo departamento escalado prerechazo es requerido'),
+  justificacion_escalamiento: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      200,
+      'El campo justificacion escalamiento no debe exceder los 200 caracteres',
+    ),
+});
