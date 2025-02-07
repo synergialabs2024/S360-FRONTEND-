@@ -519,7 +519,7 @@ export const useNestedMenu = () => {
               SidenavModulesEnum.INVENTARIO_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {
                 id: 'solicitud-transferencia-material',
-                title: 'Solcitud de transferencia material',
+                title: 'Solicitud de transferencia material',
                 type: MenuItemType.ITEM,
                 url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
               },
@@ -528,7 +528,7 @@ export const useNestedMenu = () => {
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {
                 id: 'recepcion-solicitud-transferencia-material',
-                title: 'Recepcion solcitud de transferencia material',
+                title: 'Aprobación solicitud de transferencia material',
                 type: MenuItemType.ITEM,
                 url: ROUTER_PATHS.inventario
                   .recepcionSolicitudTransferenciaMaterialesNav,
