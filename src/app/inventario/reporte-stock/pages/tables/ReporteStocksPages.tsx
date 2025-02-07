@@ -248,6 +248,7 @@ const MotivoReporteStockPages: React.FC = () => {
         enableGlobalFilter={false}
         pagination={pagination}
         onPaging={setPagination}
+        enableActionsColumn={false}
       />
     </SingleTableBoxScene>
   );

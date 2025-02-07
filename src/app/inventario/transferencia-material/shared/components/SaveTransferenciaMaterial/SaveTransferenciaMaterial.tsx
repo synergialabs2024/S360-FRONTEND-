@@ -324,7 +324,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         }}
       />
       <CustomAutocomplete<MotivoTransferencia>
-        label="Motivo Egreso"
+        label="Motivo Transferencia"
         name="motivo_transferencia"
         defaultValue={form.getValues().motivo_transferencia}
         // options
