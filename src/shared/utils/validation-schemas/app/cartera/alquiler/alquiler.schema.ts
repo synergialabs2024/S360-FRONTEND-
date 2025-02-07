@@ -5,23 +5,14 @@ export const alquilerFormSchema = yup.object({
     .string()
     .required('El campo descripcion es requerido')
     .max(255, 'El campo descripcion no debe exceder los 255 caracteres'),
-  fecha_inicio: yup.string().required('El campo fecha inicio es requerido'),
-  fecha_fin: yup.string().required('El campo fecha inicio es requerido'),
-  es_indefinido: yup
-    .boolean()
-    .typeError('El estado es Indefinido es Requerido')
-    .required('El estado es Indefinido es Requerido'),
+  tipo_recurrencia: yup
+    .string()
+    .required('El campo tipo recurrencia es requerido'),
+  valor_base_cuota: yup.string().required('El campo monto es requerido'),
   total_cuotas: yup
     .number()
     .typeError('El campo total cuotas es requerido')
     .required('El campo total cuotas es requerido'),
-  cuota_actual: yup
-    .number()
-    .typeError('El campo cuota actual es requerido')
-    .required('El campo cuota actual es requerido'),
-  valor_base_cuota: yup
-    .string()
-    .required('El campo valor base cuota es requerido'),
 
   //* fk
   producto: yup

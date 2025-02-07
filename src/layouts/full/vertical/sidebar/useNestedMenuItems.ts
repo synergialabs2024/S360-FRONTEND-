@@ -870,6 +870,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.buzontareasNav,
             }),
+            renderByModule(SidenavModulesEnum.CARTERA_ALQUILER, {
+              id: 'alquileres',
+              title: 'Alquileres',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.alquileresNav,
+            }),
             {
               id: 'parametros',
               title: 'Parametros',

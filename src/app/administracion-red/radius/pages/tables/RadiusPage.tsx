@@ -46,7 +46,9 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
+
       username: searchTerm,
+
       ...filterObject,
     },
   });
@@ -77,14 +79,6 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'ip_address'),
-      },
-      {
-        accessorKey: 'olt_name',
-        header: 'OLT NAME',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'olt_name'),
       },
     ],
     [],

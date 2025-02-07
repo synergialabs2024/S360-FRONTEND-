@@ -12,15 +12,14 @@ export interface Alquiler {
   uuid?: string;
 
   descripcion: string;
-  estado_alquiler: string;
-  fecha_inicio: string;
-  fecha_fin: string;
-
-  es_indefinido: boolean;
-
-  total_cuotas: number;
-  cuota_actual: number;
+  tipo_recurrencia: string;
   valor_base_cuota: string;
+  total_cuotas: number;
+
+  fecha_inicio?: string;
+  fecha_fin?: string;
+  estado_alquiler?: string;
+  cuota_actual?: number;
 
   // fk
   producto: number;

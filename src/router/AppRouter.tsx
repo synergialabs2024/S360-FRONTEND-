@@ -936,6 +936,10 @@ const CambioPropietarioPagoPage = Loadable(
       ),
   ),
 );
+const AlquilerPages = Loadable(
+  lazy(() => import('@/app/cartera/alquiler/pages/tables/AlquilerPages')),
+);
+
 const RubrosPage = Loadable(
   lazy(() => import('@/app/cobranza/rubros/pages/tables/RubrosPage')),
 );
@@ -2318,6 +2322,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.saldos,
             element: <SaldosPage />,
+          },
+
+          ///* Alquiler
+          {
+            path: ROUTER_PATHS.cartera.alquileres,
+            element: <AlquilerPages />,
           },
         ],
       },

@@ -1148,6 +1148,120 @@ export const ESTADO_DEUDA_TYPE_ARRAY_CHOICES = [
   estadoDeudaTypeEnumChoice.COMPLETADO,
   estadoDeudaTypeEnumChoice.CANCELADO,
 ];
+
+export enum valueTipoRecuerrenciaAlquilerEnumChoice {
+  UN_SOLO_PAGO = 'UN SOLO PAGO',
+  MENSUAL = 'MENSUAL',
+  CUOTAS = 'CUOTAS',
+}
+
+export type TipoRecurrenciaAlquilerEnumChoiceType = {
+  label: string;
+  value: number;
+};
+export const TIPO_RECURRENCIA_ALQUILER_ARRAY_OBJ_ONT = [
+  {
+    label: 'Mensualmente',
+    value: 0,
+  },
+  {
+    label: 'Un solo pago',
+    value: 1,
+  },
+  {
+    label: 'Pago en 2 cuotas',
+    value: 2,
+  },
+  {
+    label: 'Pago en 3 cuotas',
+    value: 3,
+  },
+  {
+    label: 'Pago en 4 cuotas',
+    value: 4,
+  },
+  {
+    label: 'Pago en 5 cuotas',
+    value: 5,
+  },
+  {
+    label: 'Pago en 6 cuotas',
+    value: 6,
+  },
+  {
+    label: 'Pago en 7 cuotas',
+    value: 7,
+  },
+  {
+    label: 'Pago en 8 cuotas',
+    value: 8,
+  },
+  {
+    label: 'Pago en 9 cuotas',
+    value: 9,
+  },
+  {
+    label: 'Pago en 10 cuotas',
+    value: 10,
+  },
+  {
+    label: 'Pago en 11 cuotas',
+    value: 11,
+  },
+  {
+    label: 'Pago en 12 cuotas',
+    value: 12,
+  },
+  {
+    label: 'Pago en 13 cuotas',
+    value: 13,
+  },
+  {
+    label: 'Pago en 14 cuotas',
+    value: 14,
+  },
+  {
+    label: 'Pago en 15 cuotas',
+    value: 15,
+  },
+  {
+    label: 'Pago en 16 cuotas',
+    value: 16,
+  },
+  {
+    label: 'Pago en 17 cuotas',
+    value: 17,
+  },
+  {
+    label: 'Pago en 18 cuotas',
+    value: 18,
+  },
+  {
+    label: 'Pago en 19 cuotas',
+    value: 19,
+  },
+  {
+    label: 'Pago en 20 cuotas',
+    value: 20,
+  },
+  {
+    label: 'Pago en 21 cuotas',
+    value: 21,
+  },
+  {
+    label: 'Pago en 22 cuotas',
+    value: 22,
+  },
+  {
+    label: 'Pago en 23 cuotas',
+    value: 23,
+  },
+  {
+    label: 'Pago en 24 cuotas',
+    value: 24,
+  },
+];
+
 export enum YesNoEnumChoice {
   SI = 'SI',
   NO = 'NO',
