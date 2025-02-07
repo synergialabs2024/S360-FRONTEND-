@@ -552,6 +552,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.motivoTransferenciasNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'reporte-stock',
+              title: 'Reporte stock',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.reporteStocksNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------

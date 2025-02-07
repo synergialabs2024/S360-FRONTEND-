@@ -4,6 +4,7 @@ export * from './ingreso-material';
 export * from './modals';
 export * from './modelo-inventario';
 export * from './movimiento-material';
+export * from './reporte-stock';
 export * from './motivo-inventario';
 export * from './solicitud-material';
 export * from './solicitud-devolucion';

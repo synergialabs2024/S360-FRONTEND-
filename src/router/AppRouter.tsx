@@ -1403,6 +1403,12 @@ const UpdateMotivoTransferenciaPages = Loadable(
       ),
   ),
 );
+const ReporteStocksPages = Loadable(
+  lazy(
+    () =>
+      import('@/app/inventario/reporte-stock/pages/tables/ReporteStocksPages'),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -2934,6 +2940,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.motivoTransferenciasEditar,
             element: <UpdateMotivoTransferenciaPages />,
+          },
+
+          ///* Reporte Stock
+          {
+            path: ROUTER_PATHS.inventario.reporteStocks,
+            element: <ReporteStocksPages />,
           },
         ],
       },

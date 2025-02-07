@@ -14,7 +14,8 @@ import {
 } from '@/actions/app';
 import {
   Bodega,
-  gridSizeMdLg4,
+  gridSizeMdLg12,
+  gridSizeMdLg6,
   MotivoTransferencia,
   ProductosDisponiblesModal,
   ProductosDisponiblesTableType,
@@ -250,7 +251,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
           form.setValue('ubicacion_origen', '' as any);
           productosEnviar([]);
         }}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
       />
       <CustomAutocomplete<Bodega>
         label="Bodega Destino"
@@ -270,7 +271,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
           form.setValue('ubicacion_destino', '' as any);
           productosEnviar([]);
         }}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
       />
       <CustomAutocomplete<Ubicacion>
         label="Ubicacion Origen"
@@ -286,7 +287,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         control={form.control}
         error={errors.ubicacion_origen as any}
         helperText={errors.ubicacion_origen?.message}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         onChangeRawValue={value => {
           setUUIDUbicacion(value?.uuid);
           form.setValue('ubicacion_origen', Number(value?.id));
@@ -316,7 +317,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         control={form.control}
         error={errors.ubicacion_destino as any}
         helperText={errors.ubicacion_destino?.message}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         onChangeRawValue={value => {
           form.setValue('ubicacion_destino', Number(value?.id));
           productosEnviar([]);
@@ -338,7 +339,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         control={form.control}
         error={errors.motivo_transferencia as any}
         helperText={errors.motivo_transferencia?.message}
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg12}
       />
       <CustomTextArea
         label="Observación"

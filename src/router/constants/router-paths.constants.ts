@@ -285,7 +285,6 @@ export const ROUTER_PATHS = {
       '/cartera/parametros/subtipo-mantenedor-beneficios',
 
     // Beneficio
-
     parametrosBeneficioMantenedorBeneficios:
       'parametros/beneficio-mantenedor-beneficios',
     parametrosBeneficioMantenedorBeneficiosCrear:
@@ -296,7 +295,6 @@ export const ROUTER_PATHS = {
       '/cartera/parametros/beneficio-mantenedor-beneficios',
 
     // Causa
-
     parametrosCausaMantenedorBeneficios:
       'parametros/causa-mantenedor-beneficios',
     parametrosCausaMantenedorBeneficiosCrear:
@@ -748,6 +746,10 @@ export const ROUTER_PATHS = {
     motivoTransferenciasCrear: 'motivo-transferencia/crear',
     motivoTransferenciasEditar: 'motivo-transferencia/editar/:uuid',
     motivoTransferenciasNav: '/inventario/motivo-transferencia',
+
+    ///* Reporte Stock
+    reporteStocks: 'reporte-stock',
+    reporteStocksNav: '/inventario/reporte-stock',
   },
   // // LOGISTICA =================================
   logistica: {
