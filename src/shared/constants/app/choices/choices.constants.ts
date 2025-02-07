@@ -1154,3 +1154,25 @@ export enum YesNoEnumChoice {
 }
 
 export const YES_NO_ARRAY_CHOICES = [YesNoEnumChoice.SI, YesNoEnumChoice.NO];
+
+export enum canalReferenciaMantenedoresEnumChoice {
+  RRSS = 'RRSS',
+  WEB = 'WEB',
+  VEINTICUATROENLINEAWEB = '24ENLINEAWEB',
+  VEINTICUATROENLINEAAPP = '24ENLINEAAPP',
+  CHATBOT = 'CHATBOT',
+  CALLCENTER = 'CALLCENTER',
+  CENTRO_DE_EXPERIENCIA = 'CENTRO DE EXPERIENCIA',
+  OTRO = 'OTRO',
+}
+
+export const CANAL_REFERENCIA_MANTENEDORES_ARRAY_CHOICES = [
+  canalReferenciaMantenedoresEnumChoice.RRSS,
+  canalReferenciaMantenedoresEnumChoice.WEB,
+  canalReferenciaMantenedoresEnumChoice.VEINTICUATROENLINEAWEB,
+  canalReferenciaMantenedoresEnumChoice.VEINTICUATROENLINEAAPP,
+  canalReferenciaMantenedoresEnumChoice.CHATBOT,
+  canalReferenciaMantenedoresEnumChoice.CALLCENTER,
+  canalReferenciaMantenedoresEnumChoice.CENTRO_DE_EXPERIENCIA,
+  canalReferenciaMantenedoresEnumChoice.OTRO,
+];

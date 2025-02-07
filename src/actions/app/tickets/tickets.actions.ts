@@ -5,6 +5,7 @@ import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
   FindByIdentification,
+  FindByIdentificationWithDebt,
   PagingPartialParams,
   UseFetchEnabledParams,
   UseMutationParams,
@@ -62,6 +63,21 @@ export const useSearchCedulaMutation = () => {
       setIsGlobalLoading(true);
       try {
         return await getClient(params.identificacion);
+      } finally {
+        setIsGlobalLoading(false);
+      }
+    },
+  });
+};
+
+export const useSearchCedulaWithDebtMutation = () => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: async (params: { identificacion: string }) => {
+      setIsGlobalLoading(true);
+      try {
+        return await getClientWithDebit(params.identificacion);
       } finally {
         setIsGlobalLoading(false);
       }
@@ -178,6 +194,17 @@ export const getClient = async (uuid: string) => {
   try {
     return await get<FindByIdentification>(
       `/cliente/find-by-identification/${uuid}`,
+      true,
+    );
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const getClientWithDebit = async (uuid: string) => {
+  try {
+    return await get<FindByIdentificationWithDebt>(
+      `/cliente/find-by-identification-with-debt/${uuid}`,
       true,
     );
   } catch (error) {

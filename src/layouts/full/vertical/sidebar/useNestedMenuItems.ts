@@ -675,12 +675,15 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'aprobacion-ticket-visita',
-              title: 'Aprobación de Ticket visita',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.OPERACIONES_APROBACION_TICKET_VISITA,
+              {
+                id: 'aprobacion-ticket-visita',
+                title: 'Aprobación de Ticket visita',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Logistica ----------------
@@ -861,7 +864,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.buzontareasNav,
             }), */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
               id: 'buzontareas',
               title: 'Buzon de Tareas',
               type: MenuItemType.ITEM,
@@ -873,35 +876,35 @@ export const useNestedMenu = () => {
               type: MenuItemType.COLLAPSE,
               icon: IconBuildingWarehouse,
               children: [
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
                   id: 'parametrosTipoMantenedorBeneficios',
                   title: 'Tipo mantenedor beneficios',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.cartera
                     .parametrosTipoMantenedorBeneficiosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
                   id: 'parametrosSubtipoMantenedorBeneficios',
                   title: 'Subipo mantenedor beneficios',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.cartera
                     .parametrosSubtipoMantenedorBeneficiosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
                   id: 'parametrosBeneficioMantenedorBeneficios',
                   title: 'Beneficio mantenedor beneficios',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.cartera
                     .parametrosBeneficioMantenedorBeneficiosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
                   id: 'parametrosCausaMantenedorBeneficios',
                   title: 'Causa mantenedor beneficios',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.cartera
                     .parametrosCausaMantenedorBeneficiosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
                   id: 'parametrosSolucionMantenedorBeneficios',
                   title: 'Solucion mantenedor beneficios',
                   type: MenuItemType.ITEM,

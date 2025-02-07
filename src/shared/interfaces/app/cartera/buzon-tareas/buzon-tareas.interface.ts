@@ -16,9 +16,9 @@ export interface BuzonTarea {
   estado_tarea: string;
   aplica_beneficio: string;
   canal_referencia: string;
-  tipo_tarea: string;
-  subtipo_tarea: string;
-  detalle_caso: string;
+  tipo_tarea: number;
+  subtipo_tarea: number;
+  detalle_caso?: string;
 
   detalle_solucion: string;
   aplica_beneficio_solucion: string;
@@ -31,9 +31,13 @@ export interface BuzonTarea {
   categorizacion_pagos: string;
   usuario_creacion: number;
   departamento_asignado: number;
-
+  causa_tarea: number;
+  solucion_tarea: number;
   cliente: number;
   contrato: number;
   linea_servicio: number;
   beneficio: number;
+  aplica_beneficio_segun_perfil: string;
+  //
+  deuda: string;
 }

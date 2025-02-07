@@ -8,39 +8,48 @@ import {
   CustomCardAlert,
   CustomIdentificacionTextField,
   CustomScanLoad,
-  CustomTextAreaNoForm,
+  CustomTextArea,
   CustomTextFieldNoForm,
   CustomTypoLabel,
   InputAndBtnGridSpace,
+  SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
   ApiResponse,
+  CANAL_REFERENCIA_MANTENEDORES_ARRAY_CHOICES,
   ContratoData,
   Departamento,
-  FindByIdentification,
+  FindByIdentificationWithDebt,
   getKeysFormErrorsMessage,
   IdentificationTypeEnumChoice,
   LineaServicio,
   ToastWrapper,
   useLoaders,
+  YES_NO_ARRAY_CHOICES,
 } from '@/shared';
 import { CiSearch } from 'react-icons/ci';
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { cambioPlanFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-plan/cambio-plan.schema';
-import { useSearchCedulaMutation } from '@/actions/app/tickets';
-import { useCreateCambioPlan } from '@/actions/app/cartera/cambio-plan/cambio-plan.actions';
+import { useSearchCedulaWithDebtMutation } from '@/actions/app/tickets';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlCambioPlanPage } from '../../../pages/forms/BuzonTareasPage';
-import { CreateBuzonTareaParamsBase } from '@/actions/app/cartera/buzon-tareas';
+import {
+  CreateBuzonTareaParamsBase,
+  useCreateBuzonTarea,
+} from '@/actions/app/cartera/buzon-tareas';
 import { useAuthStore } from '@/store/auth';
 import { useFetchDepartamentos } from '@/actions/app';
 import dayjs from 'dayjs';
 import { useFetchTipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
 import { useFetchSubtipoMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
-import { TipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
+import {
+  CausaMantenedorBeneficios,
+  TipoMantenedorBeneficios,
+} from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
 import { SubtipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
+import { useFetchCausaMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
+import { buzonTareaFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/buzon-tareas.schema';
 
 export interface SaveBuzonTareasProps {
   title: string;
@@ -54,6 +63,7 @@ type SaveFormData = CreateBuzonTareaParamsBase & {
   //
   cedula: string;
   telefono: string;
+  cliente_name: string;
   correo: string;
   //
 };
@@ -72,7 +82,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
     useState<boolean>(false);
 
   const [cedulaData, setCedulaData] =
-    useState<ApiResponse<FindByIdentification> | null>(null);
+    useState<ApiResponse<FindByIdentificationWithDebt> | null>(null);
 
   const [numeroContrato, setNumeroContrato] = useState<string | undefined>(
     undefined,
@@ -82,7 +92,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
 
   ///* form -----------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(cambioPlanFormSchema) as any,
+    resolver: yupResolver(buzonTareaFormSchema) as any,
     defaultValues: {
       tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
     },
@@ -92,15 +102,16 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
 
   ///* mutations ---------------------
 
-  const searchCedulaMutation = useSearchCedulaMutation();
-  const createCambioPlan = useCreateCambioPlan({
-    enableErrorNavigate: false,
-    customOnSuccess: () => {
-      navigate(returnUrlCambioPlanPage);
-    },
+  const searchCedulaMutation = useSearchCedulaWithDebtMutation();
+
+  const createBuzonTarea = useCreateBuzonTarea({
     navigate,
     returnUrl: returnUrlCambioPlanPage,
+    enableErrorNavigate: false,
+    customOnSuccess: () => {},
   });
+
+  //
 
   const {
     data: departamentoPagingRes,
@@ -135,27 +146,50 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
   });
 
   const {
+    data: causaMantenedorBeneficiosPaginatedRes,
+    isLoading: isLoadingCausaMantenedorBeneficios,
+    isRefetching: isRefetchingCausaMantenedorBeneficios,
+  } = useFetchCausaMantenedorBeneficios({
+    params: {
+      page_size: 200,
+    },
+  });
+
+  const {
     handleSubmit,
     formState: { errors },
   } = form;
   const watchedIdentificationType = form.watch('tipo_identificacion');
   const watchedIdentification = form.watch('identificacion');
-  const watchedLineaServicio = form.watch('linea_servicio_data');
   const watchedErrorMessage = form.watch('error_message');
   //
   const watchedCedula = form.watch('cedula');
   const watchedTelefono = form.watch('telefono');
   const watchedCorreo = form.watch('correo');
+  const watchedClienteName = form.watch('cliente_name');
+  const watchedDeuda = form.watch('deuda');
+  const watchedCategorizacionPerfil = form.watch('categorizacion_perfil');
+  const watchedTiempoPermanencia = form.watch('tiempo_permancencia');
+  const watchedTipoCliente = form.watch('tipo_cliente');
   //
 
-  const onSave = async () => {
+  const onSave = async (data: SaveFormData) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Cambiar plan',
-      subtitle: '¿Está seguro que desea cambiar este plan?',
+      title: 'Buzon de tarea',
+      subtitle: '¿Está seguro que desea crear la tarea?',
       onConfirm: () => {
-        createCambioPlan.mutate({
-          linea_servicio: watchedLineaServicio?.contrato_data?.id,
+        createBuzonTarea.mutate({
+          canal_referencia: data.canal_referencia,
+          detalle_caso: data.detalle_caso,
+          tipo_tarea: data.tipo_tarea,
+          subtipo_tarea: data.subtipo_tarea,
+          causa_tarea: data.causa_tarea,
+          cliente: data.cliente,
+          linea_servicio: data.linea_servicio,
+          departamento_asignado: data.departamento_asignado,
+          usuario_creacion: user?.id,
+          aplica_beneficio_segun_perfil: data.aplica_beneficio_solucion,
         });
         setConfirmDialogIsOpen(false);
       },
@@ -218,7 +252,33 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
           contrato.solicitud_servicio_data.identificacion,
         );
         form.setValue('telefono', contrato.solicitud_servicio_data.celular);
+        form.setValue('telefono', contrato.solicitud_servicio_data.celular);
         form.setValue('correo', contrato.solicitud_servicio_data.email);
+        form.setValue(
+          'cliente_name',
+          contrato.solicitud_servicio_data.razon_social,
+        );
+        form.setValue(
+          'linea_servicio',
+          contrato.solicitud_servicio_data.linea_servicio,
+        );
+        form.setValue('deuda', contrato.deuda);
+        form.setValue(
+          'categorizacion_perfil',
+          contrato.contrato_data.categorizacion_perfil,
+        );
+        form.setValue(
+          'categorizacion_pagos',
+          contrato.contrato_data.categorizacion_pagos,
+        );
+        form.setValue(
+          'tiempo_permancencia',
+          contrato.contrato_data.permanencia_contrato,
+        );
+        form.setValue(
+          'tipo_cliente',
+          contrato.contrato_data.plan_internet_actual_data.tipo_plan,
+        );
       }
     }
   }, [numeroContrato, cedulaData?.data, form]);
@@ -228,6 +288,8 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
     isRefetchingTipoMantenedorBeneficios ||
     isLoadingSubtipoMantenedorBeneficios ||
     isRefetchingSubtipoMantenedorBeneficios ||
+    isLoadingCausaMantenedorBeneficios ||
+    isRefetchingCausaMantenedorBeneficios ||
     isLoadingDepartamentos ||
     isRefetchingDepartamentos;
   useLoaders(customLoader);
@@ -273,7 +335,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
         />
         <CustomAutocomplete<Departamento>
           label="Departamento"
-          name="tipo_mantenedor_beneficio"
+          name="departamento_asignado"
           valueKey="name"
           actualValueKey="id"
           control={form.control}
@@ -298,7 +360,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
           size={gridSizeMdLg6}
           onChangeValue={e => {
             if (e) setFieldVisibility(true);
-            form.setValue('subtipo_tarea', '');
+            form.setValue('subtipo_tarea', 0);
           }}
         />
         <CustomAutocomplete<SubtipoMantenedorBeneficios>
@@ -314,18 +376,38 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
           helperText={errors.subtipo_tarea?.message}
           size={gridSizeMdLg6}
         />
-        <CustomTextFieldNoForm
-          label="Aplica para beneficio segun perfil?"
+        <CustomAutocomplete<CausaMantenedorBeneficios>
+          label="Causa de solicitud"
+          name="causa_tarea"
+          valueKey="name"
+          actualValueKey="id"
+          control={form.control}
+          defaultValue={form.getValues().causa_tarea}
+          options={causaMantenedorBeneficiosPaginatedRes?.data.items || []}
+          isLoadingData={isLoadingSubtipoMantenedorBeneficios}
+          error={errors.causa_tarea}
+          helperText={errors.causa_tarea?.message}
           size={gridSizeMdLg6}
-          value={''}
-          disabled
         />
 
-        <CustomTextFieldNoForm
+        <SelectArrayString
+          label="Aplica beneficio perfil"
+          name="aplica_beneficio_segun_perfil"
+          control={form.control}
+          error={errors.aplica_beneficio_segun_perfil}
+          helperText={errors.aplica_beneficio_segun_perfil?.message}
+          options={YES_NO_ARRAY_CHOICES}
+          gridSize={gridSizeMdLg6}
+        />
+
+        <SelectArrayString
           label="Canal de referencia"
-          size={gridSizeMdLg6}
-          value={''}
-          disabled
+          name="canal_referencia"
+          control={form.control}
+          error={errors.canal_referencia}
+          helperText={errors.canal_referencia?.message}
+          options={CANAL_REFERENCIA_MANTENEDORES_ARRAY_CHOICES}
+          gridSize={gridSizeMdLg6}
         />
 
         <>
@@ -400,6 +482,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
               helperText={errors.numero_contrato?.message}
               size={gridSizeMdLg6}
               onChangeRawValue={i => {
+                console.log('i.numero_contrato', i.numero_contrato);
                 setNumeroContrato(i.numero_contrato);
               }}
             />
@@ -421,7 +504,7 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
             <CustomTextFieldNoForm
               label="Deuda"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedDeuda}
               disabled
             />
 
@@ -435,43 +518,39 @@ const SaveBuzonTareas: React.FC<SaveBuzonTareasProps> = ({ title }) => {
             <CustomTextFieldNoForm
               label="Tiempo de permanencia"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedTiempoPermanencia}
               disabled
             />
 
             <CustomTextFieldNoForm
               label="tipo de cliente"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedTipoCliente}
               disabled
             />
 
             <CustomTextFieldNoForm
               label="Categorizacion (Perfil)"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedCategorizacionPerfil}
               disabled
             />
 
             <CustomTextFieldNoForm
               label="Cliente"
               size={gridSizeMdLg6}
-              value={''}
+              value={watchedClienteName}
               disabled
             />
 
-            <CustomTextAreaNoForm
-              label="Detalles del caso"
-              size={gridSizeMdLg6}
-              value={''}
-              disabled
-            />
-
-            <CustomTextAreaNoForm
-              label="Respuesta de caso"
-              size={gridSizeMdLg6}
-              value={''}
-              disabled
+            <CustomTextArea
+              label="Detalle de caso"
+              name="detalle_caso"
+              control={form.control}
+              defaultValue={form.getValues().detalle_caso}
+              error={errors.detalle_caso}
+              helperText={errors.detalle_caso?.message}
+              size={gridSizeMdLg12}
             />
           </Grid>
         </>
