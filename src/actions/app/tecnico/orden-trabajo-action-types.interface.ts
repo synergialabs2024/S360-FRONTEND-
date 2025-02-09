@@ -47,6 +47,7 @@ export type UploadInstalacionOTAsignData = Pick<
   // | 'url_foto_ont_encontrado_casa'
   // | 'url_foto_premio'
   // | 'url_foto_acta_entrega_ups'
+  | 'producto_fibra'
 > &
   Pick<Preventa, 'nap' | 'puerto_nap' | 'distancia_nap'> & {
     url_foto_ont_encontrado_casa?: string;

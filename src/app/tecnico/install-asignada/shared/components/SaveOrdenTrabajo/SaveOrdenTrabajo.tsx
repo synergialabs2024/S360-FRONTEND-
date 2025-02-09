@@ -483,6 +483,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         potencia_ont: data.potencia_ont,
         observaciones_adicionales: data.observaciones_adicionales,
         modelo_fibra_utilizada: data.modelo_fibra_utilizada,
+        producto_fibra: firstFibra.producto_data?.id!,
 
         nap: data.nap,
         distancia_nap: data.distancia_nap!,

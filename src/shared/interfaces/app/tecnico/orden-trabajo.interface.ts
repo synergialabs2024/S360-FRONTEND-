@@ -56,6 +56,7 @@ export interface OrdenTrabajo {
   observaciones_adicionales: string;
   modelo_fibra_utilizada: string; // code
   modelo_ont_wifi: string; // code
+  producto_fibra?: number; // fk
 
   url_foto_ont: string;
   url_foto_potencia_ont: string;
