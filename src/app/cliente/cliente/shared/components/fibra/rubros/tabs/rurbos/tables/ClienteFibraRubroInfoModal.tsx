@@ -7,7 +7,7 @@ import {
   ClienteFibraRobroInfoAmounts,
   ClienteFibraRobroInfoFromTo,
   ClienteFibraRobroInfoHeader,
-  ClienteFibraRobroInfoTableDetails,
+  ClienteFibraRobroInfoTableDetailsRubroItem,
 } from './modal';
 
 export type ClienteFibraRobroInfoModalProps = {
@@ -51,7 +51,8 @@ const ClienteFibraRobroInfoModal: React.FC<ClienteFibraRobroInfoModalProps> = ({
 
             <ClienteFibraRobroInfoFromTo rubro={rubro} />
 
-            <ClienteFibraRobroInfoTableDetails rubro={rubro} />
+            {/* <ClienteFibraRobroInfoTableDetails rubro={rubro} /> */}
+            <ClienteFibraRobroInfoTableDetailsRubroItem rubro={rubro} />
 
             <ClienteFibraRobroInfoAmounts rubro={rubro} />
           </>

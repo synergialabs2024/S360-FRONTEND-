@@ -49,7 +49,36 @@ export interface Rubro {
   factura_data?: Factura;
 
   orden_trabajo_data?: OrdenTrabajoLimitData;
+
+  rubro_items_data?: RubroItemData[];
 }
+
+export type RubroItemData = {
+  id: number;
+  uuid?: string;
+
+  tipo_rubro_item: TipoRubroEnumChoice;
+
+  descripcion: string;
+  valor_base: string;
+  cantidad: number;
+  impuesto: string;
+
+  // si se puede eliminar del detalle del rubro
+  removible: boolean;
+  state: boolean; // false = eliminado
+
+  codigo_producto?: string;
+
+  created_at?: string;
+  modified_at?: string;
+
+  ///* fk
+  rubro?: number;
+  plan_internet?: number;
+  producto?: number;
+  default_iva?: number;
+};
 
 export type BaseRubroDetail = {
   codigo: string;
