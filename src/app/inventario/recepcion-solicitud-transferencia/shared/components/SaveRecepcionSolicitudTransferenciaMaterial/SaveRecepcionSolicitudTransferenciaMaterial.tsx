@@ -8,6 +8,7 @@ import { Grid } from '@mui/material';
 
 import {
   CreateSolicitudTransferenciaMaterialParamsBase,
+  useCreateTransferenciaMaterial,
   useFetchBodegas,
   useFetchUbicacions,
   useUpdateSolicitudTransferenciaMaterial,
@@ -22,6 +23,7 @@ import {
   useLoaders,
   useColumnsTransferenciaMaterial,
   ProductosDisponiblesTableType,
+  Producto,
 } from '@/shared';
 import {
   CustomAutocomplete,
@@ -35,7 +37,8 @@ import {
 import { useProductosStore } from '@/store/app';
 import ProductosDisponiblesModal from '@/shared/hooks/app/inventario/modals/ProductosDisponiblesModal';
 import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
-import RecepcionTransferenciaModal from '@/shared/hooks/app/inventario/transferencia-material/modal/RecepcionTransferenciaModal';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
 
 export interface SaveRecepcionSolicitudTransferenciaMaterialProps {
   title: string;
@@ -50,12 +53,15 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
   const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
-  const [openModal, setOpenModal] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -130,6 +136,66 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
       },
     );
 
+  const updateRecepcionSolicitudTransferenciaAprobarMutation =
+    useUpdateSolicitudTransferenciaMaterial<CreateSolicitudTransferenciaMaterialParamsBase>(
+      {
+        enableNavigate: true,
+        enableErrorNavigate: true,
+      },
+    );
+
+  const createTransferenciaMaterialMutation = useCreateTransferenciaMaterial({
+    navigate,
+    returnUrl: returnUrlTransferenciaMaterialesPage,
+    enableErrorNavigate: false,
+  });
+
+  const onSuccessCreateTransferencia = (
+    dato: SolicitudTransferenciaMaterial,
+  ) => {
+    updateRecepcionSolicitudTransferenciaAprobarMutation.mutate(
+      {
+        id: dato.id!,
+        data: dato,
+      },
+      {
+        onSuccess: () => {
+          const preparedData = {
+            state: dato.state,
+            observacion: dato.observacion,
+            productos: dato.productos,
+            bodega_origen: dato.bodega_origen,
+            ubicacion_origen: dato.ubicacion_origen,
+            bodega_destino: dato.bodega_destino,
+            ubicacion_destino: dato.ubicacion_destino,
+          };
+
+          setConfirmDialog({
+            isOpen: true,
+            title: 'Solicitud de material creada',
+            subtitle:
+              'La solicitud ha sido creada con éxito. ¿Desea continuar con la preventa?',
+            onConfirm: () => {
+              setConfirmDialogIsOpen(false);
+              createTransferenciaMaterialMutation.mutate(preparedData);
+            },
+            confirmTextBtn: 'SI, CONTINUAR',
+            cancelTextBtn: 'CERRAR',
+            onClose: () => {
+              setConfirmDialogIsOpen(false);
+              navigate(returnUrlRecepcionSolicitudTransferenciaMaterialesPage);
+            },
+          });
+        },
+        onError: error => {
+          // Muestra un mensaje de error si la mutación falla
+          ToastWrapper.error('Error al actualizar la recepción del material.');
+          console.error('Error al actualizar:', error);
+        },
+      },
+    );
+  };
+
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
@@ -165,17 +231,18 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
       return;
     }
 
-    const preparedData = {
-      ...data,
-      productos: mappedProductos,
-    };
+    data.productos = mappedProductos as unknown as Producto[];
 
+    onSuccessCreateTransferencia(data as SolicitudTransferenciaMaterial);
+
+    /*
     ///* upd
     if (solicitudTransferenciaMaterial?.id) {
       data.estado_solicitud = 'APROBADO';
       setModalData(preparedData);
       setOpenModal(true);
     }
+      */
   };
 
   const onRechazar = async (data: SaveFormData) => {
@@ -253,13 +320,6 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
 
   return (
     <>
-      {openModal && (
-        <RecepcionTransferenciaModal
-          Arrays={modalData}
-          openModal={openModal}
-          onClose={() => setOpenModal(false)}
-        />
-      )}
       <SingleFormBoxScene
         titlePage={title}
         onCancel={() =>

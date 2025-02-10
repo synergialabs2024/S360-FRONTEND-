@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 import {
   CreateRecepcionMaterialParamsBase,
+  useCreateEgresoMaterial,
   useFetchBodegas,
   useFetchUbicacions,
   useUpdateRecepcionMaterial,
@@ -32,10 +33,11 @@ import {
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useProductosStore } from '@/store/app';
-import RecepcionEgresoModal from '../../../pages/modal/RecepcionEgresoModal';
 
 import { FiPlus } from 'react-icons/fi';
 import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { returnUrlEgresoMaterialesPage } from '@/app/inventario/egreso-material/pages/tables/EgresoMaterialesPage';
 
 export interface SaveRecepcionMaterialProps {
   title: string;
@@ -52,12 +54,15 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   const navigate = useNavigate();
 
@@ -106,12 +111,66 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       returnUrl: returnUrlRecepcionMaterialPage,
     });
 
+  const updateRecepcionMaterialAprobarMutation =
+    useUpdateRecepcionMaterial<CreateRecepcionMaterialParamsBase>({
+      enableNavigate: true,
+      enableErrorNavigate: true,
+    });
+
+  const createEgresoMaterialMutation = useCreateEgresoMaterial({
+    navigate,
+    returnUrl: returnUrlEgresoMaterialesPage,
+    enableErrorNavigate: false,
+  });
+
+  const onSuccessCreateEgreso = (dato: RecepcionMaterial) => {
+    updateRecepcionMaterialAprobarMutation.mutate(
+      {
+        id: dato.id!,
+        data: dato,
+      },
+      {
+        onSuccess: () => {
+          const preparedData = {
+            state: dato.state,
+            observacion: dato.observacion,
+            productos: dato.productos,
+            bodega: dato.bodega,
+            ubicacion: dato.ubicacion,
+          };
+
+          setConfirmDialog({
+            isOpen: true,
+            title: 'Solicitud de material creada',
+            subtitle:
+              'La solicitud ha sido creada con éxito. ¿Desea continuar con la preventa?',
+            onConfirm: () => {
+              setConfirmDialogIsOpen(false);
+              createEgresoMaterialMutation.mutate(preparedData);
+            },
+            confirmTextBtn: 'SI, CONTINUAR',
+            cancelTextBtn: 'CERRAR',
+            onClose: () => {
+              setConfirmDialogIsOpen(false);
+              navigate(returnUrlRecepcionMaterialPage);
+            },
+          });
+        },
+        onError: error => {
+          // Muestra un mensaje de error si la mutación falla
+          ToastWrapper.error('Error al actualizar la recepción del material.');
+          console.error('Error al actualizar:', error);
+        },
+      },
+    );
+  };
+
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     const mappedProductos = productosDisponibles.map(producto => ({
       id: producto.id,
       producto: producto.id,
-      cantidad: producto.cantidad,
+      cantidad: producto.cantidad!,
       descripcion: producto.descripcion,
       nombre: producto.nombre,
       codigo: producto.codigo,
@@ -137,17 +196,10 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       return;
     }
 
-    const preparedData = {
-      ...data,
-      productos: mappedProductos,
-    };
+    data.estado_solicitud = 'APROBADO';
+    data.productos = mappedProductos;
 
-    ///* upd
-    if (recepcionMaterial?.id) {
-      data.estado_solicitud = 'APROBADO';
-      setModalData(preparedData);
-      setOpenModal(true);
-    }
+    onSuccessCreateEgreso(data as RecepcionMaterial);
   };
 
   const onRechazar = async (data: SaveFormData) => {
@@ -179,13 +231,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
 
   return (
     <>
-      {openModal && (
-        <RecepcionEgresoModal
-          Arrays={modalData}
-          openModal={openModal}
-          onClose={() => setOpenModal(false)} // Cierra el modal
-        />
-      )}
       <SingleFormBoxScene
         titlePage={title}
         onCancel={() => navigate(returnUrlRecepcionMaterialPage)}
