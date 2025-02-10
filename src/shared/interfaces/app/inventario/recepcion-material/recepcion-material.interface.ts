@@ -30,7 +30,7 @@ export interface RecepcionMaterial {
 }
 
 interface Productos {
-  stock_up: number;
+  stock_up?: number;
   requiere_series: boolean;
   cantidad: number;
   series: any[];
