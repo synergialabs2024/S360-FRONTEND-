@@ -1262,6 +1262,12 @@ export const TIPO_RECURRENCIA_ALQUILER_ARRAY_OBJ_ONT = [
   },
 ];
 
+export enum EstadoAlquilerEnumChoice {
+  ACTIVO = 'ACTIVO',
+  PAGADO = 'PAGADO',
+  CANCELADO = 'CANCELADO',
+}
+
 export enum YesNoEnumChoice {
   SI = 'SI',
   NO = 'NO',
