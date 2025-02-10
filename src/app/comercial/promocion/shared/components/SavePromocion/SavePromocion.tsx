@@ -804,6 +804,11 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
             />
           }
         />
+
+        {/* ==================== PRODUCTOS ==================== */}
+        {/* ------------- Inventariables EQUIPOS ------------- */}
+
+        {/* ------------- Inventariables DIGITALES (alquileres) ------------- */}
       </CustomTabPanel>
     </TabsFormBoxScene>
   );
