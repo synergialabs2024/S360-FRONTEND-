@@ -60,6 +60,7 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
       <Paper variant="outlined">
         <TableContainer>
           <Table>
+            {/* ==================== head ==================== */}
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -77,6 +78,12 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
                     Cantidad
                   </Typography>
                 </TableCell>
+                <TableCell>
+                  <Typography variant="h6" fontSize="14px">
+                    Imp %
+                  </Typography>
+                </TableCell>
+
                 {rubroType === TipoRubroEnumChoice.PRODUCTOS && hasSeriesOT && (
                   <TableCell>
                     <Typography variant="h6" fontSize="14px">
@@ -89,13 +96,21 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
                     Subtotal
                   </Typography>
                 </TableCell>
+                <TableCell align="right">
+                  <Typography variant="h6" fontSize="14px">
+                    Total
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
 
+            {/* ==================== body ==================== */}
             <TableBody>
               {items.map(item => {
                 const subtotal =
                   Number(item.valor_base) * Number(item.cantidad);
+                const total = subtotal * (Number(item.impuesto) / 100 + 1);
+
                 return (
                   <TableRow key={item.uuid}>
                     <TableCell>
@@ -112,6 +127,9 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
                       <Typography variant="body1">
                         {formatQuantity(item.cantidad)}
                       </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1">{item.impuesto}</Typography>
                     </TableCell>
 
                     {rubroType === TipoRubroEnumChoice.PRODUCTOS &&
@@ -139,6 +157,11 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
                     <TableCell align="right">
                       <Typography variant="body1">
                         {formatCurrency(subtotal)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body1">
+                        {formatCurrency(total)}
                       </Typography>
                     </TableCell>
                   </TableRow>
