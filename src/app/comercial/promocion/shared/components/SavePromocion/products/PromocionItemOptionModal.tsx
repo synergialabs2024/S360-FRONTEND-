@@ -3,6 +3,7 @@ import {
   gridSize,
   OpcionProductoPromocionItem,
   TIPO_PAGO_PROMOCION_ALQUILER_ARRAY,
+  valueTipoRecuerrenciaAlquilerEnumChoice,
 } from '@/shared';
 import {
   CustomAutocompleteNoForm,
@@ -64,10 +65,10 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
 
   const handleAddOption = () => {
     const nuevaOpcion: OpcionProductoPromocionItem = {
-      tipo_pago: '',
-      valor: '',
-      cantidad: 0,
-      cuotas: 0,
+      tipo_pago: valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS,
+      valor: '0.00',
+      cantidad: 1,
+      cuotas: 1,
     };
     setSelectedRow({
       ...selectedRow,
@@ -104,7 +105,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                 >
                   <Grid item xs={5}>
                     <CustomAutocompleteNoForm<GenericAutocompleteNoFormType>
-                      label="Categoría"
+                      label="Recurrencia"
                       value={opcion.tipo_pago}
                       actualValueKey="value"
                       onChange={v => {
@@ -128,17 +129,19 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                       }
                       type="number"
                       size={gridSize}
+                      min={1}
                     />
                   </Grid>
                   <Grid item xs={2}>
                     <CustomTextFieldControlled
-                      label="Valor"
+                      label="Valor base"
                       value={opcion.valor}
                       onChange={e =>
                         handleUpdateOption(index, 'valor', e.target.value)
                       }
                       type="number"
                       size={gridSize}
+                      min={1}
                     />
                   </Grid>
                   <Grid item xs={2}>
@@ -150,6 +153,8 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                       }
                       type="number"
                       size={gridSize}
+                      required={false}
+                      min={0}
                     />
                   </Grid>
 

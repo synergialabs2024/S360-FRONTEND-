@@ -1,5 +1,5 @@
-import React from 'react';
 import { Grid, InputAdornment, TextField } from '@mui/material';
+import React from 'react';
 
 import { gridSizeMdLg6 } from '@/shared/constants';
 import {
@@ -22,6 +22,10 @@ export type CustomTextFieldControlledProps = {
   sxTextField?: SxPropsThemeType;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
+
+  min?: number;
+  max?: number;
+  step?: number;
 };
 
 const CustomTextFieldControlled: React.FC<CustomTextFieldControlledProps> = ({
@@ -37,6 +41,10 @@ const CustomTextFieldControlled: React.FC<CustomTextFieldControlledProps> = ({
   sxTextField,
   startAdornment,
   endAdornment,
+
+  min = 1,
+  max,
+  step = 1,
 }) => {
   return (
     <Grid item {...size}>
@@ -63,6 +71,14 @@ const CustomTextFieldControlled: React.FC<CustomTextFieldControlledProps> = ({
           endAdornment: endAdornment ? (
             <InputAdornment position="end">{endAdornment}</InputAdornment>
           ) : null,
+
+          inputProps: {
+            ...(type === 'number' && {
+              min,
+              ...(max && { max }),
+              step,
+            }),
+          },
         }}
         disabled={disabled}
         sx={{
