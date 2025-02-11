@@ -937,7 +937,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               setIsOpenProductModal(false);
             }}
           />
-
           <PromocionItemOptionModal
             open={isOpenProductOptionsModal}
             onClose={() => {
