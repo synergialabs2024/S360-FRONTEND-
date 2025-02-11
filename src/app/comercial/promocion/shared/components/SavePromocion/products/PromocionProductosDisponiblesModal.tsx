@@ -75,10 +75,6 @@ const PromocionProductosDisponiblesModal: React.FC<
   });
 
   ///* handlers ---------------------
-  const handleConfirm = () => {
-    onClose();
-  };
-
   const handleClose = () => {
     onClose();
     setProductCategory(InvetarioCodesEnum.EQUIPOS);
@@ -113,8 +109,7 @@ const PromocionProductosDisponiblesModal: React.FC<
       onClose={handleClose}
       minWidth="60%"
       title="Productos Disponibles"
-      confirmTextBtn="Reasignar"
-      onConfirm={handleConfirm}
+      cancelTextBtn="Cerrar"
       contentNode={
         <>
           <CustomSearch
