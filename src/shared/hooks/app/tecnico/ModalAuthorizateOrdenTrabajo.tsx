@@ -1,24 +1,24 @@
+import { IconRouteSquare2 } from '@tabler/icons-react';
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
-  CreateAuthOnuParamsBase,
-  useFetchAuthOnu,
   useFetchOLTs,
+  useFetchAuthOnu,
+  CreateAuthOnuParamsBase,
 } from '@/actions/app';
-import { gridSizeMdLg6 } from '@/shared/constants';
 import {
-  CustomAutocompleteNoForm,
-  CustomNumberTextField,
   CustomTextField,
   CustomTypoLabel,
+  SingleIconButton,
   CustomTypoLabelEnum,
   ScrollableDialogProps,
-  SingleIconButton,
+  CustomNumberTextField,
+  CustomAutocompleteNoForm,
 } from '@/shared/components';
 import { ToastWrapper } from '@/shared/wrappers';
-import { IconRouteSquare2 } from '@tabler/icons-react';
+import { gridSizeMdLg6 } from '@/shared/constants';
 
 export type ModalAuthorizateOrdenTrabajoProps = {
   authOnu: Record<string, any>;
@@ -148,6 +148,20 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
       setOpenModal(false);
     }
   };
+
+  // alets: not found
+  useEffect(() => {
+    if (
+      AuthOnusPagingRes &&
+      AuthOnusPagingRes.data?.items?.length &&
+      openModal
+    ) {
+      return;
+    }
+    if (!AuthOnusPagingRes?.data?.items?.length && openModal) {
+      ToastWrapper.error('No se encontraron Autenticaciones en la ONU');
+    }
+  }, [AuthOnusPagingRes, openModal]);
 
   return (
     <>
