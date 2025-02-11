@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Tab } from '@mui/material';
+import { Grid, Tab } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -22,8 +22,11 @@ import {
   CustomDatePicker,
   CustomNumberTextField,
   CustomRadioButtonGroup,
+  CustomSingleButton,
   CustomTabPanel,
   CustomTextField,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
   FormTabsOnly,
   InputAndBtnGridSpace,
   SampleCheckbox,
@@ -50,7 +53,9 @@ import type {
 import { promocionFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { FiPlus } from 'react-icons/fi';
 import { returnUrlPromocionsPage } from '../../../pages/tables/PromocionsPage';
+import { PromocionProductosDisponiblesModal } from './products';
 
 export interface SavePromocionProps {
   title: string;
@@ -73,7 +78,10 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
   useCheckPermissionsArray(SAVE_PROMOCION_PERMISSIONS);
 
-  ///* global state
+  ///* local state ----------------
+  const [isOpenProductModal, setIsOpenProductModal] = useState(false);
+
+  ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
@@ -82,7 +90,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   ///* hooks ----------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly({
-    initialTabValue: 1,
+    initialTabValue: 2,
   });
 
   ///* form ----------------
@@ -442,373 +450,404 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
       {/* ======================== Select ======================== */}
       <CustomTabPanel index={2} value={tabValue}>
-        {/* --------- provinces --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<Provincia>
-              label="Provincias"
-              name="provincias"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={provinciasPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().provincias?.length
-                  ? provinciasPaging?.data?.items?.filter(
-                      (provincia: Provincia) =>
-                        (form.getValues().provincias as any[])?.includes(
-                          provincia?.id!,
-                        ),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingProvincias || isRefetchingProvincias}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.provincias?.message}
-              disabled={watchedAllProvincias || !!promocion?.id}
-              onlyActualValueKey
-              required={false}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allProvincias"
-              control={form.control}
-              defaultValue={!!form.getValues().allProvincias}
-              onChangeValue={value => {
-                if (value) return form.setValue('provincias', ['*']);
-                form.setValue('provincias', []);
-              }}
-              // disabled
-              disabled={
-                !provinciasPaging?.data?.items?.length || !!promocion?.id
-              }
-              onClickDisabled={() => {
-                if (promocion?.id) return;
+        <>
+          {/* --------- provinces --------- */}
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<Provincia>
+                label="Provincias"
+                name="provincias"
+                textFieldKey="nombre"
+                valueKey="name"
+                actualValueKey="id"
+                // options
+                options={provinciasPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().provincias?.length
+                    ? provinciasPaging?.data?.items?.filter(
+                        (provincia: Provincia) =>
+                          (form.getValues().provincias as any[])?.includes(
+                            provincia?.id!,
+                          ),
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingProvincias || isRefetchingProvincias}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.provincias?.message}
+                disabled={watchedAllProvincias || !!promocion?.id}
+                onlyActualValueKey
+                required={false}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allProvincias"
+                control={form.control}
+                defaultValue={!!form.getValues().allProvincias}
+                onChangeValue={value => {
+                  if (value) return form.setValue('provincias', ['*']);
+                  form.setValue('provincias', []);
+                }}
+                // disabled
+                disabled={
+                  !provinciasPaging?.data?.items?.length || !!promocion?.id
+                }
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
 
-                ToastWrapper.warning(
-                  'No se puede seleccionar todas las provincias ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
-
-        {/* --------- cities --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<Ciudad>
-              label="Ciudades"
-              name="ciudades"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={ciudadesPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().ciudades?.length
-                  ? ciudadesPaging?.data?.items?.filter((ciudad: Ciudad) =>
-                      (form.getValues().ciudades as any[])?.includes(
-                        ciudad?.id!,
-                      ),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingCiudades || isRefetchingCiudades}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.ciudades?.message}
-              disabled={
-                watchedAllCities ||
-                !watchedProvincias?.length ||
-                !!promocion?.id
-              }
-              onlyActualValueKey
-              required={false}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allCities"
-              control={form.control}
-              defaultValue={!!form.getValues().allCities}
-              onChangeValue={value => {
-                if (value) return form.setValue('ciudades', ['*']);
-                form.setValue('ciudades', []);
-              }}
-              // disabled
-              disabled={
-                !provinciasPaging?.data?.items?.length ||
-                !watchedProvincias?.length ||
-                !!promocion?.id
-              }
-              onClickDisabled={() => {
-                if (promocion?.id) return;
-
-                if (!watchedProvincias?.length)
-                  return ToastWrapper.warning(
-                    'Seleccione al menos una provincia',
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todas las provincias ya que no se tienen registros disponibles',
                   );
+                }}
+              />
+            }
+          />
 
-                ToastWrapper.warning(
-                  'No se puede seleccionar todas las ciudades ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
-
-        {/* --------- zones --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<Zona>
-              label="Zonas"
-              name="zonas"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={zonasPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().zonas?.length
-                  ? zonasPaging?.data?.items?.filter((zona: Zona) =>
-                      (form.getValues().zonas as any[])?.includes(zona?.id!),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingZonas || isRefetchingZonas}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.zonas?.message}
-              disabled={
-                watchedAllZones || !watchedCiudades?.length || !!promocion?.id
-              }
-              onlyActualValueKey
-              required={false}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allZones"
-              control={form.control}
-              defaultValue={!!form.getValues().allZones}
-              onChangeValue={value => {
-                if (value) return form.setValue('zonas', ['*']);
-                form.setValue('zonas', []);
-              }}
-              // disabled
-              disabled={
-                !ciudadesPaging?.data?.items?.length ||
-                !watchedCiudades?.length ||
-                !!promocion?.id
-              }
-              onClickDisabled={() => {
-                if (promocion?.id) return;
-
-                if (!watchedCiudades?.length)
-                  return ToastWrapper.warning('Seleccione al menos una ciudad');
-
-                ToastWrapper.warning(
-                  'No se puede seleccionar todas las zonas ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
-
-        {/* --------- sectores --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<Sector>
-              label="Sectores"
-              name="sectores"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={sectoresPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().sectores?.length
-                  ? sectoresPaging?.data?.items?.filter((sector: Sector) =>
-                      (form.getValues().sectores as any[])?.includes(
-                        sector?.id!,
-                      ),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingSectores || isRefetchingSectores}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.sectores?.message}
-              disabled={
-                watchedAllSectores || !watchedZonas?.length || !!promocion?.id
-              }
-              onlyActualValueKey
-              required={false}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allSectores"
-              control={form.control}
-              defaultValue={!!form.getValues().allSectores}
-              onChangeValue={value => {
-                if (value) return form.setValue('sectores', ['*']);
-                form.setValue('sectores', []);
-              }}
-              // disabled
-              disabled={
-                !zonasPaging?.data?.items?.length ||
-                !watchedZonas?.length ||
-                !!promocion?.id
-              }
-              onClickDisabled={() => {
-                if (promocion?.id) return;
-
-                if (!watchedZonas?.length)
-                  return ToastWrapper.warning('Seleccione al menos una zona');
-
-                ToastWrapper.warning(
-                  'No se puede seleccionar todos los sectores ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
-
-        {/* --------- PLANES --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<PlanInternet>
-              label="Planes"
-              name="planes"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={planesPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().planes?.length
-                  ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
-                      (form.getValues().planes as any[])?.includes(plan?.id!),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingPlanes || isRefetchingPlanes}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.planes?.message}
-              disabled={watchedAllPlanes || !!promocion?.id}
-              onlyActualValueKey
-              required={false}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allPlanes"
-              control={form.control}
-              defaultValue={!!form.getValues().allPlanes}
-              onChangeValue={value => {
-                if (value) return form.setValue('planes', ['*']);
-                form.setValue('planes', []);
-              }}
-              // disabled
-              disabled={!planesPaging?.data?.items?.length || !!promocion?.id}
-              onClickDisabled={() => {
-                if (promocion?.id) return;
-
-                ToastWrapper.warning(
-                  'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
-
-        {/* --------- Payment methods --------- */}
-        <InputAndBtnGridSpace
-          mainGridSize={gridSize}
-          inputNode={
-            <CustomAutocompleteMultiple<MetodoPago>
-              label="Métodos de pago"
-              name="metodo_pagos"
-              textFieldKey="nombre"
-              valueKey="name"
-              actualValueKey="id"
-              // options
-              options={metodoPagosPaging?.data?.items || []}
-              defaultValue={
-                form.getValues().metodo_pagos?.length
-                  ? metodoPagosPaging?.data?.items?.filter(
-                      (metodoPago: MetodoPago) =>
-                        (form.getValues().metodo_pagos as any[])?.includes(
-                          metodoPago?.id!,
+          {/* --------- cities --------- */}
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<Ciudad>
+                label="Ciudades"
+                name="ciudades"
+                textFieldKey="nombre"
+                valueKey="name"
+                actualValueKey="id"
+                // options
+                options={ciudadesPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().ciudades?.length
+                    ? ciudadesPaging?.data?.items?.filter((ciudad: Ciudad) =>
+                        (form.getValues().ciudades as any[])?.includes(
+                          ciudad?.id!,
                         ),
-                    )
-                  : []
-              }
-              isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
-              // errors
-              control={form.control}
-              error={undefined}
-              helperText={errors.metodo_pagos?.message}
-              onlyActualValueKey
-              required={false}
-              disabled={watchedAllMetodosPago || !!promocion?.id}
-            />
-          }
-          overrideBtnNode
-          customBtnNode={
-            <SampleCheckbox
-              label="TODOS"
-              name="allMetodosPago"
-              control={form.control}
-              defaultValue={!!form.getValues().allMetodosPago}
-              onChangeValue={value => {
-                if (value) return form.setValue('metodo_pagos', ['*']);
-                form.setValue('metodo_pagos', []);
-              }}
-              // disabled
-              disabled={
-                !metodoPagosPaging?.data?.items?.length || !!promocion?.id
-              }
-              onClickDisabled={() => {
-                if (promocion?.id) return;
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingCiudades || isRefetchingCiudades}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.ciudades?.message}
+                disabled={
+                  watchedAllCities ||
+                  !watchedProvincias?.length ||
+                  !!promocion?.id
+                }
+                onlyActualValueKey
+                required={false}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allCities"
+                control={form.control}
+                defaultValue={!!form.getValues().allCities}
+                onChangeValue={value => {
+                  if (value) return form.setValue('ciudades', ['*']);
+                  form.setValue('ciudades', []);
+                }}
+                // disabled
+                disabled={
+                  !provinciasPaging?.data?.items?.length ||
+                  !watchedProvincias?.length ||
+                  !!promocion?.id
+                }
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
 
-                ToastWrapper.warning(
-                  'No se puede seleccionar todos los métodos de pago ya que no se tienen registros disponibles',
-                );
-              }}
-            />
-          }
-        />
+                  if (!watchedProvincias?.length)
+                    return ToastWrapper.warning(
+                      'Seleccione al menos una provincia',
+                    );
+
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todas las ciudades ya que no se tienen registros disponibles',
+                  );
+                }}
+              />
+            }
+          />
+
+          {/* --------- zones --------- */}
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<Zona>
+                label="Zonas"
+                name="zonas"
+                textFieldKey="nombre"
+                valueKey="name"
+                actualValueKey="id"
+                // options
+                options={zonasPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().zonas?.length
+                    ? zonasPaging?.data?.items?.filter((zona: Zona) =>
+                        (form.getValues().zonas as any[])?.includes(zona?.id!),
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingZonas || isRefetchingZonas}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.zonas?.message}
+                disabled={
+                  watchedAllZones || !watchedCiudades?.length || !!promocion?.id
+                }
+                onlyActualValueKey
+                required={false}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allZones"
+                control={form.control}
+                defaultValue={!!form.getValues().allZones}
+                onChangeValue={value => {
+                  if (value) return form.setValue('zonas', ['*']);
+                  form.setValue('zonas', []);
+                }}
+                // disabled
+                disabled={
+                  !ciudadesPaging?.data?.items?.length ||
+                  !watchedCiudades?.length ||
+                  !!promocion?.id
+                }
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
+
+                  if (!watchedCiudades?.length)
+                    return ToastWrapper.warning(
+                      'Seleccione al menos una ciudad',
+                    );
+
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todas las zonas ya que no se tienen registros disponibles',
+                  );
+                }}
+              />
+            }
+          />
+
+          {/* --------- sectores --------- */}
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<Sector>
+                label="Sectores"
+                name="sectores"
+                textFieldKey="nombre"
+                valueKey="name"
+                actualValueKey="id"
+                // options
+                options={sectoresPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().sectores?.length
+                    ? sectoresPaging?.data?.items?.filter((sector: Sector) =>
+                        (form.getValues().sectores as any[])?.includes(
+                          sector?.id!,
+                        ),
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingSectores || isRefetchingSectores}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.sectores?.message}
+                disabled={
+                  watchedAllSectores || !watchedZonas?.length || !!promocion?.id
+                }
+                onlyActualValueKey
+                required={false}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allSectores"
+                control={form.control}
+                defaultValue={!!form.getValues().allSectores}
+                onChangeValue={value => {
+                  if (value) return form.setValue('sectores', ['*']);
+                  form.setValue('sectores', []);
+                }}
+                // disabled
+                disabled={
+                  !zonasPaging?.data?.items?.length ||
+                  !watchedZonas?.length ||
+                  !!promocion?.id
+                }
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
+
+                  if (!watchedZonas?.length)
+                    return ToastWrapper.warning('Seleccione al menos una zona');
+
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todos los sectores ya que no se tienen registros disponibles',
+                  );
+                }}
+              />
+            }
+          />
+
+          {/* --------- PLANES --------- */}
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<PlanInternet>
+                label="Planes"
+                name="planes"
+                textFieldKey="nombre"
+                valueKey="name"
+                actualValueKey="id"
+                // options
+                options={planesPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().planes?.length
+                    ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
+                        (form.getValues().planes as any[])?.includes(plan?.id!),
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingPlanes || isRefetchingPlanes}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.planes?.message}
+                disabled={watchedAllPlanes || !!promocion?.id}
+                onlyActualValueKey
+                required={false}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allPlanes"
+                control={form.control}
+                defaultValue={!!form.getValues().allPlanes}
+                onChangeValue={value => {
+                  if (value) return form.setValue('planes', ['*']);
+                  form.setValue('planes', []);
+                }}
+                // disabled
+                disabled={!planesPaging?.data?.items?.length || !!promocion?.id}
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
+
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
+                  );
+                }}
+              />
+            }
+          />
+
+          {/* --------- Payment methods --------- */}
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<MetodoPago>
+                label="Métodos de pago"
+                name="metodo_pagos"
+                textFieldKey="nombre"
+                valueKey="name"
+                actualValueKey="id"
+                // options
+                options={metodoPagosPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().metodo_pagos?.length
+                    ? metodoPagosPaging?.data?.items?.filter(
+                        (metodoPago: MetodoPago) =>
+                          (form.getValues().metodo_pagos as any[])?.includes(
+                            metodoPago?.id!,
+                          ),
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.metodo_pagos?.message}
+                onlyActualValueKey
+                required={false}
+                disabled={watchedAllMetodosPago || !!promocion?.id}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allMetodosPago"
+                control={form.control}
+                defaultValue={!!form.getValues().allMetodosPago}
+                onChangeValue={value => {
+                  if (value) return form.setValue('metodo_pagos', ['*']);
+                  form.setValue('metodo_pagos', []);
+                }}
+                // disabled
+                disabled={
+                  !metodoPagosPaging?.data?.items?.length || !!promocion?.id
+                }
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
+
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todos los métodos de pago ya que no se tienen registros disponibles',
+                  );
+                }}
+              />
+            }
+          />
+        </>
 
         {/* ==================== PRODUCTOS ==================== */}
         {/* ------------- Inventariables EQUIPOS ------------- */}
+        <>
+          <Grid item xs={12} container justifyContent="flex-end" pb={3}>
+            <CustomTypoLabel
+              text="Productos Promocionables"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+
+            <CustomSingleButton
+              label="AGREGAR PRODUCTO"
+              color="primary"
+              variant="text"
+              startIcon={<FiPlus />}
+              onClick={() => {
+                setIsOpenProductModal(true);
+              }}
+              justifyContent="flex-end"
+            />
+          </Grid>
+
+          <PromocionProductosDisponiblesModal
+            open={isOpenProductModal}
+            onClose={() => {
+              setIsOpenProductModal(false);
+            }}
+          />
+        </>
 
         {/* ------------- Inventariables DIGITALES (alquileres) ------------- */}
+        <></>
       </CustomTabPanel>
     </TabsFormBoxScene>
   );
