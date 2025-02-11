@@ -79,7 +79,7 @@ const InstalacionAsignadaEsperaCoreccionTectOT: React.FC<
   };
 
   ///* columns ---------------------
-  const { installAsignadasEsperaOTColumns } = useColumnsOrdenTrabajo();
+  const { installPendientesCorreccionOTColumns } = useColumnsOrdenTrabajo();
 
   return (
     <GridTableTabsContainerOnly>
@@ -93,7 +93,7 @@ const InstalacionAsignadaEsperaCoreccionTectOT: React.FC<
       />
 
       <CustomTable<OrdenTrabajo>
-        columns={installAsignadasEsperaOTColumns}
+        columns={installPendientesCorreccionOTColumns}
         data={OrdensTrabajoPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

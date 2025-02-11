@@ -468,6 +468,23 @@ export const useColumnsOrdenTrabajo = () => {
 
   const installPreRechazadoOTColumns = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
+      {
+        accessorKey: 'preventa_data__name',
+        header: 'MOTIVO PRERECHAZO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['motivo_prerechazo_data', 'name']),
+      },
+      {
+        accessorKey: 'observacion_prerechazo',
+        header: 'OBSERVACION PRERECHAZO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'observacion_prerechazo'),
+      },
       ...otColumnsBase01,
       ...otColumnsBase02,
       ...otColumnsBase03,
@@ -523,6 +540,22 @@ export const useColumnsOrdenTrabajo = () => {
     MRT_ColumnDef<OrdenTrabajo>[]
   >(
     () => [
+      {
+        accessorKey: 'motivo_correccion',
+        header: 'MOTIVO CORRECCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'motivo_correccion'),
+      },
+      {
+        accessorKey: 'observacion_correccion',
+        header: 'OBSERVACION CORRECCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'observacion_correccion'),
+      },
       ...otColumnsBase01,
       ...otColumnsBase02,
       ...otColumnsBase03,
@@ -542,6 +575,31 @@ export const useColumnsOrdenTrabajo = () => {
     [otColumnsBase01, otColumnsBase02, otColumnsBase03, otColumnsBase04],
   );
 
+  const installPendientesCorreccionOTColumns = useMemo<
+    MRT_ColumnDef<OrdenTrabajo>[]
+  >(
+    () => [
+      {
+        accessorKey: 'motivo_correccion',
+        header: 'MOTIVO CORRECCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'motivo_correccion'),
+      },
+      {
+        accessorKey: 'observacion_correccion',
+        header: 'OBSERVACION CORRECCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'observacion_correccion'),
+      },
+      ...otColumnsBase01,
+    ],
+    [otColumnsBase01],
+  );
+
   return {
     installAsignadasEsperaOTColumns,
     installAsignadasRecoordinadasOTColumns,
@@ -551,5 +609,6 @@ export const useColumnsOrdenTrabajo = () => {
     installEsperaAuditoriaOTColumns,
     installEsperaCorreccionAuditoriaOTColumns,
     installAprobadasAuditoriaOTColumns,
+    installPendientesCorreccionOTColumns,
   };
 };
