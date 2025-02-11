@@ -288,7 +288,6 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         defaultValue={form.getValues().aplica_promocion}
         size={gridSizeMdLg3}
-        disabled={!!producto}
       />
       <SampleCheckbox
         label="Requiere serie"
