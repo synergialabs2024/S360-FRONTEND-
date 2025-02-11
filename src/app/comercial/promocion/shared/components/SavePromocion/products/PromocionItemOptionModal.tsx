@@ -21,6 +21,7 @@ import {
   useTypedGenericInventoryStore,
 } from '@/store/app';
 import { SelectedEqPromoctionType } from '../SavePromocion';
+import { CustomCardPromocion } from '../../../custom';
 
 export type PromocionItemOptionModalProps = {
   open: boolean;
@@ -97,88 +98,96 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
             <Grid item xs={12}>
               <CustomTypoLabel text="Opciones a ofertar" />
             </Grid>
-
-            <Grid item xs={12}>
-              {selectedRow?.productoOptionItemList.map((opcion, index) => (
-                <Grid
-                  key={index}
-                  item
-                  container
-                  spacing={1}
-                  alignItems="center"
-                >
-                  <Grid item xs={5}>
-                    <CustomAutocompleteNoForm<GenericAutocompleteNoFormType>
-                      label="Recurrencia"
-                      value={opcion.tipo_pago}
-                      actualValueKey="value"
-                      onChange={v => {
-                        handleUpdateOption(index, 'tipo_pago', v as string);
-                      }}
-                      options={TIPO_PAGO_PROMOCION_ALQUILER_ARRAY}
-                      getOptionLabel={o => o.label}
-                      loading={false}
-                      required
-                      error={false}
-                      disableClearable
-                      size={gridSize}
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <CustomTextFieldControlled
-                      label="Cantidad"
-                      value={opcion.cantidad}
-                      onChange={e =>
-                        handleUpdateOption(index, 'cantidad', e.target.value)
-                      }
-                      type="number"
-                      size={gridSize}
-                      min={1}
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <CustomTextFieldControlled
-                      label="Valor base"
-                      value={opcion.valor}
-                      onChange={e =>
-                        handleUpdateOption(index, 'valor', e.target.value)
-                      }
-                      type="number"
-                      size={gridSize}
-                      min={1}
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <CustomTextFieldControlled
-                      label="Cuotas"
-                      value={opcion.cuotas}
-                      onChange={e =>
-                        handleUpdateOption(index, 'cuotas', e.target.value)
-                      }
-                      type="number"
-                      size={gridSize}
-                      required={false}
-                      min={0}
-                    />
-                  </Grid>
-
-                  <Grid item xs={1}>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleRemoveOption(index)}
+            <CustomCardPromocion
+              ml={5}
+              contentNode={
+                <Grid item xs={12}>
+                  {selectedRow?.productoOptionItemList.map((opcion, index) => (
+                    <Grid
+                      key={index}
+                      item
+                      container
+                      spacing={1}
+                      alignItems="center"
                     >
-                      <MdDelete />
-                    </IconButton>
+                      <Grid item xs={5}>
+                        <CustomAutocompleteNoForm<GenericAutocompleteNoFormType>
+                          label="Recurrencia"
+                          value={opcion.tipo_pago}
+                          actualValueKey="value"
+                          onChange={v => {
+                            handleUpdateOption(index, 'tipo_pago', v as string);
+                          }}
+                          options={TIPO_PAGO_PROMOCION_ALQUILER_ARRAY}
+                          getOptionLabel={o => o.label}
+                          loading={false}
+                          required
+                          error={false}
+                          disableClearable
+                          size={gridSize}
+                        />
+                      </Grid>
+                      <Grid item xs={2} sx={{ mt: 3 }}>
+                        <CustomTextFieldControlled
+                          label="Cantidad"
+                          value={opcion.cantidad}
+                          onChange={e =>
+                            handleUpdateOption(
+                              index,
+                              'cantidad',
+                              e.target.value,
+                            )
+                          }
+                          type="number"
+                          size={gridSize}
+                          min={1}
+                        />
+                      </Grid>
+                      <Grid item xs={2} sx={{ mt: 3 }}>
+                        <CustomTextFieldControlled
+                          label="Valor base"
+                          value={opcion.valor}
+                          onChange={e =>
+                            handleUpdateOption(index, 'valor', e.target.value)
+                          }
+                          type="number"
+                          size={gridSize}
+                          min={1}
+                        />
+                      </Grid>
+                      <Grid item xs={2} sx={{ mt: 3 }}>
+                        <CustomTextFieldControlled
+                          label="Cuotas"
+                          value={opcion.cuotas}
+                          onChange={e =>
+                            handleUpdateOption(index, 'cuotas', e.target.value)
+                          }
+                          type="number"
+                          size={gridSize}
+                          required={false}
+                          min={0}
+                        />
+                      </Grid>
+
+                      <Grid item xs={1} sx={{ mt: 6 }}>
+                        <IconButton
+                          color="error"
+                          onClick={() => handleRemoveOption(index)}
+                        >
+                          <MdDelete />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  ))}
+
+                  <Grid item xs={12} mt={5}>
+                    <Button variant="contained" onClick={handleAddOption}>
+                      Agregar Opción
+                    </Button>
                   </Grid>
                 </Grid>
-              ))}
-
-              <Grid item xs={12} mt={5}>
-                <Button variant="contained" onClick={handleAddOption}>
-                  Agregar Opción
-                </Button>
-              </Grid>
-            </Grid>
+              }
+            />
           </Grid>
         </>
       }

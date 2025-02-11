@@ -45,7 +45,11 @@ import {
   FacturasCuotasObjArray,
   SAVE_PROMOCION_PERMISSIONS,
 } from '@/shared/constants/app';
-import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSize,
+  gridSizeMdLg6,
+  TABLE_CONSTANTS,
+} from '@/shared/constants/ui';
 import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import type {
@@ -342,6 +346,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       {
         accessorKey: 'opciones',
         enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         header: 'OPCIONES',
         Cell: ({ row }) => (
           <SingleIconButton
@@ -359,6 +364,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       {
         accessorKey: 'action',
         enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         header: 'ACCIÓN',
         Cell: ({ row }) => (
           <SingleIconButton
