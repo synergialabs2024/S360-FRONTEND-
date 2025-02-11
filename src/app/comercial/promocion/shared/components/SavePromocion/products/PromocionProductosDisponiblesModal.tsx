@@ -9,6 +9,7 @@ import {
 import {
   CustomSearch,
   CustomSingleButton,
+  CustomTextFieldControlled,
   ScrollableDialogProps,
   TableWithoutActions,
 } from '@/shared/components';
@@ -16,6 +17,7 @@ import {
   GenericInventoryStoreKey,
   useTypedGenericInventoryStore,
 } from '@/store/app';
+import { useState } from 'react';
 import { SelectedEqPromoctionType } from '../SavePromocion';
 
 export type PromocionProductosDisponiblesModalProps = {
@@ -37,6 +39,9 @@ const PromocionProductosDisponiblesModal: React.FC<
     onChangeFilter,
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
+
+  ///* local state ---------------------
+  const [productCategory, setProductCategory] = useState<string>('');
 
   ///* global state ---------------------
   const { addSelectedItem } =
@@ -110,6 +115,15 @@ const PromocionProductosDisponiblesModal: React.FC<
             onChange={onChangeFilter}
             value={globalFilter}
             text="por código"
+            customSpaceNode={
+              <>
+                <CustomTextFieldControlled
+                  label="Categoría"
+                  value={productCategory}
+                  onChange={e => setProductCategory(e.target.value)}
+                />
+              </>
+            }
           />
 
           <TableWithoutActions<Producto>
