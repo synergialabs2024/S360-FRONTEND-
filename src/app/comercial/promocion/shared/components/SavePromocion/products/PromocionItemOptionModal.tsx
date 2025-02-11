@@ -20,8 +20,8 @@ import {
   GenericInventoryStoreKey,
   useTypedGenericInventoryStore,
 } from '@/store/app';
-import { SelectedEqPromoctionType } from '../SavePromocion';
 import { CustomCardPromocion } from '../../../custom';
+import { SelectedEqPromoctionType } from '../SavePromocion';
 
 export type PromocionItemOptionModalProps = {
   open: boolean;
@@ -51,6 +51,22 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
     const updatedOpciones = selectedRow?.productoOptionItemList.map(
       (opcion, i) => (i === index ? { ...opcion, [field]: value } : opcion),
     );
+
+    let newValor = value;
+    if (field === 'cuotas') {
+      // calc new value = value / cuotas
+      const valor = parseFloat(
+        selectedRow?.precios?.find(p => p.default)?.valor as any,
+      );
+      const cuotas = value as number;
+      newValor = (valor / cuotas).toFixed(2);
+
+      // update valor
+      if (updatedOpciones && cuotas > 0) {
+        updatedOpciones[index].valor = newValor;
+      }
+    }
+
     setSelectedRow({
       ...selectedRow,
       productoOptionItemList: updatedOpciones || [],
@@ -71,7 +87,8 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
     const nuevaOpcion: OpcionProductoPromocionItem = {
       uuid: uuidv4(),
       tipo_pago: valueTipoRecuerrenciaAlquilerEnumChoice.UN_SOLO_PAGO,
-      valor: '0.00',
+      valor:
+        (selectedRow?.precios?.find(p => p.default)?.valor as any) || '10.00',
       cantidad: 1,
       cuotas: 1,
     };
@@ -159,9 +176,11 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                         <CustomTextFieldControlled
                           label="Cuotas"
                           value={opcion.cuotas}
-                          onChange={e =>
-                            handleUpdateOption(index, 'cuotas', e.target.value)
-                          }
+                          onChange={e => {
+                            // upd cuota ----------
+                            const cuota = e.target.value;
+                            handleUpdateOption(index, 'cuotas', cuota);
+                          }}
                           type="number"
                           size={gridSize}
                           required={false}
