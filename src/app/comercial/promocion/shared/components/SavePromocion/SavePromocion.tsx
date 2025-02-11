@@ -1,8 +1,12 @@
 /* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, Tab } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
+import { MdDelete } from 'react-icons/md';
+import { TbTableOptions } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -16,6 +20,7 @@ import {
   useFetchZonas,
   useUpdatePromocion,
 } from '@/actions/app';
+import { useColumnsEquiposPreventa } from '@/app/comercial/preventa/shared/hooks';
 import {
   a11yProps,
   CustomAutocompleteMultiple,
@@ -31,6 +36,7 @@ import {
   FormTabsOnly,
   InputAndBtnGridSpace,
   SampleCheckbox,
+  SingleIconButton,
   TabsFormBoxScene,
 } from '@/shared/components';
 import {
@@ -45,6 +51,7 @@ import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import type {
   Ciudad,
   MetodoPago,
+  OpcionProductoPromocionItem,
   PlanInternet,
   Producto,
   Promocion,
@@ -59,9 +66,11 @@ import {
   useTypedGenericInventoryStore,
 } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { FiPlus } from 'react-icons/fi';
 import { returnUrlPromocionsPage } from '../../../pages/tables/PromocionsPage';
-import { PromocionProductosDisponiblesModal } from './products';
+import {
+  PromocionItemOptionModal,
+  PromocionProductosDisponiblesModal,
+} from './products';
 
 export interface SavePromocionProps {
   title: string;
@@ -80,6 +89,7 @@ type SaveFormData = CreatePromocionParamsBase & {
 
 export type SelectedEqPromoctionType = Producto & {
   usedQuantity: number;
+  productoOptionItemList: OpcionProductoPromocionItem[];
 };
 
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
@@ -90,6 +100,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
   ///* local state ----------------
   const [isOpenProductModal, setIsOpenProductModal] = useState(false);
+  const [isOpenProductOptionsModal, setIsOpenProductOptionsModal] =
+    useState(false);
 
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -99,8 +111,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
   const {
     items: equiposPromocion,
-    // removeSelectedItem,
+    removeSelectedItem,
     // updateSelectedItemValue,
+    setSelectedRow,
   } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
     GenericInventoryStoreKey.equiposPromocion,
   );
@@ -305,6 +318,59 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoadingMetodoPagos ||
     isRefetchingMetodoPagos;
   useLoaders(customLoading);
+
+  //
+  const { productsBaseColumns } = useColumnsEquiposPreventa({
+    showActionColumn: false,
+  });
+
+  const selectedItemsColumns = useMemo<
+    MRT_ColumnDef<SelectedEqPromoctionType>[]
+  >(
+    () => [
+      ...(productsBaseColumns as any),
+
+      {
+        accessorKey: 'opciones',
+        enableColumnFilter: false,
+        header: 'OPCIONES',
+        Cell: ({ row }) => (
+          <SingleIconButton
+            startIcon={<TbTableOptions />}
+            label="Opciones"
+            tooltipPlacement="right-end"
+            color="info"
+            onClick={() => {
+              setSelectedRow(row?.original);
+              setIsOpenProductOptionsModal(true);
+            }}
+          />
+        ),
+      },
+      {
+        accessorKey: 'action',
+        enableColumnFilter: false,
+        header: 'ACCIÓN',
+        Cell: ({ row }) => (
+          <SingleIconButton
+            startIcon={<MdDelete />}
+            label="Remover"
+            color="error"
+            onClick={() => {
+              removeSelectedItem({
+                item: {
+                  ...row?.original,
+                  productoOptionItemList: [],
+                },
+                idKey: 'id',
+              });
+            }}
+          />
+        ),
+      },
+    ],
+    [productsBaseColumns, removeSelectedItem, setSelectedRow],
+  );
 
   return (
     <TabsFormBoxScene
@@ -857,7 +923,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
             <Grid item xs={12}>
               <CustomMinimalTable<SelectedEqPromoctionType>
-                columns={[]}
+                columns={selectedItemsColumns}
                 data={equiposPromocion || []}
                 enablePagination
               />
@@ -868,6 +934,14 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
             open={isOpenProductModal}
             onClose={() => {
               setIsOpenProductModal(false);
+            }}
+          />
+
+          <PromocionItemOptionModal
+            open={isOpenProductOptionsModal}
+            onClose={() => {
+              setIsOpenProductOptionsModal(false);
+              setSelectedRow(null);
             }}
           />
         </>

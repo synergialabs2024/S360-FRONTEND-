@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useFetchProductos } from '@/actions/app';
 import { useColumnsEquiposPreventa } from '@/app/comercial/preventa/shared/hooks';
 import {
@@ -20,7 +22,6 @@ import {
   GenericInventoryStoreKey,
   useTypedGenericInventoryStore,
 } from '@/store/app';
-import { useState } from 'react';
 import { SelectedEqPromoctionType } from '../SavePromocion';
 
 export type PromocionProductosDisponiblesModalProps = {
@@ -94,6 +95,7 @@ const PromocionProductosDisponiblesModal: React.FC<
               item: {
                 ...item,
                 usedQuantity: 1,
+                productoOptionItemList: [],
               },
               showToast: true,
             });
