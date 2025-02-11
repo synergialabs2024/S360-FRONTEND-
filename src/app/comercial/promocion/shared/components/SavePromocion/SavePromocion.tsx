@@ -91,6 +91,9 @@ export type SelectedEqPromoctionType = Producto & {
   uuid: string;
   usedQuantity: number;
   productoOptionItemList: OpcionProductoPromocionItem[];
+
+  // promociones
+  isIncluded?: boolean;
 };
 
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
@@ -103,6 +106,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const [isOpenProductModal, setIsOpenProductModal] = useState(false);
   const [isOpenProductOptionsModal, setIsOpenProductOptionsModal] =
     useState(false);
+  const [isOpenDisccountProductModal, setIsOpenDisccountProductModal] =
+    useState(false);
 
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -113,11 +118,14 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const {
     items: equiposPromocion,
     removeSelectedItem,
-    // updateSelectedItemValue,
     setSelectedRow,
   } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
     GenericInventoryStoreKey.equiposPromocion,
   );
+  const { items: disccountItems, removeSelectedItem: removeDisccountItem } =
+    useTypedGenericInventoryStore<any>(
+      GenericInventoryStoreKey.descuentosPromocion,
+    );
 
   ///* hooks ----------------
   const navigate = useNavigate();
@@ -371,6 +379,47 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       },
     ],
     [productsBaseColumns, removeSelectedItem, setSelectedRow],
+  );
+
+  const selectedItemsDisccountColumns = useMemo<
+    MRT_ColumnDef<SelectedEqPromoctionType>[]
+  >(
+    () => [
+      ...(productsBaseColumns as any),
+
+      {
+        accessorKey: 'opciones',
+        enableColumnFilter: false,
+        header: 'INCLUIDO',
+        Cell: ({ row }) => {
+          const isIncluded = row?.original?.isIncluded;
+
+          return isIncluded ? 'SI' : 'NO';
+        },
+      },
+      {
+        accessorKey: 'action',
+        enableColumnFilter: false,
+        header: 'ACCIÓN',
+        Cell: ({ row }) => (
+          <SingleIconButton
+            startIcon={<MdDelete />}
+            label="Remover"
+            color="error"
+            onClick={() => {
+              removeDisccountItem({
+                item: {
+                  ...row?.original,
+                  productoOptionItemList: [],
+                },
+                idKey: 'id',
+              });
+            }}
+          />
+        ),
+      },
+    ],
+    [productsBaseColumns, removeDisccountItem],
   );
 
   return (
@@ -946,8 +995,42 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           />
         </>
 
-        {/* ------------- Inventariables DIGITALES (alquileres) ------------- */}
-        <></>
+        {/* ------------- Disccount ------------- */}
+        <>
+          <Grid item xs={12} container justifyContent="flex-end" pb={3}>
+            <CustomTypoLabel
+              text="Descuentos incluidos a productos"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+
+            <CustomSingleButton
+              label="AGREGAR DESCUENTO"
+              color="primary"
+              variant="text"
+              startIcon={<FiPlus />}
+              onClick={() => {
+                setIsOpenDisccountProductModal(true);
+              }}
+              justifyContent="flex-end"
+            />
+
+            <Grid item xs={12}>
+              <CustomMinimalTable<SelectedEqPromoctionType>
+                columns={selectedItemsDisccountColumns}
+                data={disccountItems || []}
+                enablePagination
+              />
+            </Grid>
+          </Grid>
+
+          <PromocionProductosDisponiblesModal
+            open={isOpenDisccountProductModal}
+            onClose={() => {
+              setIsOpenDisccountProductModal(false);
+            }}
+            genericStorageKey={GenericInventoryStoreKey.descuentosPromocion}
+          />
+        </>
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

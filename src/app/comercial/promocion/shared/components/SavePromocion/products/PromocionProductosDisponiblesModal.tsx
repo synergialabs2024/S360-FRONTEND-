@@ -28,11 +28,16 @@ import { SelectedEqPromoctionType } from '../SavePromocion';
 export type PromocionProductosDisponiblesModalProps = {
   open: boolean;
   onClose: () => void;
+  genericStorageKey?: GenericInventoryStoreKey;
 };
 
 const PromocionProductosDisponiblesModal: React.FC<
   PromocionProductosDisponiblesModalProps
-> = ({ open, onClose }) => {
+> = ({
+  open,
+  onClose,
+  genericStorageKey = GenericInventoryStoreKey.equiposPromocion,
+}) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -52,9 +57,7 @@ const PromocionProductosDisponiblesModal: React.FC<
 
   ///* global state ---------------------
   const { addSelectedItem } =
-    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
-      GenericInventoryStoreKey.equiposPromocion,
-    );
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(genericStorageKey);
 
   ///* fetch data ---------------------
   const {
@@ -98,6 +101,7 @@ const PromocionProductosDisponiblesModal: React.FC<
                 ...item,
                 usedQuantity: 1,
                 productoOptionItemList: [],
+                isIncluded: true, // only for disccounts
               },
               showToast: true,
             });
