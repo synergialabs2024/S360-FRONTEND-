@@ -8,6 +8,10 @@ export enum GenericInventoryStoreKey {
   // OT --------------
   equiposUtilizados = 'equiposUtilizados',
   materialesUtilizados = 'materialesUtilizados',
+
+  // promocion --------------
+  equiposPromocion = 'equiposPromocion',
+  descuentosPromocion = 'descuentosPromocion',
 }
 
 export enum UbicacionProductoKeys {

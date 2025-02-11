@@ -20,6 +20,7 @@ import {
   a11yProps,
   CustomAutocompleteMultiple,
   CustomDatePicker,
+  CustomMinimalTable,
   CustomNumberTextField,
   CustomRadioButtonGroup,
   CustomSingleButton,
@@ -45,6 +46,7 @@ import type {
   Ciudad,
   MetodoPago,
   PlanInternet,
+  Producto,
   Promocion,
   Provincia,
   Sector,
@@ -52,6 +54,10 @@ import type {
 } from '@/shared/interfaces';
 import { promocionFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
+import {
+  GenericInventoryStoreKey,
+  useTypedGenericInventoryStore,
+} from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { FiPlus } from 'react-icons/fi';
 import { returnUrlPromocionsPage } from '../../../pages/tables/PromocionsPage';
@@ -72,6 +78,10 @@ type SaveFormData = CreatePromocionParamsBase & {
   allMetodosPago?: boolean;
 };
 
+export type SelectedEqPromoctionType = Producto & {
+  usedQuantity: number;
+};
+
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   ///* State Global ----------------------
   const [loadingArray, setLoadingArray] = useState(true);
@@ -85,6 +95,14 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
+  );
+
+  const {
+    items: equiposPromocion,
+    // removeSelectedItem,
+    // updateSelectedItemValue,
+  } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+    GenericInventoryStoreKey.equiposPromocion,
   );
 
   ///* hooks ----------------
@@ -836,6 +854,14 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               }}
               justifyContent="flex-end"
             />
+
+            <Grid item xs={12}>
+              <CustomMinimalTable<SelectedEqPromoctionType>
+                columns={[]}
+                data={equiposPromocion || []}
+                enablePagination
+              />
+            </Grid>
           </Grid>
 
           <PromocionProductosDisponiblesModal
