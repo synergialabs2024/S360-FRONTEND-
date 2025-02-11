@@ -70,6 +70,8 @@ export interface ProductoPromocionItem {
 }
 
 export interface OpcionProductoPromocionItem {
+  uuid: string;
+
   tipo_pago: string; // valueTipoRecuerrenciaAlquilerEnumChoice
 
   valor: string;

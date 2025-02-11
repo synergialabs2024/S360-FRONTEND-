@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useFetchProductos } from '@/actions/app';
 import { useColumnsEquiposPreventa } from '@/app/comercial/preventa/shared/hooks';
@@ -93,6 +94,7 @@ const PromocionProductosDisponiblesModal: React.FC<
             addSelectedItem({
               idKey: 'id',
               item: {
+                uuid: uuidv4(),
                 ...item,
                 usedQuantity: 1,
                 productoOptionItemList: [],

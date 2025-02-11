@@ -1,8 +1,13 @@
+import { Button, Grid, IconButton } from '@mui/material';
+import { MdDelete } from 'react-icons/md';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   GenericAutocompleteNoFormType,
   gridSize,
   OpcionProductoPromocionItem,
   TIPO_PAGO_PROMOCION_ALQUILER_ARRAY,
+  ToastWrapper,
   valueTipoRecuerrenciaAlquilerEnumChoice,
 } from '@/shared';
 import {
@@ -15,8 +20,6 @@ import {
   GenericInventoryStoreKey,
   useTypedGenericInventoryStore,
 } from '@/store/app';
-import { Button, Grid, IconButton } from '@mui/material';
-import { MdDelete } from 'react-icons/md';
 import { SelectedEqPromoctionType } from '../SavePromocion';
 
 export type PromocionItemOptionModalProps = {
@@ -65,7 +68,8 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
 
   const handleAddOption = () => {
     const nuevaOpcion: OpcionProductoPromocionItem = {
-      tipo_pago: valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS,
+      uuid: uuidv4(),
+      tipo_pago: valueTipoRecuerrenciaAlquilerEnumChoice.UN_SOLO_PAGO,
       valor: '0.00',
       cantidad: 1,
       cuotas: 1,
@@ -179,6 +183,21 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
         </>
       }
       onConfirm={() => {
+        if (selectedRow?.productoOptionItemList.length === 0)
+          return ToastWrapper.error('Debe agregar al menos una opción');
+
+        // validate not negative values (cantidad, valor, cuotas)
+        const hasNegativeValues = selectedRow?.productoOptionItemList.some(
+          opcion =>
+            opcion.cantidad < 0 ||
+            parseFloat(opcion.valor) < 0 ||
+            opcion.cuotas < 0,
+        );
+        if (hasNegativeValues)
+          return ToastWrapper.error(
+            'No se permiten valores negativos en cantidad, valor o cuotas',
+          );
+
         updateSelectedItemValue({
           idKey: 'id',
           updatedItem: {

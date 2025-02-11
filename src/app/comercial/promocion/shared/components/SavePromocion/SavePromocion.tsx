@@ -88,6 +88,7 @@ type SaveFormData = CreatePromocionParamsBase & {
 };
 
 export type SelectedEqPromoctionType = Producto & {
+  uuid: string;
   usedQuantity: number;
   productoOptionItemList: OpcionProductoPromocionItem[];
 };
