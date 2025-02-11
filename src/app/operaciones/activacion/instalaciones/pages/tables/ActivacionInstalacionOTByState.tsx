@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { MdArrowRightAlt } from 'react-icons/md';
+import { MdArrowRightAlt, MdCancel } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 
 import { useFetchOrdenTrabajos } from '@/actions/app';
@@ -18,6 +18,7 @@ import {
   CustomSearch,
   CustomTable,
   GridTableTabsContainerOnly,
+  SingleIconButton,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import ModalAuthorizateOrdenTrabajo from '@/shared/hooks/app/tecnico/ModalAuthorizateOrdenTrabajo';
@@ -161,7 +162,20 @@ const ActivacionInstalacionOTByState: React.FC<
         canDelete={false}
         showCustomButtonsSpace
         customButtonsSpace={row => {
-          if (!row?.luz_verde && onAuthorizate) {
+          if (activacionState === EstadoActivacionEnumChoice.PENDIENTE) {
+            return (
+              <SingleIconButton
+                startIcon={<MdCancel />}
+                label="Recoordinar"
+                color="error"
+                onClick={() =>
+                  navigate(
+                    `/supervision-comercial/solicitud-recoordinacion-agenda/${row?.agendamiento_data?.uuid}?sr=${row?.uuid}`,
+                  )
+                }
+              />
+            );
+          } else if (!row?.luz_verde && onAuthorizate) {
             return (
               <ModalAuthorizateOrdenTrabajo
                 authOnu={row}

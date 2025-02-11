@@ -18,6 +18,7 @@ const HandleRecoordinacionAgendaSuperVentas: React.FC<
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const sr = searchParams.get('sr');
+  const ventana = searchParams.get('ventana');
   const { data, isLoading, isRefetching } = useGetAgendamiento(uuid!);
   const customLoading = isLoading || isRefetching;
   useLoaders(customLoading);
@@ -37,6 +38,7 @@ const HandleRecoordinacionAgendaSuperVentas: React.FC<
         }
         agendamiento={data.data}
         solicitudRecoordinacion={sr!}
+        showRejectedButton={ventana!}
       />
     </>
   );

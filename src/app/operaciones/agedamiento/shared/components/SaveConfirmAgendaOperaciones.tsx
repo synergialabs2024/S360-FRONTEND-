@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  AgendamientoTSQEnum,
-  CacheBaseKeysPreventaEnum,
-  RecoordinarAgendaData,
-} from '@/actions/app';
+import { AgendamientoTSQEnum, CacheBaseKeysPreventaEnum } from '@/actions/app';
 import { useGenericPATCH, useSetCacheRedis } from '@/actions/shared';
 import { usePlanificadorAgendamiento } from '@/app/comercial/agendamiento/shared/hooks';
 import { returnUrlSolicitudsRecoordinacionAgendaPage } from '@/app/operaciones/solicitud-recoordinacion-agenda/pages/tables/SolicitudsRecoordinacionAgendaMainPage';
@@ -32,11 +28,13 @@ import {
   RejectSolRecoordinacionModal,
   ServiceCoordinationConfirmAgendaStep,
 } from './form';
+import { returnUrlActivacionesInstallacionesOT } from '@/app/operaciones/activacion/instalaciones/pages/tables/ActivacionesInstalacionesMainPage';
 
 export type SaveConfirmAgendaOperacionesProps = {
   agendamiento: Agendamiento;
   title: React.ReactNode;
   solicitudRecoordinacion: string;
+  showRejectedButton: string;
 };
 
 const steps = ['Datos generales', 'Servicio y Coordinación'];
@@ -55,7 +53,7 @@ export type SaveConfirmAgendaOperaciones = Partial<SolicitudServicio> &
 
 const SaveConfirmAgendaOperaciones: React.FC<
   SaveConfirmAgendaOperacionesProps
-> = ({ agendamiento, title, solicitudRecoordinacion }) => {
+> = ({ agendamiento, title, solicitudRecoordinacion, showRejectedButton }) => {
   ///* hooks ---------------------
   const navigate = useNavigate();
   const cackeKey = `${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`;
@@ -86,16 +84,18 @@ const SaveConfirmAgendaOperaciones: React.FC<
   });
 
   ///* mutations ---------------------
-  const recoordinarAgenda = useGenericPATCH<
-    RecoordinarAgendaData,
-    Agendamiento
-  >(
-    `/agendamiento/recoordinar/${agendamiento?.id!}/`,
+  const recoordinarAgenda = useGenericPATCH<any, Agendamiento>(
+    showRejectedButton === 'agendamiento'
+      ? `/agendamiento/recoordinar/${agendamiento?.id!}/`
+      : `/agendamiento/recoordinar-no-request/${agendamiento?.id!}/`,
     AgendamientoTSQEnum.AGENDAMIENTOS,
     {
       customMessageToast: 'Agendamiento recoordinado con éxito',
       navigate,
-      returnUrl: returnUrlSolicitudsRecoordinacionAgendaPage,
+      returnUrl:
+        showRejectedButton === 'agendamiento'
+          ? returnUrlSolicitudsRecoordinacionAgendaPage
+          : returnUrlActivacionesInstallacionesOT,
       customOnSuccess() {
         setCache.mutate({
           key: cackeKey,
@@ -128,12 +128,19 @@ const SaveConfirmAgendaOperaciones: React.FC<
       return;
     }
 
-    recoordinarAgenda.mutate({
-      fecha_instalacion: data.fecha_instalacion!,
-      hora_instalacion: data.hora_instalacion!,
-      flota: data.flota!,
-      solicitud_recoordinacion: solicitudRecoordinacion,
-    });
+    showRejectedButton === 'agendamiento'
+      ? recoordinarAgenda.mutate({
+        fecha_instalacion: data.fecha_instalacion!,
+        hora_instalacion: data.hora_instalacion!,
+        flota: data.flota!,
+        solicitud_recoordinacion: solicitudRecoordinacion,
+      })
+      : recoordinarAgenda.mutate({
+        fecha_instalacion: data.fecha_instalacion!,
+        hora_instalacion: data.hora_instalacion!,
+        agendamiento: agendamiento.id,
+        flota: data.flota!,
+      });
   };
 
   ///* effects ---------------------
@@ -172,26 +179,34 @@ const SaveConfirmAgendaOperaciones: React.FC<
       handleBack={handleBack}
       disableNextStepBtn={disableNextStepBtn}
       // action btns
-      onCancel={() => navigate(returnUrlSolicitudsRecoordinacionAgendaPage)}
+      onCancel={() =>
+        navigate(
+          showRejectedButton === 'agendamiento'
+            ? returnUrlSolicitudsRecoordinacionAgendaPage
+            : returnUrlActivacionesInstallacionesOT,
+        )
+      }
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
         ToastWrapper.error(`Faltan campos requeridos: ${keys}`);
       })}
       // custom buttons
       customSpaceButton={
-        <>
-          <CustomSingleButton
-            label="Rechazar solicitud"
-            variant="text"
-            color="error"
-            onClick={() => {
-              setOpenModalReject(true);
-            }}
-            sxBtn={{
-              ml: 0.8,
-            }}
-          />
-        </>
+        showRejectedButton === 'agendamiento' ? (
+          <>
+            <CustomSingleButton
+              label="Rechazar solicitud"
+              variant="text"
+              color="error"
+              onClick={() => {
+                setOpenModalReject(true);
+              }}
+              sxBtn={{
+                ml: 0.8,
+              }}
+            />
+          </>
+        ) : null
       }
     >
       {/* ========================= Datos Generales ========================= */}

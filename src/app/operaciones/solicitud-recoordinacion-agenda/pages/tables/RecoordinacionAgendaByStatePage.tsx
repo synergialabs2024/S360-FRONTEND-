@@ -70,7 +70,7 @@ const RecoordinacionAgendaByStatePage: React.FC<
     solicitudrecoordinacionagenda: SolicitudRecoordinacionAgenda,
   ) => {
     navigate(
-      `/supervision-comercial/solicitud-recoordinacion-agenda/${solicitudrecoordinacionagenda?.agendamiento_data?.uuid}?sr=${solicitudrecoordinacionagenda?.uuid}`,
+      `/supervision-comercial/solicitud-recoordinacion-agenda/${solicitudrecoordinacionagenda?.agendamiento_data?.uuid}?sr=${solicitudrecoordinacionagenda?.uuid}&ventana=${'agendamiento'}`,
     );
   };
 
