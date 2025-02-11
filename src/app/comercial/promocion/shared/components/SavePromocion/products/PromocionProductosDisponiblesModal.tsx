@@ -1,15 +1,18 @@
 import { useFetchProductos } from '@/actions/app';
 import { useColumnsEquiposPreventa } from '@/app/comercial/preventa/shared/hooks';
 import {
+  CATEGORIA_PRODUCTOS_PROMOCION,
+  GenericAutocompleteNoFormType,
+  gridSizeMdLg8,
   InvetarioCodesEnum,
   Producto,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
 import {
+  CustomAutocompleteNoForm,
   CustomSearch,
   CustomSingleButton,
-  CustomTextFieldControlled,
   ScrollableDialogProps,
   TableWithoutActions,
 } from '@/shared/components';
@@ -41,7 +44,9 @@ const PromocionProductosDisponiblesModal: React.FC<
   const { pageIndex, pageSize } = pagination;
 
   ///* local state ---------------------
-  const [productCategory, setProductCategory] = useState<string>('');
+  const [productCategory, setProductCategory] = useState<string>(
+    InvetarioCodesEnum.EQUIPOS,
+  );
 
   ///* global state ---------------------
   const { addSelectedItem } =
@@ -65,7 +70,7 @@ const PromocionProductosDisponiblesModal: React.FC<
       codigo: searchTerm,
       aplica_promocion: true,
 
-      categoria__code: InvetarioCodesEnum.EQUIPOS,
+      categoria__code: productCategory,
     },
   });
 
@@ -76,6 +81,7 @@ const PromocionProductosDisponiblesModal: React.FC<
 
   const handleClose = () => {
     onClose();
+    setProductCategory(InvetarioCodesEnum.EQUIPOS);
   };
 
   ///* columns ---------------------
@@ -92,7 +98,6 @@ const PromocionProductosDisponiblesModal: React.FC<
               item: {
                 ...item,
                 usedQuantity: 1,
-                // selectedCuotas: 1,
               },
               showToast: true,
             });
@@ -106,6 +111,7 @@ const PromocionProductosDisponiblesModal: React.FC<
     <ScrollableDialogProps
       open={open}
       onClose={handleClose}
+      minWidth="60%"
       title="Productos Disponibles"
       confirmTextBtn="Reasignar"
       onConfirm={handleConfirm}
@@ -117,10 +123,20 @@ const PromocionProductosDisponiblesModal: React.FC<
             text="por código"
             customSpaceNode={
               <>
-                <CustomTextFieldControlled
+                <CustomAutocompleteNoForm<GenericAutocompleteNoFormType>
                   label="Categoría"
                   value={productCategory}
-                  onChange={e => setProductCategory(e.target.value)}
+                  actualValueKey="value"
+                  onChange={v => {
+                    setProductCategory(v as string);
+                  }}
+                  options={CATEGORIA_PRODUCTOS_PROMOCION}
+                  getOptionLabel={o => o.label}
+                  loading={false}
+                  required
+                  error={false}
+                  disableClearable
+                  size={gridSizeMdLg8}
                 />
               </>
             }

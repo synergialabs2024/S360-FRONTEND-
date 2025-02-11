@@ -63,3 +63,16 @@ export type PromocionLimitData = Pick<
   | 'facturas_descuento'
   | 'facturas_gratis'
 >;
+
+export interface ProductoPromocionItem {
+  codigo_producto: string; // code unique
+  opciones: OpcionProductoPromocionItem[];
+}
+
+export interface OpcionProductoPromocionItem {
+  tipo_pago: string; // valueTipoRecuerrenciaAlquilerEnumChoice
+
+  valor: string;
+  cuotas: number;
+  cantidad: number;
+}
