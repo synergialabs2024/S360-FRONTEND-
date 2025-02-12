@@ -17,7 +17,7 @@ import {
 export type PromocionPreventaComponentProps = { promocion: Promocion };
 
 const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
-  promocion = {} as any,
+  promocion = {} as Promocion,
 }) => {
   ///* local state ----------------
   const [isVissible, setIsVissible] = useState(true);
@@ -65,6 +65,17 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
             />
           </>
         )}
+      </Grid>
+
+      {/* --------------- */}
+      <Grid item xs={12}>
+        <pre>
+          {JSON.stringify(promocion?.opciones_productos_incluye, null, 3)}
+        </pre>
+
+        <pre>
+          {JSON.stringify(promocion?.opciones_productos_descuento, null, 3)}
+        </pre>
       </Grid>
     </>
   );
