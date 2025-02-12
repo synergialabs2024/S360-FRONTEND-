@@ -1,26 +1,28 @@
 import { Button, Grid } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import * as XLSX from 'xlsx';
 
 import {
-  gridSizeMdLg6,
-  MovimientoMaterial,
-  PermissionsEnum,
-  TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO,
-  useColumnsMovimientoMaterial,
-  useTableFilter,
-  useTableServerSideFiltering,
-} from '@/shared';
-import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   DateRangePicker,
   SingleTableBoxScene,
 } from '@/shared/components';
+import {
+  useFetchMovimientoMateriales,
+  ReportMovimientoMaterialExcel,
+} from '@/actions/app';
+import {
+  gridSizeMdLg6,
+  useTableFilter,
+  PermissionsEnum,
+  MovimientoMaterial,
+  useTableServerSideFiltering,
+  useColumnsMovimientoMaterial,
+  TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO,
+} from '@/shared';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { useFetchMovimientoMateriales } from '@/actions/app';
 import CustomAutocompletSearchNoForm from '@/shared/components/CustomAutocompletes/CustomAutocompletSearchNoForm';
 
 export const returnUrlMovimientoMaterialesPage =
@@ -81,26 +83,17 @@ const MovimientoMaterialesPage: React.FC<
   ///* columns
   const { movimientoMaterialColumns } = useColumnsMovimientoMaterial();
 
-  const handleDownloadExcel = () => {
-    const items = movimientoMaterialPagingRes?.data?.items || [];
+  const handleDownload2 = async () => {
+    ReportMovimientoMaterialExcel({
+      page_size: 99999999,
+      name: searchTerm,
+      ...filterObject,
+      filterByState: false,
 
-    const data = items.map(item => ({
-      ID: item.id,
-      Cantidad: item.cantidad,
-      Observación: item.observacion,
-      Series: item.series,
-      Producto: item.producto_data?.nombre,
-      'Bodega Origen': item.bodega_origen_data?.nombre,
-      'Ubicación Origen': item.ubicacion_origen_data?.nombre,
-      'Bodega Destino': item.bodega_destino_data?.nombre,
-      'Ubicacion Destino': item.ubicacion_destino_data?.nombre,
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Movimiento Material');
-
-    XLSX.writeFile(workbook, 'Movimiento Material.xlsx');
+      tipo_movimiento: selectedTipoM,
+      created_at__gte: selectedDateRange.date_1,
+      created_at__lte: selectedDateRange.date_2,
+    });
   };
 
   return (
@@ -136,7 +129,7 @@ const MovimientoMaterialesPage: React.FC<
               required={false}
             />
             <Grid sx={{ m: '5px' }}>
-              <Button onClick={handleDownloadExcel}>Descargar Excel</Button>
+              <Button onClick={handleDownload2}>Descargar Excel</Button>
             </Grid>
           </>
         }
