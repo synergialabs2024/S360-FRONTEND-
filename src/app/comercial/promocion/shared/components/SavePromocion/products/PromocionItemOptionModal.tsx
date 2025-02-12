@@ -86,7 +86,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
   const handleAddOption = () => {
     const nuevaOpcion: OpcionProductoPromocionItem = {
       uuid: uuidv4(),
-      tipo_pago: valueTipoRecuerrenciaAlquilerEnumChoice.UN_SOLO_PAGO,
+      tipo_pago: valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS,
       valor:
         (selectedRow?.precios?.find(p => p.default)?.valor as any) || '10.00',
       cantidad: 1,
@@ -184,7 +184,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                           type="number"
                           size={gridSize}
                           required={false}
-                          min={0}
+                          min={1}
                         />
                       </Grid>
 
@@ -214,7 +214,6 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
         if (selectedRow?.productoOptionItemList.length === 0)
           return ToastWrapper.error('Debe agregar al menos una opción');
 
-        // validate not negative values (cantidad, valor, cuotas)
         const hasNegativeValues = selectedRow?.productoOptionItemList.some(
           opcion =>
             opcion.cantidad < 0 ||
@@ -224,6 +223,13 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
         if (hasNegativeValues)
           return ToastWrapper.error(
             'No se permiten valores negativos en cantidad, valor o cuotas',
+          );
+        const hasDecimals = selectedRow?.productoOptionItemList.some(
+          opcion => opcion.cantidad % 1 !== 0 || opcion.cuotas % 1 !== 0,
+        );
+        if (hasDecimals)
+          return ToastWrapper.error(
+            'No se permiten valores decimales en cantidad o cuotas',
           );
 
         updateSelectedItemValue({

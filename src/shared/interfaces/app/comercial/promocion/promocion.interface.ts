@@ -44,6 +44,9 @@ export interface Promocion {
   planes?: number[] | string[];
   metodo_pagos?: number[] | string[];
 
+  opciones_productos_incluye?: ProductoPromocionItem[];
+  opciones_productos_descuento?: ProductoDisccountItem[];
+
   planes_data?: PlanInternetLimitData[];
   paises_data?: PaisLimitData[];
   provincias_data?: ProvinciaLimitData[];
@@ -65,8 +68,13 @@ export type PromocionLimitData = Pick<
 >;
 
 export interface ProductoPromocionItem {
-  codigo_producto: string; // code unique
+  codigo: string; // code unique
   opciones: OpcionProductoPromocionItem[];
+}
+
+export interface ProductoDisccountItem {
+  codigo: string;
+  descuento: string; // %
 }
 
 export interface OpcionProductoPromocionItem {

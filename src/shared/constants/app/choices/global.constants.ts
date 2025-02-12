@@ -32,10 +32,6 @@ export const TIPO_PAGO_PROMOCION_ALQUILER_ARRAY: GenericAutocompleteNoFormType[]
       value: valueTipoRecuerrenciaAlquilerEnumChoice.MENSUAL,
     },
     {
-      label: 'UN SOLO PAGO',
-      value: valueTipoRecuerrenciaAlquilerEnumChoice.UN_SOLO_PAGO,
-    },
-    {
       label: 'CUOTAS',
       value: valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS,
     },

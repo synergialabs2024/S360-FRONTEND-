@@ -44,6 +44,7 @@ import {
   FACTURAS_CUOTAS_ARRAY_OBJECT,
   FacturasCuotasObjArray,
   SAVE_PROMOCION_PERMISSIONS,
+  valueTipoRecuerrenciaAlquilerEnumChoice,
 } from '@/shared/constants/app';
 import {
   gridSize,
@@ -58,6 +59,8 @@ import type {
   OpcionProductoPromocionItem,
   PlanInternet,
   Producto,
+  ProductoDisccountItem,
+  ProductoPromocionItem,
   Promocion,
   Provincia,
   Sector,
@@ -127,7 +130,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     GenericInventoryStoreKey.equiposPromocion,
   );
   const { items: disccountItems, removeSelectedItem: removeDisccountItem } =
-    useTypedGenericInventoryStore<any>(
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
       GenericInventoryStoreKey.descuentosPromocion,
     );
 
@@ -264,6 +267,83 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const onSave = async (data: SaveFormData) => {
     const { fecha_fin, ...restData } = data;
 
+    //* productos ===============
+    // validate if there are products without options
+    let thereAreProductsWithOutOptions = false;
+    const equiposPromocionWithOutOptions = equiposPromocion?.filter(
+      item => !item.productoOptionItemList.length,
+    );
+    if (equiposPromocionWithOutOptions?.length) {
+      thereAreProductsWithOutOptions = true;
+    }
+    if (thereAreProductsWithOutOptions) {
+      ToastWrapper.warning(
+        'Existen productos promocionales sin opciones seleccionadas.',
+      );
+      return;
+    }
+
+    const disccountItemsCode = disccountItems?.map(item => item.codigo);
+    const filteredEquiposPromocion = equiposPromocion?.filter(item =>
+      disccountItemsCode?.includes(item.codigo),
+    );
+    if (
+      filteredEquiposPromocion?.length <= 0 &&
+      disccountItemsCode?.length > 0
+    ) {
+      ToastWrapper.warning(
+        'No se han encontrado productos promocionales asociados a productos con descuento.',
+      );
+      return;
+    }
+    if (filteredEquiposPromocion?.length !== disccountItemsCode?.length) {
+      ToastWrapper.warning(
+        'No se han encontrado productos promocionales asociados a productos con descuento.',
+      );
+      return;
+    }
+
+    if (filteredEquiposPromocion?.length) {
+      let productNames = '';
+      const thereAreProductsWithOutOptions = filteredEquiposPromocion?.some(
+        item => {
+          const thereAreOptions = item.productoOptionItemList?.some(
+            option =>
+              option.tipo_pago ===
+                valueTipoRecuerrenciaAlquilerEnumChoice.MENSUAL ||
+              (option.tipo_pago ===
+                valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS &&
+                +(option?.cuotas || 0) === 1),
+          );
+          if (!thereAreOptions) {
+            productNames += `${item.nombre}, `;
+          }
+          return !thereAreOptions;
+        },
+      );
+      if (thereAreProductsWithOutOptions) {
+        ToastWrapper.warning(
+          `El producto ${productNames} no tiene una opción de pago acorde.`,
+        );
+        return;
+      }
+    }
+
+    const formattedEquiposPromocion: ProductoPromocionItem[] =
+      equiposPromocion?.map(item => ({
+        codigo: item.codigo,
+        opciones: item.productoOptionItemList?.map(opt => ({
+          ...opt,
+          cantidad: +(opt.cantidad || 0),
+          cuotas: +(opt.cuotas || 0),
+        })),
+      }));
+    const formattedDisccountItems: ProductoDisccountItem[] =
+      disccountItems?.map(item => ({
+        codigo: item.codigo,
+        descuento: '100%',
+      }));
+
     ///* upd
     if (promocion?.id) {
       updatePromocionMutation.mutate({
@@ -271,6 +351,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
         data: {
           ...restData,
           ...(fecha_fin && { fecha_fin }),
+          opciones_productos_incluye: formattedEquiposPromocion,
+          opciones_productos_descuento: formattedDisccountItems,
         } as unknown as CreatePromocionParamsBase,
       });
       return;
@@ -288,6 +370,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
         createPromocionMutation.mutate({
           ...restData,
           ...(fecha_fin && { fecha_fin }),
+          opciones_productos_incluye: formattedEquiposPromocion,
+          opciones_productos_descuento: formattedDisccountItems,
         } as unknown as CreatePromocionParamsBase);
       },
     });
