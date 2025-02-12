@@ -126,13 +126,18 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     items: equiposPromocion,
     removeSelectedItem,
     setSelectedRow,
+    clearAllStore,
+    setItems: setEquiposPromocion,
   } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
     GenericInventoryStoreKey.equiposPromocion,
   );
-  const { items: disccountItems, removeSelectedItem: removeDisccountItem } =
-    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
-      GenericInventoryStoreKey.descuentosPromocion,
-    );
+  const {
+    items: disccountItems,
+    removeSelectedItem: removeDisccountItem,
+    setItems: setDisccountItems,
+  } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+    GenericInventoryStoreKey.descuentosPromocion,
+  );
 
   ///* hooks ----------------
   const navigate = useNavigate();
@@ -254,12 +259,18 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       navigate,
       returnUrl: returnUrlPromocionsPage,
       enableErrorNavigate: false,
+      customOnSuccess: () => {
+        clearAllStore();
+      },
     },
   );
   const updatePromocionMutation = useUpdatePromocion<CreatePromocionParamsBase>(
     {
       navigate,
       returnUrl: returnUrlPromocionsPage,
+      customOnSuccess: () => {
+        clearAllStore();
+      },
     },
   );
 
@@ -331,7 +342,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
     const formattedEquiposPromocion: ProductoPromocionItem[] =
       equiposPromocion?.map(item => ({
-        codigo: item.codigo,
+        code: item.codigo,
+        name: item.nombre,
         opciones: item.productoOptionItemList?.map(opt => ({
           ...opt,
           cantidad: +(opt.cantidad || 0),
@@ -340,7 +352,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       }));
     const formattedDisccountItems: ProductoDisccountItem[] =
       disccountItems?.map(item => ({
-        codigo: item.codigo,
+        code: item.codigo,
+        name: item.nombre,
         descuento: '100%',
       }));
 
@@ -389,6 +402,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     const allPlanes = (promocion.planes as any[])?.includes('*');
     const allMetodosPago = (promocion.metodo_pagos as any[])?.includes('*');
 
+    const eqP = promocion?.opciones_productos_incluye?.map(op => ({
+      ...op,
+      productoOptionItemList: op.opciones,
+    }));
+    setEquiposPromocion((eqP as any) || []);
+    setDisccountItems((promocion?.opciones_productos_descuento as any) || []);
+
     reset({
       ...promocion,
       allProvincias,
@@ -399,6 +419,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       allMetodosPago,
       facturas_gratis: promocion?.facturas_gratis || [],
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [promocion, reset]);
 
   const customLoading =
@@ -464,11 +485,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 idKey: 'id',
               });
             }}
+            disabled={!!promocion?.id}
           />
         ),
       },
     ],
-    [productsBaseColumns, removeSelectedItem, setSelectedRow],
+    [productsBaseColumns, promocion?.id, removeSelectedItem, setSelectedRow],
   );
 
   const selectedItemsDisccountColumns = useMemo<
@@ -505,11 +527,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 idKey: 'id',
               });
             }}
+            disabled={!!promocion?.id}
           />
         ),
       },
     ],
-    [productsBaseColumns, removeDisccountItem],
+    [productsBaseColumns, promocion?.id, removeDisccountItem],
   );
 
   return (
@@ -1059,6 +1082,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 setIsOpenProductModal(true);
               }}
               justifyContent="flex-end"
+              disabled={!!promocion?.id}
             />
 
             <Grid item xs={12}>
@@ -1082,6 +1106,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               setIsOpenProductOptionsModal(false);
               setSelectedRow(null);
             }}
+            isEdditingForm={!!promocion?.id}
           />
         </>
 
@@ -1102,6 +1127,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 setIsOpenDisccountProductModal(true);
               }}
               justifyContent="flex-end"
+              disabled={!!promocion?.id}
             />
 
             <Grid item xs={12}>

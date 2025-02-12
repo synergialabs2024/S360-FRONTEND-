@@ -26,11 +26,13 @@ import { SelectedEqPromoctionType } from '../SavePromocion';
 export type PromocionItemOptionModalProps = {
   open: boolean;
   onClose: () => void;
+  isEdditingForm?: boolean;
 };
 
 const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
   onClose,
   open,
+  isEdditingForm = false,
 }) => {
   ///* global state ---------------------
   const { selectedRow, setSelectedRow, updateSelectedItemValue } =
@@ -119,7 +121,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
               ml={5}
               contentNode={
                 <Grid item xs={12}>
-                  {selectedRow?.productoOptionItemList.map((opcion, index) => (
+                  {selectedRow?.productoOptionItemList?.map((opcion, index) => (
                     <Grid
                       key={index}
                       item
@@ -142,6 +144,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                           error={false}
                           disableClearable
                           size={gridSize}
+                          disabled={isEdditingForm}
                         />
                       </Grid>
                       <Grid item xs={2} sx={{ mt: 3 }}>
@@ -158,6 +161,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                           type="number"
                           size={gridSize}
                           min={1}
+                          disabled={isEdditingForm}
                         />
                       </Grid>
                       <Grid item xs={2} sx={{ mt: 3 }}>
@@ -170,6 +174,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                           type="number"
                           size={gridSize}
                           min={1}
+                          disabled={isEdditingForm}
                         />
                       </Grid>
                       <Grid item xs={2} sx={{ mt: 3 }}>
@@ -185,6 +190,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                           size={gridSize}
                           required={false}
                           min={1}
+                          disabled={isEdditingForm}
                         />
                       </Grid>
 
@@ -192,6 +198,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                         <IconButton
                           color="error"
                           onClick={() => handleRemoveOption(index)}
+                          disabled={isEdditingForm}
                         >
                           <MdDelete />
                         </IconButton>
@@ -200,7 +207,11 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                   ))}
 
                   <Grid item xs={12} mt={5}>
-                    <Button variant="contained" onClick={handleAddOption}>
+                    <Button
+                      variant="contained"
+                      onClick={handleAddOption}
+                      disabled={isEdditingForm}
+                    >
                       Agregar Opción
                     </Button>
                   </Grid>
@@ -241,6 +252,7 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
 
         handleClose();
       }}
+      showConfirmBtn={!isEdditingForm}
     />
   );
 };

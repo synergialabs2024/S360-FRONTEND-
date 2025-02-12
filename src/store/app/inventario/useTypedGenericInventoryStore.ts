@@ -9,6 +9,10 @@ export const useTypedGenericInventoryStore = <T>(
   // ) as T[];
   const itemsRecord = useGenericInventoryStore(state => state.items || {});
 
+  const setItems = (items: T[]) => {
+    useGenericInventoryStore.getState().setItems(keyStore, items);
+  };
+
   const addSelectedItem = (params: {
     item: T;
     idKey: string;
@@ -59,6 +63,7 @@ export const useTypedGenericInventoryStore = <T>(
 
   return {
     items: (itemsRecord[keyStore] as T[]) || [],
+    setItems,
     addSelectedItem,
     updateSelectedItemValue,
     removeSelectedItem,

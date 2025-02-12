@@ -49,16 +49,18 @@ export const useCreatePromocion = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
     mutationFn: (params: CreatePromocionParams<T>) => createPromocion(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [PromocionTSQEnum.PROMOCIONS],
       });
+      customOnSuccess && customOnSuccess(res);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
@@ -88,16 +90,18 @@ export const useUpdatePromocion = <T>({
   enableNavigate = true,
   enableErrorNavigate = false,
   enableToast = true,
+  customOnSuccess,
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
     mutationFn: (params: UpdatePromocionParams<T>) => updatePromocion(params),
-    onSuccess: () => {
+    onSuccess: res => {
       queryClient.invalidateQueries({
         queryKey: [PromocionTSQEnum.PROMOCIONS],
       });
+      customOnSuccess && customOnSuccess(res);
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(

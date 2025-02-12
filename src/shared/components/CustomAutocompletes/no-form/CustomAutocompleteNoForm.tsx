@@ -101,7 +101,13 @@ function CustomAutocompleteNoForm<T>({
                 </>
               ),
             }}
-            sx={sxAutocomplete}
+            sx={{
+              ...sxAutocomplete,
+              ...(disabled && {
+                background: 'rgba(0, 0, 0, 0.04)',
+                borderRadius: '13px',
+              }),
+            }}
           />
         )}
       />
