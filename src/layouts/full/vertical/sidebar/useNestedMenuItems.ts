@@ -806,6 +806,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'soporte-tecnico',
+              title: 'Soporte tecnico',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.clientes.soporteTecnicoNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Cartera ----------------

@@ -10,8 +10,9 @@ import {
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
-import { getUrlParams } from '@/shared/utils';
+import { getEnvs, getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
+import axios from 'axios';
 
 const { get, post, patch } = erpAPI();
 
@@ -195,4 +196,30 @@ export const updateUbicacionProducto = async <T>({
   setIsGlobalLoading(true);
 
   return patch<UbicacionProducto>(`/ubicacion-producto/${id}/`, data, true);
+};
+
+///*  Reporte
+const { VITE_ERPAPI_URL } = getEnvs();
+
+export const ReportUbicacionProductoExcel = async (params: any) => {
+  try {
+    const response = await axios.get(
+      `${VITE_ERPAPI_URL}/ubicacion-producto/report/excel/`,
+      {
+        params,
+        responseType: 'blob',
+      },
+    );
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Reporte Stock.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error descargando el Excel:', error);
+  }
 };

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
+  getEnvs,
   getUrlParams,
   MovimientoMaterial,
   MovimientoMaterialesPaginatedRes,
@@ -12,6 +13,7 @@ import {
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
 import { useUiStore } from '@/store/ui';
+import axios from 'axios';
 
 const { get, post, patch } = erpAPI();
 
@@ -179,4 +181,30 @@ export const updateMovimientoMaterial = async <T>({
   setIsGlobalLoading(true);
 
   return patch<MovimientoMaterial>(`/movimiento-material/${id}/`, data, true);
+};
+
+///*  Reporte
+const { VITE_ERPAPI_URL } = getEnvs();
+
+export const ReportMovimientoMaterialExcel = async (params: any) => {
+  try {
+    const response = await axios.get(
+      `${VITE_ERPAPI_URL}/movimiento-material/report/excel/`,
+      {
+        params,
+        responseType: 'blob',
+      },
+    );
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Reporte Movimiento Material.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error descargando el Excel:', error);
+  }
 };

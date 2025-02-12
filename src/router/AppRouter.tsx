@@ -1549,6 +1549,12 @@ const TicketTenicoPage = Loadable(
 const VisitaTecnico = Loadable(
   lazy(() => import('@/app/tecnico/tickets-tecnico/pages/forms/VisitaTecnico')),
 );
+const SoporteTecnicoPages = Loadable(
+  lazy(
+    () =>
+      import('@/app/cliente/soporte-tecnico/pages/tables/SoporteTecnicoPages'),
+  ),
+);
 
 //* activaciones ---------
 const ActivacionesInstalacionesMainPage = Loadable(
@@ -2740,6 +2746,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.clientes.clientesFibraVer,
             element: <FibraClientFormPage />,
+          },
+
+          ///* Soporte Tecnico
+          {
+            path: ROUTER_PATHS.clientes.soporteTecnicoNav,
+            element: <SoporteTecnicoPages />,
           },
         ],
       },
