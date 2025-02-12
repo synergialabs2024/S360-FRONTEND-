@@ -68,14 +68,14 @@ export type PromocionLimitData = Pick<
 >;
 
 export interface ProductoPromocionItem {
-  code: string; // code unique
-  name: string;
+  codigo: string; // code unique
+  nombre: string;
   opciones: OpcionProductoPromocionItem[];
 }
 
 export interface ProductoDisccountItem {
-  code: string;
-  name: string;
+  codigo: string;
+  nombre: string;
   descuento: string; // %
 }
 

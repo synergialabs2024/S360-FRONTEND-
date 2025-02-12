@@ -142,7 +142,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   ///* hooks ----------------
   const navigate = useNavigate();
   const { tabValue, handleTabChange } = useTabsOnly({
-    initialTabValue: 2,
+    // initialTabValue: 2,
   });
 
   ///* form ----------------
@@ -342,8 +342,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
     const formattedEquiposPromocion: ProductoPromocionItem[] =
       equiposPromocion?.map(item => ({
-        code: item.codigo,
-        name: item.nombre,
+        codigo: item.codigo,
+        nombre: item.nombre,
         opciones: item.productoOptionItemList?.map(opt => ({
           ...opt,
           cantidad: +(opt.cantidad || 0),
@@ -352,8 +352,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       }));
     const formattedDisccountItems: ProductoDisccountItem[] =
       disccountItems?.map(item => ({
-        code: item.codigo,
-        name: item.nombre,
+        codigo: item.codigo,
+        nombre: item.nombre,
         descuento: '100%',
       }));
 
@@ -421,6 +421,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [promocion, reset]);
+
+  useEffect(() => {
+    return () => {
+      clearAllStore();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const customLoading =
     isLoadingCiudades ||
