@@ -1,0 +1,172 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import {
+  getUrlParams,
+  ToastWrapper,
+  SoporteTecnico,
+  UseMutationParams,
+  PagingPartialParams,
+  UseFetchEnabledParams,
+  SoporteTecnicoPaginatedRes,
+} from '@/shared';
+import { useUiStore } from '@/store/ui';
+import { erpAPI } from '@/axios/erp-api';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
+
+const { get, post, patch } = erpAPI();
+
+export enum SoporteTecnicoTSQEnum {
+  SOPORTETECNICOS = 'soporte-tecnicos',
+  SOPORTETECNICO = 'soporte-tecnico',
+}
+
+///* tanStack query ---------------
+export const useFetchSoporteTecnicos = ({
+  enabled = true,
+  params,
+}: UseFetchEnabledParams<GetSoporteTecnicosParams>) => {
+  return useQuery({
+    queryKey: [
+      SoporteTecnicoTSQEnum.SOPORTETECNICOS,
+      ...Object.values(params || {}),
+    ],
+    queryFn: () => getSoporteTecnicos(params),
+    enabled: enabled,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useGetSoporteTecnico = (uuid: string) => {
+  return useQuery({
+    queryKey: [SoporteTecnicoTSQEnum.SOPORTETECNICO, uuid],
+    queryFn: () => getSoporteTecnico(uuid),
+    retry: false,
+  });
+};
+
+export const useCreateSoporteTecnico = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateSoporteTecnicoParams<T>) =>
+      createSoporteTecnico(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [SoporteTecnicoTSQEnum.SOPORTETECNICOS],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'SoporteTecnicos creado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const useUpdateSoporteTecnico = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: UpdateSoporteTecnicoParams<T>) =>
+      updateSoporteTecnico(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [SoporteTecnicoTSQEnum.SOPORTETECNICOS],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'SoporteTecnicos actualizado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+///* axios ---------------
+export type GetSoporteTecnicosParams = Partial<SoporteTecnico> &
+  PagingPartialParams;
+export type CreateSoporteTecnicoParams<T> = T;
+export type CreateSoporteTecnicoParamsBase = Omit<SoporteTecnico, 'id'>;
+export interface UpdateSoporteTecnicoParams<T> {
+  id: number;
+  data: T;
+}
+
+export const getSoporteTecnicos = async (params?: GetSoporteTecnicosParams) => {
+  const stateParams = { ...params };
+
+  const queryParams = getUrlParams(stateParams);
+  return get<SoporteTecnicoPaginatedRes>(
+    `/soportetecnicos/?${queryParams}`,
+    true,
+  );
+};
+
+export const getSoporteTecnico = async (uuid: string) => {
+  try {
+    return await get<SoporteTecnico>(`/soportetecnicos/${uuid}`, true);
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const createSoporteTecnico = async <T>(
+  data: CreateSoporteTecnicoParams<T>,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<SoporteTecnico>('/soportetecnicos/', data, true);
+};
+
+export const updateSoporteTecnico = async <T>({
+  id,
+  data,
+}: UpdateSoporteTecnicoParams<T>) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return patch<SoporteTecnico>(`/soportetecnicos/${id}/`, data, true);
+};

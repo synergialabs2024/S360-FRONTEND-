@@ -223,6 +223,10 @@ export const ROUTER_PATHS = {
     clientesFibra: 'fibra-optica',
     clientesFibraVer: 'fibra-optica/:uuid',
     clientesFibraNav: '/clientes/fibra-optica',
+
+    //* Soporte Tecnico
+    soporteTecnico: 'soporte-tecnico',
+    soporteTecnicoNav: '/clientes/soporte-tecnico',
   },
   /////* Cartera ----------------
   cartera: {
