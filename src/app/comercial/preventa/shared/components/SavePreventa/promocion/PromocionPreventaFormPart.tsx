@@ -1,10 +1,15 @@
 import { Grid } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 import { useFetchPromocions } from '@/actions/app';
+import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
 import { useLoaders } from '@/shared';
 import { CustomCardAlert } from '@/shared/components';
+import {
+  GenericInventoryStoreKey,
+  useTypedGenericInventoryStore,
+} from '@/store/app';
 import type { SaveFormDataPreventa } from '../SavePreventa';
 import PromocionPreventaComponent from './PromocionPreventaComponent';
 
@@ -15,6 +20,9 @@ export type PromocionPreventaFormPartProps = {
 const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
   form,
 }) => {
+  ///* local state ----------------
+  const [isMounted, setIsMounted] = useState(false);
+
   ///* form ----------------
   const watchedIs3raEdad = form.watch('es_tercera_edad');
   const watchedInternetPlan = form.watch('plan_internet');
@@ -50,19 +58,50 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
     },
   });
 
+  const { setItems: setEquiposPromocion } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.equiposPromocion,
+    );
+  const { setItems: setPromoDisccounts } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.descuentosPromocion,
+    );
+
   ///* effects ----------------
   useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+
+  const isCustomLoading = isLoadingPromociones || isRefetchingPromociones;
+  useLoaders(isCustomLoading);
+
+  useEffect(() => {
+    if (!isMounted || isCustomLoading) return;
     const firstPromocion = promocionesPagingRes?.data?.items?.at(0);
 
     if (firstPromocion) {
       form.setValue('promociones', [firstPromocion?.id!]);
+      const includedProducts = firstPromocion?.opciones_productos_incluye || [];
+      const includedDiscounts =
+        firstPromocion?.opciones_productos_descuento || [];
+
+      setEquiposPromocion(
+        includedProducts?.map(op => ({
+          ...op,
+          productoOptionItemList: op?.opciones || [],
+        })) as any,
+      );
+      setPromoDisccounts(includedDiscounts as any);
     } else {
       form.setValue('promociones', []);
+      setEquiposPromocion([]);
+      setPromoDisccounts([]);
     }
-  }, [form, promocionesPagingRes]);
-
-  const isCustomLoading = isLoadingPromociones || isRefetchingPromociones;
-  useLoaders(isCustomLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, promocionesPagingRes, isMounted, isCustomLoading]);
 
   if (watchedIs3raEdad)
     return (

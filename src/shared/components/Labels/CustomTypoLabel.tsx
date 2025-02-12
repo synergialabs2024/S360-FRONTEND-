@@ -15,6 +15,8 @@ export type CustomTypoLabelProps = {
   color?: string;
 
   sx?: SxPropsThemeType;
+
+  textAlign?: 'left' | 'center' | 'right' | 'justify' | 'inherit';
 };
 
 export enum CustomTypoLabelEnum {
@@ -31,10 +33,12 @@ const CustomTypoLabel: React.FC<CustomTypoLabelProps> = ({
   uppercase = true,
   color = '#6c737fb0',
   sx,
+  textAlign = 'left',
 }) => {
   return (
     <Typography
       variant={variant}
+      textAlign={textAlign}
       sx={
         sx || {
           ...TAB_TEXT_LABEL_SX,

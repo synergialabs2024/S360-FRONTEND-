@@ -27,6 +27,7 @@ export type CustomAutocompleteNoFormProps<T> = {
   endAdornment?: React.ReactNode;
   inLineLabel?: boolean;
   actualValueKey: keyof T;
+  showLabel?: boolean;
 };
 
 function CustomAutocompleteNoForm<T>({
@@ -48,6 +49,7 @@ function CustomAutocompleteNoForm<T>({
   endAdornment,
   inLineLabel = false,
   actualValueKey,
+  showLabel = true,
 }: CustomAutocompleteNoFormProps<T>) {
   const selectedOption =
     options.find(option => option[actualValueKey] === value) || null;
@@ -56,7 +58,7 @@ function CustomAutocompleteNoForm<T>({
 
   return (
     <Grid item {...size} sx={sxGrid}>
-      {!inLineLabel && (
+      {!inLineLabel && showLabel && (
         <CustomFormLabel htmlFor={label} required={required}>
           {label}
         </CustomFormLabel>

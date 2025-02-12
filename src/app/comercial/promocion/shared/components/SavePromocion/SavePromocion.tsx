@@ -101,6 +101,10 @@ export type SelectedEqPromoctionType = Producto & {
 
   // promociones
   isIncluded?: boolean;
+
+  // preventa
+  selectedUuidItem?: string;
+  descuento?: string;
 };
 
 const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {

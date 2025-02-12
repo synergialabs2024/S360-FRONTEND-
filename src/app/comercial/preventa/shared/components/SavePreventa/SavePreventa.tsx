@@ -118,6 +118,7 @@ import ValidButton from './ValidButton';
 import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
 import { EquiposSeleccionadosProductoType } from './form/equipos/EquiposSeleccionadosPreventa';
 
+import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
 import Cards from 'react-credit-cards-2';
 import { PromocionPreventaFormPart } from './promocion';
 
@@ -745,6 +746,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setAlreadyConsultedEquifax(true);
   };
 
+  const { clearAllStore: clearAllStoreEquiposPromocion } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.equiposPromocion,
+    );
+
   ///* effects ---------------------
   useEffect(() => {
     if (!solicitudServicio?.id) return;
@@ -888,8 +894,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     return () => {
       clearAllTimers();
       setIsComponentBlocked(false);
+      clearAllPreventaStore();
+      clearAllStoreEquiposPromocion();
     };
-  }, [clearAllTimers, setIsComponentBlocked]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isCustomLoading =
     isRefetchingNaps ||
