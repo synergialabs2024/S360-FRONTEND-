@@ -267,6 +267,17 @@ export const ROUTER_PATHS = {
     buzontareasEditar: 'buzontareas/editar/:uuid',
     buzontareasNav: '/cartera/buzontareas',
 
+    ///* parametros activaciones
+    // Tipo
+    parametrosCriterioMantenedorActivaciones:
+      'parametros/criterio-mantenedor-activaciones',
+    parametrosCriterioMantenedorActivacionesCrear:
+      'parametros/criterio-mantenedor-activaciones/crear',
+    parametrosCriterioMantenedorActivacionesEditar:
+      'parametros/criterio-mantenedor-activaciones/editar/:uuid',
+    parametrosCriterioMantenedorActivacionesNav:
+      '/cartera/parametros/criterio-mantenedor-activaciones',
+
     ///* parametros mantenedor de tareas
     // Tipo
     parametrosTipoMantenedorBeneficios: 'parametros/tipo-mantenedor-beneficios',
@@ -325,7 +336,13 @@ export const ROUTER_PATHS = {
     promesaspagoEditar: 'promesaspago/editar/:uuid',
     promesaspagoNav: '/cartera/promesaspago',
 
-    ///* promesas de pago
+    ///* mantenedor activaciones base
+    mantenedorActivacionesBase: 'mantenedorActivacionesBase',
+    mantenedorActivacionesBaseCrear: 'mantenedorActivacionesBase/crear',
+    mantenedorActivacionesBaseEditar: 'mantenedorActivacionesBase/editar/:uuid',
+    mantenedorActivacionesBaseNav: '/cartera/mantenedorActivacionesBase',
+
+    ///* mantenedor activaciones
     mantenedorActivaciones: 'mantenedorActivaciones',
     mantenedorActivacionesCrear: 'mantenedorActivaciones/crear',
     mantenedorActivacionesEditar: 'mantenedorActivaciones/editar/:uuid',
