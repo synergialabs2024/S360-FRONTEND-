@@ -88,10 +88,17 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       const includedDiscounts =
         firstPromocion?.opciones_productos_descuento || [];
 
+      // to handle prev selectedPromoOptions if exists (safe pev selected when unmout stepper)
+      const watchedSelectedPromoOptions =
+        form?.watch('selectedPromoOptions') || [];
+
       setEquiposPromocion(
         includedProducts?.map(op => ({
           ...op,
           productoOptionItemList: op?.opciones || [],
+          selectedUuidItem:
+            watchedSelectedPromoOptions.find(opt => opt.codigo === op.codigo)
+              ?.selectedUuidItem || undefined,
         })) as any,
       );
       setPromoDisccounts(includedDiscounts as any);
@@ -160,6 +167,7 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
               <>
                 <PromocionPreventaComponent
                   promocion={promocionesPagingRes?.data?.items?.at(0)!}
+                  form={form}
                 />
               </>
             )}

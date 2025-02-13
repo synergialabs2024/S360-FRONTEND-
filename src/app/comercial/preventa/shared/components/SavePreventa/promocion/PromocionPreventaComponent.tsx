@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
-import { MRT_ColumnDef } from 'material-react-table';
+import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo, useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 import { MdUnfoldMore } from 'react-icons/md';
 
 import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
@@ -26,14 +27,20 @@ import {
   useTypedGenericInventoryStore,
 } from '@/store/app';
 import { useColumnsEquiposPreventa } from '../../../hooks';
+import type { SaveFormDataPreventa } from '../SavePreventa';
 
-export type PromocionPreventaComponentProps = { promocion: Promocion };
+export type PromocionPreventaComponentProps = {
+  promocion: Promocion;
+  form?: UseFormReturn<SaveFormDataPreventa>;
+};
 
 const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
   promocion = {} as Promocion,
+  form,
 }) => {
   ///* local state ----------------
   const [isVissible, setIsVissible] = useState(true);
+  const watchedSelectedPromoOptions = form?.watch('selectedPromoOptions') || [];
 
   ///* columns ----------------
   const { promocionPreventaColumns } = useColumnsPromocion();
@@ -69,7 +76,7 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
                   : valueTipoRecuerrenciaAlquilerEnumChoice.MENSUAL
                     ? 'mensual)'
                     : '-';
-              const label = name + ' (' + `$${opt?.valor} ` + additionalLabel;
+              const label = name + ` ($${opt?.valor} ` + additionalLabel;
 
               return {
                 ...opt,
@@ -91,6 +98,34 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
                 value={row?.original?.selectedUuidItem || ''}
                 actualValueKey="value"
                 onChange={v => {
+                  if (form) {
+                    const isExist = watchedSelectedPromoOptions.find(
+                      o => o.codigo === row.original.codigo,
+                    );
+
+                    if (isExist) {
+                      const updated = watchedSelectedPromoOptions.map(o => {
+                        if (o.codigo === row.original.codigo) {
+                          return {
+                            ...o,
+                            selectedUuidItem: v as any,
+                          };
+                        }
+                        return o;
+                      });
+
+                      form.setValue('selectedPromoOptions', updated);
+                    } else {
+                      form.setValue('selectedPromoOptions', [
+                        ...watchedSelectedPromoOptions,
+                        {
+                          ...row.original,
+                          selectedUuidItem: v as any,
+                        },
+                      ]);
+                    }
+                  }
+
                   updateSelectedItemValue({
                     idKey: 'codigo', // unique to upd specific item
                     updatedItem: {
@@ -113,6 +148,7 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
         },
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [productsBaseColumns, updateSelectedItemValue],
   );
 

@@ -358,7 +358,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       disccountItems?.map(item => ({
         codigo: item.codigo,
         nombre: item.nombre,
-        descuento: '100%',
+        descuento: '100',
       }));
 
     ///* upd
@@ -515,7 +515,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
         enableColumnFilter: false,
         header: 'INCLUIDO',
         Cell: ({ row }) => {
-          const isIncluded = row?.original?.isIncluded;
+          const isIncluded =
+            row?.original?.isIncluded || row?.original?.descuento == '100';
 
           return isIncluded ? 'SI' : 'NO';
         },

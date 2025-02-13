@@ -146,8 +146,12 @@ export type SaveFormDataPreventa = CreatePreventaParamsBase &
 
     estadoOtp?: Nullable<OtpStatesEnumChoice>;
 
-    // helpers
+    // helpers ----------------
     tipoIdentificacion?: string;
+
+    // promociones ----------------
+    // to safe selected options after unmount in PromocionPreventaFormPart
+    selectedPromoOptions?: SelectedEqPromoctionType[];
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
@@ -231,7 +235,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
-      // initialStep: 2,
+      initialStep: 2,
     });
 
   ///* form --------------------------
@@ -244,6 +248,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
       tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
+
+      selectedPromoOptions: [],
     },
   });
 
@@ -549,8 +555,26 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     },
   });
 
+  ///* promociones ---------------------
+  const { items: equiposPromocion } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.equiposPromocion,
+    );
+  const { items: promoDisccounts } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.descuentosPromocion,
+    );
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataPreventa) => {
+    console.log({
+      equiposPromocion,
+      promoDisccounts,
+      selectedPromoOptions: data?.selectedPromoOptions,
+    });
+
+    // return;
+
     if (!isValid) return;
     if (
       !watchedEstadoOtp ||
@@ -765,6 +789,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
       tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
+
+      selectedPromoOptions: [],
     });
   }, [solicitudServicio, reset]);
 
@@ -1042,6 +1068,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 control={form.control}
                 error={errors.sector}
                 helperText={errors.sector?.message}
+                onChangeValue={() => {
+                  form.setValue('selectedPromoOptions', []);
+                }}
               />
               <CustomTextField
                 label="Zona"
@@ -1219,6 +1248,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 !watchedServiceType ||
                 !alreadyConsultedEquifax
               }
+              onChangeValue={() => {
+                form.setValue('selectedPromoOptions', []);
+              }}
             />
             <Grid
               item
@@ -1284,6 +1316,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               }}
               onChangeRawValue={rawValue => {
                 form.setValue('rawPaymentMethod', rawValue);
+                form.setValue('selectedPromoOptions', []);
               }}
             />
             {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
