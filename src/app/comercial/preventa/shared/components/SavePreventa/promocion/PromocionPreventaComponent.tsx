@@ -72,11 +72,14 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
               const tipoPago = opt.tipo_pago;
               const additionalLabel =
                 tipoPago === valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS
-                  ? `en ${opt.cuotas} cuotas)`
+                  ? `por ${opt.cuotas} cuotas)`
                   : valueTipoRecuerrenciaAlquilerEnumChoice.MENSUAL
                     ? 'mensual)'
                     : '-';
-              const label = name + ` ($${opt?.valor} ` + additionalLabel;
+              const label =
+                `${opt?.cantidad}  ${name}` +
+                ` ($${opt?.valor} ` +
+                additionalLabel;
 
               return {
                 ...opt,
@@ -168,9 +171,9 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
         enableColumnFilter: false,
         header: 'INCLUIDO',
         Cell: ({ row }) => {
-          const isIncluded = row?.original?.descuento === '100%';
+          const isIncluded = row?.original?.descuento === '100';
 
-          return isIncluded ? 'SI' : 'NO';
+          return isIncluded ? 'SI (1)' : 'NO';
         },
       },
     ],
