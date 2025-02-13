@@ -519,7 +519,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           const isIncluded =
             row?.original?.isIncluded || row?.original?.descuento == '100';
 
-          return isIncluded ? 'SI' : 'NO';
+          return isIncluded ? 'SI (1)' : 'NO';
         },
       },
       {
