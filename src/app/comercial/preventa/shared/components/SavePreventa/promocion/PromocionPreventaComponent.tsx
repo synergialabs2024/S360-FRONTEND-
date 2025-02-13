@@ -99,30 +99,32 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
                 actualValueKey="value"
                 onChange={v => {
                   if (form) {
-                    const isExist = watchedSelectedPromoOptions.find(
-                      o => o.codigo === row.original.codigo,
-                    );
-
-                    if (isExist) {
-                      const updated = watchedSelectedPromoOptions.map(o => {
-                        if (o.codigo === row.original.codigo) {
-                          return {
-                            ...o,
-                            selectedUuidItem: v as any,
-                          };
-                        }
-                        return o;
-                      });
-
+                    if (v === undefined || v === null) {
+                      const updated = watchedSelectedPromoOptions.filter(
+                        o => o.codigo !== row.original.codigo,
+                      );
                       form.setValue('selectedPromoOptions', updated);
                     } else {
-                      form.setValue('selectedPromoOptions', [
-                        ...watchedSelectedPromoOptions,
-                        {
-                          ...row.original,
-                          selectedUuidItem: v as any,
-                        },
-                      ]);
+                      const exists = watchedSelectedPromoOptions.find(
+                        o => o.codigo === row.original.codigo,
+                      );
+                      if (exists) {
+                        const updated = watchedSelectedPromoOptions.map(o => {
+                          if (o.codigo === row.original.codigo) {
+                            return {
+                              ...o,
+                              selectedUuidItem: v as any,
+                            };
+                          }
+                          return o;
+                        });
+                        form.setValue('selectedPromoOptions', updated);
+                      } else {
+                        form.setValue('selectedPromoOptions', [
+                          ...watchedSelectedPromoOptions,
+                          { ...row.original, selectedUuidItem: String(v) },
+                        ]);
+                      }
                     }
                   }
 
