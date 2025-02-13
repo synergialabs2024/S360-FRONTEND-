@@ -888,12 +888,35 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.alquileresNav,
             }),
+            renderByModule(SidenavModulesEnum.CARTERA_MANTENEDOR_ACTIVACIONES, {
+              id: 'mantenedorActivacionesBase',
+              title: 'Mantenedor Activaciones Base',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.mantenedorActivacionesBaseNav,
+            }),
+            renderByModule(SidenavModulesEnum.CARTERA_MANTENEDOR_ACTIVACIONES, {
+              id: 'mantenedorActivaciones',
+              title: 'Mantenedor Activaciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.mantenedorActivacionesNav,
+            }),
             {
               id: 'parametros',
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
               icon: IconBuildingWarehouse,
               children: [
+                renderByModule(
+                  // SidenavModulesEnum.CARTERA_MANTENEDOR_ACTIVACIONES,
+                  SidenavModulesEnum.CARTERA_MANTENEDOR_ACTIVACIONES,
+                  {
+                    id: 'parametrosCriterioMantenedorActivaciones',
+                    title: 'Criterio mantenedor activaciones',
+                    type: MenuItemType.ITEM,
+                    url: ROUTER_PATHS.cartera
+                      .parametrosCriterioMantenedorActivacionesNav,
+                  },
+                ),
                 renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
                   id: 'parametrosTipoMantenedorBeneficios',
                   title: 'Tipo mantenedor beneficios',
@@ -931,12 +954,6 @@ export const useNestedMenu = () => {
                 }),
               ],
             },
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'mantenedorActivaciones',
-              title: 'Mantenedor Activaciones',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.cartera.mantenedorActivacionesNav,
-            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Cobranza ----------------

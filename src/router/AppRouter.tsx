@@ -795,11 +795,20 @@ const CreatePromesaPagoPage = Loadable(
   ),
 );
 
-const MantenedorAplicacionesByStatePage = Loadable(
+const MantenedorActivacionesBaseByStatePage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/cartera/mantenedor-activaciones/pages/tables/MantenedorAplicacionesByStatePage'
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activaciones-base/pages/tables/MantenedorActivacionesBaseByStatePage'
+      ),
+  ),
+);
+
+const MantenedorActivacionByStatePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activacion/pages/tables/MantenedorActivacionByStatePage'
       ),
   ),
 );
@@ -820,6 +829,25 @@ const BuzonTareasPage = Loadable(
     () =>
       import(
         '@/app/cartera/buzon-tareas/buzon-tarea/pages/forms/BuzonTareasPage'
+      ),
+  ),
+);
+
+// Criterio mantenedor activaciones
+const CriterioMantenedorActivacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/parametros/criterio-mantenedor-activaciones/pages/tables/CriterioMantenedorActivacionesPage'
+      ),
+  ),
+);
+
+const CreateCriterioMantenedorActivacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/parametros/criterio-mantenedor-activaciones/pages/forms/CreateCriterioMantenedorActivacionesPage'
       ),
   ),
 );
@@ -924,7 +952,16 @@ const MantenedorAplicacionesPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/cartera/mantenedor-activaciones/pages/forms/MantenedorAplicacionesPage'
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activaciones-base/pages/forms/MantenedorActivacionesBasePage'
+      ),
+  ),
+);
+
+const MantenedorActivacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activacion/pages/forms/MantenedorActivacionPage'
       ),
   ),
 );
@@ -2239,6 +2276,7 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera.cambiopropietarioNav,
             element: <CambioPropietarioPagoPage />,
           },
+
           ///* Buzon de Tareas
 
           {
@@ -2248,6 +2286,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.buzontareasCrear,
             element: <BuzonTareasPage />,
+          },
+
+          // Criterio mantenedor activaciones
+
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosCriterioMantenedorActivacionesNav,
+            element: <CriterioMantenedorActivacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosCriterioMantenedorActivacionesCrear,
+            element: <CreateCriterioMantenedorActivacionesPage />,
           },
 
           // Tipo mantenedor aplicaciones
@@ -2319,14 +2370,24 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera.promesapagoCrear,
             element: <CreatePromesaPagoPage />,
           },
-          ///* Mantenedor aplicaciones
+          ///* Mantenedor activaciones base
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseNav,
+            element: <MantenedorActivacionesBaseByStatePage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseCrear,
+            element: <MantenedorAplicacionesPage />,
+          },
+
+          ///* Mantenedor activaciones
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesNav,
-            element: <MantenedorAplicacionesByStatePage />,
+            element: <MantenedorActivacionByStatePage />,
           },
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesCrear,
-            element: <MantenedorAplicacionesPage />,
+            element: <MantenedorActivacionPage />,
           },
 
           ///* rubros

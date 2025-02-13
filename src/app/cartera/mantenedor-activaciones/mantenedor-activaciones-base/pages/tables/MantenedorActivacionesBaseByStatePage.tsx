@@ -1,6 +1,7 @@
 import {
   emptyCellOneLevel,
   EstadoTicketTecnicoEnumChoice,
+  formatBooleanCell,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -15,15 +16,15 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { CambioPlan } from '@/shared/interfaces/app/cartera';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { useFetchCambioPlanes } from '@/actions/app/cartera';
-import { returnUrlMantenedorAplicacionesPage } from '../forms/MantenedorAplicacionesPage';
+import { returnUrlMantenedorActivacionesBasePage } from '../forms/MantenedorActivacionesBasePage';
+import { useFetchMantenedorActivacionesBase } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
 
-export type MantenedorAplicacionesByStatePageProps = {
+export type MantenedorActivacionesBaseByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
 };
 
-const MantenedorAplicacionesByStatePage: React.FC<
-  MantenedorAplicacionesByStatePageProps
+const MantenedorActivacionesBaseByStatePage: React.FC<
+  MantenedorActivacionesBaseByStatePageProps
 > = () => {
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
@@ -45,7 +46,7 @@ const MantenedorAplicacionesByStatePage: React.FC<
     data: CambioPlanesPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchCambioPlanes({
+  } = useFetchMantenedorActivacionesBase({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -60,25 +61,61 @@ const MantenedorAplicacionesByStatePage: React.FC<
   const columns = useMemo<MRT_ColumnDef<CambioPlan>[]>(
     () => [
       {
-        accessorKey: 'plan_internet_anterior',
-        header: 'PLAN INTERNET ANTERIOR',
+        accessorKey: 'code',
+        header: 'CODIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_internet_anterior'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
       },
       {
-        accessorKey: 'plan_internet_nuevo',
-        header: 'PLAN INTERNET NUEVO',
+        accessorKey: 'tiempo_bloqueo',
+        header: 'Tiempo Bloqueo',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_internet_nuevo'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tiempo_bloqueo'),
       },
+      {
+        accessorKey: 'tiempo_limite',
+        header: 'Tiempo Limite',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tiempo_limite'),
+      },
+
+      {
+        accessorKey: 'incluye_facturacion',
+        header: 'Incluye Facturacion',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatBooleanCell(row, 'incluye_facturacion'),
+      },
+      {
+        accessorKey: 'incluye_notificacion',
+        header: 'Incluye Notificacion',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatBooleanCell(row, 'incluye_notificacion'),
+      },
+
+      /* {
+        accessorKey: 'usuarios_autorizados',
+        header: 'Usuarios Autorizados',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'usuarios_autorizados'),
+      }, */
+      /* {
+        accessorKey: 'motivo',
+        header: 'Motivo',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'motivo'),
+      }, */
     ],
     [],
   );
 
   return (
     <SingleTableBoxScene
-      title="Mantenedor Aplicaciones"
-      createPageUrl={`${returnUrlMantenedorAplicacionesPage}/crear`}
+      title="Mantenedor Activaciones"
+      createPageUrl={`${returnUrlMantenedorActivacionesBasePage}/crear`}
       showCreateBtn={true}
     >
       <CustomSearch
@@ -111,4 +148,4 @@ const MantenedorAplicacionesByStatePage: React.FC<
   );
 };
 
-export default MantenedorAplicacionesByStatePage;
+export default MantenedorActivacionesBaseByStatePage;

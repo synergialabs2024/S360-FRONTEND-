@@ -5,6 +5,9 @@ export enum GenericInventoryStoreKey {
   // mantenedor beneficios --------------
   servicioInternet = 'servicioInternet',
 
+  // mantenedor activaciones --------------
+  mantenedorActivaciones = 'mantenedorActivaciones',
+
   // OT --------------
   equiposUtilizados = 'equiposUtilizados',
   materialesUtilizados = 'materialesUtilizados',
