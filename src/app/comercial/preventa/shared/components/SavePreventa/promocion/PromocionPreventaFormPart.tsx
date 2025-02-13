@@ -99,6 +99,8 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
           selectedUuidItem:
             watchedSelectedPromoOptions.find(opt => opt.codigo === op.codigo)
               ?.selectedUuidItem || undefined,
+
+          promocionUuid: firstPromocion?.uuid,
         })) as any,
       );
       setPromoDisccounts(includedDiscounts as any);

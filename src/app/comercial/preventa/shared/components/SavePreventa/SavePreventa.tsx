@@ -93,7 +93,10 @@ import {
 } from '@/shared/constants/ui';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
-import { SolicitudServicio } from '@/shared/interfaces';
+import {
+  PreventaPromocionSelectedOptions,
+  SolicitudServicio,
+} from '@/shared/interfaces';
 import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import {
   formatCountDownTimer,
@@ -235,7 +238,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const { activeStep, disableNextStepBtn, handleBack, handleNext } =
     useCustomStepper({
       steps,
-      initialStep: 2,
+      initialStep: 0,
     });
 
   ///* form --------------------------
@@ -555,26 +558,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     },
   });
 
-  ///* promociones ---------------------
-  const { items: equiposPromocion } =
-    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
-      GenericInventoryStoreKey.equiposPromocion,
-    );
-  const { items: promoDisccounts } =
-    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
-      GenericInventoryStoreKey.descuentosPromocion,
-    );
-
   ///* handlers ---------------------
   const onSave = async (data: SaveFormDataPreventa) => {
-    console.log({
-      equiposPromocion,
-      promoDisccounts,
-      selectedPromoOptions: data?.selectedPromoOptions,
-    });
-
-    // return;
-
     if (!isValid) return;
     if (
       !watchedEstadoOtp ||
@@ -652,7 +637,17 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     );
     const sanitizedDataToSend = sanitizeDataForSend(data);
 
-    // create
+    // promociones ------------
+    const selectedPromoOptions = data?.selectedPromoOptions || [];
+    const formattedSelectedPromoOptions: PreventaPromocionSelectedOptions[] =
+      selectedPromoOptions.map(opt => ({
+        codigo: opt?.codigo as string,
+        nombre: opt?.nombre as string,
+        selected_item_uuid: opt?.selectedUuidItem as string,
+        promocion_uuid: opt?.promocionUuid as string,
+      }));
+
+    // create ----------------
     await createPreventaMutation.mutateAsync({
       ...sanitizedDataToSend,
       solicitud_servicio: solicitudServicio?.id!,
@@ -663,6 +658,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       url_foto_planilla: planillaPhotoObj?.streamUlr || '',
       url_foto_documento_cuenta: documentoCuentaBancariaObj?.streamUlr || '',
+
+      promocion_items_selected: formattedSelectedPromoOptions,
     });
     setIsCheckingCedula(false);
   };
@@ -770,6 +767,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     setAlreadyConsultedEquifax(true);
   };
 
+  ///* promociones ---------------------
   const { clearAllStore: clearAllStoreEquiposPromocion } =
     useTypedGenericInventoryStore<SelectedEqPromoctionType>(
       GenericInventoryStoreKey.equiposPromocion,

@@ -104,6 +104,7 @@ export type SelectedEqPromoctionType = Producto & {
 
   // preventa
   selectedUuidItem?: string;
+  promocionUuid?: string;
   descuento?: string;
 };
 

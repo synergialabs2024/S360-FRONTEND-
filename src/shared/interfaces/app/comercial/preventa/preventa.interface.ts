@@ -114,6 +114,7 @@ export interface Preventa {
   tarjeta?: number; // credito
 
   promociones?: number[]; // fk
+  promocion_items_selected?: PreventaPromocionSelectedOptions[];
 
   // sales filter logic
   area: number;
@@ -137,3 +138,10 @@ export interface Preventa {
   can_be_scheduled?: boolean;
   es_tercera_edad?: boolean; // <- sol_service
 }
+
+export type PreventaPromocionSelectedOptions = {
+  codigo: string;
+  nombre: string;
+  selected_item_uuid: string;
+  promocion_uuid: string;
+};
