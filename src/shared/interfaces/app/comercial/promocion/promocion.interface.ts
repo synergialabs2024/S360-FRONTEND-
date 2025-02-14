@@ -65,6 +65,8 @@ export type PromocionLimitData = Pick<
   | 'valor_descuento'
   | 'facturas_descuento'
   | 'facturas_gratis'
+  | 'opciones_productos_incluye'
+  | 'opciones_productos_descuento'
 >;
 
 export interface ProductoPromocionItem {

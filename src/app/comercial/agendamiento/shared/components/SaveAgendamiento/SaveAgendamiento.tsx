@@ -9,6 +9,7 @@ import {
   CreateAgendamientoVentasFormData,
   useCreateAgendamiento,
 } from '@/actions/app';
+import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
 import { ToastWrapper } from '@/shared';
 import { StepperBoxScene, useCustomStepper } from '@/shared/components';
 import { Flota, Preventa, SolicitudServicio } from '@/shared/interfaces';
@@ -47,6 +48,10 @@ export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
 
     rawFlota?: Flota;
     flotaUUID?: string;
+
+    // promociones ----------------
+    // to safe selected options after unmount in PromocionPreventaFormPart
+    selectedPromoOptions?: SelectedEqPromoctionType[];
   };
 
 const steps = ['Datos generales', 'Servicio y Ubicación', 'Agendamiento'];
@@ -132,7 +137,9 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       tarjetaName: rest?.tarjeta_data?.name,
       paymentMethodName: rest?.metodo_pago_data?.name,
       flotaUUID: preventa?.flota_data?.uuid,
-    } as SaveFormDataAgendaVentas);
+
+      selectedPromoOptions: preventa?.promocion_items_selected || [],
+    } as unknown as SaveFormDataAgendaVentas);
   }, [preventa, reset, setActivePreventa]);
 
   // const isLoading = false;

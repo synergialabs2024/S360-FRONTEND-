@@ -32,11 +32,13 @@ import type { SaveFormDataPreventa } from '../SavePreventa';
 export type PromocionPreventaComponentProps = {
   promocion: Promocion;
   form?: UseFormReturn<SaveFormDataPreventa>;
+  optionSelectDisabled?: boolean;
 };
 
 const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
   promocion = {} as Promocion,
   form,
+  optionSelectDisabled = false,
 }) => {
   ///* local state ----------------
   const [isVissible, setIsVissible] = useState(true);
@@ -145,7 +147,7 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
                 required
                 error={false}
                 size={gridSize}
-                disabled={false}
+                disabled={optionSelectDisabled}
                 showLabel={false}
               />
             </>
