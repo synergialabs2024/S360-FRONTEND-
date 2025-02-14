@@ -161,6 +161,12 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
                           type="number"
                           size={gridSize}
                           min={1}
+                          max={
+                            opcion.tipo_pago ===
+                            valueTipoRecuerrenciaAlquilerEnumChoice.MENSUAL
+                              ? 2
+                              : 24
+                          }
                           disabled={isEdditingForm}
                         />
                       </Grid>
@@ -241,6 +247,25 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
         if (hasDecimals)
           return ToastWrapper.error(
             'No se permiten valores decimales en cantidad o cuotas',
+          );
+        const hasQuantityBT2 = selectedRow?.productoOptionItemList.some(
+          opcion =>
+            opcion.cantidad > 2 &&
+            opcion.tipo_pago ===
+              valueTipoRecuerrenciaAlquilerEnumChoice.MENSUAL,
+        );
+        if (hasQuantityBT2)
+          return ToastWrapper.error(
+            'La cantidad de productos no puede ser mayor a 2 cuando la recurrencia es mensual',
+          );
+        const hasQuantityBT24 = selectedRow?.productoOptionItemList.some(
+          opcion =>
+            opcion.cantidad > 24 &&
+            opcion.tipo_pago === valueTipoRecuerrenciaAlquilerEnumChoice.CUOTAS,
+        );
+        if (hasQuantityBT24)
+          return ToastWrapper.error(
+            'La cantidad de productos no puede ser mayor a 24 cuando la recurrencia es por cuotas',
           );
 
         updateSelectedItemValue({
