@@ -96,14 +96,14 @@ export const useColumnsAutorizacionOnus = () => {
         },
       },
       {
-        accessorKey: 'opcion__provicinar',
-        header: 'PROVICINAR',
+        accessorKey: 'opcion__provicionar',
+        header: 'XML',
         size: 50,
         Cell: ({ row }) => {
           return (
             <ModalAutorizacionOnusPage
               authOnu={row.original}
-              titleButton="PROVICINAR"
+              titleButton="XML"
             />
           );
         },

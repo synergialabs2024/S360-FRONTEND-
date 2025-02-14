@@ -1,4 +1,5 @@
 import { IconRouteSquare2 } from '@tabler/icons-react';
+import { gridSizeMdLg6 } from '@/shared/constants';
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,6 +8,7 @@ import {
   useFetchOLTs,
   useFetchAuthOnu,
   CreateAuthOnuParamsBase,
+  useCreateAuthONUAuthorized,
 } from '@/actions/app';
 import {
   CustomTextField,
@@ -18,7 +20,8 @@ import {
   CustomAutocompleteNoForm,
 } from '@/shared/components';
 import { ToastWrapper } from '@/shared/wrappers';
-import { gridSizeMdLg6 } from '@/shared/constants';
+import { PermissionsEnum } from '@/shared/interfaces';
+import { hasAllPermissions } from '@/shared/utils/auth';
 
 export type ModalAuthorizateOrdenTrabajoProps = {
   authOnu: Record<string, any>;
@@ -35,9 +38,26 @@ type TransformedDataOLT2 = {
   label: string;
 };
 
+type SaveFormData = CreateAuthOnuParamsBase & {
+  vlan?: string;
+  line_profile?: string;
+  traffic_table?: string;
+  srv_profile?: string;
+  eth?: number;
+  nap?: number;
+  slot?: number;
+  port_onu?: number;
+  user_ppoe?: string;
+  pass_ppoe?: string;
+  mode?: string;
+  description?: string;
+};
+
 const ModalAuthorizateOrdenTrabajo: React.FC<
   ModalAuthorizateOrdenTrabajoProps
 > = ({ authOnu, titleButton }) => {
+  hasAllPermissions([PermissionsEnum.infraestructura_view_olt]);
+
   // State management
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [nameBtn, setNameBtn] = useState<string | undefined>('');
@@ -61,9 +81,15 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
   });
 
   // Form management
-  const form = useForm<CreateAuthOnuParamsBase>({ defaultValues: {} });
+  const form = useForm<SaveFormData>({
+    defaultValues: {
+      eth: 4,
+      nap: authOnu.preventa_data.nap,
+    },
+  });
   const {
     formState: { errors },
+    handleSubmit,
   } = form;
 
   useEffect(() => {
@@ -139,11 +165,33 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
     />
   );
 
-  const onSend = () => {
+  const createAuthOnuAutorizacionMutation = useCreateAuthONUAuthorized({
+    enableNavigate: true,
+    enableErrorNavigate: true,
+  });
+
+  const onSave = (data: SaveFormData) => {
     if (dataBeing) {
-      setOpenModal(false);
-      ToastWrapper.success('Datos enviados');
-      console.log(optionsState);
+      data.ont_model = AuthOnusPagingRes?.data?.items[0].ont_model;
+      data.vlan = optionsState.vlans || '';
+      data.line_profile = optionsState.lineProfiles || '';
+      data.traffic_table = optionsState.trafficTables || '';
+      data.srv_profile = optionsState.srvProfiles || '';
+      data.port_pon = AuthOnusPagingRes?.data?.items[0].port_pon;
+
+      createAuthOnuAutorizacionMutation.mutate(
+        { data: data },
+        {
+          onSuccess: () => {
+            ToastWrapper.success('Se actualizo correctamente la ONU');
+            setOpenModal(false);
+          },
+          onError: error => {
+            setOpenModal(false);
+            ToastWrapper.error(`Error al actualizar la ONU. ${error}`);
+          },
+        },
+      );
     } else {
       setOpenModal(false);
     }
@@ -184,7 +232,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
         onClose={() => setOpenModal(false)}
         cancelTextBtn="Cerrar"
         confirmTextBtn={nameBtn}
-        onConfirm={() => onSend()}
+        onConfirm={handleSubmit(onSave)}
         contentNode={
           <Grid container spacing={3}>
             <Grid item container spacing={3} sx={{ mb: 3 }}>
@@ -192,38 +240,38 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
                 <>
                   <CustomTextField
                     label="TIPO"
-                    name="olt_name"
+                    name="mode"
                     control={form.control}
                     defaultValue={
                       AuthOnusPagingRes?.data?.items[0]?.olt_name || ''
                     }
-                    error={errors.olt_name}
-                    helperText={errors.olt_name?.message}
+                    error={errors.mode}
+                    helperText={errors.mode?.message}
                     required={false}
                     disabled
                   />
                   <CustomNumberTextField
                     label="BOARD"
-                    name="olt_slot"
+                    name="slot"
                     control={form.control}
                     defaultValue={
                       AuthOnusPagingRes?.data?.items[0]?.olt_slot || ''
                     }
-                    error={errors.olt_slot}
-                    helperText={errors.olt_slot?.message}
+                    error={errors.slot}
+                    helperText={errors.slot?.message}
                     size={gridSizeMdLg6}
                     required={false}
                     disabled
                   />
                   <CustomNumberTextField
                     label="PORT"
-                    name="olt_port"
+                    name="port_onu"
                     control={form.control}
                     defaultValue={
                       AuthOnusPagingRes?.data?.items[0]?.olt_port || ''
                     }
-                    error={errors.olt_port}
-                    helperText={errors.olt_port?.message}
+                    error={errors.port_onu}
+                    helperText={errors.port_onu?.message}
                     size={gridSizeMdLg6}
                     required={false}
                     disabled
@@ -241,33 +289,33 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
                   />
                   <CustomTextField
                     label="ALIAS/CAJA"
-                    name="alias_caja"
+                    name="description"
                     control={form.control}
                     defaultValue={authOnu?.nap_data?.name || ''}
-                    error={errors.alias_caja}
-                    helperText={errors.alias_caja?.message}
+                    error={errors.description}
+                    helperText={errors.description?.message}
                     size={gridSizeMdLg6}
                     required={false}
                     disabled
                   />
                   <CustomTextField
                     label="USERPPOE"
-                    name="userppoe"
+                    name="user_ppoe"
                     control={form.control}
                     defaultValue={authOnu?.pppoe || ''}
-                    error={errors.userppoe}
-                    helperText={errors.userppoe?.message}
+                    error={errors.user_ppoe}
+                    helperText={errors.user_ppoe?.message}
                     size={gridSizeMdLg6}
                     required={false}
                     disabled
                   />
                   <CustomTextField
                     label="PASSPPOE"
-                    name="passppoe"
+                    name="pass_ppoe"
                     control={form.control}
                     defaultValue={authOnu?.pppassword || ''}
-                    error={errors.passppoe}
-                    helperText={errors.passppoe?.message}
+                    error={errors.pass_ppoe}
+                    helperText={errors.pass_ppoe?.message}
                     size={gridSizeMdLg6}
                     required={false}
                     disabled

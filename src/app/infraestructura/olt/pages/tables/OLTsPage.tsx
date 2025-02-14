@@ -102,6 +102,14 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
+        accessorKey: 'code',
+        header: 'CODE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
+      {
         accessorKey: 'user',
         header: 'USER',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

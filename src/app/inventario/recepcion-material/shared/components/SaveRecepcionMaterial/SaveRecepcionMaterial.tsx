@@ -157,9 +157,9 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
           });
         },
         onError: error => {
-          // Muestra un mensaje de error si la mutación falla
-          ToastWrapper.error('Error al actualizar la recepción del material.');
-          console.error('Error al actualizar:', error);
+          ToastWrapper.error(
+            `Error al actualizar la recepción del material. ${error}`,
+          );
         },
       },
     );
