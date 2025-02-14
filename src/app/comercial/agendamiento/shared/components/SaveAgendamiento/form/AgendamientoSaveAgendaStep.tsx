@@ -53,7 +53,7 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
 
-        <PromocionPreventaView preventa={preventa!} />
+        <PromocionPreventaView preventa={preventa!} form={form as any} />
       </Grid>
 
       {/* ============ planificador component ============ */}
