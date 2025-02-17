@@ -443,6 +443,7 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({ title }) => {
         helperText={errors.observacion?.message}
         size={gridSizeMdLg6}
       />
+
       <CustomTypoLabel text="Historial" />
 
       <>
@@ -459,8 +460,8 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({ title }) => {
           enableGlobalFilter={false}
           // // pagination
           /* pagination={pagination}
-        onPaging={setPagination}
-        rowCount={GruposIPv6PagingRes?.data?.meta?.count} */
+        onPaging={setPagination} */
+          rowCount={promesasPagoPagingRes?.data?.meta?.count}
           // // actions
           actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         />

@@ -17,7 +17,7 @@ export interface CambioPlan {
   rubro: number;
   cliente: number;
   contrato: number;
-  linea_servicio: number;
+  linea_servicio?: number;
 
   //
 }
