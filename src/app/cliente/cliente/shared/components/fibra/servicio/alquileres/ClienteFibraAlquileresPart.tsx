@@ -1,23 +1,24 @@
+import { Box, Card, Grid } from '@mui/material';
+import { FiPlus } from 'react-icons/fi';
+import { useState } from 'react';
+
 import {
+  gridSize,
   Alquiler,
-  valueTipoRecuerrenciaAlquilerEnumChoice,
+  useTableFilter,
   LineaServicio,
   useColumnsAlquiler,
-  useTableFilter,
   useTableServerSideFiltering,
-  gridSize,
+  valueTipoRecuerrenciaAlquilerEnumChoice,
 } from '@/shared';
 import {
-  CustomSingleButton,
   CustomTable,
   CustomTypoLabel,
+  CustomSingleButton,
   CustomTypoLabelEnum,
 } from '@/shared/components';
-import { useState } from 'react';
-import { FiPlus } from 'react-icons/fi';
-import ClienteFibraRubroAlquilerModal from '../rubros/tabs/rurbos/libre/ClienteFibraRubroAlquilerModal';
 import { useFetchAlquileres } from '@/actions/app';
-import { Box, Card, Grid } from '@mui/material';
+import ClienteFibraRubroAlquilerModal from './ClienteFibraRubroAlquilerModal';
 
 export type ClienteFibraAlquileresPartProps = {
   serviceLine: LineaServicio;

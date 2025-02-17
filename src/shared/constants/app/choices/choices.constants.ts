@@ -516,6 +516,11 @@ export enum InvetarioCodesEnum {
   MATERIALES = 'MATERIALES',
   EQUIPOS = 'EQUIPOS',
 }
+export const CATEGORIA_TYPE_ARRAY_CHOICES = [
+  InvetarioCodesEnum.DIGITAL,
+  InvetarioCodesEnum.MATERIALES,
+  InvetarioCodesEnum.EQUIPOS,
+];
 
 // // Bucket ==============================================
 const { VITE_MINIO_BUCKET_NAME } = getEnvs();

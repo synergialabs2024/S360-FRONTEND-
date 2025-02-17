@@ -1,7 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Grid } from '@mui/material';
+import dayjs from 'dayjs';
 
 import {
   useCreateAlquiler,
@@ -13,6 +14,7 @@ import {
   CustomTextField,
   CustomAutocomplete,
   ScrollableDialogProps,
+  CustomFormLabel,
 } from '@/shared/components';
 import {
   Alquiler,
@@ -21,18 +23,24 @@ import {
   LineaServicio,
   gridSizeMdLg12,
   alquilerFormSchema,
-  TIPO_RECURRENCIA_ALQUILER_ARRAY_OBJ_ONT,
   TipoRecurrenciaAlquilerEnumChoiceType,
   valueTipoRecuerrenciaAlquilerEnumChoice,
+  TIPO_RECURRENCIA_ALQUILER_ARRAY_OBJ_ONT,
+  CATEGORIA_TYPE_ARRAY_CHOICES,
+  gridSize,
+  ToastWrapper,
+  useLoaders,
 } from '@/shared';
-import dayjs from 'dayjs';
+import { SelectArrayStringSimple } from '@/app/administracion-red/trafico/custom';
 
 export type ClienteFibraRubroAlquilerModalProps = {
   open: boolean;
   onClose: () => void;
   serviceLine: LineaServicio;
 };
-type SaveFormData = CreateAlquilerParamsBase & {};
+type SaveFormData = CreateAlquilerParamsBase & {
+  categoria__code: string;
+};
 
 export type RubrosClienteAlquilerFormData = Partial<Alquiler> & {};
 
@@ -53,6 +61,8 @@ const ClienteFibraRubroAlquilerModal: React.FC<
     },
   });
 
+  const categoriaValue = form.watch('categoria__code');
+
   const {
     formState: { errors },
     watch,
@@ -67,8 +77,12 @@ const ClienteFibraRubroAlquilerModal: React.FC<
     isLoading: isLoadingProducto,
     isRefetching: isRefetchingProducto,
   } = useFetchProductos({
+    enabled: open,
     params: {
       page_size: 200,
+
+      es_para_venta: true,
+      categoria__code: categoriaValue,
     },
   });
 
@@ -96,6 +110,18 @@ const ClienteFibraRubroAlquilerModal: React.FC<
     handleClose();
   };
 
+  // alets: not found
+  useEffect(() => {
+    if (isLoadingProducto || isRefetchingProducto || !categoriaValue) return;
+    !ProductosPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron producto para la categoria seleccionada',
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingProducto, isRefetchingProducto]);
+
+  useLoaders(isLoadingProducto || isRefetchingProducto);
+
   return (
     <>
       <ScrollableDialogProps
@@ -104,7 +130,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
         onClose={handleClose}
         minWidth="81%"
         // confirm --------
-        cancelTextBtn="Guardar cambios"
+        cancelTextBtn="Cerrar"
         onConfirm={form.handleSubmit(onSave)}
         confirmVariantBtn="outlined"
         confirmTextBtn="Guardar"
@@ -116,6 +142,30 @@ const ClienteFibraRubroAlquilerModal: React.FC<
             justifyContent="center"
             sx={{ mb: 3 }}
           >
+            <Grid item {...gridSize}>
+              <CustomFormLabel
+                sx={{
+                  mt: 0,
+                }}
+                htmlFor="Categoria"
+                required={true}
+              >
+                Categoria
+              </CustomFormLabel>
+              <SelectArrayStringSimple
+                textFieldKey="CATEGORIA"
+                options={CATEGORIA_TYPE_ARRAY_CHOICES}
+                name="categoria__code"
+                control={form.control}
+                gridSize={gridSizeMdLg12}
+                onChangeValue={() => {
+                  form.setValue('producto', '' as any);
+                  form.setValue('tipo_recurrencia', '' as any);
+                  form.setValue('valor_base_cuota', '' as any);
+                  form.setValue('descripcion', '' as any);
+                }}
+              />
+            </Grid>
             <CustomAutocomplete<Producto>
               label="Producto"
               name="producto"
@@ -129,7 +179,8 @@ const ClienteFibraRubroAlquilerModal: React.FC<
               control={form.control}
               error={errors.producto}
               helperText={errors.producto?.message}
-              size={gridSizeMdLg6}
+              size={gridSizeMdLg12}
+              disabled={!categoriaValue}
               onChangeRawValue={row => {
                 if (row?.categoria_data?.nombre == 'DIGITAL') {
                   setCompValor(false);
@@ -144,6 +195,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
                 setProdValor(precioDefaultValor);
                 form.setValue('tipo_recurrencia', '' as any);
                 form.setValue('valor_base_cuota', '' as any);
+                form.setValue('descripcion', row.nombre);
               }}
             />
             <CustomAutocomplete<TipoRecurrenciaAlquilerEnumChoiceType>
@@ -182,7 +234,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
               defaultValue={form.getValues().valor_base_cuota}
               error={errors.valor_base_cuota}
               helperText={errors.valor_base_cuota?.message}
-              size={gridSizeMdLg12}
+              size={gridSizeMdLg6}
               disabled={!watchedTipoRecurrencia}
             />
             <CustomTextArea
@@ -193,6 +245,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
               error={errors.descripcion}
               helperText={errors.descripcion?.message}
               required={false}
+              disabled
             />
           </Grid>
         }

@@ -117,6 +117,8 @@ export const useUpdateProducto = <T>({
 export type GetProductosParams = Partial<Producto> &
   PagingPartialParams & {
     categoria_uuid?: string;
+    categoria__code?: string;
+    categoria__nombre?: string;
   };
 
 export type CreateProductoParams<T> = T;
