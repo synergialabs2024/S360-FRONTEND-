@@ -56,6 +56,46 @@ export const useCreateAuthONUs = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
+          customMessageToast || 'Autorizacion creado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const useCreateAuthONUAuthorized = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateAuthOnuParams<T>) =>
+      createAuthONUAuthorize(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [AutorizacionONUTSQEnum.AUTORIZACIONONU],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
           customMessageToast || 'Autorizacion ONU creado correctamente',
         );
     },
@@ -101,4 +141,13 @@ export const createAuthONU = async <T>(data: CreateAuthOnuParams<T>) => {
   setIsGlobalLoading(true);
 
   return post<AutorizacionOnu>('/olt-conect/olt/ont_autofind/', data, true);
+};
+
+export const createAuthONUAuthorize = async <T>(
+  data: CreateAuthOnuParams<T>,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<AutorizacionOnu>('/ont-unauthorized/authorized/', data, true);
 };

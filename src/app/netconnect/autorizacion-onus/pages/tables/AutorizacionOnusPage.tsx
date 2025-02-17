@@ -1,26 +1,28 @@
+import { gridSizeMdLg8 } from '@/shared/constants/ui';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
 
 import {
+  useFetchOLTs,
+  useFetchAuthOnu,
+  useCreateAuthONUs,
   AutorizacionONUTSQEnum,
   CreateAuthOnuParamsBase,
-  useCreateAuthONUs,
-  useFetchAuthOnu,
-  useFetchOLTs,
 } from '@/actions/app';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   SelectArrayChip,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg8 } from '@/shared/constants/ui';
 import {
-  useColumnsAutorizacionOnus,
   useTableFilter,
+  useColumnsAutorizacionOnus,
   useTableServerSideFiltering,
 } from '@/shared/hooks';
+import { ToastWrapper } from '@/shared';
+import { ROUTER_PATHS } from '@/router/constants';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { AutorizacionOnu, OLT, PermissionsEnum } from '@/shared/interfaces';
 
@@ -28,9 +30,10 @@ type SaveFormData = CreateAuthOnuParamsBase & {};
 
 export type AutorizacionOnusPageProps = {};
 
+export const returnUrlAuthOnu = ROUTER_PATHS.netconnect.autorizacionOnusNav;
+
 const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
-  ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  useCheckPermission(PermissionsEnum.infraestructura_view_olt);
 
   // Select OLT
   const {
@@ -39,6 +42,10 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
     isRefetching: isRefetchingOlts,
   } = useFetchOLTs({
     enabled: true,
+    params: {
+      filterByState: false,
+      page_size: 1000,
+    },
   });
 
   // Form setup
@@ -66,14 +73,22 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
   const onSave = async () => {
     if (!isValid) return;
 
-    await queryClient.invalidateQueries({
-      queryKey: [AutorizacionONUTSQEnum.AUTORIZACIONONUS],
-    });
-
     ///* create
-    createAutorizacionONUMutation.mutate({
-      olt_ids: watchIdOLT,
-    });
+    createAutorizacionONUMutation.mutate(
+      {
+        olt_id: watchIdOLT,
+      },
+      {
+        onSuccess: async () => {
+          await queryClient.invalidateQueries({
+            queryKey: [AutorizacionONUTSQEnum.AUTORIZACIONONUS],
+          });
+        },
+        onError: error => {
+          ToastWrapper.error(`Error al procesar la ONT. ${error}`);
+        },
+      },
+    );
   };
 
   // server side filters - colums table
@@ -137,8 +152,8 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
               required={false}
               size={gridSizeMdLg8}
               titleArray={['name', 'hostname']}
+              maxSelectable={3}
             />
-
             <Button sx={{ mt: 3 }} onClick={handleSubmit(onSave, () => {})}>
               Buscar ONTs
             </Button>

@@ -53,7 +53,7 @@ export interface AutorizacionOnu {
   olt_data?: OLT[];
   ont_contract_data?: ont_contract[];
   ont_model_data?: ont_model[];
-  olt_ids?: number[];
+  olt_id?: number[];
 
   /*----------------------------------------------*/
   alias_caja: string;

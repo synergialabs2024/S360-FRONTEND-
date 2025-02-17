@@ -259,15 +259,6 @@ export const useColumnsOrdenTrabajo = () => {
         Cell: ({ row }) => emptyCellNested(row, ['nap_data', 'name']),
       },
       {
-        accessorKey: 'linea_servicio__estado_linea',
-        header: 'ESTADO LINEA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['linea_servicio_data', 'estado_linea']),
-      },
-      {
         accessorKey: 'nodo__name',
         header: 'NODO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

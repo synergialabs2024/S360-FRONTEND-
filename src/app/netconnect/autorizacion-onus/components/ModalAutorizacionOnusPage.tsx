@@ -1,46 +1,210 @@
-import { CreateAuthOnuParamsBase } from '@/actions/app';
-import { authOnuFormSchema, AutorizacionOnu, gridSizeMdLg6 } from '@/shared';
-import {
-  CustomNumberTextField,
-  CustomTextField,
-  ScrollableDialogProps,
-} from '@/shared/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import {
+  CustomTextField,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
+  CustomNumberTextField,
+  ScrollableDialogProps,
+  CustomAutocompleteNoForm,
+} from '@/shared/components';
+import { hasAllPermissions } from '@/shared/utils/auth';
+import {
+  CreateAuthOnuParamsBase,
+  useCreateAuthONUAuthorized,
+  useFetchOLTs,
+} from '@/actions/app';
+import {
+  authOnuFormSchema,
+  AutorizacionOnu,
+  gridSizeMdLg6,
+  PermissionsEnum,
+  ToastWrapper,
+} from '@/shared';
 
 export type ModalAutorizacionOnusProps = {
   authOnu: AutorizacionOnu;
   titleButton: string;
 };
 
-type SaveFormData = CreateAuthOnuParamsBase & {};
+type DataOLT = {
+  id: number;
+  text: string;
+};
+
+type TransformedDataOLT2 = {
+  value: string | number;
+  label: string;
+};
+
+type SaveFormData = CreateAuthOnuParamsBase & {
+  vlan?: string;
+  line_profile?: string;
+  traffic_table?: string;
+  srv_profile?: string;
+  eth?: number;
+  nap?: number;
+  slot?: number;
+  port_onu?: number;
+  user_ppoe?: string;
+  pass_ppoe?: string;
+  mode?: string;
+  description?: string;
+};
 
 const ModalAutorizacionOnusPage: React.FC<ModalAutorizacionOnusProps> = ({
   authOnu,
   titleButton,
 }) => {
+  hasAllPermissions([PermissionsEnum.infraestructura_view_olt]);
+
   ///* local state ------------------------
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [idOLT, setIdOLT] = useState<number>();
+  const [optionsState, setOptionsState] = useState({
+    vlans: null as string | null,
+    lineProfiles: null as string | null,
+    srvProfiles: null as string | null,
+    trafficTables: null as string | null,
+  });
 
   ///* form -------------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(authOnuFormSchema) as any,
     defaultValues: {
-      sn: '',
+      eth: 4,
     },
   });
   const {
     reset,
-    formState: { errors },
+    formState: { errors, isValid },
+    handleSubmit,
   } = form;
 
   ///* effects
   useEffect(() => {
     if (!authOnu?.id) return;
+    setIdOLT(Number(authOnu.olt_id));
     reset(authOnu);
   }, [authOnu, reset]);
+
+  const { data: OltsPagingRes } = useFetchOLTs({
+    enabled: true,
+    params: { page_size: 900, id: idOLT },
+  });
+
+  // Data transformation functions
+  const transformData = (
+    rawData: unknown,
+    isStringId = false,
+  ): TransformedDataOLT2[] => {
+    return Array.isArray(rawData) &&
+      rawData.every(
+        item =>
+          typeof item === 'object' &&
+          item !== null &&
+          'id' in item &&
+          'text' in item &&
+          (isStringId
+            ? typeof item.id === 'string'
+            : typeof item.id === 'number') &&
+          typeof item.text === 'string',
+      )
+      ? (rawData as DataOLT[]).map(item => ({
+        value: item.id,
+        label: item.text.trim(),
+      }))
+      : [];
+  };
+
+  // Transform OLT data
+  const vlans = transformData(OltsPagingRes?.data?.items[0]?.vlans ?? []);
+  const lineProfiles = transformData(
+    OltsPagingRes?.data?.items[0]?.line_profiles ?? [],
+    true,
+  );
+  const srvProfiles = transformData(
+    OltsPagingRes?.data?.items[0]?.srv_profiles ?? [],
+    true,
+  );
+  const trafficTables = transformData(
+    OltsPagingRes?.data?.items[0]?.traffic_tables ?? [],
+    true,
+  );
+
+  // Reusable autocomplete component
+  const renderAutocomplete = (
+    label: string,
+    options: TransformedDataOLT2[],
+    value: string | null,
+    onChange: (v: string) => void,
+  ) => (
+    <CustomAutocompleteNoForm<TransformedDataOLT2>
+      label={label}
+      value={value}
+      actualValueKey="value"
+      onChange={v => onChange(v as string)}
+      options={options}
+      getOptionLabel={o => o.label}
+      loading={false}
+      error={false}
+      disableClearable
+      size={gridSizeMdLg6}
+    />
+  );
+
+  const createAuthOnuAutorizacionMutation = useCreateAuthONUAuthorized({
+    enableNavigate: true,
+    enableErrorNavigate: true,
+  });
+
+  const onSave = async (data: SaveFormData) => {
+    if (!isValid) return;
+    data.ont_model = authOnu?.ont_model;
+    data.vlan = optionsState.vlans || '';
+    data.line_profile = optionsState.lineProfiles || '';
+    data.traffic_table = optionsState.trafficTables || '';
+    data.srv_profile = optionsState.srvProfiles || '';
+    data.port_pon = authOnu?.port_pon;
+    //createAuthOnuAutorizacionMutation.mutate(data);
+
+    const dato = {
+      eth: data.eth,
+      nap: data.nap,
+      mode: data.mode,
+      slot: data.slot,
+      port_onu: data.port_onu,
+      sn: data.sn,
+      description: data.description,
+      user_ppoe: data.user_ppoe,
+      pass_ppoe: data.pass_ppoe,
+      nombre_cliente: data.nombre_cliente,
+      cedula_cliente: data.cedula_cliente,
+      ont_model: data.ont_model,
+      vlan: data.vlan,
+      line_profile: data.line_profile,
+      traffic_table: data.traffic_table,
+      srv_profile: data.srv_profile,
+      port_pon: data.port_pon,
+    };
+
+    createAuthOnuAutorizacionMutation.mutate(
+      { data: dato },
+      {
+        onSuccess: () => {
+          ToastWrapper.success('Se actualizo correctamente la ONU');
+          setOpenModal(false);
+        },
+        onError: error => {
+          setOpenModal(false);
+          ToastWrapper.error(`Error al actualizar la ONU. ${error}`);
+        },
+      },
+    );
+  };
 
   return (
     <>
@@ -58,35 +222,41 @@ const ModalAutorizacionOnusPage: React.FC<ModalAutorizacionOnusProps> = ({
         minWidth="75%"
         onClose={() => setOpenModal(false)}
         cancelTextBtn="Cerrar"
+        confirmTextBtn="Si, continuar"
+        onConfirm={handleSubmit(onSave)}
         contentNode={
           <Grid container spacing={3}>
             <Grid item container spacing={3} sx={{ mb: 3 }}>
               <CustomTextField
                 label="TIPO"
-                name="olt_name"
+                name="mode"
                 control={form.control}
                 defaultValue={form.getValues().olt_name}
-                error={errors.olt_name}
-                helperText={errors.olt_name?.message}
+                error={errors.mode}
+                helperText={errors.mode?.message}
+                required={false}
+                disabled
               />
               <CustomNumberTextField
                 label="BOARD"
-                name="olt_slot"
+                name="slot"
                 control={form.control}
                 defaultValue={form.getValues().olt_slot}
-                error={errors.olt_slot}
-                helperText={errors.olt_slot?.message}
+                error={errors.slot}
+                helperText={errors.slot?.message}
                 size={gridSizeMdLg6}
+                required={false}
                 disabled
               />
               <CustomNumberTextField
                 label="PORT"
-                name="olt_port"
+                name="port_onu"
                 control={form.control}
                 defaultValue={form.getValues().olt_port}
-                error={errors.olt_port}
-                helperText={errors.olt_port?.message}
+                error={errors.port_onu}
+                helperText={errors.port_onu?.message}
                 size={gridSizeMdLg6}
+                required={false}
                 disabled
               />
               <CustomNumberTextField
@@ -97,33 +267,34 @@ const ModalAutorizacionOnusPage: React.FC<ModalAutorizacionOnusProps> = ({
                 error={errors.sn}
                 helperText={errors.sn?.message}
                 size={gridSizeMdLg6}
+                required={false}
                 disabled
               />
               <CustomTextField
                 label="ALIAS/CAJA"
-                name="alias_caja"
+                name="description"
                 control={form.control}
-                defaultValue={form.getValues().alias_caja}
-                error={errors.alias_caja}
-                helperText={errors.alias_caja?.message}
+                defaultValue={form.getValues().description}
+                error={errors.description}
+                helperText={errors.description?.message}
                 size={gridSizeMdLg6}
               />
               <CustomTextField
                 label="USERPPOE"
-                name="userppoe"
+                name="user_ppoe"
                 control={form.control}
-                defaultValue={form.getValues().userppoe}
-                error={errors.userppoe}
-                helperText={errors.userppoe?.message}
+                defaultValue={form.getValues().user_ppoe}
+                error={errors.user_ppoe}
+                helperText={errors.user_ppoe?.message}
                 size={gridSizeMdLg6}
               />
               <CustomTextField
                 label="PASSPPOE"
-                name="passppoe"
+                name="pass_ppoe"
                 control={form.control}
-                defaultValue={form.getValues().passppoe}
-                error={errors.passppoe}
-                helperText={errors.passppoe?.message}
+                defaultValue={form.getValues().pass_ppoe}
+                error={errors.pass_ppoe}
+                helperText={errors.pass_ppoe?.message}
                 size={gridSizeMdLg6}
               />
               <CustomTextField
@@ -136,34 +307,43 @@ const ModalAutorizacionOnusPage: React.FC<ModalAutorizacionOnusProps> = ({
                 size={gridSizeMdLg6}
               />
               <CustomTextField
-                label="VLANS"
-                name="vlans"
+                label="CEDULA CLIENTE"
+                name="cedula_cliente"
                 control={form.control}
-                defaultValue={form.getValues().vlans}
-                error={errors.vlans}
-                helperText={errors.vlans?.message}
+                defaultValue={form.getValues().cedula_cliente}
+                error={errors.cedula_cliente}
+                helperText={errors.cedula_cliente?.message}
+                size={gridSizeMdLg6}
               />
-              <CustomTextField
-                label="LINE PROFILE"
-                name="line_profile"
-                control={form.control}
-                defaultValue={form.getValues().line_profile}
-                error={errors.line_profile}
-                helperText={errors.line_profile?.message}
+              {/* =============== Autocompletes =============== */}
+              <CustomTypoLabel
+                text="SELECCION"
+                pt={CustomTypoLabelEnum.ptMiddlePosition}
               />
-              <CustomTextField
-                label="PERFIL PLAN"
-                name="perfil_plan"
-                control={form.control}
-                defaultValue={form.getValues().perfil_plan}
-                error={errors.perfil_plan}
-                helperText={errors.perfil_plan?.message}
-              />
+              {renderAutocomplete('VLANS', vlans, optionsState.vlans, v =>
+                setOptionsState(prev => ({ ...prev, vlans: v })),
+              )}
+              {renderAutocomplete(
+                'LINE PROFILES',
+                lineProfiles,
+                optionsState.lineProfiles,
+                v => setOptionsState(prev => ({ ...prev, lineProfiles: v })),
+              )}
+              {renderAutocomplete(
+                'SRV PROFILES',
+                srvProfiles,
+                optionsState.srvProfiles,
+                v => setOptionsState(prev => ({ ...prev, srvProfiles: v })),
+              )}
+              {renderAutocomplete(
+                'TRAFFIC TABLES',
+                trafficTables,
+                optionsState.trafficTables,
+                v => setOptionsState(prev => ({ ...prev, trafficTables: v })),
+              )}
             </Grid>
           </Grid>
         }
-        confirmTextBtn="Si, continuar"
-        //onConfirm={form.handleSubmit(onSave)}
       />
     </>
   );
