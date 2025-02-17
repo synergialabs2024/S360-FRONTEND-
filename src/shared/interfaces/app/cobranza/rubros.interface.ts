@@ -78,6 +78,8 @@ export type RubroItemData = {
   plan_internet?: number;
   producto?: number;
   default_iva?: number;
+
+  producto_data?: Producto;
 };
 
 export type BaseRubroDetail = {
