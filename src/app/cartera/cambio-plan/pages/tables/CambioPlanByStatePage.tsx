@@ -1,6 +1,7 @@
 import {
-  emptyCellOneLevel,
+  emptyCellNested,
   EstadoTicketTecnicoEnumChoice,
+  formatDateWithTimeCell,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -60,16 +61,64 @@ const CambioPlanByStatePage: React.FC<CambioPlanByStatePageProps> = () => {
   const columns = useMemo<MRT_ColumnDef<CambioPlan>[]>(
     () => [
       {
-        accessorKey: 'plan_internet_anterior',
-        header: 'PLAN INTERNET ANTERIOR',
+        accessorKey:
+          'linea_servicio_data__solicitud_servicio_data__razon_social',
+        header: 'CLIENTE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_internet_anterior'),
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'solicitud_servicio_data',
+            'razon_social',
+          ]),
       },
       {
-        accessorKey: 'plan_internet_nuevo',
-        header: 'PLAN INTERNET NUEVO',
+        accessorKey:
+          'linea_servicio_data__solicitud_servicio_data__identificacion',
+        header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_internet_nuevo'),
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'solicitud_servicio_data',
+            'identificacion',
+          ]),
+      },
+      {
+        accessorKey: 'plan_internet_anterior_data__name',
+        header: 'NOMBRE PLAN ANTERIOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_anterior_data', 'name']),
+      },
+      {
+        accessorKey: 'plan_internet_anterior_data__valor',
+        header: 'VALOR PLAN ANTERIOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_anterior_data', 'valor']),
+      },
+      {
+        accessorKey: 'plan_internet_nuevo_data__name',
+        header: 'NOMBRE PLAN NUEVO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_nuevo_data', 'name']),
+      },
+      {
+        accessorKey: 'plan_internet_nuevo_data__valor',
+        header: 'VALOR PLAN NUEVO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_nuevo_data', 'valor']),
+      },
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA CREACION',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
     ],
     [],

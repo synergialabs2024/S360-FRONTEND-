@@ -91,11 +91,14 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     handleSubmit,
     formState: { errors },
   } = form;
+
+  const watchedMotivo = form.watch('motivo');
   //
 
   const {
     items: mantenedorActivaciones,
     clearOneRecord: clearAllServiciosInternetSelecStore,
+    clearAllStore,
   } = useTypedGenericInventoryStore<any>(
     GenericInventoryStoreKey.mantenedorActivaciones,
   );
@@ -125,6 +128,7 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           permitido_en_anio: data.permitido_en_anio,
         });
         clearForm();
+        clearAllStore();
         setConfirmDialogIsOpen(false);
       },
     });
@@ -171,12 +175,8 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           isLoadingData={isLoadingMotivoRubroAdicionals}
           error={errors.criterio}
           helperText={errors.criterio?.message}
-          size={gridSizeMdLg12}
+          size={gridSizeMdLg6}
         />
-
-        <>
-          <ActivacionesMantenedorActivacionesBase />
-        </>
 
         <CustomAutocomplete<MotivoRubroAdicional>
           label="Motivo"
@@ -189,11 +189,17 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           isLoadingData={isLoadingMotivoRubroAdicionals}
           error={errors.motivo}
           helperText={errors.motivo?.message}
-          size={gridSizeMdLg12}
+          size={gridSizeMdLg6}
           onChangeRawValue={row => {
             form.setValue('valor', row?.valor);
           }}
         />
+
+        <>
+          <ActivacionesMantenedorActivacionesBase
+            motivoMantenedorActivacion={watchedMotivo}
+          />
+        </>
 
         <CustomTextField
           label="Codigo"

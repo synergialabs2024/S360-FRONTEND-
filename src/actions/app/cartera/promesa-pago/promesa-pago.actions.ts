@@ -136,15 +136,12 @@ export const getPromesasPago = async (params?: GetPromesasPagoParams) => {
   delete stateParams.filterByState;
 
   const queryParams = getUrlParams(stateParams);
-  return get<PromesaPagoPaginatedRes>(
-    `/buzon-tarea-mantenedor/?${queryParams}`,
-    true,
-  );
+  return get<PromesaPagoPaginatedRes>(`/promesa-pago/?${queryParams}`, true);
 };
 
 export const getPromesaPago = async (uuid: string) => {
   try {
-    return await get<PromesaPago>(`/buzon-tarea-mantenedor/${uuid}`, true);
+    return await get<PromesaPago>(`/promesa-pago/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
@@ -156,7 +153,7 @@ export const createPromesaPago = async <T>(
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<PromesaPago>('/buzon-tarea-mantenedor/', data, true);
+  return post<PromesaPago>('/promesa-pago/', data, true);
 };
 
 export const updatePromesaPago = async <T>({
@@ -166,5 +163,5 @@ export const updatePromesaPago = async <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<PromesaPago>(`/buzon-tarea-mantenedor/${id}/`, data, true);
+  return patch<PromesaPago>(`/promesa-pago/${id}/`, data, true);
 };

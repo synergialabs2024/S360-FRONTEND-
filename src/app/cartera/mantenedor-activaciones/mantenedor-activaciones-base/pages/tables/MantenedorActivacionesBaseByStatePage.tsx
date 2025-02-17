@@ -114,7 +114,7 @@ const MantenedorActivacionesBaseByStatePage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Mantenedor Activaciones"
+      title="Mantenedor Activaciones Base"
       createPageUrl={`${returnUrlMantenedorActivacionesBasePage}/crear`}
       showCreateBtn={true}
     >

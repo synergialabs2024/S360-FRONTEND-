@@ -2,12 +2,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg12,
+  gridSizeMdLg6,
+  TABLE_CONSTANTS,
+} from '@/shared/constants/ui';
 import {
   CustomAutocomplete,
   CustomCardAlert,
   CustomIdentificacionTextField,
   CustomScanLoad,
+  CustomTable,
   CustomTextFieldNoForm,
   CustomTypoLabel,
   InputAndBtnGridSpace,
@@ -17,8 +22,10 @@ import { useFetchPlanInternets } from '@/actions/app';
 import {
   ApiResponse,
   ContratoData,
+  emptyCellNested,
   FindByIdentification,
   formatDate,
+  formatDateWithTimeCell,
   getKeysFormErrorsMessage,
   IdentificationTypeEnumChoice,
   InternetPlanInternetTypeEnumChoice,
@@ -26,21 +33,27 @@ import {
   PlanInternet,
   SolicitudServicio,
   ToastWrapper,
+  useTableServerSideFiltering,
 } from '@/shared';
 import { CiSearch } from 'react-icons/ci';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { cambioPlanFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-plan/cambio-plan.schema';
 import { useSearchCedulaMutation } from '@/actions/app/tickets';
 import {
   CreateCambioPlanParamsBase,
   useCreateCambioPlan,
+  useFetchCambioPlanes,
   useGetCambioPlanComputeValores,
 } from '@/actions/app/cartera/cambio-plan/cambio-plan.actions';
 import { returnUrlCambioPlanPage } from '../../../pages/tables/CambioPlanByStatePage';
-import { CambioPlanComputeValores } from '@/shared/interfaces/app/cartera';
+import {
+  CambioPlan,
+  CambioPlanComputeValores,
+} from '@/shared/interfaces/app/cartera';
 import dayjs from 'dayjs';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { MRT_ColumnDef } from 'material-react-table';
 
 export interface SavePromesaPagoProps {
   title: string;
@@ -72,8 +85,13 @@ type SaveFormData = CreateCambioPlanParamsBase & {
   plan_nuevo_id: number;
   error_message: string;
   valores_positivos: boolean;
+
+  num_contrato: number;
 };
 const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
+  // server side filters - colums table
+  const { columnFilters, setColumnFilters } = useTableServerSideFiltering();
+
   const navigate = useNavigate();
 
   ///* global state
@@ -141,11 +159,15 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
   const watchedPlanActual = form.watch('plan_actual');
   const watchedPlanNuevoId = form.watch('plan_nuevo_id');
   const watchedValoresPositivos = form.watch('valores_positivos');
-  const watchedLineaServicio = form.watch('linea_servicio_data');
+  const watchedLineaServicioData = form.watch('linea_servicio_data');
+  const watchedLineaServicio = form.watch('linea_servicio');
+
   const watchedcambioPlanComputeValores = form.watch(
     'cambio_plan_compute_valores_data',
   );
   const watchedErrorMessage = form.watch('error_message');
+  const watchedNumContrato = form.watch('num_contrato');
+  const watchedCliente = form.watch('cliente');
   //
 
   const onSave = async () => {
@@ -156,7 +178,7 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
       onConfirm: () => {
         createCambioPlan.mutate({
           plan_internet_nuevo: watchedPlanNuevoId,
-          linea_servicio: watchedLineaServicio?.contrato_data?.id,
+          linea_servicio: watchedLineaServicioData?.contrato_data?.id,
         });
         setConfirmDialogIsOpen(false);
       },
@@ -217,7 +239,7 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
   const cambioPlanComputeValoresFunction = (planInternetNuevo: number) => {
     getCambioPlanComputeValores.mutate({
       plan_internet_nuevo: planInternetNuevo,
-      linea_servicio: watchedLineaServicio?.contrato_data?.id,
+      linea_servicio: watchedLineaServicioData?.contrato_data?.id,
     });
   };
 
@@ -242,7 +264,12 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
           'precio_plan_actual',
           contrato.contrato_data.plan_internet_actual_data.valor,
         );
-
+        form.setValue('num_contrato', contrato.contrato_data.id);
+        form.setValue('cliente', contrato.contrato_data.cliente);
+        form.setValue(
+          'linea_servicio',
+          contrato.solicitud_servicio_data.linea_servicio,
+        );
         if (
           Number(watchedPlanNuevoId) >
           Number(contrato?.contrato_data?.plan_internet_actual_data?.id)
@@ -258,6 +285,87 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
   const roundToTwoDecimals = (value: number) => {
     return Math.round((value + Number.EPSILON) * 100) / 100;
   };
+
+  const {
+    data: cambioPlanesPagingRes,
+    isLoading: isLoadingCambioPlanes,
+    isRefetching: isRefetchingCambioPlanes,
+  } = useFetchCambioPlanes({
+    enabled: !!watchedLineaServicio,
+    params: {
+      page_size: 1000,
+      cliente: watchedCliente,
+      contrato: watchedNumContrato,
+      linea_servicio: watchedLineaServicio,
+    },
+  });
+
+  ///* columns
+  const columns = useMemo<MRT_ColumnDef<CambioPlan>[]>(
+    () => [
+      {
+        accessorKey:
+          'linea_servicio_data__solicitud_servicio_data__razon_social',
+        header: 'CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'solicitud_servicio_data',
+            'razon_social',
+          ]),
+      },
+      {
+        accessorKey:
+          'linea_servicio_data__solicitud_servicio_data__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'solicitud_servicio_data',
+            'identificacion',
+          ]),
+      },
+      {
+        accessorKey: 'plan_internet_anterior_data__name',
+        header: 'NOMBRE PLAN ANTERIOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_anterior_data', 'name']),
+      },
+      {
+        accessorKey: 'plan_internet_anterior_data__valor',
+        header: 'VALOR PLAN ANTERIOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_anterior_data', 'valor']),
+      },
+      {
+        accessorKey: 'plan_internet_nuevo_data__name',
+        header: 'NOMBRE PLAN NUEVO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_nuevo_data', 'name']),
+      },
+      {
+        accessorKey: 'plan_internet_nuevo_data__valor',
+        header: 'VALOR PLAN NUEVO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_nuevo_data', 'valor']),
+      },
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA CREACION',
+        size: 180,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+    ],
+    [],
+  );
 
   return (
     <SingleFormBoxScene
@@ -355,7 +463,8 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
         />
       </Grid>
 
-      {numeroContrato === undefined || watchedLineaServicio === undefined ? (
+      {numeroContrato === undefined ||
+      watchedLineaServicioData === undefined ? (
         <></>
       ) : (
         <>
@@ -518,6 +627,33 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
               </Grid>
             </>
           )}
+        </>
+      )}
+
+      {numeroContrato === undefined ||
+      watchedLineaServicioData === undefined ? (
+        <></>
+      ) : (
+        <>
+          <CustomTypoLabel text="Historial" />
+          <CustomTable<CambioPlan>
+            columns={columns}
+            data={cambioPlanesPagingRes?.data?.items || []}
+            isLoading={isLoadingCambioPlanes}
+            isRefetching={isRefetchingCambioPlanes}
+            // // filters - server side
+            enableManualFiltering={true}
+            columnFilters={columnFilters}
+            onColumnFiltersChange={setColumnFilters}
+            // // search
+            enableGlobalFilter={false}
+            // // pagination
+            /* pagination={pagination}
+        onPaging={setPagination} */
+            rowCount={cambioPlanesPagingRes?.data?.meta?.count}
+            // // actions
+            actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+          />
         </>
       )}
 
