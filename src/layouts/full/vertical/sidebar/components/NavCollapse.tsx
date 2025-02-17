@@ -1,4 +1,3 @@
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {
   Collapse,
   ListItemButton,
@@ -8,7 +7,7 @@ import {
   styled,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconPoint } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -97,13 +96,7 @@ const NavCollapse: React.FC<NavCollapseProps> = ({ menu, level, hideMenu }) => {
       style={{ marginTop: 'auto', marginBottom: 'auto' }}
     />
   ) : (
-    <FiberManualRecordIcon
-      sx={{
-        width: isOpen ? 8 : 6,
-        height: isOpen ? 8 : 6,
-      }}
-      fontSize={level > 0 ? 'inherit' : 'medium'}
-    />
+    <IconPoint stroke={1.5} size="1rem" />
   );
 
   const ListItemStyled = styled(ListItemButton)(() => ({
@@ -148,7 +141,13 @@ const NavCollapse: React.FC<NavCollapseProps> = ({ menu, level, hideMenu }) => {
         >
           {menuIcon}
         </ListItemIcon>
-        <ListItemText color="inherit">
+        <ListItemText
+          sx={{
+            whiteSpace: 'normal',
+            wordWrap: 'break-word',
+          }}
+          color="inherit"
+        >
           {hideMenu ? '' : <>{t(`${menu.title}`)}</>}
         </ListItemText>
         {isOpen ? (
