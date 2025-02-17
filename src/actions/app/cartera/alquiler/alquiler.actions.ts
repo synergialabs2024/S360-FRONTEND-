@@ -113,6 +113,44 @@ export const useUpdateAlquiler = <T>({
   });
 };
 
+export const useUpdateAlquilerCancel = ({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: UpdateAlquilerCancelParams) =>
+      updateAlquilerCancel(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [AlquilerTSQEnum.ALQUILERES] });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Alquiler cancelado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
 ///* axios ---------------
 export type GetAlquileresParams = Partial<Alquiler> & PagingPartialParams;
 export type CreateAlquilerParams<T> = T;
@@ -120,6 +158,9 @@ export type CreateAlquilerParamsBase = Omit<Alquiler, 'id'>;
 export interface UpdateAlquilerParams<T> {
   id: number;
   data: T;
+}
+export interface UpdateAlquilerCancelParams {
+  id: number;
 }
 
 export const getAlquileres = async (params?: GetAlquileresParams) => {
@@ -155,4 +196,17 @@ export const updateAlquiler = async <T>({
   setIsGlobalLoading(true);
 
   return patch<Alquiler>(`/alquileres-rubro-servicio/${id}/`, data, true);
+};
+
+export const updateAlquilerCancel = async ({
+  id,
+}: UpdateAlquilerCancelParams) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return patch<Alquiler>(
+    `/alquileres-rubro-servicio/cancel/${id}/`,
+    { id },
+    true,
+  );
 };
