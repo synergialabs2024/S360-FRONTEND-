@@ -1,10 +1,16 @@
 import * as yup from 'yup';
-import { fieldStateYupValidation } from '../../common';
 
 export const promesapagoFormSchema = yup.object({
-  name: yup
+  fecha_promesa_pago: yup
     .string()
-    .required('El campo name es requerido')
-    .max(100, 'El campo name no debe exceder los 100 caracteres'),
-  state: fieldStateYupValidation,
+    .typeError('El campo fecha promesa pago es requerido')
+    .required('El campo fecha promesa pago es requerido'),
+  observacion: yup
+    .string()
+    .required('El campo observacion pago es requerido')
+    .max(200, 'El campo observacion pago no debe exceder los 200 caracteres'),
+  numero_contrato: yup
+    .string()
+    .typeError('El campo numero contrato es requerido')
+    .required('El campo numero contrato es requerido'),
 });

@@ -1,9 +1,9 @@
 import { Grid } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MdDelete, MdOutlineAddShoppingCart } from 'react-icons/md';
 
-import { UbicacionProducto } from '@/shared';
+import { ToastWrapper, UbicacionProducto } from '@/shared';
 import {
   CustomMinimalTable,
   CustomSingleButton,
@@ -17,7 +17,9 @@ import CuotaServiciosBeneficioMantenedorBeneficiosModal from './ActivacionesMant
 import { CuotasServicioInternet } from '@/shared/interfaces/app/cartera/buzon-tareas';
 import { useColumnsActivacionesMantenedorActivacionesBase } from '../../../../hooks';
 
-export type ActivacionesSeleccionadosMantenedorActivacionesBaseProps = {};
+export type ActivacionesSeleccionadosMantenedorActivacionesBaseProps = {
+  motivoMantenedorActivacion: number;
+};
 
 export type ActivacionesSeleccionadosTableType = UbicacionProducto & {
   usedQuantity: number;
@@ -28,16 +30,19 @@ export type ActivacionesSeleccionadosProductoType = CuotasServicioInternet & {
 
 const ActivacionesSeleccionadosMantenedorActivacionesBase: React.FC<
   ActivacionesSeleccionadosMantenedorActivacionesBaseProps
-> = () => {
+> = ({ motivoMantenedorActivacion }) => {
   ///* local state ---------------------
   const [openAvailableEquipmentsModal, setOpenAvailableEquipmentsModal] =
     useState<boolean>(false);
 
   ///* global state ---------------------
-  const { items: equiposUtilizados, removeSelectedItem } =
-    useTypedGenericInventoryStore<ActivacionesSeleccionadosProductoType>(
-      GenericInventoryStoreKey.mantenedorActivaciones,
-    );
+  const {
+    items: equiposUtilizados,
+    removeSelectedItem,
+    clearAllStore,
+  } = useTypedGenericInventoryStore<ActivacionesSeleccionadosProductoType>(
+    GenericInventoryStoreKey.mantenedorActivaciones,
+  );
 
   ///* columns ---------------------
   const { activacionesBaseColumns } =
@@ -69,6 +74,10 @@ const ActivacionesSeleccionadosMantenedorActivacionesBase: React.FC<
     [activacionesBaseColumns, removeSelectedItem],
   );
 
+  useEffect(() => {
+    clearAllStore();
+  }, [motivoMantenedorActivacion]);
+
   return (
     <Grid item container xs={12} spacing={1}>
       <Grid
@@ -86,7 +95,9 @@ const ActivacionesSeleccionadosMantenedorActivacionesBase: React.FC<
             variant="text"
             startIcon={<MdOutlineAddShoppingCart />}
             onClick={() => {
-              setOpenAvailableEquipmentsModal(true);
+              motivoMantenedorActivacion
+                ? setOpenAvailableEquipmentsModal(true)
+                : ToastWrapper.warning('Debe seleccionar un motivo');
             }}
           />
         </Grid>
@@ -104,6 +115,7 @@ const ActivacionesSeleccionadosMantenedorActivacionesBase: React.FC<
       <CuotaServiciosBeneficioMantenedorBeneficiosModal
         open={openAvailableEquipmentsModal}
         onClose={() => setOpenAvailableEquipmentsModal(false)}
+        motivoMantenedorActivacion={motivoMantenedorActivacion}
       />
     </Grid>
   );

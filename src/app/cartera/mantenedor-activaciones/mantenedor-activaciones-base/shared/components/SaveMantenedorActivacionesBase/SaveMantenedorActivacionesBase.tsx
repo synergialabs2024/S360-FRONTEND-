@@ -16,6 +16,7 @@ import {
 import {
   Departamento,
   getKeysFormErrorsMessage,
+  MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES,
   MotivoRubroAdicional,
   ToastWrapper,
   useLoaders,
@@ -103,6 +104,7 @@ const SaveMantenedorActivacionesBase: React.FC<
       subtitle: '¿Está seguro que desea crear este registro?',
       onConfirm: () => {
         createMantenedorActivacion.mutate({
+          motivo_base: data.motivo_base,
           code: data.code,
           tiempo_bloqueo: data.tiempo_bloqueo,
           tiempo_limite: data.tiempo_limite,
@@ -145,6 +147,16 @@ const SaveMantenedorActivacionesBase: React.FC<
       <>
         <CustomTypoLabel text="Datos de solicitud" />
 
+        <SelectArrayString
+          label="Motivo Base"
+          name="motivo_base"
+          control={form.control}
+          error={errors.motivo_base}
+          helperText={errors.motivo_base?.message}
+          options={MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES}
+          gridSize={gridSizeMdLg6}
+        />
+
         <CustomAutocomplete<MotivoRubroAdicional>
           label="Motivo"
           name="motivo"
@@ -156,7 +168,7 @@ const SaveMantenedorActivacionesBase: React.FC<
           isLoadingData={isLoadingMotivoRubroAdicionals}
           error={errors.motivo}
           helperText={errors.motivo?.message}
-          size={gridSizeMdLg12}
+          size={gridSizeMdLg6}
           onChangeRawValue={row => {
             form.setValue('valor', row?.valor);
           }}

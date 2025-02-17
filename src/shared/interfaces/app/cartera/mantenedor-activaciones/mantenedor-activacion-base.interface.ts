@@ -11,6 +11,7 @@ export interface MantenedorActivacionBasePaginatedRes {
 export interface MantenedorActivacionBase {
   id?: number;
   uuid?: string;
+  motivo_base: string;
   state: string;
   code: string;
   tiempo_bloqueo: number;

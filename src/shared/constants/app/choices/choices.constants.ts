@@ -1304,3 +1304,23 @@ export enum EstadoTareaEnumChoice {
   RECHAZADO = 'RECHAZADO',
   SEPARADO = 'SEPARADO',
 }
+
+export enum motivoBaseMantenedorActivacionBaseEnumChoice {
+  PROMESA_DE_PAGO = 'PROMESA DE PAGO',
+  PROMESA_DE_PAGO_APP = 'PROMESA DE PAGO - APP',
+  VALIDACION_DE_PAGO = 'VALIDACION DE PAGO',
+  PROMESA_DE_PAGO_CASOS_ESPECIALES = 'PROMESA DE PAGO (CASOS ESPECIALES)',
+  REVISIONES_NOC = 'REVISIONES NOC',
+  INCONVENIENTES_CON_SISTEMA = 'INCONVENIENTES CON SISTEMA',
+  AL_DIA = 'AL DIA',
+}
+
+export const MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES = [
+  motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO,
+  motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO_APP,
+  motivoBaseMantenedorActivacionBaseEnumChoice.VALIDACION_DE_PAGO,
+  motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO_CASOS_ESPECIALES,
+  motivoBaseMantenedorActivacionBaseEnumChoice.REVISIONES_NOC,
+  motivoBaseMantenedorActivacionBaseEnumChoice.INCONVENIENTES_CON_SISTEMA,
+  motivoBaseMantenedorActivacionBaseEnumChoice.AL_DIA,
+];

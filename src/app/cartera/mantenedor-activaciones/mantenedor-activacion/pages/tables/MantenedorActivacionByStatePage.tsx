@@ -2,6 +2,7 @@ import {
   emptyCellNested,
   emptyCellOneLevel,
   EstadoTicketTecnicoEnumChoice,
+  MODEL_STATE_BOOLEAN,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -9,6 +10,7 @@ import {
 } from '@/shared';
 import {
   CustomSearch,
+  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
@@ -16,8 +18,13 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { returnUrlMantenedorActivacionesPage } from '../forms/MantenedorActivacionPage';
-import { useFetchMantenedorActivaciones } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
+import {
+  useFetchMantenedorActivaciones,
+  useUpdateMantenedorActivacion,
+} from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
 import { MantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones/mantenedor-activacion.interface';
+import { hasPermission } from '@/shared/utils/auth';
+import { useUiConfirmModalStore } from '@/store/ui';
 
 export type MantenedorActivacionByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
@@ -26,10 +33,19 @@ export type MantenedorActivacionByStatePageProps = {
 const MantenedorActivacionByStatePage: React.FC<
   MantenedorActivacionByStatePageProps
 > = () => {
+  ///* global state ----------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  const changeState = useUpdateMantenedorActivacion({
+    enableNavigate: false,
+  });
 
   ///* table
   const {
@@ -65,6 +81,44 @@ const MantenedorActivacionByStatePage: React.FC<
         header: 'CODIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
+      {
+        accessorKey: 'state',
+        header: 'ESTADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.state === 'boolean' ? (
+            <CustomSwitch
+              title="state"
+              checked={row.original?.state}
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.tecnico_change_asuntoticket))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar state',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el state de este registro?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        state: !row.original.state,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
       },
       {
         accessorKey: 'criterio_data__name',

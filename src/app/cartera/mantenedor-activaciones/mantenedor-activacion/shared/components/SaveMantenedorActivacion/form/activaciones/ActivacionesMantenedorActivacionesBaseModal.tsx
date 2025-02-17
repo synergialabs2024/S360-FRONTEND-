@@ -22,11 +22,12 @@ import { useColumnsActivacionesMantenedorActivacionesBase } from '../../../../ho
 export type ActivacionesMantenedorActivacionesBaseModalProps = {
   open: boolean;
   onClose: () => void;
+  motivoMantenedorActivacion: number;
 };
 
 const ActivacionesMantenedorActivacionesBaseModal: React.FC<
   ActivacionesMantenedorActivacionesBaseModalProps
-> = ({ open, onClose }) => {
+> = ({ open, onClose, motivoMantenedorActivacion }) => {
   ///* hooks ---------------------
   const { columnFilters, setColumnFilters } = useTableServerSideFiltering();
 
@@ -75,6 +76,7 @@ const ActivacionesMantenedorActivacionesBaseModal: React.FC<
     params: {
       page_size: 1000,
       code: searchTerm,
+      motivo: motivoMantenedorActivacion,
     },
   });
 
