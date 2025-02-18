@@ -160,6 +160,13 @@ const MotivosRubroAdicionalPage: React.FC<
       },
 
       {
+        accessorKey: 'tipo_rubro_adicional',
+        header: 'TIPO RUBRO ADICIONAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_rubro_adicional'),
+      },
+
+      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

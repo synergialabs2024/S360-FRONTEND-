@@ -34,9 +34,4 @@ export const mantenedorActivacionBaseFormSchema = yup.object({
     .number()
     .typeError('El campo motivo es requerido')
     .required('El campo motivo es requerido'),
-
-  usuarios_autorizados: yup
-    .array()
-    .typeError('El campo usuarios autorizados es requerido')
-    .required('El campo usuarios autorizados es requerido'),
 });

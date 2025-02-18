@@ -1,4 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { SystemGroup } from '../administration';
 
 export interface MotivosRubroAdicionalPaginatedRes {
   status: number;
@@ -11,6 +12,8 @@ export interface MotivoRubroAdicional {
   id?: number;
   uuid?: string;
 
+  tipo_rubro_adicional: string;
+  grupos_usuario_autorizados: SystemGroup[];
   nombre: string;
   codigo: string;
   valor: string;

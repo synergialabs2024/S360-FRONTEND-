@@ -6,17 +6,25 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateMotivoRubroAdicionalParamsBase,
   useCreateMotivoRubroAdicional,
+  useFetchSystemGroups,
   useUpdateMotivoRubroAdicional,
 } from '@/actions/app';
-import { ToastWrapper } from '@/shared';
 import {
+  TIPO_RUBRO_ADICIONAL_MANTENEDOR_ARRAY_CHOICES,
+  tipoRubroAdicionalMantenedorEnumChoice,
+  ToastWrapper,
+  useLoaders,
+} from '@/shared';
+import {
+  CustomAutocompleteMultiple,
   CustomNumberTextField,
   CustomTextArea,
   CustomTextField,
+  SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { MotivoRubroAdicional } from '@/shared/interfaces';
+import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { MotivoRubroAdicional, SystemGroup } from '@/shared/interfaces';
 import {
   getKeysFormErrorsMessage,
   motivoRubroAdicionalFormSchema,
@@ -50,6 +58,18 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
     formState: { errors, isValid },
   } = form;
 
+  const watchedTipoRubroAdicional = form.watch('tipo_rubro_adicional');
+
+  const {
+    data: departamentoPagingRes,
+    isLoading: isLoadingDepartamentos,
+    isRefetching: isRefetchingDepartamentos,
+  } = useFetchSystemGroups({
+    params: {
+      page_size: 1000,
+    },
+  });
+
   ///* mutations ---------------------
   const createMotivoRubroAdicionalMutation = useCreateMotivoRubroAdicional({
     navigate,
@@ -65,6 +85,15 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    if (
+      watchedTipoRubroAdicional ===
+        tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES &&
+      data.grupos_usuario_autorizados.length === 0
+    ) {
+      ToastWrapper.warning('Debe seleccionar al menos un grupo de usuarios');
+      return;
+    }
 
     ///* upd
     if (motivorubroadicional?.id) {
@@ -85,6 +114,9 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
     reset(motivorubroadicional);
   }, [motivorubroadicional, reset]);
 
+  const customLoader = isLoadingDepartamentos || isRefetchingDepartamentos;
+  useLoaders(customLoader);
+
   return (
     <SingleFormBoxScene
       titlePage={title}
@@ -102,7 +134,57 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
         defaultValue={form.getValues().nombre}
         error={errors.nombre}
         helperText={errors.nombre?.message}
+        size={gridSizeMdLg6}
       />
+      <SelectArrayString
+        label="Tipo rubro adicional"
+        name="tipo_rubro_adicional"
+        control={form.control}
+        error={errors.tipo_rubro_adicional}
+        helperText={errors.tipo_rubro_adicional?.message}
+        defaultValue={form.getValues('tipo_rubro_adicional')}
+        options={TIPO_RUBRO_ADICIONAL_MANTENEDOR_ARRAY_CHOICES}
+        onChangeValue={() => {
+          form.setValue('grupos_usuario_autorizados', []);
+        }}
+      />
+
+      {watchedTipoRubroAdicional ===
+      tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES ? (
+          <>
+            {/* --------- SYSTEM GROUP --------- */}
+            <CustomAutocompleteMultiple<SystemGroup>
+              label="Grupos Usuarios autorizados"
+              name="grupos_usuario_autorizados"
+              textFieldKey="nombre"
+              valueKey="name"
+              actualValueKey="id"
+              // options
+              options={departamentoPagingRes?.data?.items || []}
+              defaultValue={
+                form.getValues().grupos_usuario_autorizados?.length
+                  ? departamentoPagingRes?.data?.items?.filter(
+                    (departamento: SystemGroup) =>
+                      (
+                        form.getValues().grupos_usuario_autorizados as any[]
+                      )?.includes(departamento?.id!),
+                  )
+                  : []
+              }
+              isLoadingData={isLoadingDepartamentos || isRefetchingDepartamentos}
+              // errors
+              control={form.control}
+              error={undefined}
+              helperText={errors.grupos_usuario_autorizados?.message}
+              onlyActualValueKey
+              required={false}
+              size={gridSizeMdLg12}
+            />
+          </>
+        ) : (
+          <></>
+        )}
+
       <CustomTextField
         label="Código"
         name="codigo"
