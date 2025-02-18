@@ -38,9 +38,8 @@ export type ConfigPlantillaClienteFibraPartProps = {
 const ConfigPlantillaClienteFibraPart: React.FC<
   ConfigPlantillaClienteFibraPartProps
 > = ({ serviceLine }) => {
-  const configPlantillaArray =
-    serviceLine?.contrato_data?.config_plantilla_cliente_json || [];
-  const configuracionplantilla = configPlantillaArray?.at(0);
+  const configuracionplantilla =
+    serviceLine?.contrato_data?.config_plantilla_cliente_data;
 
   ///* global state
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
