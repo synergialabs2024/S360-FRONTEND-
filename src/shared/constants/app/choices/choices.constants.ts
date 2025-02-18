@@ -1031,6 +1031,14 @@ export const RECORDATORIO_PAGO_TIPOS_ARRAY_CHOICES = [
   RecordatorioPagoTiposEnumChoice.SMS,
   RecordatorioPagoTiposEnumChoice.NO_NOTIFICAR,
 ];
+export enum TipoPlantillaConfigClienteEnumChoice {
+  GENERAL = 'GENERAL',
+  PERSONALIZADO = 'PERSONALIZADO',
+}
+export const TIPO_PLANTILLA_CONFIG_CLINETE_ARRAY_CHOICES = [
+  TipoPlantillaConfigClienteEnumChoice.GENERAL,
+  TipoPlantillaConfigClienteEnumChoice.PERSONALIZADO,
+];
 
 export enum CalendarioFacturaTypeEnumChoice {
   UNO = '1',
