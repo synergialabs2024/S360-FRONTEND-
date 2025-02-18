@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
 import {
   CustomAutocomplete,
-  CustomAutocompleteMultiple,
   CustomNumberTextField,
   CustomTextField,
   CustomTextFieldNoForm,
@@ -14,7 +13,6 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
-  Departamento,
   getKeysFormErrorsMessage,
   MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES,
   MotivoRubroAdicional,
@@ -24,10 +22,7 @@ import {
 } from '@/shared';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlMantenedorActivacionesBasePage } from '../../../pages/forms/MantenedorActivacionesBasePage';
-import {
-  useFetchDepartamentos,
-  useFetchMotivoRubroAdicionals,
-} from '@/actions/app';
+import { useFetchMotivoRubroAdicionals } from '@/actions/app';
 import { mantenedorActivacionBaseFormSchema } from '@/shared/utils/validation-schemas/app/cartera/mantenedor-activaciones/mantenedor-activacion-base.schema';
 import {
   CreateMantenedorActivacionBaseParamsBase,
@@ -72,16 +67,6 @@ const SaveMantenedorActivacionesBase: React.FC<
     },
   });
 
-  const {
-    data: departamentoPagingRes,
-    isLoading: isLoadingDepartamentos,
-    isRefetching: isRefetchingDepartamentos,
-  } = useFetchDepartamentos({
-    params: {
-      page_size: 1000,
-    },
-  });
-
   ///* form -----------------
   const form = useForm<SaveFormData>({
     resolver: yupResolver(mantenedorActivacionBaseFormSchema) as any,
@@ -100,7 +85,7 @@ const SaveMantenedorActivacionesBase: React.FC<
     console.log('data.code', data.code);
     setConfirmDialog({
       isOpen: true,
-      title: 'Mantenedor activaciones',
+      title: 'Mantenedor activaciones base',
       subtitle: '¿Está seguro que desea crear este registro?',
       onConfirm: () => {
         createMantenedorActivacion.mutate({
@@ -111,7 +96,6 @@ const SaveMantenedorActivacionesBase: React.FC<
           incluye_facturacion: data.incluye_facturacion === 'SI' ? true : false,
           incluye_notificacion:
             data.incluye_notificacion === 'SI' ? true : false,
-          usuarios_autorizados: data.usuarios_autorizados,
           motivo: data.motivo,
         });
         clearForm();
@@ -127,10 +111,7 @@ const SaveMantenedorActivacionesBase: React.FC<
   };
 
   const customLoader =
-    isLoadingMotivoRubroAdicionals ||
-    isRefetchingMotivoRubroAdicionals ||
-    isLoadingDepartamentos ||
-    isRefetchingDepartamentos;
+    isLoadingMotivoRubroAdicionals || isRefetchingMotivoRubroAdicionals;
   useLoaders(customLoader);
 
   return (
@@ -233,35 +214,6 @@ const SaveMantenedorActivacionesBase: React.FC<
           helperText={errors.incluye_notificacion?.message}
           options={YES_NO_ARRAY_CHOICES}
           gridSize={gridSizeMdLg6}
-        />
-
-        {/* --------- DEPARTAMENTOS --------- */}
-        <CustomAutocompleteMultiple<Departamento>
-          label="Usuarios autorizados"
-          name="usuarios_autorizados"
-          textFieldKey="nombre"
-          valueKey="name"
-          actualValueKey="id"
-          // options
-          options={departamentoPagingRes?.data?.items || []}
-          defaultValue={
-            form.getValues().usuarios_autorizados?.length
-              ? departamentoPagingRes?.data?.items?.filter(
-                  (departamento: Departamento) =>
-                    (form.getValues().usuarios_autorizados as any[])?.includes(
-                      departamento?.id!,
-                    ),
-                )
-              : []
-          }
-          isLoadingData={isLoadingDepartamentos || isRefetchingDepartamentos}
-          // errors
-          control={form.control}
-          error={undefined}
-          helperText={errors.usuarios_autorizados?.message}
-          onlyActualValueKey
-          required={false}
-          size={gridSizeMdLg12}
         />
       </>
 

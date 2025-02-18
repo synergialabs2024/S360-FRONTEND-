@@ -1337,3 +1337,15 @@ export const MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES = [
   motivoBaseMantenedorActivacionBaseEnumChoice.INCONVENIENTES_CON_SISTEMA,
   motivoBaseMantenedorActivacionBaseEnumChoice.AL_DIA,
 ];
+
+export enum tipoRubroAdicionalMantenedorEnumChoice {
+  GENERAL = 'GENERAL',
+  MANTENEDOR_ACTIVACIONES = 'MANTENEDOR ACTIVACIONES',
+  MANTENEDOR_RECONECCIONES = 'MANTENEDOR RECONECCIONES',
+}
+
+export const TIPO_RUBRO_ADICIONAL_MANTENEDOR_ARRAY_CHOICES = [
+  tipoRubroAdicionalMantenedorEnumChoice.GENERAL,
+  tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES,
+  tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_RECONECCIONES,
+];

@@ -14,7 +14,7 @@ const MantenedorActivacionesBasePage: React.FC<
   useCheckPermission(PermissionsEnum.cobranza_add_factura);
 
   return (
-    <SaveMantenedorActivacionesBase title="Parametrizacion para activacion de servicio" />
+    <SaveMantenedorActivacionesBase title="Crear Mantenedor Activaciones Base" />
   );
 };
 
