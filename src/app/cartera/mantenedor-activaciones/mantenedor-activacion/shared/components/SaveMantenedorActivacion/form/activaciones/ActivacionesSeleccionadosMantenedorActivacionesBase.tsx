@@ -65,6 +65,7 @@ const ActivacionesSeleccionadosMantenedorActivacionesBase: React.FC<
             label="Remover"
             color="error"
             onClick={() => {
+              console.log('row?.original', row?.original);
               removeSelectedItem({ item: row?.original, idKey: 'id' });
             }}
           />

@@ -795,6 +795,13 @@ const CreatePromesaPagoPage = Loadable(
   ),
 );
 
+const UpdatePromesaPagoPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/promesa-pago/pages/forms/UpdatePromesaPagoPage'),
+  ),
+);
+
 const MantenedorActivacionesBaseByStatePage = Loadable(
   lazy(
     () =>
@@ -957,11 +964,29 @@ const MantenedorAplicacionesPage = Loadable(
   ),
 );
 
+const UpdateMantenedorActivacionesBasePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activaciones-base/pages/forms/UpdateMantenedorActivacionesBasePage'
+      ),
+  ),
+);
+
 const MantenedorActivacionPage = Loadable(
   lazy(
     () =>
       import(
         '@/app/cartera/mantenedor-activaciones/mantenedor-activacion/pages/forms/MantenedorActivacionPage'
+      ),
+  ),
+);
+
+const UpdateMantenedorActivacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activacion/pages/forms/UpdateMantenedorActivacionPage'
       ),
   ),
 );
@@ -2378,6 +2403,10 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera.promesapagoCrear,
             element: <CreatePromesaPagoPage />,
           },
+          {
+            path: ROUTER_PATHS.cartera.promesapagoEditar,
+            element: <UpdatePromesaPagoPage />,
+          },
           ///* Mantenedor activaciones base
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseNav,
@@ -2386,6 +2415,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseCrear,
             element: <MantenedorAplicacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseEditar,
+            element: <UpdateMantenedorActivacionesBasePage />,
           },
 
           ///* Mantenedor activaciones
@@ -2396,6 +2429,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesCrear,
             element: <MantenedorActivacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesEditar,
+            element: <UpdateMantenedorActivacionPage />,
           },
 
           ///* rubros

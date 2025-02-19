@@ -24,7 +24,10 @@ import {
   CreateMantenedorActivacionParamsBase,
   useCreateMantenedorActivacion,
 } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
-import { CriterioMantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones';
+import {
+  CriterioMantenedorActivacion,
+  MantenedorActivacionBase,
+} from '@/shared/interfaces/app/cartera/mantenedor-activaciones';
 import { useFetchCriterioMantenedorActivaciones } from '@/actions/app/cartera/buzon-tareas/parametros/criterio-mantenedor-activaciones';
 import ActivacionesMantenedorActivacionesBase from './form/activaciones/ActivacionesMantenedorActivacionesBase';
 import { mantenedorActivacionFormSchema } from '@/shared/utils/validation-schemas/app/cartera/mantenedor-activaciones/mantenedor-activacion.schema';
@@ -32,15 +35,20 @@ import {
   GenericInventoryStoreKey,
   useTypedGenericInventoryStore,
 } from '@/store/app';
+import { MantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones/mantenedor-activacion.interface';
+import { useEffect } from 'react';
 
 export interface SaveMantenedorActivacionProps {
   title: string;
+  mantenedorActivacion?: MantenedorActivacion;
 }
 type SaveFormData = CreateMantenedorActivacionParamsBase & {
   valor: number | string;
 };
+
 const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
   title,
+  mantenedorActivacion,
 }) => {
   const navigate = useNavigate();
 
@@ -48,6 +56,10 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
+  );
+
+  const { setItems } = useTypedGenericInventoryStore<MantenedorActivacionBase>(
+    GenericInventoryStoreKey.mantenedorActivaciones,
   );
 
   ///* mutations ---------------------
@@ -89,6 +101,7 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
 
   const {
     handleSubmit,
+    reset,
     formState: { errors },
   } = form;
 
@@ -139,6 +152,33 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
       ...form.getValues(),
     });
   };
+
+  ///* effects ---------------------
+  useEffect(() => {
+    if (!mantenedorActivacion?.id) return;
+    reset(mantenedorActivacion);
+  }, [mantenedorActivacion, reset]);
+
+  ///* effects
+  useEffect(() => {
+    if (!mantenedorActivacion?.id) return;
+    const eqP = mantenedorActivacion?.mantenedor_base_data;
+    const items: any[] = [];
+    items.push(eqP);
+    console.log('eqP', eqP);
+
+    setItems((items as any) || []);
+    reset({
+      ...mantenedorActivacion,
+    });
+
+    /* addSelectedItem({
+      idKey: 'id',
+      item: mantenedorActivacion?.mantenedor_base_data!,
+      showToast: true,
+    }); */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mantenedorActivacion, reset]);
 
   const customLoader =
     isLoadingMotivoRubroAdicionals ||
