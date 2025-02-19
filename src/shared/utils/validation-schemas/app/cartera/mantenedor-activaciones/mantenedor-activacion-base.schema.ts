@@ -20,12 +20,12 @@ export const mantenedorActivacionBaseFormSchema = yup.object({
     .min(1, 'El campo tiempo limite no debe ser menor a 1 caracter')
     .max(31, 'El campo tiempo limite no debe exceder los 31 caracteres'),
 
-  incluye_facturacion: yup
+  incluye_facturacion_string: yup
     .string()
     .typeError('El campo incluye facturacion es requerido')
     .required('El campo incluye facturacion es requerido'),
 
-  incluye_notificacion: yup
+  incluye_notificacion_string: yup
     .string()
     .typeError('El campo incluye notificacion es requerido')
     .required('El campo incluye notificacion es requerido'),

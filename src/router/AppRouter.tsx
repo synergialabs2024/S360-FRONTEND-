@@ -957,6 +957,15 @@ const MantenedorAplicacionesPage = Loadable(
   ),
 );
 
+const UpdateMantenedorActivacionesBasePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/mantenedor-activaciones-base/pages/forms/UpdateMantenedorActivacionesBasePage'
+      ),
+  ),
+);
+
 const MantenedorActivacionPage = Loadable(
   lazy(
     () =>
@@ -2378,6 +2387,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseCrear,
             element: <MantenedorAplicacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.mantenedorActivacionesBaseEditar,
+            element: <UpdateMantenedorActivacionesBasePage />,
           },
 
           ///* Mantenedor activaciones

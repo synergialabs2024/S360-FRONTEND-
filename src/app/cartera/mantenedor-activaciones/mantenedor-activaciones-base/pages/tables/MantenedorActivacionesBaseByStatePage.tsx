@@ -16,16 +16,29 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { CambioPlan } from '@/shared/interfaces/app/cartera';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { returnUrlMantenedorActivacionesBasePage } from '../forms/MantenedorActivacionesBasePage';
 import { useFetchMantenedorActivacionesBase } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { useNavigate } from 'react-router';
+import { MantenedorActivacionBase } from '@/shared/interfaces/app/cartera/mantenedor-activaciones';
 
 export type MantenedorActivacionesBaseByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
 };
 
+export const returnUrlMantenedorActivacionesBasePage =
+  ROUTER_PATHS.cartera.mantenedorActivacionesBaseNav;
+
 const MantenedorActivacionesBaseByStatePage: React.FC<
   MantenedorActivacionesBaseByStatePageProps
 > = () => {
+  const navigate = useNavigate();
+  ///* global state ---------------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
+
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -112,6 +125,21 @@ const MantenedorActivacionesBaseByStatePage: React.FC<
     [],
   );
 
+  ///* handlers ---------------------
+  const onEdit = (mantenedorActivacionBase: MantenedorActivacionBase) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Editar Mantenedor Activacion Base',
+      subtitle: '¿Está seguro que desea editar este registro?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(
+          `${returnUrlMantenedorActivacionesBasePage}/editar/${mantenedorActivacionBase.uuid}`,
+        );
+      },
+    });
+  };
+
   return (
     <SingleTableBoxScene
       title="Mantenedor Activaciones Base"
@@ -124,7 +152,7 @@ const MantenedorActivacionesBaseByStatePage: React.FC<
         text="por nombre"
       />
 
-      <CustomTable<CambioPlan>
+      <CustomTable<MantenedorActivacionBase>
         columns={columns}
         data={CambioPlanesPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -143,6 +171,7 @@ const MantenedorActivacionesBaseByStatePage: React.FC<
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
         canDelete={false}
+        onEdit={onEdit}
       />
     </SingleTableBoxScene>
   );

@@ -21,23 +21,29 @@ import {
   YES_NO_ARRAY_CHOICES,
 } from '@/shared';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { returnUrlMantenedorActivacionesBasePage } from '../../../pages/forms/MantenedorActivacionesBasePage';
 import { useFetchMotivoRubroAdicionals } from '@/actions/app';
 import { mantenedorActivacionBaseFormSchema } from '@/shared/utils/validation-schemas/app/cartera/mantenedor-activaciones/mantenedor-activacion-base.schema';
 import {
   CreateMantenedorActivacionBaseParamsBase,
   useCreateMantenedorActivacionBase,
+  useUpdateMantenedorActivacionBase,
 } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
+import { MantenedorActivacionBase } from '@/shared/interfaces/app/cartera/mantenedor-activaciones';
+import { useEffect } from 'react';
+import { returnUrlMantenedorActivacionesBasePage } from '../../../pages/tables/MantenedorActivacionesBaseByStatePage';
 
 export interface SaveMantenedorActivacionesBaseProps {
   title: string;
+  mantenedorActivacionBase?: MantenedorActivacionBase;
 }
 type SaveFormData = CreateMantenedorActivacionBaseParamsBase & {
   valor: number | string;
+  incluye_facturacion_string: string;
+  incluye_notificacion_string: string;
 };
 const SaveMantenedorActivacionesBase: React.FC<
   SaveMantenedorActivacionesBaseProps
-> = ({ title }) => {
+> = ({ title, mantenedorActivacionBase }) => {
   const navigate = useNavigate();
 
   ///* global state
@@ -57,6 +63,12 @@ const SaveMantenedorActivacionesBase: React.FC<
     returnUrl: returnUrlMantenedorActivacionesBasePage,
   });
 
+  const updateMantenedorActivacionMutation =
+    useUpdateMantenedorActivacionBase<MantenedorActivacionBase>({
+      navigate,
+      returnUrl: returnUrlMantenedorActivacionesBasePage,
+    });
+
   const {
     data: motivoRubroAdicionalsPagingRes,
     isLoading: isLoadingMotivoRubroAdicionals,
@@ -75,6 +87,7 @@ const SaveMantenedorActivacionesBase: React.FC<
 
   const {
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = form;
   const watchedValor = form.watch('valor');
@@ -82,20 +95,28 @@ const SaveMantenedorActivacionesBase: React.FC<
 
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    console.log('data.code', data.code);
     setConfirmDialog({
       isOpen: true,
       title: 'Mantenedor activaciones base',
       subtitle: '¿Está seguro que desea crear este registro?',
       onConfirm: () => {
+        ///* upd
+        if (mantenedorActivacionBase?.id) {
+          updateMantenedorActivacionMutation.mutate({
+            id: mantenedorActivacionBase.id!,
+            data,
+          });
+          setConfirmDialogIsOpen(false);
+          return;
+        }
+
         createMantenedorActivacion.mutate({
           motivo_base: data.motivo_base,
           code: data.code,
           tiempo_bloqueo: data.tiempo_bloqueo,
           tiempo_limite: data.tiempo_limite,
-          incluye_facturacion: data.incluye_facturacion === 'SI' ? true : false,
-          incluye_notificacion:
-            data.incluye_notificacion === 'SI' ? true : false,
+          incluye_facturacion: data.incluye_facturacion,
+          incluye_notificacion: data.incluye_notificacion,
           motivo: data.motivo,
         });
         clearForm();
@@ -109,6 +130,27 @@ const SaveMantenedorActivacionesBase: React.FC<
       ...form.getValues(),
     });
   };
+
+  ///* effects ---------------------
+  useEffect(() => {
+    if (!mantenedorActivacionBase?.id) return;
+    reset(mantenedorActivacionBase);
+  }, [mantenedorActivacionBase, reset]);
+
+  useEffect(() => {
+    mantenedorActivacionBase?.incluye_facturacion
+      ? form.setValue('incluye_facturacion_string', 'SI')
+      : form.setValue('incluye_facturacion_string', 'NO');
+
+    mantenedorActivacionBase?.incluye_notificacion
+      ? form.setValue('incluye_notificacion_string', 'SI')
+      : form.setValue('incluye_notificacion_string', 'NO');
+
+    form.setValue(
+      'valor',
+      mantenedorActivacionBase?.motivo_data?.valor.toString()!,
+    );
+  }, [mantenedorActivacionBase, form]);
 
   const customLoader =
     isLoadingMotivoRubroAdicionals || isRefetchingMotivoRubroAdicionals;
@@ -169,6 +211,8 @@ const SaveMantenedorActivacionesBase: React.FC<
           defaultValue={form.getValues().code}
           error={errors.code}
           helperText={errors.code?.message}
+          defaultHelperText="El código debe ser único"
+          disabled={!!mantenedorActivacionBase?.id}
           size={gridSizeMdLg6}
         />
 
@@ -198,22 +242,32 @@ const SaveMantenedorActivacionesBase: React.FC<
 
         <SelectArrayString
           label="Aplica descuento meses posteriores"
-          name="incluye_facturacion"
+          name="incluye_facturacion_string"
           control={form.control}
-          error={errors.incluye_facturacion}
-          helperText={errors.incluye_facturacion?.message}
+          error={errors.incluye_facturacion_string}
+          helperText={errors.incluye_facturacion_string?.message}
           options={YES_NO_ARRAY_CHOICES}
           gridSize={gridSizeMdLg6}
+          onChangeValue={e => {
+            e === 'SI'
+              ? form.setValue('incluye_facturacion', true)
+              : form.setValue('incluye_facturacion', false);
+          }}
         />
 
         <SelectArrayString
           label="Aplica descuento meses posteriores"
-          name="incluye_notificacion"
+          name="incluye_notificacion_string"
           control={form.control}
-          error={errors.incluye_notificacion}
-          helperText={errors.incluye_notificacion?.message}
+          error={errors.incluye_notificacion_string}
+          helperText={errors.incluye_notificacion_string?.message}
           options={YES_NO_ARRAY_CHOICES}
           gridSize={gridSizeMdLg6}
+          onChangeValue={e => {
+            e === 'SI'
+              ? form.setValue('incluye_notificacion', true)
+              : form.setValue('incluye_notificacion', false);
+          }}
         />
       </>
 
