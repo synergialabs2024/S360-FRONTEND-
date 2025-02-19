@@ -51,6 +51,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useUiConfirmModalStore } from '@/store/ui';
 export interface SavePromesaPagoProps {
   title: string;
+  promesaPago?: PromesaPago;
 }
 
 type SaveFormData = CreatePromesaPagoParamsBase & {
@@ -70,7 +71,10 @@ type SaveFormData = CreatePromesaPagoParamsBase & {
   categorizacion_perfil: string;
 };
 
-const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({ title }) => {
+const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
+  title,
+  promesaPago,
+}) => {
   ///* global state
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -116,6 +120,7 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({ title }) => {
   });
   const {
     handleSubmit,
+    reset,
     formState: { errors },
   } = form;
 
@@ -188,6 +193,12 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({ title }) => {
       ...form.getValues(),
     });
   };
+
+  ///* effects ---------------------
+  useEffect(() => {
+    if (!promesaPago?.id) return;
+    reset(promesaPago);
+  }, [promesaPago, reset]);
 
   useEffect(() => {
     if (Array.isArray(cedulaData?.data)) {

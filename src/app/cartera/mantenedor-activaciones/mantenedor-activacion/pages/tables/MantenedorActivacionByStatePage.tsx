@@ -17,7 +17,6 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { returnUrlMantenedorActivacionesPage } from '../forms/MantenedorActivacionPage';
 import {
   useFetchMantenedorActivaciones,
   useUpdateMantenedorActivacion,
@@ -25,14 +24,20 @@ import {
 import { MantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones/mantenedor-activacion.interface';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useNavigate } from 'react-router';
 
 export type MantenedorActivacionByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
 };
 
+export const returnUrlMantenedorActivacionesPage =
+  ROUTER_PATHS.cartera.mantenedorActivacionesNav;
+
 const MantenedorActivacionByStatePage: React.FC<
   MantenedorActivacionByStatePageProps
 > = () => {
+  const navigate = useNavigate();
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -72,6 +77,21 @@ const MantenedorActivacionByStatePage: React.FC<
       filterByState: false,
     },
   });
+
+  ///* handlers ---------------------
+  const onEdit = (MantenedorActivacion: MantenedorActivacion) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Editar Motivo Rubro Adicional',
+      subtitle: '¿Está seguro que desea editar este registro?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(
+          `${returnUrlMantenedorActivacionesPage}/editar/${MantenedorActivacion.uuid}`,
+        );
+      },
+    });
+  };
 
   ///* columns
   const columns = useMemo<MRT_ColumnDef<MantenedorActivacion>[]>(
@@ -209,6 +229,7 @@ const MantenedorActivacionByStatePage: React.FC<
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
         canDelete={false}
+        onEdit={onEdit}
       />
     </SingleTableBoxScene>
   );
