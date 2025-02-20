@@ -36,8 +36,10 @@ export interface Rubro {
   fecha_emision: string;
   fecha_vencimiento: string;
 
-  created_at: string;
-  modified_at: string;
+  ifi?: string;
+
+  created_at?: string;
+  modified_at?: string;
 
   ///* fk
   cliente?: number;
