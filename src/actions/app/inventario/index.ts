@@ -1,4 +1,5 @@
 export * from './bodega';
+export * from './cuenta-contable';
 export * from './categoria-producto.actions';
 export * from './ingreso-material';
 export * from './egreso-material';

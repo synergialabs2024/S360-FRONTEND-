@@ -1,47 +1,48 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { handleAxiosError } from '@/shared/axios/axios.utils';
-import { erpAPI } from '@/axios/erp-api';
 import {
-  Brass,
-  BrassPaginatedRes,
   getUrlParams,
-  PagingPartialParams,
   ToastWrapper,
-  UseFetchEnabledParams,
+  CuentaContable,
   UseMutationParams,
+  PagingPartialParams,
+  UseFetchEnabledParams,
+  CuentaContablePaginatedRes,
 } from '@/shared';
 import { useUiStore } from '@/store/ui';
+import { erpAPI } from '@/axios/erp-api';
+import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 const { get, post, patch } = erpAPI();
 
-export enum BrasTSQEnum {
-  BRASS = 'brass',
-  BRAS = 'bras',
+export enum CuentaContableTSQEnum {
+  CUENTACONTABLES = 'cuenta-contables',
+  CUENTACONTABLE = 'cuenta-contable',
 }
 
 ///* tanStack query ---------------
-export const useFetchBrass = ({
+export const useFetchCuentaContables = ({
   enabled = true,
   params,
-}: UseFetchEnabledParams<GetBrassParams>) => {
+}: UseFetchEnabledParams<GetCuentaContablesParams>) => {
   return useQuery({
-    queryKey: [BrasTSQEnum.BRASS, ...Object.values(params || {})],
-    queryFn: () => getBrass(params),
+    queryKey: [
+      CuentaContableTSQEnum.CUENTACONTABLES,
+      ...Object.values(params || {}),
+    ],
+    queryFn: () => getCuentaContables(params),
     enabled: enabled,
     refetchOnWindowFocus: false,
   });
 };
-
-export const useGetBras = (uuid: string) => {
+export const useGetCuentaContable = (uuid: string) => {
   return useQuery({
-    queryKey: [BrasTSQEnum.BRAS, uuid],
-    queryFn: () => getBras(uuid),
+    queryKey: [CuentaContableTSQEnum.CUENTACONTABLE, uuid],
+    queryFn: () => getCuentaContable(uuid),
     retry: false,
   });
 };
-
-export const useCreateBras = <T>({
+export const useCreateCuentaContable = <T>({
   navigate,
   returnUrl,
   returnErrorUrl,
@@ -55,13 +56,16 @@ export const useCreateBras = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: CreateBrasParams<T>) => createBras(params),
+    mutationFn: (params: CreateCuentaContableParams<T>) =>
+      createCuentaContable(params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [BrasTSQEnum.BRASS] });
+      queryClient.invalidateQueries({
+        queryKey: [CuentaContableTSQEnum.CUENTACONTABLES],
+      });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Brass creado correctamente',
+          customMessageToast || 'Cuenta Contable creado correctamente',
         );
     },
     onError: error => {
@@ -77,8 +81,7 @@ export const useCreateBras = <T>({
     },
   });
 };
-
-export const useUpdateBras = <T>({
+export const useUpdateCuentaContable = <T>({
   navigate,
   returnUrl,
   returnErrorUrl,
@@ -92,13 +95,16 @@ export const useUpdateBras = <T>({
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
 
   return useMutation({
-    mutationFn: (params: UpdateBrasParams<T>) => updateBras(params),
+    mutationFn: (params: UpdateCuentaContableParams<T>) =>
+      updateCuentaContable(params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [BrasTSQEnum.BRASS] });
+      queryClient.invalidateQueries({
+        queryKey: [CuentaContableTSQEnum.CUENTACONTABLES],
+      });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'Brass actualizado correctamente',
+          customMessageToast || 'Cuenta Contable actualizado correctamente',
         );
     },
     onError: error => {
@@ -116,47 +122,53 @@ export const useUpdateBras = <T>({
 };
 
 ///* axios ---------------
-export type GetBrassParams = Partial<Brass> & PagingPartialParams;
-export type CreateBrasParams<T> = T;
-export type CreateBrasParamsBase = Omit<Brass, 'id'>;
-export interface UpdateBrasParams<T> {
+export type GetCuentaContablesParams = Partial<CuentaContable> &
+  PagingPartialParams;
+export type CreateCuentaContableParams<T> = T;
+export type CreateCuentaContableParamsBase = Omit<CuentaContable, 'id'>;
+export interface UpdateCuentaContableParams<T> {
   id: number;
   data: T;
 }
 
-export const getBrass = async (params?: GetBrassParams) => {
+export const getCuentaContables = async (params?: GetCuentaContablesParams) => {
   const stateParams = { ...params };
 
   // filter by state
-  if (stateParams.filterByState === false && stateParams.state === undefined) {
-    delete stateParams.state;
+  if (stateParams.filterByState === false && stateParams.estado === undefined) {
+    delete stateParams.estado;
   } else if (stateParams.filterByState !== false) {
-    stateParams.state = true;
+    stateParams.estado = true;
   }
   delete stateParams.filterByState;
 
   const queryParams = getUrlParams(stateParams);
-  return get<BrassPaginatedRes>(`/brass/?${queryParams}`, true);
+  return get<CuentaContablePaginatedRes>(
+    `/cuenta_contable/?${queryParams}`,
+    true,
+  );
 };
-
-export const getBras = async (uuid: string) => {
+export const getCuentaContable = async (uuid: string) => {
   try {
-    return await get<Brass>(`/brass/${uuid}`, true);
+    return await get<CuentaContable>(`/cuenta_contable/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
   }
 };
-
-export const createBras = async <T>(data: CreateBrasParams<T>) => {
+export const createCuentaContable = async <T>(
+  data: CreateCuentaContableParams<T>,
+) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<Brass>('/brass/', data, true);
+  return post<CuentaContable>('/cuenta_contable/', data, true);
 };
-
-export const updateBras = async <T>({ id, data }: UpdateBrasParams<T>) => {
+export const updateCuentaContable = async <T>({
+  id,
+  data,
+}: UpdateCuentaContableParams<T>) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return patch<Brass>(`/brass/${id}/`, data, true);
+  return patch<CuentaContable>(`/cuenta_contable/${id}/`, data, true);
 };
