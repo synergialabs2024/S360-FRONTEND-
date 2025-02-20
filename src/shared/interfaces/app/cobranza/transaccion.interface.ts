@@ -17,11 +17,13 @@ export interface Transaccion {
 
   monto: string;
 
+  ifi: string; // metodo de pago
+
   codigo_transaccion: string;
   numero_transaccion: string;
 
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
 
   ///* fk ----------
   rubro?: number;

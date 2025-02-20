@@ -91,6 +91,13 @@ export const useColumnsTransaccionesCliente = () => {
       },
 
       {
+        accessorKey: 'ifi',
+        header: 'IFI',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ifi'),
+      },
+
+      {
         accessorKey: 'metodo_pago__name',
         header: 'METODO PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
