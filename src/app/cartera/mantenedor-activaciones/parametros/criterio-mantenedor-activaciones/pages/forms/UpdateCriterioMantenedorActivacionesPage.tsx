@@ -3,9 +3,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { useGetAsunto } from '@/actions/app/tickets/parametros/asunto/asunto.actions';
-import { SaveAsunto } from '@/app/tickets/parametros/asunto/shared/components';
 import { returnUrlCriterioMantenedorActivacionesPage } from '../tables/CriterioMantenedorActivacionesPage';
+import { useGetCriterioMantenedorActivacion } from '@/actions/app/cartera/buzon-tareas/parametros/criterio-mantenedor-activaciones';
+import SaveCriterioMantenedorActivaciones from '../../shared/components/SaveCriterioMantenedorActivaciones/SaveCriterioMantenedorActivaciones';
 
 export type UpdateTipoMantenedorBeneficiosPageProps = {};
 
@@ -15,7 +15,9 @@ const UpdateTipoMantenedorBeneficiosPage: React.FC<
   useCheckPermission(PermissionsEnum.tecnico_change_asuntoticket);
 
   const { uuid } = useParams();
-  const { data, isLoading, isRefetching } = useGetAsunto(uuid!);
+  const { data, isLoading, isRefetching } = useGetCriterioMantenedorActivacion(
+    uuid!,
+  );
   useLoaders(isLoading || isRefetching);
 
   if (isLoading || isRefetching) return null;
@@ -23,7 +25,10 @@ const UpdateTipoMantenedorBeneficiosPage: React.FC<
     return <Navigate to={returnUrlCriterioMantenedorActivacionesPage} />;
 
   return (
-    <SaveAsunto title="Editar Tipo Mantenedor Beneficios" asunto={data.data} />
+    <SaveCriterioMantenedorActivaciones
+      title="Editar Criterio Mantenedor Activaciones"
+      criterioMantenedorActivacion={data.data}
+    />
   );
 };
 
