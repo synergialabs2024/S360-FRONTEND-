@@ -5,8 +5,13 @@ const currentYear = new Date().getFullYear();
 export const flotaFormSchema = yup.object({
   name: yup
     .string()
-    .required('El campo name es requerido')
-    .max(200, 'El campo name no debe exceder los 200 caracteres'),
+    .required('El campo nombre es requerido')
+    .max(200, 'El campo nombre no debe exceder los 200 caracteres')
+    .test(
+      'sin-guion-bajo',
+      'El campo nombre no debe contener el carácter "_"',
+      value => !value?.includes('_'),
+    ),
   marca_vehiculo: yup
     .string()
     .required('El campo marca vehiculo es requerido')
