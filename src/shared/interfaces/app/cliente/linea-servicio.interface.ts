@@ -1,3 +1,4 @@
+import { LineaServicioEnumChoice } from '@/shared/constants';
 import type { PagingMetaResponse } from '@/shared/interfaces/common';
 import type {
   Agendamiento,
@@ -33,7 +34,7 @@ export interface LineaServicio {
   id: number;
   uuid: string;
 
-  estado_linea: string;
+  estado_linea: LineaServicioEnumChoice;
   linea_numero: number;
 
   created_at?: string;

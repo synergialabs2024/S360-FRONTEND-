@@ -142,7 +142,22 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
         </Typography>
       </Grid>
       <Grid item {...gridSizeMdLg5}>
-        <ChipModelState label={serviceLine.estado_linea} />
+        <ChipModelState
+          label={serviceLine.estado_linea}
+          color={
+            serviceLine.estado_linea === LineaServicioEnumChoice.ACTIVO
+              ? 'success'
+              : serviceLine.estado_linea === LineaServicioEnumChoice.RETIRADO
+                ? 'error'
+                : serviceLine.estado_linea ===
+                    LineaServicioEnumChoice.SUSPENDIDO
+                  ? 'warning'
+                  : serviceLine.estado_linea ===
+                      LineaServicioEnumChoice.RETENCION
+                    ? 'info'
+                    : 'primary'
+          }
+        />
       </Grid>
 
       <Grid item {...gridSizeMdLg1}>
