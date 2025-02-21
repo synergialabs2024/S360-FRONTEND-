@@ -268,7 +268,7 @@ export const ROUTER_PATHS = {
     buzontareasNav: '/cartera/buzontareas',
 
     ///* parametros activaciones
-    // Tipo
+    // Criterio
     parametrosCriterioMantenedorActivaciones:
       'parametros/criterio-mantenedor-activaciones',
     parametrosCriterioMantenedorActivacionesCrear:
@@ -850,5 +850,9 @@ export const ROUTER_PATHS = {
     buzonTareasAsignadas: 'tareas-asignadas',
     buzonTareasAsignada: 'tareas-asignadas/:uuid',
     buzonTareasAsignadasNav: '/buzon-tareas/tareas-asignadas',
+
+    pendientesActivacionAsignadas: 'pendientes-activacion',
+    pendientesActivacionAsignada: 'pendientes-activacion/:uuid',
+    pendientesActivacionAsignadasNav: '/buzon-tareas/pendientes-activacion',
   },
 };
