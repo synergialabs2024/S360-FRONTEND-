@@ -776,6 +776,12 @@ export const ROUTER_PATHS = {
     ///* Reporte Stock
     reporteStocks: 'reporte-stock',
     reporteStocksNav: '/inventario/reporte-stock',
+
+    ///* Cuenta Contable
+    cuentaContables: 'cuenta-contable',
+    cuentaContablesCrear: 'cuenta-contable/crear',
+    cuentaContablesEditar: 'cuenta-contable/editar/:uuid',
+    cuentaContablesNav: '/inventario/cuenta-contable',
   },
   // // LOGISTICA =================================
   logistica: {

@@ -552,11 +552,17 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.motivoTransferenciasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_REPORTE_STOCK, {
               id: 'reporte-stock',
               title: 'Reporte stock',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.reporteStocksNav,
+            }),
+            renderByModule(SidenavModulesEnum.CONTABILIDAD_CUENTA_CONTABLE, {
+              id: 'cuenta-contable',
+              title: 'Cuenta Contable',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

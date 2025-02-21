@@ -19,7 +19,7 @@ export const useColumnsMovimientoMaterial = () => {
     () => [
       {
         accessorKey: 'secuencial',
-        header: 'REFERENCIA',
+        header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['secuencial']),
       },

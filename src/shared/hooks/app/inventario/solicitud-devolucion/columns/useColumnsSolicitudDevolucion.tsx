@@ -18,7 +18,7 @@ export const useColumnsSolicitudDevolucion = () => {
     () => [
       {
         accessorKey: 'secuencial',
-        header: 'REFERENCIA',
+        header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },

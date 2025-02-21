@@ -1480,6 +1480,30 @@ const ReporteStocksPages = Loadable(
       import('@/app/inventario/reporte-stock/pages/tables/ReporteStocksPages'),
   ),
 );
+const CuentaContablePages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/cuenta-contable/pages/tables/CuentaContablePages'
+      ),
+  ),
+);
+const CreateCuentaContablePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/cuenta-contable/pages/forms/CreateCuentaContablePage'
+      ),
+  ),
+);
+const UpdateCuentaContablePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/cuenta-contable/pages/forms/UpdateCuentaContablePage'
+      ),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -3081,6 +3105,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.reporteStocks,
             element: <ReporteStocksPages />,
+          },
+
+          ///* Cuenta Contable
+          {
+            path: ROUTER_PATHS.inventario.cuentaContables,
+            element: <CuentaContablePages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.cuentaContablesCrear,
+            element: <CreateCuentaContablePage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.cuentaContablesEditar,
+            element: <UpdateCuentaContablePage />,
           },
         ],
       },
