@@ -1404,6 +1404,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'pendientes',
+              title: 'Pendientes',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.buzonTareas.pendientesActivacionAsignadasNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
       ],

@@ -20,6 +20,7 @@ import {
   useUpdateCriterioMantenedorActivacion,
 } from '@/actions/app/cartera/buzon-tareas/parametros/criterio-mantenedor-activaciones';
 import { CriterioMantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones';
+import { useNavigate } from 'react-router';
 
 export const returnUrlCriterioMantenedorActivacionesPage =
   ROUTER_PATHS.cartera.parametrosCriterioMantenedorActivacionesNav;
@@ -29,6 +30,8 @@ export type CriterioMantenedorActivacionesPageProps = {};
 const CriterioMantenedorActivacionesPage: React.FC<
   CriterioMantenedorActivacionesPageProps
 > = () => {
+  const navigate = useNavigate();
+
   useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
 
   /* const navigate = useNavigate(); */
@@ -146,6 +149,12 @@ const CriterioMantenedorActivacionesPage: React.FC<
     [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
+  const onEdit = (row: CriterioMantenedorActivacion) => {
+    navigate(
+      `${returnUrlCriterioMantenedorActivacionesPage}/editar/${row.uuid}`,
+    );
+  };
+
   return (
     <SingleTableBoxScene
       title="criterio Mantenedor Activaciones"
@@ -179,9 +188,8 @@ const CriterioMantenedorActivacionesPage: React.FC<
           PermissionsEnum.tecnico_change_asuntoticket,
         )} */
         // crud
-        /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)}
         onEdit={onEdit}
-        canDelete={false} */
+        canDelete={false}
       />
     </SingleTableBoxScene>
   );

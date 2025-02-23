@@ -1,3 +1,7 @@
+import {
+  LineaServicioEnumChoice,
+  tipoRubroAdicionalMantenedorEnumChoice,
+} from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface CriterioMantenedorActivacionBasePaginatedRes {
@@ -14,4 +18,8 @@ export interface CriterioMantenedorActivacion {
   description: string;
   code: string;
   state: boolean;
+  tipo_mantenedor_activacion: tipoRubroAdicionalMantenedorEnumChoice;
+  estados_linea_servicio: LineaServicioEnumChoice[];
+  dia_inicio_range: number;
+  dia_fin_range: number;
 }

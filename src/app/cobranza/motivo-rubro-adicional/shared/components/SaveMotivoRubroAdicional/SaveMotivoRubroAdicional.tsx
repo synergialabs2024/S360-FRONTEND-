@@ -61,9 +61,9 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
   const watchedTipoRubroAdicional = form.watch('tipo_rubro_adicional');
 
   const {
-    data: departamentoPagingRes,
-    isLoading: isLoadingDepartamentos,
-    isRefetching: isRefetchingDepartamentos,
+    data: systemGroupsPagingRes,
+    isLoading: isLoadingsyStemGroups,
+    isRefetching: isRefetchingSystemGroups,
   } = useFetchSystemGroups({
     params: {
       page_size: 1000,
@@ -114,7 +114,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
     reset(motivorubroadicional);
   }, [motivorubroadicional, reset]);
 
-  const customLoader = isLoadingDepartamentos || isRefetchingDepartamentos;
+  const customLoader = isLoadingsyStemGroups || isRefetchingSystemGroups;
   useLoaders(customLoader);
 
   return (
@@ -160,10 +160,10 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
               valueKey="name"
               actualValueKey="id"
               // options
-              options={departamentoPagingRes?.data?.items || []}
+              options={systemGroupsPagingRes?.data?.items || []}
               defaultValue={
                 form.getValues().grupos_usuario_autorizados?.length
-                  ? departamentoPagingRes?.data?.items?.filter(
+                  ? systemGroupsPagingRes?.data?.items?.filter(
                     (departamento: SystemGroup) =>
                       (
                         form.getValues().grupos_usuario_autorizados as any[]
@@ -171,7 +171,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
                   )
                   : []
               }
-              isLoadingData={isLoadingDepartamentos || isRefetchingDepartamentos}
+              isLoadingData={isLoadingsyStemGroups || isRefetchingSystemGroups}
               // errors
               control={form.control}
               error={undefined}

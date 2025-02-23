@@ -859,6 +859,15 @@ const CreateCriterioMantenedorActivacionesPage = Loadable(
   ),
 );
 
+const UpdateCriterioMantenedorActivacionesPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-activaciones/parametros/criterio-mantenedor-activaciones/pages/forms/UpdateCriterioMantenedorActivacionesPage'
+      ),
+  ),
+);
+
 // Tipo mantenedor aplicaciones
 const TipoMantenedorBeneficiosPage = Loadable(
   lazy(
@@ -1893,6 +1902,24 @@ const CreateTareaPage = Loadable(
   lazy(() => import('@/app/buzon-tareas/tareas/pages/forms/CreateTareaPage')),
 );
 
+const PendientesActivacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/buzon-tareas/pendientes-activacion/pages/tables/PendientesActivacionPage'
+      ),
+  ),
+);
+
+const CreatePendientesActivacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/buzon-tareas/pendientes-activacion/pages/forms/CreatePendientesActivacionPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -2356,6 +2383,11 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera
               .parametrosCriterioMantenedorActivacionesCrear,
             element: <CreateCriterioMantenedorActivacionesPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosCriterioMantenedorActivacionesEditar,
+            element: <UpdateCriterioMantenedorActivacionesPage />,
           },
 
           // Tipo mantenedor aplicaciones
@@ -3399,6 +3431,14 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.buzonTareas.buzonTareasAsignada,
             element: <CreateTareaPage />,
+          },
+          {
+            path: ROUTER_PATHS.buzonTareas.pendientesActivacionAsignadasNav,
+            element: <PendientesActivacionPage />,
+          },
+          {
+            path: ROUTER_PATHS.buzonTareas.pendientesActivacionAsignada,
+            element: <CreatePendientesActivacionPage />,
           },
         ],
       },
