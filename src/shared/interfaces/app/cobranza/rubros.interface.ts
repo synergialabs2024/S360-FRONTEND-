@@ -4,6 +4,7 @@ import { ClienteLimitData, ContratoLimitData } from '../cliente';
 import { Producto } from '../inventario';
 import { OrdenTrabajoLimitData } from '../tecnico';
 import { Factura } from './factura.interface';
+import { Saldo } from './saldo.interface';
 
 export interface RubrosPaginatedRes {
   status: number;
@@ -53,6 +54,10 @@ export interface Rubro {
   orden_trabajo_data?: OrdenTrabajoLimitData;
 
   rubro_items_data?: RubroItemData[];
+
+  // helpers no models -----
+  saldo_rubro_consume_data?: Saldo[];
+  saldo_rubro_origen_data?: Saldo[];
 }
 
 export type RubroItemData = {

@@ -8,6 +8,18 @@ export type ClienteFibraRobroInfoAmountsProps = {
 const ClienteFibraRobroInfoAmounts: React.FC<
   ClienteFibraRobroInfoAmountsProps
 > = ({ rubro }) => {
+  const saldo_rubro_consume_data = rubro?.saldo_rubro_consume_data || [];
+  const saldo = saldo_rubro_consume_data.reduce(
+    (acc, item) => acc + parseFloat(item.monto),
+    0,
+  );
+  const saldo_rubro_origen_data = rubro?.saldo_rubro_origen_data || [];
+  const saldo_origen = saldo_rubro_origen_data.reduce(
+    (acc, item) => acc + parseFloat(item.monto),
+    0,
+  );
+  const saldo_total = saldo + -saldo_origen;
+
   return (
     <>
       <Box p={3} bgcolor="primary.light" mt={3}>
@@ -22,10 +34,19 @@ const ClienteFibraRobroInfoAmounts: React.FC<
 
         <Box display="flex" justifyContent="end" gap={3} mb={3}>
           <Typography variant="body1" fontWeight={600}>
-            Impuestos:
+            Impuesto:
           </Typography>
           <Typography variant="body1" fontWeight={600}>
             {formatCurrency(rubro?.valor_taxes)}
+          </Typography>
+        </Box>
+
+        <Box display="flex" justifyContent="end" gap={3} mb={3}>
+          <Typography variant="body1" fontWeight={600}>
+            Descuento:
+          </Typography>
+          <Typography variant="body1" fontWeight={600}>
+            {formatCurrency(saldo_total)}
           </Typography>
         </Box>
 
