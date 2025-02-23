@@ -45,19 +45,28 @@ const ContractFibraClientPart: React.FC<ContractFibraClientPartProps> = ({
         <>
           <CustomTextFieldNoForm
             label="Plan internet ingreso"
-            value={serviceLine?.contrato_data?.plan_internet_ingreso_data?.name}
+            value={
+              serviceLine?.contrato_data?.plan_internet_ingreso_data
+                ?.name_valor_base
+            }
             disabled
           />
           <CustomTextFieldNoForm
             label="Plan internet actual"
-            value={serviceLine?.contrato_data?.plan_internet_actual_data?.name}
+            value={
+              serviceLine?.contrato_data?.plan_internet_actual_data
+                ?.name_valor_base
+            }
             disabled
           />
         </>
       ) : (
         <CustomTextFieldNoForm
           label="Plan internet contratado"
-          value={serviceLine?.contrato_data?.plan_internet_actual_data?.name}
+          value={
+            serviceLine?.contrato_data?.plan_internet_actual_data
+              ?.name_valor_base
+          }
           disabled
           size={gridSize}
         />

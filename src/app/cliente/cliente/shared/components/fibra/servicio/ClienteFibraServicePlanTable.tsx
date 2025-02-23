@@ -52,7 +52,7 @@ const ClienteFibraServicePlanTable: React.FC<
       pppassword: serviceLine?.orden_trabajo_data?.pppassword!,
 
       plan_contratado__name:
-        serviceLine?.contrato_data?.plan_internet_actual_data?.name!, //
+        serviceLine?.contrato_data?.plan_internet_actual_data?.name_valor_base!, //
       plan_contratado__precio:
         serviceLine?.contrato_data?.plan_internet_actual_data?.valor!,
     },
@@ -62,14 +62,9 @@ const ClienteFibraServicePlanTable: React.FC<
   const columns = useMemo<MRT_ColumnDef<ServicePlanType>[]>(
     () => [
       {
-        accessorKey: 'uuid',
-        header: 'LINEA ID',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-      },
-      {
         accessorKey: 'plan_contratado__name',
         header: 'PLAN CONTRATADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
       },
       {
         accessorKey: 'tipo_servicio',
@@ -143,6 +138,12 @@ const ClienteFibraServicePlanTable: React.FC<
             <PasswordTableCell password={row.original?.pppassword || 'N/A'} />
           );
         },
+      },
+
+      {
+        accessorKey: 'uuid',
+        header: 'LINEA ID',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
       },
     ],
     [],
