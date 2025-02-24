@@ -92,7 +92,6 @@ const ClienteFibraCreateSaldoModal: React.FC<
               defaultValue={form.getValues().descripcion}
               error={errors.descripcion}
               helperText={errors.descripcion?.message}
-              required={false}
             />
           </Grid>
         }

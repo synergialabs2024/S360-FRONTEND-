@@ -42,6 +42,9 @@ export interface Rubro {
   created_at?: string;
   modified_at?: string;
 
+  generar_factura?: boolean;
+  valor_factura?: string;
+
   ///* fk
   cliente?: number;
   linea_servicio?: number;

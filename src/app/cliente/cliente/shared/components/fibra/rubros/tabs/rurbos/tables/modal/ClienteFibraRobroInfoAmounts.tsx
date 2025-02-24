@@ -1,5 +1,7 @@
-import { formatCurrency, Rubro } from '@/shared';
+/* eslint-disable indent */
 import { Box, Typography } from '@mui/material';
+
+import { formatCurrency, Rubro } from '@/shared';
 
 export type ClienteFibraRobroInfoAmountsProps = {
   rubro: Rubro;
@@ -8,17 +10,14 @@ export type ClienteFibraRobroInfoAmountsProps = {
 const ClienteFibraRobroInfoAmounts: React.FC<
   ClienteFibraRobroInfoAmountsProps
 > = ({ rubro }) => {
-  const saldo_rubro_consume_data = rubro?.saldo_rubro_consume_data || [];
-  const saldo = saldo_rubro_consume_data.reduce(
-    (acc, item) => acc + parseFloat(item.monto),
-    0,
-  );
-  const saldo_rubro_origen_data = rubro?.saldo_rubro_origen_data || [];
-  const saldo_origen = saldo_rubro_origen_data.reduce(
-    (acc, item) => acc + parseFloat(item.monto),
-    0,
-  );
-  const saldo_total = saldo + -saldo_origen;
+  const discountAll = +(rubro?.subtotal || 0) + +(rubro?.valor_taxes || 0);
+
+  const onlyNegativesSaldoConsume = (rubro?.saldo_rubro_consume_data || [])
+    .filter(item => parseFloat(item.monto) < 0)
+    .reduce((acc, item) => acc + parseFloat(item.monto), 0);
+
+  const discount2 =
+    rubro?.valor_total === '0.00' ? -discountAll : onlyNegativesSaldoConsume;
 
   return (
     <>
@@ -46,7 +45,7 @@ const ClienteFibraRobroInfoAmounts: React.FC<
             Descuento:
           </Typography>
           <Typography variant="body1" fontWeight={600}>
-            {formatCurrency(saldo_total)}
+            {formatCurrency(discount2)}
           </Typography>
         </Box>
 
