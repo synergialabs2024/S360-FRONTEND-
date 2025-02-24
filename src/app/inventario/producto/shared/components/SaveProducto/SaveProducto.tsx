@@ -25,7 +25,7 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { gridSizeMdLg2, gridSizeMdLg6 } from '@/shared/constants/ui';
 import {
   CategoriaProducto,
   IVA,
@@ -54,6 +54,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       es_para_venta: false,
       requiere_series: false,
       aplica_promocion: false,
+      considera_reporte_arcotel: false,
       // init with 1 default price
       precios: [
         {
@@ -273,29 +274,36 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         name="state"
         control={control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg3}
+        size={gridSizeMdLg2}
       />
       <SampleCheckbox
         label="Es para venta"
         name="es_para_venta"
         control={control}
         defaultValue={form.getValues().es_para_venta}
-        size={gridSizeMdLg3}
+        size={gridSizeMdLg2}
       />
       <SampleCheckbox
         label="Aplica promocion"
         name="aplica_promocion"
         control={control}
         defaultValue={form.getValues().aplica_promocion}
-        size={gridSizeMdLg3}
+        size={gridSizeMdLg2}
       />
       <SampleCheckbox
         label="Requiere serie"
         name="requiere_series"
         control={control}
         defaultValue={form.getValues().requiere_series}
-        size={gridSizeMdLg3}
+        size={gridSizeMdLg2}
         disabled={!!producto}
+      />
+      <SampleCheckbox
+        label="Considera Reporte Arcotel"
+        name="considera_reporte_arcotel"
+        control={control}
+        defaultValue={form.getValues().considera_reporte_arcotel}
+        size={gridSizeMdLg2}
       />
       {/* ------------ prices component ------------ */}
       <PricesForm

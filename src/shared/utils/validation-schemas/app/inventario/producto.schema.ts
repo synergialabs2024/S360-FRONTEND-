@@ -45,6 +45,10 @@ export const productoFormSchema = yup.object().shape({
     .boolean()
     .typeError('El campo aplica promocion es requerido')
     .required('El campo aplica promocion es requerido'),
+  considera_reporte_arcotel: yup
+    .boolean()
+    .typeError('El campo reporte arcotel es requerido')
+    .required('El campo reporte arcotel es requerido'),
 
   // ======================================
   // validate prices array
