@@ -57,6 +57,15 @@ const ClienteFibraRobroInfoAmounts: React.FC<
             {formatCurrency(rubro?.valor_total)}
           </Typography>
         </Box>
+
+        <Box display="flex" justifyContent="end" gap={3}>
+          <Typography variant="body1" fontWeight={600}>
+            Total Factura:
+          </Typography>
+          <Typography variant="body1" fontWeight={600}>
+            {formatCurrency(rubro?.valor_factura || '0.00')}
+          </Typography>
+        </Box>
       </Box>
     </>
   );
