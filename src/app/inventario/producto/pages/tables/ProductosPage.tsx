@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -56,6 +57,11 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
   });
   const changeAplicaPromocion = useUpdateProducto<{
     aplica_promocion: boolean;
+  }>({
+    enableNavigate: false,
+  });
+  const changeReporteArcotel = useUpdateProducto<{
+    considera_reporte_arcotel: boolean;
   }>({
     enableNavigate: false,
   });
@@ -203,7 +209,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
       },
       {
         accessorKey: 'aplica_promocion',
-        header: 'ES PARA VENTA',
+        header: 'APLICA PROMOCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableSorting: false,
         enableColumnFilter: true,
@@ -229,6 +235,48 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
                       id: row.original.id!,
                       data: {
                         aplica_promocion: !row.original.aplica_promocion,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
+      },
+      {
+        accessorKey: 'considera_reporte_arcotel',
+        header: 'APLICA PROMOCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableSorting: false,
+        enableColumnFilter: true,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.considera_reporte_arcotel ===
+            'boolean' ? (
+            <CustomSwitch
+              title="considera_reporte_arcotel"
+              checked={row.original?.considera_reporte_arcotel}
+              isSimpleBoolean
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.inventario_change_producto))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar Aplica Promocion',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el reporte arcotel de este registro?',
+                  onConfirm: () => {
+                    changeReporteArcotel.mutate({
+                      id: row.original.id!,
+                      data: {
+                        considera_reporte_arcotel:
+                          !row.original.considera_reporte_arcotel,
                       },
                     });
                     setConfirmDialogIsOpen(false);
@@ -368,6 +416,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
       changeState,
       changeEsParaVenta,
       changeAplicaPromocion,
+      changeReporteArcotel,
       setConfirmDialog,
       setConfirmDialogIsOpen,
     ],

@@ -22,6 +22,7 @@ export interface Producto {
   descripcion: string;
   requiere_series: boolean;
   aplica_promocion: boolean;
+  considera_reporte_arcotel: boolean;
 
   es_para_venta: boolean; // preventas
   metraje_relativo?: string; // to handle m in CodigoModeloProductoEnumChoice
