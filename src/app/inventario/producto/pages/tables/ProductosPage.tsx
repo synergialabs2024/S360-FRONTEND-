@@ -249,7 +249,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
       },
       {
         accessorKey: 'considera_reporte_arcotel',
-        header: 'APLICA PROMOCION',
+        header: 'CONSIDERA REPORTE ARCOTEL',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableSorting: false,
         enableColumnFilter: true,
