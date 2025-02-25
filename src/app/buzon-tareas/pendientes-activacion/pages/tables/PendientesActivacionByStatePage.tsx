@@ -1,7 +1,9 @@
 import {
+  Cliente,
   EstadoTareaEnumChoice,
   PermissionsEnum,
   TABLE_CONSTANTS,
+  useColumnsClientes,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -11,19 +13,10 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import {
-  BuzonTareasTSQEnum,
-  useFetchBuzonTareas,
-} from '@/actions/app/cartera/buzon-tareas';
-import { useColumnsBuzonTareas } from '@/shared/hooks/app/buzon-tareas';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useNavigate } from 'react-router';
-import { BuzonTarea } from '@/shared/interfaces/app/cartera/buzon-tareas';
-import { useGenericPATCH } from '@/actions/shared';
-import { useState } from 'react';
-import TareaAsignPendienteTableBtns from '../../shared/components/table/TareaAsignPendienteTableBtns';
-import { useAuthStore } from '@/store/auth';
 import { returnUrlActivacionAsignadas } from './PendientesActivacionPage';
+import { useFetchClientes } from '@/actions/app';
 
 export type PendientesActivacionByStatePageProps = {
   state: EstadoTareaEnumChoice;
@@ -40,11 +33,7 @@ const PendientesActivacionByStatePage: React.FC<
   );
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
-  const { filterObject, columnFilters, setColumnFilters } =
-    useTableServerSideFiltering();
-
-  ///* local states ---------------------
-  const [selectedBT, setSelectedBT] = useState<BuzonTarea | null>(null);
+  const { columnFilters, setColumnFilters } = useTableServerSideFiltering();
 
   ///* table
   const {
@@ -54,44 +43,20 @@ const PendientesActivacionByStatePage: React.FC<
     onChangeFilter,
     setPagination,
   } = useTableFilter();
-  const { pageIndex, pageSize } = pagination;
-
-  const user = useAuthStore(s => s.user);
 
   ///* fetch data
   const {
     data: ticketsPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchBuzonTareas({
+  } = useFetchClientes({
     enabled: true,
     params: {
-      departamento_asignado: user?.departamento,
-      page: pageIndex + 1,
-      page_size: pageSize,
-      ...filterObject,
-      estado_tarea: state,
+      page_size: 200,
+      only_suspended: true,
     },
   });
 
-  ///* mutations ---------------------
-  const updOt = useGenericPATCH<any, BuzonTarea>(
-    `/buzon-tarea-mantenedor/init-gestion-take-task/${selectedBT?.id!}/`,
-    BuzonTareasTSQEnum.BUZONTAREAS,
-    {
-      customMessageToast: 'Hora de inicio registrada correctamente',
-      customOnSuccess() {
-        navigate(`/buzon-tareas/tareas-asignadas/${selectedBT?.uuid}`);
-        setConfirmDialogIsOpen(false);
-      },
-      customOnError() {
-        setConfirmDialogIsOpen(false);
-      },
-    },
-  );
-
-  ///* columns
-  const { tareasBaseColumns } = useColumnsBuzonTareas();
   ///* handlers ---------------------
   const calcEnableActionsColumn = () => {
     return (
@@ -99,21 +64,21 @@ const PendientesActivacionByStatePage: React.FC<
       state === EstadoTareaEnumChoice.SEPARADO
     );
   };
-  const onEdit = (row: BuzonTarea) => {
-    setSelectedBT(row);
-
+  const onEdit = (cliente: Cliente) => {
+    const firstLine = cliente?.linea_servicio_data?.[0];
     setConfirmDialog({
       isOpen: true,
-      title: 'Gestionar tarea asignada',
-      subtitle:
-        'Una vez ingreses en el formulario se registrará la hora de inicio de la gestión y esta no podrá ser modificada. ¿Estás seguro de continuar?',
+      title: 'Editar Cliente',
+      subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
-        updOt.mutate({});
-        navigate(`/${returnUrlActivacionAsignadas}/${row.uuid}`);
         setConfirmDialogIsOpen(false);
+        navigate(`${returnUrlActivacionAsignadas}/${firstLine}`);
       },
     });
   };
+
+  ///* columns
+  const { clientesFibraColumnsActivos } = useColumnsClientes();
 
   return (
     <GridTableTabsContainerOnly>
@@ -126,18 +91,8 @@ const PendientesActivacionByStatePage: React.FC<
         }}
       />
 
-      <CustomTable<BuzonTarea>
-        columns={
-          state === EstadoTareaEnumChoice.EN_BORRADOR
-            ? tareasBaseColumns
-            : state === EstadoTareaEnumChoice.GESTIONADO
-              ? tareasBaseColumns
-              : state === EstadoTareaEnumChoice.RECHAZADO
-                ? tareasBaseColumns
-                : state === EstadoTareaEnumChoice.SEPARADO
-                  ? tareasBaseColumns
-                  : tareasBaseColumns
-        }
+      <CustomTable<Cliente>
+        columns={clientesFibraColumnsActivos}
         data={ticketsPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -159,21 +114,12 @@ const PendientesActivacionByStatePage: React.FC<
         canEdit={calcEnableActionsColumn()}
         onEdit={onEdit}
         canDelete={false}
-        onConditionEdit={ot => {
-          return (
-            ot.estado_tarea === EstadoTareaEnumChoice.EN_BORRADOR ||
-            ot.estado_tarea === EstadoTareaEnumChoice.SEPARADO
-          );
-        }}
         // onEdit={onEdit}
         // customButtonsSpaceEnd={(preventa: Preventa) => {
         //   return <EsperaAgendaPreventaCustomButtons preventa={preventa!} />;
         // }}
         arrowIcon
         showCustomButtonsSpaceEnd={true}
-        customButtonsSpaceEnd={buzonTarea => {
-          return <TareaAsignPendienteTableBtns buzonTarea={buzonTarea!} />;
-        }}
       />
     </GridTableTabsContainerOnly>
   );

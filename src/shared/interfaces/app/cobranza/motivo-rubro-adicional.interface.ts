@@ -14,6 +14,7 @@ export interface MotivoRubroAdicional {
 
   tipo_rubro_adicional: string;
   grupos_usuario_autorizados: SystemGroup[];
+  grupos_usuario_autorizados_data: SystemGroup[];
   nombre: string;
   codigo: string;
   valor: string;

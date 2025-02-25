@@ -95,7 +95,8 @@ const SaveCriterioMantenedorActivaciones: React.FC<
   const onSave = async (data: SaveFormData) => {
     console.log(data.dia_fin_range);
     if (
-      tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES &&
+      data.tipo_mantenedor_activacion ===
+        tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES &&
       data.estados_linea_servicio.length === 0
     ) {
       ToastWrapper.warning(
