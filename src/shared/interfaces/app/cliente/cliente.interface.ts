@@ -33,6 +33,7 @@ export interface Cliente {
   vendedor?: number;
 
   linea_servicio_data?: LineaServicio[];
+  only_suspended: boolean;
 }
 
 export type ClienteLimitData = Pick<

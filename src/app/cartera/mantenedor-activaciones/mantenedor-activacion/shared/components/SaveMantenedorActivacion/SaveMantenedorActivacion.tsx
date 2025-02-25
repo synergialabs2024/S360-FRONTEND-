@@ -5,15 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
 import {
   CustomAutocomplete,
+  CustomAutocompleteMultiple,
   CustomNumberTextField,
-  CustomTextField,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
   getKeysFormErrorsMessage,
+  LineaServicioEnumChoice,
   MotivoRubroAdicional,
+  SystemGroup,
+  tipoRubroAdicionalMantenedorEnumChoice,
   ToastWrapper,
   useLoaders,
 } from '@/shared';
@@ -44,6 +48,15 @@ export interface SaveMantenedorActivacionProps {
 }
 type SaveFormData = CreateMantenedorActivacionParamsBase & {
   valor: number | string;
+  //
+  tipo_rubro_adicional: string;
+  tipo_rubro_adicional_motivo: string;
+  estados_linea_servicio: LineaServicioEnumChoice[];
+  dia_inicio_range: number;
+  dia_fin_range: number;
+  //
+  grupos_usuario_autorizados: SystemGroup[];
+  codigo_motivo: string;
 };
 
 const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
@@ -107,6 +120,13 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
 
   const watchedMotivo = form.watch('motivo');
   //
+  const watchedTipoRubroAdicional = form.watch('tipo_rubro_adicional');
+  const watchedDiaInicioRange = form.watch('dia_inicio_range');
+  const watchedDiaFinRange = form.watch('dia_fin_range');
+  const watchedTipoRubroAdicionalMotivo = form.watch(
+    'tipo_rubro_adicional_motivo',
+  );
+  const watchedCode = form.watch('codigo_motivo');
 
   const {
     items: mantenedorActivaciones,
@@ -204,6 +224,8 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
       <>
         <CustomTypoLabel text="Datos de solicitud" />
 
+        <CustomTypoLabel text="Criterio" />
+
         <CustomAutocomplete<CriterioMantenedorActivacion>
           label="Criterio"
           name="criterio"
@@ -215,8 +237,70 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           isLoadingData={isLoadingMotivoRubroAdicionals}
           error={errors.criterio}
           helperText={errors.criterio?.message}
-          size={gridSizeMdLg6}
+          size={gridSizeMdLg12}
+          onChangeRawValue={i => {
+            form.setValue('tipo_rubro_adicional', i.tipo_mantenedor_activacion);
+            form.setValue('estados_linea_servicio', i.estados_linea_servicio);
+            form.setValue('dia_inicio_range', i.dia_inicio_range);
+            form.setValue('dia_fin_range', i.dia_fin_range);
+          }}
         />
+
+        {watchedTipoRubroAdicional ===
+        tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES ? (
+          <>
+            <CustomAutocompleteMultiple<any>
+              label="Estado linea de servicio"
+              name="estados_linea_servicio"
+              textFieldKey="nombre"
+              valueKey="value"
+              actualValueKey="value"
+              // options
+              options={[]}
+              defaultValue={
+                form.getValues().estados_linea_servicio?.length
+                  ? form
+                      .getValues()
+                      .estados_linea_servicio.filter(
+                        (estado: string) =>
+                          estado === LineaServicioEnumChoice.ACTIVO ||
+                          estado === LineaServicioEnumChoice.SUSPENDIDO,
+                      )
+                      .map((estado: string) => ({
+                        label: estado,
+                        value: estado,
+                      }))
+                  : []
+              }
+              isLoadingData={false}
+              // errors
+              control={form.control}
+              error={undefined}
+              helperText={undefined}
+              onlyActualValueKey
+              required={false}
+              size={gridSizeMdLg12}
+              disabled={true}
+            />
+          </>
+        ) : (
+          <>
+            <CustomTextFieldNoForm
+              label="Dia inicio"
+              size={gridSizeMdLg6}
+              value={watchedDiaInicioRange}
+              disabled
+            />
+            <CustomTextFieldNoForm
+              label="Dia fin"
+              size={gridSizeMdLg6}
+              value={watchedDiaFinRange}
+              disabled
+            />
+          </>
+        )}
+
+        <CustomTypoLabel text="Motivo" />
 
         <CustomAutocomplete<MotivoRubroAdicional>
           label="Motivo"
@@ -229,27 +313,90 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           isLoadingData={isLoadingMotivoRubroAdicionals}
           error={errors.motivo}
           helperText={errors.motivo?.message}
-          size={gridSizeMdLg6}
+          size={gridSizeMdLg12}
           onChangeRawValue={row => {
             form.setValue('valor', row?.valor);
+            form.setValue(
+              'grupos_usuario_autorizados',
+              row?.grupos_usuario_autorizados_data,
+            );
+            form.setValue(
+              'tipo_rubro_adicional_motivo',
+              row.tipo_rubro_adicional,
+            );
+            form.setValue('codigo_motivo', row.codigo);
+            console.log('codigo_motivo', row.codigo);
+            console.log(
+              'row?.grupos_usuario_autorizados_data',
+              row?.grupos_usuario_autorizados_data,
+            );
           }}
         />
+
+        {watchedTipoRubroAdicionalMotivo ===
+        tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES ? (
+          <>
+            <CustomAutocompleteMultiple<any>
+              label="Grupos Usuarios autorizados"
+              name="grupos_usuario_autorizados"
+              textFieldKey="name"
+              valueKey="name"
+              actualValueKey="id"
+              // options
+              options={[]}
+              defaultValue={
+                form.getValues().grupos_usuario_autorizados?.map(grupo => ({
+                  id: grupo.id,
+                  name: grupo.name,
+                })) || []
+              }
+              isLoadingData={false}
+              // errors
+              control={form.control}
+              error={undefined}
+              helperText={undefined}
+              onlyActualValueKey
+              required={false}
+              size={gridSizeMdLg6}
+              disabled={true}
+              limitTags={10}
+            />
+            <CustomTextFieldNoForm
+              label="Codigo"
+              size={gridSizeMdLg6}
+              value={watchedCode}
+              disabled
+            />
+          </>
+        ) : watchedTipoRubroAdicionalMotivo ===
+          tipoRubroAdicionalMantenedorEnumChoice.GENERAL ? (
+          <>
+            <CustomTextFieldNoForm
+              label="Codigo"
+              size={gridSizeMdLg12}
+              value={watchedCode}
+              disabled
+            />
+          </>
+        ) : watchedTipoRubroAdicionalMotivo ===
+          tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_RECONEXIONES ? (
+          <>
+            <CustomTextFieldNoForm
+              label="Codigo"
+              size={gridSizeMdLg12}
+              value={watchedCode}
+              disabled
+            />
+          </>
+        ) : (
+          <></>
+        )}
 
         <>
           <ActivacionesMantenedorActivacionesBase
             motivoMantenedorActivacion={watchedMotivo}
           />
         </>
-
-        <CustomTextField
-          label="Codigo"
-          name="code"
-          control={form.control}
-          defaultValue={form.getValues().code}
-          error={errors.code}
-          helperText={errors.code?.message}
-          size={gridSizeMdLg6}
-        />
 
         <CustomNumberTextField
           label="Permitido en el anio"

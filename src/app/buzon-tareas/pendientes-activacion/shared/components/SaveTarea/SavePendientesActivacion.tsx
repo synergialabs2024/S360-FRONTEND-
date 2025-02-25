@@ -29,7 +29,6 @@ import {
 } from '@/actions/app/cartera/buzon-tareas';
 import { useAuthStore } from '@/store/auth';
 import dayjs from 'dayjs';
-import { returnUrlCambioPlanPage } from '../../../pages/forms/CreatePendientesActivacionPage';
 import {
   BeneficioMantenedorBeneficios,
   BuzonTarea,
@@ -38,6 +37,7 @@ import {
 import { useFetchSolucionMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
 import { useFetchBeneficioMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
 import { tareaGestionadaFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/tarea.schema';
+import { returnUrlCambioPlanPage } from '@/app/cartera/cambio-plan/pages/tables/CambioPlanByStatePage';
 
 export interface SavePendientesActivacionProps {
   title: string;
