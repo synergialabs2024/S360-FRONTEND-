@@ -268,7 +268,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
 
                 setConfirmDialog({
                   isOpen: true,
-                  title: 'Cambiar Aplica Promocion',
+                  title: 'Cambiar Consideración de Reporte de Arcotel',
                   subtitle:
                     '¿Está seguro que desea cambiar el reporte arcotel de este registro?',
                   onConfirm: () => {
