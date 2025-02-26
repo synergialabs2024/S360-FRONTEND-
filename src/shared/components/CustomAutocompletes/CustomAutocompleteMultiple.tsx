@@ -9,7 +9,7 @@ import { Control, Controller, FieldError } from 'react-hook-form';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 
 import { gridSize } from '@/shared/constants/ui';
-import { GridSizeType } from '@/shared/interfaces';
+import { GridSizeType, SxPropsType } from '@/shared/interfaces';
 import { CustomCircularPorgress } from '../Loaders';
 
 export type CustomAutocompleteMultiplepleProps<T> = {
@@ -42,6 +42,9 @@ export type CustomAutocompleteMultiplepleProps<T> = {
   getOptionDisabled?: boolean;
 
   onlyActualValueKey?: boolean;
+
+  sxGridItem?: SxPropsType;
+  sxFormControl?: SxPropsType;
 };
 
 const icon = <MdCheckBoxOutlineBlank />;
@@ -72,14 +75,17 @@ export default function CustomAutocompleteMultiple<T>({
   size = gridSize,
 
   limitTags = 2,
+
+  sxGridItem,
+  sxFormControl,
 }: CustomAutocompleteMultiplepleProps<T>) {
   return (
     <>
-      <Grid item {...size}>
+      <Grid item {...size} sx={sxGridItem}>
         {isLoadingData ? (
           <CustomCircularPorgress />
         ) : (
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={sxFormControl}>
             <Controller
               name={name}
               control={control}
