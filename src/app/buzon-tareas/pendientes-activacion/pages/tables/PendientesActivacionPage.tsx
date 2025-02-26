@@ -21,7 +21,7 @@ const PendientesActivacionPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Pendientes Activacion"
+      title="Clientes suspendidos"
       showCreateBtn={false}
       isMainTableStates
     >

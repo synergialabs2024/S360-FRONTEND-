@@ -336,6 +336,12 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
         {watchedTipoRubroAdicionalMotivo ===
         tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES ? (
           <>
+            <CustomTextFieldNoForm
+              label="Codigo"
+              size={gridSizeMdLg12}
+              value={watchedCode}
+              disabled
+            />
             <CustomAutocompleteMultiple<any>
               label="Grupos Usuarios autorizados"
               name="grupos_usuario_autorizados"
@@ -357,15 +363,10 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
               helperText={undefined}
               onlyActualValueKey
               required={false}
-              size={gridSizeMdLg6}
+              size={gridSizeMdLg12}
               disabled={true}
               limitTags={10}
-            />
-            <CustomTextFieldNoForm
-              label="Codigo"
-              size={gridSizeMdLg6}
-              value={watchedCode}
-              disabled
+              sxGridItem={{ marginTop: 2 }}
             />
           </>
         ) : watchedTipoRubroAdicionalMotivo ===
@@ -397,6 +398,16 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
             motivoMantenedorActivacion={watchedMotivo}
           />
         </>
+
+        <CustomNumberTextField
+          label="Codigo"
+          name="code"
+          size={gridSizeMdLg6}
+          control={form.control}
+          defaultValue={form.getValues().code}
+          error={errors.code}
+          helperText={errors.code?.message}
+        />
 
         <CustomNumberTextField
           label="Permitido en el anio"
