@@ -10,6 +10,8 @@ import {
 import { useState } from 'react';
 import { IoEllipsisVerticalCircleOutline } from 'react-icons/io5';
 
+import { LineaServicioTSQEnum } from '@/actions/app';
+import { useGenericPATCH } from '@/actions/shared';
 import {
   gridSizeMdLg1,
   gridSizeMdLg5,
@@ -19,6 +21,7 @@ import {
   LineaServicioEnumChoice,
 } from '@/shared';
 import { ChipModelState, SingleIconButton } from '@/shared/components';
+import { useUiConfirmModalStore } from '@/store/ui';
 
 export type LineStateFibraClientProps = {
   serviceLine: LineaServicio;
@@ -68,6 +71,21 @@ const StyledMenu = styled((props: MenuProps) => (
 const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   serviceLine,
 }) => {
+  ///* global state ----------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
+
+  ///* handlers ----------------
+  const simpleSuspenion = useGenericPATCH<any, any>(
+    `/linea-servicio/suspend/${serviceLine.id}/`,
+    LineaServicioTSQEnum.LINEASERVICIO,
+    {
+      customMessageToast: 'Se ha suspendido la línea de servicio correctamente',
+    },
+  );
+
   ///* local state ----------------
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -81,7 +99,15 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
       alert('RETIRADO');
     },
     [LineaServicioEnumChoice.SUSPENDIDO]: () => {
-      alert('SUSPENDIDO');
+      setConfirmDialog({
+        isOpen: true,
+        title: 'Suspender línea de servicio',
+        subtitle: '¿Está seguro que desea suspender esta línea de servicio?',
+        onConfirm: () => {
+          setConfirmDialogIsOpen(false);
+          simpleSuspenion.mutate({});
+        },
+      });
     },
     [LineaServicioEnumChoice.RETENCION]: () => {
       alert('RETENCION');
