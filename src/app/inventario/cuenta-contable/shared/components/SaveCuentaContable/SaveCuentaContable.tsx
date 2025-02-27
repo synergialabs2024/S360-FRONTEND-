@@ -88,15 +88,26 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    delete data.tiene_cuenta_padre;
 
-    if (watchedCuentaPadre == cuenta_contable?.id) {
-      ToastWrapper.error('Cuenta Padre no puede elegirse a si mismo');
+    // Si tiene_cuenta_padre es true pero no seleccionó cuenta_padre
+    if (watchedTieneCuentaPadre && !watchedCuentaPadre) {
+      ToastWrapper.error('Debes elegir una Cuenta Padre');
+      return;
+    }
+
+    // Si la cuenta seleccionada como padre es la misma cuenta actual
+    if (
+      watchedCuentaPadre === cuenta_contable?.id &&
+      cuenta_contable?.created_at
+    ) {
+      ToastWrapper.error('Cuenta Padre no puede elegirse a sí mismo');
       form.setValue('tiene_cuenta_padre', !!form.getValues('cuenta_padre'));
       return;
     }
 
-    ///* upd
+    delete data.tiene_cuenta_padre;
+
+    ///* update
     if (cuenta_contable?.id) {
       updateCuentaContableMutation.mutate({ id: cuenta_contable.id!, data });
       return;
@@ -132,7 +143,7 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
         size={gridSizeMdLg6}
       />
       <CustomTextField
-        label="CODIGO"
+        label="Codigo"
         name="codigo"
         control={form.control}
         defaultValue={form.getValues().codigo}
@@ -168,17 +179,25 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
         <CustomAutocomplete<CuentaContable>
           label="Cuenta Padre"
           name="cuenta_padre"
-          // options
-          options={cuentaContablePagingRes?.data?.items || []}
+          // Filtra las opciones
+          options={
+            cuentaContablePagingRes?.data?.items.filter(item => {
+              if (cuenta_contable?.id) {
+                return item.id !== cuenta_contable?.id;
+              }
+              return true;
+            }) || []
+          }
           valueKey="nombre"
           actualValueKey="id"
-          defaultValue={form.getValues().cuenta_padre}
+          defaultValue={Number(form.getValues().cuenta_padre)}
           isLoadingData={isLoadingPaises || isRefetchingPaises}
-          // vaidation
+          // validación
           control={form.control}
           error={errors.cuenta_padre}
           helperText={errors.cuenta_padre?.message}
           required={false}
+          onChangeValue={value => form.setValue('cuenta_padre', Number(value))}
         />
       ) : null}
     </SingleFormBoxScene>

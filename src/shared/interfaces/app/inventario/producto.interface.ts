@@ -3,6 +3,7 @@ import { PagingMetaResponse } from '../../common';
 import { IVA } from '../administration';
 import { CategoriaProducto } from './categoria-producto.interface';
 import { ModeloInventario } from './modelo-inventario';
+import { CuentaContable } from './cuenta-contable';
 
 export interface ProductosPaginatedRes {
   status: number;
@@ -28,6 +29,7 @@ export interface Producto {
   metraje_relativo?: string; // to handle m in CodigoModeloProductoEnumChoice
 
   precios?: PrecioProducto[];
+  cuentas_contables?: CuentaContable[];
   tipo?: TipoProductoEnumChoice;
 
   created_at?: string;
