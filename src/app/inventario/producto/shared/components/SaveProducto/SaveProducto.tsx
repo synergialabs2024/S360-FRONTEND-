@@ -7,6 +7,7 @@ import {
   CreateProductoParamsBase,
   useCreateProducto,
   useFetchCategoriaProductos,
+  useFetchCuentaContables,
   useFetchIVAs,
   useFetchModeloInventarios,
   useUpdateProducto,
@@ -25,9 +26,14 @@ import {
   SelectTextFieldArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg2, gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg12,
+  gridSizeMdLg2,
+  gridSizeMdLg6,
+} from '@/shared/constants/ui';
 import {
   CategoriaProducto,
+  CuentaContable_Producto,
   IVA,
   ModeloInventario,
   Producto,
@@ -35,6 +41,7 @@ import {
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
 import { returnUrlProductosPage } from '../../../pages/tables/ProductosPage';
 import { PricesForm } from './PricesForm'; // Asegúrate de importar correctamente
+import CustomCuentaContable from '../../custom/CustomCuentaContable';
 
 export interface SaveProductoProps {
   title: string;
@@ -100,6 +107,15 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     isLoading: isLoadingCategorias,
     isRefetching: isRefetchingCategorias,
   } = useFetchCategoriaProductos({
+    params: {
+      page_size: 300,
+    },
+  });
+  const {
+    data: cuentaContablePaginatedRes,
+    isLoading: isLoadingCuentaContable,
+    isRefetching: isRefetchingCuentaContable,
+  } = useFetchCuentaContables({
     params: {
       page_size: 300,
     },
@@ -263,12 +279,29 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         isLoadingData={
           isLoadingModeloInventario || isRefetchingModeloInventario
         }
-        // validation
+        // validation cuenta_padre_data
         control={control}
         error={errors.modelo}
         helperText={errors.modelo?.message}
         size={gridSizeMdLg6}
       />
+      <CustomCuentaContable<CuentaContable_Producto>
+        label="Cuenta Contable"
+        name="cuentas_contables"
+        options={(cuentaContablePaginatedRes?.data?.items || []).filter(
+          (cuenta): cuenta is CuentaContable_Producto =>
+            cuenta.id !== undefined,
+        )}
+        isLoadingData={isLoadingCuentaContable || isRefetchingCuentaContable}
+        control={control}
+        size={gridSizeMdLg12}
+        limitTags={7}
+        defaultValue={form
+          .getValues()
+          .cuentas_contables?.map(item => item.id)
+          .filter(id => id !== undefined)}
+      />
+
       <SampleCheckbox
         label="Estado"
         name="state"
