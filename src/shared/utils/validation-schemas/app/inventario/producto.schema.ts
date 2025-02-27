@@ -50,6 +50,16 @@ export const productoFormSchema = yup.object().shape({
     .typeError('El campo reporte arcotel es requerido')
     .required('El campo reporte arcotel es requerido'),
 
+  cuentas_contables: yup
+    .array()
+    .of(
+      yup.object({
+        id: yup.string().required('El campo id es obligatorio'),
+      }),
+    )
+    .required('Las cuentas contables son obligatorias')
+    .min(1, 'Debe haber al menos una cuenta contable'),
+
   // ======================================
   // validate prices array
   precios: yup
