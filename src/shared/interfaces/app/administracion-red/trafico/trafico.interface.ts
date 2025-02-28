@@ -37,6 +37,7 @@ export interface TraficoDetalleConsumo {
 export interface Trafico {
   id?: number;
   username: string;
+  ip_address: string;
 }
 
 export type TraficoLimitData = Pick<Trafico, 'id' | 'username'>;

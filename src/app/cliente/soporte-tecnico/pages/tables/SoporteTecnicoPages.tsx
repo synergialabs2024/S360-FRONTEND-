@@ -1,3 +1,4 @@
+import { MdArrowRightAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 
 import {
@@ -10,14 +11,13 @@ import {
   useTableFilter,
   PermissionsEnum,
   TABLE_CONSTANTS,
-  useColumnsSoporteTecnico,
   useTableServerSideFiltering,
+  useColumnsClientes,
 } from '@/shared';
-import { useFetchOrdenTrabajos } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
-import { useUiConfirmModalStore } from '@/store/ui';
-import { hasPermission } from '@/shared/utils/auth';
+import { useFetchClientes } from '@/actions/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 
 export const returnUrlSoporteTecnico = ROUTER_PATHS.clientes.soporteTecnicoNav;
 
@@ -32,12 +32,6 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
 
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
   ///* table
   const {
     globalFilter,
@@ -48,35 +42,28 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
   } = useTableFilter();
   const { pageIndex, pageSize } = pagination;
 
+  ///* fetch data ---------------------------
   const {
-    data: OTPagingRes,
-    isLoading: isLoadingOT,
-    isRefetching: isRefetchingOT,
-  } = useFetchOrdenTrabajos({
-    enabled: true,
+    data: clientesPagingRes,
+    isLoading: isLoadingClientes,
+    isRefetching: isRefetchingClientes,
+  } = useFetchClientes({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
-
+      identificacion: searchTerm,
       ...filterObject,
-      filterByState: false,
+      is_installed: true,
     },
   });
 
-  ///* handlers
+  ///* handlers ---------------------------
   const onEdit = (cliente: Cliente) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Cliente',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlSoporteTecnico}/editar/${cliente.uuid}`);
-      },
-    });
+    const firstLine = cliente?.linea_servicio_data?.[0];
+    navigate(`${returnUrlSoporteTecnico}/${firstLine?.uuid}`);
   };
-  const { soporteTecnicoColumns } = useColumnsSoporteTecnico();
+  ///* columns ---------------------------
+  const { clientesFibraColumnsActivos } = useColumnsClientes();
 
   return (
     <SingleTableBoxScene
@@ -91,10 +78,10 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
       />
 
       <CustomTable<Cliente>
-        columns={soporteTecnicoColumns}
-        data={OTPagingRes?.data?.items || []}
-        isLoading={isLoadingOT}
-        isRefetching={isRefetchingOT}
+        columns={clientesFibraColumnsActivos}
+        data={clientesPagingRes?.data?.items || []}
+        isLoading={isLoadingClientes}
+        isRefetching={isRefetchingClientes}
         // // filters - server side
         enableManualFiltering={true}
         columnFilters={columnFilters}
@@ -104,16 +91,22 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={OTPagingRes?.data?.meta?.count}
+        rowCount={clientesPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
           PermissionsEnum.clientes_change_cliente,
         )}
         // crud
-        canEdit={hasPermission(PermissionsEnum.clientes_change_cliente)}
+        canEdit={hasAllPermissions([
+          PermissionsEnum.clientes_change_cliente,
+          PermissionsEnum.clientes_view_cliente,
+        ])}
         onEdit={onEdit}
         canDelete={false}
+        editIcon={<MdArrowRightAlt />}
+        editIconToolTipTitle="Ver detalle"
+        editIconTooltipPlacement="left"
       />
     </SingleTableBoxScene>
   );

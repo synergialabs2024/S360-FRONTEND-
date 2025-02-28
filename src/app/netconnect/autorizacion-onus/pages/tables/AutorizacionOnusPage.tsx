@@ -76,7 +76,7 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
     ///* create
     createAutorizacionONUMutation.mutate(
       {
-        olt_id: watchIdOLT,
+        olt_ids: watchIdOLT,
       },
       {
         onSuccess: async () => {

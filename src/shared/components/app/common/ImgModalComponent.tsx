@@ -1,11 +1,11 @@
-import { Grid, IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import React, { useState } from 'react';
-import { SingleIconButton } from '../../CustomButtons';
 import {
   IconPhoto,
   IconChevronLeft,
   IconChevronRight,
 } from '@tabler/icons-react';
+
 import { ScrollableDialogProps } from '../../CustomDialogs';
 
 export type ImgModalComponentProps = {
@@ -43,19 +43,17 @@ const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
 
   return (
     <>
-      <Grid container item xs={12} spacing={4}>
-        <Grid item xs={2}>
-          <SingleIconButton
-            startIcon={<IconPhoto />}
-            label="Imagen"
-            color="inherit"
-            onClick={() => {
-              setOpen(!open);
-            }}
-          />
-        </Grid>
-      </Grid>
-
+      <Tooltip title="Imagenes" arrow placement="top">
+        <IconButton
+          component="span"
+          color="primary"
+          size="small"
+          onClick={() => setOpen(!open)}
+          style={{ cursor: 'pointer' }}
+        >
+          <IconPhoto />
+        </IconButton>
+      </Tooltip>
       {open && (
         <ScrollableDialogProps
           open={open}

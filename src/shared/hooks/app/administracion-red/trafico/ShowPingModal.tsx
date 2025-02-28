@@ -1,34 +1,44 @@
-import { useForm } from 'react-hook-form';
-import { useMemo, useState } from 'react';
+import { IconBrandOpenSource } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  Alert,
+  Button,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 
-import { ScrollableDialogProps } from '@/shared/components';
-import { Button, Typography, Alert, Stack } from '@mui/material';
-import { getTraficoPing } from '@/actions/app';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import {
   TABLE_CONSTANTS,
   TRAFICO_PING_TYPE_ARRAY_CHOICES,
-  TraficoPing,
-} from '@/shared';
-import { SelectArrayStringSimple } from '../Common';
+} from '@/shared/constants';
+import { getTraficoPing } from '@/actions/app';
+import { TraficoPing } from '@/shared/interfaces';
+import { ScrollableDialogProps } from '@/shared/components';
+import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { SelectArrayStringSimple } from '@/app/administracion-red/trafico/custom';
 
-export type ModalDetallePingProps = {
+export type ShowPingModalProps = {
   modalTitle?: string;
-  viewMoreText: string;
-  listItems?: Record<string, any>;
+  viewMoreText?: string;
+  typeBtn: 'button' | 'icon';
+  ipItem: string;
 };
 
-const ModalDetallePing: React.FC<ModalDetallePingProps> = ({
-  viewMoreText,
+const ShowPingModal: React.FC<ShowPingModalProps> = ({
+  viewMoreText = 'PING',
   modalTitle = 'PING',
-  listItems = {},
+  ipItem,
+  typeBtn,
 }) => {
   ///* local state -----------------
   const [open, setOpen] = useState(false);
   const [datoTrace, setDatoTrace] = useState<TraficoPing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
+  const [errorMessage, setErrorMessage] = useState('');
 
   ///* form
   const { control, watch } = useForm({
@@ -41,10 +51,10 @@ const ModalDetallePing: React.FC<ModalDetallePingProps> = ({
 
   const callPing = async () => {
     setIsLoading(true);
-    setErrorMessage(''); // Reinicia el mensaje de error en cada intento
+    setErrorMessage('');
     try {
-      const pingNumber = Number(selectedPing); // Convierte el valor a número
-      const response = await getTraficoPing(listItems?.ip_address, pingNumber); // Usa el número convertido
+      const pingNumber = Number(selectedPing);
+      const response = await getTraficoPing(ipItem, pingNumber);
       if (response.status === 200) {
         setDatoTrace(response.console_output);
       }
@@ -97,19 +107,36 @@ const ModalDetallePing: React.FC<ModalDetallePingProps> = ({
   return (
     <>
       <Typography>
-        <Button
-          component="span"
-          color="primary"
-          variant="outlined"
-          size="small"
-          onClick={() => {
-            callPing();
-            setOpen(!open);
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          {viewMoreText}
-        </Button>
+        {typeBtn == 'button' ? (
+          <Button
+            component="span"
+            color="primary"
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              callPing();
+              setOpen(!open);
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            {viewMoreText}
+          </Button>
+        ) : (
+          <Tooltip title={'PING'} arrow placement="top">
+            <IconButton
+              component="span"
+              color="primary"
+              size="small"
+              onClick={() => {
+                callPing();
+                setOpen(!open);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
+              <IconBrandOpenSource />
+            </IconButton>
+          </Tooltip>
+        )}
       </Typography>
 
       {open && (
@@ -142,7 +169,9 @@ const ModalDetallePing: React.FC<ModalDetallePingProps> = ({
                 />
               </Stack>
               {errorMessage && (
-                <Alert severity="error">{errorMessage}</Alert> // Muestra el mensaje de error si existe
+                <Alert sx={{ m: 5 }} severity="error">
+                  {errorMessage}
+                </Alert>
               )}
               {!errorMessage && (
                 <SimpleTable<TraficoPing>
@@ -160,4 +189,4 @@ const ModalDetallePing: React.FC<ModalDetallePingProps> = ({
   );
 };
 
-export default ModalDetallePing;
+export default ShowPingModal;

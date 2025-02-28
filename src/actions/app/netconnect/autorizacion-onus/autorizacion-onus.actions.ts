@@ -137,8 +137,8 @@ export const getAuthONUs = async (params?: GetAuthONUsParams) => {
 };
 
 export const createAuthONU = async <T>(data: CreateAuthOnuParams<T>) => {
-  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
-  setIsGlobalLoading(true);
+  //const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  //setIsGlobalLoading(true);
 
   return post<AutorizacionOnu>('/olt-conect/olt/ont_autofind/', data, true);
 };
@@ -149,5 +149,5 @@ export const createAuthONUAuthorize = async <T>(
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   setIsGlobalLoading(true);
 
-  return post<AutorizacionOnu>('/ont-unauthorized/authorized/', data, true);
+  return post<AutorizacionOnu>('/ont-unauthorized/authorize/', data, true);
 };

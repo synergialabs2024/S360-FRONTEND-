@@ -1,10 +1,10 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { Eq_Ma_Utilizados } from '../modal';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import ShowSerieSTModal from '../modal/ShowSerieSTModal';
 import { emptyCellNested, emptyCellOneLevel } from '@/shared/utils';
+import { Eq_Ma_Utilizados } from '../modal/ShowEquipoMaterialUtilizadosModal';
 
 export const useColumnsEqMaUtilizado = () => {
   const utilizadosBaseColumns01 = useMemo<MRT_ColumnDef<Eq_Ma_Utilizados>[]>(

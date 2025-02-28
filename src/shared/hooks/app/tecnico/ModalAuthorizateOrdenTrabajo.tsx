@@ -1,5 +1,8 @@
 import { IconRouteSquare2 } from '@tabler/icons-react';
-import { gridSizeMdLg6 } from '@/shared/constants';
+import {
+  gridSizeMdLg6,
+  MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES,
+} from '@/shared/constants';
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,6 +25,7 @@ import {
 import { ToastWrapper } from '@/shared/wrappers';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { hasAllPermissions } from '@/shared/utils/auth';
+import { SelectArrayStringSimple } from '@/app/administracion-red/trafico/custom';
 
 export type ModalAuthorizateOrdenTrabajoProps = {
   authOnu: Record<string, any>;
@@ -85,6 +89,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
     defaultValues: {
       eth: 4,
       nap: authOnu.preventa_data.nap,
+      mode: 'routing',
     },
   });
   const {
@@ -93,6 +98,19 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
   } = form;
 
   useEffect(() => {
+    if (
+      Array.isArray(AuthOnusPagingRes?.data?.items) &&
+      AuthOnusPagingRes.data.items.length === 0
+    ) {
+      ToastWrapper.error('No se ha actualizado la Authenticacion de Onus');
+    }
+    if (
+      Array.isArray(OltsPagingRes?.data?.items) &&
+      OltsPagingRes.data.items.length === 0
+    ) {
+      ToastWrapper.error('No se ha actualizado OLT');
+    }
+
     if (
       AuthOnusPagingRes?.data?.items?.length &&
       OltsPagingRes?.data?.items?.length
@@ -172,7 +190,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
 
   const onSave = (data: SaveFormData) => {
     if (dataBeing) {
-      data.ont_model = AuthOnusPagingRes?.data?.items[0].ont_model;
+      data.ont_model = 1;
       data.vlan = optionsState.vlans || '';
       data.line_profile = optionsState.lineProfiles || '';
       data.traffic_table = optionsState.trafficTables || '';
@@ -180,7 +198,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
       data.port_pon = AuthOnusPagingRes?.data?.items[0].port_pon;
 
       createAuthOnuAutorizacionMutation.mutate(
-        { data: data },
+        { ...data },
         {
           onSuccess: () => {
             ToastWrapper.success('Se actualizo correctamente la ONU');
@@ -238,18 +256,6 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
             <Grid item container spacing={3} sx={{ mb: 3 }}>
               {dataBeing ? (
                 <>
-                  <CustomTextField
-                    label="TIPO"
-                    name="mode"
-                    control={form.control}
-                    defaultValue={
-                      AuthOnusPagingRes?.data?.items[0]?.olt_name || ''
-                    }
-                    error={errors.mode}
-                    helperText={errors.mode?.message}
-                    required={false}
-                    disabled
-                  />
                   <CustomNumberTextField
                     label="BOARD"
                     name="slot"
@@ -345,6 +351,17 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
                     size={gridSizeMdLg6}
                     required={false}
                     disabled
+                  />
+                  {/* =============== Autocompletes =============== */}
+                  <CustomTypoLabel
+                    text="TIPO"
+                    pt={CustomTypoLabelEnum.ptMiddlePosition}
+                  />
+                  <SelectArrayStringSimple
+                    label="TIPO"
+                    options={MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES}
+                    name="mode"
+                    control={form.control}
                   />
 
                   {/* =============== Autocompletes =============== */}

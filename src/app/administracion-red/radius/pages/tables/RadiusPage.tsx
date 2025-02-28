@@ -1,40 +1,26 @@
 import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { useFetchRadiuss } from '@/actions/app';
+import { fetchCombinedDataRadiusToken, useFetchRadiuss } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
-import {
-  CustomSearch,
-  CustomTable,
-  SingleTableBoxScene,
-} from '@/shared/components';
+import { SingleTableBoxScene } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Radius } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
+import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 
 export const returnUrlRadiusPage = ROUTER_PATHS.administracionRed.radiusNav;
 
 export type RadiusPageProps = {};
 
 const RadiusPage: React.FC<RadiusPageProps> = () => {
+  const [tokenRadius, setTokenRadius] = useState<{ access: string } | null>(
+    null,
+  );
+
   ///* Pendiente a cambio
   useCheckPermission(PermissionsEnum.administration_view_pais);
-
-  // server side filters - colums table
-  const { filterObject, columnFilters, setColumnFilters } =
-    useTableServerSideFiltering();
-
-  ///* table
-  const {
-    globalFilter,
-    pagination,
-    searchTerm,
-    onChangeFilter,
-    setPagination,
-  } = useTableFilter();
-  const { pageIndex, pageSize } = pagination;
 
   // Fetch data
   const {
@@ -42,16 +28,19 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
     isLoading,
     isRefetching,
   } = useFetchRadiuss({
-    enabled: true,
+    enabled: !!tokenRadius,
     params: {
-      page: pageIndex + 1,
-      page_size: pageSize,
-
-      username: searchTerm,
-
-      ...filterObject,
+      token: tokenRadius?.access ?? '',
     },
   });
+
+  useEffect(() => {
+    const x = async () => {
+      const result = await fetchCombinedDataRadiusToken();
+      setTokenRadius(result);
+    };
+    x();
+  }, []);
 
   // Define columns
   const columns = useMemo<MRT_ColumnDef<Radius>[]>(
@@ -86,28 +75,12 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
 
   return (
     <SingleTableBoxScene title="Radius" showCreateBtn={false}>
-      <CustomSearch
-        onChange={onChangeFilter}
-        value={globalFilter}
-        text="por nombre"
-      />
-
-      <CustomTable<Radius>
+      <SimpleTable<Radius>
         columns={columns}
         data={RadiusPagingRes?.data?.items || []}
-        isLoading={isLoading}
-        isRefetching={isRefetching}
-        // // filters - server side
-        enableManualFiltering={true}
-        columnFilters={columnFilters}
-        onColumnFiltersChange={setColumnFilters}
-        // // search
-        enableGlobalFilter={false}
-        // // pagination
-        pagination={pagination}
-        onPaging={setPagination}
-        rowCount={RadiusPagingRes?.data?.meta?.count}
-        enableActionsColumn={false}
+        isLoading={isLoading || isRefetching}
+        enableGlobalFilter={true}
+        showTotal={false}
       />
     </SingleTableBoxScene>
   );

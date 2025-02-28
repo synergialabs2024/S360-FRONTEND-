@@ -1,22 +1,25 @@
-import { useMemo, useState } from 'react';
-import { MRT_ColumnDef } from 'material-react-table';
-
-import { ScrollableDialogProps } from '@/shared/components';
-import { Button, Typography } from '@mui/material';
 import { getTraficoTrace } from '@/actions/app';
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { TABLE_CONSTANTS, TraficoTrace } from '@/shared';
+import { ScrollableDialogProps } from '@/shared/components';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { TraficoTrace } from '@/shared/interfaces';
+import { Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { IconRadar } from '@tabler/icons-react';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo, useState } from 'react';
 
-export type ModalDetalleTraceProps = {
+export type ShowTraceModalProps = {
   modalTitle?: string;
-  viewMoreText: string;
-  listItems?: Record<string, any>;
+  viewMoreText?: string;
+  typeBtn: 'button' | 'icon';
+  ipItem: string;
 };
 
-const ModalDetalleTrace: React.FC<ModalDetalleTraceProps> = ({
-  viewMoreText,
-  modalTitle = 'TRACEROUTE',
-  listItems = {},
+const ShowTraceModal: React.FC<ShowTraceModalProps> = ({
+  viewMoreText = 'TRACING',
+  modalTitle = 'TRACING',
+  ipItem,
+  typeBtn,
 }) => {
   ///* local state -----------------
   const [open, setOpen] = useState(false);
@@ -26,7 +29,8 @@ const ModalDetalleTrace: React.FC<ModalDetalleTraceProps> = ({
   const callTrace = async () => {
     setIsLoading(true);
     try {
-      const response = await getTraficoTrace(listItems?.ip_address);
+      const response = await getTraficoTrace(ipItem);
+      console.log(response);
       if (response.status === 200) {
         setDatoTrace(response.console_output);
       }
@@ -71,19 +75,36 @@ const ModalDetalleTrace: React.FC<ModalDetalleTraceProps> = ({
   return (
     <>
       <Typography>
-        <Button
-          component="span"
-          color="primary"
-          variant="outlined"
-          size="small"
-          onClick={() => {
-            callTrace();
-            setOpen(!open);
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          {viewMoreText}
-        </Button>
+        {typeBtn == 'button' ? (
+          <Button
+            component="span"
+            color="primary"
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              callTrace();
+              setOpen(!open);
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            {viewMoreText}
+          </Button>
+        ) : (
+          <Tooltip title={'TRACING'} arrow placement="top">
+            <IconButton
+              component="span"
+              color="primary"
+              size="small"
+              onClick={() => {
+                callTrace();
+                setOpen(!open);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
+              <IconRadar />
+            </IconButton>
+          </Tooltip>
+        )}
       </Typography>
 
       {open && (
@@ -108,4 +129,4 @@ const ModalDetalleTrace: React.FC<ModalDetalleTraceProps> = ({
   );
 };
 
-export default ModalDetalleTrace;
+export default ShowTraceModal;
