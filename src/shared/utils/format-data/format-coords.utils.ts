@@ -2,25 +2,34 @@ import { CoordenadasTypeString, Zona } from '@/shared';
 
 export const calcOtherZonesMultiPolygon = (
   zones: Zona[],
-  savedCoords: CoordenadasTypeString[] = [],
+  savedCoords: CoordenadasTypeString[][] = [],
 ) => {
-  const coordsArray = zones.map(zone => zone.coordenadas);
+  return zones
+    .filter(zone => zone.coordenadas?.length)
+    .map(zone => {
+      // Convertir coordenadas de la zona actual a formato numérico
+      const currentZoneCoords = zone?.coordenadas?.map(polygon =>
+        polygon.map(coord => ({
+          lat: parseFloat(coord.lat),
+          lng: parseFloat(coord.lng),
+        })),
+      );
 
-  const multiPolygon = coordsArray.map(coords => {
-    return (coords || [])
-      .filter(
-        coord =>
+      // Filtrar polígonos que no están en los guardados
+      return currentZoneCoords?.filter(
+        polygon =>
           !savedCoords.some(
-            savedCoord =>
-              savedCoord.lat === coord.lat && savedCoord.lng === coord.lng,
+            savedPolygon =>
+              // Comparar si el polígono actual existe en los guardados
+              JSON.stringify(savedPolygon.map(c => [c.lat, c.lng])) ===
+              JSON.stringify(
+                polygon.map(c => [c.lat.toString(), c.lng.toString()]),
+              ),
           ),
-      )
-      .map(coord => {
-        return [parseFloat(coord.lat), parseFloat(coord.lng)];
-      });
-  });
-
-  return multiPolygon?.length ? multiPolygon : [];
+      );
+    })
+    .flat() // Aplanar el array de arrays
+    .filter(polygon => polygon && polygon.length > 0); // Filtrar polígonos vacíos
 };
 
 /*
@@ -89,13 +98,16 @@ export const calcOtherZonesMultiPolygon = (
 */
 
 export const calcMultiPolygon = (zones: Zona[]) => {
-  const coordsArray = zones.map(zone => zone.coordenadas);
+  const multiPolygon = zones
+    .map(zone =>
+      (zone.coordenadas || []).map(
+        (
+          polygon, // Cada polígono en el multipolígono
+        ) =>
+          polygon.map(coord => [parseFloat(coord.lat), parseFloat(coord.lng)]),
+      ),
+    )
+    .flat(); // Aplanar todos los polígonos de todas las zonas
 
-  const multiPolygon = coordsArray.map(coords => {
-    return (coords || []).map(coord => {
-      return [parseFloat(coord.lat), parseFloat(coord.lng)];
-    });
-  });
-
-  return multiPolygon?.length ? multiPolygon : [];
+  return multiPolygon.length ? multiPolygon : [];
 };

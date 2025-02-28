@@ -47,7 +47,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
   const { MapPolygon, latLng, setLatLng } = useMapPolygonComponent({});
   useLocationCoords({ setLatLng });
 
-  const [coordsArray, setCoordsArray] = useState<CoordenadasType[]>([]);
+  const [coordsArray, setCoordsArray] = useState<CoordenadasType[][]>([]);
 
   ///* form -------------------
   const form = useForm<SaveFormData>({
@@ -128,10 +128,12 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
         'Debe trazar un área de cobertura y guardar el trazo',
       );
 
-    const mapedCoords = coordsArray.map(({ lat, lng }) => ({
-      lat: lat?.toString(),
-      lng: lng?.toString(),
-    }));
+    const mapedCoords = coordsArray?.map(polygonArr =>
+      polygonArr.map(({ lat, lng }) => ({
+        lat: lat?.toString(),
+        lng: lng?.toString(),
+      })),
+    );
 
     ///* upd
     if (zona?.id) {

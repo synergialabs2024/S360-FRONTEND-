@@ -17,7 +17,7 @@ export interface Zona {
   name: string;
   has_coverage: boolean;
 
-  coordenadas?: CoordenadasTypeString[];
+  coordenadas?: CoordenadasTypeString[][];
 
   state: boolean;
   created_at?: string;

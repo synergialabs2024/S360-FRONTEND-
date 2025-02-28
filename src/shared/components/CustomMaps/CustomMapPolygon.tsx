@@ -48,10 +48,13 @@ type CoordenadasType = {
   lng: number;
 };
 
-// Helper function to calculate polygon center
-function calculatePolygonCenter(polygon: CoordenadasType[]): CoordenadasType {
-  const latlngs = polygon.map(coord => new L.LatLng(coord.lat, coord.lng));
-  const polygonBounds = L.latLngBounds(latlngs);
+function calculatePolygonCenter(polygon: CoordenadasType[][]): CoordenadasType {
+  const allPoints = polygon.reduce(
+    (acc, poly) =>
+      acc.concat(poly.map(coord => new L.LatLng(coord.lat, coord.lng))),
+    [] as L.LatLng[],
+  );
+  const polygonBounds = L.latLngBounds(allPoints);
   const center = polygonBounds.getCenter();
 
   return { lat: center.lat, lng: center.lng };
@@ -63,11 +66,11 @@ export type CustomMapPolygonProps = {
   size?: GridSizeType;
   limitOnePolygon?: boolean;
 
-  polygon?: CoordenadasType[];
-  otherZones?: CoordenadasType[];
+  polygon?: CoordenadasType[][];
+  otherZones?: CoordenadasType[][];
 
   onCancel?: () => void;
-  onSave?: (arrayCoords: CoordenadasType[]) => void;
+  onSave?: (arrayCoords: CoordenadasType[][]) => void;
 };
 
 const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
@@ -91,12 +94,10 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
 
   ///* local state --------------------
   const [isEdittingAlredySavedPolygon, setIsEdittingAlredySavedPolygon] =
-    useState<boolean>(+(polygon?.length || 0) > 0);
+    useState<boolean>(polygon.length > 0);
 
-  const savedPolygonArray = !isEdittingAlredySavedPolygon ? [] : polygon;
-  const savedMultiPolygonArray = !isEdittingAlredySavedPolygon
-    ? otherZones
-    : [];
+  const savedPolygonArray = isEdittingAlredySavedPolygon ? polygon : [];
+  const savedMultiPolygonArray = otherZones;
 
   ///* Function to clear all polygons
   const clearPolygons = () => {
@@ -122,14 +123,15 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
       featureGroupRef.current
     ) {
       featureGroupRef.current.clearLayers();
-      const lPolygon = L.polygon(
-        polygon.map(coord => [coord.lat, coord.lng]),
-        purpleOptions,
-      );
-      featureGroupRef.current.addLayer(lPolygon);
-      const latlngs = lPolygon.getLatLngs();
-      if (latlngs && latlngs[0]) {
-        setCoordsArray(latlngs[0] as any);
+      polygon.forEach(poly => {
+        const lPolygon = L.polygon(
+          poly.map(coord => [coord.lat, coord.lng]),
+          purpleOptions,
+        );
+        featureGroupRef.current?.addLayer(lPolygon);
+      });
+      if (polygon[0].length) {
+        setCoordsArray(polygon as any);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,7 +186,7 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                   }
 
                   setCanDrawPolygon(false);
-                  onSave && onSave(coordsArray);
+                  onSave && onSave(coordsArray as any);
                 }}
                 sxGrid={{ pb: 3 }}
               />
@@ -254,21 +256,19 @@ const CustomMapPolygon: React.FC<CustomMapPolygonProps> = ({
                     );
                   } else {
                     const latlngs = layer.getLatLngs();
-                    setCoordsArray(latlngs[0]);
+                    setCoordsArray(latlngs as any);
                   }
                 }
               }}
               onEdited={e => {
                 const { layers } = e;
                 const latlngs = layers.getLayers()[0].getLatLngs();
-
-                setCoordsArray(latlngs[0]);
+                setCoordsArray(latlngs as any);
               }}
               onDeleted={e => {
                 const { layers } = e;
                 const latlngs = layers.getLayers()[0].getLatLngs();
-
-                setCoordsArray(latlngs[0]);
+                setCoordsArray(latlngs as any);
               }}
             />
           </FeatureGroup>
