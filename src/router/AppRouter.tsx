@@ -1658,6 +1658,14 @@ const SoporteTecnicoPages = Loadable(
       import('@/app/cliente/soporte-tecnico/pages/tables/SoporteTecnicoPages'),
   ),
 );
+const SoporteTecnicoFormPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cliente/soporte-tecnico/pages/forms/SoporteTecnicoFormPage'
+      ),
+  ),
+);
 
 //* activaciones ---------
 const ActivacionesInstalacionesMainPage = Loadable(
@@ -2918,8 +2926,12 @@ const AppRouter = [
 
           ///* Soporte Tecnico
           {
-            path: ROUTER_PATHS.clientes.soporteTecnicoNav,
+            path: ROUTER_PATHS.clientes.soporteTecnico,
             element: <SoporteTecnicoPages />,
+          },
+          {
+            path: ROUTER_PATHS.clientes.soporteTecnicoEditar,
+            element: <SoporteTecnicoFormPage />,
           },
         ],
       },

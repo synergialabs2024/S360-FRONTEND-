@@ -1205,7 +1205,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            */
             renderByModule(SidenavModulesEnum.NETCONNECT_AUDITORIA_CONSUMO, {
               id: 'auditoria-consumos',
               title: 'Auditoría de consumos',
@@ -1218,6 +1217,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.netconnect.ontModelsNav,
             }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Soporte Tecnico ----------------

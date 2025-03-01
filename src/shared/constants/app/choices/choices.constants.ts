@@ -1349,3 +1349,12 @@ export const TIPO_RUBRO_ADICIONAL_MANTENEDOR_ARRAY_CHOICES = [
   tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES,
   tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_RECONEXIONES,
 ];
+
+export enum modeAuthorizateTypeEnumChoice {
+  ROUTING = 'routing',
+  BRIDGING = 'bridging',
+}
+export const MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES = [
+  modeAuthorizateTypeEnumChoice.ROUTING,
+  modeAuthorizateTypeEnumChoice.BRIDGING,
+];

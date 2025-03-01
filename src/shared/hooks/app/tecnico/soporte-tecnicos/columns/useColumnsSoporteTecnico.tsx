@@ -8,7 +8,7 @@ import {
 } from '@/shared/utils';
 import { Cliente } from '@/shared/interfaces';
 import { TABLE_CONSTANTS } from '@/shared/constants';
-import ShowEquipoMaterialUtilizadosModal from '../modal/ShowEquipoMaterialUtilizadosModal';
+import { ShowEquipoMaterialUtilizadosModal } from '../modal';
 
 export type ClienteSTTableType = Cliente & {
   materiales_utilizados?: string[];

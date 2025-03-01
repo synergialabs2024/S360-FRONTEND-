@@ -1,2 +1,2 @@
-export * from './ShowEquipoMaterialUtilizadosModal';
-export * from './ShowSerieSTModal';
+export { default as ShowEquipoMaterialUtilizadosModal } from './ShowEquipoMaterialUtilizadosModal';
+export { default as ShowSerieSTModal } from './ShowSerieSTModal';

@@ -226,6 +226,7 @@ export const ROUTER_PATHS = {
 
     //* Soporte Tecnico
     soporteTecnico: 'soporte-tecnico',
+    soporteTecnicoEditar: 'soporte-tecnico/:uuid',
     soporteTecnicoNav: '/clientes/soporte-tecnico',
   },
   /////* Cartera ----------------

@@ -11,7 +11,8 @@ export interface SimpleTableProps<T extends MRT_RowData> {
   data: T[];
   isLoading?: boolean;
   enableGlobalFilter?: boolean;
-  centerColumns?: boolean; // Nuevo prop
+  centerColumns?: boolean;
+  showTotal?: boolean;
 }
 
 function SimpleTable<T extends MRT_RowData>({
@@ -19,7 +20,8 @@ function SimpleTable<T extends MRT_RowData>({
   data,
   isLoading = false,
   enableGlobalFilter = true,
-  centerColumns = false, // Predeterminado en false
+  centerColumns = false,
+  showTotal = true,
 }: SimpleTableProps<T>) {
   const theme = useTheme();
 
@@ -61,12 +63,14 @@ function SimpleTable<T extends MRT_RowData>({
 
   return (
     <Box>
-      <Typography
-        variant="subtitle2"
-        style={{ fontWeight: 'bold', color: theme.palette.grey[600] }}
-      >
-        Total Registros: {data.length}
-      </Typography>
+      {showTotal ? (
+        <Typography
+          variant="subtitle2"
+          style={{ fontWeight: 'bold', color: theme.palette.grey[600] }}
+        >
+          Total Registros: {data.length}
+        </Typography>
+      ) : null}
       <MaterialReactTable table={table} />
     </Box>
   );

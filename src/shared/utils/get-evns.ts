@@ -10,4 +10,8 @@ export const getEnvs = () => ({
 
   VITE_MINIO_ENDPOINT: import.meta.env.VITE_MINIO_ENDPOINT,
   VITE_MINIO_BUCKET_NAME: import.meta.env.VITE_MINIO_BUCKET_NAME,
+
+  VITE_YIGA5_RADIUS_USER: import.meta.env.VITE_YIGA5_RADIUS_USER,
+  VITE_YIGA5_RADIUS_PASS: import.meta.env.VITE_YIGA5_RADIUS_PASS,
+  VITE_YIGA5_URL_RADIUS: import.meta.env.VITE_YIGA5_URL_RADIUS,
 });

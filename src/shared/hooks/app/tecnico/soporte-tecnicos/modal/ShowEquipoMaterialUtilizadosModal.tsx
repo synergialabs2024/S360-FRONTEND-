@@ -1,5 +1,5 @@
-import { IconBrandCodesandbox } from '@tabler/icons-react';
-import { Grid, IconButton } from '@mui/material';
+import { IconBrandAsana, IconCheckupList } from '@tabler/icons-react';
+import { Grid, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 import { useColumnsEqMaUtilizado } from '../columns';
@@ -9,6 +9,7 @@ import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 export type ShowEquipoMaterialUtilizadosModalProps = {
   Arrays: any;
   tipo_utilizado: 'equipo' | 'material';
+  title?: string;
 };
 
 export interface Eq_Ma_Utilizados {
@@ -20,7 +21,7 @@ export interface Eq_Ma_Utilizados {
 
 const ShowEquipoMaterialUtilizadosModal: React.FC<
   ShowEquipoMaterialUtilizadosModalProps
-> = ({ Arrays = [], tipo_utilizado }) => {
+> = ({ Arrays = [], tipo_utilizado, title = 'Productos' }) => {
   //* State local
   const [open, setOpen] = useState(false);
 
@@ -37,9 +38,9 @@ const ShowEquipoMaterialUtilizadosModal: React.FC<
         <Grid item xs={12}>
           <SimpleTable<Eq_Ma_Utilizados>
             columns={
-              tipo_utilizado == 'equipo'
+              tipo_utilizado === 'equipo'
                 ? equipoUtilizadoColumns
-                : tipo_utilizado == 'material'
+                : tipo_utilizado === 'material'
                   ? materialUtilizadoColumns
                   : generalUtilizadoColumns
             }
@@ -55,21 +56,31 @@ const ShowEquipoMaterialUtilizadosModal: React.FC<
 
   return (
     <>
-      <IconButton
-        component="span"
-        color="primary"
-        size="small"
-        onClick={() => setOpen(!open)}
-        style={{ cursor: 'pointer' }}
+      <Tooltip
+        title={tipo_utilizado === 'equipo' ? 'Equipo' : 'Material'}
+        arrow
+        placement="top"
       >
-        <IconBrandCodesandbox />
-      </IconButton>
+        <IconButton
+          component="span"
+          color="primary"
+          size="small"
+          onClick={() => setOpen(!open)}
+          style={{ cursor: 'pointer' }}
+        >
+          {tipo_utilizado === 'equipo' ? (
+            <IconBrandAsana />
+          ) : (
+            <IconCheckupList />
+          )}
+        </IconButton>
+      </Tooltip>
       {open && (
         <ScrollableDialogProps
           open={open}
           onClose={() => setOpen(false)}
           cancelTextBtn="Cerrar"
-          title="Productos"
+          title={title}
           contentNode={<Section />}
         />
       )}
