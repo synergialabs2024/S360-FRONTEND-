@@ -114,6 +114,10 @@ export const useUpdateSolicitudDesbloqueoVentas = <T>({
         );
     },
     onError: error => {
+      queryClient.invalidateQueries({
+        queryKey: [SolicitudDesbloqueoVentasTSQEnum.SOLICITUDDESBLOQUEOVENTASS],
+      });
+
       enableErrorNavigate &&
         navigate &&
         returnUrl &&

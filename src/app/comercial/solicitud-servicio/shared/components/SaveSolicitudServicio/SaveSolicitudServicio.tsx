@@ -262,8 +262,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         if (isSolictudServicioBlocked) {
           setConfirmDialog({
             isOpen: true,
-            title: 'Prospecto existente',
-            subtitle: `Prospecto registrado hace ${timeBlocked} ${
+            title: 'Solicitante existente',
+            subtitle: `Solicitante registrado hace ${timeBlocked} ${
               minutesBlocked > 60 ? 'horas' : 'minutos'
             }. Para poderlo ingresar en un nuevo proceso debe solicitar desbloqueo o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}. 
         ¿Desea solicitar desbloqueo?`,
@@ -285,7 +285,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           // new sol_serv not required, just change vendedor q solicita reasignacion
           setConfirmDialog({
             isOpen: true,
-            title: 'Prospecto en preventa',
+            title: 'Solicitante en preventa',
             subtitle: `Preventa registrada hace ${timeBlocked} ${
               minutesBlocked > 60 ? 'horas' : 'minutos'
             }. Para poderlo ingresar en un nuevo proceso debe solicitar la liberación de la preventa o esperar hasta ${blockedUntil.format('DD/MM/YYYY HH:mm')}.
