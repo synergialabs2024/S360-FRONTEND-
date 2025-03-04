@@ -488,7 +488,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...prevForm,
       ...rest,
       estadoOtp:
-        updatedSolServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
+        updatedSolServicio?.codigos_otp_data?.at(0)?.estado_otp || null,
 
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       email: prevForm.email,
@@ -680,6 +680,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     await createOTP.mutateAsync({
       celular: watchedCelular,
       identificacion: form.getValues().identificacion!,
+      solicitud_servicio: solicitudServicio?.id!,
     });
   };
   const handleNewOtp = async () => {
@@ -691,6 +692,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     resetOtp.mutateAsync({
       celular: watchedCelular,
       identificacion: form.getValues().identificacion!,
+      solicitud_servicio: solicitudServicio?.id!,
     });
   };
 
@@ -781,8 +783,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
     reset({
       ...sanitizedSolicitudServicio,
-      estadoOtp:
-        solicitudServicio?.codigos_otp_data?.at(-1)?.estado_otp || null,
+      estadoOtp: solicitudServicio?.codigos_otp_data?.at(0)?.estado_otp || null,
 
       tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,

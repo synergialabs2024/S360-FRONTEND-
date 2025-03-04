@@ -113,7 +113,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
         validateOtp.mutate({
-          identificacion: otp.solicitud_servicio_data?.at(-1)?.identificacion!,
+          identificacion: otp.solicitud_servicio_data?.identificacion!,
           codigo_otp: otp.codigo_otp,
         });
       },
@@ -130,7 +130,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => {
-          const solService = row.original?.solicitud_servicio_data?.at(-1);
+          const solService = row.original?.solicitud_servicio_data;
           return solService?.numero_referencia || 'N/A';
         },
       },
@@ -149,7 +149,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => {
-          const solService = row.original?.solicitud_servicio_data?.at(-1);
+          const solService = row.original?.solicitud_servicio_data;
           return solService?.razon_social || 'N/A';
         },
       },

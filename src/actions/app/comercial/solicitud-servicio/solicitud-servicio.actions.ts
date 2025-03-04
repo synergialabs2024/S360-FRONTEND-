@@ -311,6 +311,7 @@ export const consultaEquifax = async (
 export type GenerateOtpCodeParams = {
   identificacion: string;
   celular: string;
+  solicitud_servicio: number;
 };
 export const createOtpCode = async (data: GenerateOtpCodeParams) => {
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
