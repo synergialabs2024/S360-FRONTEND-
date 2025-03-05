@@ -16,4 +16,9 @@ export const solicitudDevolucionFormSchema = yup.object({
     .string()
     .required('El campo nombre es requerido')
     .max(100, 'El campo nombre no debe exceder los 100 caracteres'),
+  user_create: yup
+    .number()
+    .typeError('El campo usuario es requerido')
+    .optional()
+    .nullable(),
 });

@@ -26,7 +26,7 @@ export const useColumnsIngresoMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return <ShowSeriesModal Arrays={row.original.productos} />;
+          return <ShowSeriesModal Arrays={row.original} />;
         },
       },
     ],
@@ -74,6 +74,12 @@ export const useColumnsIngresoMaterial = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['motivo_ingreso_data', 'nombre']),
+      },
+      {
+        accessorKey: 'user_create__name',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['user_create']),
       },
     ],
     [],

@@ -11,12 +11,17 @@ export interface SolicitudMaterialPaginatedRes {
 export interface SolicitudMaterial {
   id?: number;
   uuid?: string;
+  secuencial?: string;
+
   state: boolean;
-  estado_solicitud?: string;
   observacion: string;
   productos: Producto[];
+  estado_solicitud?: string;
+
+  ///* fk
   bodega: number;
   ubicacion: number;
+  user_create: number;
 
   created_at?: string;
   modified_at?: string;

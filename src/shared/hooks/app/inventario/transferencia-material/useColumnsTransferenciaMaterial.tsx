@@ -70,7 +70,7 @@ export const useColumnsTransferenciaMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
-          return <ShowSeriesModal Arrays={row.original.productos} />;
+          return <ShowSeriesModal Arrays={row.original} />;
         },
       },
     ],
@@ -134,6 +134,12 @@ export const useColumnsTransferenciaMaterial = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['motivo_transferencia_data', 'nombre']),
+      },
+      {
+        accessorKey: 'user_create__name',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['user_create']),
       },
     ],
     [],
@@ -261,6 +267,7 @@ export const useColumnsTransferenciaMaterial = () => {
               Arrays={row.original}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               cantidadBoolean={obtenerValor(cantidad)}
+              randomButton={true}
               onDataChange={newData => {
                 onChangeSerieInit(newData, row.original);
               }}

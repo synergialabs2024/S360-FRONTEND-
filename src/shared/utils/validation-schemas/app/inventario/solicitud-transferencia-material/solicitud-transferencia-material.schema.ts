@@ -24,4 +24,9 @@ export const solicitudTransferenciaMaterialFormSchema = yup.object({
     .number()
     .typeError('El campo ubicacion destino es requerido')
     .nullable(),
+  user_create: yup
+    .number()
+    .typeError('El campo usuario es requerido')
+    .optional()
+    .nullable(),
 });

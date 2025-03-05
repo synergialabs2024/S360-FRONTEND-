@@ -28,7 +28,7 @@ export const useColumnsSolicitudMaterial = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
-          return <ShowSolicitudMaterialModal Arrays={row.original.productos} />;
+          return <ShowSolicitudMaterialModal Arrays={row.original} />;
         },
       },
       {
@@ -69,6 +69,12 @@ export const useColumnsSolicitudMaterial = () => {
         header: 'UBICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
+      },
+      {
+        accessorKey: 'user_create__name',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['user_create']),
       },
     ],
     [],

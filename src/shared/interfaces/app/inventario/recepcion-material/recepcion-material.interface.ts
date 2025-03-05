@@ -13,6 +13,7 @@ export interface RecepcionMaterial {
   id?: number;
   uuid?: string;
   state: boolean;
+  user_create: any;
 
   observacion: string;
   productos: Productos[];
@@ -30,11 +31,12 @@ export interface RecepcionMaterial {
 }
 
 interface Productos {
+  producto: number | undefined;
   stock_up?: number;
-  requiere_series: boolean;
+  requiere_series?: boolean;
   cantidad: number;
   series: any[];
-  codigo: string;
+  codigo?: string;
 }
 
 export type RecepcionMaterialLimitData = Pick<RecepcionMaterial, 'uuid' | 'id'>;

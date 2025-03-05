@@ -26,4 +26,9 @@ export const egresoMaterialFormSchema = yup.object({
     .typeError('El campo motivo egreso es requerido')
     .optional()
     .nullable(),
+  user_create: yup
+    .number()
+    .typeError('El campo usuario es requerido')
+    .optional()
+    .nullable(),
 });

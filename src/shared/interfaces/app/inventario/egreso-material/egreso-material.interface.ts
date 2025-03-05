@@ -20,6 +20,7 @@ export interface EgresoMaterial {
   bodega: number;
   ubicacion: number;
   motivo_egreso: number;
+  user_create: number;
 
   created_at?: string;
   modified_at?: string;

@@ -144,6 +144,12 @@ export const useColumnsMovimientoMaterial = () => {
           );
         },
       },
+      {
+        accessorKey: 'user_create__name',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['user_create']),
+      },
     ],
     [],
   );

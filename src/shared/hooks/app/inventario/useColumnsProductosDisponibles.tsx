@@ -86,13 +86,6 @@ export const useColumnsProductosDisponibles = ({
   >(
     () => [
       {
-        accessorKey: 'categoria_data__name',
-        header: 'CATEGORIA',
-        enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
-      },
-      {
         accessorKey: 'codigo',
         header: 'CÓDIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
@@ -103,6 +96,13 @@ export const useColumnsProductosDisponibles = ({
         header: 'DESCRIPCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
+      },
+      {
+        accessorKey: 'categoria_data__name',
+        header: 'CATEGORIA',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
       },
     ],
     [],
@@ -149,6 +149,7 @@ export const useColumnsProductosDisponibles = ({
             <SeriesProductoModal
               tipoSerie={row.original.requiere_series}
               Arrays={row.original}
+              randomButton={true}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               cantidadBoolean={obtenerValor(cantidad)}
               onDataChange={newData => onChangeSerieInit(newData, row.original)}
@@ -165,6 +166,12 @@ export const useColumnsProductosDisponibles = ({
   >(
     () => [
       ...baseColumnsIngreso01,
+      {
+        accessorKey: 'stock',
+        header: 'STOCK GLOBAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'stock'),
+      },
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -235,7 +242,26 @@ export const useColumnsProductosDisponibles = ({
     MRT_ColumnDef<ProductosDisponiblesTableType>[]
   >(
     () => [
-      ...baseColumnsIngreso01,
+      {
+        accessorKey: 'remove',
+        header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => (
+          <SingleIconButton
+            label="Remover"
+            startIcon={<IoMdTrash />}
+            color="error"
+            tooltipPlacement="right-end"
+            onClick={() => {
+              removeSelectedItem({
+                item: row.original,
+                keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
+              });
+            }}
+            justifyContent="center"
+          />
+        ),
+      },
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -256,6 +282,26 @@ export const useColumnsProductosDisponibles = ({
         },
       },
       ...baseColumnsProductosDisponibles02,
+      ...baseColumnsIngreso01,
+      {
+        accessorKey: 'stock_up',
+        header: 'STOCK ACTUAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'stock_up'),
+      },
+    ],
+    [
+      baseColumnsIngreso01,
+      baseColumnsProductosDisponibles02,
+      onChangePuntaInit,
+      removeSelectedItem,
+    ],
+  );
+
+  const crearMaterialColumnsSinSerie = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
       {
         accessorKey: 'remove',
         header: 'ACCIONES',
@@ -276,20 +322,6 @@ export const useColumnsProductosDisponibles = ({
           />
         ),
       },
-    ],
-    [
-      baseColumnsIngreso01,
-      baseColumnsProductosDisponibles02,
-      onChangePuntaInit,
-      removeSelectedItem,
-    ],
-  );
-
-  const crearMaterialColumnsSinSerie = useMemo<
-    MRT_ColumnDef<ProductosDisponiblesTableType>[]
-  >(
-    () => [
-      ...baseColumnsIngreso01,
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
@@ -309,26 +341,7 @@ export const useColumnsProductosDisponibles = ({
           );
         },
       },
-      {
-        accessorKey: 'remove',
-        header: 'ACCIONES',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => (
-          <SingleIconButton
-            label="Remover"
-            startIcon={<IoMdTrash />}
-            color="error"
-            tooltipPlacement="right-end"
-            onClick={() => {
-              removeSelectedItem({
-                item: row.original,
-                keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
-              });
-            }}
-            justifyContent="center"
-          />
-        ),
-      },
+      ...baseColumnsIngreso01,
     ],
     [baseColumnsIngreso01, onChangePuntaInit, removeSelectedItem],
   );
@@ -354,7 +367,7 @@ export const useColumnsProductosDisponibles = ({
         },
       },
       {
-        accessorKey: 'cantidad_aprobada',
+        accessorKey: 'cantidad',
         header: 'CANTIDAD APROBADA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {

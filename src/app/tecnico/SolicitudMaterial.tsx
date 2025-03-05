@@ -34,14 +34,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { useCreateSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 
-export interface SaveIngresoMaterialProps {
+export interface SaveSolicitudMaterialProps {
   title: string;
   ingresoMaterial?: IngresoMaterial;
 }
 
 type SaveFormData = CreateIngresoMaterialParamsBase & {};
 
-const SolicitudMaterial: React.FC<SaveIngresoMaterialProps> = ({
+const SolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   title,
   ingresoMaterial,
 }) => {

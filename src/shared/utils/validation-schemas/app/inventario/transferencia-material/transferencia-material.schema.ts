@@ -31,4 +31,9 @@ export const transferenciaMaterialFormSchema = yup.object({
     .number()
     .typeError('El campo motivo transferencia es requerido')
     .nullable(),
+  user_create: yup
+    .number()
+    .typeError('El campo usuario es requerido')
+    .optional()
+    .nullable(),
 });

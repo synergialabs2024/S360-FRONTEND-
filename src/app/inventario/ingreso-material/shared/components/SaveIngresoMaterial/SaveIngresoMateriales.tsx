@@ -1,50 +1,56 @@
-import { FiPlus } from 'react-icons/fi';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
 import { Grid } from '@mui/material';
 
 import {
-  CreateIngresoMaterialParamsBase,
-  useCreateIngresoMaterial,
-  useFetchBodegas,
-  useFetchMotivoIngreso,
-  useFetchUbicacions,
-} from '@/actions/app';
+  CustomTextArea,
+  CustomTypoLabel,
+  CustomAutocomplete,
+  CustomMinimalTable,
+  CustomSingleButton,
+  SingleFormBoxScene,
+  CustomTypoLabelEnum,
+} from '@/shared/components';
 import {
   Bodega,
+  Ubicacion,
+  useLoaders,
+  ToastWrapper,
+  MotivoIngreso,
   IngresoMaterial,
   ingresoMaterialFormSchema,
-  Ubicacion,
-  ToastWrapper,
-  useLoaders,
   ProductosDisponiblesModal,
-  MotivoIngreso,
   useColumnsProductosDisponibles,
   ProductosDisponiblesTableType,
   gridSizeMdLg4,
 } from '@/shared';
 import {
-  CustomAutocomplete,
-  CustomMinimalTable,
-  CustomSingleButton,
-  CustomTextArea,
-  CustomTypoLabel,
-  CustomTypoLabelEnum,
-  SingleFormBoxScene,
-} from '@/shared/components';
-import { yupResolver } from '@hookform/resolvers/yup';
+  useFetchBodegas,
+  useFetchProductos,
+  useFetchUbicacions,
+  useFetchMotivoIngreso,
+  useCreateIngresoMaterial,
+  CreateIngresoMaterialParamsBase,
+} from '@/actions/app';
+import { useAuthStore } from '@/store/auth';
 import { useProductosStore } from '@/store/app';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMaterialesPage';
 
-export interface SaveIngresoMaterialProps {
+export interface SaveIngresoMaterialesProps {
   title: string;
   ingresoMaterial?: IngresoMaterial;
 }
 
 type SaveFormData = CreateIngresoMaterialParamsBase & {};
 
-const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
+const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
+  title,
+}) => {
+  const user = useAuthStore(s => s.user);
+
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
   const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
@@ -61,6 +67,7 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     resolver: yupResolver(ingresoMaterialFormSchema) as any,
     defaultValues: {
       state: true,
+      user_create: user?.id,
     },
   });
 
@@ -103,6 +110,11 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
       page_size: 1200,
     },
   });
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
+    },
+  });
 
   ///* mutations
   const createIngresoMaterialMutation = useCreateIngresoMaterial({
@@ -116,36 +128,68 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
     if (!isValid) return;
 
     const mappedProductos = productosDisponibles.map(producto => ({
-      id: producto.id,
       producto: producto.id,
-      producto_uuid: producto.uuid,
       cantidad: producto.cantidad,
-      cantidad_pedida: producto.cantidad,
-      descripcion: producto.descripcion,
-      nombre: producto.nombre,
-      codigo: producto.codigo,
-      codigo_auxiliar: producto.codigo_auxiliar,
-      categoria: producto.categoria,
-      categoria_data: producto.categoria_data,
       series: producto.series ? producto.series : [],
-      requiere_series: producto.requiere_series,
-      tipo: producto.tipo,
     }));
-
-    for (const producto of mappedProductos) {
-      if (producto.requiere_series === true) {
-        if (producto.cantidad !== producto.series.length) {
-          ToastWrapper.error(
-            'Las series deben tener la misma cifra que la cantidad',
-          );
-          return;
-        }
-      }
-    }
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
       return;
+    }
+
+    // Validaciones
+    for (const prod of mappedProductos) {
+      const detalles = productosPaging?.data.items.find(
+        item => item.id === prod.producto,
+      );
+
+      const validarCantidad = (
+        detalles?.ubicaciones_producto as unknown as {
+          stock: number;
+          ubicacion: string;
+        }[]
+      )?.find(i => i.ubicacion == uuidUbicacion);
+
+      if (!detalles) {
+        console.error(`No se encontró el producto con ID ${prod.producto}`);
+        ToastWrapper.error(
+          `No se encontró el producto con ID ${prod.producto}`,
+        );
+        return;
+      }
+
+      // Validar cantidad
+      if (
+        prod.cantidad === undefined ||
+        prod.cantidad === null ||
+        prod.cantidad === 0
+      ) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" necesita cantidad.`,
+        );
+        return;
+      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" tiene una cantidad
+          de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
+        );
+        return;
+      }
+
+      // Validaciones según `requiere_series`
+      if (
+        detalles.requiere_series &&
+        (!prod.series || prod.series.length === 0)
+      ) {
+        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
+        return;
+      } else if (!detalles.requiere_series && prod.series.length > 0) {
+        ToastWrapper.error(
+          `El producto "${detalles.nombre}" no necesita series.`,
+        );
+        return;
+      }
     }
 
     const preparedData = {
@@ -289,4 +333,4 @@ const SaveIngresoMaterial: React.FC<SaveIngresoMaterialProps> = ({ title }) => {
   );
 };
 
-export default SaveIngresoMaterial;
+export default SaveIngresoMateriales;

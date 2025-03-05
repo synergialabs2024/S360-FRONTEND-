@@ -12,7 +12,7 @@ const CreateSolicitudTransferenciaMaterialPage: React.FC<
   );
 
   return (
-    <SaveSolicitudTransferenciaMaterial title="Crear Solcilitud Transferencia Material" />
+    <SaveSolicitudTransferenciaMaterial title="Crear Solicitud Transferencia Material" />
   );
 };
 

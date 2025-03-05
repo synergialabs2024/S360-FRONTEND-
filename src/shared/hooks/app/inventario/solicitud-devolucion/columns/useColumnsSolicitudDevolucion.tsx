@@ -28,7 +28,7 @@ export const useColumnsSolicitudDevolucion = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return <ShowSeriesModal Arrays={row.original.productos} />;
+          return <ShowSeriesModal Arrays={row.original} />;
         },
       },
       {
@@ -76,6 +76,12 @@ export const useColumnsSolicitudDevolucion = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ingreso_material_data', 'secuencial']),
+      },
+      {
+        accessorKey: 'user_create__name',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['user_create']),
       },
     ],
     [],

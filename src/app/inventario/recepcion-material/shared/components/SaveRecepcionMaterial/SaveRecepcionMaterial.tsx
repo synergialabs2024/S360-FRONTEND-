@@ -7,6 +7,7 @@ import {
   CreateRecepcionMaterialParamsBase,
   useCreateEgresoMaterial,
   useFetchBodegas,
+  useFetchProductos,
   useFetchUbicacions,
   useUpdateRecepcionMaterial,
 } from '@/actions/app';
@@ -103,6 +104,11 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       bodega: watchedBodega!,
     },
   });
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
+    },
+  });
 
   ///* mutations
   const updateRecepcionMaterialMutation =
@@ -137,6 +143,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
             productos: dato.productos,
             bodega: dato.bodega,
             ubicacion: dato.ubicacion,
+            user_create: dato.user_create,
           };
 
           setConfirmDialog({
@@ -168,32 +175,60 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     const mappedProductos = productosDisponibles.map(producto => ({
-      id: producto.id,
       producto: producto.id,
       cantidad: producto.cantidad!,
-      descripcion: producto.descripcion,
-      nombre: producto.nombre,
-      codigo: producto.codigo,
-      codigo_auxiliar: producto.codigo_auxiliar,
-      categoria: producto.categoria,
-      categoria_data: producto.categoria_data,
       series: producto.series ? producto.series : [],
-      requiere_series: producto.requiere_series,
-      tipo: producto.tipo,
     }));
-
-    for (const producto of mappedProductos) {
-      if (producto.cantidad === undefined || producto.cantidad <= 0) {
-        ToastWrapper.error(
-          `El producto ${producto.codigo} tiene una cantidad de 0 o menor y no puede ser procesado.`,
-        );
-        return;
-      }
-    }
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
       return;
+    }
+
+    for (const prod of mappedProductos) {
+      const detalles = productosPaging?.data.items.find(
+        item => item.id === prod.producto,
+      );
+
+      const validarCantidad = (
+        detalles?.ubicaciones_producto as unknown as {
+          stock: number;
+          ubicacion: string;
+        }[]
+      )?.find(i => i.ubicacion == recepcionMaterial?.ubicacion_data.uuid);
+
+      if (!detalles) {
+        ToastWrapper.error(
+          `No se encontró el producto con ID ${prod.producto}`,
+        );
+        return;
+      }
+
+      // Validar cantidad
+      if (
+        prod.cantidad === undefined ||
+        prod.cantidad === null ||
+        prod.cantidad === 0
+      ) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" necesita cantidad.`,
+        );
+        return;
+      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" tiene una cantidad
+              de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
+        );
+        return;
+      }
+
+      // Validaciones según `requiere_series`
+      if (!detalles.requiere_series && prod.series.length > 0) {
+        ToastWrapper.error(
+          `El producto "${detalles.nombre}" no necesita series.`,
+        );
+        return;
+      }
     }
 
     data.estado_solicitud = 'APROBADO';
@@ -218,13 +253,29 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
-    productosEnviar(
-      (recepcionMaterial?.productos as ProductosDisponiblesTableType[]) || [],
-    );
+    const dataP = recepcionMaterial?.productos
+      ?.map(prod => {
+        const itemEncontrado = productosPaging?.data?.items.find(
+          item => item.id === prod.producto,
+        );
+        return itemEncontrado
+          ? {
+            ...itemEncontrado,
+            producto: prod.producto,
+            cantidad: prod.cantidad,
+            cantidad_pedida: prod.cantidad,
+            cantidad_aprobada: prod.cantidad,
+            series: prod.series,
+          }
+          : null;
+      })
+      .filter(Boolean);
+
+    productosEnviar(dataP?.filter(item => item !== null) || []);
     if (!recepcionMaterial?.id) return;
     reset(recepcionMaterial);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reset]);
+  }, [reset, productosPaging]);
 
   ///* columns --------------------
   const { crearMaterialColumnsRecepcion } = useColumnsProductosDisponibles();

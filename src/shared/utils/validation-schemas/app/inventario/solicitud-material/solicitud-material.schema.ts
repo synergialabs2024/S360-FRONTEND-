@@ -18,4 +18,9 @@ export const solicitudMaterialFormSchema = yup.object({
     .typeError('El campo ubicacion es requerido')
     .optional()
     .nullable(),
+  user_create: yup
+    .number()
+    .typeError('El campo usuario es requerido')
+    .optional()
+    .nullable(),
 });

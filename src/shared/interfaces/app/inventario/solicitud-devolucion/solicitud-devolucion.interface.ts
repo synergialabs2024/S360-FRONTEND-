@@ -22,6 +22,7 @@ export interface SolicitudDevolucion {
   bodega: number;
   ubicacion: number;
   ingreso_material: number;
+  user_create: number;
 
   created_at?: string;
   modified_at?: string;

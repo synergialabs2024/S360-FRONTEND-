@@ -1,42 +1,44 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
+import { Grid } from '@mui/material';
 
 import {
   CreateSolicitudDevolucionParamsBase,
   useCreateSolicitudDevolucion,
-  useFetchBodegas,
   useFetchIngresoMateriales,
   useFetchUbicacions,
+  useFetchBodegas,
+  useFetchProductos,
 } from '@/actions/app';
 import {
   Bodega,
+  Ubicacion,
+  useLoaders,
+  ToastWrapper,
   gridSizeMdLg4,
   IngresoMaterial,
-  IngresosDisponiblesTableType,
   PermissionsEnum,
   SolicitudDevolucion,
+  IngresosDisponiblesTableType,
   solicitudDevolucionFormSchema,
-  ToastWrapper,
-  Ubicacion,
   useColumnsIngresosDisponibles,
-  useLoaders,
 } from '@/shared';
 import {
+  CustomTextArea,
+  CustomTypoLabel,
   CustomAutocomplete,
   CustomMinimalTable,
   CustomSingleButton,
-  CustomTextArea,
-  CustomTypoLabel,
-  CustomTypoLabelEnum,
   SingleFormBoxScene,
+  CustomTypoLabelEnum,
 } from '@/shared/components';
+import { useAuthStore } from '@/store/auth';
+import { useIngresosStore } from '@/store/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlSolicitudDevolucionPage } from '../../../pages/tables/SolicitudDevolucionMainPages';
-import { Grid } from '@mui/material';
-import { FiPlus } from 'react-icons/fi';
-import { useIngresosStore } from '@/store/app';
 import IngresoDisponiblesModal from '@/shared/hooks/app/inventario/solicitud-devolucion/modal/IngresoDisponiblesModal';
 
 export interface SaveSolicitudDevolucionProps {
@@ -50,6 +52,8 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
   title,
   solicitud_devolucion,
 }) => {
+  const user = useAuthStore(s => s.user);
+
   useCheckPermission(PermissionsEnum.inventario_view_solicituddevolicion);
 
   ///* local state --------------------
@@ -69,6 +73,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
     resolver: yupResolver(solicitudDevolucionFormSchema) as any,
     defaultValues: {
       state: true,
+      user_create: user?.id,
     },
   });
 
@@ -114,6 +119,11 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
       ubicacion: watchedUbicacion!,
     },
   });
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
+    },
+  });
 
   ///* mutations
   const createSolicitudDevolucionMutation = useCreateSolicitudDevolucion({
@@ -127,33 +137,52 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
     if (!isValid) return;
 
     const mappedProductos = ingresosDisponibles.map(i => ({
-      id: i.id,
       producto: i.id,
-      producto_uuid: i.uuid,
       cantidad: i.cantidad,
-      cantidad_pedida: i.cantidad,
-      descripcion: i.descripcion,
-      nombre: i.nombre,
-      codigo: i.codigo,
-      codigo_auxiliar: i.codigo_auxiliar,
-      categoria: i.categoria,
-      categoria_data: i.categoria_data,
       series: i.series ? i.series : [],
-      requiere_series: i.requiere_series,
-      tipo: i.tipo,
     }));
 
-    for (const producto of mappedProductos) {
-      if (producto.requiere_series === true) {
-        if (producto.cantidad !== producto.series.length) {
-          ToastWrapper.error(`
-            Las series deben tener la misma cifra que
-            la cantidad aprobada
-          `);
-          return;
-        }
+    // Validaciones
+    for (const prod of mappedProductos) {
+      const detalles = productosPaging?.data.items.find(
+        item => item.id === prod.producto,
+      );
+
+      if (!detalles) {
+        console.error(`No se encontró el producto con ID ${prod.producto}`);
+        ToastWrapper.error(
+          `No se encontró el producto con ID ${prod.producto}`,
+        );
+        return;
+      }
+
+      // Validar cantidad
+      if (
+        prod.cantidad === undefined ||
+        prod.cantidad === null ||
+        prod.cantidad === 0
+      ) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" necesita cantidad.`,
+        );
+        return;
+      }
+
+      // Validaciones según `requiere_series`
+      if (
+        detalles.requiere_series &&
+        (!prod.series || prod.series.length === 0)
+      ) {
+        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
+        return;
+      } else if (!detalles.requiere_series && prod.series.length > 0) {
+        ToastWrapper.error(
+          `El producto "${detalles.nombre}" no necesita series.`,
+        );
+        return;
       }
     }
+
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
       return;

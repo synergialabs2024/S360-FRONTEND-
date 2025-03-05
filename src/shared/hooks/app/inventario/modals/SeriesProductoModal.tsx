@@ -20,6 +20,7 @@ export type SeriesProductoModalProps = {
   cantidadBoolean: boolean;
   onDataChange?: (data: any[]) => void;
   tipoSerie?: boolean;
+  randomButton?: boolean;
 };
 
 export interface MaterialSeries {
@@ -32,6 +33,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   onDataChange,
   cantidadBoolean,
   tipoSerie = true,
+  randomButton = false,
 }) => {
   //* State local
   const [open, setOpen] = useState(false);
@@ -41,16 +43,11 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
 
   useEffect(() => {
     if (tipoSerie) {
-      setData(
-        Array.isArray(Arrays?.ubicaciones_producto) &&
-          Arrays?.ubicaciones_producto[0]?.series
-          ? Arrays.ubicaciones_producto[0].series
-          : [],
-      );
+      setData(Arrays?.ubicaciones_producto);
     } else {
       setData([]);
     }
-  }, [Arrays.ubicaciones_producto, tipoSerie]);
+  }, [Arrays.ubicaciones_producto, tipoSerie, Arrays]);
 
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
   const serieIndividualRef = useRef<HTMLInputElement>(null);
@@ -95,7 +92,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   };
 
   const cargarSeries = () => {
-    const copiaSeries = [...data];
+    const copiaSeries = data.find(i => i.ubicacion == Arrays.ubicacion).series;
 
     if (Arrays.cantidad && Arrays.cantidad > 0) {
       if (data && data.length > 0) {
@@ -178,20 +175,6 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   const ExcelSection = () => (
     <>
       <Box display="flex" gap={2} mb={2}>
-        <Button
-          onClick={handleButtonClick}
-          startIcon={<IconUpload />}
-          disabled={cantidadBoolean}
-        >
-          CARGAR EXCEL
-        </Button>
-        <Button
-          onClick={cargarSeries}
-          startIcon={<IconArrowsShuffle2 />}
-          disabled={cantidadBoolean}
-        >
-          ALEATORIO
-        </Button>
         <TextField
           inputRef={serieIndividualRef}
           label="Número de Serie"
@@ -203,6 +186,22 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         >
           Añadir
         </Button>
+        <Button
+          onClick={handleButtonClick}
+          startIcon={<IconUpload />}
+          disabled={cantidadBoolean}
+        >
+          CARGAR EXCEL
+        </Button>
+        {randomButton ? (
+          <Button
+            onClick={cargarSeries}
+            startIcon={<IconArrowsShuffle2 />}
+            disabled={cantidadBoolean}
+          >
+            ALEATORIO
+          </Button>
+        ) : null}
       </Box>
 
       <Grid container spacing={2} mt={2} mb={3}>

@@ -159,7 +159,7 @@ export const useColumnsIngresosDisponibles = ({
         },
       },
       {
-        accessorKey: 'cantidad_aprobada',
+        accessorKey: 'cantidad',
         header: 'CANTIDAD APROBADA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {

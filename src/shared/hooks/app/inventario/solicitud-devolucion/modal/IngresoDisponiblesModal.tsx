@@ -18,8 +18,9 @@ import {
   CodigoCategoriaProductoEnumChoiceType,
   gridSizeMdLg6,
 } from '@/shared/constants';
-import { useGetIngresoMaterial } from '@/actions/app';
+import { useFetchProductos, useGetIngresoMaterial } from '@/actions/app';
 import { ToastWrapper } from '@/shared/wrappers';
+import { useEffect, useState } from 'react';
 
 export type IngresoDisponiblesModalProps = {
   open: boolean;
@@ -43,6 +44,9 @@ const IngresoDisponiblesModal: React.FC<IngresoDisponiblesModalProps> = ({
     onChangeFilter,
   } = useTableFilter();
 
+  ///* local state ---------------------
+  const [dataFilter, setDataFilter] = useState<any[]>([]);
+
   ///* global state ---------------------
   const addSelectedItem = useIngresosStore(s => s.addSelectedItem);
   const selectedCategoria = useIngresosStore(s => s.selectedCategoriaModel);
@@ -54,6 +58,11 @@ const IngresoDisponiblesModal: React.FC<IngresoDisponiblesModalProps> = ({
   const { data, isLoading, isRefetching } = useGetIngresoMaterial(
     uuid_ingreso ?? '',
   );
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
+    },
+  });
 
   useLoaders(isLoading || isRefetching);
 
@@ -95,6 +104,31 @@ const IngresoDisponiblesModal: React.FC<IngresoDisponiblesModalProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (!data?.data) return;
+
+    const productos = Array.isArray(data.data.productos)
+      ? data.data.productos.map(prod => ({
+        cantidad: (prod as any).cantidad ?? 0,
+        producto: (prod as any).producto ?? null,
+        cantidad_pedida: (prod as any).cantidad ?? 0,
+        cantidad_aprobada: (prod as any).cantidad ?? 0,
+        series: (prod as any).series ?? [],
+      }))
+      : [];
+
+    const detallesArray = productos
+      .map(prod => {
+        const detalle = productosPaging?.data?.items?.find(
+          item => item.id === prod.producto,
+        );
+        return detalle ? { ...detalle, ...prod } : null;
+      })
+      .filter(Boolean);
+
+    setDataFilter(detallesArray);
+  }, [data, productosPaging]);
+
   return (
     <ScrollableDialogProps
       open={open}
@@ -130,7 +164,7 @@ const IngresoDisponiblesModal: React.FC<IngresoDisponiblesModalProps> = ({
           />
           <TableWithoutActions<IngresoMaterial>
             columns={modalMaterialColumns}
-            data={data?.data.productos || []}
+            data={dataFilter || []}
             isLoading={isLoading}
             isRefetching={isRefetching}
             // search

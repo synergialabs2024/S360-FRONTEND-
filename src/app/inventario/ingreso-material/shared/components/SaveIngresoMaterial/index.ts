@@ -1,1 +1,1 @@
-export { default as SaveIngresoMaterial } from './SaveIngresoMaterial';
+export { default as SaveIngresoMateriales } from './SaveIngresoMateriales';

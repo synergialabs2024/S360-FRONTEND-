@@ -462,11 +462,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.ubicacionesNav,
             }),
-            renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
-              id: 'recepcion-solicitud-materiales',
-              title: 'Recepción de solicitudes de materiales',
+            ///* Inventario Principal
+            renderByModule(SidenavModulesEnum.INVENTARIO_INGRESO_MATERIAL, {
+              id: 'ingreso-mercaderia',
+              title: 'Ingreso de Inventario',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
+              url: ROUTER_PATHS.inventario.ingresoMaterialesNav,
             }),
             renderByModule(SidenavModulesEnum.INVENTARIO_EGRESO_MATERIAL, {
               id: 'egreso-mercaderia',
@@ -474,26 +475,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.egresoMaterialesNav,
             }),
-            renderByModule(SidenavModulesEnum.INVENTARIO_INGRESO_MATERIAL, {
-              id: 'ingreso-mercaderia',
-              title: 'Ingreso de Inventario',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.ingresoMaterialesNav,
-            }),
-            renderByModule(SidenavModulesEnum.INVENTARIO_MOVIMIENTO_MATERIAL, {
-              id: 'movimiento-materiales',
-              title: 'Movimiento de Materiales',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.movimientoMaterialesNav,
-            }),
-            /*
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solcitud-devoluciones',
-              title: 'Recepción de solicitud de devolución',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            */
             renderByModule(
               SidenavModulesEnum.INVENTARIO_TRANSFERENCIA_MATERIAL,
               {
@@ -503,15 +484,10 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INVENTARIO_MODELO_INVENTARIO, {
-              id: 'modelo-inventario',
-              title: 'Modelo de inventario',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.modeloInventariosNav,
-            }),
+            ///* Inventario Solicitudes
             renderByModule(SidenavModulesEnum.INVENTARIO_SOLICITUD_DEVOLUCION, {
               id: 'solicitud-devolucion',
-              title: 'Solcitud de devolucion',
+              title: 'Solicitud de devolucion',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
             }),
@@ -524,6 +500,13 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
               },
             ),
+            ///* Inventario Recepciones
+            renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
+              id: 'recepcion-solicitud-materiales',
+              title: 'Recepción de solicitudes de materiales',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
+            }),
             renderByModule(
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {
@@ -534,6 +517,22 @@ export const useNestedMenu = () => {
                   .recepcionSolicitudTransferenciaMaterialesNav,
               },
             ),
+
+            ///* Inventario Reporte
+            renderByModule(SidenavModulesEnum.INVENTARIO_MOVIMIENTO_MATERIAL, {
+              id: 'movimiento-materiales',
+              title: 'Movimiento de Materiales',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.movimientoMaterialesNav,
+            }),
+            renderByModule(SidenavModulesEnum.INVENTARIO_REPORTE_STOCK, {
+              id: 'reporte-stock',
+              title: 'Reporte stock',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.reporteStocksNav,
+            }),
+
+            ///* Inventario Motivos
             renderByModule(SidenavModulesEnum.INVENTARIO_MOTIVO_INGRESO, {
               id: 'motivo-ingreso',
               title: 'Motivo Ingreso',
@@ -552,11 +551,13 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.motivoTransferenciasNav,
             }),
-            renderByModule(SidenavModulesEnum.INVENTARIO_REPORTE_STOCK, {
-              id: 'reporte-stock',
-              title: 'Reporte stock',
+
+            ///* Inventario OTROS
+            renderByModule(SidenavModulesEnum.INVENTARIO_MODELO_INVENTARIO, {
+              id: 'modelo-inventario',
+              title: 'Modelo de inventario',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.reporteStocksNav,
+              url: ROUTER_PATHS.inventario.modeloInventariosNav,
             }),
             renderByModule(SidenavModulesEnum.CONTABILIDAD_CUENTA_CONTABLE, {
               id: 'cuenta-contable',
@@ -564,6 +565,14 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
+            /*
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'solcitud-devoluciones',
+              title: 'Recepción de solicitud de devolución',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.notFound,
+            }),
+            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------

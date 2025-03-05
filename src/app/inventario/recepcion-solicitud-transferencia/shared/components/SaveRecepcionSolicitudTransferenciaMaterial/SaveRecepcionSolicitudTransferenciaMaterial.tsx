@@ -1,43 +1,43 @@
 /* eslint-disable indent */
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
-import { FiPlus } from 'react-icons/fi';
-import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
 import { Grid } from '@mui/material';
 
 import {
-  CreateSolicitudTransferenciaMaterialParamsBase,
-  useCreateTransferenciaMaterial,
   useFetchBodegas,
+  useFetchProductos,
   useFetchUbicacions,
+  useCreateTransferenciaMaterial,
+  CreateSolicitudTransferenciaMaterialParamsBase,
   useUpdateSolicitudTransferenciaMaterial,
 } from '@/actions/app';
 import {
   Bodega,
-  gridSizeMdLg6,
-  ToastWrapper,
-  SolicitudTransferenciaMaterial,
-  solicitudTransferenciaMaterialFormSchema,
   Ubicacion,
   useLoaders,
-  useColumnsTransferenciaMaterial,
+  ToastWrapper,
+  gridSizeMdLg6,
   ProductosDisponiblesTableType,
-  Producto,
+  SolicitudTransferenciaMaterial,
+  useColumnsTransferenciaMaterial,
+  solicitudTransferenciaMaterialFormSchema,
 } from '@/shared';
 import {
+  CustomTextArea,
+  CustomTypoLabel,
   CustomAutocomplete,
   CustomMinimalTable,
   CustomSingleButton,
-  CustomTextArea,
-  CustomTypoLabel,
-  CustomTypoLabelEnum,
   SingleFormBoxScene,
+  CustomTypoLabelEnum,
 } from '@/shared/components';
 import { useProductosStore } from '@/store/app';
+import { useUiConfirmModalStore } from '@/store/ui';
 import ProductosDisponiblesModal from '@/shared/hooks/app/inventario/modals/ProductosDisponiblesModal';
 import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
-import { useUiConfirmModalStore } from '@/store/ui';
 import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
 
 export interface SaveRecepcionSolicitudTransferenciaMaterialProps {
@@ -52,7 +52,6 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
 > = ({ title, solicitudTransferenciaMaterial }) => {
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
-  const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
@@ -126,6 +125,11 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
       bodega: watchedBodegaDestino!,
     },
   });
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
+    },
+  });
 
   ///* mutations
   const updateRecepcionSolicitudTransferenciaMaterialMutation =
@@ -168,6 +172,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
             ubicacion_origen: dato.ubicacion_origen,
             bodega_destino: dato.bodega_destino,
             ubicacion_destino: dato.ubicacion_destino,
+            user_create: dato.user_create,
           };
 
           setConfirmDialog({
@@ -189,8 +194,9 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         },
         onError: error => {
           // Muestra un mensaje de error si la mutación falla
-          ToastWrapper.error('Error al actualizar la recepción del material.');
-          console.error('Error al actualizar:', error);
+          ToastWrapper.error(
+            `Error al actualizar la recepción del material: ${error}`,
+          );
         },
       },
     );
@@ -199,50 +205,81 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    const mappedProductos = productosDisponibles.map(producto => ({
-      id: producto.id,
-      producto: producto.id,
-      cantidad: producto.cantidad,
-      cantidad_pedida: producto.cantidad,
-      descripcion: producto.descripcion,
-      nombre: producto.nombre,
-      codigo: producto.codigo,
-      codigo_auxiliar: producto.codigo_auxiliar,
-      categoria: producto.categoria,
-      categoria_data: producto.categoria_data,
-      series: producto.series ? producto.series : [],
-      requiere_series: producto.requiere_series,
-      tipo: producto.tipo,
-    }));
 
-    for (const producto of mappedProductos) {
-      if (producto.requiere_series === true) {
-        if (producto.cantidad !== producto.series.length) {
-          ToastWrapper.error(
-            'Las series deben tener la misma cifra que la cantidad',
-          );
-          return;
-        }
-      }
-    }
+    const mappedProductos = productosDisponibles.map(producto => ({
+      producto: producto.id,
+      cantidad: producto.cantidad ?? 0,
+      series: producto.series ? producto.series : [],
+    }));
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
       return;
     }
 
-    data.productos = mappedProductos as unknown as Producto[];
+    // Validaciones
+    for (const prod of mappedProductos) {
+      const detalles = productosPaging?.data.items.find(
+        item => item.id === prod.producto,
+      );
+
+      const validarCantidad = (
+        detalles?.ubicaciones_producto as unknown as {
+          stock: number;
+          ubicacion: string;
+        }[]
+      )?.find(
+        i =>
+          i.ubicacion ==
+          solicitudTransferenciaMaterial?.ubicacion_origen_data?.uuid,
+      );
+
+      if (!detalles) {
+        ToastWrapper.error(
+          `No se encontró el producto con ID ${prod.producto}`,
+        );
+        return;
+      }
+
+      // Validar cantidad
+      if (prod.cantidad <= 0) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" necesita cantidad.`,
+        );
+        return;
+      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" tiene una cantidad de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
+        );
+        return;
+      }
+
+      // Validaciones según `requiere_series`
+      if (
+        detalles.requiere_series &&
+        (!prod.series || prod.series.length === 0)
+      ) {
+        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
+        return;
+      } else if (!detalles.requiere_series && prod.series.length > 0) {
+        ToastWrapper.error(
+          `El producto "${detalles.nombre}" no necesita series.`,
+        );
+        return;
+      }
+
+      if (detalles.requiere_series && prod.series.length !== prod.cantidad) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" debe tener una cantidad de series de ${prod.cantidad}.`,
+        );
+        return;
+      }
+    }
+
+    data.estado_solicitud = 'APROBADO';
+    data.productos = mappedProductos;
 
     onSuccessCreateTransferencia(data as SolicitudTransferenciaMaterial);
-
-    /*
-    ///* upd
-    if (solicitudTransferenciaMaterial?.id) {
-      data.estado_solicitud = 'APROBADO';
-      setModalData(preparedData);
-      setOpenModal(true);
-    }
-      */
   };
 
   const onRechazar = async (data: SaveFormData) => {
@@ -263,15 +300,29 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
 
   ///* effects
   useEffect(() => {
+    const dataP = solicitudTransferenciaMaterial?.productos
+      ?.map(prod => {
+        const itemEncontrado = productosPaging?.data?.items.find(
+          item => item.id === prod.producto,
+        );
+        return itemEncontrado
+          ? {
+              ...itemEncontrado,
+              producto: prod.producto,
+              cantidad: prod.cantidad,
+              cantidad_pedida: prod.cantidad,
+              cantidad_aprobada: prod.cantidad,
+              ubicacion:
+                solicitudTransferenciaMaterial.ubicacion_origen_data?.uuid,
+              series: prod.series,
+            }
+          : null;
+      })
+      .filter(Boolean);
+
+    productosEnviar(dataP?.filter(item => item !== null) || []);
     if (!solicitudTransferenciaMaterial?.id) return;
     reset(solicitudTransferenciaMaterial);
-    productosEnviar(
-      (solicitudTransferenciaMaterial?.productos as ProductosDisponiblesTableType[]) ||
-        [],
-    );
-    setUUIDUbicacion(
-      solicitudTransferenciaMaterial?.ubicacion_origen_data?.uuid,
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset]);
 
@@ -464,7 +515,9 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
           />
           <ProductosDisponiblesModal
             askADD={true}
-            pk_ubicacion={uuidUbicacion}
+            pk_ubicacion={
+              solicitudTransferenciaMaterial?.ubicacion_origen_data?.uuid
+            }
             open={openAddProducts}
             onClose={() => setOpenAddProducts(false)}
           />

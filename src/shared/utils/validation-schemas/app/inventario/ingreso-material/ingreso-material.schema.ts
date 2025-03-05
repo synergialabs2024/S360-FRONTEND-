@@ -23,4 +23,9 @@ export const ingresoMaterialFormSchema = yup.object({
     .typeError('El campo motivo ingreso es requerido')
     .optional()
     .nullable(),
+  user_create: yup
+    .number()
+    .typeError('El campo usuario es requerido')
+    .optional()
+    .nullable(),
 });

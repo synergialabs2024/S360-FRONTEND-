@@ -1,42 +1,44 @@
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
-import { FiPlus } from 'react-icons/fi';
-import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
 import { Grid } from '@mui/material';
 
 import {
-  CreateTransferenciaMaterialParamsBase,
-  useCreateTransferenciaMaterial,
-  useFetchBodegas,
-  useFetchMotivoTransferencia,
-  useFetchUbicacions,
-} from '@/actions/app';
-import {
-  Bodega,
-  gridSizeMdLg12,
-  gridSizeMdLg6,
-  MotivoTransferencia,
-  ProductosDisponiblesModal,
-  ProductosDisponiblesTableType,
-  ToastWrapper,
-  TransferenciaMaterial,
-  transferenciaMaterialFormSchema,
-  Ubicacion,
-  useColumnsProductosDisponibles,
-  useLoaders,
-} from '@/shared';
-import {
+  CustomTextArea,
+  CustomTypoLabel,
   CustomAutocomplete,
   CustomMinimalTable,
   CustomSingleButton,
-  CustomTextArea,
-  CustomTypoLabel,
-  CustomTypoLabelEnum,
   SingleFormBoxScene,
+  CustomTypoLabelEnum,
 } from '@/shared/components';
-import { returnUrlTransferenciaMaterialesPage } from '../../../pages/tables/TransferenciaMaterialPage';
+import {
+  Bodega,
+  Ubicacion,
+  useLoaders,
+  ToastWrapper,
+  gridSizeMdLg6,
+  gridSizeMdLg12,
+  MotivoTransferencia,
+  TransferenciaMaterial,
+  ProductosDisponiblesModal,
+  ProductosDisponiblesTableType,
+  useColumnsProductosDisponibles,
+  transferenciaMaterialFormSchema,
+} from '@/shared';
+import {
+  useFetchBodegas,
+  useFetchProductos,
+  useFetchUbicacions,
+  useFetchMotivoTransferencia,
+  useCreateTransferenciaMaterial,
+  CreateTransferenciaMaterialParamsBase,
+} from '@/actions/app';
 import { useProductosStore } from '@/store/app';
+import { returnUrlTransferenciaMaterialesPage } from '../../../pages/tables/TransferenciaMaterialPage';
+import { useAuthStore } from '@/store/auth';
 
 export interface SaveTransferenciaMaterialProps {
   title: string;
@@ -48,6 +50,8 @@ type SaveFormData = CreateTransferenciaMaterialParamsBase & {};
 const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
   title,
 }) => {
+  const user = useAuthStore(s => s.user);
+
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
   const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
@@ -64,6 +68,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     resolver: yupResolver(transferenciaMaterialFormSchema) as any,
     defaultValues: {
       state: true,
+      user_create: user?.id,
     },
   });
 
@@ -127,6 +132,11 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       page_size: 1200,
     },
   });
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
+    },
+  });
 
   ///* mutations
   const createTransferenciaMaterialMutation = useCreateTransferenciaMaterial({
@@ -140,34 +150,63 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     if (!isValid) return;
 
     const mappedProductos = productosDisponibles.map(producto => ({
-      id: producto.id,
       producto: producto.id,
       cantidad: producto.cantidad,
-      descripcion: producto.descripcion,
-      nombre: producto.nombre,
-      codigo: producto.codigo,
-      codigo_auxiliar: producto.codigo_auxiliar,
-      categoria: producto.categoria,
-      categoria_data: producto.categoria_data,
       series: producto.series ? producto.series : [],
-      requiere_series: producto.requiere_series,
-      tipo: producto.tipo,
     }));
-
-    for (const producto of mappedProductos) {
-      if (producto.requiere_series === true) {
-        if (producto.cantidad !== producto.series.length) {
-          ToastWrapper.error(
-            'Las series deben tener la misma cifra que la cantidad',
-          );
-          return;
-        }
-      }
-    }
 
     if (mappedProductos.length === 0) {
       ToastWrapper.error('Campo Productos es requerido');
       return;
+    }
+
+    // Validaciones
+    for (const prod of mappedProductos) {
+      const detalles = productosPaging?.data.items.find(
+        item => item.id === prod.producto,
+      );
+
+      if (!detalles) {
+        ToastWrapper.error(
+          `No se encontró el producto con ID ${prod.producto}`,
+        );
+        return;
+      }
+
+      // Validar cantidad
+      if (
+        prod.cantidad === undefined ||
+        prod.cantidad === null ||
+        prod.cantidad === 0
+      ) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" necesita cantidad.`,
+        );
+        return;
+      }
+
+      // Validaciones según `requiere_series`
+      if (
+        detalles.requiere_series &&
+        (!prod.series || prod.series.length === 0)
+      ) {
+        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
+        return;
+      } else if (!detalles.requiere_series && prod.series.length > 0) {
+        ToastWrapper.error(
+          `El producto "${detalles.nombre}" no necesita series.`,
+        );
+        return;
+      }
+      if (
+        detalles.requiere_series == true &&
+        prod.series.length !== prod.cantidad
+      ) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" debe tener una cantidad de series de ${prod.cantidad}.`,
+        );
+        return;
+      }
     }
 
     const preparedData = {
@@ -226,6 +265,13 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
 
   ///* columns --------------------
   const { crearMaterialColumns } = useColumnsProductosDisponibles();
+
+  const productosConUbicacion = productosDisponibles.map(producto => {
+    return {
+      ...producto,
+      ubicacion: uuidUbicacion,
+    };
+  });
 
   return (
     <SingleFormBoxScene
@@ -371,7 +417,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
 
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumns}
-          data={productosDisponibles || []}
+          data={productosConUbicacion || []}
           enablePagination
           density="comfortable"
         />

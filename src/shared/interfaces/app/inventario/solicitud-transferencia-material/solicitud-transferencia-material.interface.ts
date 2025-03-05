@@ -1,5 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { Bodega, Producto, Ubicacion } from '../../inventario';
+import { Bodega, Ubicacion } from '../../inventario';
 
 export interface SolicitudTransferenciaMaterialPaginatedRes {
   status: number;
@@ -16,13 +16,14 @@ export interface SolicitudTransferenciaMaterial {
   observacion: string;
   secuencial: string;
   estado_solicitud: string;
-  productos: Producto[];
+  productos: Productos[];
 
   //* fk
   bodega_origen: number;
   ubicacion_origen: number;
   bodega_destino: number;
   ubicacion_destino: number;
+  user_create: number;
 
   bodega_origen_data?: Bodega;
   bodega_destino_data?: Bodega;
@@ -31,6 +32,15 @@ export interface SolicitudTransferenciaMaterial {
 
   created_at?: string;
   modified_at?: string;
+}
+
+interface Productos {
+  producto: number | undefined;
+  stock_up?: number;
+  requiere_series?: boolean;
+  cantidad: number;
+  series: any[];
+  codigo?: string;
 }
 
 export type SolicitudTransferenciaMaterialLimitData = Pick<

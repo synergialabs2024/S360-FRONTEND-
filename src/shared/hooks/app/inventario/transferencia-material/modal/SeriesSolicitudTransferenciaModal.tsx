@@ -1,18 +1,18 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, Grid, IconButton, TextField } from '@mui/material';
-
-import { Producto } from '@/shared/interfaces';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { ScrollableDialogProps } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants';
-import { emptyCellOneLevel } from '@/shared/utils';
-import { useUiStore } from '@/store/ui';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { MRT_ColumnDef } from 'material-react-table';
 import {
-  IconArrowsShuffle2,
   IconBrandCodesandbox,
+  IconArrowsShuffle2,
   IconTrash,
 } from '@tabler/icons-react';
+
+import { useUiStore } from '@/store/ui';
+import { Producto } from '@/shared/interfaces';
+import { emptyCellOneLevel } from '@/shared/utils';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { ScrollableDialogProps } from '@/shared/components';
+import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import { MaterialSeries } from '@/shared/hooks/app/inventario/modals/SeriesProductoModal';
 
 export type SeriesSolicitudTranferenciaModalProps = {
@@ -21,6 +21,7 @@ export type SeriesSolicitudTranferenciaModalProps = {
   cantidadBoolean: boolean;
   onDataChange?: (data: any[]) => void;
   tipoSerie?: boolean;
+  randomButton?: boolean;
 };
 
 const SeriesSolicitudTranferenciaModal: React.FC<
@@ -31,17 +32,16 @@ const SeriesSolicitudTranferenciaModal: React.FC<
   onDataChange,
   cantidadBoolean,
   tipoSerie = true,
+  randomButton = false,
 }) => {
   //* State local
   const [open, setOpen] = useState(false);
   const [cantidadTF, setCantidadTF] = useState(false);
   const [data, setData] = useState<any[]>([]);
-  const [dataSeries, setDataSeries] = useState<any[]>([]);
 
   useEffect(() => {
     if (tipoSerie) {
-      setData(Array.isArray(Arrays?.series) ? [...Arrays.series] : []);
-      setDataSeries(Array.isArray(Arrays?.series) ? [...Arrays.series] : []);
+      setData(Arrays?.series);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoSerie]);
@@ -52,18 +52,19 @@ const SeriesSolicitudTranferenciaModal: React.FC<
   const cargarSeries = () => {
     setIsGlobalLoading(true);
 
-    console.log([...dataSeries]);
+    const dataArray = Arrays?.ubicaciones_producto;
+    const copiaSeries = dataArray.find(
+      (i: { ubicacion: any }) => i.ubicacion == Arrays.ubicacion,
+    ).series;
 
     if (Arrays.cantidad && Arrays.cantidad > 0) {
-      const shuffledData = [...dataSeries];
-
-      for (let i = shuffledData.length - 1; i > 0; i--) {
+      for (let i = copiaSeries.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffledData[i], shuffledData[j]] = [shuffledData[j], shuffledData[i]];
+        [copiaSeries[i], copiaSeries[j]] = [copiaSeries[j], copiaSeries[i]];
       }
 
-      const cantidadReal = Math.min(Arrays.cantidad, shuffledData.length);
-      const primerosDatos = shuffledData.slice(0, cantidadReal);
+      const cantidadReal = Math.min(Arrays.cantidad, copiaSeries.length);
+      const primerosDatos = copiaSeries.slice(0, cantidadReal);
 
       setData(primerosDatos);
     }
@@ -79,7 +80,6 @@ const SeriesSolicitudTranferenciaModal: React.FC<
       if (!value) return setIsGlobalLoading(false);
       if (data.length >= Arrays.cantidad) return setIsGlobalLoading(false);
 
-      console.log(value);
       setData(prevData => [...prevData, value]);
     }
     setIsGlobalLoading(false);
@@ -137,34 +137,26 @@ const SeriesSolicitudTranferenciaModal: React.FC<
   const ExcelSection = () => (
     <>
       <Box display="flex" gap={2} mb={2}>
-        <Grid container spacing={2}>
-          <Grid item xs={7}>
-            <Button
-              onClick={cargarSeries}
-              startIcon={<IconArrowsShuffle2 />}
-              disabled={cantidadBoolean}
-            >
-              ALEATORIO
-            </Button>
-          </Grid>
-          <Grid container item xs={5}>
-            <Grid sx={{ mt: -1 }}>
-              <TextField
-                inputRef={serieIndividualRef}
-                label="Número de Serie"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ mt: -0.5, ml: 1 }}>
-              <Button
-                onClick={handleSeriesChange}
-                disabled={cantidadBoolean || cantidadTF}
-              >
-                Añadir
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
+        <TextField
+          inputRef={serieIndividualRef}
+          label="Número de Serie"
+          variant="outlined"
+        />
+        <Button
+          onClick={handleSeriesChange}
+          disabled={cantidadBoolean || cantidadTF}
+        >
+          Añadir
+        </Button>
+        {randomButton ? (
+          <Button
+            onClick={cargarSeries}
+            startIcon={<IconArrowsShuffle2 />}
+            disabled={cantidadBoolean}
+          >
+            ALEATORIO
+          </Button>
+        ) : null}
       </Box>
 
       <Grid container spacing={2} mt={2} mb={3}>

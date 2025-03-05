@@ -80,8 +80,7 @@ const ShowSeriesProductosModal: React.FC<ShowSeriesProductosModalProps> = ({
         <ScrollableDialogProps
           open={open}
           onClose={() => setOpen(false)}
-          confirmTextBtn="Aceptar"
-          onConfirm={() => setOpen(false)}
+          cancelTextBtn="Cerrar"
           title="Series"
           contentNode={
             serieR ? <Section /> : <>PRODUCTO NO REQUIERE DE SERIE</>
