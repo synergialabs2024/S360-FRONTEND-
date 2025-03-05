@@ -74,7 +74,8 @@ export const useColumnsSolicitudMaterial = () => {
         accessorKey: 'user_create__name',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['user_create']),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['user_create_data', 'razon_social']),
       },
     ],
     [],
