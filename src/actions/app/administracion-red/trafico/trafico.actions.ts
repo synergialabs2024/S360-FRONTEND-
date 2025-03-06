@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { useQuery } from '@tanstack/react-query';
-import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 export enum TraficoTSQEnum {
   TRAFICOS = 'traficos',
@@ -15,13 +14,8 @@ const TRACE_API = 'https://serverapiolt.intercommerce.com.ec/api/traceroute';
 const PING_API = 'https://serverapiolt.intercommerce.com.ec/api/makePing';
 
 export const fetchCombinedDataTrafico = async (params?: any) => {
-  try {
-    const response = await axios.get(API_DATA, { params });
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error);
-    throw error;
-  }
+  const response = await axios.get(API_DATA, { params });
+  return response.data;
 };
 
 ///* tanStack query ---------------
@@ -52,55 +46,43 @@ export const getTraficoConsulta = async (username: string) => {
   if (!username) {
     return null;
   }
-  try {
-    const response = await axios.get(`${CONSULTA_API}${username}`);
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error);
-  }
+  const response = await axios.get(`${CONSULTA_API}${username}`);
+  return response.data;
 };
 
 export const getTraficoTrace = async (ipConsult: string) => {
-  try {
-    const myHeaders = {
-      'Content-Type': 'application/json',
-    };
+  const myHeaders = {
+    'Content-Type': 'application/json',
+  };
 
-    const response = await axios.post(
-      TRACE_API,
-      {
-        ipConsult: ipConsult,
-      },
-      {
-        headers: myHeaders,
-      },
-    );
+  const response = await axios.post(
+    TRACE_API,
+    {
+      ipConsult: ipConsult,
+    },
+    {
+      headers: myHeaders,
+    },
+  );
 
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error);
-  }
+  return response.data;
 };
 
 export const getTraficoPing = async (ipConsult: string, packages: number) => {
-  try {
-    const myHeaders = {
-      'Content-Type': 'application/json',
-    };
+  const myHeaders = {
+    'Content-Type': 'application/json',
+  };
 
-    const response = await axios.post(
-      PING_API,
-      {
-        ipConsult: ipConsult,
-        packages: packages,
-      },
-      {
-        headers: myHeaders,
-      },
-    );
+  const response = await axios.post(
+    PING_API,
+    {
+      ipConsult: ipConsult,
+      packages: packages,
+    },
+    {
+      headers: myHeaders,
+    },
+  );
 
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error);
-  }
+  return response.data;
 };

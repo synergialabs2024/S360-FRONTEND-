@@ -1136,12 +1136,14 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
+            /*
             renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_TRAFICO, {
               id: 'traficos',
               title: 'Tráfico',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracionRed.traficosNav,
             }),
+             */
             renderByModule(SidenavModulesEnum.ADMINISTRACION_RED_RADIUS, {
               id: 'radius',
               title: 'Radius',
