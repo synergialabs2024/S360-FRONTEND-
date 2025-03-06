@@ -1,20 +1,19 @@
 import { MRT_ColumnDef } from 'material-react-table';
+import { Button } from '@mui/material';
 import { useMemo } from 'react';
 
-import { useFetchAutenticacionClientes } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { AutenticacionCliente, PermissionsEnum } from '@/shared/interfaces';
+import { ROUTER_PATHS } from '@/router/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button } from '@mui/material';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { AutenticacionCliente } from '@/shared/interfaces';
+import { useFetchAutenticacionClientes } from '@/actions/app';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 
 export const returnUrlAutenticacionClientesPage =
   ROUTER_PATHS.administracionRed.autenticacionClientesNav;
@@ -25,7 +24,9 @@ const AutenticacionClientesPage: React.FC<
   AutenticacionClientesPageProps
 > = () => {
   ///* Pendiente a cambio
+  /*
   useCheckPermission(PermissionsEnum.administration_view_pais);
+  */
   const queryClient = useQueryClient();
 
   const consultaAuthCliente = () => {

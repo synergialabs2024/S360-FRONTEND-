@@ -1,21 +1,20 @@
 import { MRT_ColumnDef } from 'material-react-table';
+import { useForm } from 'react-hook-form';
 import { useMemo } from 'react';
 
-import { useFetchOLTs, useFetchOnusConfiguradas } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { OLT, PermissionsEnum } from '@/shared/interfaces';
+import { OLT } from '@/shared/interfaces';
+import { ROUTER_PATHS } from '@/router/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
-import { OnusConfigurada } from '@/shared/interfaces/app/netconnect';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { SelectOLTItemsNMS } from '@/app/netconnect/custom';
-import { useForm } from 'react-hook-form';
+import { OnusConfigurada } from '@/shared/interfaces/app/netconnect';
+import { useFetchOLTs, useFetchOnusConfiguradas } from '@/actions/app';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 
 export const returnUrlOnusConfiguradasPage =
   ROUTER_PATHS.netconnect.onusConfiguradasNav;
@@ -28,7 +27,7 @@ interface OLTForm extends OLT {
 
 const OnusConfiguradasPage: React.FC<OnusConfiguradasPageProps> = () => {
   ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  //useCheckPermission(PermissionsEnum.administration_view_pais);
 
   // Fetch data
   const { data: OsLTPagingRes, isLoading: isOLTsLoading } = useFetchOLTs({

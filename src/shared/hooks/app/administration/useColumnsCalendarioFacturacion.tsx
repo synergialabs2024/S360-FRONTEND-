@@ -153,8 +153,9 @@ export const useColumnsCalendarioFacturacion = () => {
               checked={row.original?.state}
               onChangeChecked={() => {
                 if (
-                  // Pendiente a cambio
-                  !hasPermission(PermissionsEnum.infraestructura_change_nap)
+                  !hasPermission(
+                    PermissionsEnum.administration_change_calendariofacturacion,
+                  )
                 )
                   return;
 

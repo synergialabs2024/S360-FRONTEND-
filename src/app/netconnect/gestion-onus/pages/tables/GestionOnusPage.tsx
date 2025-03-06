@@ -1,19 +1,18 @@
 import { MRT_ColumnDef } from 'material-react-table';
+import { useForm } from 'react-hook-form';
 import { useMemo } from 'react';
 
-import { useFetchGestionOnus, useFetchOLTs } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { GestionOnu, OLT, PermissionsEnum } from '@/shared/interfaces';
+import { ROUTER_PATHS } from '@/router/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
+import { GestionOnu, OLT } from '@/shared/interfaces';
 import { SelectOLTItemsNMS } from '@/app/netconnect/custom';
-import { useForm } from 'react-hook-form';
+import { useFetchGestionOnus, useFetchOLTs } from '@/actions/app';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 
 export const returnUrlGestionOnusPage = ROUTER_PATHS.netconnect.gestionOnusNav;
 
@@ -25,7 +24,7 @@ interface OLTForm extends OLT {
 
 const GestionOnusPage: React.FC<GestionOnusPageProps> = () => {
   ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  //useCheckPermission(PermissionsEnum.administration_view_pais);
 
   // Fetch data
   const { data: OsLTPagingRes, isLoading: isOLTsLoading } = useFetchOLTs({

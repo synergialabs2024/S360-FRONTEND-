@@ -1,22 +1,20 @@
 import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 
-import { useFetchMonitoreos, useUpdateMonitoreo } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
+  CustomTable,
   CustomSearch,
   CustomSwitch,
-  CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { Monitoreo, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import { ROUTER_PATHS } from '@/router/constants';
+import { Monitoreo } from '@/shared/interfaces';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { useFetchMonitoreos, useUpdateMonitoreo } from '@/actions/app';
+import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 
 export const returnUrlMonitoreosPage =
   ROUTER_PATHS.administracionRed.monitoreosNav;
@@ -25,7 +23,7 @@ export type MonitoreosPageProps = {};
 
 const MonitoreosPage: React.FC<MonitoreosPageProps> = () => {
   ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  //useCheckPermission(PermissionsEnum.administration_view_pais);
 
   const navigate = useNavigate();
 
@@ -108,8 +106,7 @@ const MonitoreosPage: React.FC<MonitoreosPageProps> = () => {
               checked={row.original?.state}
               onChangeChecked={() => {
                 ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
-                  return;
+                //if (!hasPermission(PermissionsEnum.administration_change_pais)) return;
 
                 setConfirmDialog({
                   isOpen: true,
@@ -159,7 +156,7 @@ const MonitoreosPage: React.FC<MonitoreosPageProps> = () => {
       title="Monitoreos"
       createPageUrl={`${returnUrlMonitoreosPage}/crear`}
       ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      //showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -186,7 +183,7 @@ const MonitoreosPage: React.FC<MonitoreosPageProps> = () => {
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
         ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
+        //canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
         onEdit={onEdit}
         canDelete={false}
       />

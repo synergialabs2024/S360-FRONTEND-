@@ -1,22 +1,20 @@
 import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 
-import { useFetchVlans, useUpdateVlan } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum, Vlan } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
+import { Vlan } from '@/shared/interfaces';
+import { ROUTER_PATHS } from '@/router/constants';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { useFetchVlans, useUpdateVlan } from '@/actions/app';
+import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 
 export const returnUrlVlansPage = ROUTER_PATHS.netconnect.vlansNav;
 
@@ -24,7 +22,7 @@ export type VlansPageProps = {};
 
 const VlansPage: React.FC<VlansPageProps> = () => {
   ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  //useCheckPermission(PermissionsEnum.administration_view_pais);
 
   const navigate = useNavigate();
 
@@ -107,8 +105,7 @@ const VlansPage: React.FC<VlansPageProps> = () => {
               checked={row.original?.state}
               onChangeChecked={() => {
                 ///* Pendiente a cambio
-                if (!hasPermission(PermissionsEnum.administration_change_pais))
-                  return;
+                //if (!hasPermission(PermissionsEnum.administration_change_pais)) return;
 
                 setConfirmDialog({
                   isOpen: true,
@@ -158,7 +155,7 @@ const VlansPage: React.FC<VlansPageProps> = () => {
       title="Vlans"
       createPageUrl={`${returnUrlVlansPage}/crear`}
       ///* Pendiente a cambio
-      showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
+      //showCreateBtn={hasPermission(PermissionsEnum.administration_add_pais)}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -185,7 +182,7 @@ const VlansPage: React.FC<VlansPageProps> = () => {
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
         ///* Pendiente a cambio
-        canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
+        //canEdit={hasPermission(PermissionsEnum.administration_change_pais)}
         onEdit={onEdit}
         canDelete={false}
       />

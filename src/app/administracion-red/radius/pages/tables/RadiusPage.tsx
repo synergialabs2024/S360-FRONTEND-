@@ -1,14 +1,13 @@
-import { MRT_ColumnDef } from 'material-react-table';
 import { useEffect, useMemo, useState } from 'react';
+import { MRT_ColumnDef } from 'material-react-table';
 
-import { fetchCombinedDataRadiusToken, useFetchRadiuss } from '@/actions/app';
+import { Radius } from '@/shared/interfaces';
 import { ROUTER_PATHS } from '@/router/constants';
-import { SingleTableBoxScene } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum, Radius } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { SingleTableBoxScene } from '@/shared/components';
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { fetchCombinedDataRadiusToken, useFetchRadiuss } from '@/actions/app';
 
 export const returnUrlRadiusPage = ROUTER_PATHS.administracionRed.radiusNav;
 
@@ -20,7 +19,7 @@ const RadiusPage: React.FC<RadiusPageProps> = () => {
   );
 
   ///* Pendiente a cambio
-  useCheckPermission(PermissionsEnum.administration_view_pais);
+  //useCheckPermission(PermissionsEnum.administration_view_pais);
 
   // Fetch data
   const {
