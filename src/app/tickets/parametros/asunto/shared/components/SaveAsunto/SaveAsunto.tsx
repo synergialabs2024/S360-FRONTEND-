@@ -8,9 +8,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { returnUrlAsuntosPage } from '../../../pages/tables/AsuntosPage';
-import { getKeysFormErrorsMessage, ToastWrapper } from '@/shared';
+import {
+  getKeysFormErrorsMessage,
+  gridSizeMdLg6,
+  TIPO_TICKET_ASUNTO_ARRAY_CHOICES,
+  ToastWrapper,
+} from '@/shared';
 import { useEffect } from 'react';
 import {
+  CustomAutocompleteArrString,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
@@ -89,6 +95,7 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
+        size={gridSizeMdLg6}
       />
 
       <CustomTextField
@@ -98,6 +105,19 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
         defaultValue={(form.getValues().valor_cobrar ?? '').toString()}
         error={errors.valor_cobrar}
         helperText={errors.valor_cobrar?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocompleteArrString
+        label="Tipo Ticket"
+        name="tipo_ticket"
+        control={form.control}
+        defaultValue={form.getValues('tipo_ticket')}
+        options={TIPO_TICKET_ASUNTO_ARRAY_CHOICES}
+        isLoadingData={false}
+        error={errors.tipo_ticket}
+        helperText={errors.tipo_ticket?.message}
+        size={gridSizeMdLg6}
+        disableClearable
       />
 
       <SampleCheckbox
@@ -106,6 +126,7 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
         control={form.control}
         defaultValue={form.getValues().state}
         isState
+        size={gridSizeMdLg6}
       />
     </SingleFormBoxScene>
   );

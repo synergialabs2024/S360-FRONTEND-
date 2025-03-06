@@ -12,4 +12,5 @@ export const asuntoFormSchema = yup.object({
     .number()
     .typeError('El campo valor a cobrar es requerido')
     .required('El campo valor a cobrar es requerido'),
+  tipo_ticket: yup.string().required('El campo tipo ticket es requerido'),
 });

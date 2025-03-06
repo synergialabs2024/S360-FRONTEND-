@@ -13,4 +13,5 @@ export interface Asunto {
   name: string;
   state: boolean;
   valor_cobrar: number;
+  tipo_ticket: string;
 }

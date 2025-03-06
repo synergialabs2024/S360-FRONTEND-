@@ -1351,12 +1351,23 @@ export const MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES = [
   modeAuthorizateTypeEnumChoice.BRIDGING,
 ];
 
-export enum tipoCausaTicketMAsivoEnumChoice {
+//* TICKET MASIVO
+export enum tipoCausaTicketMasivoEnumChoice {
   PRIMARIA = 'PRIMARIA',
   SECUNDARIA = 'SECUNDARIA',
 }
 
 export const TIPO_CAUSA_TICKET_MASIVO_ARRAY_CHOICES = [
-  tipoCausaTicketMAsivoEnumChoice.PRIMARIA,
-  tipoCausaTicketMAsivoEnumChoice.SECUNDARIA,
+  tipoCausaTicketMasivoEnumChoice.PRIMARIA,
+  tipoCausaTicketMasivoEnumChoice.SECUNDARIA,
+];
+
+export enum tipoTicketAsuntoEnumChoice {
+  MASIVO = 'MASIVO',
+  INDIVIDUAL = 'INDIVIDUAL',
+}
+
+export const TIPO_TICKET_ASUNTO_ARRAY_CHOICES = [
+  tipoTicketAsuntoEnumChoice.MASIVO,
+  tipoTicketAsuntoEnumChoice.INDIVIDUAL,
 ];
