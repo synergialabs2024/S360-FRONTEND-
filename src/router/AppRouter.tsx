@@ -1867,6 +1867,34 @@ const UpdateOrigenPage = Loadable(
       import('@/app/tickets/parametros/origen/pages/forms/UpdateOrigenPage'),
   ),
 );
+///////* Ticket Masivos
+// Causa
+const CausaTicketMasivoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/causa-ticket-masivo/pages/tables/CausaTicketMasivoPage'
+      ),
+  ),
+);
+const CreateCausaTicketMasivoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/causa-ticket-masivo/pages/forms/CreateCausaTicketMasivoPage'
+      ),
+  ),
+);
+const UpdateCausaTicketMasivoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/causa-ticket-masivo/pages/forms/UpdateCausaTicketMasivoPage'
+      ),
+  ),
+);
+
+///*
 const ScoresLimitVentasPage = Loadable(
   lazy(
     () =>
@@ -3413,6 +3441,21 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.parametrosOrigenesEditar,
             element: <UpdateOrigenPage />,
+          },
+
+          ///* TICKETS MASIVOS
+          //Causa
+          {
+            path: ROUTER_PATHS.tickets.causaTicketMasivo,
+            element: <CausaTicketMasivoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.causaTicketMasivoCrear,
+            element: <CreateCausaTicketMasivoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.causaTicketMasivoEditar,
+            element: <UpdateCausaTicketMasivoPage />,
           },
         ],
       },

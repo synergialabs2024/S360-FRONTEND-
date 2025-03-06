@@ -14,3 +14,4 @@ export * from './rubros';
 export * from './saldos';
 export * from './tecnico';
 export * from './transacciones';
+export * from './tickets';

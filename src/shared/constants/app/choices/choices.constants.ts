@@ -1350,3 +1350,13 @@ export const MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES = [
   modeAuthorizateTypeEnumChoice.ROUTING,
   modeAuthorizateTypeEnumChoice.BRIDGING,
 ];
+
+export enum tipoCausaTicketMAsivoEnumChoice {
+  PRIMARIA = 'PRIMARIA',
+  SECUNDARIA = 'SECUNDARIA',
+}
+
+export const TIPO_CAUSA_TICKET_MASIVO_ARRAY_CHOICES = [
+  tipoCausaTicketMAsivoEnumChoice.PRIMARIA,
+  tipoCausaTicketMAsivoEnumChoice.SECUNDARIA,
+];

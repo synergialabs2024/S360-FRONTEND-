@@ -839,6 +839,12 @@ export const ROUTER_PATHS = {
     parametrosOrigenesCrear: 'parametros/origenes/crear',
     parametrosOrigenesEditar: 'parametros/origenes/editar/:uuid',
     parametrosOrigenesNav: '/tickets/parametros/origenes',
+
+    ///* TICKETS MASIVOS
+    causaTicketMasivo: 'causa-ticket-masivo',
+    causaTicketMasivoCrear: 'causa-ticket-masivo/crear',
+    causaTicketMasivoEditar: 'causa-ticket-masivo/editar/:uuid',
+    causaTicketMasivoNav: '/tickets/causa-ticket-masivo',
   },
 
   /////* Buzon Tareas ----------------

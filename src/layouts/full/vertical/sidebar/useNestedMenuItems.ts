@@ -1393,6 +1393,12 @@ export const useNestedMenu = () => {
                 }),
               ],
             },
+            renderByModule(SidenavModulesEnum.TICKETS_CAUSA_TICKET_MASIVO, {
+              id: 'causa-ticket-masivo',
+              title: 'Causa de ticket masivo',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.tickets.causaTicketMasivoNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
