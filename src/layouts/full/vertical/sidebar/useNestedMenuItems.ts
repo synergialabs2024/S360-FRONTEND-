@@ -1403,7 +1403,7 @@ export const useNestedMenu = () => {
               id: 'causa-ticket-masivo',
               title: 'Causa de ticket masivo',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.tickets.causaTicketMasivoNav,
+              url: ROUTER_PATHS.tickets.causaTMNav,
             }),
             renderByModule(
               SidenavModulesEnum.TICKETS_MENSAJERIA_TICKET_MASIVO,
@@ -1411,9 +1411,15 @@ export const useNestedMenu = () => {
                 id: 'mensajeria-ticket-masivo',
                 title: 'Mensajeria de ticket masivo',
                 type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.tickets.mensajeriaTicketMasivoNav,
+                url: ROUTER_PATHS.tickets.mensajeriaTMNav,
               },
             ),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'evento-mensajeria-ticket-masivo',
+              title: 'Evento Mensajeria de ticket masivo',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.tickets.eventomensajeriaTMNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

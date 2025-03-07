@@ -847,16 +847,22 @@ export const ROUTER_PATHS = {
 
     ///* TICKETS MASIVOS
     //Causa
-    causaTicketMasivo: 'causa-ticket-masivo',
-    causaTicketMasivoCrear: 'causa-ticket-masivo/crear',
-    causaTicketMasivoEditar: 'causa-ticket-masivo/editar/:uuid',
-    causaTicketMasivoNav: '/tickets/causa-ticket-masivo',
+    causaTM: 'causa-ticket-masivo',
+    causaTMCrear: 'causa-ticket-masivo/crear',
+    causaTMEditar: 'causa-ticket-masivo/editar/:uuid',
+    causaTMNav: '/tickets/causa-ticket-masivo',
 
     //Mensajeria
-    mensajeriaTicketMasivo: 'mensajeria-ticket-masivo',
-    mensajeriaTicketMasivoCrear: 'mensajeria-ticket-masivo/crear',
-    mensajeriaTicketMasivoEditar: 'mensajeria-ticket-masivo/editar/:uuid',
-    mensajeriaTicketMasivoNav: '/tickets/mensajeria-ticket-masivo',
+    mensajeriaTM: 'mensajeria-ticket-masivo',
+    mensajeriaTMCrear: 'mensajeria-ticket-masivo/crear',
+    mensajeriaTMEditar: 'mensajeria-ticket-masivo/editar/:uuid',
+    mensajeriaTMNav: '/tickets/mensajeria-ticket-masivo',
+
+    //Evento Mensajeria
+    eventomensajeriaTM: 'evento-mensajeria-ticket-masivo',
+    eventomensajeriaTMCrear: 'evento-mensajeria-ticket-masivo/crear',
+    eventomensajeriaTMEditar: 'evento-mensajeria-ticket-masivo/editar/:uuid',
+    eventomensajeriaTMNav: '/tickets/evento-mensajeria-ticket-masivo',
   },
 
   /////* Buzon Tareas ----------------

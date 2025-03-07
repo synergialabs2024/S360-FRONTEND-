@@ -11,11 +11,15 @@ import { ScrollableDialogProps } from '../../CustomDialogs';
 export type ImgModalComponentProps = {
   urls: Record<string, string | null>;
   modalTitle?: string;
+  widthModal?: string;
+  maxImg?: string;
 };
 
 const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
   urls = {},
   modalTitle = 'Imagen',
+  widthModal = '75%',
+  maxImg = '300px',
 }) => {
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,7 +62,8 @@ const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
         <ScrollableDialogProps
           open={open}
           onClose={() => setOpen(false)}
-          minWidth="75%"
+          cancelTextBtn="Cerrar"
+          minWidth={widthModal}
           title={modalTitle}
           contentNode={
             validEntries.length === 0 ? (
@@ -107,7 +112,7 @@ const ImgModalComponent: React.FC<ImgModalComponentProps> = ({
                     alt={`Imagen ${currentIndex + 1}`}
                     style={{
                       maxWidth: '50%',
-                      maxHeight: '300px',
+                      maxHeight: maxImg,
                     }}
                   />
 

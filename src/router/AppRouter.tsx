@@ -1877,52 +1877,55 @@ const UpdateOrigenPage = Loadable(
 );
 ///////* Ticket Masivos
 // Causa
-const CausaTicketMasivoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/tickets/causa-ticket-masivo/pages/tables/CausaTicketMasivoPage'
-      ),
-  ),
+const CausaTMPage = Loadable(
+  lazy(() => import('@/app/tickets/causa-tm/pages/tables/CausaTMPage')),
 );
-const CreateCausaTicketMasivoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/tickets/causa-ticket-masivo/pages/forms/CreateCausaTicketMasivoPage'
-      ),
-  ),
+const CreateCausaTMPage = Loadable(
+  lazy(() => import('@/app/tickets/causa-tm/pages/forms/CreateCausaTMPage')),
 );
-const UpdateCausaTicketMasivoPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/tickets/causa-ticket-masivo/pages/forms/UpdateCausaTicketMasivoPage'
-      ),
-  ),
+const UpdateCausaTMPage = Loadable(
+  lazy(() => import('@/app/tickets/causa-tm/pages/forms/UpdateCausaTMPage')),
 );
 // Mensajeria
-const MensajeriaTicketMasivoPage = Loadable(
+const MensajeriaTMPage = Loadable(
+  lazy(
+    () => import('@/app/tickets/mensajeria-tm/pages/tables/MensajeriaTMPage'),
+  ),
+);
+const CreateMensajeriaTMPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/mensajeria-tm/pages/forms/CreateMensajeriaTMPage'),
+  ),
+);
+const UpdateMensajeriaTMPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/mensajeria-tm/pages/forms/UpdateMensajeriaTMPage'),
+  ),
+);
+// Evento Mensajeria
+const EventoMensajeriaTMPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/tickets/mensajeria-ticket-masivo/pages/tables/MensajeriaTicketMasivoPage'
+        '@/app/tickets/evento-mensajeria-tm/pages/tables/EventoMensajeriaTMPage'
       ),
   ),
 );
-const CreateMensajeriaTicketMasivoPage = Loadable(
+const CreateEventoMensajeriaTMPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/tickets/mensajeria-ticket-masivo/pages/forms/CreateMensajeriaTicketMasivoPage'
+        '@/app/tickets/evento-mensajeria-tm/pages/forms/CreateEventoMensajeriaTMPage'
       ),
   ),
 );
-const UpdateMensajeriaTicketMasivoPage = Loadable(
+const UpdateEventoMensajeriaTMPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/tickets/mensajeria-ticket-masivo/pages/forms/UpdateMensajeriaTicketMasivoPage'
+        '@/app/tickets/evento-mensajeria-tm/pages/forms/UpdateEventoMensajeriaTMPage'
       ),
   ),
 );
@@ -3485,29 +3488,42 @@ const AppRouter = [
           ///* TICKETS MASIVOS
           //Causa
           {
-            path: ROUTER_PATHS.tickets.causaTicketMasivo,
-            element: <CausaTicketMasivoPage />,
+            path: ROUTER_PATHS.tickets.causaTM,
+            element: <CausaTMPage />,
           },
           {
-            path: ROUTER_PATHS.tickets.causaTicketMasivoCrear,
-            element: <CreateCausaTicketMasivoPage />,
+            path: ROUTER_PATHS.tickets.causaTMCrear,
+            element: <CreateCausaTMPage />,
           },
           {
-            path: ROUTER_PATHS.tickets.causaTicketMasivoEditar,
-            element: <UpdateCausaTicketMasivoPage />,
+            path: ROUTER_PATHS.tickets.causaTMEditar,
+            element: <UpdateCausaTMPage />,
           },
-          //Causa
+          //Mensajeria
           {
-            path: ROUTER_PATHS.tickets.mensajeriaTicketMasivo,
-            element: <MensajeriaTicketMasivoPage />,
-          },
-          {
-            path: ROUTER_PATHS.tickets.mensajeriaTicketMasivoCrear,
-            element: <CreateMensajeriaTicketMasivoPage />,
+            path: ROUTER_PATHS.tickets.mensajeriaTM,
+            element: <MensajeriaTMPage />,
           },
           {
-            path: ROUTER_PATHS.tickets.mensajeriaTicketMasivoEditar,
-            element: <UpdateMensajeriaTicketMasivoPage />,
+            path: ROUTER_PATHS.tickets.mensajeriaTMCrear,
+            element: <CreateMensajeriaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.mensajeriaTMEditar,
+            element: <UpdateMensajeriaTMPage />,
+          },
+          //Evento Mensajeria
+          {
+            path: ROUTER_PATHS.tickets.eventomensajeriaTM,
+            element: <EventoMensajeriaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.eventomensajeriaTMCrear,
+            element: <CreateEventoMensajeriaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.eventomensajeriaTMEditar,
+            element: <UpdateEventoMensajeriaTMPage />,
           },
         ],
       },
