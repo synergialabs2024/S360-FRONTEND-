@@ -897,6 +897,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.alquileresNav,
             }),
+            renderByModule(SidenavModulesEnum.CARTERA_CONFIGURACION_PLANTILLA, {
+              id: 'configuracion-plantilla',
+              title: 'Configuraciones de plantilla',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.configuracionPlantillaClienteNav,
+            }),
 
             // MANTENEDOR ACTIVACIONES
 

@@ -4,6 +4,7 @@ import { ClienteLimitData, ContratoLimitData } from '../cliente';
 import { Producto } from '../inventario';
 import { OrdenTrabajoLimitData } from '../tecnico';
 import { Factura } from './factura.interface';
+import { Saldo } from './saldo.interface';
 
 export interface RubrosPaginatedRes {
   status: number;
@@ -41,6 +42,9 @@ export interface Rubro {
   created_at?: string;
   modified_at?: string;
 
+  generar_factura?: boolean;
+  valor_factura?: string;
+
   ///* fk
   cliente?: number;
   linea_servicio?: number;
@@ -53,6 +57,10 @@ export interface Rubro {
   orden_trabajo_data?: OrdenTrabajoLimitData;
 
   rubro_items_data?: RubroItemData[];
+
+  // helpers no models -----
+  saldo_rubro_consume_data?: Saldo[];
+  saldo_rubro_origen_data?: Saldo[];
 }
 
 export type RubroItemData = {
@@ -80,6 +88,8 @@ export type RubroItemData = {
   plan_internet?: number;
   producto?: number;
   default_iva?: number;
+
+  producto_data?: Producto;
 };
 
 export type BaseRubroDetail = {

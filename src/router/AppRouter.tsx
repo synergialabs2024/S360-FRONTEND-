@@ -1,6 +1,7 @@
 // @ts-ignore
 import { lazy } from 'react';
 
+import BuzonTareasModule from '@/app/buzon-tareas/BuzonTareasModule';
 import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
 import CreateSolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/forms/CreateSolicitudMaterialPage';
 import SolicitudMaterialMainPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialMainPage';
@@ -10,7 +11,6 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
-import BuzonTareasModule from '@/app/buzon-tareas/BuzonTareasModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -1022,6 +1022,14 @@ const TransaccionsPage = Loadable(
 );
 const SaldosPage = Loadable(
   lazy(() => import('@/app/cobranza/saldo/pages/tables/SaldosPage')),
+);
+const ConfiguracionPlantillaClienteCarteraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/config-plantilla/ConfiguracionPlantillaClienteCarteraPage'
+      ),
+  ),
 );
 ///* Cobranza ------------
 const CobranzaModule = Loadable(
@@ -2566,6 +2574,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.alquileres,
             element: <AlquilerMainPage />,
+          },
+
+          ///* Configuracion plantilla cliente
+          {
+            path: ROUTER_PATHS.cartera.configuracionPlantillaCliente,
+            element: <ConfiguracionPlantillaClienteCarteraPage />,
           },
         ],
       },

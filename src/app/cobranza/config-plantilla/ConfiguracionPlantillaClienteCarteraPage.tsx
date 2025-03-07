@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-
 import { useFetchConfiguracionPlantillas } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
+import { useColumnsConfigPlantillaCliente } from '@/app/administration/config-plantilla/shared/hooks/useColumnsConfigPlantillaCliente';
 import { TipoPlantillaConfigClienteEnumChoice } from '@/shared';
 import {
   CustomSearch,
@@ -15,33 +13,19 @@ import {
   ConfiguracionPlantillaCliente,
   PermissionsEnum,
 } from '@/shared/interfaces';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
-import { useColumnsConfigPlantillaCliente } from '../../shared/hooks/useColumnsConfigPlantillaCliente';
 
-export const returnUrlConfiguracionsPlantillaPage =
-  ROUTER_PATHS.administracion.configuracionPlantillasNav;
+export type ConfiguracionPlantillaClienteCarteraPageProps = {};
 
-export type ConfiguracionsPlantillaPageProps = {};
-
-const ConfiguracionsPlantillaPage: React.FC<
-  ConfiguracionsPlantillaPageProps
+const ConfiguracionPlantillaClienteCarteraPage: React.FC<
+  ConfiguracionPlantillaClienteCarteraPageProps
 > = () => {
   useCheckPermission(
     PermissionsEnum.administration_view_configplantillacliente,
   );
 
-  const navigate = useNavigate();
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table
   const {
@@ -66,36 +50,15 @@ const ConfiguracionsPlantillaPage: React.FC<
       name: searchTerm,
       ...filterObject,
       filterByState: false,
-      tipo_configuracion: TipoPlantillaConfigClienteEnumChoice.GENERAL,
+      tipo_configuracion: TipoPlantillaConfigClienteEnumChoice.PERSONALIZADO,
     },
   });
 
-  ///* handlers
-  const onEdit = (configuracionplantilla: ConfiguracionPlantillaCliente) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar ConfiguracionPlantilla',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(
-          `${returnUrlConfiguracionsPlantillaPage}/editar/${configuracionplantilla.uuid}`,
-        );
-      },
-    });
-  };
-
   ///* columns
-  const { genericColumns } = useColumnsConfigPlantillaCliente();
+  const { carteraColumns } = useColumnsConfigPlantillaCliente();
 
   return (
-    <SingleTableBoxScene
-      title="Configuracion Plantilla"
-      createPageUrl={`${returnUrlConfiguracionsPlantillaPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.administration_add_configplantillacliente,
-      )}
-    >
+    <SingleTableBoxScene title="Configuracion Plantilla" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
@@ -103,7 +66,7 @@ const ConfiguracionsPlantillaPage: React.FC<
       />
 
       <CustomTable<ConfiguracionPlantillaCliente>
-        columns={genericColumns}
+        columns={carteraColumns}
         data={ConfiguracionsPlantillaPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -119,18 +82,13 @@ const ConfiguracionsPlantillaPage: React.FC<
         rowCount={ConfiguracionsPlantillaPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.administration_change_configplantillacliente,
-        )}
+        enableActionsColumn={false}
         // crud
-        canEdit={hasPermission(
-          PermissionsEnum.administration_change_configplantillacliente,
-        )}
-        onEdit={onEdit}
+        canEdit={false}
         canDelete={false}
       />
     </SingleTableBoxScene>
   );
 };
 
-export default ConfiguracionsPlantillaPage;
+export default ConfiguracionPlantillaClienteCarteraPage;

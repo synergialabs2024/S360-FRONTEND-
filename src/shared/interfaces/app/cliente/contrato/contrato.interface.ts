@@ -44,6 +44,7 @@ export interface Contrato {
 
   plan_internet_ingreso_data?: PlanInternet;
   plan_internet_actual_data?: PlanInternet;
+  config_plantilla_cliente_data?: ConfiguracionPlantillaCliente;
 }
 
 export type ContratoLimitData = Pick<

@@ -48,7 +48,7 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
     if (rubroType !== TipoRubroEnumChoice.PRODUCTOS || !hasSeriesOT) return {};
     return equiposUtilizados.reduce(
       (acc, item) => {
-        acc[item?.codigo] = item?.series;
+        acc[item?.producto_data?.codigo] = item?.series;
         return acc;
       },
       {} as Record<string, string[]>,
@@ -140,12 +140,16 @@ const ClienteFibraRobroInfoTableDetailsRubroItem: React.FC<
                             startIcon={<IoQrCodeSharp />}
                             color="info"
                             onClick={() => {
+                              console.log('item', { item });
+
                               setSelectedRow({
                                 ...item,
-                                series: seriesMap[item.descripcion] || [],
-                                savedSeries: seriesMap[item.descripcion] || [],
+                                series:
+                                  seriesMap[item?.producto_data?.codigo!] || [],
+                                savedSeries:
+                                  seriesMap[item?.producto_data?.codigo!] || [],
                                 selectedSeries:
-                                  seriesMap[item.descripcion] || [],
+                                  seriesMap[item?.producto_data?.codigo!] || [],
                               } as any);
                               setOpenSeriesModal(true);
                             }}

@@ -362,6 +362,11 @@ export const ROUTER_PATHS = {
     alquileresCrear: 'alquileres/crear',
     alquileresEditar: 'alquileres/editar/:uuid',
     alquileresNav: '/cartera/alquileres',
+
+    ///* configuracion de plantilla
+    configuracionPlantillaCliente: 'configuracion-plantilla-cliente',
+    configuracionPlantillaClienteNav:
+      '/cartera/configuracion-plantilla-cliente',
   },
   /////* Cobranza ----------------
   cobranza: {

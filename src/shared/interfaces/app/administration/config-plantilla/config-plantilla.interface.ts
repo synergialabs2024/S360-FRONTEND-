@@ -1,3 +1,4 @@
+import { TipoPlantillaConfigClienteEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface ConfiguracionesPlantillaClientePaginatedRes {
@@ -13,6 +14,9 @@ export interface ConfiguracionPlantillaCliente {
 
   name: string;
   state: boolean;
+
+  tipo_configuracion: TipoPlantillaConfigClienteEnumChoice;
+  default_config: boolean;
 
   dia_pago: number; // CalendarioFacturacion - 1-31
   dia_facturacion: number; // CalendarioFacturacion - 1-31

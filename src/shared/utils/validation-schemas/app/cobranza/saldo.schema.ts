@@ -10,7 +10,8 @@ export const saldoFormSchema = yup.object({
     }),
   descripcion: yup
     .string()
-    .optional()
-    .nullable()
+    .required(
+      'El campo descripcion es requerido para identificar el saldo a crear',
+    )
     .max(200, 'El campo descripcion no debe exceder los 200 caracteres'),
 });
