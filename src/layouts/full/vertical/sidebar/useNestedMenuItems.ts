@@ -1399,6 +1399,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.tickets.causaTicketMasivoNav,
             }),
+            renderByModule(
+              SidenavModulesEnum.TICKETS_MENSAJERIA_TICKET_MASIVO,
+              {
+                id: 'mensajeria-ticket-masivo',
+                title: 'Mensajeria de ticket masivo',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.tickets.mensajeriaTicketMasivoNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

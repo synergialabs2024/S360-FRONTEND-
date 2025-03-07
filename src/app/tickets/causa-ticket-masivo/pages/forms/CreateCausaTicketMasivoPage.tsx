@@ -9,7 +9,7 @@ const CreateCausaTicketMasivoPage: React.FC<
 > = () => {
   useCheckPermission(PermissionsEnum.tecnico_add_causaticketmasivo);
 
-  return <SaveCausaTicketMasivo title="Crear Brass" />;
+  return <SaveCausaTicketMasivo title="Crear Causa para ticket masivo" />;
 };
 
 export default CreateCausaTicketMasivoPage;

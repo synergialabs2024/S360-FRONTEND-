@@ -1893,6 +1893,31 @@ const UpdateCausaTicketMasivoPage = Loadable(
       ),
   ),
 );
+// Mensajeria
+const MensajeriaTicketMasivoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/mensajeria-ticket-masivo/pages/tables/MensajeriaTicketMasivoPage'
+      ),
+  ),
+);
+const CreateMensajeriaTicketMasivoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/mensajeria-ticket-masivo/pages/forms/CreateMensajeriaTicketMasivoPage'
+      ),
+  ),
+);
+const UpdateMensajeriaTicketMasivoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/mensajeria-ticket-masivo/pages/forms/UpdateMensajeriaTicketMasivoPage'
+      ),
+  ),
+);
 
 ///*
 const ScoresLimitVentasPage = Loadable(
@@ -3456,6 +3481,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.causaTicketMasivoEditar,
             element: <UpdateCausaTicketMasivoPage />,
+          },
+          //Causa
+          {
+            path: ROUTER_PATHS.tickets.mensajeriaTicketMasivo,
+            element: <MensajeriaTicketMasivoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.mensajeriaTicketMasivoCrear,
+            element: <CreateMensajeriaTicketMasivoPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.mensajeriaTicketMasivoEditar,
+            element: <UpdateMensajeriaTicketMasivoPage />,
           },
         ],
       },

@@ -841,10 +841,17 @@ export const ROUTER_PATHS = {
     parametrosOrigenesNav: '/tickets/parametros/origenes',
 
     ///* TICKETS MASIVOS
+    //Causa
     causaTicketMasivo: 'causa-ticket-masivo',
     causaTicketMasivoCrear: 'causa-ticket-masivo/crear',
     causaTicketMasivoEditar: 'causa-ticket-masivo/editar/:uuid',
     causaTicketMasivoNav: '/tickets/causa-ticket-masivo',
+
+    //Mensajeria
+    mensajeriaTicketMasivo: 'mensajeria-ticket-masivo',
+    mensajeriaTicketMasivoCrear: 'mensajeria-ticket-masivo/crear',
+    mensajeriaTicketMasivoEditar: 'mensajeria-ticket-masivo/editar/:uuid',
+    mensajeriaTicketMasivoNav: '/tickets/mensajeria-ticket-masivo',
   },
 
   /////* Buzon Tareas ----------------

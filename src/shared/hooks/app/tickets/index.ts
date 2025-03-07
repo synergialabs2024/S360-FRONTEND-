@@ -1,2 +1,3 @@
 export * from './causa-ticket-masivo';
+export * from './mensajeria-ticket-masivo';
 export * from './useColumnsTickets';
