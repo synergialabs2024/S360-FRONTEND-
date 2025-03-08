@@ -306,6 +306,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           });
         }
       }
+      // 412
     } else if (status === HTTPResStatusCodeEnum.CLIENTE_EXISTS_IN_DB) {
       ToastWrapper.info(err?.response?.data?.message);
       data?.sri_down &&
@@ -342,6 +343,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         isValidIdentificacion: true,
         pais: currentCountry?.id,
         nacionalidad: data?.nacionalidad,
+        email: data?.cliente?.email,
+        celular: data?.cliente?.celular,
       });
 
       setClientData(data);

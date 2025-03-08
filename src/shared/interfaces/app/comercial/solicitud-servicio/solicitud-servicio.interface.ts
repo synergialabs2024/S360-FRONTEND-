@@ -73,7 +73,7 @@ export interface SolicitudServicio {
   vendedor?: number;
 
   trazabilidad_data?: TrazabilidadVentas[]; // JSON
-  codigo_otp_data?: CodigoOtpLimitData;
+  // codigo_otp_data?: CodigoOtpLimitData;
   codigos_otp_data?: CodigoOtpLimitData[];
 
   sector_data?: Sector;

@@ -26,13 +26,15 @@ export interface CodigoOtp {
   modified_at?: string;
 
   ///* fk
+  solicitud_servicio?: number;
+
   area: number;
   departamento: number;
   canal_venta: number;
   vendedor: number;
 
   // only serializer
-  solicitud_servicio_data?: SolicitudServicioLimitData[];
+  solicitud_servicio_data?: SolicitudServicioLimitData;
   trazabilidad_data?: TrazabilidadVentas[];
   vendedor_data?: SystemUserLimitData;
   gestionado_by_data?: SystemUserLimitData;

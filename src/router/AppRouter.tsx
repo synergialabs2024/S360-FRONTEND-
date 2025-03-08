@@ -1,12 +1,9 @@
 // @ts-ignore
 import { lazy } from 'react';
 
-import BuzonTareasModule from '@/app/buzon-tareas/BuzonTareasModule';
-import InfraestructuraModule from '@/app/infraestructura/InfraestructuraModule';
+import AdministrationModule from '@/app/administration/AdministrationModule';
 import CreateSolicitudMaterialPage from '@/app/inventario/solicitud-material/pages/forms/CreateSolicitudMaterialPage';
 import SolicitudMaterialMainPage from '@/app/inventario/solicitud-material/pages/tables/SolicitudMaterialMainPage';
-import TecnicoModule from '@/app/tecnico/TecnicoModule';
-import TicketsModule from '@/app/tickets/TicketsModule';
 import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
@@ -32,9 +29,9 @@ const Error404 = Loadable(lazy(() => import('@/shared/pages/error/Error404')));
 // import PaginaTabs from './PaginaTabs';
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 
-const AdministrationModule = Loadable(
-  lazy(() => import('@/app/administration/AdministrationModule')),
-);
+// const AdministrationModule = Loadable(
+//   lazy(() => import('@/app/administration/AdministrationModule')),
+// );
 const PaisesPage = Loadable(
   lazy(() => import('@/app/administration/pais/pages/tables/PaisesPage')),
 );
@@ -448,9 +445,9 @@ const UpdatePlanInternetPage = Loadable(
   ),
 );
 
-const ComercialModule = Loadable(
-  lazy(() => import('@/app/comercial/ComercialModule')),
-);
+// const ComercialModule = Loadable(
+//   lazy(() => import('@/app/comercial/ComercialModule')),
+// );
 const PromocionesPage = Loadable(
   lazy(() => import('@/app/comercial/promocion/pages/tables/PromocionsPage')),
 );
@@ -503,9 +500,9 @@ const InstalacionPreRechazadaOT = Loadable(
 );
 
 ///* Supervision Comercial ------------
-const SupervisionComercialModule = Loadable(
-  lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
-);
+// const SupervisionComercialModule = Loadable(
+//   lazy(() => import('@/app/supervision-comercial/SupervisionComercialModule')),
+// );
 const SolicitudsDesbloqueoPreventasMainPage = Loadable(
   lazy(
     () =>
@@ -740,9 +737,9 @@ const UpdateGrupoIPv6Page = Loadable(
 );
 
 ///* Mantenimiento Operaciones ------------
-const MantenimientoOperacionModule = Loadable(
-  lazy(() => import('@/app/mante-operacion/MantenimientoOperacionModule')),
-);
+// const MantenimientoOperacionModule = Loadable(
+//   lazy(() => import('@/app/mante-operacion/MantenimientoOperacionModule')),
+// );
 const FlotasPage = Loadable(
   lazy(() => import('@/app/mante-operacion/flota/pages/tables/FlotasPage')),
 );
@@ -753,9 +750,9 @@ const UpdateFlotaPage = Loadable(
   lazy(() => import('@/app/mante-operacion/flota/pages/forms/UpdateFlotaPage')),
 );
 ///* Cartera ------------
-const CarteraModule = Loadable(
-  lazy(() => import('@/app/cartera/CarteraModule')),
-);
+// const CarteraModule = Loadable(
+//   lazy(() => import('@/app/cartera/CarteraModule')),
+// );
 const CreateVentaConvenioPage = Loadable(
   lazy(
     () =>
@@ -1032,9 +1029,9 @@ const ConfiguracionPlantillaClienteCarteraPage = Loadable(
   ),
 );
 ///* Cobranza ------------
-const CobranzaModule = Loadable(
-  lazy(() => import('@/app/cobranza/CobranzaModule')),
-);
+// const CobranzaModule = Loadable(
+//   lazy(() => import('@/app/cobranza/CobranzaModule')),
+// );
 const TarjetasPage = Loadable(
   lazy(() => import('@/app/cobranza/tarjeta/pages/tables/TarjetasPage')),
 );
@@ -1129,9 +1126,9 @@ const PlanificadorFlotaPage = Loadable(
 );
 
 ///* Administracion red ------------
-const AdministracionRedModule = Loadable(
-  lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
-);
+// const AdministracionRedModule = Loadable(
+//   lazy(() => import('@/app/administracion-red/AdministracionRedModule')),
+// );
 const RoutersPage = Loadable(
   lazy(
     () => import('@/app/administracion-red/router/pages/tables/RoutersPage'),
@@ -1791,9 +1788,9 @@ const AuditoriaInstallActualizadasPage = Loadable(
 );
 
 ///* cliente ------------
-const ClienteModule = Loadable(
-  lazy(() => import('@/app/cliente/ClienteModule')),
-);
+// const ClienteModule = Loadable(
+//   lazy(() => import('@/app/cliente/ClienteModule')),
+// );
 const ClientesFibraMainPage = Loadable(
   lazy(
     () => import('@/app/cliente/cliente/pages/tables/ClientesFibraMainPage'),
@@ -2368,7 +2365,7 @@ const AppRouter = [
       //////////* Mantenimiento Operaciones ------------
       {
         path: ROUTER_PATHS.mantenimientoOperacion.root,
-        element: <MantenimientoOperacionModule />,
+        element: <AdministrationModule />,
         children: [
           ///* flotas
           {
@@ -2398,7 +2395,7 @@ const AppRouter = [
       //////////* Cartera ------------
       {
         path: ROUTER_PATHS.cartera.root,
-        element: <CarteraModule />,
+        element: <AdministrationModule />,
         children: [
           ///* cambio domiclio
           {
@@ -2589,7 +2586,7 @@ const AppRouter = [
       //////////* Cobranza ------------
       {
         path: ROUTER_PATHS.cobranza.root,
-        element: <CobranzaModule />,
+        element: <AdministrationModule />,
         children: [
           ///* tarjetas
           {
@@ -2638,7 +2635,7 @@ const AppRouter = [
       //////////* Infraestructura ------------
       {
         path: ROUTER_PATHS.infraestructura.root,
-        element: <InfraestructuraModule />,
+        element: <AdministrationModule />,
         children: [
           ///* Nodo
           {
@@ -2754,7 +2751,7 @@ const AppRouter = [
       //////////* Supervision Comercial ------------
       {
         path: ROUTER_PATHS.supervisionComercial.root,
-        element: <SupervisionComercialModule />,
+        element: <AdministrationModule />,
         children: [
           ///* solicitud liberacion
           {
@@ -2805,7 +2802,7 @@ const AppRouter = [
       //////////* Comercial ------------
       {
         path: ROUTER_PATHS.comercial.root,
-        element: <ComercialModule />,
+        element: <AdministrationModule />,
         children: [
           ///* promocion
           {
@@ -2886,7 +2883,7 @@ const AppRouter = [
       //////////* Operaciones ------------
       {
         path: ROUTER_PATHS.operaciones.root,
-
+        element: <AdministrationModule />,
         children: [
           ///* agendamientos: ya no
           // {
@@ -2958,7 +2955,7 @@ const AppRouter = [
       //////////* Cliente ------------
       {
         path: ROUTER_PATHS.clientes.root,
-        element: <ClienteModule />,
+        element: <AdministrationModule />,
         children: [
           ///* servicio
           {
@@ -3247,7 +3244,7 @@ const AppRouter = [
       //////////* Administracion Red ------------
       {
         path: ROUTER_PATHS.administracionRed.root,
-        element: <AdministracionRedModule />,
+        element: <AdministrationModule />,
         children: [
           ///* router
           {
@@ -3392,7 +3389,7 @@ const AppRouter = [
       //////////* Tecnico ------------
       {
         path: ROUTER_PATHS.tecnico.root,
-        element: <TecnicoModule />,
+        element: <AdministrationModule />,
         children: [
           ///* Instalaciones Asignadas
           {
@@ -3445,7 +3442,7 @@ const AppRouter = [
       //////////* Tickets ------------
       {
         path: ROUTER_PATHS.tickets.root,
-        element: <TicketsModule />,
+        element: <AdministrationModule />,
         children: [
           {
             path: ROUTER_PATHS.tickets.ticketsCrear,
@@ -3531,7 +3528,7 @@ const AppRouter = [
       //////////* Buzon Tareas ------------
       {
         path: ROUTER_PATHS.buzonTareas.root,
-        element: <BuzonTareasModule />,
+        element: <AdministrationModule />,
         children: [
           {
             path: ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav,
