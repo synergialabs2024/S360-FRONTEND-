@@ -540,6 +540,9 @@ export enum BucketTypeEnumChoice {
 
   IMAGES_ORDENTRABAJO_INSTALACION = 'images/orden-trabajo/instalaciones',
   IMAGES_TICKETS_VISITAS = 'images/tickets-visitas',
+
+  // ticket masivo
+  IMAGES_EMAIL_TM = 'images/email',
 }
 
 export enum BucketKeyNameEnumChoice {
@@ -1379,3 +1382,7 @@ export const TIPO_TICKET_ASUNTO_ARRAY_CHOICES = [
   tipoTicketAsuntoEnumChoice.MASIVO,
   tipoTicketAsuntoEnumChoice.INDIVIDUAL,
 ];
+
+export enum ImageEventoMensajeriaTMNameEnumChoice {
+  MENSAJE_IMG = 'email_tm',
+}

@@ -1,5 +1,6 @@
-export * from './causa-ticket-masivo';
-export * from './mensajeria-ticket-masivo';
+export * from './causa-tm';
+export * from './evento-mensajeria-tm';
+export * from './mensajeria-tm';
 
 export * from './parametros';
 export * from './tickets.actions';
