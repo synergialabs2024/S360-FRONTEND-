@@ -104,6 +104,7 @@ import {
   preventaFormSchema,
   sanitizeDataForSend,
   sanitizeDataResetForm,
+  validarCedulaEcuador,
 } from '@/shared/utils';
 import {
   GenericInventoryStoreKey,
@@ -716,28 +717,34 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   };
   const onErrorEquifax = async (err: any) => {
     if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
-      ToastWrapper.warning(
-        'Servicio de consulta de Equifax no disponible en este momento',
+      ToastWrapper.error(
+        'El servicio de consulta de buro de crédito no está disponible en este momento',
       );
     } else {
       handleAxiosError(err);
     }
-    const suggestedPlansBuroKey = [
-      ClasificacionPlanesScoreBuroEnumChoice.BASICO,
-    ];
-
-    setAlreadyConsultedEquifax(true);
-    setSuggestedPlansBuroKey(suggestedPlansBuroKey);
-    form.reset({
-      ...form.getValues(),
-      rango_capacidad_pago: '0-150',
-      score_servicios: 'E',
-      plan_sugerido_buro: suggestedPlansBuroKey.join(','),
-      score_sobreendeudamiento: 'E',
-      planes_sugeridos_buro: suggestedPlansBuroKey,
-    });
     setIsCheckingIdentificacionEquifax(false);
-    setScoreServicio('E');
+    return ToastWrapper.warning(
+      'No se podrá continuar con la preventa hasta que vuelva a estar operativo el servicio de consulta de buro de crédito',
+    );
+
+    // // // Ahora SI bloquea la venta totalmente el equifax -------
+    // const suggestedPlansBuroKey = [
+    //   ClasificacionPlanesScoreBuroEnumChoice.BASICO,
+    // ];
+
+    // setAlreadyConsultedEquifax(true);
+    // setSuggestedPlansBuroKey(suggestedPlansBuroKey);
+    // form.reset({
+    //   ...form.getValues(),
+    //   rango_capacidad_pago: '0-150',
+    //   score_servicios: 'E',
+    //   plan_sugerido_buro: suggestedPlansBuroKey.join(','),
+    //   score_sobreendeudamiento: 'E',
+    //   planes_sugeridos_buro: suggestedPlansBuroKey,
+    // });
+    // setIsCheckingIdentificacionEquifax(false);
+    // setScoreServicio('E');
   };
 
   const consultarEquifax = useConsultarEquifax({
@@ -1176,6 +1183,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 IdentificationTypeEnumChoice.PASAPORTE
               }
               onClick={() => {
+                if (!validarCedulaEcuador(watchedIdentification!)) {
+                  ToastWrapper.warning(
+                    'El número de cédula ingresado no es válido',
+                  );
+                  return;
+                }
                 handleConsultaEquifax();
               }}
             />
