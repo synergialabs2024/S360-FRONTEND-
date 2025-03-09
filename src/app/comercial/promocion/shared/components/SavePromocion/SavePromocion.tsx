@@ -63,6 +63,7 @@ import type {
   ProductoDisccountItem,
   ProductoPromocionItem,
   Promocion,
+  PromocionPremioItem,
   Provincia,
   Sector,
   Zona,
@@ -373,12 +374,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
         descuento: '100',
         categoria: item.categoria_data?.code!,
       }));
-    const formattedPremiosItems: ProductoDisccountItem[] = premiosItems?.map(
+    const formattedPremiosItems: PromocionPremioItem[] = premiosItems?.map(
       item => ({
         codigo: item.codigo,
         nombre: item.nombre,
         descuento: '100',
         categoria: item.categoria_data?.code!,
+        uuid: item.uuid,
       }),
     );
 

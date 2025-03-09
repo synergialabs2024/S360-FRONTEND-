@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { MdUnfoldMore } from 'react-icons/md';
+import { MdDelete, MdUnfoldMore } from 'react-icons/md';
 
 import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
 import {
@@ -182,6 +182,51 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
     [productsBaseColumns],
   );
 
+  const { items: promoPremios, removeSelectedItem: removePremio } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.premiosPromocion,
+    );
+  const selectedPromoPremios = useMemo<
+    MRT_ColumnDef<SelectedEqPromoctionType>[]
+  >(
+    () => [
+      ...(productsBaseColumns as any),
+      {
+        accessorKey: 'opciones',
+        enableColumnFilter: false,
+        header: 'INCLUIDO',
+        Cell: ({ row }) => {
+          const isIncluded = row?.original?.descuento === '100';
+
+          return isIncluded ? 'SI (1)' : 'NO';
+        },
+      },
+      {
+        accessorKey: 'acciones',
+        enableColumnFilter: false,
+        header: 'ACCIONES',
+        Cell: ({ row }) => {
+          return (
+            <SingleIconButton
+              startIcon={<MdDelete />}
+              label="Remover"
+              color="error"
+              onClick={() => {
+                removePremio({
+                  item: {
+                    ...row?.original,
+                  },
+                  idKey: 'uuid',
+                });
+              }}
+            />
+          );
+        },
+      },
+    ],
+    [productsBaseColumns, removePremio],
+  );
+
   return (
     <>
       <Grid
@@ -242,6 +287,17 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
         <CustomMinimalTable<SelectedEqPromoctionType>
           columns={selectedPromoDisccounts}
           data={promoDisccounts || []}
+          enablePagination
+          density="comfortable"
+        />
+      </Grid>
+
+      <Grid item xs={12}>
+        <CustomTypoLabel text="Premios promocionados" />
+
+        <CustomMinimalTable<SelectedEqPromoctionType>
+          columns={selectedPromoPremios}
+          data={promoPremios || []}
           enablePagination
           density="comfortable"
         />

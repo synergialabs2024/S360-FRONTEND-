@@ -89,6 +89,7 @@ export interface PromocionPremioItem {
   nombre: string;
   descuento: string; // %: 100
   categoria: string; // category_code
+  uuid: string; // select in frontend
 }
 
 export interface OpcionProductoPromocionItem {

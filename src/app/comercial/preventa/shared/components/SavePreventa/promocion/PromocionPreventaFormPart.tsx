@@ -66,6 +66,10 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
     useTypedGenericInventoryStore<SelectedEqPromoctionType>(
       GenericInventoryStoreKey.descuentosPromocion,
     );
+  const { setItems: setPromoPremios } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.premiosPromocion,
+    );
 
   ///* effects ----------------
   useEffect(() => {
@@ -87,6 +91,7 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       const includedProducts = firstPromocion?.opciones_productos_incluye || [];
       const includedDiscounts =
         firstPromocion?.opciones_productos_descuento || [];
+      const includedPremios = firstPromocion?.opciones_productos_premio || [];
 
       // to handle prev selectedPromoOptions if exists (safe pev selected when unmout stepper)
       const watchedSelectedPromoOptions =
@@ -104,10 +109,24 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
         })) as any,
       );
       setPromoDisccounts(includedDiscounts as any);
+
+      // to handle prev selectedPromoOptions if exists (safe pev selected when unmout stepper)
+      const watchedSelectedPromoPremios =
+        form?.watch('selectedPromoPremios') || [];
+      setPromoPremios(
+        includedPremios?.map(op => ({
+          ...op,
+          selectedUuidItem:
+            watchedSelectedPromoPremios.find(opt => opt.codigo === op.codigo)
+              ?.selectedUuidItem || undefined,
+          promocionUuid: firstPromocion?.uuid,
+        })) as any,
+      );
     } else {
       form.setValue('promociones', []);
       setEquiposPromocion([]);
       setPromoDisccounts([]);
+      setPromoPremios([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, promocionesPagingRes, isMounted, isCustomLoading]);

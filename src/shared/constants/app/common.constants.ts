@@ -72,6 +72,102 @@ export const FACTURAS_CUOTAS_ARRAY_OBJECT = [
     label: '12va Factura',
     value: 12,
   },
+  {
+    label: '13ra Factura',
+    value: 13,
+  },
+  {
+    label: '14ta Factura',
+    value: 14,
+  },
+  {
+    label: '15ta Factura',
+    value: 15,
+  },
+  {
+    label: '16ta Factura',
+    value: 16,
+  },
+  {
+    label: '17ma Factura',
+    value: 17,
+  },
+  {
+    label: '18va Factura',
+    value: 18,
+  },
+  {
+    label: '19na Factura',
+    value: 19,
+  },
+  {
+    label: '20ma Factura',
+    value: 20,
+  },
+  {
+    label: '21ra Factura',
+    value: 21,
+  },
+  {
+    label: '22da Factura',
+    value: 22,
+  },
+  {
+    label: '23ra Factura',
+    value: 23,
+  },
+  {
+    label: '24ta Factura',
+    value: 24,
+  },
+  {
+    label: '25ta Factura',
+    value: 25,
+  },
+  {
+    label: '26ta Factura',
+    value: 26,
+  },
+  {
+    label: '27ma Factura',
+    value: 27,
+  },
+  {
+    label: '28va Factura',
+    value: 28,
+  },
+  {
+    label: '29na Factura',
+    value: 29,
+  },
+  {
+    label: '30ma Factura',
+    value: 30,
+  },
+  {
+    label: '31ra Factura',
+    value: 31,
+  },
+  {
+    label: '32da Factura',
+    value: 32,
+  },
+  {
+    label: '33ra Factura',
+    value: 33,
+  },
+  {
+    label: '34ta Factura',
+    value: 34,
+  },
+  {
+    label: '35ta Factura',
+    value: 35,
+  },
+  {
+    label: '36ta Factura',
+    value: 36,
+  },
 ];
 
 export const DIAS_PAGO_OBJ_01_TO_28 = [
