@@ -92,7 +92,6 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       const includedProducts = firstPromocion?.opciones_productos_incluye || [];
       const includedDiscounts =
         firstPromocion?.opciones_productos_descuento || [];
-      const includedPremios = firstPromocion?.opciones_productos_premio || [];
 
       // to handle prev selectedPromoOptions if exists (safe pev selected when unmout stepper)
       const watchedSelectedPromoOptions =
@@ -111,15 +110,8 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       );
       setPromoDisccounts(includedDiscounts as any);
 
-      // verificar selectedPromoItems si ya hay y dejo solo esos, sino includedPremios
-      const selectedPromoPremios = form?.watch('selectedPromoPremios') || [];
-
-      const finalPremios = selectedPromoPremios.length
-        ? includedPremios.filter(p =>
-            selectedPromoPremios.find(sp => sp.codigo === p.codigo),
-          )
-        : includedPremios;
-      setPromoPremios(finalPremios as any);
+      const includedPremios = firstPromocion?.opciones_productos_premio || [];
+      setPromoPremios(includedPremios as any);
     } else {
       form.setValue('promociones', []);
       setEquiposPromocion([]);

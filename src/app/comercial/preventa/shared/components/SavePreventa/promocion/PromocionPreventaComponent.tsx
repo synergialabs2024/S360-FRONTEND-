@@ -257,31 +257,32 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
       </Grid>
 
       {/* -------------- premio -------------- */}
-      <CustomTypoLabel text="Premios promocionados" />
+      <>
+        <CustomTypoLabel text="Premios promocionados" />
 
-      {/* selectedPromoPremioUuid form item */}
-      <CustomAutocomplete<GenericAutocompleteNoFormType>
-        label="Premio"
-        name="selectedPromoPremioUuid"
-        // options
-        options={promoPremios.map(p => ({
-          label: p.nombre,
-          value: p.uuid,
-        }))}
-        valueKey="label"
-        actualValueKey="value"
-        defaultValue={form?.getValues().selectedPromoPremioUuid}
-        isLoadingData={false}
-        // vaidation
-        control={form?.control as any}
-        error={errors?.provincia}
-        helperText={errors?.provincia?.message}
-        size={gridSize}
-        //
-        onChangeValue={v => {
-          console.log('onChangeValue', { v });
-        }}
-      />
+        <CustomAutocomplete<GenericAutocompleteNoFormType>
+          label="Premio"
+          name="selectedPromoPremioUuid"
+          // options
+          options={promoPremios.map(p => ({
+            label: p.nombre,
+            value: p.uuid,
+          }))}
+          valueKey="label"
+          actualValueKey="value"
+          defaultValue={form?.getValues().selectedPromoPremioUuid}
+          isLoadingData={false}
+          // vaidation
+          control={form?.control as any}
+          error={errors?.provincia}
+          helperText={errors?.provincia?.message}
+          size={gridSize}
+          // ------
+          // onChangeValue={v => {
+          //   console.log('onChangeValue', { v });
+          // }}
+        />
+      </>
     </>
   );
 };

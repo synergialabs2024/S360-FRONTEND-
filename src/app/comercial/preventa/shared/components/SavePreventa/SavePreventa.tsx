@@ -156,7 +156,6 @@ export type SaveFormDataPreventa = CreatePreventaParamsBase &
     // promociones ----------------
     // to safe selected options after unmount in PromocionPreventaFormPart
     selectedPromoOptions?: SelectedEqPromoctionType[];
-    selectedPromoPremios?: SelectedEqPromoctionType[];
     selectedPromoPremioUuid?: string;
   };
 
@@ -256,7 +255,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
 
       selectedPromoOptions: [],
-      selectedPromoPremios: [],
     },
   });
 
@@ -650,7 +648,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         selected_item_uuid: opt?.selectedUuidItem as string,
         promocion_uuid: opt?.promocionUuid as string,
       }));
-    const selectedPromoPremios = data?.selectedPromoPremios || [];
 
     // create ----------------
     await createPreventaMutation.mutateAsync({
@@ -665,6 +662,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       url_foto_documento_cuenta: documentoCuentaBancariaObj?.streamUlr || '',
 
       promocion_items_selected: formattedSelectedPromoOptions,
+      ...(data?.selectedPromoPremioUuid
+        ? { promocion_premio_selected: data?.selectedPromoPremioUuid }
+        : {}),
     });
     setIsCheckingCedula(false);
   };
@@ -800,7 +800,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
 
       selectedPromoOptions: [],
-      selectedPromoPremios: [],
     });
   }, [solicitudServicio, reset]);
 
@@ -1081,7 +1080,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 helperText={errors.sector?.message}
                 onChangeValue={() => {
                   form.setValue('selectedPromoOptions', []);
-                  form.setValue('selectedPromoPremios', []);
                 }}
               />
               <CustomTextField
@@ -1268,7 +1266,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               }
               onChangeValue={() => {
                 form.setValue('selectedPromoOptions', []);
-                form.setValue('selectedPromoPremios', []);
               }}
             />
             <Grid
@@ -1336,7 +1333,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
               onChangeRawValue={rawValue => {
                 form.setValue('rawPaymentMethod', rawValue);
                 form.setValue('selectedPromoOptions', []);
-                form.setValue('selectedPromoPremios', []);
               }}
             />
             {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (

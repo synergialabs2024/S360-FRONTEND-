@@ -115,6 +115,7 @@ export interface Preventa {
 
   promociones?: number[]; // fk
   promocion_items_selected?: PreventaPromocionSelectedOptions[];
+  promocion_premio_selected?: string; // selectedPromoPremioUuid
 
   // sales filter logic
   area: number;
