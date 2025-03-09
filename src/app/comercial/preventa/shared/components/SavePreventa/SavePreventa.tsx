@@ -649,7 +649,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
         selected_item_uuid: opt?.selectedUuidItem as string,
         promocion_uuid: opt?.promocionUuid as string,
       }));
-    // const selectedPromoPremios = data?.selectedPromoPremios || [];
+    const selectedPromoPremios = data?.selectedPromoPremios || [];
 
     // create ----------------
     await createPreventaMutation.mutateAsync({

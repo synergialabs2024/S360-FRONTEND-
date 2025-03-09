@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
@@ -110,18 +111,15 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       );
       setPromoDisccounts(includedDiscounts as any);
 
-      // to handle prev selectedPromoOptions if exists (safe pev selected when unmout stepper)
-      const watchedSelectedPromoPremios =
-        form?.watch('selectedPromoPremios') || [];
-      setPromoPremios(
-        includedPremios?.map(op => ({
-          ...op,
-          selectedUuidItem:
-            watchedSelectedPromoPremios.find(opt => opt.codigo === op.codigo)
-              ?.selectedUuidItem || undefined,
-          promocionUuid: firstPromocion?.uuid,
-        })) as any,
-      );
+      // verificar selectedPromoItems si ya hay y dejo solo esos, sino includedPremios
+      const selectedPromoPremios = form?.watch('selectedPromoPremios') || [];
+
+      const finalPremios = selectedPromoPremios.length
+        ? includedPremios.filter(p =>
+            selectedPromoPremios.find(sp => sp.codigo === p.codigo),
+          )
+        : includedPremios;
+      setPromoPremios(finalPremios as any);
     } else {
       form.setValue('promociones', []);
       setEquiposPromocion([]);

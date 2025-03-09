@@ -218,13 +218,16 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
                   },
                   idKey: 'uuid',
                 });
+                form?.setValue('selectedPromoPremios', [
+                  ...promoPremios.filter(p => p?.uuid !== row?.original?.uuid),
+                ]);
               }}
             />
           );
         },
       },
     ],
-    [productsBaseColumns, removePremio],
+    [form, productsBaseColumns, promoPremios, removePremio],
   );
 
   return (
