@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { MdDelete, MdUnfoldMore } from 'react-icons/md';
+import { MdUnfoldMore } from 'react-icons/md';
 
 import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
 import {
@@ -16,6 +16,7 @@ import {
   valueTipoRecuerrenciaAlquilerEnumChoice,
 } from '@/shared';
 import {
+  CustomAutocomplete,
   CustomAutocompleteNoForm,
   CustomMinimalTable,
   CustomTextFieldNoForm,
@@ -40,6 +41,9 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
   form,
   optionSelectDisabled = false,
 }) => {
+  ///* form ----------------
+  const { errors } = form?.formState || {};
+
   ///* local state ----------------
   const [isVissible, setIsVissible] = useState(true);
   const watchedSelectedPromoOptions = form?.watch('selectedPromoOptions') || [];
@@ -182,53 +186,10 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
     [productsBaseColumns],
   );
 
-  const { items: promoPremios, removeSelectedItem: removePremio } =
+  const { items: promoPremios } =
     useTypedGenericInventoryStore<SelectedEqPromoctionType>(
       GenericInventoryStoreKey.premiosPromocion,
     );
-  const selectedPromoPremios = useMemo<
-    MRT_ColumnDef<SelectedEqPromoctionType>[]
-  >(
-    () => [
-      ...(productsBaseColumns as any),
-      {
-        accessorKey: 'opciones',
-        enableColumnFilter: false,
-        header: 'INCLUIDO',
-        Cell: ({ row }) => {
-          const isIncluded = row?.original?.descuento === '100';
-
-          return isIncluded ? 'SI (1)' : 'NO';
-        },
-      },
-      {
-        accessorKey: 'acciones',
-        enableColumnFilter: false,
-        header: 'ACCIONES',
-        Cell: ({ row }) => {
-          return (
-            <SingleIconButton
-              startIcon={<MdDelete />}
-              label="Remover"
-              color="error"
-              onClick={() => {
-                removePremio({
-                  item: {
-                    ...row?.original,
-                  },
-                  idKey: 'uuid',
-                });
-                form?.setValue('selectedPromoPremios', [
-                  ...promoPremios.filter(p => p?.uuid !== row?.original?.uuid),
-                ]);
-              }}
-            />
-          );
-        },
-      },
-    ],
-    [form, productsBaseColumns, promoPremios, removePremio],
-  );
 
   return (
     <>
@@ -295,16 +256,32 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
         />
       </Grid>
 
-      <Grid item xs={12}>
-        <CustomTypoLabel text="Premios promocionados" />
+      {/* -------------- premio -------------- */}
+      <CustomTypoLabel text="Premios promocionados" />
 
-        <CustomMinimalTable<SelectedEqPromoctionType>
-          columns={selectedPromoPremios}
-          data={promoPremios || []}
-          enablePagination
-          density="comfortable"
-        />
-      </Grid>
+      {/* selectedPromoPremioUuid form item */}
+      <CustomAutocomplete<GenericAutocompleteNoFormType>
+        label="Premio"
+        name="selectedPromoPremioUuid"
+        // options
+        options={promoPremios.map(p => ({
+          label: p.nombre,
+          value: p.uuid,
+        }))}
+        valueKey="label"
+        actualValueKey="value"
+        defaultValue={form?.getValues().selectedPromoPremioUuid}
+        isLoadingData={false}
+        // vaidation
+        control={form?.control as any}
+        error={errors?.provincia}
+        helperText={errors?.provincia?.message}
+        size={gridSize}
+        //
+        onChangeValue={v => {
+          console.log('onChangeValue', { v });
+        }}
+      />
     </>
   );
 };

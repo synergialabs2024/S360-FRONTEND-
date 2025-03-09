@@ -157,6 +157,7 @@ export type SaveFormDataPreventa = CreatePreventaParamsBase &
     // to safe selected options after unmount in PromocionPreventaFormPart
     selectedPromoOptions?: SelectedEqPromoctionType[];
     selectedPromoPremios?: SelectedEqPromoctionType[];
+    selectedPromoPremioUuid?: string;
   };
 
 const steps = ['Datos generales', 'Ubicación', 'Servicio', 'Documentos'];
