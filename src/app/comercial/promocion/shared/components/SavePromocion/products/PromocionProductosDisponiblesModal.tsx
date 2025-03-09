@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useFetchProductos } from '@/actions/app';
@@ -9,6 +9,7 @@ import {
   gridSizeMdLg8,
   InvetarioCodesEnum,
   Producto,
+  ToastWrapper,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
@@ -29,6 +30,7 @@ export type PromocionProductosDisponiblesModalProps = {
   open: boolean;
   onClose: () => void;
   genericStorageKey?: GenericInventoryStoreKey;
+  defaultProductCategory?: InvetarioCodesEnum;
 };
 
 const PromocionProductosDisponiblesModal: React.FC<
@@ -37,6 +39,7 @@ const PromocionProductosDisponiblesModal: React.FC<
   open,
   onClose,
   genericStorageKey = GenericInventoryStoreKey.equiposPromocion,
+  defaultProductCategory = InvetarioCodesEnum.EQUIPOS,
 }) => {
   ///* hooks ---------------------
   const { filterObject, columnFilters, setColumnFilters } =
@@ -52,7 +55,7 @@ const PromocionProductosDisponiblesModal: React.FC<
 
   ///* local state ---------------------
   const [productCategory, setProductCategory] = useState<string>(
-    InvetarioCodesEnum.EQUIPOS,
+    defaultProductCategory,
   );
 
   ///* global state ---------------------
@@ -82,7 +85,7 @@ const PromocionProductosDisponiblesModal: React.FC<
   ///* handlers ---------------------
   const handleClose = () => {
     onClose();
-    setProductCategory(InvetarioCodesEnum.EQUIPOS);
+    setProductCategory(defaultProductCategory);
   };
 
   ///* columns ---------------------
@@ -110,6 +113,25 @@ const PromocionProductosDisponiblesModal: React.FC<
       );
     },
   });
+
+  ///* effects ---------------------
+  useEffect(() => {
+    // alert no products data
+    if (!open || isLoadingItemsDisponibles || isRefetchingItemsDisponibles)
+      return;
+
+    if (itemsDisponiblesPaging?.data?.items?.length === 0) {
+      ToastWrapper.warning(
+        'No se encontraron productos disponibles configurados para promoción con la categoría seleccionada',
+      );
+      return;
+    }
+  }, [
+    open,
+    itemsDisponiblesPaging?.data?.items,
+    isLoadingItemsDisponibles,
+    isRefetchingItemsDisponibles,
+  ]);
 
   return (
     <ScrollableDialogProps

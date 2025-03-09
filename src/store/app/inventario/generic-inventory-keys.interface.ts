@@ -15,6 +15,7 @@ export enum GenericInventoryStoreKey {
   // promocion --------------
   equiposPromocion = 'equiposPromocion',
   descuentosPromocion = 'descuentosPromocion',
+  premiosPromocion = 'premiosPromocion',
 }
 
 export enum UbicacionProductoKeys {

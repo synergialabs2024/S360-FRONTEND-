@@ -23,6 +23,10 @@ export const CATEGORIA_PRODUCTOS_PROMOCION: GenericAutocompleteNoFormType[] = [
     label: 'DIGITAL',
     value: InvetarioCodesEnum.DIGITAL,
   },
+  {
+    label: 'PREMIO',
+    value: InvetarioCodesEnum.PREMIO,
+  },
 ];
 
 export const TIPO_PAGO_PROMOCION_ALQUILER_ARRAY: GenericAutocompleteNoFormType[] =

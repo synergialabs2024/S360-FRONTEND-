@@ -43,6 +43,7 @@ import {
   DiscountTypeEnumChoice,
   FACTURAS_CUOTAS_ARRAY_OBJECT,
   FacturasCuotasObjArray,
+  InvetarioCodesEnum,
   SAVE_PROMOCION_PERMISSIONS,
   valueTipoRecuerrenciaAlquilerEnumChoice,
 } from '@/shared/constants/app';
@@ -120,6 +121,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     useState(false);
   const [isOpenDisccountProductModal, setIsOpenDisccountProductModal] =
     useState(false);
+  const [isOpenPremioProductModal, setIsOpenPremioProductModal] =
+    useState(false);
 
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -142,6 +145,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     setItems: setDisccountItems,
   } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
     GenericInventoryStoreKey.descuentosPromocion,
+  );
+  const {
+    items: premiosItems,
+    removeSelectedItem: removePremioItem,
+    setItems: setPremiosItems,
+  } = useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+    GenericInventoryStoreKey.premiosPromocion,
   );
 
   ///* hooks ----------------
@@ -354,13 +364,23 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           cantidad: +(opt.cantidad || 0),
           cuotas: +(opt.cuotas || 0),
         })),
+        categoria: item.categoria_data?.code!,
       }));
     const formattedDisccountItems: ProductoDisccountItem[] =
       disccountItems?.map(item => ({
         codigo: item.codigo,
         nombre: item.nombre,
         descuento: '100',
+        categoria: item.categoria_data?.code!,
       }));
+    const formattedPremiosItems: ProductoDisccountItem[] = premiosItems?.map(
+      item => ({
+        codigo: item.codigo,
+        nombre: item.nombre,
+        descuento: '100',
+        categoria: item.categoria_data?.code!,
+      }),
+    );
 
     ///* upd
     if (promocion?.id) {
@@ -371,6 +391,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           ...(fecha_fin && { fecha_fin }),
           opciones_productos_incluye: formattedEquiposPromocion,
           opciones_productos_descuento: formattedDisccountItems,
+          opciones_productos_premio: formattedPremiosItems,
         } as unknown as CreatePromocionParamsBase,
       });
       return;
@@ -390,6 +411,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           ...(fecha_fin && { fecha_fin }),
           opciones_productos_incluye: formattedEquiposPromocion,
           opciones_productos_descuento: formattedDisccountItems,
+          opciones_productos_premio: formattedPremiosItems,
         } as unknown as CreatePromocionParamsBase);
       },
     });
@@ -413,6 +435,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     }));
     setEquiposPromocion((eqP as any) || []);
     setDisccountItems((promocion?.opciones_productos_descuento as any) || []);
+    setPremiosItems((promocion?.opciones_productos_premio as any) || []);
 
     reset({
       ...promocion,
@@ -546,6 +569,49 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       },
     ],
     [productsBaseColumns, promocion?.id, removeDisccountItem],
+  );
+
+  const selectedItemsPremioColumns = useMemo<
+    MRT_ColumnDef<SelectedEqPromoctionType>[]
+  >(
+    () => [
+      ...(productsBaseColumns as any),
+
+      {
+        accessorKey: 'opciones',
+        enableColumnFilter: false,
+        header: 'INCLUIDO',
+        Cell: ({ row }) => {
+          const isIncluded =
+            row?.original?.isIncluded || row?.original?.descuento == '100';
+
+          return isIncluded ? 'SI (1)' : 'NO';
+        },
+      },
+      {
+        accessorKey: 'action',
+        enableColumnFilter: false,
+        header: 'ACCIÓN',
+        Cell: ({ row }) => (
+          <SingleIconButton
+            startIcon={<MdDelete />}
+            label="Remover"
+            color="error"
+            onClick={() => {
+              removePremioItem({
+                item: {
+                  ...row?.original,
+                  productoOptionItemList: [],
+                },
+                idKey: 'id',
+              });
+            }}
+            disabled={!!promocion?.id}
+          />
+        ),
+      },
+    ],
+    [productsBaseColumns, promocion?.id, removePremioItem],
   );
 
   return (
@@ -1158,6 +1224,44 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               setIsOpenDisccountProductModal(false);
             }}
             genericStorageKey={GenericInventoryStoreKey.descuentosPromocion}
+          />
+        </>
+
+        {/* ------------- premiso ------------- */}
+        <>
+          <Grid item xs={12} container justifyContent="flex-end" pb={3}>
+            <CustomTypoLabel
+              text="Premios incluidos"
+              pt={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+            <CustomSingleButton
+              label="AGREGAR PREMIO"
+              color="primary"
+              variant="text"
+              startIcon={<FiPlus />}
+              onClick={() => {
+                setIsOpenPremioProductModal(true);
+              }}
+              justifyContent="flex-end"
+              disabled={!!promocion?.id}
+            />
+
+            <Grid item xs={12}>
+              <CustomMinimalTable<SelectedEqPromoctionType>
+                columns={selectedItemsPremioColumns}
+                data={premiosItems || []}
+                enablePagination
+              />
+            </Grid>
+          </Grid>
+
+          <PromocionProductosDisponiblesModal
+            open={isOpenPremioProductModal}
+            onClose={() => {
+              setIsOpenPremioProductModal(false);
+            }}
+            genericStorageKey={GenericInventoryStoreKey.premiosPromocion}
+            defaultProductCategory={InvetarioCodesEnum.PREMIO}
           />
         </>
       </CustomTabPanel>

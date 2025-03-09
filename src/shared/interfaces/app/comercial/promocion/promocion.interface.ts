@@ -46,6 +46,7 @@ export interface Promocion {
 
   opciones_productos_incluye?: ProductoPromocionItem[];
   opciones_productos_descuento?: ProductoDisccountItem[];
+  opciones_productos_premio?: ProductoDisccountItem[];
 
   planes_data?: PlanInternetLimitData[];
   paises_data?: PaisLimitData[];
@@ -73,12 +74,21 @@ export interface ProductoPromocionItem {
   codigo: string; // code unique
   nombre: string;
   opciones: OpcionProductoPromocionItem[];
+  categoria: string; // category_code
 }
 
 export interface ProductoDisccountItem {
   codigo: string;
   nombre: string;
-  descuento: string; // %
+  descuento: string; // %: 100
+  categoria: string; // category_code
+}
+
+export interface PromocionPremioItem {
+  codigo: string;
+  nombre: string;
+  descuento: string; // %: 100
+  categoria: string; // category_code
 }
 
 export interface OpcionProductoPromocionItem {

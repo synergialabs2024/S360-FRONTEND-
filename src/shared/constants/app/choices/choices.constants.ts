@@ -515,11 +515,13 @@ export enum InvetarioCodesEnum {
   DIGITAL = 'DIGITAL',
   MATERIALES = 'MATERIALES',
   EQUIPOS = 'EQUIPOS',
+  PREMIO = 'PREMIO',
 }
 export const CATEGORIA_TYPE_ARRAY_CHOICES = [
   InvetarioCodesEnum.DIGITAL,
   InvetarioCodesEnum.MATERIALES,
   InvetarioCodesEnum.EQUIPOS,
+  InvetarioCodesEnum.PREMIO,
 ];
 
 // // Bucket ==============================================
