@@ -699,9 +699,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
   // // Equifax ------
   const onSuccessEquifax = async (data: EquifaxServicioCedula) => {
-    const suggestedPlansKey = data?.plan_sugerido?.map(
-      plan => plan.planSugerido,
-    ) || [ClasificacionPlanesScoreBuroEnumChoice.BASICO];
+    const suggestedPlansKey =
+      data?.plan_sugerido?.map(plan => plan.planSugerido) || [];
 
     setSuggestedPlansBuroKey(suggestedPlansKey);
     const scoreServicio = data.plan_sugerido?.[0]?.scoreServicios;
@@ -968,6 +967,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       }}
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);
+        // console.log('keys', { errors });
         ToastWrapper.error(`Faltan campos por requeridos: ${keys}`);
       })}
     >
