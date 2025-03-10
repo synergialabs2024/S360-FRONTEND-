@@ -38,6 +38,8 @@ export enum UserRolesEnumChoice {
   INVENTARIO_GENERAL = 'INVENTARIO_GENERAL',
   OPERADOR = 'OPERADOR',
   PRODUCTO = 'PRODUCTO',
+  SOPORTE_N1 = 'SOPORTE_N1',
+  COBRANZA = 'COBRANZA',
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
@@ -58,6 +60,9 @@ export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.AUXILIAR,
   UserRolesEnumChoice.INVENTARIO_GENERAL,
   UserRolesEnumChoice.OPERADOR,
+  UserRolesEnumChoice.PRODUCTO,
+  UserRolesEnumChoice.SOPORTE_N1,
+  UserRolesEnumChoice.COBRANZA,
 ];
 
 export enum InternetServiceTypeEnumChoice {
