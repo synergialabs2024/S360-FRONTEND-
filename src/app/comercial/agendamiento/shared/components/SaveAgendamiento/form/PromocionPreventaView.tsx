@@ -82,6 +82,7 @@ const PromocionPreventaView: React.FC<PromocionPreventaViewProps> = ({
         (preventa?.promociones_data?.at(0)! as unknown as Promocion) || {}
       }
       optionSelectDisabled
+      form={form as any}
     />
   );
 };
