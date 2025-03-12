@@ -111,6 +111,7 @@ const SaveCategoriaProducto: React.FC<SaveCategoriaProductoProps> = ({
         error={errors.code}
         helperText={errors.code?.message}
         size={gridSizeMdLg6}
+        disabled={!!categoriaproducto?.id}
       />
 
       <SampleCheckbox
