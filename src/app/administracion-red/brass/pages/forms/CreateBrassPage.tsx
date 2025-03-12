@@ -7,7 +7,7 @@ export type CreateBrassPageProps = {};
 const CreateBrassPage: React.FC<CreateBrassPageProps> = () => {
   useCheckPermission(PermissionsEnum.infraestructura_add_brass);
 
-  return <SaveBrass title="Crear Brass" />;
+  return <SaveBrass title="Crear Bras" />;
 };
 
 export default CreateBrassPage;

@@ -19,7 +19,7 @@ const UpdateBrassPage: React.FC<UpdateBrassPageProps> = () => {
   if (isLoading || isRefetching) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlBrassPage} />;
 
-  return <SaveBrass title="Editar Brass" brass={data.data} />;
+  return <SaveBrass title="Editar Bras" brass={data.data} />;
 };
 
 export default UpdateBrassPage;
