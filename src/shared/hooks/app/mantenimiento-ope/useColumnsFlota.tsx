@@ -37,7 +37,7 @@ export const useColumnsFlota = () => {
       },
 
       {
-        accessorKey: 'lider',
+        accessorKey: 'lider__razon_social',
         header: 'LIDER',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -45,7 +45,7 @@ export const useColumnsFlota = () => {
         Cell: ({ row }) => emptyCellNested(row, ['lider_data', 'razon_social']),
       },
       {
-        accessorKey: 'auxiliar',
+        accessorKey: 'auxiliar__razon_social',
         header: 'AUXILIAR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -55,7 +55,7 @@ export const useColumnsFlota = () => {
       },
 
       {
-        accessorKey: 'user',
+        accessorKey: 'user__username',
         header: 'USERNAME',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -139,7 +139,7 @@ export const useColumnsFlota = () => {
       },
 
       {
-        accessorKey: 'area',
+        accessorKey: 'area__name',
         header: 'AREA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -147,7 +147,7 @@ export const useColumnsFlota = () => {
         Cell: ({ row }) => emptyCellNested(row, ['area_data', 'name']),
       },
       {
-        accessorKey: 'departamento',
+        accessorKey: 'departamento__name',
         header: 'DEPARTAMENTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -156,7 +156,7 @@ export const useColumnsFlota = () => {
       },
 
       {
-        accessorKey: 'pais',
+        accessorKey: 'pais__name',
         header: 'PAIS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -164,7 +164,7 @@ export const useColumnsFlota = () => {
         Cell: ({ row }) => emptyCellNested(row, ['pais_data', 'name']),
       },
       {
-        accessorKey: 'provincia',
+        accessorKey: 'provincia__name',
         header: 'PROVINCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -172,7 +172,7 @@ export const useColumnsFlota = () => {
         Cell: ({ row }) => emptyCellNested(row, ['provincia_data', 'name']),
       },
       {
-        accessorKey: 'ciudad',
+        accessorKey: 'ciudad__name',
         header: 'CIUDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -181,11 +181,11 @@ export const useColumnsFlota = () => {
       },
       // TODO: modal polygon maps
       {
-        accessorKey: 'zonas',
+        accessorKey: 'zonas__name',
         header: 'ZONAS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
+        enableColumnFilter: false,
+        enableSorting: false,
         Cell: ({ row }) => emptyCellOneLevel(row, 'zonas'),
       },
 
