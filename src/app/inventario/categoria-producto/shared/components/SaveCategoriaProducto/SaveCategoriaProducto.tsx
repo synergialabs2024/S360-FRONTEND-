@@ -104,7 +104,7 @@ const SaveCategoriaProducto: React.FC<SaveCategoriaProductoProps> = ({
         size={gridSizeMdLg6}
       />
       <CustomTextField
-        label="Code"
+        label="Código"
         name="code"
         control={form.control}
         defaultValue={form.getValues().code}
