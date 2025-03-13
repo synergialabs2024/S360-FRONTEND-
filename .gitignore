@@ -27,3 +27,4 @@ dist-ssr
 notes*md
 __ts__
 __ts__*/
+x_envs_*.env
