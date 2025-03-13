@@ -158,6 +158,8 @@ export const ROUTER_PATHS = {
     usuariosCrear: 'usuarios/crear',
     usuariosEditar: 'usuarios/editar/:uuid',
     usuariosNav: '/parametrizacion/usuarios',
+    desbloquearUsuarios: 'usuarios/bloqueados',
+    desbloquearUsuariosNav: 'parametrizacion/usuarios/bloqueados',
 
     ///* grupos
     grupos: 'grupos',

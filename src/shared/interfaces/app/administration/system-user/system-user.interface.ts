@@ -33,6 +33,9 @@ export interface SystemUser {
   departamento?: number;
   canal_venta?: number;
   role?: UserRolesEnumChoice; // choice
+
+  // helpers ----
+  is_blocked?: boolean;
 }
 
 export type SystemUserLimitData = Pick<

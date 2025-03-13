@@ -266,6 +266,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.gruposNav,
             }),
+            renderByModule(SidenavModulesEnum.USUARIOS_DESBLOQUEO_USUARIOS, {
+              id: 'usuarios-bloqueados',
+              title: 'Usuarios Bloqueados',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.desbloquearUsuariosNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Comercial ----------------

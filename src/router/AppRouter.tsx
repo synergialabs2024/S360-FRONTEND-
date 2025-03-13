@@ -25,6 +25,14 @@ const LoginPage = Loadable(
 
 /* ****Pages***** */
 
+const BlockedSystemUsers = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/system-user/pages/tables/BlockedSystemUsers'
+      ),
+  ),
+);
 const Error404 = Loadable(lazy(() => import('@/shared/pages/error/Error404')));
 // import PaginaTabs from './PaginaTabs';
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -2324,6 +2332,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.gruposEditar,
             element: <UpdateSystemGroupPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.desbloquearUsuarios,
+            element: <BlockedSystemUsers />,
           },
         ],
       },
