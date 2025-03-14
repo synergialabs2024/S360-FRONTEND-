@@ -100,6 +100,7 @@ const SaveModeloInventario: React.FC<SaveModeloInventarioProps> = ({
         error={errors.codigo}
         size={gridSizeMdLg6}
         helperText={errors.codigo?.message}
+        disabled={!!modelo_inventario?.id}
       />
     </SingleFormBoxScene>
   );
