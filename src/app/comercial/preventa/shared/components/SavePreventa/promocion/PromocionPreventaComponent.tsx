@@ -277,6 +277,7 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
           error={errors?.provincia}
           helperText={errors?.provincia?.message}
           size={gridSize}
+          disabled={optionSelectDisabled}
           // ------
           // onChangeValue={v => {
           //   console.log('onChangeValue', { v });
