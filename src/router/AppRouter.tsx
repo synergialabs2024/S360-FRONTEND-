@@ -1909,6 +1909,24 @@ const UpdateMensajeriaTMPage = Loadable(
       import('@/app/tickets/mensajeria-tm/pages/forms/UpdateMensajeriaTMPage'),
   ),
 );
+// Incidencia
+const IncidenciaTMPage = Loadable(
+  lazy(
+    () => import('@/app/tickets/incidencia-tm/pages/tables/IncidenciaTMPage'),
+  ),
+);
+const CreateIncidenciaTMPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/incidencia-tm/pages/forms/CreateIncidenciaTMPage'),
+  ),
+);
+const UpdateIncidenciaTMPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/incidencia-tm/pages/forms/UpdateIncidenciaTMPage'),
+  ),
+);
 // Evento Mensajeria
 const EventoMensajeriaTMPage = Loadable(
   lazy(
@@ -3520,6 +3538,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.mensajeriaTMEditar,
             element: <UpdateMensajeriaTMPage />,
+          },
+          //Incidencia
+          {
+            path: ROUTER_PATHS.tickets.incidenciaTM,
+            element: <IncidenciaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.incidenciaTMCrear,
+            element: <CreateIncidenciaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.incidenciaTMEditar,
+            element: <UpdateIncidenciaTMPage />,
           },
           //Evento Mensajeria
           {
