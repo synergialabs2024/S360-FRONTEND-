@@ -827,7 +827,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CLIENTE_SOPORTE_TECNICO, {
               id: 'soporte-tecnico',
               title: 'Soporte tecnico',
               type: MenuItemType.ITEM,
@@ -1411,6 +1411,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.tickets.causaTMNav,
             }),
+            renderByModule(SidenavModulesEnum.TICKETS_CAUSA_TICKET_MASIVO, {
+              id: 'incidencia-ticket-masivo',
+              title: 'Incidencia de ticket masivo',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.tickets.incidenciaTMNav,
+            }),
             renderByModule(
               SidenavModulesEnum.TICKETS_MENSAJERIA_TICKET_MASIVO,
               {
@@ -1420,12 +1426,15 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.tickets.mensajeriaTMNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'evento-mensajeria-ticket-masivo',
-              title: 'Evento Mensajeria de ticket masivo',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.tickets.eventomensajeriaTMNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.TICKETS_EVENTO_MENSAJERIA_TICKET_MASIVO,
+              {
+                id: 'evento-mensajeria-ticket-masivo',
+                title: 'Evento Mensajeria de ticket masivo',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.tickets.eventomensajeriaTMNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

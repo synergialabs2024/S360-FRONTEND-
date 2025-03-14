@@ -1,5 +1,5 @@
-import { PermissionsEnum } from '@/shared/interfaces';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { PermissionsEnum } from '@/shared/interfaces';
 import { SaveCausaTM } from '../../shared/components';
 
 export type CreateCausaTMPageProps = {};

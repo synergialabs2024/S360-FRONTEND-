@@ -1,10 +1,10 @@
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useLoaders } from '@/shared/hooks';
-import { PermissionsEnum } from '@/shared/interfaces';
 import { useGetCausaTM } from '@/actions/app';
-import { useCheckPermission } from '@/shared/hooks/auth';
 import { SaveCausaTM } from '../../shared/components';
+import { PermissionsEnum } from '@/shared/interfaces';
+import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlCausaTMPage } from '../tables/CausaTMPage';
 
 export type UpdateCausaTMPageProps = {};

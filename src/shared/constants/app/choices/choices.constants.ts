@@ -1393,3 +1393,15 @@ export const TIPO_TICKET_ASUNTO_ARRAY_CHOICES = [
 export enum ImageEventoMensajeriaTMNameEnumChoice {
   MENSAJE_IMG = 'email_tm',
 }
+
+export enum PrioridadTMEnumChoice {
+  ALTA = 'ALTA',
+  MEDIA = 'MEDIA',
+  BAJA = 'BAJA',
+}
+
+export const PRIORIDAD_TICKET_MASIVO_ARRAY_CHOICES = [
+  PrioridadTMEnumChoice.ALTA,
+  PrioridadTMEnumChoice.MEDIA,
+  PrioridadTMEnumChoice.BAJA,
+];

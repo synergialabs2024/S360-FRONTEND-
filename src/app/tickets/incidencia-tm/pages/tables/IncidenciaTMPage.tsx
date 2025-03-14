@@ -7,25 +7,25 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import {
-  CausaTM,
+  IncidenciaTM,
   useTableFilter,
   PermissionsEnum,
   TABLE_CONSTANTS,
-  useColumnsCausaTM,
+  useColumnsIncidenciaTM,
   useTableServerSideFiltering,
 } from '@/shared';
-import { useFetchCausaTMs } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { useFetchIncidenciaTMs } from '@/actions/app';
 import { hasAllPermissions } from '@/shared/utils/auth';
 import { useCheckPermission } from '@/shared/hooks/auth';
 
-export const returnUrlCausaTMPage = ROUTER_PATHS.tickets.causaTMNav;
+export const returnUrlIncidenciaTMPage = ROUTER_PATHS.tickets.incidenciaTMNav;
 
-export type CausaTMPageProps = {};
+export type IncidenciaTMPageProps = {};
 
-const CausaTMPage: React.FC<CausaTMPageProps> = () => {
-  useCheckPermission(PermissionsEnum.tecnico_view_causaticketmasivo);
+const IncidenciaTMPage: React.FC<IncidenciaTMPageProps> = () => {
+  useCheckPermission(PermissionsEnum.tecnico_view_incidenciaticketmasivo);
 
   const navigate = useNavigate();
 
@@ -51,10 +51,10 @@ const CausaTMPage: React.FC<CausaTMPageProps> = () => {
 
   ///* fetch data
   const {
-    data: CausaTMPagingRes,
+    data: IncidenciaTMPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchCausaTMs({
+  } = useFetchIncidenciaTMs({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
@@ -65,25 +65,25 @@ const CausaTMPage: React.FC<CausaTMPageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (causa_tm: CausaTM) => {
+  const onEdit = (incidencia_tm: IncidenciaTM) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Causa del Ticket Masivo',
+      title: 'Editar Incidencia del Ticket Masivo',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlCausaTMPage}/editar/${causa_tm.uuid}`);
+        navigate(`${returnUrlIncidenciaTMPage}/editar/${incidencia_tm.uuid}`);
       },
     });
   };
 
   ///* columns
-  const { causatmColumns } = useColumnsCausaTM();
+  const { incidenciatmColumns } = useColumnsIncidenciaTM();
 
   return (
     <SingleTableBoxScene
-      title="Causa Ticket Masivo"
-      createPageUrl={`${returnUrlCausaTMPage}/crear`}
+      title="Incidencia Ticket Masivo"
+      createPageUrl={`${returnUrlIncidenciaTMPage}/crear`}
       isMainTableStates
     >
       <GridTableTabsContainerOnly>
@@ -93,9 +93,9 @@ const CausaTMPage: React.FC<CausaTMPageProps> = () => {
           text="por nombre"
         />
 
-        <CustomTable<CausaTM>
-          columns={causatmColumns}
-          data={CausaTMPagingRes?.data?.items || []}
+        <CustomTable<IncidenciaTM>
+          columns={incidenciatmColumns}
+          data={IncidenciaTMPagingRes?.data?.items || []}
           isLoading={isLoading}
           isRefetching={isRefetching}
           // // filters - server side
@@ -107,15 +107,15 @@ const CausaTMPage: React.FC<CausaTMPageProps> = () => {
           // // pagination
           pagination={pagination}
           onPaging={setPagination}
-          rowCount={CausaTMPagingRes?.data?.meta?.count}
+          rowCount={IncidenciaTMPagingRes?.data?.meta?.count}
           // // actions
           actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
           enableActionsColumn={hasAllPermissions([
-            PermissionsEnum.tecnico_view_causaticketmasivo,
+            PermissionsEnum.tecnico_view_incidenciaticketmasivo,
           ])}
           // crud
           canEdit={hasAllPermissions([
-            PermissionsEnum.tecnico_view_causaticketmasivo,
+            PermissionsEnum.tecnico_view_incidenciaticketmasivo,
           ])}
           onEdit={onEdit}
         />
@@ -124,4 +124,4 @@ const CausaTMPage: React.FC<CausaTMPageProps> = () => {
   );
 };
 
-export default CausaTMPage;
+export default IncidenciaTMPage;

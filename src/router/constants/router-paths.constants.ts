@@ -854,6 +854,12 @@ export const ROUTER_PATHS = {
     causaTMEditar: 'causa-ticket-masivo/editar/:uuid',
     causaTMNav: '/tickets/causa-ticket-masivo',
 
+    //Incidencia
+    incidenciaTM: 'incidencia-ticket-masivo',
+    incidenciaTMCrear: 'incidencia-ticket-masivo/crear',
+    incidenciaTMEditar: 'incidencia-ticket-masivo/editar/:uuid',
+    incidenciaTMNav: '/ticketsincidencia-ticket-masivo',
+
     //Mensajeria
     mensajeriaTM: 'mensajeria-ticket-masivo',
     mensajeriaTMCrear: 'mensajeria-ticket-masivo/crear',
