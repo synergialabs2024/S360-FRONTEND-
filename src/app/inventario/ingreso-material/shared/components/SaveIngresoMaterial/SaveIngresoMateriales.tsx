@@ -144,12 +144,14 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
         item => item.id === prod.producto,
       );
 
+      /*
       const validarCantidad = (
         detalles?.ubicaciones_producto as unknown as {
           stock: number;
           ubicacion: string;
         }[]
       )?.find(i => i.ubicacion == uuidUbicacion);
+      */
 
       if (!detalles) {
         console.error(`No se encontró el producto con ID ${prod.producto}`);
@@ -169,13 +171,14 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
           `El producto "${detalles.codigo}" necesita cantidad.`,
         );
         return;
-      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
+      }
+      /* else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" tiene una cantidad
           de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
         );
         return;
-      }
+      }*/
 
       // Validaciones según `requiere_series`
       if (
