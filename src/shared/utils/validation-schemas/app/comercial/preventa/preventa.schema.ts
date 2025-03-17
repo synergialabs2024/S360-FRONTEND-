@@ -145,7 +145,7 @@ export const preventaFormSchema = yup.object({
         rawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO,
       then: schema =>
         schema
-          .min(16, 'Debe tener minimo 16 digitos')
+          .min(10, 'Debe tener minimo 10 digitos')
           .required('El campo numero tarjeta credito es requerido')
           .typeError('El campo numero tarjeta credito es requerido'),
     }),
