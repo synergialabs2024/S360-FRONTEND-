@@ -13,6 +13,7 @@ export interface Ciudad {
   id?: number;
   uuid?: string;
   name: string;
+  code?: string;
 
   has_coverage: boolean;
   metraje_autorizado?: string;

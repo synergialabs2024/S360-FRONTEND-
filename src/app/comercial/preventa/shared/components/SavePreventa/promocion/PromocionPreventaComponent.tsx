@@ -34,12 +34,14 @@ export type PromocionPreventaComponentProps = {
   promocion: Promocion;
   form?: UseFormReturn<SaveFormDataPreventa>;
   optionSelectDisabled?: boolean;
+  isOnlyViewPromo?: boolean;
 };
 
 const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
   promocion = {} as Promocion,
   form,
   optionSelectDisabled = false,
+  isOnlyViewPromo = false,
 }) => {
   ///* form ----------------
   const { errors } = form?.formState || {};
@@ -260,29 +262,42 @@ const PromocionPreventaComponent: React.FC<PromocionPreventaComponentProps> = ({
       <>
         <CustomTypoLabel text="Premios promocionados" />
 
-        <CustomAutocomplete<GenericAutocompleteNoFormType>
-          label="Premio"
-          name="selectedPromoPremioUuid"
-          // options
-          options={promoPremios.map(p => ({
-            label: p.nombre,
-            value: p.uuid,
-          }))}
-          valueKey="label"
-          actualValueKey="value"
-          defaultValue={form?.getValues().selectedPromoPremioUuid}
-          isLoadingData={false}
-          // vaidation
-          control={form?.control as any}
-          error={errors?.provincia}
-          helperText={errors?.provincia?.message}
-          size={gridSize}
-          disabled={optionSelectDisabled}
-          // ------
-          // onChangeValue={v => {
-          //   console.log('onChangeValue', { v });
-          // }}
-        />
+        {!isOnlyViewPromo ? (
+          <CustomAutocomplete<GenericAutocompleteNoFormType>
+            label="Premio"
+            name="selectedPromoPremioUuid"
+            // options
+            options={promoPremios.map(p => ({
+              label: p.nombre,
+              value: p.uuid,
+            }))}
+            valueKey="label"
+            actualValueKey="value"
+            defaultValue={form?.getValues().selectedPromoPremioUuid}
+            isLoadingData={false}
+            // vaidation
+            control={form?.control as any}
+            error={errors?.provincia}
+            helperText={errors?.provincia?.message}
+            size={gridSize}
+            disabled={optionSelectDisabled}
+            // ------
+            // onChangeValue={v => {
+            //   console.log('onChangeValue', { v });
+            // }}
+          />
+        ) : (
+          <CustomTextFieldNoForm
+            label="Premio"
+            value={
+              promoPremios?.find(
+                p => p.uuid === form?.watch('selectedPromoPremioUuid'),
+              )?.nombre || 'N/A'
+            }
+            disabled
+            size={gridSize}
+          />
+        )}
       </>
     </>
   );

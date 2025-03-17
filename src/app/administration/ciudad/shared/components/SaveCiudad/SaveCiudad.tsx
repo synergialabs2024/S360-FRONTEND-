@@ -146,6 +146,16 @@ const SaveCiudad: React.FC<SaveCiudadProps> = ({ title, ciudad }) => {
         error={errors.name}
         helperText={errors.name?.message}
       />
+      <CustomTextField
+        label="Código"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        defaultHelperText="El código debe ser único"
+        disabled={!!ciudad?.id && !!ciudad?.code}
+      />
 
       <CustomAutocomplete<Pais>
         label="Pais"

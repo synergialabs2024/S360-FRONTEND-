@@ -12,6 +12,7 @@ export interface Provincia {
   id?: number;
   uuid?: string;
   name: string;
+  code?: string;
   has_coverage: boolean;
 
   state: boolean;

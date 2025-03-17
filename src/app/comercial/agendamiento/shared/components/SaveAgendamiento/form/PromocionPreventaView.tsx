@@ -29,6 +29,10 @@ const PromocionPreventaView: React.FC<PromocionPreventaViewProps> = ({
     useTypedGenericInventoryStore<SelectedEqPromoctionType>(
       GenericInventoryStoreKey.descuentosPromocion,
     );
+  const { setItems: setPromoPremios } =
+    useTypedGenericInventoryStore<SelectedEqPromoctionType>(
+      GenericInventoryStoreKey.premiosPromocion,
+    );
 
   ///* effects ----------------
   useEffect(() => {
@@ -55,6 +59,9 @@ const PromocionPreventaView: React.FC<PromocionPreventaViewProps> = ({
     );
 
     setPromoDisccounts(includedDiscounts as any);
+
+    const includedPremios = promocion?.opciones_productos_premio || [];
+    setPromoPremios(includedPremios as any);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preventa, form]);
 
@@ -83,6 +90,7 @@ const PromocionPreventaView: React.FC<PromocionPreventaViewProps> = ({
       }
       optionSelectDisabled
       form={form as any}
+      isOnlyViewPromo
     />
   );
 };

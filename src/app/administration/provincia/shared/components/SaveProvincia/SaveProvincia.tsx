@@ -104,7 +104,16 @@ const SaveProvincia: React.FC<SaveProvinciaProps> = ({ title, provincia }) => {
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
-        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Código"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        defaultHelperText="El código debe ser único"
+        disabled={!!provincia?.id && !!provincia?.code}
       />
 
       <CustomAutocomplete<Pais>

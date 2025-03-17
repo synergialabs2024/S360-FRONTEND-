@@ -52,6 +52,7 @@ export type SaveFormDataAgendaVentas = CreateAgendamientoParamsBase &
     // promociones ----------------
     // to safe selected options after unmount in PromocionPreventaFormPart
     selectedPromoOptions?: SelectedEqPromoctionType[];
+    selectedPromoPremioUuid?: string;
   };
 
 const steps = ['Datos generales', 'Servicio y Ubicación', 'Agendamiento'];
@@ -139,6 +140,7 @@ const SaveAgendamiento: React.FC<SaveAgendamientoProps> = ({
       flotaUUID: preventa?.flota_data?.uuid,
 
       selectedPromoOptions: preventa?.promocion_items_selected || [],
+      selectedPromoPremioUuid: preventa?.promocion_premio_selected,
     } as unknown as SaveFormDataAgendaVentas);
   }, [preventa, reset, setActivePreventa]);
 

@@ -109,27 +109,10 @@ const CiudadesPage: React.FC<CiudadesPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
-        accessorKey: 'metraje_autorizado',
-        header: 'METRAJE AUTORIZADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => {
-          const hasCoverage = row.original?.has_coverage;
-          return row.original?.metraje_autorizado && hasCoverage
-            ? `${formatQuantity(row.original?.metraje_autorizado || 0)} m`
-            : '-';
-        },
-      },
-      {
-        accessorKey: 'precio_metraje_excedido',
-        header: '$ METRO EXCEDIDO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => {
-          const hasCoverage = row.original?.has_coverage;
-
-          return row.original?.precio_metraje_excedido && hasCoverage
-            ? `${formatCurrency(row.original?.precio_metraje_excedido || 0)}`
-            : '-';
-        },
+        accessorKey: 'code',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
       },
 
       {
@@ -165,6 +148,29 @@ const CiudadesPage: React.FC<CiudadesPageProps> = () => {
             }}
           />
         ),
+      },
+      {
+        accessorKey: 'metraje_autorizado',
+        header: 'METRAJE AUTORIZADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const hasCoverage = row.original?.has_coverage;
+          return row.original?.metraje_autorizado && hasCoverage
+            ? `${formatQuantity(row.original?.metraje_autorizado || 0)} m`
+            : '-';
+        },
+      },
+      {
+        accessorKey: 'precio_metraje_excedido',
+        header: '$ METRO EXCEDIDO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const hasCoverage = row.original?.has_coverage;
+
+          return row.original?.precio_metraje_excedido && hasCoverage
+            ? `${formatCurrency(row.original?.precio_metraje_excedido || 0)}`
+            : '-';
+        },
       },
 
       {
