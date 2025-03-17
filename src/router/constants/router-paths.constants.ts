@@ -858,7 +858,7 @@ export const ROUTER_PATHS = {
     incidenciaTM: 'incidencia-ticket-masivo',
     incidenciaTMCrear: 'incidencia-ticket-masivo/crear',
     incidenciaTMEditar: 'incidencia-ticket-masivo/editar/:uuid',
-    incidenciaTMNav: '/ticketsincidencia-ticket-masivo',
+    incidenciaTMNav: '/tickets/incidencia-ticket-masivo',
 
     //Mensajeria
     mensajeriaTM: 'mensajeria-ticket-masivo',
@@ -871,6 +871,13 @@ export const ROUTER_PATHS = {
     eventomensajeriaTMCrear: 'evento-mensajeria-ticket-masivo/crear',
     eventomensajeriaTMEditar: 'evento-mensajeria-ticket-masivo/editar/:uuid',
     eventomensajeriaTMNav: '/tickets/evento-mensajeria-ticket-masivo',
+
+    //Prioridad Incidencia
+    prioridadincidenciaTM: 'prioridad-incidencia-ticket-masivo',
+    prioridadincidenciaTMCrear: 'prioridad-incidencia-ticket-masivo/crear',
+    prioridadincidenciaTMEditar:
+      'prioridad-incidencia-ticket-masivo/editar/:uuid',
+    prioridadincidenciaTMNav: '/tickets/prioridad-incidencia-ticket-masivo',
   },
 
   /////* Buzon Tareas ----------------

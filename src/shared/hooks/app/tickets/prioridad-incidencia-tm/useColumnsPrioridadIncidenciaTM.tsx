@@ -2,22 +2,22 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
 import {
-  MODEL_BOOLEAN,
-  TABLE_CONSTANTS,
-  MODEL_STATE_BOOLEAN,
-} from '@/shared/constants';
+  emptyCellNested,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+} from '@/shared/utils';
 import {
-  IncidenciaTM,
   PermissionsEnum,
   ChangeModelStateData,
+  PrioridadIncidenciaTM,
 } from '@/shared/interfaces';
 import { CustomSwitch } from '@/shared/components';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { useUpdateIncidenciaTM } from '@/actions/app';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { useUpdatePrioridadIncidenciaTM } from '@/actions/app';
+import { TABLE_CONSTANTS, MODEL_STATE_BOOLEAN } from '@/shared/constants';
 
-export const useColumnsIncidenciaTM = () => {
+export const useColumnsPrioridadIncidenciaTM = () => {
   ///* global state
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -25,16 +25,13 @@ export const useColumnsIncidenciaTM = () => {
   );
 
   ///* mutations
-  const changeState = useUpdateIncidenciaTM<ChangeModelStateData>({
-    enableNavigate: false,
-  });
-  const changeRestringirAsuntoTicekt = useUpdateIncidenciaTM<{
-    restringir_asuntos_ticket: boolean;
-  }>({
+  const changeState = useUpdatePrioridadIncidenciaTM<ChangeModelStateData>({
     enableNavigate: false,
   });
 
-  const incidenciatmBaseColumns01 = useMemo<MRT_ColumnDef<IncidenciaTM>[]>(
+  const prioridadincidenciatmBaseColumns01 = useMemo<
+    MRT_ColumnDef<PrioridadIncidenciaTM>[]
+  >(
     () => [
       {
         accessorKey: 'name',
@@ -45,47 +42,27 @@ export const useColumnsIncidenciaTM = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
-        accessorKey: 'prioridad',
-        header: 'PRIORIDAD',
+        accessorKey: 'code',
+        header: 'CODIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'prioridad'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
       },
       {
-        accessorKey: 'restringir_asuntos_ticket',
-        header: 'RESTRINGIR ASUNTO TICKET',
+        accessorKey: 'color_hex',
+        header: 'COLOR HEX',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_BOOLEAN,
-        Cell: ({ row }) => (
-          <CustomSwitch
-            title="Restringir Asunto Ticket"
-            checked={row.original?.restringir_asuntos_ticket}
-            isSimpleBoolean
-            onChangeChecked={() => {
-              if (!hasPermission(PermissionsEnum.administration_change_pais))
-                return;
-
-              setConfirmDialog({
-                isOpen: true,
-                title: 'Cambiar Asunto Ticket',
-                subtitle:
-                  '¿Está seguro que desea cambiar el Asunto Ticket de este registro?',
-                onConfirm: () => {
-                  setConfirmDialogIsOpen(false);
-                  changeRestringirAsuntoTicekt.mutate({
-                    id: row.original.id!,
-                    data: {
-                      restringir_asuntos_ticket:
-                        !row.original?.restringir_asuntos_ticket,
-                    },
-                  });
-                },
-              });
-            }}
-          />
-        ),
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'color_hex'),
+      },
+      {
+        accessorKey: 'user_create__name',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['user_create_data', 'razon_social']),
       },
       {
         accessorKey: 'state',
@@ -102,7 +79,7 @@ export const useColumnsIncidenciaTM = () => {
               onChangeChecked={() => {
                 if (
                   !hasPermission(
-                    PermissionsEnum.tecnico_change_incidenciaticketmasivo,
+                    PermissionsEnum.tecnico_change_prioridadincidenciaticketmasivo,
                   )
                 )
                   return;
@@ -130,17 +107,14 @@ export const useColumnsIncidenciaTM = () => {
         },
       },
     ],
-    [
-      setConfirmDialog,
-      setConfirmDialogIsOpen,
-      changeState,
-      changeRestringirAsuntoTicekt,
-    ],
+    [setConfirmDialog, setConfirmDialogIsOpen, changeState],
   );
 
-  const incidenciatmColumns = useMemo<MRT_ColumnDef<IncidenciaTM>[]>(
+  const prioridadincidenciatmColumns = useMemo<
+    MRT_ColumnDef<PrioridadIncidenciaTM>[]
+  >(
     () => [
-      ...incidenciatmBaseColumns01,
+      ...prioridadincidenciatmBaseColumns01,
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -158,10 +132,10 @@ export const useColumnsIncidenciaTM = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
       },
     ],
-    [incidenciatmBaseColumns01],
+    [prioridadincidenciatmBaseColumns01],
   );
 
   return {
-    incidenciatmColumns,
+    prioridadincidenciatmColumns,
   };
 };

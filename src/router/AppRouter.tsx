@@ -1952,6 +1952,31 @@ const UpdateEventoMensajeriaTMPage = Loadable(
       ),
   ),
 );
+// Prioridad Incidencia
+const PrioridadIncidenciaTMPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/prioridad-incidencia-tm/pages/tables/PrioridadIncidenciaTMPage'
+      ),
+  ),
+);
+const CreatePrioridadIncidenciaTMPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/prioridad-incidencia-tm/pages/forms/CreatePrioridadIncidenciaTMPage'
+      ),
+  ),
+);
+const UpdatePrioridadIncidenciaTMPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/prioridad-incidencia-tm/pages/forms/UpdatePrioridadIncidenciaTMPage'
+      ),
+  ),
+);
 
 ///*
 const ScoresLimitVentasPage = Loadable(
@@ -3564,6 +3589,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.eventomensajeriaTMEditar,
             element: <UpdateEventoMensajeriaTMPage />,
+          },
+          //Prioridad Incidencia
+          {
+            path: ROUTER_PATHS.tickets.prioridadincidenciaTM,
+            element: <PrioridadIncidenciaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.prioridadincidenciaTMCrear,
+            element: <CreatePrioridadIncidenciaTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.prioridadincidenciaTMEditar,
+            element: <UpdatePrioridadIncidenciaTMPage />,
           },
         ],
       },

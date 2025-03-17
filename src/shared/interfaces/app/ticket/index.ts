@@ -3,3 +3,4 @@ export * from './evento-mensajeria-tm';
 export * from './incidencia-tm';
 export * from './mensajeria-tm';
 export * from './parametros';
+export * from './prioridad-incidencia-tm';
