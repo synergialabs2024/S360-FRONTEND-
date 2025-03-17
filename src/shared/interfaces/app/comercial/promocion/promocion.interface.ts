@@ -46,7 +46,7 @@ export interface Promocion {
 
   opciones_productos_incluye?: ProductoPromocionItem[];
   opciones_productos_descuento?: ProductoDisccountItem[];
-  opciones_productos_premio?: ProductoDisccountItem[];
+  opciones_productos_premio?: PromocionPremioItem[];
 
   planes_data?: PlanInternetLimitData[];
   paises_data?: PaisLimitData[];

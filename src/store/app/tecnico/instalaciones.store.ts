@@ -5,8 +5,24 @@ import type {
   MaterialesUtilizadosOTTableType,
 } from '@/app/tecnico/install-asignada/shared/components/form';
 
-import { ToastWrapper } from '@/shared';
+import {
+  PreventaPromocionSelectedOptions,
+  Promocion,
+  ToastWrapper,
+} from '@/shared';
 
+// -----------------------------
+export type ItemsPromoInstalacion = {
+  codigo: string;
+  cantidad: number;
+
+  nombre?: string;
+  descuento?: string | undefined;
+  categoria?: string | undefined;
+  uuid?: string | undefined;
+};
+
+// -----------------------------
 export enum InstalacionesStoreKey {
   equiposUtilizados = 'equiposUtilizados',
   materialesUtilizados = 'materialesUtilizados',
@@ -35,6 +51,21 @@ export interface InstalacionesState {
   setIsRequiredMiniUPS: (value: boolean) => void;
   isRequiredMesh: boolean;
   setIsRequiredMesh: (value: boolean) => void;
+
+  // promocion ---
+  selectedPromocion: Promocion | null;
+  setSelectedPromocion: (promocion: Promocion | null) => void;
+  promocionItemsSelected: PreventaPromocionSelectedOptions[];
+  setPromocionItemsSelected: (
+    items: PreventaPromocionSelectedOptions[],
+  ) => void;
+  promocionPremioSelectedUuid: string | null;
+  setPromocionPremioSelectedUuid: (uuid: string | null) => void;
+
+  promocionItemsSelectedFormatted: ItemsPromoInstalacion[];
+  promocionPremioSelectedFormatted: ItemsPromoInstalacion[];
+  setPromocionItemsSelectedFormatted: (items: ItemsPromoInstalacion[]) => void;
+  setPromocionPremioSelectedFormatted: (item: ItemsPromoInstalacion[]) => void;
 
   // operations functions ------
   addSelectedItem: ({
@@ -139,6 +170,11 @@ export const useInstalacionesStore = create<InstalacionesState>()(
         selectedFibraModel: null,
         isRequiredMiniUPS: false,
         isRequiredMesh: false,
+
+        // ---
+        selectedPromocion: null,
+        promocionItemsSelected: [],
+        promocionPremioSelectedUuid: null,
       });
     },
 
@@ -152,5 +188,20 @@ export const useInstalacionesStore = create<InstalacionesState>()(
     setIsRequiredMiniUPS: value => set({ isRequiredMiniUPS: value }),
     isRequiredMesh: false,
     setIsRequiredMesh: value => set({ isRequiredMesh: value }),
+
+    // promocion ---
+    selectedPromocion: null,
+    setSelectedPromocion: promocion => set({ selectedPromocion: promocion }),
+    promocionItemsSelected: [],
+    setPromocionItemsSelected: items => set({ promocionItemsSelected: items }),
+    promocionPremioSelectedUuid: null,
+    setPromocionPremioSelectedUuid: uuid =>
+      set({ promocionPremioSelectedUuid: uuid }),
+    promocionItemsSelectedFormatted: [],
+    promocionPremioSelectedFormatted: [],
+    setPromocionPremioSelectedFormatted: item =>
+      set({ promocionPremioSelectedFormatted: item }),
+    setPromocionItemsSelectedFormatted: items =>
+      set({ promocionItemsSelectedFormatted: items }),
   }),
 );

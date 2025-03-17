@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -12,9 +13,10 @@ import {
   CustomCardAlert,
   CustomMinimalTable,
   CustomSingleButton,
+  CustomTypoLabel,
   ScrollableDialogProps,
 } from '@/shared/components';
-import { useInstalacionesStore } from '@/store/app';
+import { ItemsPromoInstalacion, useInstalacionesStore } from '@/store/app';
 
 export type EquipoAdicionalInstallTectAsignFormPartProps = {
   ordenTrabajo: OrdenTrabajo;
@@ -31,6 +33,34 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
     s => s.setIsRequiredMiniUPS,
   );
   const setIsRequiredMesh = useInstalacionesStore(s => s.setIsRequiredMesh);
+  const setSelectedPromocion = useInstalacionesStore(
+    s => s.setSelectedPromocion,
+  );
+  const setPromocionItemsSelected = useInstalacionesStore(
+    s => s.setPromocionItemsSelected,
+  );
+  const setPromocionPremioSelectedUuid = useInstalacionesStore(
+    s => s.setPromocionPremioSelectedUuid,
+  );
+  const selectedPromo = useInstalacionesStore(s => s.selectedPromocion);
+  const promocionItemsSelected = useInstalacionesStore(
+    s => s.promocionItemsSelected,
+  );
+  const promocionPremioSelectedUuid = useInstalacionesStore(
+    s => s.promocionPremioSelectedUuid,
+  );
+  const setPromocionPremioSelectedFormatted = useInstalacionesStore(
+    s => s.setPromocionPremioSelectedFormatted,
+  );
+  const setPromocionItemsSelectedFormatted = useInstalacionesStore(
+    s => s.setPromocionItemsSelectedFormatted,
+  );
+  const promocionItemsSelectedFormatted = useInstalacionesStore(
+    s => s.promocionItemsSelectedFormatted,
+  );
+  const promocionPremioSelectedFormatted = useInstalacionesStore(
+    s => s.promocionPremioSelectedFormatted,
+  );
 
   ///* columns ---------------------
   const { savedEquiposPreventaColumns } = useColumnsEquiposPreventa({
@@ -54,9 +84,71 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
       item => item.codigo === CodigoProductosEnumChoice.WIFIMESH,
     );
     setIsRequiredMesh(isRequiredMesh);
-  }, [equiposVentaDetail, setIsRequiredMesh, setIsRequiredMiniUPS]);
 
-  if (!equiposVentaDetail.length) return null;
+    // handle promocion -------------
+    const selectedPromocion =
+      ordenTrabajo?.preventa_data?.promociones_data?.at(0) || null;
+    if (!selectedPromocion) return;
+    setSelectedPromocion(selectedPromocion as any);
+    setPromocionItemsSelected(
+      ordenTrabajo?.preventa_data?.promocion_items_selected || [],
+    );
+    setPromocionPremioSelectedUuid(
+      ordenTrabajo?.preventa_data?.promocion_premio_selected || null,
+    );
+
+    const selectedItemsFormatted =
+      promocionItemsSelected.map(item => {
+        const itemFound = selectedPromo?.opciones_productos_incluye?.find(
+          i => i.codigo === item.codigo,
+        );
+        const cantidad = itemFound?.opciones?.find(
+          i => i.uuid === item.selected_item_uuid,
+        )?.cantidad;
+
+        return {
+          ...item,
+          cantidad,
+        };
+      }) || [];
+    setPromocionItemsSelectedFormatted(
+      selectedItemsFormatted as ItemsPromoInstalacion[],
+    );
+    const selectedPremioFormatted = promocionPremioSelectedUuid
+      ? [
+          {
+            ...selectedPromo?.opciones_productos_premio?.find(
+              i => i?.uuid === promocionPremioSelectedUuid,
+            ),
+            cantidad: 1,
+          },
+        ]
+      : [];
+
+    setPromocionPremioSelectedFormatted(
+      selectedPremioFormatted as ItemsPromoInstalacion[],
+    );
+  }, [
+    equiposVentaDetail,
+    setIsRequiredMesh,
+    setIsRequiredMiniUPS,
+    ordenTrabajo,
+    setSelectedPromocion,
+    setPromocionItemsSelected,
+    setPromocionPremioSelectedUuid,
+    promocionItemsSelected,
+    setPromocionItemsSelectedFormatted,
+    setPromocionPremioSelectedFormatted,
+    selectedPromo,
+    promocionPremioSelectedUuid,
+  ]);
+
+  if (
+    !equiposVentaDetail.length &&
+    !promocionItemsSelected.length &&
+    !promocionPremioSelectedUuid
+  )
+    return null;
 
   return (
     <Grid item container mb={4}>
@@ -93,12 +185,46 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
         contentNode={
           <Grid item container {...gridSize} spacing={2}>
             <Grid item xs={12}>
+              <CustomTypoLabel text="Equipo adicional" />
               <CustomMinimalTable<EquiposSeleccionadosTableType>
                 columns={savedEquiposPreventaColumns}
                 data={(equiposVentaDetail as any) || []}
                 enablePagination
                 density="comfortable"
               />
+            </Grid>
+
+            <Grid item xs={12}>
+              <>
+                {useInstalacionesStore.getState().promocionItemsSelected
+                  ?.length > 0 ? (
+                  <>
+                    <CustomTypoLabel text="Items por promoción" />
+
+                    <CustomMinimalTable<EquiposSeleccionadosTableType>
+                      columns={savedEquiposPreventaColumns}
+                      data={promocionItemsSelectedFormatted}
+                      enablePagination
+                      density="comfortable"
+                    />
+                  </>
+                ) : null}
+              </>
+            </Grid>
+
+            <Grid item xs={12}>
+              {promocionPremioSelectedUuid ? (
+                <>
+                  <CustomTypoLabel text="Premio por promoción" />
+
+                  <CustomMinimalTable<EquiposSeleccionadosTableType>
+                    columns={savedEquiposPreventaColumns}
+                    data={promocionPremioSelectedFormatted}
+                    enablePagination
+                    density="comfortable"
+                  />
+                </>
+              ) : null}
             </Grid>
           </Grid>
         }
