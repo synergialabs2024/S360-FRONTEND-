@@ -1,3 +1,4 @@
+import { tipoCausaTicketMasivoEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface CausaTMPaginatedRes {
@@ -14,7 +15,7 @@ export interface CausaTM {
   name: string;
   description: string;
   state: boolean;
-  tipo_causa: string;
+  tipo_causa: tipoCausaTicketMasivoEnumChoice;
 
   created_at?: string;
   modified_at?: string;

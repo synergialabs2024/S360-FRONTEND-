@@ -4,6 +4,7 @@ export * from './CustomButtons';
 export * from './CustomMaps';
 export * from './CustomSearch';
 export * from './CustomChips';
+export * from './CustomColor';
 export * from './CustomDateRange';
 export * from './FormBoxScenes';
 export * from './CustomTable';

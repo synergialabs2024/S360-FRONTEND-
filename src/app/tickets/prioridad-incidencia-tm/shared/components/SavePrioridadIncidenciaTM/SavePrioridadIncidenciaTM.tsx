@@ -6,18 +6,21 @@ import {
   SampleCheckbox,
   CustomTextField,
   SingleFormBoxScene,
+  CustomColorPickerHexa,
 } from '@/shared/components';
+import {
+  gridSizeMdLg1,
+  gridSizeMdLg6,
+  gridSizeMdLg11,
+  PermissionsEnum,
+  PrioridadIncidenciaTM,
+  prioridadincidenciaTMFormSchema,
+} from '@/shared';
 import {
   useCreatePrioridadIncidenciaTM,
   useUpdatePrioridadIncidenciaTM,
   CreatePrioridadIncidenciaTMParamsBase,
 } from '@/actions/app';
-import {
-  PrioridadIncidenciaTM,
-  gridSizeMdLg6,
-  PermissionsEnum,
-  prioridadincidenciaTMFormSchema,
-} from '@/shared';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlPrioridadIncidenciaTMPage } from '../../../pages/tables/PrioridadIncidenciaTMPage';
@@ -79,6 +82,8 @@ const SavePrioridadIncidenciaTM: React.FC<SavePrioridadIncidenciaTMProps> = ({
       return;
     }
 
+    console.log(data);
+
     ///* create
     createPrioridadIncidenciaTMMutation.mutate(data);
   };
@@ -121,7 +126,15 @@ const SavePrioridadIncidenciaTM: React.FC<SavePrioridadIncidenciaTMProps> = ({
         defaultValue={form.getValues().color_hex}
         error={errors.color_hex}
         helperText={errors.color_hex?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg11}
+        disabled
+      />
+      <CustomColorPickerHexa
+        size={gridSizeMdLg1}
+        initialColor={prioridadincidenciaTM?.color_hex}
+        onData={row => {
+          form.setValue('color_hex', row);
+        }}
       />
       <SampleCheckbox
         label="state"

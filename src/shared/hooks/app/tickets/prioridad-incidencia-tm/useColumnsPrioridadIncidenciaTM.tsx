@@ -1,4 +1,5 @@
 import { MRT_ColumnDef } from 'material-react-table';
+import { Tooltip } from '@mui/material';
 import { useMemo } from 'react';
 
 import {
@@ -10,12 +11,15 @@ import {
   PermissionsEnum,
   ChangeModelStateData,
   PrioridadIncidenciaTM,
+  AuditLogsPITM,
 } from '@/shared/interfaces';
-import { CustomSwitch } from '@/shared/components';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { AuditLogPrioridadIncidencia } from '../modals';
 import { useUpdatePrioridadIncidenciaTM } from '@/actions/app';
+import AdditionalDataModal from '../modals/AdditionalDataModal';
 import { TABLE_CONSTANTS, MODEL_STATE_BOOLEAN } from '@/shared/constants';
+import { CustomSwitch, ViewMoreTextModalTableCell } from '@/shared/components';
 
 export const useColumnsPrioridadIncidenciaTM = () => {
   ///* global state
@@ -55,7 +59,32 @@ export const useColumnsPrioridadIncidenciaTM = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'color_hex'),
+        Cell: ({ row }) => {
+          return (
+            <Tooltip title={row.original.color_hex}>
+              <div
+                style={{
+                  padding: '5px',
+                  background: '#fff',
+                  borderRadius: '1px',
+                  boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+                  display: 'inline-block',
+                  cursor: 'pointer',
+                  minWidth: '2cm',
+                }}
+              >
+                <div
+                  style={{
+                    height: '10px',
+                    background: row.original.color_hex, // Color de fondo dinámico
+                    borderRadius: '2px',
+                    border: '1px solid rgba(0, 0, 0, 0.2)', // Un pequeño borde opcional
+                  }}
+                />
+              </div>
+            </Tooltip>
+          );
+        },
       },
       {
         accessorKey: 'user_create__name',
@@ -116,6 +145,17 @@ export const useColumnsPrioridadIncidenciaTM = () => {
     () => [
       ...prioridadincidenciatmBaseColumns01,
       {
+        accessorKey: 'audit_logs',
+        header: 'HISTORIAL',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <AuditLogPrioridadIncidencia Arrays={row.original.audit_logs} />
+          );
+        },
+      },
+      {
         accessorKey: 'created_at',
         header: 'CREADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -135,7 +175,73 @@ export const useColumnsPrioridadIncidenciaTM = () => {
     [prioridadincidenciatmBaseColumns01],
   );
 
+  const prioridadincidenciaHistorialColumns = useMemo<
+    MRT_ColumnDef<AuditLogsPITM>[]
+  >(
+    () => [
+      {
+        accessorKey: 'action',
+        header: 'ACCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'action'),
+      },
+      {
+        accessorKey: 'user_data__razon_social',
+        header: 'USUARIO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['user_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'description',
+        header: 'DESCRIPCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.description
+            ? row.original.description
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle="Descripcion"
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'additional_data',
+        header: 'Cambio',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          return <AdditionalDataModal Arrays={row.original.additional_data} />;
+        },
+      },
+      {
+        accessorKey: 'created_at',
+        header: 'CREADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+      {
+        accessorKey: 'modified_at',
+        header: 'MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [],
+  );
+
   return {
     prioridadincidenciatmColumns,
+    prioridadincidenciaHistorialColumns,
   };
 };

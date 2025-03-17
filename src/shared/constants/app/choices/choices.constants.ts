@@ -1405,3 +1405,13 @@ export const PRIORIDAD_TICKET_MASIVO_ARRAY_CHOICES = [
   PrioridadTMEnumChoice.MEDIA,
   PrioridadTMEnumChoice.BAJA,
 ];
+
+export enum TipoTicketMasivoNocEnumChoice {
+  INCIDENCIA = 'INCIDENCIA',
+  EVENTO = 'EVENTO',
+}
+
+export const TIPO_TICKET_TICKET_MASIVO_NOC_ARRAY_CHOICES = [
+  TipoTicketMasivoNocEnumChoice.INCIDENCIA,
+  TipoTicketMasivoNocEnumChoice.EVENTO,
+];

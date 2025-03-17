@@ -1435,12 +1435,15 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.tickets.eventomensajeriaTMNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'prioridad-incidencia-ticket-masivo',
-              title: 'Prioridad incidencia de ticket masivo',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.tickets.prioridadincidenciaTMNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.TICKETS_PRIORIDAD_INCIDENCIA_TICEKT_MASIVO,
+              {
+                id: 'prioridad-incidencia-ticket-masivo',
+                title: 'Prioridad incidencia de ticket masivo',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.tickets.prioridadincidenciaTMNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 
