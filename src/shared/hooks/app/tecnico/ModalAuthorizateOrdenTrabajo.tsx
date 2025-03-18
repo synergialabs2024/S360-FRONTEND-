@@ -1,8 +1,4 @@
 import { IconRouteSquare2 } from '@tabler/icons-react';
-import {
-  gridSizeMdLg6,
-  MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES,
-} from '@/shared/constants';
 import { Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,6 +18,10 @@ import {
   CustomNumberTextField,
   CustomAutocompleteNoForm,
 } from '@/shared/components';
+import {
+  gridSizeMdLg6,
+  MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES,
+} from '@/shared/constants';
 import { ToastWrapper } from '@/shared/wrappers';
 import { PermissionsEnum } from '@/shared/interfaces';
 import { hasAllPermissions } from '@/shared/utils/auth';
@@ -100,13 +100,15 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
   useEffect(() => {
     if (
       Array.isArray(AuthOnusPagingRes?.data?.items) &&
-      AuthOnusPagingRes.data.items.length === 0
+      AuthOnusPagingRes.data.items.length === 0 &&
+      openModal
     ) {
       ToastWrapper.error('No se ha actualizado la Authenticacion de Onus');
     }
     if (
       Array.isArray(OltsPagingRes?.data?.items) &&
-      OltsPagingRes.data.items.length === 0
+      OltsPagingRes.data.items.length === 0 &&
+      openModal
     ) {
       ToastWrapper.error('No se ha actualizado OLT');
     }
@@ -121,7 +123,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
       setNameBtn('Reintentar');
       setDataBeing(false);
     }
-  }, [AuthOnusPagingRes, OltsPagingRes]);
+  }, [AuthOnusPagingRes, OltsPagingRes, openModal]);
 
   // Data transformation functions
   const transformData = (

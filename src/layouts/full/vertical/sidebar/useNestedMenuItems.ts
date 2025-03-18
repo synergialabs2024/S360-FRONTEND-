@@ -1028,13 +1028,13 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cobranza.planpagocuotasNav,
             }),
-            /*
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.COBRANZA_FACTURA, {
               id: 'facturas',
               title: 'Facturas',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
+              url: ROUTER_PATHS.cobranza.facturasNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rubros',
               title: 'Rubros',

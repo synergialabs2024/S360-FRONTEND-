@@ -1036,6 +1036,9 @@ const ConfiguracionPlantillaClienteCarteraPage = Loadable(
       ),
   ),
 );
+const FacturasPage = Loadable(
+  lazy(() => import('@/app/cobranza/factura/pages/tables/FacturasPage')),
+);
 ///* Cobranza ------------
 // const CobranzaModule = Loadable(
 //   lazy(() => import('@/app/cobranza/CobranzaModule')),
@@ -2706,6 +2709,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.planpagocuotasEditar,
             element: <PlanPagoCuotaPage />,
+          },
+
+          ///* Cobranza
+          {
+            path: ROUTER_PATHS.cobranza.facturas,
+            element: <FacturasPage />,
           },
         ],
       },

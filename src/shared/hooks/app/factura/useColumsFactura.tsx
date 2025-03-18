@@ -1,9 +1,12 @@
-import { type MRT_ColumnDef } from 'material-react-table';
+import { MRT_Row, type MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { Factura } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import { PDFIconButton } from '@/shared/components';
+
+type MRTFacturaType = { row: MRT_Row<Factura> };
 
 export const useColumsFactura = () => {
   const columnsBase = useMemo<MRT_ColumnDef<Factura>[]>(
@@ -14,21 +17,32 @@ export const useColumsFactura = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_emision'),
       },
-
       {
         accessorKey: 'url_pdf',
-        header: 'URL PDF',
+        header: 'PDF',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'url_pdf'),
-      },
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }: MRTFacturaType) => {
+          const pdf = row?.original.url_pdf;
+          if (!pdf) return 'N/A';
 
+          return <PDFIconButton url={pdf} />;
+        },
+      },
       {
         accessorKey: 'url_xml',
-        header: 'URL XML',
+        header: 'XML',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'url_xml'),
-      },
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }: MRTFacturaType) => {
+          const xml = row?.original.url_xml;
+          if (!xml) return 'N/A';
 
+          return <PDFIconButton url={xml} isXml />;
+        },
+      },
       {
         accessorKey: 'total',
         header: 'TOTAL',
