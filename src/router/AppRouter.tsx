@@ -1977,6 +1977,29 @@ const UpdatePrioridadIncidenciaTMPage = Loadable(
       ),
   ),
 );
+// Departamento TM
+const DepartamentoTMPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/tickets/departamento-tm/pages/tables/DepartamentoTMPage'),
+  ),
+);
+const CreateDepartamentoTMPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/departamento-tm/pages/forms/CreateDepartamentoTMPage'
+      ),
+  ),
+);
+const UpdateDepartamentoTMPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/tickets/departamento-tm/pages/forms/UpdateDepartamentoTMPage'
+      ),
+  ),
+);
 
 ///*
 const ScoresLimitVentasPage = Loadable(
@@ -3602,6 +3625,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.tickets.prioridadincidenciaTMEditar,
             element: <UpdatePrioridadIncidenciaTMPage />,
+          },
+          //Departamento
+          {
+            path: ROUTER_PATHS.tickets.departamentoTM,
+            element: <DepartamentoTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.departamentoTMCrear,
+            element: <CreateDepartamentoTMPage />,
+          },
+          {
+            path: ROUTER_PATHS.tickets.departamentoTMEditar,
+            element: <UpdateDepartamentoTMPage />,
           },
         ],
       },

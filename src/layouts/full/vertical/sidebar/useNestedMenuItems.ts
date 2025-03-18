@@ -1444,6 +1444,12 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.tickets.prioridadincidenciaTMNav,
               },
             ),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'departamento-ticket-masivo',
+              title: 'Departamento de ticket masivo',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.tickets.departamentoTMNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
 

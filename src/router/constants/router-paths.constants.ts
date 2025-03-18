@@ -878,6 +878,12 @@ export const ROUTER_PATHS = {
     prioridadincidenciaTMEditar:
       'prioridad-incidencia-ticket-masivo/editar/:uuid',
     prioridadincidenciaTMNav: '/tickets/prioridad-incidencia-ticket-masivo',
+
+    //Departamento
+    departamentoTM: 'departamento-ticket-masivo',
+    departamentoTMCrear: 'departamento-ticket-masivo/crear',
+    departamentoTMEditar: 'departamento-ticket-masivo/editar/:uuid',
+    departamentoTMNav: '/tickets/departamento-ticket-masivo',
   },
 
   /////* Buzon Tareas ----------------
