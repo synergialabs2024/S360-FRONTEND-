@@ -1461,10 +1461,10 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav,
             }),
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'pendientes',
-              title: 'Pendientes',
+              id: 'clientes-suspendidos',
+              title: 'Clientes suspendidos',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.buzonTareas.pendientesActivacionAsignadasNav,
+              url: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignadasNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

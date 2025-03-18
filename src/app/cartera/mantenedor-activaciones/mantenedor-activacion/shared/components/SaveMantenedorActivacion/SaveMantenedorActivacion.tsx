@@ -7,6 +7,7 @@ import {
   CustomAutocomplete,
   CustomAutocompleteMultiple,
   CustomNumberTextField,
+  CustomTextField,
   CustomTextFieldNoForm,
   CustomTypoLabel,
   SampleCheckbox,
@@ -41,6 +42,7 @@ import {
 } from '@/store/app';
 import { MantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones/mantenedor-activacion.interface';
 import { useEffect } from 'react';
+import { useFetchMantenedorActivacionesBase } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
 
 export interface SaveMantenedorActivacionProps {
   title: string;
@@ -57,6 +59,8 @@ type SaveFormData = CreateMantenedorActivacionParamsBase & {
   //
   grupos_usuario_autorizados: SystemGroup[];
   codigo_motivo: string;
+  motivo_base: string;
+  motivo_base_id: number;
 };
 
 const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
@@ -127,6 +131,18 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     'tipo_rubro_adicional_motivo',
   );
   const watchedCode = form.watch('codigo_motivo');
+  const watchedMotivoBaseId = form.watch('motivo_base_id');
+
+  const {
+    data: mantenedorActivacionesBasePagingRes,
+    isLoading: isLoadingMantenedorActivacionesBase,
+    isRefetching: isRefetchingMantenedorActivacionesBase,
+  } = useFetchMantenedorActivacionesBase({
+    params: {
+      page_size: 1,
+      id: watchedMotivoBaseId,
+    },
+  });
 
   const {
     items: mantenedorActivaciones,
@@ -137,6 +153,10 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
   );
 
   const onSave = async (data: SaveFormData) => {
+    console.log(
+      'mantenedorActivacionesBasePagingRes?.data.items[0].id;',
+      mantenedorActivacionesBasePagingRes?.data.items[0].id,
+    );
     console.log('data.criterio', data.criterio);
 
     const mantenedorActivacionesId =
@@ -147,19 +167,28 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
       return;
     }
 
+    const mantenedorActivacionData: MantenedorActivacion = {
+      criterio: data.criterio,
+      mantenedor_base: mantenedorActivacionesId,
+      motivo: data.motivo,
+      code: data.code,
+      state: data.state,
+      motivo_base: data.motivo_base,
+    };
+
+    // Si permitido_en_anio tiene valor, lo añadimos al objeto, si es un string vacío lo omitimos
+    if (data.permitido_en_anio) {
+      mantenedorActivacionData.permitido_en_anio = Number(
+        data.permitido_en_anio,
+      );
+    }
+
     setConfirmDialog({
       isOpen: true,
       title: 'Mantenedor activaciones',
       subtitle: '¿Está seguro que desea crear este registro?',
       onConfirm: () => {
-        createMantenedorActivacion.mutate({
-          criterio: data.criterio,
-          mantenedor_base: mantenedorActivacionesId,
-          motivo: data.motivo,
-          code: data.code,
-          state: data.state,
-          permitido_en_anio: data.permitido_en_anio,
-        });
+        createMantenedorActivacion.mutate(mantenedorActivacionData);
         clearForm();
         clearAllStore();
         setConfirmDialogIsOpen(false);
@@ -204,7 +233,9 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     isLoadingMotivoRubroAdicionals ||
     isRefetchingMotivoRubroAdicionals ||
     isLoadingCriterioMantenedorActivaciones ||
-    isRefetchingCriterioMantenedorActivaciones;
+    isRefetchingCriterioMantenedorActivaciones ||
+    isLoadingMantenedorActivacionesBase ||
+    isRefetchingMantenedorActivacionesBase;
   useLoaders(customLoader);
 
   return (
@@ -315,6 +346,7 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           helperText={errors.motivo?.message}
           size={gridSizeMdLg12}
           onChangeRawValue={row => {
+            console.log('row', row);
             form.setValue('valor', row?.valor);
             form.setValue(
               'grupos_usuario_autorizados',
@@ -324,12 +356,9 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
               'tipo_rubro_adicional_motivo',
               row.tipo_rubro_adicional,
             );
+            form.setValue('motivo_base', row.nombre);
             form.setValue('codigo_motivo', row.codigo);
-            console.log('codigo_motivo', row.codigo);
-            console.log(
-              'row?.grupos_usuario_autorizados_data',
-              row?.grupos_usuario_autorizados_data,
-            );
+            console.log('row.nombre', row.nombre);
           }}
         />
 
@@ -399,7 +428,7 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           />
         </>
 
-        <CustomNumberTextField
+        <CustomTextField
           label="Codigo"
           name="code"
           size={gridSizeMdLg6}
@@ -425,7 +454,7 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           label="state"
           name="state"
           control={form.control}
-          defaultValue={form.getValues().state}
+          defaultValue={form.getValues().state!}
           isState
           size={gridSizeMdLg6}
         />

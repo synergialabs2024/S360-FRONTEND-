@@ -6,20 +6,6 @@ export const mantenedorActivacionBaseFormSchema = yup.object({
     .typeError('El campo codigo es requerido')
     .required('El campo codigo es requerido'),
 
-  tiempo_bloqueo: yup
-    .number()
-    .typeError('El campo tiempo de bloqueo caso es requerido')
-    .required('El campo tiempo de bloqueo caso es requerido')
-    .min(1, 'El campo tiempo de bloqueo no debe ser menor a 1 caracter')
-    .max(31, 'El campo tiempo de bloqueo no debe exceder los 31 caracteres'),
-
-  tiempo_limite: yup
-    .number()
-    .typeError('El campo tiempo limite es requerido')
-    .required('El campo tiempo limite es requerido')
-    .min(1, 'El campo tiempo limite no debe ser menor a 1 caracter')
-    .max(31, 'El campo tiempo limite no debe exceder los 31 caracteres'),
-
   incluye_facturacion_string: yup
     .string()
     .typeError('El campo incluye facturacion es requerido')

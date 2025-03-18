@@ -3620,11 +3620,11 @@ const AppRouter = [
             element: <CreateTareaPage />,
           },
           {
-            path: ROUTER_PATHS.buzonTareas.pendientesActivacionAsignadasNav,
+            path: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignadasNav,
             element: <PendientesActivacionPage />,
           },
           {
-            path: ROUTER_PATHS.buzonTareas.pendientesActivacionAsignada,
+            path: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignada,
             element: <CreatePendientesActivacionPage />,
           },
         ],

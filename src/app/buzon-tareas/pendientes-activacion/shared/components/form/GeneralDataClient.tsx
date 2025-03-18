@@ -14,10 +14,8 @@ import {
   TabsFormBoxScene,
 } from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
-import {
-  ClienteFibraTitle,
-  FibraClientSummaryFormPart,
-} from '@/app/cliente/cliente/shared/components';
+import { ClienteFibraTitle } from '@/app/cliente/cliente/shared/components';
+import ClientDataFormPart from '../client-data/ClientDataFormPart';
 
 export type GeneralFibraClientProps = {
   serviceLine?: LineaServicio;
@@ -53,7 +51,7 @@ const GeneralDataClient: React.FC<GeneralFibraClientProps> = ({
     >
       {/* ========================= Resumen ========================= */}
       <CustomTabPanel index={1} value={tabValue} gridSizeChild={gridSizeMdLg10}>
-        <FibraClientSummaryFormPart serviceLine={serviceLine!} />
+        <ClientDataFormPart serviceLine={serviceLine!} />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

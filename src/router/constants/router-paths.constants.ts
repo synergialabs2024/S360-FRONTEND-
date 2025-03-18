@@ -891,8 +891,8 @@ export const ROUTER_PATHS = {
     buzonTareasAsignada: 'tareas-asignadas/:uuid',
     buzonTareasAsignadasNav: '/buzon-tareas/tareas-asignadas',
 
-    pendientesActivacionAsignadas: 'pendientes-activacion',
-    pendientesActivacionAsignada: 'pendientes-activacion/:uuid',
-    pendientesActivacionAsignadasNav: '/buzon-tareas/pendientes-activacion',
+    clientesSuspendidosAsignadas: 'clientes-suspendidos',
+    clientesSuspendidosAsignada: 'clientes-suspendidos/:uuid',
+    clientesSuspendidosAsignadasNav: '/buzon-tareas/clientes-suspendidos',
   },
 };

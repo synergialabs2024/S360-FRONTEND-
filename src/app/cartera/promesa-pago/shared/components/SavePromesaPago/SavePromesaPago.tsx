@@ -242,9 +242,9 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
     isRefetching: isRefetchingMantenedorActivaciones,
   } = useFetchMantenedorActivaciones({
     params: {
-      page_size: 1000,
-      motivo_base: motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO,
+      page_size: 1,
       state: true,
+      motivo_base: motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO,
     },
   });
 
@@ -306,6 +306,18 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
     ],
     [],
   );
+
+  useEffect(() => {
+    console.log(
+      'mantenedorActivacionesPagingRes',
+      mantenedorActivacionesPagingRes,
+    );
+    console.log(
+      'mantenedorActivacionesPagingRes?.data?.items?.[0]?.mantenedor_base_data?.tiempo_limite',
+      mantenedorActivacionesPagingRes?.data?.items?.[0]?.mantenedor_base_data
+        ?.tiempo_limite,
+    );
+  });
   return (
     <SingleFormBoxScene
       titlePage={title}

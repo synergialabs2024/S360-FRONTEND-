@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router';
 import { useLoaders } from '@/shared';
 import { useGetLineaServicio } from '@/actions/app';
 import GeneralDataClient from '../../shared/components/form/GeneralDataClient';
-import { returnUrlActivacionAsignadas } from '../tables/PendientesActivacionPage';
+import { returnUrlClientesSuspendidosAsignadas } from '../tables/PendientesActivacionPage';
 
 export type CreatePendientesActivacionPageProps = {};
 
@@ -13,7 +13,8 @@ const CreatePendientesActivacionPage: React.FC<
   const { data, isLoading, isRefetching } = useGetLineaServicio(uuid!);
   useLoaders(isLoading || isRefetching);
   if (isLoading) return null; // no isRefetching commented 'cause opt
-  if (!data?.data?.id) return <Navigate to={returnUrlActivacionAsignadas} />;
+  if (!data?.data?.id)
+    return <Navigate to={returnUrlClientesSuspendidosAsignadas} />;
 
   return <GeneralDataClient serviceLine={data.data} />;
 };

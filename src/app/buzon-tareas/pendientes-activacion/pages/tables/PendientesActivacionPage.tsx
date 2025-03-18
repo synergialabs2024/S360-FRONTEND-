@@ -9,8 +9,8 @@ import {
 import { Tab } from '@mui/material';
 import PendientesActivacionByStatePage from './PendientesActivacionByStatePage';
 
-export const returnUrlActivacionAsignadas =
-  ROUTER_PATHS.buzonTareas.pendientesActivacionAsignadasNav;
+export const returnUrlClientesSuspendidosAsignadas =
+  ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignadasNav;
 
 export type PendientesActivacionPageProps = {};
 

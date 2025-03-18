@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { MdArrowRightAlt, MdCancel } from 'react-icons/md';
+import { MdArrowRightAlt, MdEditCalendar } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 
 import { useFetchOrdenTrabajos } from '@/actions/app';
@@ -165,9 +165,9 @@ const ActivacionInstalacionOTByState: React.FC<
           if (activacionState === EstadoActivacionEnumChoice.PENDIENTE) {
             return (
               <SingleIconButton
-                startIcon={<MdCancel />}
+                startIcon={<MdEditCalendar />}
+                color="inherit"
                 label="Recoordinar"
-                color="error"
                 onClick={() =>
                   navigate(
                     `/supervision-comercial/solicitud-recoordinacion-agenda/${row?.agendamiento_data?.uuid}?sr=${row?.uuid}`,

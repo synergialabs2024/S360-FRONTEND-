@@ -15,10 +15,10 @@ export interface MantenedorActivacion {
   mantenedor_base: number;
   motivo: number;
   code: string;
-  state: boolean;
-  motivo_base: string;
-  mantenedor_base_data: MantenedorActivacionBase;
-  permitido_en_anio: number;
+  state?: boolean;
+  motivo_base?: string;
+  mantenedor_base_data?: MantenedorActivacionBase;
+  permitido_en_anio?: number;
   created_at?: string;
   modified_at?: string;
 }

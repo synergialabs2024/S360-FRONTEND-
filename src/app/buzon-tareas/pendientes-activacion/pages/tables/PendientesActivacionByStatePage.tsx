@@ -15,7 +15,7 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useNavigate } from 'react-router';
-import { returnUrlActivacionAsignadas } from './PendientesActivacionPage';
+import { returnUrlClientesSuspendidosAsignadas } from './PendientesActivacionPage';
 import { useFetchClientes } from '@/actions/app';
 
 export type PendientesActivacionByStatePageProps = {
@@ -65,14 +65,14 @@ const PendientesActivacionByStatePage: React.FC<
     );
   };
   const onEdit = (cliente: Cliente) => {
-    const firstLine = cliente?.linea_servicio_data?.[0];
+    const firstLine = cliente?.linea_servicio_data?.[0].uuid;
     setConfirmDialog({
       isOpen: true,
       title: 'Editar Cliente',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlActivacionAsignadas}/${firstLine}`);
+        navigate(`${returnUrlClientesSuspendidosAsignadas}/${firstLine}`);
       },
     });
   };

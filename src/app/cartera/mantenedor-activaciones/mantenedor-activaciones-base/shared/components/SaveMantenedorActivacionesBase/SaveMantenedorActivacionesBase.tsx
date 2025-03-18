@@ -95,6 +95,25 @@ const SaveMantenedorActivacionesBase: React.FC<
 
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    const mantenedorActivacionBaseData: MantenedorActivacionBase = {
+      motivo_base: data.motivo_base,
+      code: data.code,
+      incluye_facturacion: data.incluye_facturacion,
+      incluye_notificacion: data.incluye_notificacion,
+      motivo: data.motivo,
+    };
+
+    // Si tiempo_bloqueo tiene valor, lo añadimos al objeto, si es un string vacío lo omitimos
+    if (data.tiempo_bloqueo) {
+      mantenedorActivacionBaseData.tiempo_bloqueo = Number(data.tiempo_bloqueo);
+    }
+
+    // Hacemos lo mismo para tiempo_limite
+    if (data.tiempo_limite) {
+      mantenedorActivacionBaseData.tiempo_limite = Number(data.tiempo_limite);
+    }
+
     setConfirmDialog({
       isOpen: true,
       title: 'Mantenedor activaciones base',
@@ -110,15 +129,7 @@ const SaveMantenedorActivacionesBase: React.FC<
           return;
         }
 
-        createMantenedorActivacion.mutate({
-          motivo_base: data.motivo_base,
-          code: data.code,
-          tiempo_bloqueo: data.tiempo_bloqueo,
-          tiempo_limite: data.tiempo_limite,
-          incluye_facturacion: data.incluye_facturacion,
-          incluye_notificacion: data.incluye_notificacion,
-          motivo: data.motivo,
-        });
+        createMantenedorActivacion.mutate(mantenedorActivacionBaseData);
         clearForm();
         setConfirmDialogIsOpen(false);
       },
@@ -182,7 +193,7 @@ const SaveMantenedorActivacionesBase: React.FC<
 
         <CustomAutocomplete<MotivoRubroAdicional>
           label="Motivo"
-          name="motivo"
+          name="motivo_id"
           valueKey="nombre"
           actualValueKey="id"
           control={form.control}
@@ -224,7 +235,7 @@ const SaveMantenedorActivacionesBase: React.FC<
           defaultValue={form.getValues().tiempo_bloqueo}
           error={errors.tiempo_bloqueo}
           helperText={errors.tiempo_bloqueo?.message}
-          min={1}
+          min={0}
           max={31}
         />
 
@@ -236,12 +247,12 @@ const SaveMantenedorActivacionesBase: React.FC<
           defaultValue={form.getValues().tiempo_limite}
           error={errors.tiempo_limite}
           helperText={errors.tiempo_limite?.message}
-          min={1}
+          min={0}
           max={31}
         />
 
         <SelectArrayString
-          label="Aplica descuento meses posteriores"
+          label="Incluye Facturación"
           name="incluye_facturacion_string"
           control={form.control}
           error={errors.incluye_facturacion_string}
@@ -256,7 +267,7 @@ const SaveMantenedorActivacionesBase: React.FC<
         />
 
         <SelectArrayString
-          label="Aplica descuento meses posteriores"
+          label="Incluye Notificación"
           name="incluye_notificacion_string"
           control={form.control}
           error={errors.incluye_notificacion_string}

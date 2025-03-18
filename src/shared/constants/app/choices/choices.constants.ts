@@ -1336,6 +1336,9 @@ export enum motivoBaseMantenedorActivacionBaseEnumChoice {
   REVISIONES_NOC = 'REVISIONES NOC',
   INCONVENIENTES_CON_SISTEMA = 'INCONVENIENTES CON SISTEMA',
   AL_DIA = 'AL DIA',
+  RECONEXION_31_60 = 'RECONEXION 31 - 60',
+  RECONEXION_61_90 = 'RECONEXION 61 - 90',
+  RECONEXION_GENERAL = 'RECONEXION GENERAL',
 }
 
 export const MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES = [
@@ -1346,6 +1349,9 @@ export const MOTIVO_BASE_MANTENEDOR_ACTIVACION_BASE_ARRAY_CHOICES = [
   motivoBaseMantenedorActivacionBaseEnumChoice.REVISIONES_NOC,
   motivoBaseMantenedorActivacionBaseEnumChoice.INCONVENIENTES_CON_SISTEMA,
   motivoBaseMantenedorActivacionBaseEnumChoice.AL_DIA,
+  motivoBaseMantenedorActivacionBaseEnumChoice.RECONEXION_31_60,
+  motivoBaseMantenedorActivacionBaseEnumChoice.RECONEXION_61_90,
+  motivoBaseMantenedorActivacionBaseEnumChoice.RECONEXION_GENERAL,
 ];
 
 export enum tipoRubroAdicionalMantenedorEnumChoice {
