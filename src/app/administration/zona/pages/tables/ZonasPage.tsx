@@ -2,10 +2,12 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchZonas, useUpdateZona } from '@/actions/app';
+import { useFetchZonas, useUpdateZona, ZonaTSQEnum } from '@/actions/app';
+import { useGenericPOST } from '@/actions/shared';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
+  CustomSingleButton,
   CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
@@ -27,6 +29,7 @@ import {
 } from '@/shared/utils';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { Grid } from '@mui/material';
 
 export const returnUrlZonasPage = ROUTER_PATHS.administracion.zonasNav;
 
@@ -54,6 +57,17 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
   const changeState = useUpdateZona<ChangeModelStateData>({
     enableNavigate: false,
   });
+
+  const syncZones = useGenericPOST<any, any>(
+    '/zona/sync-qgis/',
+    ZonaTSQEnum.ZONAS,
+    {
+      customMessageToast: 'Ticket creado con éxito',
+      customOnSuccess() {
+        setConfirmDialogIsOpen(false);
+      },
+    },
+  );
 
   ///* table
   const {
@@ -224,6 +238,27 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
+        //
+        customSpaceNode={
+          <Grid item>
+            <CustomSingleButton
+              label="Sincronizar Zonas"
+              onClick={() => {
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Sincronizar Zonas',
+                  subtitle:
+                    '¿Está seguro que desea sincronizar la información de las zonas existentes en QGIS?',
+                  onConfirm: () => {
+                    syncZones.mutate({} as any);
+                  },
+                  confirmTextBtn: 'Si, sincronizar',
+                });
+              }}
+              variant="outlined"
+            />
+          </Grid>
+        }
       />
 
       <CustomTable<Zona>
