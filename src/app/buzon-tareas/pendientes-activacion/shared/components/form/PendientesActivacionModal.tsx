@@ -5,7 +5,7 @@ import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
 import GeneralDataClient from './GeneralDataClient';
-import { returnUrlActivacionAsignadas } from '../../../pages/tables/PendientesActivacionPage';
+import { returnUrlClientesSuspendidosAsignadas } from '../../../pages/tables/PendientesActivacionPage';
 
 export type PendientesActivacionModalProps = {};
 
@@ -19,7 +19,8 @@ const PendientesActivacionModal: React.FC<
   useLoaders(isLoading || isRefetching);
 
   if (isLoading || isRefetching) return null;
-  if (!data?.data?.id) return <Navigate to={returnUrlActivacionAsignadas} />;
+  if (!data?.data?.id)
+    return <Navigate to={returnUrlClientesSuspendidosAsignadas} />;
 
   return <GeneralDataClient serviceLine={data.data} />;
 };
