@@ -1101,6 +1101,14 @@ const PlanPagoCuotaPage = Loadable(
       import('@/app/cobranza/plan-pago-cuota/pages/forms/UpdatePlanPagoCuota'),
   ),
 );
+const ClientePendienteDevolucionMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/cliente-pendiente-devolucion/pages/tables/ClientePendienteDevolucionMainPage'
+      ),
+  ),
+);
 
 ///* Operaciones ------------
 // const AgendamientosMainPage = Loadable(
@@ -2715,6 +2723,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.facturas,
             element: <FacturasPage />,
+          },
+
+          ///* Cliente Pendiente Devolucion
+          {
+            path: ROUTER_PATHS.cobranza.clientependientedevolucion,
+            element: <ClientePendienteDevolucionMainPage />,
           },
         ],
       },

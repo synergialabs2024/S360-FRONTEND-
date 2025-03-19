@@ -300,7 +300,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.comercial.CorreccionPreventasNav,
             }),
-
             renderByModule(SidenavModulesEnum.COMERCIAL_AGENDAMIENTO, {
               id: 'agendamiento-ventas',
               title: 'Agendamiento',
@@ -321,6 +320,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
+
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'televentas',
               title: 'Televentas',
@@ -1033,6 +1033,12 @@ export const useNestedMenu = () => {
               title: 'Facturas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cobranza.facturasNav,
+            }),
+            renderByModule(SidenavModulesEnum.COBRANZA_FACTURA, {
+              id: 'cliente-pendiente-devolucion',
+              title: 'Cliente pendiente devolucion',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.clientependientedevolucionNav,
             }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {

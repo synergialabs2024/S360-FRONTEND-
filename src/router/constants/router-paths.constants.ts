@@ -403,6 +403,13 @@ export const ROUTER_PATHS = {
     planpagocuotasCrear: 'plan_pago_cuota/crear',
     planpagocuotasEditar: 'plan_pago_cuota/editar/:uuid',
     planpagocuotasNav: '/cobranza/plan_pago_cuota',
+
+    ///* cliente pendiente devolucion
+    clientependientedevolucion: 'cliente-pendiente-devolucion',
+    clientependientedevolucionCrear: 'cliente-pendiente-devolucion/crear',
+    clientependientedevolucionEditar:
+      'cliente-pendiente-devolucion/editar/:uuid',
+    clientependientedevolucionNav: '/cobranza/cliente-pendiente-devolucion',
   },
 
   /////* Comercial ----------------

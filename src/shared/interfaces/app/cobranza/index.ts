@@ -1,3 +1,4 @@
+export * from './cliente-pendiente-devolucion';
 export * from './factura.interface';
 export * from './motivo-rubro-adicional.interface';
 export * from './rubros.interface';

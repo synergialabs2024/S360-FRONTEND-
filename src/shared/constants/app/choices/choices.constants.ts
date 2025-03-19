@@ -30,6 +30,7 @@ export enum UserRolesEnumChoice {
   OPERADOR_ACTIVACIONES = 'OPERADOR ACTIVACIONES', // all orden trabajo
   // no filters (pool ips, netconect):
   OPERADOR_NETWORKING = 'OPERADOR NETWORKING',
+  OPERACIONES = 'OPERACIONES',
 
   BODEGA = 'BODEGA',
   COORDINADOR_LOGISTICA = 'COORDINADOR_LOGISTICA',
@@ -40,6 +41,7 @@ export enum UserRolesEnumChoice {
   PRODUCTO = 'PRODUCTO',
   SOPORTE_N1 = 'SOPORTE_N1',
   COBRANZA = 'COBRANZA',
+  TICKET = 'TICKET',
 }
 export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.GERENCIA,
@@ -63,6 +65,8 @@ export const USER_ROLES_ARRAY_CHOICES = [
   UserRolesEnumChoice.PRODUCTO,
   UserRolesEnumChoice.SOPORTE_N1,
   UserRolesEnumChoice.COBRANZA,
+  UserRolesEnumChoice.OPERACIONES,
+  UserRolesEnumChoice.TICKET,
 ];
 
 export enum InternetServiceTypeEnumChoice {
@@ -1112,8 +1116,13 @@ export const CALENDARIO_FACTURA_TYPE_ARRAY_CHOICES = [
   CalendarioFacturaTypeEnumChoice.VEINTIOCHO,
 ];
 
-// Tickets
+export enum EstadoDevolucionEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  FINALIZADO = 'FINALIZADO',
+  RECHAZADO = 'RECHAZADO',
+}
 
+// Tickets
 export enum EstadoTicketEnumChoice {
   ESPERA = 'ESPERA',
   REALIZADO = 'REALIZADO',
