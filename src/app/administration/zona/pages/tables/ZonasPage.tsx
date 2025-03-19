@@ -62,7 +62,7 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
     '/zona/sync-qgis/',
     ZonaTSQEnum.ZONAS,
     {
-      customMessageToast: 'Ticket creado con éxito',
+      customMessageToast: 'Zonas sincronizadas correctamente',
       customOnSuccess() {
         setConfirmDialogIsOpen(false);
       },

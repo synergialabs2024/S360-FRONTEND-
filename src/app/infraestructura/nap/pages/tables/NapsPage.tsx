@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchNaps } from '@/actions/app';
+import { NapTSQEnum, useFetchNaps } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
+  CustomSingleButton,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
@@ -16,8 +17,10 @@ import {
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { Nap, PermissionsEnum } from '@/shared/interfaces';
 
+import { useGenericPOST } from '@/actions/shared';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { Grid } from '@mui/material';
 
 export const returnUrlNapsPage = ROUTER_PATHS.infraestructura.secondarynapsNav;
 
@@ -64,6 +67,13 @@ const NapsPage: React.FC<NapsPageProps> = () => {
     },
   });
 
+  const syncNap = useGenericPOST<any, any>('/nap/sync-qgis/', NapTSQEnum.NAPS, {
+    customMessageToast: 'Cajas sincronizadas correctamente',
+    customOnSuccess() {
+      setConfirmDialogIsOpen(false);
+    },
+  });
+
   ///* handlers
   const onEdit = (nap: Nap) => {
     setConfirmDialog({
@@ -90,6 +100,27 @@ const NapsPage: React.FC<NapsPageProps> = () => {
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
+        //
+        customSpaceNode={
+          <Grid item>
+            <CustomSingleButton
+              label="Sincronizar Cajas"
+              onClick={() => {
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Sincronizar Cajas',
+                  subtitle:
+                    '¿Está seguro que desea sincronizar la información de las cajas primarias y secundarias existente en QGIS?',
+                  onConfirm: () => {
+                    syncNap.mutate({} as any);
+                  },
+                  confirmTextBtn: 'Si, sincronizar',
+                });
+              }}
+              variant="outlined"
+            />
+          </Grid>
+        }
       />
 
       <CustomTable<Nap>

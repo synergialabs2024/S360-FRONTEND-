@@ -2,10 +2,11 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchOLTs, useUpdateOLT } from '@/actions/app';
+import { OLTTSQEnum, useFetchOLTs, useUpdateOLT } from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
+  CustomSingleButton,
   CustomSwitch,
   CustomTable,
   PasswordTableCell,
@@ -26,6 +27,8 @@ import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { SAVE_OLT_PERMISSIONS } from '@/shared';
 import { ConfigOLTCustomButtons } from '../../shared/components';
 import { useUiConfirmModalStore } from '@/store/ui/confirm-modal.store';
+import { useGenericPOST } from '@/actions/shared';
+import { Grid } from '@mui/material';
 
 export const returnUrlOLTsPage = ROUTER_PATHS.infraestructura.oltsNav;
 
@@ -49,6 +52,13 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
   ///* mutations
   const changeState = useUpdateOLT({
     enableNavigate: false,
+  });
+
+  const syncOlt = useGenericPOST<any, any>('/olt/sync-qgis/', OLTTSQEnum.OLTS, {
+    customMessageToast: 'OLT sincronizadas correctamente',
+    customOnSuccess() {
+      setConfirmDialogIsOpen(false);
+    },
   });
 
   ///* table
@@ -328,6 +338,27 @@ const OLTsPage: React.FC<OLTsPageProps> = () => {
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
+        //
+        customSpaceNode={
+          <Grid item>
+            <CustomSingleButton
+              label="Sincronizar OLT"
+              onClick={() => {
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Sincronizar información de Nodos y OLT',
+                  subtitle:
+                    '¿Está seguro que desea sincronizar la información de los NODOS y OLT existentes en QGIS?',
+                  onConfirm: () => {
+                    syncOlt.mutate({} as any);
+                  },
+                  confirmTextBtn: 'Si, sincronizar',
+                });
+              }}
+              variant="outlined"
+            />
+          </Grid>
+        }
       />
 
       <CustomTable<OLT>
