@@ -219,7 +219,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
           density="comfortable"
         />
         <ProductosDisponiblesModal
-          askADD={true}
+          askADD={false}
           pk_ubicacion={user?.flota_data?.ubicacion_data?.uuid}
           open={openAddProducts}
           onClose={() => setOpenAddProducts(false)}
