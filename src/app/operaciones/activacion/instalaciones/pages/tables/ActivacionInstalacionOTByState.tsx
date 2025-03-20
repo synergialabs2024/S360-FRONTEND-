@@ -162,7 +162,10 @@ const ActivacionInstalacionOTByState: React.FC<
         canDelete={false}
         showCustomButtonsSpace
         customButtonsSpace={row => {
-          if (activacionState === EstadoActivacionEnumChoice.PENDIENTE) {
+          if (
+            activacionState === EstadoActivacionEnumChoice.PENDIENTE ||
+            activacionState === EstadoActivacionEnumChoice.GESTIONADA
+          ) {
             return (
               <SingleIconButton
                 startIcon={<MdEditCalendar />}
