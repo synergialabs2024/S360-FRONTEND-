@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 import {
   CreateRecepcionMaterialParamsBase,
-  useCreateEgresoMaterial,
+  useCreateIngresoMaterial,
   useFetchBodegas,
   useFetchProductos,
   useFetchUbicacions,
@@ -38,7 +38,7 @@ import { useProductosStore } from '@/store/app';
 import { FiPlus } from 'react-icons/fi';
 import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { returnUrlEgresoMaterialesPage } from '@/app/inventario/egreso-material/pages/tables/EgresoMaterialesPage';
+import { returnUrlIngresoMaterialesPage } from '@/app/inventario/ingreso-material/pages/tables/IngresoMaterialesPage';
 
 export interface SaveRecepcionMaterialProps {
   title: string;
@@ -123,13 +123,13 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       enableErrorNavigate: true,
     });
 
-  const createEgresoMaterialMutation = useCreateEgresoMaterial({
+  const createIngresoMaterialMutation = useCreateIngresoMaterial({
     navigate,
-    returnUrl: returnUrlEgresoMaterialesPage,
+    returnUrl: returnUrlIngresoMaterialesPage,
     enableErrorNavigate: false,
   });
 
-  const onSuccessCreateEgreso = (dato: RecepcionMaterial) => {
+  const onSuccessCreateIngreso = (dato: RecepcionMaterial) => {
     updateRecepcionMaterialAprobarMutation.mutate(
       {
         id: dato.id!,
@@ -153,7 +153,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
               'La solicitud ha sido creada con éxito. ¿Desea continuar con la preventa?',
             onConfirm: () => {
               setConfirmDialogIsOpen(false);
-              createEgresoMaterialMutation.mutate(preparedData);
+              createIngresoMaterialMutation.mutate(preparedData);
             },
             confirmTextBtn: 'SI, CONTINUAR',
             cancelTextBtn: 'CERRAR',
@@ -234,7 +234,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
     data.estado_solicitud = 'APROBADO';
     data.productos = mappedProductos;
 
-    onSuccessCreateEgreso(data as RecepcionMaterial);
+    onSuccessCreateIngreso(data as RecepcionMaterial);
   };
 
   const onRechazar = async (data: SaveFormData) => {
