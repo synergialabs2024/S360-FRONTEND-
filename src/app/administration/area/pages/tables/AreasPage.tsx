@@ -1,23 +1,22 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchAreas, useUpdateArea } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
-  CustomSearch,
-  CustomSwitch,
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
-  ViewMoreTextModalTableCell,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import {
+  useColumnsArea,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
+import { useFetchAreas } from '@/actions/app';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { hasAllPermissions } from '@/shared/utils/auth';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { Area, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlAreasPage = ROUTER_PATHS.administracion.areasNav;
 
@@ -37,11 +36,6 @@ const AreasPage: React.FC<AreasPageProps> = () => {
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
-
-  ///* mutations
-  const changeState = useUpdateArea({
-    enableNavigate: false,
-  });
 
   ///* table
   const {
@@ -83,94 +77,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<Area>[]>(
-    () => [
-      {
-        accessorKey: 'name',
-        header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
-      },
-      {
-        accessorKey: 'description',
-        header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => {
-          const str = row?.original?.description
-            ? row.original.description
-            : 'N/A';
-          return (
-            <ViewMoreTextModalTableCell
-              longText={str}
-              limit={27}
-              modalTitle={`Descripcion de ${row?.original?.name}`}
-            />
-          );
-        },
-      },
-
-      {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableSorting: false,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => {
-          return typeof row.original?.state === 'boolean' ? (
-            <CustomSwitch
-              title="state"
-              checked={row.original?.state}
-              onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.administration_change_area))
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar state',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el state de este registro?',
-                  onConfirm: () => {
-                    changeState.mutate({
-                      id: row.original.id!,
-                      data: {
-                        state: !row.original.state,
-                      } as any,
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
-            />
-          ) : (
-            'N/A'
-          );
-        },
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
-    ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
-  );
+  const { areaColumns } = useColumnsArea();
 
   return (
     <SingleTableBoxScene
@@ -187,7 +94,7 @@ const AreasPage: React.FC<AreasPageProps> = () => {
       />
 
       <CustomTable<Area>
-        columns={columns}
+        columns={areaColumns}
         data={areasPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

@@ -6,6 +6,10 @@ export const canalVentaFormSchema = yup.object({
     .string()
     .required('El campo name es requerido')
     .max(200, 'El campo name no debe exceder los 200 caracteres'),
+  code: yup
+    .string()
+    .required('El campo code es requerido')
+    .max(200, 'El campo code no debe exceder los 200 caracteres'),
   state: fieldStateYupValidation,
   consultas_buro_user: yup
     .number()

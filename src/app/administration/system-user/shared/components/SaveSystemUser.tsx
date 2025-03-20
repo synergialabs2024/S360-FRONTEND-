@@ -1,68 +1,66 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Tab } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
 import { MdEdit } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { Tab } from '@mui/material';
 
 import {
-  CreateUserProfileData,
+  useFetchZonas,
+  useFetchCargos,
+  useFetchPaises,
+  useFetchSectores,
+  useFetchCiudades,
+  useFetchProvincias,
+  useUpdateSystemUser,
   useCreateSystemUser,
   useFetchCanalVentas,
-  useFetchCargos,
-  useFetchCentroCostos,
-  useFetchCiudades,
-  useFetchPaises,
-  useFetchProvincias,
-  useFetchSectores,
   useFetchSystemGroups,
-  useFetchZonas,
-  useUpdateSystemUser,
+  CreateUserProfileData,
 } from '@/actions/app';
-import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
+import {
+  Pais,
+  Zona,
+  Cargo,
+  Ciudad,
+  Sector,
+  Provincia,
+  SystemGroup,
+  SystemUserItem,
+} from '@/shared/interfaces';
 import {
   a11yProps,
-  CustomAutocomplete,
-  CustomAutocompleteArrString,
-  CustomCellphoneTextField,
-  CustomIdentificacionTextField,
-  CustomNumberTextField,
-  CustomPasswordTextField,
+  FormTabsOnly,
+  SampleCheckbox,
   CustomTabPanel,
   CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
-  CustomTypoLabelEnum,
-  FormTabsOnly,
-  InputAndBtnGridSpace,
-  SampleCheckbox,
   TabsFormBoxScene,
+  CustomAutocomplete,
+  CustomTypoLabelEnum,
+  InputAndBtnGridSpace,
+  CustomNumberTextField,
+  CustomPasswordTextField,
+  CustomCellphoneTextField,
+  CustomAutocompleteArrString,
+  CustomIdentificacionTextField,
 } from '@/shared/components';
 import {
   EMPLOYEE_TYPE_ARRAY_CHOICES,
-  IDENTIFICATION_TYPE_ARRAY_CHOICES,
   IdentificationTypeEnumChoice,
+  IDENTIFICATION_TYPE_ARRAY_CHOICES,
 } from '@/shared/constants/app';
-import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
-import { useLoaders, useTabsOnly } from '@/shared/hooks';
-import {
-  Cargo,
-  CentroCosto,
-  Ciudad,
-  Pais,
-  Provincia,
-  Sector,
-  SystemGroup,
-  SystemUserItem,
-  Zona,
-} from '@/shared/interfaces';
-import { PersonaInformacion } from '@/shared/interfaces/consultas-api/persona-informacion.interface';
-import { systemUserFormSchema } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { returnUrlSystemUserPage } from '../../pages/tables/SystemUserPage';
+import { systemUserFormSchema } from '@/shared/utils';
+import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import VentasAndOtrosScence from './VentasAndOtrosScence';
+import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { returnUrlSystemUserPage } from '../../pages/tables/SystemUserPage';
+import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
+import { PersonaInformacion } from '@/shared/interfaces/consultas-api/persona-informacion.interface';
 
 export type SaveSystemUserProps = {
   title: string;
@@ -137,16 +135,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isLoading: isLoadingCargos,
     isRefetching: isRefetchingCargos,
   } = useFetchCargos({
-    enabled: !!watchedCreateEmployee,
-    params: {
-      page_size: 1000,
-    },
-  });
-  const {
-    data: centroCostosPagingRes,
-    isLoading: isLoadingCentroCostos,
-    isRefetching: isRefetchingCentroCostos,
-  } = useFetchCentroCostos({
     enabled: !!watchedCreateEmployee,
     params: {
       page_size: 1000,
@@ -366,9 +354,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     isLoadingZonas ||
     isRefetchingZonas ||
     isLoadingSectores ||
-    isRefetchingSectores ||
-    isLoadingCentroCostos ||
-    isRefetchingCentroCostos;
+    isRefetchingSectores;
   useLoaders(customLoader);
 
   return (
@@ -392,399 +378,368 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
       <CustomTabPanel index={1} value={tabValue}>
         {/* -------- User Form -------- */}
         <CustomTypoLabel text="Información Personal" />
-        <>
-          <CustomAutocompleteArrString
-            label="Tipo de identificación"
-            name="tipo_identificacion"
-            control={form.control}
-            defaultValue={form.getValues('tipo_identificacion')}
-            options={IDENTIFICATION_TYPE_ARRAY_CHOICES}
-            isLoadingData={false}
-            error={errors.tipo_identificacion}
-            helperText={errors.tipo_identificacion?.message}
-            size={gridSizeMdLg6}
-            disableClearable
-            onChangeValue={value => {
-              // form.setValue('identificacion', '');
-              // form.setValue('razon_social', '');
-              form.reset({
-                tipo_identificacion: value ? value : undefined,
-              });
-            }}
-          />
-          <InputAndBtnGridSpace
-            inputNode={
-              <CustomIdentificacionTextField
-                label="Identificación"
-                name="identificacion"
-                control={form.control}
-                selectedDocumentType={watchedIdentificationType}
-                defaultValue={form.getValues('identificacion')}
-                error={errors.identificacion}
-                helperText={errors.identificacion?.message}
-                onFetchCedulaRucInfo={async value => {
-                  await handleFetchCedulaRucInfo(value);
-                }}
-                disabled={!watchedIdentificationType}
-              />
-            }
-            btnLabel="Buscar"
-            iconBtn={<CiSearch />}
-            disabledBtn={
-              watchedIdentificationType ===
-              IdentificationTypeEnumChoice.PASAPORTE
-            }
-            onClick={() => {
-              if (!watchedIdentification)
-                return ToastWrapper.warning(
-                  'Ingrese un número de identificación válido',
-                );
-
-              if (
-                watchedIdentificationType ==
-                  IdentificationTypeEnumChoice.CEDULA &&
-                watchedIdentification?.length < 10
-              )
-                return ToastWrapper.warning('Ingrese una cécula válida');
-              if (
-                watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
-                watchedIdentification?.length < 13
-              )
-                return ToastWrapper.warning('Ingrese RUC válido');
-
-              handleFetchCedulaRucInfo(watchedIdentification);
-            }}
-          />
-          <CustomTextField
-            label="Razón social"
-            name="razon_social"
-            control={form.control}
-            defaultValue={form.getValues().razon_social}
-            error={errors.razon_social}
-            helperText={errors.razon_social?.message}
-          />
-          <CustomTextField
-            label="Correo Electrónico"
-            name="email"
-            control={form.control}
-            defaultValue={form.getValues().email}
-            error={errors.email}
-            helperText={errors.email?.message}
-            type="email"
-          />
-          <CustomTextField
-            label="Username"
-            name="username"
-            control={form.control}
-            defaultValue={form.getValues().username}
-            error={errors.username}
-            helperText={errors.username?.message}
-            size={gridSizeMdLg6}
-            ignoreTransform
-          />
-          <InputAndBtnGridSpace
-            inputNode={
-              <CustomPasswordTextField
-                label="Contraseña"
-                name="password"
-                defaultValue={form.getValues().password}
-                control={form.control}
-                errors={errors?.password}
-                helperText={errors?.password?.message}
-                disabled={!canWritePassword}
-              />
-            }
-            showIconBtn={watchedIsEdit}
-            btnLabel="Cambiar Contraseña"
-            iconBtn={<MdEdit />}
-            onClick={() => {
-              !canWritePassword &&
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar Contraseña',
-                  subtitle:
-                    '¿Está seguro que desea cambiar la contraseña de este usuario?',
-                  onConfirm: () => {
-                    setCanWritePassword(true);
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-            }}
-          />
-          {/* ---------- FK ---------- */}
-          <VentasAndOtrosScence form={form} />
-
-          {/* ----------- canal ventas ----------- */}
-          <>
-            <SampleCheckbox
-              label="¿Crear Empleado?"
-              name="create_employee"
+        <CustomAutocompleteArrString
+          label="Tipo de identificación"
+          name="tipo_identificacion"
+          control={form.control}
+          defaultValue={form.getValues('tipo_identificacion')}
+          options={IDENTIFICATION_TYPE_ARRAY_CHOICES}
+          isLoadingData={false}
+          error={errors.tipo_identificacion}
+          helperText={errors.tipo_identificacion?.message}
+          size={gridSizeMdLg6}
+          disableClearable
+          onChangeValue={value => {
+            // form.setValue('identificacion', '');
+            // form.setValue('razon_social', '');
+            form.reset({
+              tipo_identificacion: value ? value : undefined,
+            });
+          }}
+        />
+        <InputAndBtnGridSpace
+          inputNode={
+            <CustomIdentificacionTextField
+              label="Identificación"
+              name="identificacion"
               control={form.control}
-              defaultValue={!!form.getValues().create_employee}
-              size={gridSize}
-              onChangeValue={v => {
-                !!v && ToastWrapper.info('Complete los datos del empleado');
+              selectedDocumentType={watchedIdentificationType}
+              defaultValue={form.getValues('identificacion')}
+              error={errors.identificacion}
+              helperText={errors.identificacion?.message}
+              onFetchCedulaRucInfo={async value => {
+                await handleFetchCedulaRucInfo(value);
               }}
-              disabled={
-                (!!systemUserItem && !!systemUserItem?.create_employee) ||
-                !!whatchedIsEdit
-              }
-              onClickDisabled={() => {
-                ToastWrapper.warning(
-                  'Una vez creado el usuario no podrá gestionar el empleado desde este módulo',
-                );
-              }}
+              disabled={!watchedIdentificationType}
             />
-          </>
-        </>
+          }
+          btnLabel="Buscar"
+          iconBtn={<CiSearch />}
+          disabledBtn={
+            watchedIdentificationType === IdentificationTypeEnumChoice.PASAPORTE
+          }
+          onClick={() => {
+            if (!watchedIdentification)
+              return ToastWrapper.warning(
+                'Ingrese un número de identificación válido',
+              );
+
+            if (
+              watchedIdentificationType ==
+                IdentificationTypeEnumChoice.CEDULA &&
+              watchedIdentification?.length < 10
+            )
+              return ToastWrapper.warning('Ingrese una cécula válida');
+            if (
+              watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
+              watchedIdentification?.length < 13
+            )
+              return ToastWrapper.warning('Ingrese RUC válido');
+
+            handleFetchCedulaRucInfo(watchedIdentification);
+          }}
+        />
+        <CustomTextField
+          label="Razón social"
+          name="razon_social"
+          control={form.control}
+          defaultValue={form.getValues().razon_social}
+          error={errors.razon_social}
+          helperText={errors.razon_social?.message}
+        />
+        <CustomTextField
+          label="Correo Electrónico"
+          name="email"
+          control={form.control}
+          defaultValue={form.getValues().email}
+          error={errors.email}
+          helperText={errors.email?.message}
+          type="email"
+        />
+        <CustomTextField
+          label="Username"
+          name="username"
+          control={form.control}
+          defaultValue={form.getValues().username}
+          error={errors.username}
+          helperText={errors.username?.message}
+          size={gridSizeMdLg6}
+          ignoreTransform
+        />
+        <InputAndBtnGridSpace
+          inputNode={
+            <CustomPasswordTextField
+              label="Contraseña"
+              name="password"
+              defaultValue={form.getValues().password}
+              control={form.control}
+              errors={errors?.password}
+              helperText={errors?.password?.message}
+              disabled={!canWritePassword}
+            />
+          }
+          showIconBtn={watchedIsEdit}
+          btnLabel="Cambiar Contraseña"
+          iconBtn={<MdEdit />}
+          onClick={() => {
+            !canWritePassword &&
+              setConfirmDialog({
+                isOpen: true,
+                title: 'Cambiar Contraseña',
+                subtitle:
+                  '¿Está seguro que desea cambiar la contraseña de este usuario?',
+                onConfirm: () => {
+                  setCanWritePassword(true);
+                  setConfirmDialogIsOpen(false);
+                },
+              });
+          }}
+        />
+        {/* ---------- FK ---------- */}
+        <VentasAndOtrosScence form={form} />
+
+        {/* ----------- canal ventas ----------- */}
+        <SampleCheckbox
+          label="¿Crear Empleado?"
+          name="create_employee"
+          control={form.control}
+          defaultValue={!!form.getValues().create_employee}
+          size={gridSize}
+          onChangeValue={v => {
+            !!v && ToastWrapper.info('Complete los datos del empleado');
+          }}
+          disabled={
+            (!!systemUserItem && !!systemUserItem?.create_employee) ||
+            !!whatchedIsEdit
+          }
+          onClickDisabled={() => {
+            ToastWrapper.warning(
+              'Una vez creado el usuario no podrá gestionar el empleado desde este módulo',
+            );
+          }}
+        />
 
         {/* -------- Groups -------- */}
         <CustomTypoLabel
           text="Grupo (Opcional)"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        <>
-          <CustomAutocomplete<SystemGroup>
-            label="Grupo"
-            name="groups"
-            // options
-            options={systemGroupsPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().groups as any}
-            isLoadingData={isSystemGroupsLoading || isSystemGroupsRefetching}
-            // vaidation
-            control={form.control}
-            error={!!errors.groups}
-            helperText={errors.groups?.message}
-          />
-        </>
+        <CustomAutocomplete<SystemGroup>
+          label="Grupo"
+          name="groups"
+          // options
+          options={systemGroupsPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().groups as any}
+          isLoadingData={isSystemGroupsLoading || isSystemGroupsRefetching}
+          // vaidation
+          control={form.control}
+          error={!!errors.groups}
+          helperText={errors.groups?.message}
+        />
       </CustomTabPanel>
 
       {/* ======================== Employee ======================== */}
       <CustomTabPanel index={2} value={tabValue}>
-        <>
-          {/* -------- Cargo -------- */}
-          <CustomTypoLabel text="Cargo en la Empresa" />
-          <CustomAutocomplete<Cargo>
-            label="Cargo"
-            name="cargo"
-            // options
-            options={cargosPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().cargo}
-            isLoadingData={isLoadingCargos || isRefetchingCargos}
-            // vaidation
-            control={form.control}
-            error={errors.cargo}
-            helperText={errors.cargo?.message}
-            size={gridSizeMdLg6}
-            disabled={watchedIsEdit}
-          />
-          <CustomAutocompleteArrString
-            label="Tipo de Empleado"
-            name="tipo_empleado"
-            control={form.control}
-            defaultValue={form.getValues('tipo_empleado')}
-            options={EMPLOYEE_TYPE_ARRAY_CHOICES}
-            isLoadingData={false}
-            error={errors.tipo_empleado}
-            helperText={errors.tipo_empleado?.message}
-            size={gridSizeMdLg6}
-            disabled={watchedIsEdit}
-            disableClearable
-          />
-          <CustomNumberTextField
-            label="Salario"
-            name="salary"
-            control={form.control}
-            defaultValue={form.getValues().salary}
-            error={errors.salary}
-            helperText={errors.salary?.message}
-            size={gridSizeMdLg6}
-            disabled={watchedIsEdit}
-            customType="currency"
-            min={0}
-          />
+        {/* -------- Cargo -------- */}
+        <CustomTypoLabel text="Cargo en la Empresa" />
+        <CustomAutocomplete<Cargo>
+          label="Cargo"
+          name="cargo"
+          // options
+          options={cargosPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().cargo}
+          isLoadingData={isLoadingCargos || isRefetchingCargos}
+          // vaidation
+          control={form.control}
+          error={errors.cargo}
+          helperText={errors.cargo?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+        />
+        <CustomAutocompleteArrString
+          label="Tipo de Empleado"
+          name="tipo_empleado"
+          control={form.control}
+          defaultValue={form.getValues('tipo_empleado')}
+          options={EMPLOYEE_TYPE_ARRAY_CHOICES}
+          isLoadingData={false}
+          error={errors.tipo_empleado}
+          helperText={errors.tipo_empleado?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+          disableClearable
+        />
+        <CustomNumberTextField
+          label="Salario"
+          name="salary"
+          control={form.control}
+          defaultValue={form.getValues().salary}
+          error={errors.salary}
+          helperText={errors.salary?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+          customType="currency"
+          min={0}
+        />
+        <CustomTypoLabel
+          text="Información de Contacto"
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+        <CustomCellphoneTextField
+          label="Teléfono 1"
+          name="phone_1"
+          control={form.control}
+          defaultValue={form.getValues().phone_1}
+          error={errors.phone_1}
+          helperText={errors.phone_1?.message}
+          disabled={watchedIsEdit}
+        />
+        <CustomCellphoneTextField
+          label="Teléfono 2"
+          name="phone_2"
+          control={form.control}
+          defaultValue={form.getValues().phone_2}
+          error={errors.phone_2}
+          helperText={errors.phone_2?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+        />
+        <CustomCellphoneTextField
+          label="Teléfono 3"
+          name="phone_3"
+          control={form.control}
+          defaultValue={form.getValues().phone_3}
+          error={errors.phone_3}
+          helperText={errors.phone_3?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+          required={false}
+        />
 
-          <CustomAutocomplete<CentroCosto>
-            label="Centro de Costo"
-            name="centro_costo"
-            // options
-            options={centroCostosPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().centro_costo}
-            isLoadingData={isLoadingCentroCostos || isRefetchingCentroCostos}
-            // vaidation
-            control={form.control}
-            error={errors.centro_costo}
-            helperText={errors.centro_costo?.message}
-            size={gridSizeMdLg6}
-            disabled={watchedIsEdit}
-            required={false}
-          />
-        </>
-        <>
-          <CustomTypoLabel
-            text="Información de Contacto"
-            pt={CustomTypoLabelEnum.ptMiddlePosition}
-          />
-          <CustomCellphoneTextField
-            label="Teléfono 1"
-            name="phone_1"
-            control={form.control}
-            defaultValue={form.getValues().phone_1}
-            error={errors.phone_1}
-            helperText={errors.phone_1?.message}
-            disabled={watchedIsEdit}
-          />
-          <CustomCellphoneTextField
-            label="Teléfono 2"
-            name="phone_2"
-            control={form.control}
-            defaultValue={form.getValues().phone_2}
-            error={errors.phone_2}
-            helperText={errors.phone_2?.message}
-            size={gridSizeMdLg6}
-            disabled={watchedIsEdit}
-          />
-          <CustomCellphoneTextField
-            label="Teléfono 3"
-            name="phone_3"
-            control={form.control}
-            defaultValue={form.getValues().phone_3}
-            error={errors.phone_3}
-            helperText={errors.phone_3?.message}
-            size={gridSizeMdLg6}
-            disabled={watchedIsEdit}
-            required={false}
-          />
+        {/* ----------- Location ----------- */}
+        <CustomAutocomplete<Pais>
+          label="País"
+          name="pais"
+          // options
+          options={paisesPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().pais}
+          isLoadingData={isLoadingPaises || isRefetchingPaises}
+          // vaidation
+          control={form.control}
+          error={errors.pais}
+          helperText={errors.pais?.message}
+          disabled={watchedIsEdit}
+          onChangeValue={() => {
+            form.reset({
+              ...form.getValues(),
+              provincia: undefined,
+              ciudad: undefined,
+              zona: undefined,
+              sector: undefined,
+            });
+          }}
+        />
+        <CustomAutocomplete<Provincia>
+          label="Provincia"
+          name="provincia"
+          // options
+          options={provinciasPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().provincia}
+          isLoadingData={isLoadingProvincias || isRefetchingProvincias}
+          // vaidation
+          control={form.control}
+          error={errors.provincia}
+          helperText={errors.provincia?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+          onChangeValue={() => {
+            form.reset({
+              ...form.getValues(),
+              ciudad: undefined,
+              zona: undefined,
+              sector: undefined,
+            });
+          }}
+        />
+        <CustomAutocomplete<Ciudad>
+          label="Ciudad"
+          name="ciudad"
+          // options
+          options={ciudadesPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().ciudad}
+          isLoadingData={isLoadingCiudades || isRefetchingCiudades}
+          // vaidation
+          control={form.control}
+          error={errors.ciudad}
+          helperText={errors.ciudad?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+          onChangeValue={() => {
+            form.reset({
+              ...form.getValues(),
+              zona: undefined,
+              sector: undefined,
+            });
+          }}
+        />
+        <CustomAutocomplete<Zona>
+          label="Zona"
+          name="zona"
+          // options
+          options={zonasPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().zona}
+          isLoadingData={isLoadingZonas || isRefetchingZonas}
+          // vaidation
+          control={form.control}
+          error={errors.zona}
+          helperText={errors.zona?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+          onChangeValue={() => {
+            form.reset({
+              ...form.getValues(),
+              sector: undefined,
+            });
+          }}
+        />
+        <CustomAutocomplete<Sector>
+          label="Sector"
+          name="sector"
+          // options
+          options={sectoresPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().sector}
+          isLoadingData={isLoadingSectores || isRefetchingSectores}
+          // vaidation
+          control={form.control}
+          error={errors.sector}
+          helperText={errors.sector?.message}
+          size={gridSizeMdLg6}
+          disabled={watchedIsEdit}
+        />
 
-          {/* ----------- Location ----------- */}
-          <>
-            <CustomAutocomplete<Pais>
-              label="País"
-              name="pais"
-              // options
-              options={paisesPagingRes?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().pais}
-              isLoadingData={isLoadingPaises || isRefetchingPaises}
-              // vaidation
-              control={form.control}
-              error={errors.pais}
-              helperText={errors.pais?.message}
-              disabled={watchedIsEdit}
-              onChangeValue={() => {
-                form.reset({
-                  ...form.getValues(),
-                  provincia: undefined,
-                  ciudad: undefined,
-                  zona: undefined,
-                  sector: undefined,
-                });
-              }}
-            />
-            <CustomAutocomplete<Provincia>
-              label="Provincia"
-              name="provincia"
-              // options
-              options={provinciasPagingRes?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().provincia}
-              isLoadingData={isLoadingProvincias || isRefetchingProvincias}
-              // vaidation
-              control={form.control}
-              error={errors.provincia}
-              helperText={errors.provincia?.message}
-              size={gridSizeMdLg6}
-              disabled={watchedIsEdit}
-              onChangeValue={() => {
-                form.reset({
-                  ...form.getValues(),
-                  ciudad: undefined,
-                  zona: undefined,
-                  sector: undefined,
-                });
-              }}
-            />
-            <CustomAutocomplete<Ciudad>
-              label="Ciudad"
-              name="ciudad"
-              // options
-              options={ciudadesPagingRes?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().ciudad}
-              isLoadingData={isLoadingCiudades || isRefetchingCiudades}
-              // vaidation
-              control={form.control}
-              error={errors.ciudad}
-              helperText={errors.ciudad?.message}
-              size={gridSizeMdLg6}
-              disabled={watchedIsEdit}
-              onChangeValue={() => {
-                form.reset({
-                  ...form.getValues(),
-                  zona: undefined,
-                  sector: undefined,
-                });
-              }}
-            />
-            <CustomAutocomplete<Zona>
-              label="Zona"
-              name="zona"
-              // options
-              options={zonasPagingRes?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().zona}
-              isLoadingData={isLoadingZonas || isRefetchingZonas}
-              // vaidation
-              control={form.control}
-              error={errors.zona}
-              helperText={errors.zona?.message}
-              size={gridSizeMdLg6}
-              disabled={watchedIsEdit}
-              onChangeValue={() => {
-                form.reset({
-                  ...form.getValues(),
-                  sector: undefined,
-                });
-              }}
-            />
-            <CustomAutocomplete<Sector>
-              label="Sector"
-              name="sector"
-              // options
-              options={sectoresPagingRes?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().sector}
-              isLoadingData={isLoadingSectores || isRefetchingSectores}
-              // vaidation
-              control={form.control}
-              error={errors.sector}
-              helperText={errors.sector?.message}
-              size={gridSizeMdLg6}
-              disabled={watchedIsEdit}
-            />
-          </>
-
-          <CustomTextArea
-            label="Dirección"
-            name="address"
-            control={form.control}
-            defaultValue={form.getValues().address}
-            error={errors.address}
-            helperText={errors.address?.message}
-            disabled={watchedIsEdit}
-          />
-        </>
+        <CustomTextArea
+          label="Dirección"
+          name="address"
+          control={form.control}
+          defaultValue={form.getValues().address}
+          error={errors.address}
+          helperText={errors.address?.message}
+          disabled={watchedIsEdit}
+        />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );

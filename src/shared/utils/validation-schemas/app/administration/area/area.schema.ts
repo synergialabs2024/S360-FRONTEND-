@@ -10,7 +10,14 @@ export const areaFormSchema = yup.object({
     .required('El campo name es requerido')
     .max(200, 'El campo name no debe exceder los 200 caracteres'),
 
-  description: descriptionYupValidation,
-
+  code: yup
+    .string()
+    .required('El campo code es requerido')
+    .max(200, 'El campo code no debe exceder los 200 caracteres'),
+  centro_costo: yup
+    .number()
+    .typeError('El campo centro costo es requerido')
+    .required('El campo centro costo es requerido'),
   state: fieldStateYupValidation,
+  description: descriptionYupValidation,
 });

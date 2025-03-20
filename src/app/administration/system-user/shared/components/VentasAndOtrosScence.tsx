@@ -1,32 +1,35 @@
+import { UseFormReturn } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Tab } from '@mui/material';
+
 import {
   useFetchAreas,
   useFetchCanalVentas,
+  useFetchCentroCostos,
   useFetchDepartamentos,
 } from '@/actions/app';
 import {
+  a11yProps,
+  FormTabsOnly,
+  CustomTabPanel,
+  NestedTabsScene,
+  CustomAutocomplete,
+  CustomAutocompleteArrString,
+} from '@/shared/components';
+import {
   Area,
+  useLoaders,
+  useTabsOnly,
   CanalVenta,
+  CentroCosto,
+  ToastWrapper,
   Departamento,
   gridSizeMdLg6,
   SystemUserItem,
-  ToastWrapper,
-  useLoaders,
-  USER_OTHER_ROLES_ARRAY_CHOICES,
-  USER_ROLES_ARRAY_CHOICES,
   UserRolesEnumChoice,
-  useTabsOnly,
+  USER_ROLES_ARRAY_CHOICES,
+  USER_OTHER_ROLES_ARRAY_CHOICES,
 } from '@/shared';
-import {
-  a11yProps,
-  CustomAutocomplete,
-  CustomAutocompleteArrString,
-  CustomTabPanel,
-  FormTabsOnly,
-  NestedTabsScene,
-} from '@/shared/components';
-import { Tab } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form'; // Importar el tipo UseFormReturn
 import { SaveFormData } from './SaveSystemUser';
 
 export type VentasAndOtrosScenceProps = {
@@ -89,6 +92,9 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
   } = form;
 
   const watchedRole = form.watch('role');
+  const watchedCentroCosto = form.watch('centro_costo');
+  const watchedArea = form.watch('area');
+  const watchedDepartamento = form.watch('departamento');
 
   useEffect(() => {
     const roleFields = roleFieldsMapping[
@@ -114,21 +120,23 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
   }, [form, watchedRole]);
 
   const {
+    data: centroCostosPagingRes,
+    isLoading: isLoadingCentroCostos,
+    isRefetching: isRefetchingCentroCostos,
+  } = useFetchCentroCostos({
+    params: {
+      page_size: 1000,
+    },
+  });
+  const {
     data: areaPagingRes,
     isLoading: isLoadingAreas,
     isRefetching: isRefetchingAreas,
   } = useFetchAreas({
+    enabled: !!watchedCentroCosto,
     params: {
+      centro_costo: watchedCentroCosto,
       page_size: 726,
-    },
-  });
-  const {
-    data: canalesVentaPagingRes,
-    isLoading: isLoadingCanalesVenta,
-    isRefetching: isRefetchingCanalesVenta,
-  } = useFetchCanalVentas({
-    params: {
-      page_size: 1000,
     },
   });
   const {
@@ -136,9 +144,19 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
     isLoading: isLoadingDepartamentos,
     isRefetching: isRefetchingDepartamentos,
   } = useFetchDepartamentos({
-    enabled: fieldVisibility.area,
+    enabled: !!watchedArea,
     params: {
-      area: form.getValues().area,
+      area: watchedArea,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: canalesVentaPagingRes,
+    isLoading: isLoadingCanalesVenta,
+    isRefetching: isRefetchingCanalesVenta,
+  } = useFetchCanalVentas({
+    enabled: !!watchedDepartamento,
+    params: {
       page_size: 1000,
     },
   });
@@ -207,6 +225,28 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
               });
             }}
           />
+          <CustomAutocomplete<CentroCosto>
+            label="Centro de Costo"
+            name="centro_costo"
+            // options
+            options={centroCostosPagingRes?.data?.items || []}
+            valueKey="name"
+            actualValueKey="id"
+            defaultValue={form.getValues().centro_costo}
+            isLoadingData={isLoadingCentroCostos || isRefetchingCentroCostos}
+            // vaidation
+            control={form.control}
+            error={errors.centro_costo}
+            helperText={errors.centro_costo?.message}
+            size={gridSizeMdLg6}
+            disabled={false}
+            required={false}
+            onChangeValue={() => {
+              form.setValue('area', undefined);
+              form.setValue('departamento', undefined);
+              form.setValue('canal_venta', undefined);
+            }}
+          />
           {fieldVisibility.area && (
             <CustomAutocomplete<Area>
               label="Area"
@@ -220,6 +260,10 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
               error={errors.area}
               helperText={errors.area?.message}
               size={gridSizeMdLg6}
+              onChangeValue={() => {
+                form.setValue('departamento', undefined);
+                form.setValue('canal_venta', undefined);
+              }}
             />
           )}
           {fieldVisibility.departamento && (

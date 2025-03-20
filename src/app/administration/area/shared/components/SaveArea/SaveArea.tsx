@@ -3,15 +3,22 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { CreateAreaParams, useCreateArea, useUpdateArea } from '@/actions/app';
 import {
+  useCreateArea,
+  useUpdateArea,
+  CreateAreaParams,
+  useFetchCentroCostos,
+} from '@/actions/app';
+import {
+  SampleCheckbox,
   CustomTextArea,
   CustomTextField,
-  SampleCheckbox,
+  CustomAutocomplete,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { Area } from '@/shared/interfaces';
+import { gridSizeMdLg6 } from '@/shared';
 import { areaFormSchema } from '@/shared/utils';
+import { Area, CentroCosto } from '@/shared/interfaces';
 import { returnUrlAreasPage } from '../../../pages/tables/AreasPage';
 
 export interface SaveAreaProps {
@@ -39,6 +46,15 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
   } = form;
 
   ///* fetch data
+  const {
+    data: CentroCostoPagingRes,
+    isLoading: isLoadingCentroCosto,
+    isRefetching: isRefetchingCentroCosto,
+  } = useFetchCentroCostos({
+    params: {
+      page_size: 1000,
+    },
+  });
 
   ///* mutations
   const createAreaMutation = useCreateArea({
@@ -84,6 +100,40 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Codido"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        disabled={!!area?.id}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<CentroCosto>
+        label="Centro Costo"
+        name="centro_costo"
+        // options
+        options={CentroCostoPagingRes?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        defaultValue={form.getValues().centro_costo}
+        isLoadingData={isLoadingCentroCosto || isRefetchingCentroCosto}
+        // vaidation
+        control={form.control}
+        error={errors.centro_costo}
+        helperText={errors.centro_costo?.message}
+        size={gridSizeMdLg6}
+      />
+      <SampleCheckbox
+        label="Estado"
+        name="state"
+        control={form.control}
+        defaultValue={form.getValues().state}
+        isState
+        size={gridSizeMdLg6}
       />
       <CustomTextArea
         label="Descripción"
@@ -93,14 +143,6 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
         error={errors.description}
         helperText={errors.description?.message}
         required={false}
-      />
-
-      <SampleCheckbox
-        label="Estado"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
       />
     </SingleFormBoxScene>
   );

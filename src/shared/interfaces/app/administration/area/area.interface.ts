@@ -1,5 +1,6 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { EmpresaLimitData } from '../empresa';
+import { CentroCostoLimitData } from '../centro-costo';
 
 export interface AreasPaginatedRes {
   status: number;
@@ -14,14 +15,17 @@ export interface Area {
 
   name: string;
   description: string;
+  code: string;
 
   state: boolean;
   created_at?: string;
   modified_at?: string;
 
   ///* fk
+  centro_costo?: number;
   empresa?: number;
 
+  centro_costo_data?: CentroCostoLimitData;
   empresa_data?: EmpresaLimitData;
 }
 

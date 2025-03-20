@@ -10,7 +10,9 @@ export interface CanalVentasPaginatedRes {
 export interface CanalVenta {
   id?: number;
   uuid?: string;
+
   name: string;
+  code: string;
   consultas_buro_user: number;
 
   state: boolean;
