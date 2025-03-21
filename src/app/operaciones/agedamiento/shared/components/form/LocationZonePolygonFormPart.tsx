@@ -31,6 +31,7 @@ import {
 } from '@/shared/components';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import { useAuthStore } from '@/store/auth';
 
 export type LocationZonePolygonFormPartProps = {
   form: UseFormReturn<any>;
@@ -66,6 +67,9 @@ const LocationZonePolygonFormPart: React.FC<
 }) => {
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
+
+  ///* global state ---------------------
+  const user = useAuthStore(s => s?.user);
 
   ///* form ---------------------
   const { errors } = form.formState;
@@ -277,7 +281,7 @@ const LocationZonePolygonFormPart: React.FC<
                   showCoverage
                   coverageZones={zonasPaging?.data?.items || []}
                   //
-                  showNaps={showNaps}
+                  showNaps={showNaps && !user?.is_valid_salesman}
                   naps={napsByCoords || []}
                 />
               }

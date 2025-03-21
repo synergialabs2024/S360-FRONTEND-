@@ -25,6 +25,8 @@ export interface UserLoginResponse {
   razon_social: string;
   profile_image_url?: string;
 
+  is_valid_salesman?: boolean;
+
   ///* fk
   permissions: string[];
   groups: number[];

@@ -91,7 +91,7 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
         setSelectedImage={setCedulaFrontalImg}
       />
       <UploadImageDropZoneComponent
-        buttonLabel="Foto cédula trasera"
+        buttonLabel="Foto cédula posterior"
         selectedImage={cedulaPosteriorImg}
         setSelectedImage={setCedulaPosteriorImg}
       />

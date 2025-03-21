@@ -53,7 +53,6 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   ///* handlers
   const onSubmit = (data: LoginFormData) => {
     if (!isValidLoginData || isBlocked) return;
-    console.log('data', data);
 
     loginMutation.mutate(data);
   };
