@@ -101,6 +101,7 @@ const SaveMotivoEgreso: React.FC<SaveMotivoEgresoProps> = ({
         error={errors.codigo}
         helperText={errors.codigo?.message}
         size={gridSizeMdLg6}
+        disabled={!!motivoegreso?.id}
       />
       <CustomTextField
         label="Descripcion"

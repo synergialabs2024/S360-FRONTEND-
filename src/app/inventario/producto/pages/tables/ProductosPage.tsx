@@ -318,7 +318,7 @@ const ProductosPage: React.FC<ProductosPageProps> = () => {
         Cell: ({ row }) => emptyCellNested(row, ['modelo_data', 'nombre']),
       },
       {
-        accessorKey: 'categoria',
+        accessorKey: 'categoria__nombre',
         header: 'CATEGORIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,

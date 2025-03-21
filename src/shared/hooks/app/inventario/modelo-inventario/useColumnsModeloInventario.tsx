@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
 
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { ModeloInventario } from '@/shared/interfaces';

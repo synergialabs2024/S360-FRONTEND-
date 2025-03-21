@@ -1,13 +1,13 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { TABLE_CONSTANTS } from '@/shared/constants';
-import { UbicacionProducto } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { UbicacionProducto } from '@/shared/interfaces';
 import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesProductosModal';
 
 export const useColumnsReporteStock = () => {

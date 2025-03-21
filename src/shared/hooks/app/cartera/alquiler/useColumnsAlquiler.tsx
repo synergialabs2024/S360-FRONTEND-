@@ -199,7 +199,7 @@ export const useColumnsAlquiler = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_recurrencia'),
       },
       {
-        accessorKey: 'linea_servicio_data__estado_linea',
+        accessorKey: 'linea_servicio__estado_linea',
         header: 'LINEA DE SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>

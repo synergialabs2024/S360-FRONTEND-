@@ -18,13 +18,13 @@ import {
   Ubicacion,
   useLoaders,
   ToastWrapper,
+  gridSizeMdLg4,
   MotivoIngreso,
   IngresoMaterial,
   ingresoMaterialFormSchema,
   ProductosDisponiblesModal,
-  useColumnsProductosDisponibles,
   ProductosDisponiblesTableType,
-  gridSizeMdLg4,
+  useColumnsProductosDisponibles,
 } from '@/shared';
 import {
   useFetchBodegas,
@@ -144,15 +144,6 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
         item => item.id === prod.producto,
       );
 
-      /*
-      const validarCantidad = (
-        detalles?.ubicaciones_producto as unknown as {
-          stock: number;
-          ubicacion: string;
-        }[]
-      )?.find(i => i.ubicacion == uuidUbicacion);
-      */
-
       if (!detalles) {
         console.error(`No se encontró el producto con ID ${prod.producto}`);
         ToastWrapper.error(
@@ -172,13 +163,6 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
         );
         return;
       }
-      /* else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
-        ToastWrapper.error(
-          `El producto "${detalles.codigo}" tiene una cantidad
-          de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
-        );
-        return;
-      }*/
 
       // Validaciones según `requiere_series`
       if (

@@ -21,7 +21,7 @@ export const useColumnsMovimientoMaterial = () => {
         accessorKey: 'secuencial',
         header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['secuencial']),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
         accessorKey: 'cantidad',
@@ -63,13 +63,13 @@ export const useColumnsMovimientoMaterial = () => {
   >(
     () => [
       {
-        accessorKey: 'producto',
+        accessorKey: 'producto__nombre',
         header: 'PRODUCTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
       {
-        accessorKey: 'bodega_origen',
+        accessorKey: 'bodega_origen__nombre',
         header: 'BODEGA ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -88,7 +88,7 @@ export const useColumnsMovimientoMaterial = () => {
         },
       },
       {
-        accessorKey: 'ubicacion_origen',
+        accessorKey: 'ubicacion_origen__nombre',
         header: 'UBICACIÓN ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -107,7 +107,7 @@ export const useColumnsMovimientoMaterial = () => {
         },
       },
       {
-        accessorKey: 'bodega_destino',
+        accessorKey: 'bodega_destino__nombre',
         header: 'BODEGA DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -126,7 +126,7 @@ export const useColumnsMovimientoMaterial = () => {
         },
       },
       {
-        accessorKey: 'ubicacion_destino',
+        accessorKey: 'ubicacion_destino__nombre',
         header: 'UBICACIÓN DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -145,7 +145,7 @@ export const useColumnsMovimientoMaterial = () => {
         },
       },
       {
-        accessorKey: 'user_create__name',
+        accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>

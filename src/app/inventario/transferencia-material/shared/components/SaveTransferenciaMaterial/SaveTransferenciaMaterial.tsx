@@ -166,6 +166,13 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         item => item.id === prod.producto,
       );
 
+      const validarCantidad = (
+        detalles?.ubicaciones_producto as unknown as {
+          stock: number;
+          ubicacion: string;
+        }[]
+      )?.find(i => i.ubicacion == uuidUbicacion);
+
       if (!detalles) {
         ToastWrapper.error(
           `No se encontró el producto con ID ${prod.producto}`,
@@ -181,6 +188,12 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       ) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" necesita cantidad.`,
+        );
+        return;
+      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" tiene una cantidad
+          de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
         );
         return;
       }
@@ -203,7 +216,8 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         prod.series.length !== prod.cantidad
       ) {
         ToastWrapper.error(
-          `El producto "${detalles.codigo}" debe tener una cantidad de series de ${prod.cantidad}.`,
+          `El producto "${detalles.codigo}" debe tener una
+          cantidad de series de ${prod.cantidad}.`,
         );
         return;
       }

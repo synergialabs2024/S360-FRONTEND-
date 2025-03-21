@@ -104,6 +104,7 @@ const SaveMotivoTransferencia: React.FC<SaveMotivoTransferenciaProps> = ({
         error={errors.codigo}
         helperText={errors.codigo?.message}
         size={gridSizeMdLg6}
+        disabled={!!motivotransferencia?.id}
       />
       <CustomTextField
         label="Descripcion"

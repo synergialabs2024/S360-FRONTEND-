@@ -115,7 +115,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
     if (isLoadingProducto || isRefetchingProducto || !categoriaValue) return;
     !ProductosPagingRes?.data?.items?.length &&
       ToastWrapper.error(
-        'No se encontraron producto para la categoria seleccionada',
+        'No se encontraron producto para la categoria seleccionada con aceptacion para venta',
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoadingProducto, isRefetchingProducto]);

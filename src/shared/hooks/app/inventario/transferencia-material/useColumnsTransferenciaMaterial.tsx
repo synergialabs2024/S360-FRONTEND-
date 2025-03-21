@@ -1,23 +1,23 @@
-import { useCallback, useMemo } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useCallback, useMemo } from 'react';
+import { IoMdTrash } from 'react-icons/io';
+import { TextField } from '@mui/material';
 
-import {
-  SingleIconButton,
-  ViewMoreTextModalTableCell,
-} from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants';
-import { TransferenciaMaterial } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { TextField } from '@mui/material';
-import { ProductosDisponiblesStoreKey, useProductosStore } from '@/store/app';
-import { IoMdTrash } from 'react-icons/io';
-import SeriesSolicitudTranferenciaModal from './modal/SeriesSolicitudTransferenciaModal';
-import { ProductosDisponiblesTableType } from '../useColumnsProductosDisponibles';
+import {
+  SingleIconButton,
+  ViewMoreTextModalTableCell,
+} from '@/shared/components';
 import { ShowSeriesModal } from '../modals';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { TransferenciaMaterial } from '@/shared/interfaces';
+import { ProductosDisponiblesStoreKey, useProductosStore } from '@/store/app';
+import { ProductosDisponiblesTableType } from '../useColumnsProductosDisponibles';
+import SeriesSolicitudTranferenciaModal from './modal/SeriesSolicitudTransferenciaModal';
 
 export const useColumnsTransferenciaMaterial = () => {
   ///* global state --------------------
@@ -101,42 +101,42 @@ export const useColumnsTransferenciaMaterial = () => {
         },
       },
       {
-        accessorKey: 'bodega_origen__name',
+        accessorKey: 'bodega_origen__nombre',
         header: 'BODEGA ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['bodega_origen_data', 'nombre']),
       },
       {
-        accessorKey: 'ubicacion_origen__name',
+        accessorKey: 'ubicacion_origen__nombre',
         header: 'UBICACIÓN ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ubicacion_origen_data', 'nombre']),
       },
       {
-        accessorKey: 'bodega_destino__name',
+        accessorKey: 'bodega_destino__nombre',
         header: 'BODEGA DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['bodega_destino_data', 'nombre']),
       },
       {
-        accessorKey: 'ubicacion_destino__name',
+        accessorKey: 'ubicacion_destino__nombre',
         header: 'UBICACIÓN DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ubicacion_destino_data', 'nombre']),
       },
       {
-        accessorKey: 'motivo_transferencia__name',
+        accessorKey: 'motivo_transferencia__nombre',
         header: 'MOTIVO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['motivo_transferencia_data', 'nombre']),
       },
       {
-        accessorKey: 'user_create__name',
+        accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
@@ -177,7 +177,7 @@ export const useColumnsTransferenciaMaterial = () => {
   >(
     () => [
       {
-        accessorKey: 'categoria_data__name',
+        accessorKey: 'categoria_data__nombre',
         header: 'CATEGORIA',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,

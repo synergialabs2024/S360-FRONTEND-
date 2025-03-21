@@ -1,26 +1,27 @@
+import { useEffect, useState } from 'react';
+
+import {
+  CustomSearch,
+  CustomSingleButton,
+  TableWithoutActions,
+  ScrollableDialogProps,
+  CustomAutocompleteNoForm,
+} from '@/shared/components';
 import {
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared/hooks/ui';
+import {
+  gridSizeMdLg6,
+  CodigoCategoriaProductoEnumChoiceType,
+  CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
+} from '@/shared/constants';
+import { ToastWrapper } from '@/shared/wrappers';
 import { IngresoMaterial } from '@/shared/interfaces';
+import { useFetchProductos, useGetIngresoMaterial } from '@/actions/app';
 import { IngresosDisponiblesStoreKey, useIngresosStore } from '@/store/app';
 import { useColumnsIngresosDisponibles } from '../columns/useColumnsIngresosDisponibles';
-import {
-  CustomAutocompleteNoForm,
-  CustomSearch,
-  CustomSingleButton,
-  ScrollableDialogProps,
-  TableWithoutActions,
-} from '@/shared/components';
-import {
-  CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
-  CodigoCategoriaProductoEnumChoiceType,
-  gridSizeMdLg6,
-} from '@/shared/constants';
-import { useFetchProductos, useGetIngresoMaterial } from '@/actions/app';
-import { ToastWrapper } from '@/shared/wrappers';
-import { useEffect, useState } from 'react';
 
 export type IngresoDisponiblesModalProps = {
   open: boolean;

@@ -1,13 +1,13 @@
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { ViewMoreTextModalTableCell } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { ViewMoreTextModalTableCell } from '@/shared/components';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material';
 import ShowSolicitudMaterialModal from '@/app/inventario/solicitud-material/pages/modal/ShowSolicitudMaterialModal';
 
@@ -59,19 +59,19 @@ export const useColumnsSolicitudMaterial = () => {
   >(
     () => [
       {
-        accessorKey: 'bodega__name',
+        accessorKey: 'bodega__nombre',
         header: 'BODEGA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
       },
       {
-        accessorKey: 'ubicacion__name',
+        accessorKey: 'ubicacion__nombre',
         header: 'UBICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
       },
       {
-        accessorKey: 'user_create__name',
+        accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>

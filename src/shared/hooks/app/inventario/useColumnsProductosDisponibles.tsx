@@ -1,15 +1,15 @@
 /* eslint-disable indent */
-import { TextField } from '@mui/material';
+import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
 import { IoMdTrash } from 'react-icons/io';
-import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
+import { TextField } from '@mui/material';
 
 import {
+  Producto,
+  TABLE_CONSTANTS,
   emptyCellNested,
   emptyCellOneLevel,
-  Producto,
   SeriesProductoModal,
-  TABLE_CONSTANTS,
 } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 import {
@@ -283,12 +283,6 @@ export const useColumnsProductosDisponibles = ({
       },
       ...baseColumnsProductosDisponibles02,
       ...baseColumnsIngreso01,
-      {
-        accessorKey: 'stock_up',
-        header: 'STOCK ACTUAL',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'stock_up'),
-      },
     ],
     [
       baseColumnsIngreso01,

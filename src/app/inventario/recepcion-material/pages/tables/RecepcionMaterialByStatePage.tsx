@@ -1,22 +1,23 @@
-import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
+import { useNavigate } from 'react-router';
+
 import {
-  PermissionsEnum,
-  InventarioEnumChoice,
-  TABLE_CONSTANTS,
-  useTableFilter,
-  useTableServerSideFiltering,
-  SolicitudMaterial,
-  useColumnsSolicitudMaterial,
-} from '@/shared';
-import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
+import {
+  useTableFilter,
+  PermissionsEnum,
+  TABLE_CONSTANTS,
+  SolicitudMaterial,
+  InventarioEnumChoice,
+  useTableServerSideFiltering,
+  useColumnsSolicitudMaterial,
+} from '@/shared';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { useNavigate } from 'react-router';
 import { returnUrlRecepcionMaterialPage } from './RecepcionMaterialMainPage';
+import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 
 export type RecepcionMaterialByStatePageProps = {
   state: string;

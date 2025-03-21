@@ -1,24 +1,26 @@
+import { IconCategory } from '@tabler/icons-react';
+import { Box, Grid } from '@mui/material';
 import { useEffect } from 'react';
 
-import { useFetchProductos } from '@/actions/app';
 import {
-  CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
-  CodigoCategoriaProductoEnumChoiceType,
-  gridSizeMdLg6,
-  Producto,
-  ToastWrapper,
-  useColumnsProductosDisponibles,
-  useLoaders,
-  useTableFilter,
-  useTableServerSideFiltering,
-} from '@/shared';
-import {
-  CustomAutocompleteNoForm,
   CustomSearch,
   CustomSingleButton,
-  ScrollableDialogProps,
   TableWithoutActions,
+  ScrollableDialogProps,
+  CustomAutocompleteNoForm,
 } from '@/shared/components';
+import {
+  Producto,
+  useLoaders,
+  ToastWrapper,
+  gridSizeMdLg6,
+  useTableFilter,
+  useTableServerSideFiltering,
+  useColumnsProductosDisponibles,
+  CodigoCategoriaProductoEnumChoiceType,
+  CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO,
+} from '@/shared';
+import { useFetchProductos } from '@/actions/app';
 import { ProductosDisponiblesStoreKey, useProductosStore } from '@/store/app';
 
 export type ProductosDisponiblesModalProps = {
@@ -154,40 +156,53 @@ const ProductosDisponiblesModal: React.FC<ProductosDisponiblesModalProps> = ({
               mb: 5,
             }}
             customSpaceNode={
-              <>
-                <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
-                  label=""
-                  value={selectedCategoria}
-                  actualValueKey="value"
-                  onChange={v => {
-                    setSelectedCategoriaModel(v as string);
-                  }}
-                  options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
-                  getOptionLabel={o => o.label}
-                  loading={false}
-                  error={false}
-                  disableClearable
-                  size={gridSizeMdLg6}
-                />
-              </>
+              <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
+                label="Categoria"
+                value={selectedCategoria}
+                actualValueKey="value"
+                onChange={v => {
+                  setSelectedCategoriaModel(v as string);
+                }}
+                options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
+                getOptionLabel={o => o.label}
+                loading={false}
+                error={false}
+                disableClearable
+                sxGrid={{ mt: -4 }}
+                size={gridSizeMdLg6}
+              />
             }
           />
-          <TableWithoutActions<Producto>
-            columns={modalMaterialColumns}
-            data={selectedCategoria != null ? resultado || [] : []}
-            isLoading={isLoadingItemsDisponibles}
-            isRefetching={isRefetchingItemsDisponibles}
-            rowCount={equiposDisponiblesPaging?.data?.meta?.count || 0}
-            // search
-            enableGlobalFilter={false}
-            // // filters - server side
-            enableManualFiltering={true}
-            columnFilters={columnFilters}
-            onColumnFiltersChange={setColumnFilters}
-            // // pagination
-            pagination={pagination}
-            onPaging={setPagination}
-          />
+          {selectedCategoria ? (
+            <TableWithoutActions<Producto>
+              columns={modalMaterialColumns}
+              data={selectedCategoria != null ? resultado || [] : []}
+              isLoading={isLoadingItemsDisponibles}
+              isRefetching={isRefetchingItemsDisponibles}
+              rowCount={equiposDisponiblesPaging?.data?.meta?.count || 0}
+              // search
+              enableGlobalFilter={false}
+              // // filters - server side
+              enableManualFiltering={true}
+              columnFilters={columnFilters}
+              onColumnFiltersChange={setColumnFilters}
+              // // pagination
+              pagination={pagination}
+              onPaging={setPagination}
+            />
+          ) : (
+            <Box
+              sx={{
+                backgroundColor: 'info.light',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <IconCategory />
+              <Grid sx={{ margin: '10px' }}>Seleccione un categoria.</Grid>
+            </Box>
+          )}
         </>
       }
       cancelTextBtn="Cerrar"

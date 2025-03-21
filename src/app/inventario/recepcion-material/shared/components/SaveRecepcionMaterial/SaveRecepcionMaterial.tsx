@@ -1,43 +1,43 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { FiPlus } from 'react-icons/fi';
 
 import {
-  CreateRecepcionMaterialParamsBase,
-  useCreateIngresoMaterial,
-  useFetchBodegas,
-  useFetchProductos,
-  useFetchUbicacions,
-  useUpdateRecepcionMaterial,
-} from '@/actions/app';
-import {
-  Bodega,
-  gridSizeMdLg6,
-  PermissionsEnum,
-  ProductosDisponiblesModal,
-  ProductosDisponiblesTableType,
-  RecepcionMaterial,
-  solicitudMaterialFormSchema,
-  ToastWrapper,
-  Ubicacion,
-  useColumnsProductosDisponibles,
-} from '@/shared';
-import {
+  CustomTextArea,
+  CustomTypoLabel,
   CustomAutocomplete,
   CustomMinimalTable,
   CustomSingleButton,
-  CustomTextArea,
-  CustomTypoLabel,
   CustomTypoLabelEnum,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { useCheckPermission } from '@/shared/hooks/auth';
+import {
+  Bodega,
+  Ubicacion,
+  ToastWrapper,
+  gridSizeMdLg6,
+  PermissionsEnum,
+  RecepcionMaterial,
+  ProductosDisponiblesModal,
+  solicitudMaterialFormSchema,
+  ProductosDisponiblesTableType,
+  useColumnsProductosDisponibles,
+} from '@/shared';
+import {
+  useFetchBodegas,
+  useFetchProductos,
+  useFetchUbicacions,
+  useCreateIngresoMaterial,
+  useUpdateRecepcionMaterial,
+  CreateRecepcionMaterialParamsBase,
+} from '@/actions/app';
 import { useProductosStore } from '@/store/app';
-
-import { FiPlus } from 'react-icons/fi';
-import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
 import { returnUrlIngresoMaterialesPage } from '@/app/inventario/ingreso-material/pages/tables/IngresoMaterialesPage';
 
 export interface SaveRecepcionMaterialProps {
@@ -66,6 +66,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   );
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   ///* form
   const form = useForm<SaveFormData>({
@@ -174,6 +175,8 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
+    if (!isValid) return;
+
     const mappedProductos = productosDisponibles.map(producto => ({
       producto: producto.id,
       cantidad: producto.cantidad!,
@@ -189,13 +192,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       const detalles = productosPaging?.data.items.find(
         item => item.id === prod.producto,
       );
-
-      const validarCantidad = (
-        detalles?.ubicaciones_producto as unknown as {
-          stock: number;
-          ubicacion: string;
-        }[]
-      )?.find(i => i.ubicacion == recepcionMaterial?.ubicacion_data.uuid);
 
       if (!detalles) {
         ToastWrapper.error(
@@ -214,16 +210,16 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
           `El producto "${detalles.codigo}" necesita cantidad.`,
         );
         return;
-      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
-        ToastWrapper.error(
-          `El producto "${detalles.codigo}" tiene una cantidad
-              de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
-        );
-        return;
       }
 
       // Validaciones según `requiere_series`
-      if (!detalles.requiere_series && prod.series.length > 0) {
+      if (
+        detalles.requiere_series &&
+        (!prod.series || prod.series.length === 0)
+      ) {
+        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
+        return;
+      } else if (!detalles.requiere_series && prod.series.length > 0) {
         ToastWrapper.error(
           `El producto "${detalles.nombre}" no necesita series.`,
         );
@@ -247,6 +243,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
         id: recepcionMaterial.id!,
         data,
       });
+      queryClient.invalidateQueries({ queryKey: ['solicitud-materiales'] });
       return navigate(`${returnUrlRecepcionMaterialPage}`);
     }
   };
@@ -278,7 +275,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   }, [reset, productosPaging]);
 
   ///* columns --------------------
-  const { crearMaterialColumnsRecepcion } = useColumnsProductosDisponibles();
+  const { crearMaterialColumns } = useColumnsProductosDisponibles();
 
   return (
     <>
@@ -350,7 +347,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
           />
         )}
         <CustomMinimalTable<ProductosDisponiblesTableType>
-          columns={crearMaterialColumnsRecepcion}
+          columns={crearMaterialColumns}
           data={productosDisponibles || []}
           enablePagination
           density="comfortable"

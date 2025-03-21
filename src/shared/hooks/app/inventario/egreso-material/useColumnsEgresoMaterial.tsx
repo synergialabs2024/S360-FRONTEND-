@@ -1,15 +1,15 @@
-import { useMemo } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
 
-import { ViewMoreTextModalTableCell } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants';
-import { EgresoMaterial } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { ShowSeriesModal } from '../modals';
+import { EgresoMaterial } from '@/shared/interfaces';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { ViewMoreTextModalTableCell } from '@/shared/components';
 
 export const useColumnsEgresoMaterial = () => {
   const egresoProductoBaseColumns = useMemo<MRT_ColumnDef<EgresoMaterial>[]>(
@@ -55,26 +55,26 @@ export const useColumnsEgresoMaterial = () => {
         },
       },
       {
-        accessorKey: 'bodega__name',
+        accessorKey: 'bodega__nombre',
         header: 'BODEGA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
       },
       {
-        accessorKey: 'ubicacion__name',
+        accessorKey: 'ubicacion__nombre',
         header: 'UBICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
       },
       {
-        accessorKey: 'motivo_egreso__name',
+        accessorKey: 'motivo_egreso__nombre',
         header: 'EGRESO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['motivo_egreso_data', 'nombre']),
       },
       {
-        accessorKey: 'user_create__name',
+        accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
