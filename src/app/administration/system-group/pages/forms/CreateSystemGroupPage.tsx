@@ -16,7 +16,7 @@ const CreateSystemGroupPage: React.FC<CreateSystemGroupPageProps> = () => {
     isRefetching,
   } = useFetchSystemPermissions({
     params: {
-      page_size: 6000,
+      page_size: 16000,
     },
   });
 

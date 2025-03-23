@@ -26,7 +26,7 @@ const UpdateSystemGroupPage: React.FC<UpdateSystemGroupPageProps> = () => {
     isRefetching: isRefetchingPermissions,
   } = useFetchSystemPermissions({
     params: {
-      page_size: 6000,
+      page_size: 16000,
     },
   });
   const {

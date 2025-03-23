@@ -1,4 +1,5 @@
 import type { PagingMetaResponse } from '@/shared/interfaces/common';
+import { ClienteLimitData } from '../cliente.interface';
 
 export interface FindByIdentificationRes {
   status: number;
@@ -11,6 +12,7 @@ export interface FindByIdentification {
   id?: number;
   uuid?: string;
 
+  cliente_data?: ClienteLimitData;
   contrato_data: ContratoData;
   solicitud_servicio_data: SolicitudServicioData;
   nap_data: NapData;
@@ -53,6 +55,7 @@ export interface ContratoData {
   codigo: string;
   direccion: string;
   identificacion_pago: string;
+  direccion_referencia: string;
 }
 
 export interface ContratoData {

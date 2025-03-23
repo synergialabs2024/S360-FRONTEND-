@@ -4,8 +4,10 @@ import { CiSearch } from 'react-icons/ci';
 import { IoMdTrash } from 'react-icons/io';
 import { MdAddCircle } from 'react-icons/md';
 
-import { useFetchFlotas } from '@/actions/app';
+import { ClienteTSQEnum, useFetchFlotas } from '@/actions/app';
+import { useGenericPOST } from '@/actions/shared';
 import {
+  FindByIdentification,
   Flota,
   gridSizeMdLg6,
   IdentificationTypeEnumChoice,
@@ -72,17 +74,42 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
     },
   });
 
-  ///* handlers ----------------
-  const handleFetchClienteByCedula = async (value: string) => {
-    // TODO: fetch client data:
-    console.log('handleFetchCedulaRucInfo', value);
+  const onSuccessSearchCliente = (slData: FindByIdentification) => {
     form.reset({
       ...form.getValues(),
       thereAreClientRefiere: true,
-      clienteRefiere: 'Cliente Refiere',
-      celularRefiere: '0999999999',
-      direccionRefiere: 'Dirección Refiere',
+      clienteRefiere: slData?.cliente_data?.razon_social || 'N/A',
+      celularRefiere: slData?.cliente_data?.celular || 'N/A',
+      direccionRefiere: slData?.contrato_data?.direccion_referencia || 'N/A',
       es_referido: true,
+    });
+  };
+  ///* mutations ----------------
+  const searchCliente = useGenericPOST<any, any>(
+    '/cliente/find-by-identification/',
+    ClienteTSQEnum.CLIENTES,
+    {
+      customMessageToast: 'El cliente existe en el sistema',
+      customOnSuccess(res) {
+        onSuccessSearchCliente(
+          (res as any)?.data?.at(0) as FindByIdentification,
+        );
+      },
+      customOnError(err: any) {
+        if (err?.response?.status === 404) {
+          ToastWrapper.error('Cliente no encontrado en el sistema');
+          onClearCedula();
+        }
+      },
+    },
+  );
+
+  ///* handlers ----------------
+  const handleFetchClienteByCedula = async (value: string) => {
+    if (!value) return;
+
+    searchCliente.mutate({
+      identificacion: value,
     });
   };
 
