@@ -707,7 +707,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       data?.plan_sugerido?.map(plan => plan.planSugerido) || [];
 
     setSuggestedPlansBuroKey(suggestedPlansKey);
-    const scoreServicio = data.plan_sugerido?.[0]?.scoreServicios;
+    const scoreServicio = data?.score_servicios?.decision || '';
     form.reset({
       ...form.getValues(),
       rango_capacidad_pago: data.plan_sugerido?.[0]?.rangoCapacidadDePago || '',

@@ -14,7 +14,7 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { EsperaAgendaPreventaCustomButtons } from '../../shared/components';
+import CustomButtonsPreventaByState from '../../shared/components/CustomButtonsPreventaByState';
 
 export type PreventaByStatePageProps = {
   state: EstadoPreventaEnumChoice;
@@ -119,13 +119,20 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
         rowCount={preventasPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={false}
+        enableActionsColumn={state === EstadoPreventaEnumChoice.ESPERA}
         // crud
         canEdit={true}
         canDelete={false}
         // onEdit={onEdit}
+        showCustomButtonsSpaceEnd={state === EstadoPreventaEnumChoice.ESPERA}
         customButtonsSpaceEnd={(preventa: Preventa) => {
-          return <EsperaAgendaPreventaCustomButtons preventa={preventa!} />;
+          return (
+            <CustomButtonsPreventaByState
+              preventa={preventa}
+              // generic condition
+              canReject={state === EstadoPreventaEnumChoice.ESPERA}
+            />
+          );
         }}
       />
     </GridTableTabsContainerOnly>
