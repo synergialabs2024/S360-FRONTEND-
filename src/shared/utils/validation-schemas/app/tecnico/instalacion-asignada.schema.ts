@@ -27,9 +27,7 @@ export const ordenTrabajoFormSchema = yup.object({
   potencia_ont: yup
     .number()
     .required('El campo potencia ont es requerido')
-    .typeError('El campo potencia ont debe ser un número')
-    .positive('El campo potencia ont debe ser un número positivo')
-    .min(1, 'El campo potencia ont debe ser mayor a 0'),
+    .typeError('El campo potencia ont debe ser un número'),
 
   nap: yup
     .number()

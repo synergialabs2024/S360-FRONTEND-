@@ -100,7 +100,7 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
                 form.setValue('rawNap', undefined);
                 return;
               }
-              form.setValue('distancia_nap', nap?.distance as any);
+              form.setValue('distancia_nap', nap?.max_polygon_distance as any);
               form.setValue('puerto_nap', '' as any);
               form.setValue('rawNap', nap);
             }}

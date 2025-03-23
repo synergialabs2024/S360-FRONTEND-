@@ -20,8 +20,8 @@ import {
   GridTableTabsContainerOnly,
   SingleIconButton,
 } from '@/shared/components';
-import { useCheckPermission } from '@/shared/hooks/auth';
 import ModalAuthorizateOrdenTrabajo from '@/shared/hooks/app/tecnico/ModalAuthorizateOrdenTrabajo';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export type ActivacionInstalacionOTByStateProps = {
   activacionState: EstadoActivacionEnumChoice;
@@ -158,10 +158,11 @@ const ActivacionInstalacionOTByState: React.FC<
         canEdit={calcEnableActionsColumn()}
         onEdit={onEdit}
         editIcon={<MdArrowRightAlt />}
+        editIconToolTipTitle="Gestionar"
         // editIconToolTipTitle="Crear preventa"
         canDelete={false}
-        showCustomButtonsSpace
-        customButtonsSpace={row => {
+        showCustomButtonsSpaceEnd
+        customButtonsSpaceEnd={row => {
           if (activacionState === EstadoActivacionEnumChoice.PENDIENTE) {
             return (
               <SingleIconButton

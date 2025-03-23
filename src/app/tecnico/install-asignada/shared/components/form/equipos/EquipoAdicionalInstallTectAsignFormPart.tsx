@@ -73,14 +73,14 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
 
   ///* effects --------------------
   useEffect(() => {
-    if (!equiposVentaDetail.length) return;
+    // if (!equiposVentaDetail.length) return;
 
-    const isRequiredMiniUPS = equiposVentaDetail.some(
+    const isRequiredMiniUPS = equiposVentaDetail?.some(
       item => item.codigo === CodigoProductosEnumChoice.MINI_UPS,
     );
     setIsRequiredMiniUPS(isRequiredMiniUPS);
 
-    const isRequiredMesh = equiposVentaDetail.some(
+    const isRequiredMesh = equiposVentaDetail?.some(
       item => item.codigo === CodigoProductosEnumChoice.WIFIMESH,
     );
     setIsRequiredMesh(isRequiredMesh);
@@ -186,21 +186,33 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
           <Grid item container {...gridSize} spacing={2}>
             <Grid item xs={12}>
               <CustomTypoLabel text="Equipo adicional" />
-              <CustomMinimalTable<EquiposSeleccionadosTableType>
-                columns={savedEquiposPreventaColumns}
-                data={(equiposVentaDetail as any) || []}
-                enablePagination
-                density="comfortable"
-              />
+              <>
+                {equiposVentaDetail.length > 0 ? (
+                  <CustomMinimalTable<EquiposSeleccionadosTableType>
+                    columns={savedEquiposPreventaColumns}
+                    data={(equiposVentaDetail as any) || []}
+                    enablePagination
+                    density="comfortable"
+                  />
+                ) : (
+                  <Grid item xs={12} sx={{ width: '90%', margin: 'auto' }}>
+                    <CustomCardAlert
+                      sizeType="small"
+                      alertSeverity="info"
+                      alertTitle="No hay equipo adicional"
+                      alertMessage="No se ha seleccionado equipo para la venta adicional"
+                    />
+                  </Grid>
+                )}
+              </>
             </Grid>
 
             <Grid item xs={12}>
               <>
+                <CustomTypoLabel text="Items por promoción" />
                 {useInstalacionesStore.getState().promocionItemsSelected
                   ?.length > 0 ? (
                   <>
-                    <CustomTypoLabel text="Items por promoción" />
-
                     <CustomMinimalTable<EquiposSeleccionadosTableType>
                       columns={savedEquiposPreventaColumns}
                       data={promocionItemsSelectedFormatted}
@@ -208,15 +220,23 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
                       density="comfortable"
                     />
                   </>
-                ) : null}
+                ) : (
+                  <Grid item xs={12} sx={{ width: '90%', margin: 'auto' }}>
+                    <CustomCardAlert
+                      sizeType="small"
+                      alertSeverity="info"
+                      alertTitle="No hay items seleccionados"
+                      alertMessage="No se han seleccionado items de la promoción"
+                    />
+                  </Grid>
+                )}
               </>
             </Grid>
 
             <Grid item xs={12}>
+              <CustomTypoLabel text="Premio por promoción" />
               {promocionPremioSelectedUuid ? (
                 <>
-                  <CustomTypoLabel text="Premio por promoción" />
-
                   <CustomMinimalTable<EquiposSeleccionadosTableType>
                     columns={savedEquiposPreventaColumns}
                     data={promocionPremioSelectedFormatted}
@@ -224,7 +244,16 @@ const EquipoAdicionalInstallTectAsignFormPart: React.FC<
                     density="comfortable"
                   />
                 </>
-              ) : null}
+              ) : (
+                <Grid item xs={12} sx={{ width: '90%', margin: 'auto' }}>
+                  <CustomCardAlert
+                    sizeType="small"
+                    alertSeverity="info"
+                    alertTitle="No hay premio seleccionado"
+                    alertMessage="No se ha seleccionado un premio de la promoción"
+                  />
+                </Grid>
+              )}
             </Grid>
           </Grid>
         }
