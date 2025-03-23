@@ -1,7 +1,9 @@
+/* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { ImgModalComponent } from '@/shared/components';
+import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
 import {
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
@@ -14,11 +16,13 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
-import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
+import { useAuthStore } from '@/store/auth';
 
 type MRTSServiceType = { row: MRT_Row<Preventa> };
 
 export const useColumnsPreventa = () => {
+  const user = useAuthStore(s => s.user);
+
   // table base columns ---------------------
   const preventaBaseColumns01 = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
@@ -232,28 +236,35 @@ export const useColumnsPreventa = () => {
           ]),
       },
 
-      {
-        accessorKey: 'imagen',
-        header: 'IMAGENES',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => {
-          return (
-            <ImgModalComponent
-              urls={{
-                foto_aceptacion: row.original.url_foto_aceptacion || '',
-                foto_cedula_frontal: row.original.url_foto_cedula_frontal || '',
-                foto_cedula_trasera: row.original.url_foto_cedula_trasera || '',
-                foto_documento_cuenta:
-                  row.original.url_foto_documento_cuenta || '',
-                foto_tarjeta: row.original.url_foto_tarjeta || '',
-                foto_vivienda: row.original.url_foto_vivienda || '',
-              }}
-            />
-          );
-        },
-      },
+      ...(!user?.is_valid_salesman
+        ? [
+            {
+              accessorKey: 'imagen',
+              header: 'IMAGENES',
+              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+              enableColumnFilter: false,
+              enableSorting: false,
+              Cell: ({ row }: any) => {
+                return (
+                  <ImgModalComponent
+                    urls={{
+                      foto_aceptacion: row.original.url_foto_aceptacion || '',
+                      foto_cedula_frontal:
+                        row.original.url_foto_cedula_frontal || '',
+                      foto_cedula_trasera:
+                        row.original.url_foto_cedula_trasera || '',
+                      foto_documento_cuenta:
+                        row.original.url_foto_documento_cuenta || '',
+                      foto_tarjeta: row.original.url_foto_tarjeta || '',
+                      foto_vivienda: row.original.url_foto_vivienda || '',
+                    }}
+                  />
+                );
+              },
+            },
+          ]
+        : []),
+
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -263,7 +274,7 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
     ],
-    [],
+    [user?.is_valid_salesman],
   );
 
   // table columns ---------------------

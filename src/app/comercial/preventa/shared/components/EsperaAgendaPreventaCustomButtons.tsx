@@ -56,8 +56,8 @@ const EsperaAgendaPreventaCustomButtons: React.FC<
     params: {
       page_size: 1090,
       modulo: MotivoRechazoModuloEnumChoice.PREVENTA,
-      order_by: 'name',
-      order_by_asc: true,
+      // order_by: 'name',
+      // order_by_asc: true,
     },
   });
 

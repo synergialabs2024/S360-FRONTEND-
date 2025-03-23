@@ -1,6 +1,5 @@
 import { useFetchPreventas } from '@/actions/app';
 import {
-  EstadoPagoEnumChoice,
   EstadoPreventaEnumChoice,
   PermissionsEnum,
   Preventa,
@@ -60,9 +59,10 @@ const PreventaByStatePage: React.FC<PreventaByStatePageProps> = ({
       ...(noAceptados && { contrato_aceptado: false }),
 
       ...(pedingPayment && {
-        estado_pago: EstadoPagoEnumChoice.PENDIENTE,
-        requiere_pago_previo: true,
-        contrato_aceptado: true,
+        // estado_pago: EstadoPagoEnumChoice.PENDIENTE,
+        // requiere_pago_previo: true,
+        // contrato_aceptado: true,
+        espera_pago: true,
       }),
     },
     refetchInterval: 3000,
