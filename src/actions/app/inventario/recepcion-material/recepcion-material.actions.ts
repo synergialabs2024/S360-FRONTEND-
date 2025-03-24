@@ -33,7 +33,7 @@ export const useUpdateRecepcionMaterial = <T>({
       updateRecepcionMaterial(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL],
+        queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIALES],
       });
       enableToast &&
         ToastWrapper.success(
@@ -63,7 +63,10 @@ export type GetRecepcionMaterialParams = Partial<RecepcionMaterial> & {
   filterByState?: boolean;
 };
 export type CreateRecepcionMaterialParams<T> = T;
-export type CreateRecepcionMaterialParamsBase = Omit<RecepcionMaterial, 'id'>;
+export type CreateRecepcionMaterialParamsBase = Omit<
+  RecepcionMaterial,
+  'id'
+> & { id?: number };
 export interface UpdateRecepcionMaterialParams<T> {
   id: number;
   data: T;

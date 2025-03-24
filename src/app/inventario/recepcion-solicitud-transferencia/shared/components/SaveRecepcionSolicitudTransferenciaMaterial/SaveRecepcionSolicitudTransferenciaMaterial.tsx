@@ -7,13 +7,14 @@ import { FiPlus } from 'react-icons/fi';
 import { Grid } from '@mui/material';
 
 import {
-  useFetchBodegas,
-  useFetchProductos,
-  useFetchUbicacions,
-  useCreateTransferenciaMaterial,
-  CreateSolicitudTransferenciaMaterialParamsBase,
-  useUpdateSolicitudTransferenciaMaterial,
-} from '@/actions/app';
+  CustomTextArea,
+  CustomTypoLabel,
+  CustomAutocomplete,
+  CustomMinimalTable,
+  CustomSingleButton,
+  SingleFormBoxScene,
+  CustomTypoLabelEnum,
+} from '@/shared/components';
 import {
   Bodega,
   Ubicacion,
@@ -26,19 +27,18 @@ import {
   solicitudTransferenciaMaterialFormSchema,
 } from '@/shared';
 import {
-  CustomTextArea,
-  CustomTypoLabel,
-  CustomAutocomplete,
-  CustomMinimalTable,
-  CustomSingleButton,
-  SingleFormBoxScene,
-  CustomTypoLabelEnum,
-} from '@/shared/components';
+  useFetchBodegas,
+  useFetchProductos,
+  useFetchUbicacions,
+  useCreateTransferenciaMaterial,
+  useUpdateSolicitudTransferenciaMaterial,
+  CreateSolicitudTransferenciaMaterialParamsBase,
+} from '@/actions/app';
 import { useProductosStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import ProductosDisponiblesModal from '@/shared/hooks/app/inventario/modals/ProductosDisponiblesModal';
-import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
 import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
+import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
 
 export interface SaveRecepcionSolicitudTransferenciaMaterialProps {
   title: string;
@@ -154,54 +154,6 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
     enableErrorNavigate: false,
   });
 
-  const onSuccessCreateTransferencia = (
-    dato: SolicitudTransferenciaMaterial,
-  ) => {
-    updateRecepcionSolicitudTransferenciaAprobarMutation.mutate(
-      {
-        id: dato.id!,
-        data: dato,
-      },
-      {
-        onSuccess: () => {
-          const preparedData = {
-            state: dato.state,
-            observacion: dato.observacion,
-            productos: dato.productos,
-            bodega_origen: dato.bodega_origen,
-            ubicacion_origen: dato.ubicacion_origen,
-            bodega_destino: dato.bodega_destino,
-            ubicacion_destino: dato.ubicacion_destino,
-            user_create: dato.user_create,
-          };
-
-          setConfirmDialog({
-            isOpen: true,
-            title: 'Solicitud de material creada',
-            subtitle:
-              'La solicitud ha sido creada con éxito. ¿Desea continuar con la preventa?',
-            onConfirm: () => {
-              setConfirmDialogIsOpen(false);
-              createTransferenciaMaterialMutation.mutate(preparedData);
-            },
-            confirmTextBtn: 'SI, CONTINUAR',
-            cancelTextBtn: 'CERRAR',
-            onClose: () => {
-              setConfirmDialogIsOpen(false);
-              navigate(returnUrlRecepcionSolicitudTransferenciaMaterialesPage);
-            },
-          });
-        },
-        onError: error => {
-          // Muestra un mensaje de error si la mutación falla
-          ToastWrapper.error(
-            `Error al actualizar la recepción del material: ${error}`,
-          );
-        },
-      },
-    );
-  };
-
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
@@ -278,8 +230,48 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
 
     data.estado_solicitud = 'APROBADO';
     data.productos = mappedProductos;
-
-    onSuccessCreateTransferencia(data as SolicitudTransferenciaMaterial);
+    const preparedData = {
+      state: data.state,
+      observacion: data.observacion,
+      productos: data.productos,
+      bodega_origen: data.bodega_origen,
+      ubicacion_origen: data.ubicacion_origen,
+      bodega_destino: data.bodega_destino,
+      ubicacion_destino: data.ubicacion_destino,
+      user_create: data.user_create,
+    };
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Solicitud de material creada',
+      subtitle: '¿Desea ingresar la solicitud de este material?',
+      onConfirm: () => {
+        try {
+          setConfirmDialogIsOpen(false);
+          createTransferenciaMaterialMutation.mutate(preparedData);
+          if (!data.id) {
+            ToastWrapper.error('No se encontró el ID de la solicitud.');
+            return;
+          }
+          updateRecepcionSolicitudTransferenciaAprobarMutation.mutate({
+            id: data.id,
+            data,
+          });
+        } catch (error) {
+          setConfirmDialogIsOpen(false);
+          ToastWrapper.error(`${error}`);
+        }
+      },
+      confirmTextBtn: 'SI, CONTINUAR',
+      cancelTextBtn: 'CERRAR',
+      onClose: () => {
+        setConfirmDialogIsOpen(false);
+        updateRecepcionSolicitudTransferenciaMaterialMutation.mutate({
+          id: data.id!,
+          data,
+        });
+        navigate(returnUrlRecepcionSolicitudTransferenciaMaterialesPage);
+      },
+    });
   };
 
   const onRechazar = async (data: SaveFormData) => {
@@ -370,160 +362,156 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
   const { crearMaterialColumnsRecepcion } = useColumnsTransferenciaMaterial();
 
   return (
-    <>
-      <SingleFormBoxScene
-        titlePage={title}
-        onCancel={() =>
-          navigate(returnUrlRecepcionSolicitudTransferenciaMaterialesPage)
+    <SingleFormBoxScene
+      titlePage={title}
+      onCancel={() =>
+        navigate(returnUrlRecepcionSolicitudTransferenciaMaterialesPage)
+      }
+      onReject={handleSubmit(onRechazar, () => {})}
+      onSave={handleSubmit(onSave, () => {})}
+      saveTextBtn="Aprobar"
+    >
+      <CustomAutocomplete<Bodega>
+        label="Bodega Origen"
+        name="bodega_origen"
+        // options
+        options={bodegaOrigenPagingRes?.data?.items || []}
+        valueKey="nombre"
+        actualValueKey="id"
+        defaultValue={form.getValues().bodega_origen}
+        isLoadingData={isLoadingBodegaOrigen || isRefetchingBodegaOrigen}
+        // vaidation
+        control={form.control}
+        error={errors.bodega_origen}
+        helperText={errors.bodega_origen?.message}
+        onChangeRawValue={value => {
+          form.setValue('bodega_origen', Number(value?.id));
+          form.setValue('ubicacion_origen', '' as any);
+          productosEnviar([]);
+        }}
+        required={false}
+        disabled={true}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<Bodega>
+        label="Bodega Destino"
+        name="bodega_destino"
+        // options
+        options={bodegaDestinoPagingRes?.data?.items || []}
+        valueKey="nombre"
+        actualValueKey="id"
+        defaultValue={form.getValues().bodega_destino}
+        isLoadingData={isLoadingBodegaDestino || isRefetchingBodegaDestino}
+        // vaidation
+        control={form.control}
+        error={errors.bodega_destino}
+        helperText={errors.bodega_destino?.message}
+        onChangeRawValue={value => {
+          form.setValue('bodega_destino', Number(value?.id));
+          form.setValue('ubicacion_destino', '' as any);
+          productosEnviar([]);
+        }}
+        disabled={true}
+        required={false}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocomplete<Ubicacion>
+        label="Ubicacion Origen"
+        name="ubicacion_origen"
+        defaultValue={form.getValues().ubicacion_origen || ''}
+        // options
+        valueKey="nombre"
+        actualValueKey="id"
+        options={ubicacionOrigenPaging?.data.items || []}
+        isLoadingData={isLoadingUbicacionOrigen || isRefetchingUbicacionOrigen}
+        disableClearable
+        // errors
+        control={form.control}
+        error={errors.ubicacion_origen as any}
+        helperText={errors.ubicacion_origen?.message}
+        size={gridSizeMdLg6}
+        onChangeRawValue={value => {
+          form.setValue('ubicacion_origen', Number(value?.id));
+          form.setValue('ubicacion_destino', '' as any);
+          productosEnviar([]);
+        }}
+        required={false}
+        disabled={true}
+      />
+      <CustomAutocomplete<Ubicacion>
+        label="Ubicacion Destino"
+        name="ubicacion_destino"
+        defaultValue={form.getValues().ubicacion_destino || ''}
+        // options
+        valueKey="nombre"
+        actualValueKey="id"
+        options={
+          watchedBodegaOrigen === watchedBodegaDestino
+            ? ubicacionDestinoPaging?.data.items.filter(
+                item => item.id !== watchedUbicacionOrigen,
+              ) || []
+            : ubicacionDestinoPaging?.data.items || []
         }
-        onReject={handleSubmit(onRechazar, () => {})}
-        onSave={handleSubmit(onSave, () => {})}
-        saveTextBtn="Aprobar"
-      >
-        <CustomAutocomplete<Bodega>
-          label="Bodega Origen"
-          name="bodega_origen"
-          // options
-          options={bodegaOrigenPagingRes?.data?.items || []}
-          valueKey="nombre"
-          actualValueKey="id"
-          defaultValue={form.getValues().bodega_origen}
-          isLoadingData={isLoadingBodegaOrigen || isRefetchingBodegaOrigen}
-          // vaidation
-          control={form.control}
-          error={errors.bodega_origen}
-          helperText={errors.bodega_origen?.message}
-          onChangeRawValue={value => {
-            form.setValue('bodega_origen', Number(value?.id));
-            form.setValue('ubicacion_origen', '' as any);
-            productosEnviar([]);
-          }}
-          required={false}
-          disabled={true}
-          size={gridSizeMdLg6}
-        />
-        <CustomAutocomplete<Bodega>
-          label="Bodega Destino"
-          name="bodega_destino"
-          // options
-          options={bodegaDestinoPagingRes?.data?.items || []}
-          valueKey="nombre"
-          actualValueKey="id"
-          defaultValue={form.getValues().bodega_destino}
-          isLoadingData={isLoadingBodegaDestino || isRefetchingBodegaDestino}
-          // vaidation
-          control={form.control}
-          error={errors.bodega_destino}
-          helperText={errors.bodega_destino?.message}
-          onChangeRawValue={value => {
-            form.setValue('bodega_destino', Number(value?.id));
-            form.setValue('ubicacion_destino', '' as any);
-            productosEnviar([]);
-          }}
-          disabled={true}
-          required={false}
-          size={gridSizeMdLg6}
-        />
-        <CustomAutocomplete<Ubicacion>
-          label="Ubicacion Origen"
-          name="ubicacion_origen"
-          defaultValue={form.getValues().ubicacion_origen || ''}
-          // options
-          valueKey="nombre"
-          actualValueKey="id"
-          options={ubicacionOrigenPaging?.data.items || []}
-          isLoadingData={
-            isLoadingUbicacionOrigen || isRefetchingUbicacionOrigen
-          }
-          disableClearable
-          // errors
-          control={form.control}
-          error={errors.ubicacion_origen as any}
-          helperText={errors.ubicacion_origen?.message}
-          size={gridSizeMdLg6}
-          onChangeRawValue={value => {
-            form.setValue('ubicacion_origen', Number(value?.id));
-            form.setValue('ubicacion_destino', '' as any);
-            productosEnviar([]);
-          }}
-          required={false}
-          disabled={true}
-        />
-        <CustomAutocomplete<Ubicacion>
-          label="Ubicacion Destino"
-          name="ubicacion_destino"
-          defaultValue={form.getValues().ubicacion_destino || ''}
-          // options
-          valueKey="nombre"
-          actualValueKey="id"
-          options={
-            watchedBodegaOrigen === watchedBodegaDestino
-              ? ubicacionDestinoPaging?.data.items.filter(
-                  item => item.id !== watchedUbicacionOrigen,
-                ) || []
-              : ubicacionDestinoPaging?.data.items || []
-          }
-          isLoadingData={
-            isLoadingUbicacionDestino || isRefetchingUbicacionDestino
-          }
-          disableClearable
-          // errors
-          control={form.control}
-          error={errors.ubicacion_destino as any}
-          helperText={errors.ubicacion_destino?.message}
-          size={gridSizeMdLg6}
-          onChangeRawValue={value => {
-            form.setValue('ubicacion_destino', Number(value?.id));
-            productosEnviar([]);
-          }}
-          disabled={true}
-        />
-        <CustomTextArea
-          label="Observación"
-          name="observacion"
-          control={form.control}
-          defaultValue={form.getValues().observacion}
-          error={errors.observacion}
-          helperText={errors.observacion?.message}
-          required={false}
-          disabled={true}
-        />
-        {/* ==================== PRODUCTS ==================== */}
-        <CustomTypoLabel
-          text="Productos"
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
-        />
-        <Grid container justifyContent="flex-end">
-          {!!watchedUbicacionOrigen && !!watchedUbicacionDestino && (
-            <CustomSingleButton
-              label="AGREGAR PRODUCTO"
-              color="primary"
-              variant="text"
-              startIcon={<FiPlus />}
-              onClick={() => {
-                setOpenAddProducts(true);
-              }}
-              justifyContent="flex-end"
-            />
-          )}
+        isLoadingData={
+          isLoadingUbicacionDestino || isRefetchingUbicacionDestino
+        }
+        disableClearable
+        // errors
+        control={form.control}
+        error={errors.ubicacion_destino as any}
+        helperText={errors.ubicacion_destino?.message}
+        size={gridSizeMdLg6}
+        onChangeRawValue={value => {
+          form.setValue('ubicacion_destino', Number(value?.id));
+          productosEnviar([]);
+        }}
+        disabled={true}
+      />
+      <CustomTextArea
+        label="Observación"
+        name="observacion"
+        control={form.control}
+        defaultValue={form.getValues().observacion}
+        error={errors.observacion}
+        helperText={errors.observacion?.message}
+        required={false}
+        disabled={true}
+      />
+      {/* ==================== PRODUCTS ==================== */}
+      <CustomTypoLabel
+        text="Productos"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
+      <Grid container justifyContent="flex-end">
+        {!!watchedUbicacionOrigen && !!watchedUbicacionDestino && (
+          <CustomSingleButton
+            label="AGREGAR PRODUCTO"
+            color="primary"
+            variant="text"
+            startIcon={<FiPlus />}
+            onClick={() => {
+              setOpenAddProducts(true);
+            }}
+            justifyContent="flex-end"
+          />
+        )}
 
-          <CustomMinimalTable<ProductosDisponiblesTableType>
-            columns={crearMaterialColumnsRecepcion}
-            data={productosDisponibles || []}
-            enablePagination
-            density="comfortable"
-          />
-          <ProductosDisponiblesModal
-            askADD={true}
-            pk_ubicacion={
-              solicitudTransferenciaMaterial?.ubicacion_origen_data?.uuid
-            }
-            open={openAddProducts}
-            onClose={() => setOpenAddProducts(false)}
-          />
-        </Grid>
-      </SingleFormBoxScene>
-    </>
+        <CustomMinimalTable<ProductosDisponiblesTableType>
+          columns={crearMaterialColumnsRecepcion}
+          data={productosDisponibles || []}
+          enablePagination
+          density="comfortable"
+        />
+        <ProductosDisponiblesModal
+          askADD={true}
+          pk_ubicacion={
+            solicitudTransferenciaMaterial?.ubicacion_origen_data?.uuid
+          }
+          open={openAddProducts}
+          onClose={() => setOpenAddProducts(false)}
+        />
+      </Grid>
+    </SingleFormBoxScene>
   );
 };
 

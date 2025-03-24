@@ -1,6 +1,6 @@
 import { Tab } from '@mui/material';
 
-import { InventarioEnumChoice, useTabsOnly } from '@/shared';
+import { InventarioEnumChoice, PermissionsEnum, useTabsOnly } from '@/shared';
 import {
   a11yProps,
   BoxFormTabsOnly,
@@ -9,6 +9,7 @@ import {
 } from '@/shared/components';
 import RecepcionMaterialByStatePage from './RecepcionMaterialByStatePage';
 import { ROUTER_PATHS } from '@/router/constants';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 
 export const returnUrlRecepcionMaterialPage =
   ROUTER_PATHS.inventario.RecepcionMaterialesNav;
@@ -16,6 +17,12 @@ export const returnUrlRecepcionMaterialPage =
 export type RecepcionMaterialPageProps = {};
 
 const RecepcionMaterialMainPage: React.FC<RecepcionMaterialPageProps> = () => {
+  useCheckPermissionsArray([
+    PermissionsEnum.inventario_view_solicitudmaterial,
+    PermissionsEnum.inventario_add_solicitudmaterial,
+    PermissionsEnum.inventario_add_ingresomaterial,
+    PermissionsEnum.inventario_view_ingresomaterial,
+  ]);
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (

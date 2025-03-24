@@ -26,11 +26,17 @@ export type RecepcionMaterialByStatePageProps = {
 const RecepcionMaterialByStatePage: React.FC<
   RecepcionMaterialByStatePageProps
 > = ({ state }) => {
+  const navigate = useNavigate();
+
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
 
-  const navigate = useNavigate();
+  ///* global state
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* table
   const {
@@ -59,12 +65,6 @@ const RecepcionMaterialByStatePage: React.FC<
       estado_solicitud: state,
     },
   });
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* handlers
   const calcEnableActionsColumn = () => {

@@ -130,49 +130,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
     enableErrorNavigate: false,
   });
 
-  const onSuccessCreateIngreso = (dato: RecepcionMaterial) => {
-    updateRecepcionMaterialAprobarMutation.mutate(
-      {
-        id: dato.id!,
-        data: dato,
-      },
-      {
-        onSuccess: () => {
-          const preparedData = {
-            state: dato.state,
-            observacion: dato.observacion,
-            productos: dato.productos,
-            bodega: dato.bodega,
-            ubicacion: dato.ubicacion,
-            user_create: dato.user_create,
-          };
-
-          setConfirmDialog({
-            isOpen: true,
-            title: 'Solicitud de material creada',
-            subtitle:
-              'La solicitud ha sido creada con éxito. ¿Desea continuar con la preventa?',
-            onConfirm: () => {
-              setConfirmDialogIsOpen(false);
-              createIngresoMaterialMutation.mutate(preparedData);
-            },
-            confirmTextBtn: 'SI, CONTINUAR',
-            cancelTextBtn: 'CERRAR',
-            onClose: () => {
-              setConfirmDialogIsOpen(false);
-              navigate(returnUrlRecepcionMaterialPage);
-            },
-          });
-        },
-        onError: error => {
-          ToastWrapper.error(
-            `Error al actualizar la recepción del material. ${error}`,
-          );
-        },
-      },
-    );
-  };
-
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
@@ -230,7 +187,41 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
     data.estado_solicitud = 'APROBADO';
     data.productos = mappedProductos;
 
-    onSuccessCreateIngreso(data as RecepcionMaterial);
+    //*onSuccessCreateIngreso(data as RecepcionMaterial);
+    const preparedData = {
+      state: data.state,
+      observacion: data.observacion,
+      productos: data.productos,
+      bodega: data.bodega,
+      ubicacion: data.ubicacion,
+      user_create: data.user_create,
+    };
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Solicitud de material creada',
+      subtitle: '¿Desea ingresar la solicitud de este material?',
+      onConfirm: () => {
+        try {
+          setConfirmDialogIsOpen(false);
+          createIngresoMaterialMutation.mutate(preparedData);
+          if (!data.id) {
+            ToastWrapper.error('No se encontró el ID de la solicitud.');
+            return;
+          }
+          updateRecepcionMaterialAprobarMutation.mutate({ id: data.id, data });
+        } catch (error) {
+          setConfirmDialogIsOpen(false);
+          ToastWrapper.error(`${error}`);
+        }
+      },
+      confirmTextBtn: 'SI, CONTINUAR',
+      cancelTextBtn: 'CERRAR',
+      onClose: () => {
+        setConfirmDialogIsOpen(false);
+        updateRecepcionMaterialMutation.mutate({ id: data.id!, data });
+        navigate(returnUrlRecepcionMaterialPage);
+      },
+    });
   };
 
   const onRechazar = async (data: SaveFormData) => {

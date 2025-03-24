@@ -140,7 +140,7 @@ export type CreateSolicitudTransferenciaMaterialParams<T> = T;
 export type CreateSolicitudTransferenciaMaterialParamsBase = Omit<
   SolicitudTransferenciaMaterial,
   'id'
->;
+> & { id?: number };
 export interface UpdateSolicitudTransferenciaMaterialParams<T> {
   id: number;
   data: T;
