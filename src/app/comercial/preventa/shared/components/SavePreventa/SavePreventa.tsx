@@ -589,7 +589,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       );
 
     // upload images ----
-    setIsCheckingCedula(true);
+    // setIsCheckingCedula(true);
     const [cedulaFrontalUrl, cedulaPosteriorUrl, viviendaUrl] =
       await Promise.all([
         uploadFileToBucket({
@@ -650,7 +650,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       }));
 
     // create ----------------
-    await createPreventaMutation.mutateAsync({
+    const actualDataToSend = {
       ...sanitizedDataToSend,
       solicitud_servicio: solicitudServicio?.id!,
       url_foto_cedula_frontal: cedulaFrontalUrl?.streamUlr || '',
@@ -665,7 +665,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...(data?.selectedPromoPremioUuid
         ? { promocion_premio_selected: data?.selectedPromoPremioUuid }
         : {}),
-    });
+    };
+    // console.log({ actualDataToSend });
+    // return;
+    await createPreventaMutation.mutateAsync(actualDataToSend);
     setIsCheckingCedula(false);
   };
 

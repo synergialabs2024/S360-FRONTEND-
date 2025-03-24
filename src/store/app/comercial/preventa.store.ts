@@ -23,6 +23,11 @@ interface PreventaState {
   salectedPromociones: Promocion[];
   setSalectedPromociones: (salectedPromociones: Promocion[]) => void;
 
+  // referidos --------------------
+  showReferidosPart: boolean;
+  setShowReferidosPart: (showReferidosPart: boolean) => void;
+  toggleShowReferidosPart: () => void;
+
   clearAll: () => void;
 }
 
@@ -50,6 +55,12 @@ export const usePreventaStore = create<PreventaState>(set => ({
   salectedPromociones: [],
   setSalectedPromociones: salectedPromociones => set({ salectedPromociones }),
 
+  // referidos --------------------
+  showReferidosPart: false,
+  setShowReferidosPart: showReferidosPart => set({ showReferidosPart }),
+  toggleShowReferidosPart: () =>
+    set(state => ({ showReferidosPart: !state.showReferidosPart })),
+
   clearAll: () =>
     set({
       isOTPVerified: false,
@@ -60,5 +71,7 @@ export const usePreventaStore = create<PreventaState>(set => ({
       selectedCuotas: 1,
 
       salectedPromociones: [],
+
+      showReferidosPart: false,
     }),
 }));

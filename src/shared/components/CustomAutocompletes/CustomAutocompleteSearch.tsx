@@ -4,6 +4,7 @@ import { Control, Controller, FieldError } from 'react-hook-form';
 import { CiSearch } from 'react-icons/ci';
 
 import { GridSizeType } from '@/shared/interfaces';
+import { CustomFormLabel } from '../Labels';
 
 export type CustomAutocompleteSearchProps<T> = {
   name: string;
@@ -71,60 +72,74 @@ function CustomAutocompleteSearch<T>({
           };
 
           return (
-            <Autocomplete
-              freeSolo
-              options={options}
-              getOptionLabel={option => {
-                if (typeof option === 'string') return option;
-                return (option as any)?.[valueKey] || optionLabelForEdit || '';
-              }}
-              value={
-                options.find(
-                  item => item[actualValueKey || valueKey] === field.value,
-                ) || field.value
-              }
-              onChange={handleChange}
-              onInputChange={(_, inputText, reason) => {
-                if (reason === 'input' && onChangeInputText) {
-                  onChangeInputText(inputText);
-                } else if (reason === 'clear' && onChangeInputText) {
-                  onChangeInputText('');
+            <>
+              <CustomFormLabel
+                sx={{
+                  mt: 0,
+                }}
+                htmlFor={label}
+                required={required}
+              >
+                {label}
+              </CustomFormLabel>
+
+              <Autocomplete
+                freeSolo
+                options={options}
+                getOptionLabel={option => {
+                  if (typeof option === 'string') return option;
+                  return (
+                    (option as any)?.[valueKey] || optionLabelForEdit || ''
+                  );
+                }}
+                value={
+                  options.find(
+                    item => item[actualValueKey || valueKey] === field.value,
+                  ) || field.value
                 }
-              }}
-              disabled={disabled}
-              loading={isLoading}
-              loadingText="Cargando..."
-              renderInput={params => (
-                <TextField
-                  {...params}
-                  label={label}
-                  variant="outlined"
-                  error={!!error}
-                  helperText={helperText}
-                  required={required}
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CiSearch />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <>
-                        {isLoading ? (
-                          <CircularProgress color="inherit" size={20} />
-                        ) : (
-                          params.InputProps.endAdornment
-                        )}
-                      </>
-                    ),
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              )}
-            />
+                onChange={handleChange}
+                onInputChange={(_, inputText, reason) => {
+                  if (reason === 'input' && onChangeInputText) {
+                    onChangeInputText(inputText);
+                  } else if (reason === 'clear' && onChangeInputText) {
+                    onChangeInputText('');
+                  }
+                }}
+                disabled={disabled}
+                loading={isLoading}
+                loadingText="Cargando..."
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    // label={label}
+                    variant="outlined"
+                    error={!!error}
+                    helperText={helperText}
+                    required={required}
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CiSearch />
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <>
+                          {isLoading ? (
+                            <CircularProgress color="inherit" size={20} />
+                          ) : (
+                            params.InputProps.endAdornment
+                          )}
+                        </>
+                      ),
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                )}
+              />
+            </>
           );
         }}
       />

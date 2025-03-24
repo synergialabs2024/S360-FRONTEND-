@@ -28,6 +28,7 @@ import {
   SingleIconButton,
   TabTexLabelCustomSpace,
 } from '@/shared/components';
+import { usePreventaStore } from '@/store/app';
 import type { SaveFormDataPreventa } from '../../SavePreventa';
 
 export type ReferidosPreventaFormPartProps = {
@@ -38,7 +39,10 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
   form,
 }) => {
   ///* local state -------------------
-  const [showReferidosPart, setShowReferidosPart] = useState<boolean>(false);
+  const showReferidosPart = usePreventaStore(s => s.showReferidosPart);
+  const toggleShowReferidosPart = usePreventaStore(
+    s => s.toggleShowReferidosPart,
+  );
   const [floataSearchTerm, setFloataSearchTerm] = useState<string>('');
 
   ///* hooks -------------------
@@ -117,6 +121,7 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
     onClearCedula();
     onClearFlotaRefiere();
     form.setValue('es_referido', false);
+    form.setValue('tipo_referido', null as any);
   };
 
   const onClearCedula = () => {
@@ -135,7 +140,9 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
       ...form.getValues(),
       thereAreClientRefiere: false,
       es_referido: false,
+      flota_refiere: undefined,
     });
+    setFloataSearchTerm('');
   };
 
   ///* effects ----------------
@@ -171,7 +178,7 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
             startIcon={showReferidosPart ? <IoMdTrash /> : <MdAddCircle />}
             label={showReferidosPart ? 'REMOVER' : 'AGREGAR'}
             onClick={() => {
-              setShowReferidosPart(prev => !prev);
+              toggleShowReferidosPart();
               if (!showReferidosPart) {
                 onTrashReferidosPart();
               }
