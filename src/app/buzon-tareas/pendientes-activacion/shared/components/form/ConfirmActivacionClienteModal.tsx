@@ -8,7 +8,7 @@ import {
   RejectInstalacionOTData,
   useFetchMotivoRubroAdicionals,
 } from '@/actions/app';
-import { useGenericPATCH } from '@/actions/shared';
+import { useGenericPATCH, useGenericPOST } from '@/actions/shared';
 import {
   activacionClienteFormSchema,
   getKeysFormErrorsMessage,
@@ -16,6 +16,7 @@ import {
   LineaServicio,
   motivoBaseMantenedorActivacionBaseEnumChoice,
   MotivoRubroAdicional,
+  tipoRubroAdicionalMantenedorEnumChoice,
   ToastWrapper,
   useLoaders,
 } from '@/shared';
@@ -28,10 +29,18 @@ import {
 } from '@/shared/components';
 import { useEffect } from 'react';
 import { returnUrlClientesSuspendidosAsignadas } from '../../../pages/tables/PendientesActivacionPage';
-import { useAuthStore } from '@/store/auth';
 import dayjs from 'dayjs';
 import { useFetchMantenedorActivaciones } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
 import { useFetchMantenedorActivacionesBase } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
+
+interface CreateSolRecoordinacionAgendaResponse {
+  aplica_reconexion?: boolean;
+  aplica_activacion?: boolean;
+}
+
+type SaveFormData = {
+  linea_servicio: number;
+};
 
 export type ConfirmActivacionClienteModalProps = {
   open: boolean;
@@ -49,7 +58,17 @@ type FormData = RejectInstalacionOTData & {
 const ConfirmActivacionClienteModal: React.FC<
   ConfirmActivacionClienteModalProps
 > = ({ onClose, open, serviceLine }) => {
-  const user = useAuthStore(s => s.user);
+  const createSolRecoordinacionAgenda = useGenericPOST<
+    SaveFormData,
+    CreateSolRecoordinacionAgendaResponse
+  >('/activacion-internet/calculate/details/', 'calculate-details', {
+    customMessageToast:
+      'Se ha solicitado la aprobacion manual de la preventa con éxito',
+    overrideOnError: false,
+    customOnSuccess() {},
+    customOnError() {},
+  });
+
   ///* hooks ---------------------
   const navigate = useNavigate();
 
@@ -73,6 +92,13 @@ const ConfirmActivacionClienteModal: React.FC<
   } = useFetchMotivoRubroAdicionals({
     params: {
       page_size: 1000,
+      tipo_rubro_adicional:
+        createSolRecoordinacionAgenda?.data?.data?.aplica_reconexion === true
+          ? tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_RECONEXIONES
+          : createSolRecoordinacionAgenda?.data?.data?.aplica_activacion ===
+              true
+            ? tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES
+            : tipoRubroAdicionalMantenedorEnumChoice.GENERAL,
     },
   });
 
@@ -115,7 +141,6 @@ const ConfirmActivacionClienteModal: React.FC<
 
   ///* handlers ---------------------
   const onSave = (data: FormData) => {
-    console.log('data', data);
     prerejectInstalacionAsignada.mutate({
       motivo_reactivacion: data.motivo,
       promesa_pago_body: {
@@ -148,15 +173,10 @@ const ConfirmActivacionClienteModal: React.FC<
   }, [isLoading, motivosRubroAdicionalPagingRes, open]);
 
   useEffect(() => {
-    console.log(
-      'mantenedorActivacionesBasePagingRes',
-      mantenedorActivacionesBasePagingRes,
-    );
-    console.log(
-      'mantenedorActivacionesBasePagingRes',
-      mantenedorActivacionesBasePagingRes?.data.items[0].id,
-    );
-  });
+    createSolRecoordinacionAgenda.mutate({
+      linea_servicio: serviceLine.id,
+    });
+  }, []);
 
   useLoaders(isLoading);
 
@@ -199,10 +219,6 @@ const ConfirmActivacionClienteModal: React.FC<
             error={errors.motivo}
             helperText={errors.motivo?.message}
             onChangeRawValue={e => {
-              console.log(e);
-              console.log('user', user);
-              console.log(user?.departamento, user?.departamento);
-              console.log('e.nombre', e.nombre);
               form.setValue('motivo_name', e.nombre);
             }}
           />

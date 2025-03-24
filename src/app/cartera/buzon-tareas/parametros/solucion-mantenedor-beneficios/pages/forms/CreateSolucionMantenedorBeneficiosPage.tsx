@@ -7,7 +7,7 @@ export type CreateSolucionMantenedorBeneficiosPageProps = {};
 const CreateSolucionMantenedorBeneficiosPage: React.FC<
   CreateSolucionMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.inventario_add_ubicacion);
+  useCheckPermission(PermissionsEnum.cartera_add_solucionmantenedorbeneficio);
 
   return (
     <SaveSolucionMantenedorBeneficios title="Crear Solucion Mantenedor Beneficios" />

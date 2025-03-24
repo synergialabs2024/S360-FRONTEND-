@@ -103,7 +103,7 @@ const SaveMotivoRubroAdicional: React.FC<SaveMotivoRubroAdicionalProps> = ({
       });
       return;
     }
-
+    console.log('data', data);
     ///* create
     createMotivoRubroAdicionalMutation.mutate(data);
   };

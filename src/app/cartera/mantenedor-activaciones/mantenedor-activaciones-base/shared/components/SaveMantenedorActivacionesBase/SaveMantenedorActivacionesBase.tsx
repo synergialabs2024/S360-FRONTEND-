@@ -193,7 +193,7 @@ const SaveMantenedorActivacionesBase: React.FC<
 
         <CustomAutocomplete<MotivoRubroAdicional>
           label="Motivo"
-          name="motivo_id"
+          name="motivo"
           valueKey="nombre"
           actualValueKey="id"
           control={form.control}

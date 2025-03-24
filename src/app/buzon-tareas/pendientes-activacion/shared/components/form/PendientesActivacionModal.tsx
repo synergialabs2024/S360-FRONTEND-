@@ -12,7 +12,7 @@ export type PendientesActivacionModalProps = {};
 const PendientesActivacionModal: React.FC<
   PendientesActivacionModalProps
 > = () => {
-  useCheckPermission(PermissionsEnum.clientes_change_cliente);
+  useCheckPermission(PermissionsEnum.cartera_add_activacioninternet);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetLineaServicio(uuid!);

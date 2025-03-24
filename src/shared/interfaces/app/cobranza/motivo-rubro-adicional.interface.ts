@@ -13,7 +13,8 @@ export interface MotivoRubroAdicional {
   uuid?: string;
 
   tipo_rubro_adicional: string;
-  grupos_usuario_autorizados: SystemGroup[];
+  grupos_usuario_autorizados: number[];
+  grupos_usuario_autorizados_exact_array?: number[];
   grupos_usuario_autorizados_data: SystemGroup[];
   nombre: string;
   codigo: string;

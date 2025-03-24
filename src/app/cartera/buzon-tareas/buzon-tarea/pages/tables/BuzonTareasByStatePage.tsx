@@ -17,6 +17,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useFetchCambioPlanes } from '@/actions/app/cartera';
 import { ROUTER_PATHS } from '@/router/constants';
+import { useAuthStore } from '@/store/auth';
 
 export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
 
@@ -25,6 +26,8 @@ export type BuzonTareasByStatePageProps = {
 };
 
 const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
+  const user = useAuthStore(s => s.user);
+  console.log('user', user);
   useCheckPermission(PermissionsEnum.comercial_view_preventa);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =

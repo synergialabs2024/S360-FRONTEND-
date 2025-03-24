@@ -55,7 +55,7 @@ export interface ContratoData {
   codigo: string;
   direccion: string;
   identificacion_pago: string;
-  direccion_referencia: string;
+  direccion_referencia?: string;
 }
 
 export interface ContratoData {
@@ -70,7 +70,7 @@ export interface ContratoData {
 
 export interface SolicitudServicioData {
   id: number;
-  direccion_referencia: string;
+  direccion_referencia?: string;
   created_at: string;
   modified_at: string;
   uuid: string;

@@ -7,7 +7,7 @@ export type MantenedorActivacionesBasePageProps = {};
 const MantenedorActivacionesBasePage: React.FC<
   MantenedorActivacionesBasePageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cobranza_add_factura);
+  useCheckPermission(PermissionsEnum.cartera_add_mantenedoractivacionbase);
 
   return (
     <SaveMantenedorActivacionesBase title="Crear Mantenedor Activaciones Base" />

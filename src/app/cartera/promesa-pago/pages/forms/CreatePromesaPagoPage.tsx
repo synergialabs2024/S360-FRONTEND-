@@ -5,7 +5,7 @@ import { SavePromesaPago } from '../../shared/components';
 export type CreatePromesaPagoPageProps = {};
 
 const CreatePromesaPagoPage: React.FC<CreatePromesaPagoPageProps> = () => {
-  useCheckPermission(PermissionsEnum.cobranza_add_factura);
+  useCheckPermission(PermissionsEnum.cartera_add_promesapago);
 
   return <SavePromesaPago title="Crear Promesa de Pago" />;
 };

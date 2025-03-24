@@ -7,7 +7,7 @@ export type CreateBeneficioMantenedorBeneficiosPageProps = {};
 const CreateBeneficioMantenedorBeneficiosPage: React.FC<
   CreateBeneficioMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.inventario_add_ubicacion);
+  useCheckPermission(PermissionsEnum.cartera_add_beneficiomantenedorbeneficios);
 
   return (
     <SaveBeneficioMantenedorBeneficios title="Crear Beneficio Mantenedor Beneficios" />

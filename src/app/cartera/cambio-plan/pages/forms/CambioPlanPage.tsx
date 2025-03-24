@@ -8,7 +8,7 @@ export type CambioPlanPageProps = {};
 export const returnUrlCambioPlanPage = ROUTER_PATHS.cartera.cambioplanNav;
 
 const CambioPlanPage: React.FC<CambioPlanPageProps> = () => {
-  useCheckPermission(PermissionsEnum.cobranza_add_factura);
+  useCheckPermission(PermissionsEnum.cartera_add_cambioplan);
 
   return <SaveCambioPlan title="Cambio Plan" />;
 };

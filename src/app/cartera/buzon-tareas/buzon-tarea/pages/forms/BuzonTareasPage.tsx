@@ -8,7 +8,7 @@ export type BuzonTareasPageProps = {};
 export const returnUrlCambioPlanPage = ROUTER_PATHS.cartera.promesapagoNav;
 
 const BuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
-  useCheckPermission(PermissionsEnum.cobranza_add_factura);
+  useCheckPermission(PermissionsEnum.cartera_add_buzontareamantenedor);
 
   return <SaveBuzonTareas title="Buzon de Tareas" />;
 };

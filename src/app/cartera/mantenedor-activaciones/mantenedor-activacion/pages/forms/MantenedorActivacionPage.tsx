@@ -11,9 +11,9 @@ export const returnUrlMantenedorActivacionesPage =
 const MantenedorActivacionPage: React.FC<
   MantenedorActivacionPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cobranza_add_factura);
+  useCheckPermission(PermissionsEnum.cartera_add_mantenedoractivacion);
 
-  return <SaveMantenedorActivacionesBase title="Mantenedor activacion" />;
+  return <SaveMantenedorActivacionesBase title="Crear Mantenedor activacion" />;
 };
 
 export default MantenedorActivacionPage;

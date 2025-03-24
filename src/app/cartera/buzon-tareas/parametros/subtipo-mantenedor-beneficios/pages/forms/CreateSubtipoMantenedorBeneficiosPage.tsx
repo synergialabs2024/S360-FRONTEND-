@@ -7,7 +7,7 @@ export type CreateSubtipoMantenedorBeneficiosPageProps = {};
 const CreateSubtipoMantenedorBeneficiosPage: React.FC<
   CreateSubtipoMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.inventario_add_ubicacion);
+  useCheckPermission(PermissionsEnum.cartera_add_subtipomantenedorbeneficios);
 
   return (
     <SaveSubtipoMantenedorBeneficios title="Crear Subtipo Mantenedor Beneficios" />

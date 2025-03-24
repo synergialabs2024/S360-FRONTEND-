@@ -255,8 +255,6 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
       <>
         <CustomTypoLabel text="Datos de solicitud" />
 
-        <CustomTypoLabel text="Criterio" />
-
         <CustomAutocomplete<CriterioMantenedorActivacion>
           label="Criterio"
           name="criterio"
