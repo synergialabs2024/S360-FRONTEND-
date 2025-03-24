@@ -86,6 +86,7 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
       celularRefiere: slData?.cliente_data?.celular || 'N/A',
       direccionRefiere: slData?.contrato_data?.direccion_referencia || 'N/A',
       es_referido: true,
+      cliente_refiere: slData?.cliente_data?.id,
     });
   };
   ///* mutations ----------------
@@ -103,6 +104,12 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
         if (err?.response?.status === 404) {
           ToastWrapper.error('Cliente no encontrado en el sistema');
           onClearCedula();
+
+          // set error manually in identificacion_refiere
+          form.setError('identificacion_refiere', {
+            type: 'manual',
+            message: 'El campo identificacion refiere es requerido',
+          });
         }
       },
     },
@@ -133,6 +140,7 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
       celularRefiere: '',
       direccionRefiere: '',
       es_referido: false,
+      cliente_refiere: undefined,
     });
   };
   const onClearFlotaRefiere = () => {
@@ -179,7 +187,7 @@ const ReferidosPreventaFormPart: React.FC<ReferidosPreventaFormPartProps> = ({
             label={showReferidosPart ? 'REMOVER' : 'AGREGAR'}
             onClick={() => {
               toggleShowReferidosPart();
-              if (!showReferidosPart) {
+              if (showReferidosPart) {
                 onTrashReferidosPart();
               }
             }}

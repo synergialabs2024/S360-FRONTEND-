@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { MetodoPagoEnumUUID } from '@/shared/constants';
+import { MetodoPagoEnumUUID, ReferidoTypeEnumChoice } from '@/shared/constants';
 import { MetodoPago } from '@/shared/interfaces';
 import { emailYupValidation } from '../../common';
 
@@ -174,6 +174,46 @@ export const preventaFormSchema = yup.object({
         schema
           .required('El campo fecha vencimiento tarjeta credito es requerido')
           .typeError('El campo fecha vencimiento tarjeta credito es requerido'),
+    }),
+
+  // sistema referido --------------
+  tipo_referido: yup.string().optional().nullable(),
+  flota_refiere: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('tipo_referido', {
+      is: (tipo_referido: string) =>
+        tipo_referido === ReferidoTypeEnumChoice.FLOTA,
+      then: schema =>
+        schema
+          .required('El campo flota refiere es requerido')
+          .typeError('El campo flota refiere es requerido'),
+    }),
+
+  identificacion_refiere: yup
+    .string()
+    .optional()
+    .nullable()
+    .when('tipo_referido', {
+      is: (tipo_referido: string) =>
+        tipo_referido === ReferidoTypeEnumChoice.CLIENTE,
+      then: schema =>
+        schema
+          .required('El campo identificacion refiere es requerido')
+          .typeError('El campo identificacion refiere es requerido'),
+    }),
+  cliente_refiere: yup
+    .number()
+    .optional()
+    .nullable()
+    .when('tipo_referido', {
+      is: (tipo_referido: string) =>
+        tipo_referido === ReferidoTypeEnumChoice.CLIENTE,
+      then: schema =>
+        schema
+          .required('El campo cliente refiere es requerido')
+          .typeError('El campo cliente refiere es requerido'),
     }),
 });
 

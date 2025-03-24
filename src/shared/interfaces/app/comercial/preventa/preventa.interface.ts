@@ -40,7 +40,6 @@ export interface Preventa {
   tipo_referido?: ReferidoTypeEnumChoice;
   es_referido?: boolean;
   cliente_refiere?: number; // fk
-  correo_cliente_refiere?: string;
   flota_refiere?: number; // fk
   // detalle_servicios: Detalle;
   // detalle_productos: Detalle;

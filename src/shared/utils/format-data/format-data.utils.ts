@@ -130,9 +130,13 @@ export const sanitizeDataForSend = (obj: any): any => {
         if (key.match(/raw[A-Z]/)) {
           continue;
         }
+        // **Eliminar** propiedades con valores undefined
+        if (value === undefined) {
+          continue;
+        }
         // Aplicar sanitización recursivamente
         const sanitizedValue = sanitizeDataForSend(value);
-        // **Mantener** propiedades con otros valores, incluyendo undefined
+        // **Mantener** propiedades con otros valores
         sanitizedObj[key] = sanitizedValue;
       }
     }

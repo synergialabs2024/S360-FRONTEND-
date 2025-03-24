@@ -112,15 +112,6 @@ export const useColumnsPreventa = () => {
       },
 
       {
-        accessorKey: 'correo_cliente_refiere',
-        header: 'CORREO CLIENTE REFIERE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'correo_cliente_refiere'),
-      },
-
-      {
         accessorKey: 'tipo_servicio',
         header: 'TIPO SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

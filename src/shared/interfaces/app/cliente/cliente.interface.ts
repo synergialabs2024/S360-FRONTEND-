@@ -38,6 +38,7 @@ export interface Cliente {
 
 export type ClienteLimitData = Pick<
   Cliente,
+  | 'id'
   | 'uuid'
   | 'razon_social'
   | 'email'
