@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { useQueryClient } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
@@ -176,6 +177,14 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       ) {
         ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
         return;
+      } else if (
+        detalles.requiere_series &&
+        prod.series.length !== prod.cantidad
+      ) {
+        ToastWrapper.error(
+          `La cantidad del producto "${detalles.nombre}" debe ser igual a la cantidad de series existente.`,
+        );
+        return;
       } else if (!detalles.requiere_series && prod.series.length > 0) {
         ToastWrapper.error(
           `El producto "${detalles.nombre}" no necesita series.`,
@@ -248,13 +257,13 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
         );
         return itemEncontrado
           ? {
-            ...itemEncontrado,
-            producto: prod.producto,
-            cantidad: prod.cantidad,
-            cantidad_pedida: prod.cantidad,
-            cantidad_aprobada: prod.cantidad,
-            series: prod.series,
-          }
+              ...itemEncontrado,
+              producto: prod.producto,
+              cantidad: prod.cantidad,
+              cantidad_pedida: prod.cantidad,
+              cantidad_aprobada: prod.cantidad,
+              series: prod.series,
+            }
           : null;
       })
       .filter(Boolean);

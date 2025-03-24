@@ -145,7 +145,6 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
       );
 
       if (!detalles) {
-        console.error(`No se encontró el producto con ID ${prod.producto}`);
         ToastWrapper.error(
           `No se encontró el producto con ID ${prod.producto}`,
         );
@@ -170,6 +169,14 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
         (!prod.series || prod.series.length === 0)
       ) {
         ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
+        return;
+      } else if (
+        detalles.requiere_series &&
+        prod.series.length !== prod.cantidad
+      ) {
+        ToastWrapper.error(
+          `La cantidad del producto "${detalles.nombre}" debe ser igual a la cantidad de series existente.`,
+        );
         return;
       } else if (!detalles.requiere_series && prod.series.length > 0) {
         ToastWrapper.error(
