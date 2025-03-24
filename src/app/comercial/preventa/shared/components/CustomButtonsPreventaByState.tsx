@@ -18,10 +18,6 @@ const CustomButtonsPreventaByState: React.FC<
   ///* local state ------------------------
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  console.log({
-    ss: hasPermission(PermissionsEnum.comercial_change_preventa) && canReject,
-    preventa,
-  });
   return (
     <>
       {hasPermission(PermissionsEnum.comercial_change_preventa) && canReject ? (
