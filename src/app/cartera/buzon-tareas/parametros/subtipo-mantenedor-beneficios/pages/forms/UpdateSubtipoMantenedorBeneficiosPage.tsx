@@ -12,7 +12,9 @@ export type UpdateSubtipoMantenedorBeneficiosPageProps = {};
 const UpdateSubtipoMantenedorBeneficiosPage: React.FC<
   UpdateSubtipoMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_change_asuntoticket);
+  useCheckPermission(
+    PermissionsEnum.cartera_change_subtipomantenedorbeneficios,
+  );
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetAsunto(uuid!);

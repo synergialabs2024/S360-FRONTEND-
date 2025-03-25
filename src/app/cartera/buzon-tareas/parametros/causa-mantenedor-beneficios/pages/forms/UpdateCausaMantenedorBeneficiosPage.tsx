@@ -12,7 +12,7 @@ export type UpdateCausaMantenedorBeneficiosPageProps = {};
 const UpdateCausaMantenedorBeneficiosPage: React.FC<
   UpdateCausaMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_change_asuntoticket);
+  useCheckPermission(PermissionsEnum.cartera_change_causamantenedorbeneficio);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetAsunto(uuid!);

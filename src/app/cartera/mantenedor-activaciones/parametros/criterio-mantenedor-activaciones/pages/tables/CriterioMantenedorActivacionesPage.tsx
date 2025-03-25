@@ -32,7 +32,7 @@ const CriterioMantenedorActivacionesPage: React.FC<
 > = () => {
   const navigate = useNavigate();
 
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+  useCheckPermission(PermissionsEnum.cartera_view_criteriomantenedoractivacion);
 
   /* const navigate = useNavigate(); */
 

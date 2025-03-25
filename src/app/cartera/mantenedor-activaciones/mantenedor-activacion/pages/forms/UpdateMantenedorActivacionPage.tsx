@@ -1,8 +1,9 @@
 import { ROUTER_PATHS } from '@/router/constants';
 import SaveMantenedorActivacionesBase from '../../shared/components/SaveMantenedorActivacion/SaveMantenedorActivacion';
 import { Navigate, useParams } from 'react-router';
-import { useLoaders } from '@/shared';
+import { PermissionsEnum, useLoaders } from '@/shared';
 import { useGetMantenedorActivacion } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export type UpdateMantenedorActivacionPageProps = {};
 export const returnUrlMantenedorActivacionesPage =
@@ -11,6 +12,7 @@ export const returnUrlMantenedorActivacionesPage =
 const UpdateMantenedorActivacionPage: React.FC<
   UpdateMantenedorActivacionPageProps
 > = () => {
+  useCheckPermission(PermissionsEnum.cartera_change_mantenedoractivacion);
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetMantenedorActivacion(uuid!);
   useLoaders(isLoading || isRefetching);

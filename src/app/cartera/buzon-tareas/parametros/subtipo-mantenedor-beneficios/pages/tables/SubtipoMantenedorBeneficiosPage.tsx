@@ -29,7 +29,9 @@ export type SubtipoMantenedorBeneficiosPageProps = {};
 const SubtipoMantenedorBeneficiosPage: React.FC<
   SubtipoMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+  useCheckPermission(
+    PermissionsEnum.cartera_change_subtipomantenedorbeneficios,
+  );
 
   /* const navigate = useNavigate(); */
 

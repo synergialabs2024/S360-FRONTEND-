@@ -61,6 +61,7 @@ type SaveFormData = CreateMantenedorActivacionParamsBase & {
   codigo_motivo: string;
   motivo_base: string;
   motivo_base_id: number;
+  id_motivo: number;
 };
 
 const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
@@ -228,6 +229,52 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     }); */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mantenedorActivacion, reset]);
+
+  useEffect(() => {
+    console.log(
+      'criterioMantenedorActivacionesPagingRes?.data.items',
+      criterioMantenedorActivacionesPagingRes?.data.items,
+    );
+    form.setValue(
+      'motivo',
+      mantenedorActivacion?.mantenedor_base_data?.motivo_data?.id!,
+    );
+    console.log('mantenedorActivacion', mantenedorActivacion);
+    if (mantenedorActivacion?.id) {
+      form.setValue(
+        'valor',
+        mantenedorActivacion?.mantenedor_base_data?.motivo_data?.valor!,
+      );
+      form.setValue(
+        'grupos_usuario_autorizados',
+        mantenedorActivacion?.mantenedor_base_data?.motivo_data
+          ?.grupos_usuario_autorizados_data!,
+      );
+      form.setValue(
+        'tipo_rubro_adicional_motivo',
+        mantenedorActivacion?.mantenedor_base_data?.motivo_data
+          ?.tipo_rubro_adicional!,
+      );
+      form.setValue(
+        'motivo_base',
+        mantenedorActivacion?.mantenedor_base_data?.motivo_data?.nombre!,
+      );
+      form.setValue(
+        'codigo_motivo',
+        mantenedorActivacion?.mantenedor_base_data?.motivo_data?.codigo!,
+      );
+    }
+    if (form.getValues().criterio) {
+      criterioMantenedorActivacionesPagingRes?.data.items.map(e => {
+        if (form.getValues().criterio === e.id) {
+          form.setValue('tipo_rubro_adicional', e.tipo_mantenedor_activacion);
+          form.setValue('estados_linea_servicio', e.estados_linea_servicio);
+          form.setValue('dia_inicio_range', e.dia_inicio_range);
+          form.setValue('dia_fin_range', e.dia_fin_range);
+        }
+      });
+    }
+  }, [mantenedorActivacion, criterioMantenedorActivacionesPagingRes, form]);
 
   const customLoader =
     isLoadingMotivoRubroAdicionals ||

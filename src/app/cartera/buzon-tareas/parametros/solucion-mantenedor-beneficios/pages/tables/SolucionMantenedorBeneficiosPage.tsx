@@ -29,7 +29,7 @@ export type SolucionMantenedorBeneficiosPageProps = {};
 const SolucionMantenedorBeneficiosPage: React.FC<
   SolucionMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+  useCheckPermission(PermissionsEnum.cartera_view_solucionmantenedorbeneficio);
 
   /* const navigate = useNavigate(); */
 

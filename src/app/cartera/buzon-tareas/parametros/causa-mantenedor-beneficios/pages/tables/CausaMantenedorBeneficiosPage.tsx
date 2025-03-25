@@ -29,7 +29,7 @@ export type CausaMantenedorBeneficiosPageProps = {};
 const CausaMantenedorBeneficiosPage: React.FC<
   CausaMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+  useCheckPermission(PermissionsEnum.cartera_view_causamantenedorbeneficio);
 
   /* const navigate = useNavigate(); */
 

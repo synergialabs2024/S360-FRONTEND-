@@ -28,7 +28,7 @@ export type BuzonTareasByStatePageProps = {
 const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
   const user = useAuthStore(s => s.user);
   console.log('user', user);
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.cartera_view_buzontareamantenedor);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();

@@ -7,7 +7,7 @@ export type CreateCriterioMantenedorActivacionesPageProps = {};
 const CreateCriterioMantenedorActivacionesPage: React.FC<
   CreateCriterioMantenedorActivacionesPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.inventario_add_ubicacion);
+  useCheckPermission(PermissionsEnum.cartera_add_criteriomantenedoractivacion);
 
   return (
     <SaveCriterioMantenedorActivaciones title="Crear Criterio Mantenedor Activaciones" />

@@ -27,7 +27,7 @@ export type PromesaPagoByStatePageProps = {
 };
 
 const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.cartera_view_promesapago);
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =

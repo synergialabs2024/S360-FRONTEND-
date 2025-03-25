@@ -11,7 +11,7 @@ export type UpdateMantenedorActivacionesBasePageProps = {};
 const UpdateMantenedorActivacionesBasePage: React.FC<
   UpdateMantenedorActivacionesBasePageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cobranza_add_factura);
+  useCheckPermission(PermissionsEnum.cartera_change_mantenedoractivacionbase);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetMantenedorActivacionBase(

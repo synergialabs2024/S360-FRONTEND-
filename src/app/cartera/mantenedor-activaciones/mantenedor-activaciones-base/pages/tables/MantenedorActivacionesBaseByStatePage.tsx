@@ -39,7 +39,7 @@ const MantenedorActivacionesBaseByStatePage: React.FC<
     s => s.setConfirmDialogIsOpen,
   );
 
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.cartera_view_mantenedoractivacionbase);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();

@@ -24,7 +24,6 @@ import {
   CustomAutocomplete,
   CustomDatePicker,
   CustomTextArea,
-  CustomTextFieldNoForm,
   ScrollableDialogProps,
 } from '@/shared/components';
 import { useEffect } from 'react';
@@ -141,14 +140,23 @@ const ConfirmActivacionClienteModal: React.FC<
 
   ///* handlers ---------------------
   const onSave = (data: FormData) => {
-    prerejectInstalacionAsignada.mutate({
-      motivo_reactivacion: data.motivo,
-      promesa_pago_body: {
-        linea_servicio: serviceLine.id,
-        observacion: data.observacion,
-        fecha_promesa_pago: data.fecha_promesa_pago,
-      },
-    });
+    if (
+      watchedMotivoName ===
+      motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO
+    ) {
+      prerejectInstalacionAsignada.mutate({
+        motivo_reactivacion: data.motivo,
+        promesa_pago_body: {
+          linea_servicio: serviceLine.id,
+          observacion: data.observacion,
+          fecha_promesa_pago: data.fecha_promesa_pago,
+        },
+      });
+    } else {
+      prerejectInstalacionAsignada.mutate({
+        motivo_reactivacion: data.motivo,
+      });
+    }
   };
 
   const handleClose = () => {
@@ -226,13 +234,6 @@ const ConfirmActivacionClienteModal: React.FC<
           {watchedMotivoName ===
           motivoBaseMantenedorActivacionBaseEnumChoice.PROMESA_DE_PAGO ? (
               <>
-                <CustomTextFieldNoForm
-                  label="Linea de servicio"
-                  value={serviceLine?.id}
-                  size={gridSizeMdLg12}
-                  disabled
-                />
-
                 <CustomTextArea
                   label="Observación"
                   name="observacion"
