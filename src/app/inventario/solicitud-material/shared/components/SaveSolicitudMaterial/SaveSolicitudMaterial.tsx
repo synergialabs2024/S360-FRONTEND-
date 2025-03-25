@@ -109,8 +109,6 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
       ToastWrapper.error('Campo Productos es requerido');
       return;
     }
-
-    // Validaciones
     for (const prod of mappedProductos) {
       const detalles = productosPaging?.data.items.find(
         item => item.id === prod.producto,
@@ -122,8 +120,6 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
         );
         return;
       }
-
-      // Validar cantidad
       if (
         prod.cantidad === undefined ||
         prod.cantidad === null ||
