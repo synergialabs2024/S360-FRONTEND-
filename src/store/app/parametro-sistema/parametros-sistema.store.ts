@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { create } from 'zustand';
 
 import { getParametrosSistemas } from '@/actions/app';
@@ -45,13 +44,13 @@ export const useParametrosSistemaStore = create<ParametrosSistemaState>()(
             // handle maintenance alert (only front, in back with axios interceptor) ------------------
             if (item.slug === SystemParamsSlugsEnum.MANTENIMIENTO_PROGRAMADO) {
               const frontBuildVal: FrontBuildValueSystemParam = parsedValue;
-              const now = dayjs();
-              const fechaHoraInicio = dayjs(
-                `${frontBuildVal.fecha_inicio_alert} ${frontBuildVal.hora_inicio_alert}`,
-              );
-              const fechaHoraFin = dayjs(
-                `${frontBuildVal.fecha_fin_alert} ${frontBuildVal.hora_fin_alert}`,
-              );
+              // const now = dayjs();
+              // const fechaHoraInicio = dayjs(
+              //   `${frontBuildVal.fecha_inicio_alert} ${frontBuildVal.hora_inicio_alert}`,
+              // );
+              // const fechaHoraFin = dayjs(
+              //   `${frontBuildVal.fecha_fin_alert} ${frontBuildVal.hora_fin_alert}`,
+              // );
 
               const oldParam = currentParams.find(
                 p => p.slug === SystemParamsSlugsEnum.MANTENIMIENTO_PROGRAMADO,
@@ -65,8 +64,8 @@ export const useParametrosSistemaStore = create<ParametrosSistemaState>()(
               // conditionally show alert ------
               if (
                 frontBuildVal?.state &&
-                now.isAfter(fechaHoraInicio) &&
-                now.isBefore(fechaHoraFin) &&
+                // now.isAfter(fechaHoraInicio) &&
+                // now.isBefore(fechaHoraFin) &&
                 (!oldFrontVersion ||
                   oldFrontVersion !== frontBuildVal?.front_version) &&
                 currentParams.length > 0

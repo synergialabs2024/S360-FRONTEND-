@@ -32,10 +32,10 @@ export enum TimerAgendamientoCacheEnum {
 // ---------------------------------------------
 export interface FrontBuildValueSystemParam {
   state: boolean;
-  fecha_inicio_alert: string; // YYYY-MM-DD
-  hora_inicio_alert: string; // HH:mm:ss
-  fecha_fin_alert: string; // YYYY-MM-DD
-  hora_fin_alert: string; // HH:mm:ss
+  // fecha_inicio_alert: string; // YYYY-MM-DD
+  // hora_inicio_alert: string; // HH:mm:ss
+  // fecha_fin_alert: string; // YYYY-MM-DD
+  // hora_fin_alert: string; // HH:mm:ss
   title: string;
   description: string;
   type: string;
