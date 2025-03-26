@@ -1,9 +1,15 @@
 import axios, { AxiosRequestConfig, isAxiosError } from 'axios';
 
+import { useParametrosSistemaStore } from '@/store/app';
 import { useAuthStore } from '@/store/auth';
-import { ApiResponse, HTTPResStatusCodeEnum } from '../interfaces/common';
+import {
+  ApiResponse,
+  FrontBuildValueSystemParam,
+  HTTPResStatusCodeEnum,
+} from '../interfaces/common';
 import { getEnvs } from '../utils';
 import { ToastWrapper } from '../wrappers';
+import { useUiConfirmModalStore } from '@/store/ui';
 
 const { VITE_ERPAPI_URL, VITE_STORAGEAPI_URL, VITE_CONSULTAS_URL } = getEnvs();
 
@@ -41,6 +47,8 @@ export const erpAPI = ({
       timeout: 60000, // 1 minuto
     };
 
+    const xFrontVersion = useParametrosSistemaStore.getState().frontEndVersion;
+
     if (auth) {
       config.headers = {
         Authorization: 'Token ' + storedToken,
@@ -49,6 +57,13 @@ export const erpAPI = ({
     if (isStorageApi) {
       config.headers = {
         'Content-Type': 'multipart/form-data',
+      };
+    }
+
+    if (xFrontVersion) {
+      config.headers = {
+        ...config.headers,
+        ...(xFrontVersion && { 'x-front-version': xFrontVersion }),
       };
     }
 
@@ -66,6 +81,31 @@ export const erpAPI = ({
         ToastWrapper.error(
           'El servidor no responde, por favor intenta más tarde',
         );
+        throw error;
+      }
+      if ((error as any)?.status === HTTPResStatusCodeEnum.UPGRADE_REQUIRED) {
+        const setConfirmDialog =
+          useUiConfirmModalStore.getState().setConfirmDialog;
+        const setConfirmDialogIsOpen =
+          useUiConfirmModalStore.getState().setConfirmDialogIsOpen;
+
+        const frontBuildVal = (error as any)?.response?.data?.data;
+        const parsedValue: FrontBuildValueSystemParam = JSON.parse(
+          frontBuildVal?.value || '{}',
+        );
+
+        setConfirmDialog({
+          isOpen: true,
+          title: parsedValue.title,
+          subtitle: parsedValue.description,
+          onConfirm: () => {
+            setConfirmDialogIsOpen(false);
+            // Forzar la recarga completa
+            window.location.reload();
+          },
+          showCancelBtn: false,
+          confirmTextBtn: 'Recargar',
+        });
         throw error;
       }
       if (!isAxiosError(error)) {

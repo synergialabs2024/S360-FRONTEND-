@@ -23,6 +23,7 @@ export enum ParametroSistemaTSQEnum {
 export const useFetchParametrosSistemas = ({
   enabled = true,
   params,
+  refetchInterval,
 }: UseFetchEnabledParams<GetParametrosSistemasParams>) => {
   return useQuery({
     queryKey: [
@@ -31,6 +32,7 @@ export const useFetchParametrosSistemas = ({
     ],
     queryFn: () => getParametrosSistemas(params),
     enabled: enabled,
+    ...(refetchInterval && { refetchInterval }),
   });
 };
 
