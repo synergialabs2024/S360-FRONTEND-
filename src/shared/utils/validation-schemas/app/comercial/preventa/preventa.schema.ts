@@ -163,6 +163,7 @@ export const preventaFormSchema = yup.object({
           .typeError('El campo titular tarjeta credito es requerido'),
     }),
 
+  // En tu archivo Yup (preventaFormSchema)
   fecha_vencimiento_tarjeta: yup
     .string()
     .optional()
@@ -173,7 +174,41 @@ export const preventaFormSchema = yup.object({
       then: schema =>
         schema
           .required('El campo fecha vencimiento tarjeta credito es requerido')
-          .typeError('El campo fecha vencimiento tarjeta credito es requerido'),
+          .typeError('El campo fecha vencimiento tarjeta credito es requerido')
+          .test(
+            'valid-expiration',
+            'Fecha de expiración inválida',
+            function (value) {
+              if (!value || value.length !== 4) return false;
+
+              const month = parseInt(value.slice(0, 2), 10);
+              const year = parseInt(value.slice(2, 4), 10);
+              const currentYear = new Date().getFullYear() % 100;
+              const currentMonth = new Date().getMonth() + 1;
+              const maxFutureYears = 20; // Máximo 20 años en el futuro
+
+              // Validar mes (1-12)
+              if (month < 1 || month > 12) return false;
+
+              // Validar año no menor al actual
+              if (year < currentYear) return false;
+
+              // Validar que el año no sea demasiado futuro (ej. no más de 20 años)
+              const fullCurrentYear = new Date().getFullYear();
+              const fullExpYear = 2000 + year; // Asumimos siglo 21 para años de 2 dígitos
+              if (fullExpYear > fullCurrentYear + maxFutureYears) return false;
+
+              // Si el año es igual al actual, validar que el mes no sea pasado
+              if (year === currentYear && month < currentMonth) return false;
+
+              return true;
+            },
+          )
+          .test(
+            'valid-format',
+            'Formato inválido (MM/YY)',
+            value => !value || /^\d{4}$/.test(value), // Validamos que sean 4 dígitos (sin slash)
+          ),
     }),
 
   // sistema referido --------------

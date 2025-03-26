@@ -42,7 +42,6 @@ import {
 } from '@/store/app';
 import { MantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones/mantenedor-activacion.interface';
 import { useEffect } from 'react';
-import { useFetchMantenedorActivacionesBase } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
 
 export interface SaveMantenedorActivacionProps {
   title: string;
@@ -132,19 +131,6 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     'tipo_rubro_adicional_motivo',
   );
   const watchedCode = form.watch('codigo_motivo');
-  const watchedMotivoBaseId = form.watch('motivo_base_id');
-
-  const {
-    data: mantenedorActivacionesBasePagingRes,
-    isLoading: isLoadingMantenedorActivacionesBase,
-    isRefetching: isRefetchingMantenedorActivacionesBase,
-  } = useFetchMantenedorActivacionesBase({
-    params: {
-      page_size: 1,
-      id: watchedMotivoBaseId,
-    },
-  });
-
   const {
     items: mantenedorActivaciones,
     clearOneRecord: clearAllServiciosInternetSelecStore,
@@ -154,12 +140,6 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
   );
 
   const onSave = async (data: SaveFormData) => {
-    console.log(
-      'mantenedorActivacionesBasePagingRes?.data.items[0].id;',
-      mantenedorActivacionesBasePagingRes?.data.items[0].id,
-    );
-    console.log('data.criterio', data.criterio);
-
     const mantenedorActivacionesId =
       mantenedorActivaciones.length > 0 ? mantenedorActivaciones[0].id : null;
 
@@ -231,15 +211,10 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
   }, [mantenedorActivacion, reset]);
 
   useEffect(() => {
-    console.log(
-      'criterioMantenedorActivacionesPagingRes?.data.items',
-      criterioMantenedorActivacionesPagingRes?.data.items,
-    );
     form.setValue(
       'motivo',
       mantenedorActivacion?.mantenedor_base_data?.motivo_data?.id!,
     );
-    console.log('mantenedorActivacion', mantenedorActivacion);
     if (mantenedorActivacion?.id) {
       form.setValue(
         'valor',
@@ -280,9 +255,7 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     isLoadingMotivoRubroAdicionals ||
     isRefetchingMotivoRubroAdicionals ||
     isLoadingCriterioMantenedorActivaciones ||
-    isRefetchingCriterioMantenedorActivaciones ||
-    isLoadingMantenedorActivacionesBase ||
-    isRefetchingMantenedorActivacionesBase;
+    isRefetchingCriterioMantenedorActivaciones;
   useLoaders(customLoader);
 
   return (
@@ -391,7 +364,6 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
           helperText={errors.motivo?.message}
           size={gridSizeMdLg12}
           onChangeRawValue={row => {
-            console.log('row', row);
             form.setValue('valor', row?.valor);
             form.setValue(
               'grupos_usuario_autorizados',
@@ -403,7 +375,6 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
             );
             form.setValue('motivo_base', row.nombre);
             form.setValue('codigo_motivo', row.codigo);
-            console.log('row.nombre', row.nombre);
           }}
         />
 
