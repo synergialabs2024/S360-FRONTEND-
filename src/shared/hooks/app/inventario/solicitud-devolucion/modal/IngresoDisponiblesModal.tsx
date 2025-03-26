@@ -1,4 +1,6 @@
+import { IconCategory } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { Box, Grid } from '@mui/material';
 
 import {
   CustomSearch,
@@ -60,8 +62,10 @@ const IngresoDisponiblesModal: React.FC<IngresoDisponiblesModalProps> = ({
     uuid_ingreso ?? '',
   );
   const { data: productosPaging } = useFetchProductos({
+    enabled: open,
     params: {
       page_size: 90000,
+      categoria_uuid: selectedCategoria ?? undefined,
     },
   });
 
@@ -145,39 +149,51 @@ const IngresoDisponiblesModal: React.FC<IngresoDisponiblesModalProps> = ({
               mb: 5,
             }}
             customSpaceNode={
-              <>
-                <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
-                  label=""
-                  value={selectedCategoria}
-                  actualValueKey="value"
-                  onChange={v => {
-                    setSelectedCategoriaModel(v as string);
-                  }}
-                  options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
-                  getOptionLabel={o => o.label}
-                  loading={false}
-                  error={false}
-                  disableClearable
-                  size={gridSizeMdLg6}
-                />
-              </>
+              <CustomAutocompleteNoForm<CodigoCategoriaProductoEnumChoiceType>
+                label="Categoria"
+                value={selectedCategoria}
+                actualValueKey="value"
+                onChange={v => {
+                  setSelectedCategoriaModel(v as string);
+                }}
+                options={CATEGORIA_PRODUCTO_ARRAY_OBJ_INVENTARIO}
+                getOptionLabel={o => o.label}
+                loading={false}
+                error={false}
+                disableClearable
+                size={gridSizeMdLg6}
+              />
             }
           />
-          <TableWithoutActions<IngresoMaterial>
-            columns={modalMaterialColumns}
-            data={dataFilter || []}
-            isLoading={isLoading}
-            isRefetching={isRefetching}
-            // search
-            enableGlobalFilter={false}
-            // // filters - server side
-            enableManualFiltering={true}
-            columnFilters={columnFilters}
-            onColumnFiltersChange={setColumnFilters}
-            // // pagination
-            pagination={pagination}
-            onPaging={setPagination}
-          />
+          {selectedCategoria ? (
+            <TableWithoutActions<IngresoMaterial>
+              columns={modalMaterialColumns}
+              data={dataFilter || []}
+              isLoading={isLoading}
+              isRefetching={isRefetching}
+              // search
+              enableGlobalFilter={false}
+              // // filters - server side
+              enableManualFiltering={true}
+              columnFilters={columnFilters}
+              onColumnFiltersChange={setColumnFilters}
+              // // pagination
+              pagination={pagination}
+              onPaging={setPagination}
+            />
+          ) : (
+            <Box
+              sx={{
+                backgroundColor: 'info.light',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <IconCategory />
+              <Grid sx={{ margin: '10px' }}>Seleccione un categoria.</Grid>
+            </Box>
+          )}
         </>
       }
       cancelTextBtn="Cerrar"

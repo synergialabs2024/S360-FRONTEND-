@@ -50,13 +50,14 @@ export const useColumnsParametroSistema = () => {
 
           if (typeof str === 'string') {
             try {
-              parsedValue = JSON.parse(str);
+              const parsed = JSON.parse(str);
+              parsedValue = Array.isArray(parsed) ? parsed : [parsed];
             } catch (error) {
               parsedValue = [];
             }
           }
 
-          return type === 'ARRAY' ? (
+          return type === 'ARRAY' || type === 'JSON' ? (
             <TableModalGeneric
               Arrays={parsedValue}
               icon={<IconDiamond />}
