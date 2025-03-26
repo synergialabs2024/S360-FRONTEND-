@@ -93,9 +93,6 @@ export const erpAPI = ({
         const parsedValue: FrontBuildValueSystemParam = JSON.parse(
           frontBuildVal?.value || '{}',
         );
-        console.log({
-          parsedValue,
-        });
 
         setConfirmDialog({
           isOpen: true,
