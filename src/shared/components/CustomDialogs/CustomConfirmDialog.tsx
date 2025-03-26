@@ -29,12 +29,17 @@ const CustomConfirmDialog: React.FC<CustomConfirmDialogProps> = () => {
   const confirmTextBtn = useUiConfirmModalStore(
     s => s.confirmDialog.confirmTextBtn,
   );
+  const showCancelBtn = useUiConfirmModalStore(
+    s => s.confirmDialog.showCancelBtn,
+  );
 
   return (
     <Dialog
       open={open}
       onClose={() => {
-        !onClose ? setConfirmDialogIsOpen(false) : onClose();
+        if (showCancelBtn) {
+          !onClose ? setConfirmDialogIsOpen(false) : onClose();
+        }
       }}
     >
       <DialogTitle>
@@ -65,14 +70,16 @@ const CustomConfirmDialog: React.FC<CustomConfirmDialogProps> = () => {
           pr: 2,
         }}
       >
-        <Button
-          onClick={() => {
-            !onClose ? setConfirmDialogIsOpen(false) : onClose();
-          }}
-          sx={{ color: theme.palette.text.primary }}
-        >
-          {cancelTextBtn || 'Cancelar'}
-        </Button>
+        {showCancelBtn ? (
+          <Button
+            onClick={() => {
+              !onClose ? setConfirmDialogIsOpen(false) : onClose();
+            }}
+            sx={{ color: theme.palette.text.primary }}
+          >
+            {cancelTextBtn || 'Cancelar'}
+          </Button>
+        ) : null}
 
         <Button
           onClick={onConfirm}

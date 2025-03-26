@@ -1,4 +1,5 @@
 import { useParametrosSistemaStore } from '@/store/app';
+import { useUiStore } from '@/store/ui/ui.store';
 import { Box, Container, styled, useTheme } from '@mui/material';
 import { FC, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -7,7 +8,6 @@ import Navigation from '../full/horizontal/navbar/Navigation';
 import Customizer from './shared/customizer/Customizer';
 import Header from './vertical/header/Header';
 import Sidebar from './vertical/sidebar/Sidebar';
-import { useUiStore } from '@/store/ui/ui.store';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -27,7 +27,6 @@ const PageWrapper = styled('div')(() => ({
 
 const FullLayout: FC = () => {
   const customizer = useUiStore(state => state.state);
-
   const theme = useTheme();
 
   ///* global state ============================
@@ -38,18 +37,18 @@ const FullLayout: FC = () => {
   ///* effects ============================
   useEffect(() => {
     fetchAllSystemParameters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    const intervalId = setInterval(() => {
+      fetchAllSystemParameters();
+    }, 3600 * 1000); // 1 hour
+    // }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, [fetchAllSystemParameters]);
 
   return (
     <MainWrapper>
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
       {customizer.isHorizontal ? '' : <Sidebar />}
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
       <PageWrapper
         className="page-wrapper"
         sx={{
@@ -60,28 +59,16 @@ const FullLayout: FC = () => {
           }),
         }}
       >
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
         {customizer.isHorizontal ? <HorizontalHeader /> : <Header />}
-        {/* PageContent */}
         {customizer.isHorizontal ? <Navigation /> : ''}
         <Container
           sx={{
             maxWidth: customizer.isLayout === 'boxed' ? 'lg' : '100%!important',
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* PageContent */}
-          {/* ------------------------------------------- */}
-
           <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
             <Outlet />
           </Box>
-
-          {/* ------------------------------------------- */}
-          {/* End Page */}
-          {/* ------------------------------------------- */}
         </Container>
         <Customizer />
       </PageWrapper>

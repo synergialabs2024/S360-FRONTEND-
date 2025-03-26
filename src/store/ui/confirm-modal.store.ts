@@ -12,6 +12,7 @@ type ConfirmDialog = {
   onClose?: () => void;
   cancelTextBtn?: string;
   confirmTextBtn?: string;
+  showCancelBtn?: boolean;
 };
 
 interface UiConfirmModalState {
@@ -23,6 +24,7 @@ interface UiConfirmModalState {
 const confirmDialogInitialState: ConfirmDialog = {
   isOpen: false,
   title: '',
+  showCancelBtn: true,
   onConfirm: () => {},
   onClose: () => {},
 };
@@ -31,7 +33,14 @@ export const useUiConfirmModalStore = create<UiConfirmModalState>(
   (set, get) => ({
     confirmDialog: confirmDialogInitialState,
 
-    setConfirmDialog: dialog => set({ confirmDialog: dialog }),
+    setConfirmDialog: dialog =>
+      set({
+        confirmDialog: {
+          ...dialog,
+          isOpen: dialog.isOpen ?? true,
+          showCancelBtn: dialog.showCancelBtn ?? true,
+        },
+      }),
     setConfirmDialogIsOpen: isOpen => {
       set({
         confirmDialog: {

@@ -15,6 +15,9 @@ export enum SystemParamsSlugsEnum {
   // planificador
   HORA_INICIO_INSTALACIONES = 'hora_inicio_instalaciones',
   HORA_FIN_INSTALACIONES = 'hora_fin_instalaciones',
+
+  // general params -------------
+  MANTENIMIENTO_PROGRAMADO = 'mantenimiento_programado',
 }
 
 export const defaultSystemParamsValues = {
