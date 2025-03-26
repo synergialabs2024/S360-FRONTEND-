@@ -2,4 +2,5 @@ export { default as FlotaZonesMap } from './FlotaZonesMap';
 export { default as ImgModalComponent } from './ImgModalComponent';
 export { default as MapModalComponent } from './MapModalComponent';
 export { default as PasswordTableCell } from './PasswordTableCell';
+export { default as TableModalGeneric } from './TableModalGeneric';
 export { default as ViewMoreTextModalTableCell } from './ViewMoreTextModalTableCell';

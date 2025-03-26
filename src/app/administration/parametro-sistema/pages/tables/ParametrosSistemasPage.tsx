@@ -1,21 +1,22 @@
-import { useFetchParametrosSistemas } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
+import { useNavigate } from 'react-router-dom';
+
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
-  ViewMoreTextModalTableCell,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { ParametroSistema, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
+import {
+  useColumnsParametroSistema,
+  useTableFilter,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
+import { ROUTER_PATHS } from '@/router/constants';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { useFetchParametrosSistemas } from '@/actions/app';
+import { ParametroSistema, PermissionsEnum } from '@/shared/interfaces';
 
 export const returnUrlParamestrosSistemasPage =
   ROUTER_PATHS.administracion.parametrosSistemasNav;
@@ -79,74 +80,7 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
   };
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<ParametroSistema>[]>(
-    () => [
-      {
-        accessorKey: 'name',
-        header: 'NOMBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
-      },
-      {
-        accessorKey: 'description',
-        header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => {
-          const str = row?.original?.description
-            ? row.original.description
-            : 'N/A';
-          return (
-            <ViewMoreTextModalTableCell
-              longText={str}
-              limit={27}
-              modalTitle={`Descripcion de ${row?.original?.name}`}
-            />
-          );
-        },
-      },
-      {
-        accessorKey: 'value',
-        header: 'VALUE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'value'),
-      },
-      {
-        accessorKey: 'slug',
-        header: 'SLUG',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'slug'),
-      },
-      {
-        accessorKey: 'type',
-        header: 'TIPO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'type'),
-      },
-
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
-    ],
-    [],
-  );
-
+  const { parametrosistemaColumns } = useColumnsParametroSistema();
   return (
     <SingleTableBoxScene
       title="Parámetro del Sistema"
@@ -160,7 +94,7 @@ const ParamestrosSistemasPage: React.FC<ParamestrosSistemasPageProps> = () => {
       />
 
       <CustomTable<ParametroSistema>
-        columns={columns}
+        columns={parametrosistemaColumns}
         data={ParametroSistemasPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

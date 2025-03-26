@@ -8,18 +8,21 @@ import {
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import {
+  AuditLogsPITM,
   PermissionsEnum,
   ChangeModelStateData,
   PrioridadIncidenciaTM,
-  AuditLogsPITM,
 } from '@/shared/interfaces';
+import {
+  CustomSwitch,
+  TableModalGeneric,
+  ViewMoreTextModalTableCell,
+} from '@/shared/components';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { AuditLogPrioridadIncidencia } from '../modals';
 import { useUpdatePrioridadIncidenciaTM } from '@/actions/app';
-import AdditionalDataModal from '../modals/AdditionalDataModal';
 import { TABLE_CONSTANTS, MODEL_STATE_BOOLEAN } from '@/shared/constants';
-import { CustomSwitch, ViewMoreTextModalTableCell } from '@/shared/components';
 
 export const useColumnsPrioridadIncidenciaTM = () => {
   ///* global state
@@ -217,9 +220,14 @@ export const useColumnsPrioridadIncidenciaTM = () => {
         header: 'Cambio',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => {
-          return <AdditionalDataModal Arrays={row.original.additional_data} />;
+          const additionalData = Array.isArray(row.original.additional_data)
+            ? row.original.additional_data
+            : [row.original.additional_data];
+
+          return <TableModalGeneric Arrays={additionalData} />;
         },
       },
+
       {
         accessorKey: 'created_at',
         header: 'CREADO',
