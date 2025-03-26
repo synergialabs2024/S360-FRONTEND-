@@ -15,6 +15,9 @@ type ParametrosSistemaState = {
   isLoadin: boolean;
   setSystemParametersArray: (value: ParametroSistema[]) => void;
   fetchAllSystemParameters: () => Promise<void>;
+
+  frontEndVersion?: string;
+  setFrontEndVersion: (value: string) => void;
 };
 
 export const useParametrosSistemaStore = create<ParametrosSistemaState>()(
@@ -66,15 +69,18 @@ export const useParametrosSistemaStore = create<ParametrosSistemaState>()(
 
                 // conditionally show alert ------
                 if (
-                  frontBuildVal.state &&
+                  frontBuildVal?.state &&
                   now.isAfter(fechaHoraInicio) &&
                   now.isBefore(fechaHoraFin) &&
                   (!oldFrontVersion ||
-                    oldFrontVersion !== frontBuildVal.front_version) &&
+                    oldFrontVersion !== frontBuildVal?.front_version) &&
                   currentParams.length > 0
                 ) {
-                  const { setConfirmDialog, setConfirmDialogIsOpen } =
-                    useUiConfirmModalStore.getState();
+                  const setConfirmDialog =
+                    useUiConfirmModalStore.getState().setConfirmDialog;
+                  const setConfirmDialogIsOpen =
+                    useUiConfirmModalStore.getState().setConfirmDialogIsOpen;
+
                   setConfirmDialog({
                     isOpen: true,
                     title: frontBuildVal.title!,
@@ -99,8 +105,20 @@ export const useParametrosSistemaStore = create<ParametrosSistemaState>()(
           return item;
         });
 
-        set({ systemParametersArray: parsedItems, isLoadin: false });
+        const frontVersion = parsedItems.find(
+          p => p.slug === SystemParamsSlugsEnum.MANTENIMIENTO_PROGRAMADO,
+        )?.value?.front_version;
+
+        set({
+          systemParametersArray: parsedItems,
+          isLoadin: false,
+          frontEndVersion: frontVersion,
+        });
       },
+
+      // ----------------------
+      frontEndVersion: undefined,
+      setFrontEndVersion: value => set({ frontEndVersion: value }),
     }),
 
     {

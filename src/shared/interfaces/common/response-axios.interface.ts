@@ -28,5 +28,7 @@ export enum HTTPResStatusCodeEnum {
 
   USER_BLOCKED = 423, // fail login more than 3 times
 
+  UPGRADE_REQUIRED = 426, // required reload page
+
   EXTERNAL_SERVER_ERROR = 503,
 }
