@@ -4,21 +4,22 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { Stack, Typography, Box } from '@mui/material';
-import { IconUser, IconUserCancel, IconUserOff } from '@tabler/icons-react';
+import { IconCoin, IconCoinFilled, IconCoinOff } from '@tabler/icons-react';
 import { Props } from 'react-apexcharts';
 
 import DashboardCard from '../../shared/DashboardCard';
 
-interface SalesOverviewProps {
-  lineasServicio: {
-    activas: number;
-    suspendidas: number;
-    retiradas: number;
+interface RubrosOverviewProps {
+  rubros: {
     total: number;
+    pagados: number;
+    no_pagados: number;
+    monto_no_pagado: number;
+    anulados: number;
   };
 }
 
-const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
+const RubrosOverview = ({ rubros }: RubrosOverviewProps) => {
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;
@@ -37,7 +38,7 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
       },
       height: 275,
     },
-    labels: ['Activas', 'Suspendidas', 'Retiradas'],
+    labels: ['Pagados', 'No pagados', 'Anulados'],
     colors: [primary, secondary, error],
     plotOptions: {
       pie: {
@@ -58,7 +59,7 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
               color: textColor,
               fontSize: '20px',
               fontWeight: '600',
-              label: lineasServicio.total,
+              label: rubros.total,
             },
           },
         },
@@ -80,13 +81,13 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
   };
 
   const seriescolumnchart = [
-    lineasServicio.activas,
-    lineasServicio.suspendidas,
-    lineasServicio.retiradas,
+    rubros.pagados,
+    rubros.no_pagados,
+    rubros.anulados,
   ];
 
   return (
-    <DashboardCard title="Líneas de servicio">
+    <DashboardCard title="Rubros">
       <>
         <Box mt={3}>
           <Chart
@@ -118,15 +119,15 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <IconUser width={22} />
+                <IconCoinFilled width={22} />
               </Typography>
             </Box>
             <Box>
               <Typography variant="h6" fontWeight="600">
-                {lineasServicio.activas}
+                {rubros.pagados}
               </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Activas
+                Pagados
               </Typography>
             </Box>
           </Stack>
@@ -145,15 +146,15 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <IconUserCancel width={22} />
+                <IconCoin width={22} />
               </Typography>
             </Box>
             <Box>
               <Typography variant="h6" fontWeight="600">
-                {lineasServicio.suspendidas}
+                {rubros.no_pagados}
               </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Suspendidas
+                No pagados
               </Typography>
             </Box>
           </Stack>
@@ -172,15 +173,15 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <IconUserOff width={22} />
+                <IconCoinOff width={22} />
               </Typography>
             </Box>
             <Box>
               <Typography variant="h6" fontWeight="600">
-                {lineasServicio.retiradas}
+                {rubros.anulados}
               </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Retiradas
+                Anulados
               </Typography>
             </Box>
           </Stack>
@@ -190,4 +191,4 @@ const SalesOverview = ({ lineasServicio }: SalesOverviewProps) => {
   );
 };
 
-export default SalesOverview;
+export default RubrosOverview;

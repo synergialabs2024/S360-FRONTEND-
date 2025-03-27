@@ -12,7 +12,7 @@ import { IconArrowUpRight } from '@tabler/icons-react';
 
 interface GrowthProps {
   label: string;
-  value: number;
+  value: number | string;
   icon: React.ElementType;
 }
 
@@ -21,11 +21,23 @@ const Growth: React.FC<GrowthProps> = ({
   value,
   icon: IconComponent,
 }) => {
+  // Función para generar datos aleatorios
+  const generateRandomData = (
+    count: number,
+    min: number,
+    max: number,
+  ): number[] => {
+    return Array.from(
+      { length: count },
+      () => Math.floor(Math.random() * (max - min + 1)) + min,
+    );
+  };
+
   // chart color
   const theme = useTheme();
   const secondary = theme.palette.secondary.main;
 
-  // chart
+  // chart options
   const optionscolumnchart: Props = {
     chart: {
       type: 'area',
@@ -53,18 +65,15 @@ const Growth: React.FC<GrowthProps> = ({
       size: 0,
     },
     tooltip: {
-      theme: 'dark',
-      x: {
-        show: false,
-      },
+      enabled: false, // Opción más simple y directa
     },
   };
+
+  // Datos aleatorios para el gráfico
   const seriescolumnchart = [
     {
       name: '',
-      data: [
-        0, 10, 10, 10, 35, 45, 30, 30, 30, 50, 52, 30, 25, 45, 50, 80, 60, 65,
-      ],
+      data: generateRandomData(18, 0, 80), // 18 puntos con valores entre 0 y 80
     },
   ];
 
