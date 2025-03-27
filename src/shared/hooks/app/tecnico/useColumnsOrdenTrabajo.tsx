@@ -326,6 +326,19 @@ export const useColumnsOrdenTrabajo = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
       },
+      {
+        accessorKey: 'lider__razon_social',
+        header: 'LIDER UNIDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellNested(row, ['lider_data', 'razon_social']),
+      },
+      {
+        accessorKey: 'auxiliar__razon_social',
+        header: 'AUXILIAR UNIDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['auxiliar_data', 'razon_social']),
+      },
     ],
     [],
   );
