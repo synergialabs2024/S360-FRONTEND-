@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { Divider, Grid } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ import {
 import { ScrollableDialogProps } from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
 import ClienteFibraRubroLibreHeader from '../libre/ClienteFibraRubroLibreHeader';
+import ClienteFibraRubroServiceDetailRubroItem from './ClienteFibraRubroServiceDetailRubroItem';
 
 export type ClienteFibraRubroServiceModalProps = {
   open: boolean;
@@ -105,12 +106,18 @@ const ClienteFibraRubroServiceModal: React.FC<
         contentNode={
           <>
             <Grid container spacing={3} mt={2} mb={1}>
+              {/* ==================== headers ==================== */}
               <Grid item xs={12}>
-                {/* ==================== headers ==================== */}
                 <ClienteFibraRubroLibreHeader
                   form={form}
                   serviceLine={serviceLine}
                 />
+                <Divider></Divider>
+              </Grid>
+
+              {/* ==================== detail body ==================== */}
+              <Grid item xs={12}>
+                <ClienteFibraRubroServiceDetailRubroItem />
               </Grid>
             </Grid>
           </>

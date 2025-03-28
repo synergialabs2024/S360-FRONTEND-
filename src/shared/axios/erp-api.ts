@@ -60,16 +60,12 @@ export const erpAPI = ({
       };
     }
 
-    console.log('A xFrontVersion', xFrontVersion);
-
     if (xFrontVersion) {
       config.headers = {
         ...config.headers,
         ...(xFrontVersion && { 'x-front-version': xFrontVersion }),
       };
     }
-
-    console.log('D xFrontVersion', xFrontVersion);
 
     let dataResp;
     try {
