@@ -29,6 +29,7 @@ import {
   CreateCriterioMantenedorActivacionParamsBase,
   useCreateCriterioMantenedorActivacion,
   useFetchCriterioMantenedorActivaciones,
+  useUpdateCriterioMantenedorActivacion,
 } from '@/actions/app/cartera/buzon-tareas/parametros/criterio-mantenedor-activaciones';
 import { useUiConfirmModalStore } from '@/store/ui';
 
@@ -91,8 +92,22 @@ const SaveCriterioMantenedorActivaciones: React.FC<
       enableErrorNavigate: false,
     });
 
+  const updateCriterioMantenedorActivacion =
+    useUpdateCriterioMantenedorActivacion({
+      navigate,
+      returnUrl: returnUrlCriterioMantenedorActivacionesPage,
+    });
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
+    if (criterioMantenedorActivacion?.id) {
+      updateCriterioMantenedorActivacion.mutate({
+        id: criterioMantenedorActivacion.id!,
+        data,
+      });
+      return;
+    }
+
     console.log(data.dia_fin_range);
     if (
       data.tipo_mantenedor_activacion ===

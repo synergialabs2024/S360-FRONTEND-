@@ -892,6 +892,15 @@ const CreateTipoMantenedorBeneficiosPage = Loadable(
   ),
 );
 
+const UpdateTipoMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios/pages/forms/UpdateTipoMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
 // Subtipo mantenedor aplicaciones
 const SubtipoMantenedorBeneficiosPage = Loadable(
   lazy(
@@ -911,6 +920,15 @@ const CreateSubtipoMantenedorBeneficiosPage = Loadable(
   ),
 );
 
+const UpdateSubtipoMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios/pages/forms/UpdateSubtipoMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
 // Beneficio mantenedor aplicaciones
 const BeneficioMantenedorBeneficiosPage = Loadable(
   lazy(
@@ -926,6 +944,14 @@ const CreateBeneficioMantenedorBeneficiosPage = Loadable(
     () =>
       import(
         '@/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios/pages/forms/CreateBeneficioMantenedorBeneficiosPage'
+      ),
+  ),
+);
+const UpdateBeneficioMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios/pages/forms/UpdateBeneficioMantenedorBeneficiosPage'
       ),
   ),
 );
@@ -950,6 +976,15 @@ const CreateCausaMantenedorBeneficiosPage = Loadable(
   ),
 );
 
+const UpdateCausaMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios/pages/forms/UpdateCausaMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
 // Solucion mantenedor aplicaciones
 const SolucionMantenedorBeneficiosPage = Loadable(
   lazy(
@@ -965,6 +1000,15 @@ const CreateSolucionMantenedorBeneficiosPage = Loadable(
     () =>
       import(
         '@/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios/pages/forms/CreateSolucionMantenedorBeneficiosPage'
+      ),
+  ),
+);
+
+const UpdateSolucionMantenedorBeneficiosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios/pages/forms/UpdateSolucionMantenedorBeneficiosPage'
       ),
   ),
 );
@@ -2550,6 +2594,10 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera.parametrosTipoMantenedorBeneficiosCrear,
             element: <CreateTipoMantenedorBeneficiosPage />,
           },
+          {
+            path: ROUTER_PATHS.cartera.parametrosTipoMantenedorBeneficiosEditar,
+            element: <UpdateTipoMantenedorBeneficiosPage />,
+          },
 
           // Subtipo mantenedor aplicaciones
 
@@ -2561,6 +2609,11 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera
               .parametrosSubtipoMantenedorBeneficiosCrear,
             element: <CreateSubtipoMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosSubtipoMantenedorBeneficiosEditar,
+            element: <UpdateSubtipoMantenedorBeneficiosPage />,
           },
 
           // Beneficio mantenedor aplicaciones
@@ -2575,6 +2628,11 @@ const AppRouter = [
               .parametrosBeneficioMantenedorBeneficiosCrear,
             element: <CreateBeneficioMantenedorBeneficiosPage />,
           },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosBeneficioMantenedorBeneficiosEditar,
+            element: <UpdateBeneficioMantenedorBeneficiosPage />,
+          },
 
           // Causa mantenedor aplicaciones
 
@@ -2585,6 +2643,11 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.parametrosCausaMantenedorBeneficiosCrear,
             element: <CreateCausaMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosCausaMantenedorBeneficiosEditar,
+            element: <UpdateCausaMantenedorBeneficiosPage />,
           },
 
           // Solucion mantenedor aplicaciones
@@ -2598,6 +2661,11 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera
               .parametrosSolucionMantenedorBeneficiosCrear,
             element: <CreateSolucionMantenedorBeneficiosPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera
+              .parametrosSolucionMantenedorBeneficiosEditar,
+            element: <UpdateSolucionMantenedorBeneficiosPage />,
           },
 
           ///* Promesas pago

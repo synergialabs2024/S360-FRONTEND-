@@ -13,7 +13,7 @@ import {
   CustomAutocompleteNoForm,
   SingleIconButton,
 } from '@/shared/components';
-import { returnUrlClientesFibraPage } from '../../../pages/tables/ClientesFibraMainPage';
+import { returnUrlClientesSuspendidosAsignadas } from '@/app/buzon-tareas/pendientes-activacion/pages/tables/PendientesActivacionPage';
 
 export type ClienteFibraTitleProps = {
   serviceLine: LineaServicio;
@@ -45,7 +45,7 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
             label="Volver"
             tooltipPlacement="left"
             onClick={() => {
-              navigate(returnUrlClientesFibraPage);
+              navigate(returnUrlClientesSuspendidosAsignadas);
             }}
             color="inherit"
             size={gridSize}
@@ -70,7 +70,7 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
           actualValueKey="uuid"
           onChange={newValue => {
             setSelectedOption(newValue as string);
-            navigate(`${returnUrlClientesFibraPage}/${newValue}`);
+            navigate(`${returnUrlClientesSuspendidosAsignadas}/${newValue}`);
           }}
           options={serviceLine?.client_lines_data || []}
           getOptionLabel={option =>

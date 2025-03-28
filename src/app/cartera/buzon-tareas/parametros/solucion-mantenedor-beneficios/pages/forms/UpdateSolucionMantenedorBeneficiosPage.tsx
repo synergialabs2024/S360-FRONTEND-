@@ -3,9 +3,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { useGetAsunto } from '@/actions/app/tickets/parametros/asunto/asunto.actions';
-import { SaveAsunto } from '@/app/tickets/parametros/asunto/shared/components';
 import { returnUrlSolucionMantenedorBeneficiosPage } from '../tables/SolucionMantenedorBeneficiosPage';
+import { useGetSolucionMantenedorBeneficio } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
+import SaveSolucionMantenedorBeneficios from '../../shared/components/SaveSolucionMantenedorBeneficios/SaveSolucionMantenedorBeneficios';
 
 export type UpdateSolucionMantenedorBeneficiosPageProps = {};
 
@@ -17,7 +17,9 @@ const UpdateSolucionMantenedorBeneficiosPage: React.FC<
   );
 
   const { uuid } = useParams();
-  const { data, isLoading, isRefetching } = useGetAsunto(uuid!);
+  const { data, isLoading, isRefetching } = useGetSolucionMantenedorBeneficio(
+    uuid!,
+  );
   useLoaders(isLoading || isRefetching);
 
   if (isLoading || isRefetching) return null;
@@ -25,9 +27,9 @@ const UpdateSolucionMantenedorBeneficiosPage: React.FC<
     return <Navigate to={returnUrlSolucionMantenedorBeneficiosPage} />;
 
   return (
-    <SaveAsunto
+    <SaveSolucionMantenedorBeneficios
       title="Editar Solucion Mantenedor Beneficios"
-      asunto={data.data}
+      solucionMantenedorBeneficios={data.data}
     />
   );
 };

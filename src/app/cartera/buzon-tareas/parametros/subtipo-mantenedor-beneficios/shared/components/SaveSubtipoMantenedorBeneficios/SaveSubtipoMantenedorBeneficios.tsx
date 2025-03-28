@@ -27,6 +27,7 @@ import {
 import {
   CreateSubtipoMantenedorBeneficioParamsBase,
   useCreateSubtipoMantenedorBeneficio,
+  useUpdateSubtipoMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
 import { useFetchCausaMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
 import { useFetchSolucionMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
@@ -94,13 +95,23 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
     enableErrorNavigate: false,
   });
 
+  const updateSubtipoMantenedorBeneficio = useUpdateSubtipoMantenedorBeneficio({
+    navigate,
+    returnUrl: returnUrlSubtipoMantenedorBeneficiosPage,
+    enableErrorNavigate: false,
+  });
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
-    console.log(
-      'data.tipo_mantenedor_beneficio',
-      data.tipo_mantenedor_beneficio,
-    );
     if (!isValid) return;
+
+    if (subtipoMantenedorBeneficios?.id) {
+      updateSubtipoMantenedorBeneficio.mutate({
+        id: subtipoMantenedorBeneficios.id!,
+        data,
+      });
+      return;
+    }
 
     ///* create
     createTipoMantenedorBeneficio.mutate({

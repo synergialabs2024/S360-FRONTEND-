@@ -13,7 +13,7 @@ import {
   YES_NO_ARRAY_CHOICES,
   Zona,
 } from '@/shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   CustomAutocomplete,
   CustomAutocompleteMultiple,
@@ -32,6 +32,7 @@ import { useFetchSubtipoMantenedorBeneficios } from '@/actions/app/cartera/buzon
 import {
   CreateBeneficioMantenedorBeneficioParamsBase,
   useCreateBeneficioMantenedorBeneficio,
+  useUpdateBeneficioMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
 import {
   useFetchCanalVentas,
@@ -62,7 +63,7 @@ type SaveFormData = CreateBeneficioMantenedorBeneficioParamsBase & {
 
 const SaveBeneficioMantenedorBeneficios: React.FC<
   SaveBeneficioMantenedorBeneficiosProps
-> = ({ title }) => {
+> = ({ title, beneficioMantenedorBeneficios }) => {
   const navigate = useNavigate();
 
   const [fieldVisibility, setFieldVisibility] = useState(false);
@@ -84,6 +85,7 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
 
   const {
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = form;
 
@@ -96,6 +98,13 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
       clearAllStore();
     },
   });
+
+  const updateBeneficioMantenedorBeneficio =
+    useUpdateBeneficioMantenedorBeneficio({
+      navigate,
+      returnUrl: returnUrlBeneficioMantenedorBeneficiosPage,
+      enableErrorNavigate: false,
+    });
 
   const {
     data: tipoMantenedorBeneficiosPaginatedRes,
@@ -181,6 +190,14 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
+    if (beneficioMantenedorBeneficios?.id) {
+      updateBeneficioMantenedorBeneficio.mutate({
+        id: beneficioMantenedorBeneficios.id!,
+        data,
+      });
+      return;
+    }
+
     const productos: number[] =
       equiposSeleccionados?.map(equipo => Number(equipo.id)) || [];
 
@@ -245,6 +262,13 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
     isLoadingSubtipoMantenedorBeneficios ||
     isRefetchingSubtipoMantenedorBeneficios;
   useLoaders(customLoader);
+
+  useEffect(() => {
+    if (!beneficioMantenedorBeneficios?.id) return;
+    reset(beneficioMantenedorBeneficios);
+  }, [beneficioMantenedorBeneficios, reset]);
+
+  useEffect(() => {});
 
   return (
     <SingleFormBoxScene

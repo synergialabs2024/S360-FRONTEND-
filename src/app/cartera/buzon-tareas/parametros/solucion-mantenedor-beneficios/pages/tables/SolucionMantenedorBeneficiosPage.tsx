@@ -19,7 +19,11 @@ import {
   useFetchSolucionMantenedorBeneficios,
   useUpdateSolucionMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
-import { SolucionMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas';
+import {
+  CausaMantenedorBeneficios,
+  SolucionMantenedorBeneficios,
+} from '@/shared/interfaces/app/cartera/buzon-tareas';
+import { useNavigate } from 'react-router';
 
 export const returnUrlSolucionMantenedorBeneficiosPage =
   ROUTER_PATHS.cartera.parametrosSolucionMantenedorBeneficiosNav;
@@ -29,6 +33,8 @@ export type SolucionMantenedorBeneficiosPageProps = {};
 const SolucionMantenedorBeneficiosPage: React.FC<
   SolucionMantenedorBeneficiosPageProps
 > = () => {
+  const navigate = useNavigate();
+
   useCheckPermission(PermissionsEnum.cartera_view_solucionmantenedorbeneficio);
 
   /* const navigate = useNavigate(); */
@@ -161,11 +167,17 @@ const SolucionMantenedorBeneficiosPage: React.FC<
     [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
+  const onEdit = (row: CausaMantenedorBeneficios) => {
+    navigate(`${returnUrlSolucionMantenedorBeneficiosPage}/editar/${row.uuid}`);
+  };
+
   return (
     <SingleTableBoxScene
       title="Solucion Mantenedor Beneficios"
       createPageUrl={`${returnUrlSolucionMantenedorBeneficiosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.tecnico_view_tickettecnico)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.cartera_add_solucionmantenedorbeneficio,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -194,9 +206,12 @@ const SolucionMantenedorBeneficiosPage: React.FC<
           PermissionsEnum.tecnico_change_asuntoticket,
         )} */
         // crud
-        /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)}
+        /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)} */
+        canEdit={hasPermission(
+          PermissionsEnum.cartera_change_solucionmantenedorbeneficio,
+        )}
         onEdit={onEdit}
-        canDelete={false} */
+        canDelete={false}
       />
     </SingleTableBoxScene>
   );

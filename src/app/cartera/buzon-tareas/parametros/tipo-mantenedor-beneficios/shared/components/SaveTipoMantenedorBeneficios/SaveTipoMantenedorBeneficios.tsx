@@ -19,6 +19,7 @@ import { tipoMantenedorBeneficiosFormSchema } from '@/shared/utils/validation-sc
 import {
   CreateTipoMantenedorBeneficioParamsBase,
   useCreateTipoMantenedorBeneficio,
+  useUpdateTipoMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
 
 export type SaveTipoMantenedorBeneficiosProps = {
@@ -54,9 +55,23 @@ const SaveTipoMantenedorBeneficios: React.FC<
     enableErrorNavigate: false,
   });
 
+  const updateTipoMantenedorBeneficio = useUpdateTipoMantenedorBeneficio({
+    navigate,
+    returnUrl: returnUrlTipoMantenedorBeneficiosPage,
+    enableErrorNavigate: false,
+  });
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    if (tipoMantenedorBeneficios?.id) {
+      updateTipoMantenedorBeneficio.mutate({
+        id: tipoMantenedorBeneficios.id!,
+        data,
+      });
+      return;
+    }
 
     ///* create
     createTipoMantenedorBeneficio.mutate(data);

@@ -96,6 +96,14 @@ const SaveMantenedorActivacionesBase: React.FC<
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
+    if (mantenedorActivacionBase?.id) {
+      updateMantenedorActivacionMutation.mutate({
+        id: mantenedorActivacionBase.id!,
+        data,
+      });
+      return;
+    }
+
     const mantenedorActivacionBaseData: MantenedorActivacionBase = {
       motivo_base: data.motivo_base,
       code: data.code,
@@ -119,16 +127,6 @@ const SaveMantenedorActivacionesBase: React.FC<
       title: 'Mantenedor activaciones base',
       subtitle: '¿Está seguro que desea crear este registro?',
       onConfirm: () => {
-        ///* upd
-        if (mantenedorActivacionBase?.id) {
-          updateMantenedorActivacionMutation.mutate({
-            id: mantenedorActivacionBase.id!,
-            data,
-          });
-          setConfirmDialogIsOpen(false);
-          return;
-        }
-
         createMantenedorActivacion.mutate(mantenedorActivacionBaseData);
         clearForm();
         setConfirmDialogIsOpen(false);

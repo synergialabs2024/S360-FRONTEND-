@@ -18,6 +18,7 @@ import { SolucionMantenedorBeneficios } from '@/shared/interfaces/app/cartera/bu
 import {
   CreateSolucionMantenedorBeneficioParamsBase,
   useCreateSolucionMantenedorBeneficio,
+  useUpdateSolucionMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
 import { solucionMantenedorBeneficiosFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
 
@@ -55,9 +56,24 @@ const SaveSolucionMantenedorBeneficios: React.FC<
       enableErrorNavigate: false,
     });
 
+  const updateSolucionMantenedorBeneficio =
+    useUpdateSolucionMantenedorBeneficio({
+      navigate,
+      returnUrl: returnUrlSolucionMantenedorBeneficiosPage,
+      enableErrorNavigate: false,
+    });
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    if (solucionMantenedorBeneficios?.id) {
+      updateSolucionMantenedorBeneficio.mutate({
+        id: solucionMantenedorBeneficios.id!,
+        data,
+      });
+      return;
+    }
 
     ///* create
     createSolucionMantenedorBeneficio.mutate(data);

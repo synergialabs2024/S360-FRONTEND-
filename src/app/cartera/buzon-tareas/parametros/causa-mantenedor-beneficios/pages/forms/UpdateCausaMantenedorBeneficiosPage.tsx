@@ -3,9 +3,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useLoaders } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum } from '@/shared/interfaces';
-import { useGetAsunto } from '@/actions/app/tickets/parametros/asunto/asunto.actions';
 import { returnUrlCausaMantenedorBeneficiosPage } from '../tables/CausaMantenedorBeneficiosPage';
-import { SaveAsunto } from '@/app/tickets/parametros/asunto/shared/components';
+import { useGetCausaMantenedorBeneficio } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
+import SaveCausaMantenedorBeneficios from '../../shared/components/SaveCausaMantenedorBeneficios/SaveCausaMantenedorBeneficios';
 
 export type UpdateCausaMantenedorBeneficiosPageProps = {};
 
@@ -15,7 +15,9 @@ const UpdateCausaMantenedorBeneficiosPage: React.FC<
   useCheckPermission(PermissionsEnum.cartera_change_causamantenedorbeneficio);
 
   const { uuid } = useParams();
-  const { data, isLoading, isRefetching } = useGetAsunto(uuid!);
+  const { data, isLoading, isRefetching } = useGetCausaMantenedorBeneficio(
+    uuid!,
+  );
   useLoaders(isLoading || isRefetching);
 
   if (isLoading || isRefetching) return null;
@@ -23,7 +25,10 @@ const UpdateCausaMantenedorBeneficiosPage: React.FC<
     return <Navigate to={returnUrlCausaMantenedorBeneficiosPage} />;
 
   return (
-    <SaveAsunto title="Editar Causa Mantenedor Beneficios" asunto={data.data} />
+    <SaveCausaMantenedorBeneficios
+      title="Editar Causa Mantenedor Beneficios"
+      causaMantenedorBeneficios={data.data}
+    />
   );
 };
 

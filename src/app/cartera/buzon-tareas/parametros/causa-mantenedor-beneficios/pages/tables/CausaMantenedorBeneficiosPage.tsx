@@ -20,6 +20,7 @@ import {
   useFetchCausaMantenedorBeneficios,
   useUpdateCausaMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
+import { useNavigate } from 'react-router';
 
 export const returnUrlCausaMantenedorBeneficiosPage =
   ROUTER_PATHS.cartera.parametrosCausaMantenedorBeneficiosNav;
@@ -29,6 +30,8 @@ export type CausaMantenedorBeneficiosPageProps = {};
 const CausaMantenedorBeneficiosPage: React.FC<
   CausaMantenedorBeneficiosPageProps
 > = () => {
+  const navigate = useNavigate();
+
   useCheckPermission(PermissionsEnum.cartera_view_causamantenedorbeneficio);
 
   /* const navigate = useNavigate(); */
@@ -161,11 +164,17 @@ const CausaMantenedorBeneficiosPage: React.FC<
     [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
+  const onEdit = (row: CausaMantenedorBeneficios) => {
+    navigate(`${returnUrlCausaMantenedorBeneficiosPage}/editar/${row.uuid}`);
+  };
+
   return (
     <SingleTableBoxScene
       title="Causa Mantenedor Beneficios"
       createPageUrl={`${returnUrlCausaMantenedorBeneficiosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.tecnico_view_tickettecnico)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.cartera_add_solucionmantenedorbeneficio,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -195,8 +204,12 @@ const CausaMantenedorBeneficiosPage: React.FC<
         )} */
         // crud
         /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)}
+         */
+        canEdit={hasPermission(
+          PermissionsEnum.cartera_change_causamantenedorbeneficio,
+        )}
         onEdit={onEdit}
-        canDelete={false} */
+        canDelete={false}
       />
     </SingleTableBoxScene>
   );

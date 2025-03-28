@@ -20,6 +20,7 @@ import {
   useUpdateTipoMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
 import { TipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros';
+import { useNavigate } from 'react-router';
 
 export const returnUrlTipoMantenedorBeneficiosPage =
   ROUTER_PATHS.cartera.parametrosTipoMantenedorBeneficiosNav;
@@ -29,6 +30,8 @@ export type TipoMantenedorBeneficiosPageProps = {};
 const TipoMantenedorBeneficiosPage: React.FC<
   TipoMantenedorBeneficiosPageProps
 > = () => {
+  const navigate = useNavigate();
+
   useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
 
   /* const navigate = useNavigate(); */
@@ -161,11 +164,17 @@ const TipoMantenedorBeneficiosPage: React.FC<
     [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
+  const onEdit = (row: TipoMantenedorBeneficios) => {
+    navigate(`${returnUrlTipoMantenedorBeneficiosPage}/editar/${row.uuid}`);
+  };
+
   return (
     <SingleTableBoxScene
       title="Tipo Mantenedor Beneficios"
       createPageUrl={`${returnUrlTipoMantenedorBeneficiosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.tecnico_view_tickettecnico)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.cartera_add_tipomantenedorbeneficios,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -194,9 +203,11 @@ const TipoMantenedorBeneficiosPage: React.FC<
           PermissionsEnum.tecnico_change_asuntoticket,
         )} */
         // crud
-        /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)}
+        canEdit={hasPermission(
+          PermissionsEnum.cartera_change_tipomantenedorbeneficios,
+        )}
         onEdit={onEdit}
-        canDelete={false} */
+        canDelete={false}
       />
     </SingleTableBoxScene>
   );

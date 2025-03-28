@@ -18,6 +18,7 @@ import { returnUrlCausaMantenedorBeneficiosPage } from '../../../pages/tables/Ca
 import {
   CreateCausaMantenedorBeneficioParamsBase,
   useCreateCausaMantenedorBeneficio,
+  useUpdateCausaMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
 import { CausaMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
 
@@ -54,9 +55,23 @@ const SaveCausaMantenedorBeneficios: React.FC<
     enableErrorNavigate: false,
   });
 
+  const updateCausaMantenedorBeneficio = useUpdateCausaMantenedorBeneficio({
+    navigate,
+    returnUrl: returnUrlCausaMantenedorBeneficiosPage,
+    enableErrorNavigate: false,
+  });
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    if (causaMantenedorBeneficios?.id) {
+      updateCausaMantenedorBeneficio.mutate({
+        id: causaMantenedorBeneficios.id!,
+        data,
+      });
+      return;
+    }
 
     ///* create
     createCausaMantenedorBeneficio.mutate(data);
@@ -99,7 +114,7 @@ const SaveCausaMantenedorBeneficios: React.FC<
       />
 
       <CustomTextArea
-        label="Description"
+        label="Descripcion"
         name="description"
         control={form.control}
         defaultValue={form.getValues().description}

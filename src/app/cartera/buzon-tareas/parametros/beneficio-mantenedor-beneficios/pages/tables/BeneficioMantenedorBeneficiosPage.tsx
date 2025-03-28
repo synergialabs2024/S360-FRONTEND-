@@ -20,6 +20,7 @@ import {
   useUpdateBeneficioMantenedorBeneficio,
 } from '@/actions/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
 import { BeneficioMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
+import { useNavigate } from 'react-router';
 
 export const returnUrlBeneficioMantenedorBeneficiosPage =
   ROUTER_PATHS.cartera.parametrosBeneficioMantenedorBeneficiosNav;
@@ -29,6 +30,8 @@ export type BeneficioMantenedorBeneficiosPageProps = {};
 const BeneficioMantenedorBeneficiosPage: React.FC<
   BeneficioMantenedorBeneficiosPageProps
 > = () => {
+  const navigate = useNavigate();
+
   useCheckPermission(
     PermissionsEnum.cartera_view_beneficiomantenedorbeneficios,
   );
@@ -219,11 +222,19 @@ const BeneficioMantenedorBeneficiosPage: React.FC<
     [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
 
+  const onEdit = (row: BeneficioMantenedorBeneficios) => {
+    navigate(
+      `${returnUrlBeneficioMantenedorBeneficiosPage}/editar/${row.uuid}`,
+    );
+  };
+
   return (
     <SingleTableBoxScene
       title="Beneficio Mantenedor Beneficios"
       createPageUrl={`${returnUrlBeneficioMantenedorBeneficiosPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.tecnico_view_tickettecnico)}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.cartera_add_beneficiomantenedorbeneficios,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -252,9 +263,12 @@ const BeneficioMantenedorBeneficiosPage: React.FC<
           PermissionsEnum.tecnico_change_asuntoticket,
         )} */
         // crud
-        /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)}
+        /* canEdit={hasPermission(PermissionsEnum.tecnico_change_asuntoticket)} */
+        canEdit={hasPermission(
+          PermissionsEnum.cartera_change_beneficiomantenedorbeneficios,
+        )}
         onEdit={onEdit}
-        canDelete={false} */
+        canDelete={false}
       />
     </SingleTableBoxScene>
   );
