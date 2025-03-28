@@ -13,14 +13,14 @@ const CreateSystemGroupPage: React.FC<CreateSystemGroupPageProps> = () => {
   const {
     data: systemPermissionsRes,
     isLoading,
-    isRefetching,
+    // isRefetching,
   } = useFetchSystemPermissions({
     params: {
       page_size: 16000,
     },
   });
 
-  const isCustomLoading = isLoading || isRefetching;
+  const isCustomLoading = isLoading; /* || isRefetching */
   useLoaders(isCustomLoading);
 
   if (isCustomLoading) return null;
