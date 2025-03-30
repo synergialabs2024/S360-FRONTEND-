@@ -76,7 +76,7 @@ const EquiposDisponiblesOTTecModal: React.FC<
       producto__categoria__uuid: InventarioEnumUUID.CATEGORIA_PRODUCTO_EQUIPOS,
 
       ...(filterByProductModel && {
-        producto__modelo__codigo: productModel,
+        producto__modelo__codigo_exact: productModel,
       }),
     },
   });
@@ -138,9 +138,15 @@ const EquiposDisponiblesOTTecModal: React.FC<
 
     if (!equiposDisponiblesPaging?.data?.meta?.count)
       ToastWrapper.error(
-        `No se encontraron equipos disponibles en la unidad ${ordenTrabajo?.flota_data?.name}`,
+        `No se encontraron equipos disponibles en la unidad ${ordenTrabajo?.flota_data?.name} ${productModel ? `para el modelo ${productModel}` : ''}`,
       );
-  }, [isCustomLoading, equiposDisponiblesPaging, ordenTrabajo, open]);
+  }, [
+    isCustomLoading,
+    equiposDisponiblesPaging,
+    ordenTrabajo,
+    open,
+    productModel,
+  ]);
   useLoaders(isCustomLoading);
 
   return (

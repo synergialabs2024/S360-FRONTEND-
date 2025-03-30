@@ -16,7 +16,7 @@ const UpdateOLTPage: React.FC<UpdateOLTPageProps> = () => {
   const { data, isLoading, isRefetching } = useGetOLT(uuid!);
   useLoaders(isLoading || isRefetching);
 
-  if (isLoading || isRefetching) return null;
+  if (isLoading /* || isRefetching */) return null;
   if (!data?.data?.id) return <Navigate to={returnUrlOLTsPage} />;
 
   return <SaveOLT title="Editar OLT" olt={data.data} />;

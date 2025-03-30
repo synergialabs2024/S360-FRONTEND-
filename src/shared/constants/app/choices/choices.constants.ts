@@ -643,6 +643,8 @@ export const TIPO_PRODUCTO_ARRAY_CHOICES = [
 export enum CodigoModeloProductoEnumChoice {
   ONT_WIFI_5 = 'ONT_WIFI_5',
   ONT_WIFI_6 = 'ONT_WIFI_6',
+  ONT_WIFI_5_REP = 'ONT_WIFI_5_REP',
+  ONT_WIFI_6_REP = 'ONT_WIFI_6_REP',
   FIBRA_GRANEL = 'FIBRA_GRANEL',
   FIBRA_PRECONECTORIZADA = 'FIBRA_PRECONECTORIZADA',
   DIGITAL = 'DIGITAL',
@@ -666,6 +668,14 @@ export const CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_ONT = [
   {
     label: 'ONT WIFI 6',
     value: CodigoModeloProductoEnumChoice.ONT_WIFI_6,
+  },
+  {
+    label: 'ONT WIFI 5 REP',
+    value: CodigoModeloProductoEnumChoice.ONT_WIFI_5_REP,
+  },
+  {
+    label: 'ONT WIFI 6 REP',
+    value: CodigoModeloProductoEnumChoice.ONT_WIFI_6_REP,
   },
 ];
 export const CODIGO_MODELO_PRODUCTO_ARRAY_OBJ_FIBRA = [

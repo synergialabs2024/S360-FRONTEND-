@@ -17,6 +17,7 @@ import {
   OrdenTrabajo,
   Preventa,
   SolicitudServicio,
+  TipoProductoEnumChoice,
   ToastWrapper,
   useTabsOnly,
 } from '@/shared';
@@ -85,8 +86,17 @@ const SaveActivacionInstallPendienteOT: React.FC<
 
     if (!equiposUtilizados?.length)
       return ToastWrapper.error('No se han seleccionado equipos');
-    // if (equiposUtilizados?.length > 1)
-    //   return ToastWrapper.error('Solo se puede seleccionar un equipo');
+    const equiposONT = equiposUtilizados?.filter(
+      equipo => equipo?.producto_data?.tipo === TipoProductoEnumChoice.ONT,
+    );
+    if (equiposONT?.length > 1)
+      return ToastWrapper.error(
+        'Solo se puede seleccionar un equipo con tipo ONT',
+      );
+    if (equiposONT?.length === 0)
+      return ToastWrapper.error('No se ha seleccionado un equipo con tipo ONT');
+    if (equiposUtilizados?.length > 1)
+      return ToastWrapper.error('Solo se puede seleccionar un equipo');
 
     let thereAreEquiposWithoutSerie = false;
     let equiposWithoutSerie: EquiposUtilizadosOTTableType = {} as any;
@@ -101,7 +111,7 @@ const SaveActivacionInstallPendienteOT: React.FC<
         `El equipo ${equiposWithoutSerie?.producto_data?.nombre} no tiene serie seleccionada`,
       );
 
-    const ont = equiposUtilizados?.at(0);
+    const ont = equiposONT?.at(0);
     if (!ont || !ont?.savedSeries?.length)
       return ToastWrapper.error('No se han seleccionado la serie de la ONT');
     if (!selectedProductModel)
