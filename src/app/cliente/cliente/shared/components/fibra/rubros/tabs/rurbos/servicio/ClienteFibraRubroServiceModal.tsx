@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { CreateRubroSerivicioClienteData, useCreateRubro } from '@/actions/app';
 import {
   createRubroServiceClienteFormSchema,
   getKeysFormErrorsMessage,
@@ -22,15 +21,15 @@ export type ClienteFibraRubroServiceModalProps = {
   onClose: () => void;
   serviceLine: LineaServicio;
 
-  isCreating?: boolean;
-  isEditing?: boolean;
+  // isCreating?: boolean;
+  // isEditing?: boolean;
 };
 
 export type RubroServicioClienteFormData = Partial<Rubro> & {};
 
 const ClienteFibraRubroServiceModal: React.FC<
   ClienteFibraRubroServiceModalProps
-> = ({ open, serviceLine, onClose, isCreating = false, isEditing = false }) => {
+> = ({ open, serviceLine, onClose }) => {
   ///* global state --------------------------
   const activeRubro = useRubroStore(s => s.activeRubro); // to edit
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
@@ -44,18 +43,11 @@ const ClienteFibraRubroServiceModal: React.FC<
   });
 
   ///* mutations --------------------------
-  const createRurbo = useCreateRubro<CreateRubroSerivicioClienteData>({
-    customMessageToast: 'Rubro creado correctamente',
-    customOnSuccess: () => {
-      // form.reset();
-      handleClose();
-    },
-  });
 
   ///* handlers --------------------------
   const onSave = (data: RubroServicioClienteFormData) => {
-    createRurbo.mutate({
-      detalle: data?.detalle!,
+    console.log('onSave', {
+      data,
     });
   };
 
@@ -68,30 +60,16 @@ const ClienteFibraRubroServiceModal: React.FC<
   ///* effects --------------------------
   useEffect(() => {
     if (!open) return;
-    // TODO:  computed in backend
-    form.setValue('fecha_vencimiento', dayjs().format());
-
-    if (isCreating) {
-      console.log({
-        isCreating: isCreating,
-      });
-    }
-
-    if (isEditing) {
-      console.log({
-        isEditing: isEditing,
-      });
-    }
 
     console.log({
       activeRubro,
     });
-  }, [activeRubro, form, isCreating, isEditing, open]);
+  }, [activeRubro, form, open]);
 
   return (
     <>
       <ScrollableDialogProps
-        title={`${isEditing ? 'Editar' : 'Crear'} Rubro de Servicio`}
+        title="Editar Rubro de Servicio"
         open={open}
         onClose={handleClose}
         minWidth="81%"

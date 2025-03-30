@@ -22,6 +22,7 @@ export const useGenericPOST = <T, R>(
     enableToast = true,
     customOnSuccess,
     customOnError,
+    customOnSettled,
     overrideOnError = true,
   }: UseMutationParams,
 ) => {
@@ -57,6 +58,7 @@ export const useGenericPOST = <T, R>(
       handleAxiosError(error, customMessageErrorToast);
     },
     onSettled: () => {
+      customOnSettled && customOnSettled();
       setIsGlobalLoading(false);
     },
   });

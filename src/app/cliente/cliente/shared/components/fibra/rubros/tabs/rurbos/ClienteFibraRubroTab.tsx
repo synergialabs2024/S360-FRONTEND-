@@ -2,7 +2,8 @@ import { Grid } from '@mui/material';
 import { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 
-import { useFetchRubros } from '@/actions/app';
+import { RubroTSQEnum, useFetchRubros } from '@/actions/app';
+import { useGenericPOST } from '@/actions/shared';
 import {
   LineaServicio,
   Rubro,
@@ -12,6 +13,7 @@ import {
   useTableServerSideFiltering,
 } from '@/shared';
 import { CustomSingleButton, CustomTable } from '@/shared/components';
+import { useUiConfirmModalStore } from '@/store/ui';
 import { ClienteFibraRubroLibreModal } from './libre';
 import { ClienteFibraRubroServiceModal } from './servicio';
 
@@ -27,7 +29,12 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
     useState<boolean>(false);
   const [isOpenServiceRubroModal, setIsOpenServiceRubroModal] =
     useState<boolean>(false);
-  const [isCreatingRubro, setIsCreatingRubro] = useState<boolean>(false);
+
+  ///* global state -------------------------
+  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+    s => s.setConfirmDialogIsOpen,
+  );
 
   ///* table -------------------------
   // server side filters - colums table
@@ -64,6 +71,19 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   const isCustomLoading = isRubrosLoading || isRubrosRefetching;
   useLoaders(isCustomLoading);
 
+  ///* mutations -------------------------
+  const createDirectRubro = useGenericPOST<any, any>(
+    '/rubro/direct-create/',
+    RubroTSQEnum.RUBROS,
+    {
+      customMessageToast: 'Rubro de servicio creado correctamente',
+      customOnSuccess() {},
+      customOnSettled() {
+        setConfirmDialogIsOpen(false);
+      },
+    },
+  );
+
   ///* columns -------------------------
   const { columnsRubrosClientView } = useColumnsRubrosCliente({
     showNumberRubro: false,
@@ -95,8 +115,16 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
               startIcon={<FiPlus />}
               justifyContent="flex-end"
               onClick={() => {
-                setIsOpenServiceRubroModal(true);
-                setIsCreatingRubro(true);
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Crear Rubro de Servicio',
+                  subtitle: `¿Está seguro de generar el rubro de servicio para el cliente ${serviceLine?.cliente_data?.razon_social} en el contrato ${serviceLine?.contrato_data?.numero_contrato}? Una vez creado no se podrá eliminar.`,
+                  onConfirm: () => {
+                    createDirectRubro.mutate({
+                      linea_servicio: serviceLine?.id,
+                    });
+                  },
+                });
               }}
             />
           </Grid>
@@ -139,7 +167,7 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
         open={isOpenServiceRubroModal}
         onClose={() => setIsOpenServiceRubroModal(false)}
         serviceLine={serviceLine!}
-        isCreating={isCreatingRubro}
+        // isCreating={isCreatingRubro}
       />
     </>
   );
