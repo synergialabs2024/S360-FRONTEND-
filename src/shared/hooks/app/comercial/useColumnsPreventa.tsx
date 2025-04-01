@@ -168,7 +168,7 @@ export const useColumnsPreventa = () => {
 
       {
         accessorKey: 'solicitud_servicio__tipo_plan',
-        header: 'TIPO PLAN',
+        header: 'TIPO PLAN SOl. SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
@@ -183,7 +183,7 @@ export const useColumnsPreventa = () => {
       },
       {
         accessorKey: 'solicitud_servicio__codigo',
-        header: 'CODIGO',
+        header: 'CODIGO SOL. SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
@@ -213,7 +213,7 @@ export const useColumnsPreventa = () => {
       },
       {
         accessorKey: 'solicitud_servicio__tipo_servicio',
-        header: 'TIPO SERVICIO',
+        header: 'TIPO SERVICIO SOL. SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
