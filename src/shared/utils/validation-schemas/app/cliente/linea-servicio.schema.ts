@@ -39,3 +39,11 @@ export const lineaServicioFormSchema = yup.object({
     .optional()
     .nullable(),
 });
+
+// // // manual suspension ----------
+export const manualSuspensionSchema = yup.object({
+  reason_suspension: yup
+    .number()
+    .typeError('El campo motivo de suspensión es requerido')
+    .required('El campo motivo de suspensión es requerido'),
+});

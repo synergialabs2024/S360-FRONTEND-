@@ -1004,6 +1004,13 @@ export const LINEA_SERVICIO_ARRAY_CHOICES = [
   LineaServicioEnumChoice.RETENCION,
   LineaServicioEnumChoice.NO_INSTALADO,
 ];
+export const LINEA_SERVICIO_ARRAY_CHOICES_CLIENTE = [
+  LineaServicioEnumChoice.ACTIVO,
+  LineaServicioEnumChoice.SUSPENDIDO,
+  // LineaServicioEnumChoice.RETIRADO,
+  // LineaServicioEnumChoice.RETENCION,
+  LineaServicioEnumChoice.NO_INSTALADO,
+];
 
 // rubros --------------
 export enum TipoRubroEnumChoice {
