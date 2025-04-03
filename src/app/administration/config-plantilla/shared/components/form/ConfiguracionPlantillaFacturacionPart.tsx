@@ -1,4 +1,5 @@
 import { UseFormReturn } from 'react-hook-form';
+import { useEffect } from 'react';
 
 import { useFetchIVAs } from '@/actions/app';
 import {
@@ -10,7 +11,6 @@ import {
   gridSizeMdLg3,
   gridSizeMdLg4,
   gridSizeMdLg6,
-  IVA,
   ToastWrapper,
   useLoaders,
 } from '@/shared';
@@ -19,7 +19,6 @@ import {
   SampleCheckbox,
   SelectTextFieldArrayString,
 } from '@/shared/components';
-import { useEffect } from 'react';
 import { SaveFormDataConfigPlantilla } from './SaveConfiguracionPlantilla';
 
 export type ConfiguracionPlantillaFacturacionPartProps = {
@@ -84,6 +83,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         error={form.formState.errors.dia_facturacion}
         helperText={form.formState.errors.dia_facturacion?.message}
         gridSize={gridSizeMdLg4}
+        disabled
       />
       <SelectTextFieldArrayString
         label="Día de suspensión"
@@ -97,6 +97,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         error={form.formState.errors.dia_suspension}
         helperText={form.formState.errors.dia_suspension?.message}
         gridSize={gridSizeMdLg4}
+        disabled
       />
 
       <CustomAutocomplete<DiasAntesCreacionFacturaType>
@@ -113,6 +114,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         error={errors.crea_factura}
         helperText={errors.crea_factura?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <CustomAutocomplete<DiasGraciaType>
@@ -129,6 +131,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         error={errors.dias_gracia}
         helperText={errors.dias_gracia?.message}
         size={gridSizeMdLg6}
+        disabled
       />
 
       <SampleCheckbox
@@ -156,57 +159,58 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         defaultValue={form.getValues().aplica_reconexion}
         size={gridSizeMdLg3}
       />
-
-      <>
-        <CustomAutocomplete<IVA>
-          label="Impuesto 1"
-          name="impuesto_1"
-          // options
-          options={ivasPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().impuesto_1}
-          isLoadingData={isLoadingIvas || isRefetchingIvas}
-          // vaidation
-          control={form.control}
-          error={errors.impuesto_1}
-          helperText={errors.impuesto_1?.message}
-          size={gridSizeMdLg4}
-          required={false}
-        />
-        <CustomAutocomplete<IVA>
-          label="Impuesto 2"
-          name="impuesto_2"
-          // options
-          options={ivasPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().impuesto_2}
-          isLoadingData={isLoadingIvas || isRefetchingIvas}
-          // vaidation
-          control={form.control}
-          error={errors.impuesto_2}
-          helperText={errors.impuesto_2?.message}
-          size={gridSizeMdLg4}
-          required={false}
-        />
-        <CustomAutocomplete<IVA>
-          label="Impuesto 3"
-          name="impuesto_3"
-          // options
-          options={ivasPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().impuesto_3}
-          isLoadingData={isLoadingIvas || isRefetchingIvas}
-          // vaidation
-          control={form.control}
-          error={errors.impuesto_3}
-          helperText={errors.impuesto_3?.message}
-          size={gridSizeMdLg4}
-          required={false}
-        />
-      </>
+      {/*
+        <>
+          <CustomAutocomplete<IVA>
+            label="Impuesto 1"
+            name="impuesto_1"
+            // options
+            options={ivasPagingRes?.data?.items || []}
+            valueKey="name"
+            actualValueKey="id"
+            defaultValue={form.getValues().impuesto_1}
+            isLoadingData={isLoadingIvas || isRefetchingIvas}
+            // vaidation
+            control={form.control}
+            error={errors.impuesto_1}
+            helperText={errors.impuesto_1?.message}
+            size={gridSizeMdLg4}
+            required={false}
+          />
+          <CustomAutocomplete<IVA>
+            label="Impuesto 2"
+            name="impuesto_2"
+            // options
+            options={ivasPagingRes?.data?.items || []}
+            valueKey="name"
+            actualValueKey="id"
+            defaultValue={form.getValues().impuesto_2}
+            isLoadingData={isLoadingIvas || isRefetchingIvas}
+            // vaidation
+            control={form.control}
+            error={errors.impuesto_2}
+            helperText={errors.impuesto_2?.message}
+            size={gridSizeMdLg4}
+            required={false}
+          />
+          <CustomAutocomplete<IVA>
+            label="Impuesto 3"
+            name="impuesto_3"
+            // options
+            options={ivasPagingRes?.data?.items || []}
+            valueKey="name"
+            actualValueKey="id"
+            defaultValue={form.getValues().impuesto_3}
+            isLoadingData={isLoadingIvas || isRefetchingIvas}
+            // vaidation
+            control={form.control}
+            error={errors.impuesto_3}
+            helperText={errors.impuesto_3?.message}
+            size={gridSizeMdLg4}
+            required={false}
+          />
+        </>
+      */}
     </>
   );
 };
