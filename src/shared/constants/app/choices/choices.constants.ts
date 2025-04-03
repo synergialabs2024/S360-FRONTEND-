@@ -1377,12 +1377,14 @@ export enum tipoRubroAdicionalMantenedorEnumChoice {
   GENERAL = 'GENERAL',
   MANTENEDOR_ACTIVACIONES = 'MANTENEDOR ACTIVACIONES',
   MANTENEDOR_RECONEXIONES = 'MANTENEDOR RECONEXIONES',
+  MANTENEDOR_SUSPENSIONES = 'MANTENEDOR SUSPENSIONES',
 }
 
 export const TIPO_RUBRO_ADICIONAL_MANTENEDOR_ARRAY_CHOICES = [
   tipoRubroAdicionalMantenedorEnumChoice.GENERAL,
   tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_ACTIVACIONES,
   tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_RECONEXIONES,
+  tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_SUSPENSIONES,
 ];
 
 export enum modeAuthorizateTypeEnumChoice {
