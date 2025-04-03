@@ -101,6 +101,7 @@ const ActivacionesMantenedorActivacionesBaseModal: React.FC<
                 );
                 return;
               }
+              console.log('item antes', item);
               addSelectedItem({
                 idKey: 'id',
                 item: {
@@ -108,7 +109,7 @@ const ActivacionesMantenedorActivacionesBaseModal: React.FC<
                 },
                 showToast: true,
               });
-              console.log('item', item);
+              console.log('item despues', item);
             }}
           />
         );

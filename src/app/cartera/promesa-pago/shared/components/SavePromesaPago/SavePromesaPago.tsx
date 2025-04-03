@@ -191,6 +191,18 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
   const clearForm = () => {
     form.reset({
       ...form.getValues(),
+      cedula: '',
+      telefono: '',
+      correo: '',
+      cliente_name: '',
+      linea_servicio: 0,
+      status_servicio: '',
+      num_contrato: 0,
+      numero_contrato: '',
+      cliente: 0,
+      categorizacion_perfil: '',
+      observacion: '',
+      fecha_promesa_pago: '',
     });
   };
 
@@ -359,6 +371,7 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
                 // clearForm();
                 setNumeroContrato(undefined);
               }
+              clearForm();
             }}
           />
         }

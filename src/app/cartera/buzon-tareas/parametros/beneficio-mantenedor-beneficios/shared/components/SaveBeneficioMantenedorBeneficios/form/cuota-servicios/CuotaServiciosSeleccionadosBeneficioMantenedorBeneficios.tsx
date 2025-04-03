@@ -1,6 +1,6 @@
 import { Grid, TextField } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MdDelete, MdOutlineAddShoppingCart } from 'react-icons/md';
 
 import { ToastWrapper, UbicacionProducto } from '@/shared';
@@ -17,7 +17,9 @@ import { useColumnsCuotaServiciosBeneficioMantenedorBeneficios } from '../../../
 import CuotaServiciosBeneficioMantenedorBeneficiosModal from './CuotaServiciosBeneficioMantenedorBeneficiosModal';
 import { CuotasServicioInternet } from '@/shared/interfaces/app/cartera/buzon-tareas';
 
-export type CuotaServiciosSeleccionadosBeneficioMantenedorBeneficiosProps = {};
+export type CuotaServiciosSeleccionadosBeneficioMantenedorBeneficiosProps = {
+  planesInternet: any[];
+};
 
 export type CuotaServiciosSeleccionadosTableType = UbicacionProducto & {
   usedQuantity: number;
@@ -28,7 +30,7 @@ export type CuotaServiciosSeleccionadosProductoType = CuotasServicioInternet & {
 
 const CuotaServiciosSeleccionadosBeneficioMantenedorBeneficios: React.FC<
   CuotaServiciosSeleccionadosBeneficioMantenedorBeneficiosProps
-> = () => {
+> = ({ planesInternet }) => {
   ///* local state ---------------------
   const [openAvailableEquipmentsModal, setOpenAvailableEquipmentsModal] =
     useState<boolean>(false);
@@ -121,6 +123,10 @@ const CuotaServiciosSeleccionadosBeneficioMantenedorBeneficios: React.FC<
     [cuotasBaseColumns, onChangeQuantity, removeSelectedItem],
   );
 
+  useEffect(() => {
+    console.log('planesInternet screen', planesInternet);
+  });
+
   return (
     <Grid item container xs={12} spacing={1}>
       <Grid
@@ -156,6 +162,7 @@ const CuotaServiciosSeleccionadosBeneficioMantenedorBeneficios: React.FC<
       <CuotaServiciosBeneficioMantenedorBeneficiosModal
         open={openAvailableEquipmentsModal}
         onClose={() => setOpenAvailableEquipmentsModal(false)}
+        planesInternet={planesInternet}
       />
     </Grid>
   );

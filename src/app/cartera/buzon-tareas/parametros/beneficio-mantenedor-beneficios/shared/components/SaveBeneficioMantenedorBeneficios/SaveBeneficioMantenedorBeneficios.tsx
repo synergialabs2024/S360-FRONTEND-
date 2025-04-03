@@ -59,6 +59,13 @@ type SaveFormData = CreateBeneficioMantenedorBeneficioParamsBase & {
   allMetodosPago?: boolean;
   allZones?: boolean;
   allCanalesVentas?: boolean;
+  //
+  aplica_descuento_meses_posterior_string: string;
+  aplica_descuento_meses_curso_string: string;
+  discapacidad_string: string;
+  tercera_edad_string: string;
+  plan_desarrollo_humano_string: string;
+  plan_retencion_string: string;
 };
 
 const SaveBeneficioMantenedorBeneficios: React.FC<
@@ -82,12 +89,20 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
   const watchedAllMetodosPago = form.watch('allMetodosPago');
   const watchedAllZones = form.watch('allZones');
   const watchedAllCanalesVentas = form.watch('allCanalesVentas');
+  //
+  const watchedProductos = form.watch('productos');
+  const watchedPlanesInternet = form.watch('planes_internet');
 
   const {
     handleSubmit,
     reset,
     formState: { errors, isValid },
   } = form;
+
+  const { setItems } =
+    useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
+      GenericInventoryStoreKey.equiposVentaPreventa,
+    );
 
   ///* mutations ---------------------
   const createTipoMantenedorBeneficio = useCreateBeneficioMantenedorBeneficio({
@@ -123,8 +138,8 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
   } = useFetchSubtipoMantenedorBeneficios({
     enabled: fieldVisibility,
     params: {
-      tipo_mantenedor_beneficio: watchedTipoTarea,
       page_size: 200,
+      tipo_mantenedor_beneficio: watchedTipoTarea,
     },
   });
 
@@ -265,10 +280,42 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
 
   useEffect(() => {
     if (!beneficioMantenedorBeneficios?.id) return;
-    reset(beneficioMantenedorBeneficios);
+    setFieldVisibility(true);
+    const eqP = beneficioMantenedorBeneficios?.productos_data;
+    const items: any[] = [];
+    items.push(eqP);
+    console.log('eqP', eqP);
+
+    setItems((items as any) || []);
+    reset({ ...beneficioMantenedorBeneficios });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [beneficioMantenedorBeneficios, reset]);
 
-  useEffect(() => {});
+  useEffect(() => {
+    beneficioMantenedorBeneficios?.aplica_descuento_meses_posterior
+      ? form.setValue('aplica_descuento_meses_posterior_string', 'SI')
+      : form.setValue('aplica_descuento_meses_posterior_string', 'NO');
+
+    beneficioMantenedorBeneficios?.aplica_descuento_meses_curso
+      ? form.setValue('aplica_descuento_meses_curso_string', 'SI')
+      : form.setValue('aplica_descuento_meses_curso_string', 'NO');
+
+    beneficioMantenedorBeneficios?.discapacidad
+      ? form.setValue('discapacidad_string', 'SI')
+      : form.setValue('discapacidad_string', 'NO');
+
+    beneficioMantenedorBeneficios?.tercera_edad
+      ? form.setValue('tercera_edad_string', 'SI')
+      : form.setValue('tercera_edad_string', 'NO');
+
+    beneficioMantenedorBeneficios?.plan_desarrollo_humano
+      ? form.setValue('plan_desarrollo_humano_string', 'SI')
+      : form.setValue('plan_desarrollo_humano_string', 'NO');
+
+    beneficioMantenedorBeneficios?.plan_retencion
+      ? form.setValue('plan_retencion_string', 'SI')
+      : form.setValue('plan_retencion_string', 'NO');
+  }, [beneficioMantenedorBeneficios, form]);
 
   return (
     <SingleFormBoxScene
@@ -317,22 +364,33 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
 
       <SelectArrayString
         label="Aplica descuento meses posteriores"
-        name="aplica_descuento_meses_posterior"
+        name="aplica_descuento_meses_posterior_string"
         control={form.control}
-        error={errors.aplica_descuento_meses_posterior}
-        helperText={errors.aplica_descuento_meses_posterior?.message}
+        error={errors.aplica_descuento_meses_posterior_string}
+        helperText={errors.aplica_descuento_meses_posterior_string?.message}
         options={YES_NO_ARRAY_CHOICES}
         gridSize={gridSizeMdLg6}
+        onChangeValue={e => {
+          console.log('e', e);
+          e === 'SI'
+            ? form.setValue('aplica_descuento_meses_posterior', true)
+            : form.setValue('aplica_descuento_meses_posterior', false);
+        }}
       />
 
       <SelectArrayString
         label="Aplica descuento o N/C a factura de servicio_mes en curso"
-        name="aplica_descuento_meses_curso"
+        name="aplica_descuento_meses_curso_string"
         control={form.control}
-        error={errors.aplica_descuento_meses_curso}
-        helperText={errors.aplica_descuento_meses_curso?.message}
+        error={errors.aplica_descuento_meses_curso_string}
+        helperText={errors.aplica_descuento_meses_curso_string?.message}
         options={YES_NO_ARRAY_CHOICES}
         gridSize={gridSizeMdLg6}
+        onChangeValue={e => {
+          e === 'SI'
+            ? form.setValue('aplica_descuento_meses_curso', true)
+            : form.setValue('aplica_descuento_meses_curso', false);
+        }}
       />
 
       <CustomTextField
@@ -415,42 +473,62 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
 
       <SelectArrayString
         label="Discapacidad"
-        name="discapacidad"
+        name="discapacidad_string"
         control={form.control}
-        error={errors.discapacidad}
-        helperText={errors.discapacidad?.message}
+        error={errors.discapacidad_string}
+        helperText={errors.discapacidad_string?.message}
         options={YES_NO_ARRAY_CHOICES}
         gridSize={gridSizeMdLg6}
+        onChangeValue={e => {
+          e === 'SI'
+            ? form.setValue('discapacidad', true)
+            : form.setValue('discapacidad', false);
+        }}
       />
 
       <SelectArrayString
         label="Tercera edad"
-        name="tercera_edad"
+        name="tercera_edad_string"
         control={form.control}
-        error={errors.tercera_edad}
-        helperText={errors.tercera_edad?.message}
+        error={errors.tercera_edad_string}
+        helperText={errors.tercera_edad_string?.message}
         options={YES_NO_ARRAY_CHOICES}
         gridSize={gridSizeMdLg6}
+        onChangeValue={e => {
+          e === 'SI'
+            ? form.setValue('tercera_edad', true)
+            : form.setValue('tercera_edad', false);
+        }}
       />
 
       <SelectArrayString
         label="Plan desarrollo humano"
-        name="plan_desarrollo_humano"
+        name="plan_desarrollo_humano_string"
         control={form.control}
-        error={errors.plan_desarrollo_humano}
-        helperText={errors.plan_desarrollo_humano?.message}
+        error={errors.plan_desarrollo_humano_string}
+        helperText={errors.plan_desarrollo_humano_string?.message}
         options={YES_NO_ARRAY_CHOICES}
         gridSize={gridSizeMdLg6}
+        onChangeValue={e => {
+          e === 'SI'
+            ? form.setValue('plan_desarrollo_humano', true)
+            : form.setValue('plan_desarrollo_humano', false);
+        }}
       />
 
       <SelectArrayString
         label="Plan retención"
-        name="plan_retencion"
+        name="plan_retencion_string"
         control={form.control}
-        error={errors.plan_retencion}
-        helperText={errors.plan_retencion?.message}
+        error={errors.plan_retencion_string}
+        helperText={errors.plan_retencion_string?.message}
         options={YES_NO_ARRAY_CHOICES}
         gridSize={gridSizeMdLg6}
+        onChangeValue={e => {
+          e === 'SI'
+            ? form.setValue('plan_retencion', true)
+            : form.setValue('plan_retencion', false);
+        }}
       />
 
       <CustomTextField
@@ -541,11 +619,13 @@ const SaveBeneficioMantenedorBeneficios: React.FC<
       />
 
       <>
-        <EquiposBeneficioMantenedorBeneficios />
+        <EquiposBeneficioMantenedorBeneficios productos={watchedProductos} />
       </>
 
       <>
-        <CuotaServiciosBeneficioMantenedorBeneficios />
+        <CuotaServiciosBeneficioMantenedorBeneficios
+          planesInternet={watchedPlanesInternet}
+        />
       </>
 
       <SampleCheckbox

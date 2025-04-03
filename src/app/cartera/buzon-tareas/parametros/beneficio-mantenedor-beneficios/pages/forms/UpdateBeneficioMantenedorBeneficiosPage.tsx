@@ -26,7 +26,7 @@ const UpdateBeneficioMantenedorBeneficiosPage: React.FC<
 
   return (
     <SaveBeneficioMantenedorBeneficios
-      title="Editar Tipo Mantenedor Beneficios"
+      title="Editar Beneficio Mantenedor Beneficios"
       beneficioMantenedorBeneficios={data.data}
     />
   );

@@ -22,6 +22,8 @@ import {
 } from '@/shared';
 import { ChipModelState, SingleIconButton } from '@/shared/components';
 import { useUiConfirmModalStore } from '@/store/ui';
+import ConfirmActivacionClienteModal from '@/app/buzon-tareas/pendientes-activacion/shared/components/form/ConfirmActivacionClienteModal';
+import { returnUrlClientesFibraPage } from '@/app/cliente/cliente/pages/tables/ClientesFibraMainPage';
 
 export type LineStateFibraClientProps = {
   serviceLine: LineaServicio;
@@ -71,6 +73,8 @@ const StyledMenu = styled((props: MenuProps) => (
 const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   serviceLine,
 }) => {
+  ///* states ---------------------
+  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -93,7 +97,7 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   const estadoServicio = serviceLine?.estado_linea;
   const onClicks = {
     [LineaServicioEnumChoice.ACTIVO]: () => {
-      alert('ACTIVO');
+      setIsOpenRejectModal(true);
     },
     [LineaServicioEnumChoice.RETIRADO]: () => {
       alert('RETIRADO');
@@ -219,6 +223,13 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
           ))}
         </StyledMenu>
       </Grid>
+      {/* ========================= modals ========================= */}
+      <ConfirmActivacionClienteModal
+        open={isOpenRejectModal}
+        onClose={() => setIsOpenRejectModal(false)}
+        serviceLine={serviceLine!}
+        returnUrl={returnUrlClientesFibraPage}
+      />
     </Grid>
   );
 };

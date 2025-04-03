@@ -114,7 +114,7 @@ const SaveTipoMantenedorBeneficios: React.FC<
       />
 
       <CustomTextArea
-        label="Description"
+        label="Descripcion"
         name="description"
         control={form.control}
         defaultValue={form.getValues().description}

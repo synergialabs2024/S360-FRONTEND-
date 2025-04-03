@@ -16,6 +16,7 @@ import { CuotaServiciosSeleccionadosProductoType } from './CuotaServiciosSelecci
 export type CuotaServiciosBeneficioMantenedorBeneficiosModalProps = {
   open: boolean;
   onClose: () => void;
+  planesInternet: any[];
 };
 
 const CuotaServiciosBeneficioMantenedorBeneficiosModal: React.FC<

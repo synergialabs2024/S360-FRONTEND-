@@ -27,7 +27,6 @@ import {
   ScrollableDialogProps,
 } from '@/shared/components';
 import { useEffect } from 'react';
-import { returnUrlClientesSuspendidosAsignadas } from '../../../pages/tables/PendientesActivacionPage';
 import dayjs from 'dayjs';
 import { useFetchMantenedorActivaciones } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
 import { useFetchMantenedorActivacionesBase } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion-base.actions';
@@ -45,6 +44,7 @@ export type ConfirmActivacionClienteModalProps = {
   open: boolean;
   onClose: () => void;
   serviceLine: LineaServicio;
+  returnUrl: string;
 };
 
 type FormData = RejectInstalacionOTData & {
@@ -56,7 +56,7 @@ type FormData = RejectInstalacionOTData & {
 
 const ConfirmActivacionClienteModal: React.FC<
   ConfirmActivacionClienteModalProps
-> = ({ onClose, open, serviceLine }) => {
+> = ({ onClose, open, serviceLine, returnUrl }) => {
   const createSolRecoordinacionAgenda = useGenericPOST<
     SaveFormData,
     CreateSolRecoordinacionAgendaResponse
@@ -131,7 +131,7 @@ const ConfirmActivacionClienteModal: React.FC<
     {
       customMessageToast: 'Activacion realizada con éxito',
       navigate,
-      returnUrl: returnUrlClientesSuspendidosAsignadas,
+      returnUrl: returnUrl,
       customOnSuccess() {
         handleClose();
       },
@@ -172,9 +172,9 @@ const ConfirmActivacionClienteModal: React.FC<
     isRefetchingMotivosRubroAdicional ||
     isLoadingMantenedorActivaciones ||
     isRefetchingMantenedorActivaciones;
+
   useEffect(() => {
     if (isLoading || !open) return;
-
     if (!motivosRubroAdicionalPagingRes?.data?.items?.length) {
       ToastWrapper.error('No se encontraron motivos de rechazo');
     }

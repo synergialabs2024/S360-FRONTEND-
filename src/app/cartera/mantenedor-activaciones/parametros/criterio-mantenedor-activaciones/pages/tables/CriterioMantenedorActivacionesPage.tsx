@@ -23,7 +23,7 @@ import { CriterioMantenedorActivacion } from '@/shared/interfaces/app/cartera/ma
 import { useNavigate } from 'react-router';
 
 export const returnUrlCriterioMantenedorActivacionesPage =
-  ROUTER_PATHS.cartera.parametrosTipoMantenedorBeneficiosNav;
+  ROUTER_PATHS.cartera.parametrosCriterioMantenedorActivacionesNav;
 
 export type CriterioMantenedorActivacionesPageProps = {};
 
