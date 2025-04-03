@@ -23,6 +23,7 @@ export interface BeneficioMantenedorBeneficios {
   code: string;
   state?: boolean;
 
+  productos_data: Producto[];
   aplica_descuento_meses_posterior?: boolean | string;
   aplica_descuento_meses_curso?: boolean | string;
   discapacidad?: boolean | string;

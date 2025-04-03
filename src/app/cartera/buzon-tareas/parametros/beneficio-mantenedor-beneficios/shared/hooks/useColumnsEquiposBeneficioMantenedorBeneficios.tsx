@@ -7,10 +7,8 @@ import {
   emptyCellOneLevel,
   formatQuantityCell,
 } from '@/shared';
-import {
-  EquiposSeleccionadosProductoType,
-  EquiposSeleccionadosTableType,
-} from '../components/SaveBeneficioMantenedorBeneficios/form/equipos/EquiposSeleccionadosBeneficioMantenedorBeneficios';
+import { EquiposSeleccionadosProductoType } from '../components/SaveBeneficioMantenedorBeneficios/form/equipos/EquiposSeleccionadosBeneficioMantenedorBeneficios';
+import { EquiposSeleccionadosTableType } from '@/app/comercial/preventa/shared/components/SavePreventa/form/equipos/EquiposSeleccionadosPreventa';
 
 type MRTUbicacionProductoTableType = {
   row: MRT_Row<EquiposSeleccionadosTableType>;

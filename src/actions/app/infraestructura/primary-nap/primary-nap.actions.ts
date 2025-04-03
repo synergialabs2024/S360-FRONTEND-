@@ -1,4 +1,4 @@
-import { erpAPI } from '@/axios/erp-api';
+import { erpAPI } from '@/shared/axios/erp-api';
 import {
   getUrlParams,
   PagingPartialParams,

@@ -10,7 +10,7 @@ import {
   CuentaContablePaginatedRes,
 } from '@/shared';
 import { useUiStore } from '@/store/ui';
-import { erpAPI } from '@/axios/erp-api';
+import { erpAPI } from '@/shared/axios/erp-api';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 const { get, post, patch } = erpAPI();

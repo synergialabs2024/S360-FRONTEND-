@@ -1,9 +1,9 @@
 import { ROUTER_PATHS } from '@/router/constants';
-import SaveMantenedorActivacionesBase from '../../shared/components/SaveMantenedorActivacion/SaveMantenedorActivacion';
 import { Navigate, useParams } from 'react-router';
 import { PermissionsEnum, useLoaders } from '@/shared';
 import { useGetMantenedorActivacion } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import SaveMantenedorActivacion from '../../shared/components/SaveMantenedorActivacion/SaveMantenedorActivacion';
 
 export type UpdateMantenedorActivacionPageProps = {};
 export const returnUrlMantenedorActivacionesPage =
@@ -22,7 +22,7 @@ const UpdateMantenedorActivacionPage: React.FC<
     return <Navigate to={returnUrlMantenedorActivacionesPage} />;
 
   return (
-    <SaveMantenedorActivacionesBase
+    <SaveMantenedorActivacion
       title="Editar Mantenedor activacion"
       mantenedorActivacion={data.data}
     />

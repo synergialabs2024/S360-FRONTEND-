@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { erpAPI } from '@/axios/erp-api';
-import { useUiStore } from '@/store/ui';
 
+import { useUiStore } from '@/store/ui';
+import { erpAPI } from '@/shared/axios/erp-api';
 import { solicitudMaterialTSQEnum } from '../solicitud-material';
 import { RecepcionMaterial, ToastWrapper, UseMutationParams } from '@/shared';
 import { handleAxiosError } from '@/shared/axios/axios.utils';

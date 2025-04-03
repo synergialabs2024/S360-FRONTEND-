@@ -20,6 +20,7 @@ import {
 } from '@/shared';
 import { ChipModelState, SingleIconButton } from '@/shared/components';
 import ConfirmActivacionClienteModal from '../form/ConfirmActivacionClienteModal';
+import { returnUrlClientesSuspendidosAsignadas } from '../../../pages/tables/PendientesActivacionPage';
 
 export type LineStateClientProps = {
   serviceLine: LineaServicio;
@@ -175,6 +176,7 @@ const LineStateClient: React.FC<LineStateClientProps> = ({ serviceLine }) => {
         open={isOpenRejectModal}
         onClose={() => setIsOpenRejectModal(false)}
         serviceLine={serviceLine!}
+        returnUrl={returnUrlClientesSuspendidosAsignadas}
       />
     </Grid>
   );

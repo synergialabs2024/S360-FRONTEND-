@@ -20,6 +20,8 @@ import {
 } from '@/shared';
 import { ChipModelState, SingleIconButton } from '@/shared/components';
 import SuspendServiceLineModal from './SuspendServiceLineModal';
+import ConfirmActivacionClienteModal from '@/app/buzon-tareas/pendientes-activacion/shared/components/form/ConfirmActivacionClienteModal';
+import { returnUrlClientesFibraPage } from '@/app/cliente/cliente/pages/tables/ClientesFibraMainPage';
 
 export type LineStateFibraClientProps = {
   serviceLine: LineaServicio;
@@ -69,6 +71,8 @@ const StyledMenu = styled((props: MenuProps) => (
 const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   serviceLine,
 }) => {
+  ///* states ---------------------
+  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
   ///* local state ----------------
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -77,7 +81,7 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
   const estadoServicio = serviceLine?.estado_linea;
   const onClicks = {
     [LineaServicioEnumChoice.ACTIVO]: () => {
-      alert('ACTIVO');
+      setIsOpenRejectModal(true);
     },
     [LineaServicioEnumChoice.RETIRADO]: () => {
       alert('RETIRADO');
@@ -204,6 +208,13 @@ const LineStateFibraClient: React.FC<LineStateFibraClientProps> = ({
           ))}
         </StyledMenu>
       </Grid>
+      {/* ========================= modals ========================= */}
+      <ConfirmActivacionClienteModal
+        open={isOpenRejectModal}
+        onClose={() => setIsOpenRejectModal(false)}
+        serviceLine={serviceLine!}
+        returnUrl={returnUrlClientesFibraPage}
+      />
 
       {/* ------------------- */}
       <SuspendServiceLineModal

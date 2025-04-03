@@ -28,6 +28,7 @@ import { useFetchMotivoRubroAdicionals } from '@/actions/app';
 import {
   CreateMantenedorActivacionParamsBase,
   useCreateMantenedorActivacion,
+  useUpdateMantenedorActivacion,
 } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
 import {
   CriterioMantenedorActivacion,
@@ -90,6 +91,12 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     returnUrl: returnUrlMantenedorActivacionesPage,
   });
 
+  const updateMantenedorActivacionMutation =
+    useUpdateMantenedorActivacion<MantenedorActivacion>({
+      navigate,
+      returnUrl: returnUrlMantenedorActivacionesPage,
+    });
+
   const {
     data: motivoRubroAdicionalsPagingRes,
     isLoading: isLoadingMotivoRubroAdicionals,
@@ -148,6 +155,14 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
       return;
     }
 
+    if (mantenedorActivacion?.id) {
+      updateMantenedorActivacionMutation.mutate({
+        id: mantenedorActivacion.id!,
+        data,
+      });
+      return;
+    }
+
     const mantenedorActivacionData: MantenedorActivacion = {
       criterio: data.criterio,
       mantenedor_base: mantenedorActivacionesId,
@@ -195,7 +210,6 @@ const SaveMantenedorActivacion: React.FC<SaveMantenedorActivacionProps> = ({
     const eqP = mantenedorActivacion?.mantenedor_base_data;
     const items: any[] = [];
     items.push(eqP);
-    console.log('eqP', eqP);
 
     setItems((items as any) || []);
     reset({

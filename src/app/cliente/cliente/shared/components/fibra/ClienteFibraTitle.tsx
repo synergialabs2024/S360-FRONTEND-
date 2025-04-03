@@ -14,6 +14,7 @@ import {
   SingleIconButton,
 } from '@/shared/components';
 import { returnUrlClientesSuspendidosAsignadas } from '@/app/buzon-tareas/pendientes-activacion/pages/tables/PendientesActivacionPage';
+import { returnUrlClientesFibraPage } from '../../../pages/tables/ClientesFibraMainPage';
 
 export type ClienteFibraTitleProps = {
   serviceLine: LineaServicio;
@@ -45,7 +46,7 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
             label="Volver"
             tooltipPlacement="left"
             onClick={() => {
-              navigate(returnUrlClientesSuspendidosAsignadas);
+              navigate(returnUrlClientesFibraPage);
             }}
             color="inherit"
             size={gridSize}

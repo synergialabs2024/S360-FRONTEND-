@@ -1,9 +1,8 @@
 import { Grid, TextField } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MdDelete, MdOutlineAddShoppingCart } from 'react-icons/md';
-
-import { Producto, ToastWrapper, UbicacionProducto } from '@/shared';
+import { Producto, ToastWrapper } from '@/shared';
 import {
   CustomMinimalTable,
   CustomSingleButton,
@@ -16,11 +15,10 @@ import {
 import { useColumnsEquiposBeneficioMantenedorBeneficios } from '../../../../hooks';
 import EquiposBeneficioMantenedorBeneficiosModal from './EquiposBeneficioMantenedorBeneficiosModal';
 
-export type EquiposSeleccionadosBeneficioMantenedorBeneficiosProps = {};
-
-export type EquiposSeleccionadosTableType = UbicacionProducto & {
-  usedQuantity: number;
+export type EquiposSeleccionadosBeneficioMantenedorBeneficiosProps = {
+  productos: any[];
 };
+
 export type EquiposSeleccionadosProductoType = Producto & {
   usedQuantity: number;
 };
@@ -28,20 +26,18 @@ export type EquiposSeleccionadosProductoType = Producto & {
 const EquiposSeleccionadosBeneficioMantenedorBeneficios: React.FC<
   EquiposSeleccionadosBeneficioMantenedorBeneficiosProps
 > = () => {
-  ///* local state ---------------------
   const [openAvailableEquipmentsModal, setOpenAvailableEquipmentsModal] =
     useState<boolean>(false);
 
-  ///* global state ---------------------
   const {
     items: equiposUtilizados,
-    removeSelectedItem,
     updateSelectedItemValue,
+    clearAllStore,
+    setItems,
   } = useTypedGenericInventoryStore<EquiposSeleccionadosProductoType>(
     GenericInventoryStoreKey.equiposVentaPreventa,
   );
 
-  ///* handlers ---------------------
   const onChangeQuantity = useCallback(
     (value: string, item: EquiposSeleccionadosProductoType) => {
       if (+value > 100) {
@@ -62,7 +58,19 @@ const EquiposSeleccionadosBeneficioMantenedorBeneficios: React.FC<
     [updateSelectedItemValue],
   );
 
-  ///* columns ---------------------
+  const handleDeleteItem = useCallback(
+    (itemToDelete: EquiposSeleccionadosProductoType) => {
+      // Filtrar los elementos para eliminar el seleccionado
+      const updatedItems = equiposUtilizados
+        .flat() // Aplanamos el array
+        .filter(item => item.id !== itemToDelete.id);
+
+      // Actualizamos el estado con setItems
+      setItems(updatedItems);
+    },
+    [equiposUtilizados, setItems],
+  );
+
   const { productsBaseColumns } =
     useColumnsEquiposBeneficioMantenedorBeneficios({
       showActionColumn: false,
@@ -79,28 +87,23 @@ const EquiposSeleccionadosBeneficioMantenedorBeneficios: React.FC<
         enableColumnFilter: false,
         Cell: ({ row }) => {
           const usedQuantity = row.original?.usedQuantity || 0;
-
           return (
-            <>
-              <TextField
-                variant="outlined"
-                value={usedQuantity?.toString() || ''}
-                onChange={e => {
-                  const value = e.target.value;
-                  const intValue = parseInt(value, 10);
-
-                  onChangeQuantity(intValue.toString(), row.original);
-                }}
-                type="number"
-                inputProps={{
-                  min: 1,
-                }}
-              />
-            </>
+            <TextField
+              variant="outlined"
+              value={usedQuantity?.toString() || ''}
+              onChange={e => {
+                const value = e.target.value;
+                const intValue = parseInt(value, 10);
+                onChangeQuantity(intValue.toString(), row.original);
+              }}
+              type="number"
+              inputProps={{
+                min: 1,
+              }}
+            />
           );
         },
       },
-
       {
         accessorKey: 'action',
         enableColumnFilter: false,
@@ -110,15 +113,30 @@ const EquiposSeleccionadosBeneficioMantenedorBeneficios: React.FC<
             startIcon={<MdDelete />}
             label="Remover"
             color="error"
-            onClick={() => {
-              removeSelectedItem({ item: row?.original, idKey: 'id' });
-            }}
+            onClick={() => handleDeleteItem(row.original)}
           />
         ),
       },
     ],
-    [productsBaseColumns, onChangeQuantity, removeSelectedItem],
+    [productsBaseColumns, onChangeQuantity, handleDeleteItem],
   );
+
+  const getFlattenedData = useMemo(() => {
+    if (!equiposUtilizados || equiposUtilizados.length === 0) return [];
+
+    const flattened = Array.isArray(equiposUtilizados[0])
+      ? equiposUtilizados.flat()
+      : equiposUtilizados;
+
+    return flattened.map(item => ({
+      ...item,
+      usedQuantity: item.usedQuantity || 1,
+    }));
+  }, [equiposUtilizados]);
+
+  useEffect(() => {
+    clearAllStore();
+  }, []);
 
   return (
     <Grid item container xs={12} spacing={1}>
@@ -136,22 +154,19 @@ const EquiposSeleccionadosBeneficioMantenedorBeneficios: React.FC<
             color="primary"
             variant="text"
             startIcon={<MdOutlineAddShoppingCart />}
-            onClick={() => {
-              setOpenAvailableEquipmentsModal(true);
-            }}
+            onClick={() => setOpenAvailableEquipmentsModal(true)}
           />
         </Grid>
       </Grid>
 
       <Grid item xs={12}>
-        <CustomMinimalTable<EquiposSeleccionadosTableType>
+        <CustomMinimalTable<EquiposSeleccionadosProductoType>
           columns={selectedItemsColumns}
-          data={equiposUtilizados || []}
+          data={getFlattenedData}
           enablePagination
         />
       </Grid>
 
-      {/* ==================== modals ==================== */}
       <EquiposBeneficioMantenedorBeneficiosModal
         open={openAvailableEquipmentsModal}
         onClose={() => setOpenAvailableEquipmentsModal(false)}
