@@ -7,10 +7,11 @@ import { Alquiler, ColorChipType } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
+  formatDateWithTime,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { ChipModelState } from '@/shared/components';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { IconTrash } from '@tabler/icons-react';
 import { useUpdateAlquilerCancel } from '@/actions/app';
 import { useUiConfirmModalStore } from '@/store/ui';
@@ -94,6 +95,18 @@ export const useColumnsAlquiler = () => {
         header: 'DESCRIPCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
+      },
+      {
+        accessorKey: 'cuota_actual',
+        header: 'CUOTAS PAGADAS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const estadoActual = row?.original?.cuota_actual;
+          const estadoTotal = row?.original?.total_cuotas;
+          return `${estadoActual} de ${estadoTotal}`;
+        },
       },
       {
         accessorKey: 'N° CUOTAS',
@@ -211,9 +224,41 @@ export const useColumnsAlquiler = () => {
   const alquilerBaseColumns03 = useMemo<MRT_ColumnDef<Alquiler>[]>(
     () => [
       {
-        accessorKey: 'audit_logs__cancelar_alquiler',
+        accessorKey: 'created_at',
+        header: 'FECHA CREADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+
+      {
+        accessorKey: 'modified_at',
+        header: 'FECHA MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+      {
+        accessorKey: 'audit_logs__created_at',
+        header: 'FECHA CANCELADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }: MRTAlquilerType) => {
+          const trazabilidad = row.original?.audit_logs?.find(
+            item => item?.action === EstadoAlquilerEnumChoice.CANCELADO,
+          );
+          return trazabilidad
+            ? formatDateWithTime(trazabilidad?.created_at)
+            : '-';
+        },
+      },
+      {
+        accessorKey: 'audit_logs__action',
         header: 'CANCELADO POR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }: MRTAlquilerType) => {
           const trazabilidad = row.original?.audit_logs?.find(
             item => item?.action === EstadoAlquilerEnumChoice.CANCELADO,
@@ -263,15 +308,17 @@ export const useColumnsAlquiler = () => {
         Cell: ({ row }) => {
           return row.original.estado_alquiler ===
             EstadoAlquilerEnumChoice.ACTIVO ? (
-            <IconButton
-              component="span"
-              color="primary"
-              size="small"
-              onClick={() => onEditStateAlquiler(row.original as Alquiler)}
-              style={{ cursor: 'pointer' }}
-            >
-              <IconTrash />
-            </IconButton>
+            <Tooltip title="Eliminar" placement="top" arrow>
+              <IconButton
+                component="span"
+                color="primary"
+                size="small"
+                onClick={() => onEditStateAlquiler(row.original as Alquiler)}
+                style={{ cursor: 'pointer' }}
+              >
+                <IconTrash />
+              </IconButton>
+            </Tooltip>
           ) : (
             <></>
           );

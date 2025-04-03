@@ -8,10 +8,7 @@ import {
   LineaServicioTSQEnum,
 } from '@/actions/app';
 import { useGenericPATCH } from '@/actions/shared';
-import {
-  ConfiguracionPlantillaFacturacionPart,
-  ConfiguracionPlantillaNotificacionPart,
-} from '@/app/administration/config-plantilla/shared/components';
+import { ConfiguracionPlantillaFacturacionPart } from '@/app/administration/config-plantilla/shared/components';
 import { SaveFormDataConfigPlantilla } from '@/app/administration/config-plantilla/shared/components/form/SaveConfiguracionPlantilla';
 import {
   configuracionPlantillaFormSchema,
@@ -115,6 +112,15 @@ const ConfigPlantillaClienteFibraPart: React.FC<
         isState
         disabled
       />
+      {/*
+        <>
+          <CustomTypoLabel
+            text="Notificaciones"
+            pt={CustomTypoLabelEnum.ptMiddlePosition}
+          />
+          <ConfiguracionPlantillaNotificacionPart form={form} />
+        </>
+      */}
 
       <>
         <CustomTypoLabel
@@ -123,14 +129,6 @@ const ConfigPlantillaClienteFibraPart: React.FC<
         />
         <ConfiguracionPlantillaFacturacionPart form={form} />
         <ConfigPlantillaClienteFibraFacturacionCards form={form} />
-      </>
-
-      <>
-        <CustomTypoLabel
-          text="Notificaciones"
-          pt={CustomTypoLabelEnum.ptMiddlePosition}
-        />
-        <ConfiguracionPlantillaNotificacionPart form={form} />
       </>
 
       <CreateOrCancelButtonsForm

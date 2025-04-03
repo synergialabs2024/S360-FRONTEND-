@@ -105,7 +105,6 @@ const IVAsPage: React.FC<IVAsPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'sri_code'),
       },
-
       {
         accessorKey: 'percentage',
         header: 'PERCENTAGE',
@@ -118,7 +117,6 @@ const IVAsPage: React.FC<IVAsPageProps> = () => {
             : 'N/A';
         },
       },
-
       {
         accessorKey: 'iva_defecto',
         header: 'PREDETERMINADO',

@@ -11,10 +11,10 @@ import {
 } from '@/actions/app';
 import {
   CustomTextArea,
-  CustomTextField,
   CustomAutocomplete,
   ScrollableDialogProps,
   CustomFormLabel,
+  CustomNumberTextField,
 } from '@/shared/components';
 import {
   Alquiler,
@@ -217,7 +217,9 @@ const ClienteFibraRubroAlquilerModal: React.FC<
                 if (prodValor !== undefined) {
                   if (compValor) {
                     const valor = prodValor / value;
-                    form.setValue('valor_base_cuota', String(valor));
+                    const num = valor;
+                    const n = num.toFixed();
+                    form.setValue('valor_base_cuota', String(n));
                   } else {
                     form.setValue('valor_base_cuota', String(prodValor as any));
                   }
@@ -226,10 +228,9 @@ const ClienteFibraRubroAlquilerModal: React.FC<
               size={gridSizeMdLg6}
               disabled={!watchedProducto}
             />
-            <CustomTextField
+            <CustomNumberTextField
               label="Monto"
               name="valor_base_cuota"
-              type="number"
               control={form.control}
               defaultValue={form.getValues().valor_base_cuota}
               error={errors.valor_base_cuota}
@@ -237,6 +238,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
               size={gridSizeMdLg6}
               disabled={!watchedTipoRecurrencia}
             />
+
             <CustomTextArea
               label="Descripcion"
               name="descripcion"
