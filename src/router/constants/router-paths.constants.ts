@@ -333,6 +333,16 @@ export const ROUTER_PATHS = {
     parametrosSolucionMantenedorBeneficiosNav:
       '/cartera/parametros/solucion-mantenedor-beneficios',
 
+    // Suspension
+
+    parametrosMantenedorSuspension: 'parametros/mantenedor-suspension',
+    parametrosMantenedorSuspensionCrear:
+      'parametros/mantenedor-suspension/crear',
+    parametrosMantenedorSuspensionEditar:
+      'parametros/mantenedor-suspension/editar/:uuid',
+    parametrosMantenedorSuspensionNav:
+      '/cartera/parametros/mantenedor-suspension',
+
     ///* promesas de pago
     promesaspago: 'promesaspago',
     promesaspagoCrear: 'promesaspago/crear',

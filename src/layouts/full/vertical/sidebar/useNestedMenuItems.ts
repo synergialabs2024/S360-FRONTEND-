@@ -1009,6 +1009,13 @@ export const useNestedMenu = () => {
                       url: ROUTER_PATHS.cartera
                         .parametrosSolucionMantenedorBeneficiosNav,
                     }),
+                    renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
+                      id: 'parametrosMantenedorSuspension',
+                      title: 'Mantenedor Suspension',
+                      type: MenuItemType.ITEM,
+                      url: ROUTER_PATHS.cartera
+                        .parametrosMantenedorSuspensionNav,
+                    }),
                   ],
                 },
               ],

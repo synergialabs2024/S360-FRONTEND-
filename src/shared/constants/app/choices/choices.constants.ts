@@ -1394,6 +1394,22 @@ export const TIPO_RUBRO_ADICIONAL_MANTENEDOR_ARRAY_CHOICES = [
   tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_SUSPENSIONES,
 ];
 
+export enum CriterioMantenedorSuspensionEnumChoice {
+  SUSPENSION_TEMPORAL_1_MES = 'SUSPENSION TEMPORAL 1 MES',
+  SUSPENSION_TEMPORAL_2_MESES = 'SUSPENSION TEMPORAL 2 MESES',
+  SUSPENSION_TEMPORAL_3_MESES = 'SUSPENSION TEMPORAL 3 MESES',
+  FINALIZACION = 'FINALIZACION',
+  VENCIDO = 'VENCIDO',
+}
+
+export const CRITERIO_MANTENEDOR_SUSPENSION_ARRAY_CHOICES = [
+  CriterioMantenedorSuspensionEnumChoice.SUSPENSION_TEMPORAL_1_MES,
+  CriterioMantenedorSuspensionEnumChoice.SUSPENSION_TEMPORAL_2_MESES,
+  CriterioMantenedorSuspensionEnumChoice.SUSPENSION_TEMPORAL_3_MESES,
+  CriterioMantenedorSuspensionEnumChoice.FINALIZACION,
+  CriterioMantenedorSuspensionEnumChoice.VENCIDO,
+];
+
 export enum modeAuthorizateTypeEnumChoice {
   ROUTING = 'routing',
   BRIDGING = 'bridging',

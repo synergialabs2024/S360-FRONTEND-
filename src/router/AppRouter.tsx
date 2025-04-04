@@ -1013,6 +1013,35 @@ const UpdateSolucionMantenedorBeneficiosPage = Loadable(
   ),
 );
 
+// Suspension mantenedor aplicaciones
+
+const MantenedorSuspensionByStatePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-suspension/pages/tables/MantenedorSuspensionByStatePage'
+      ),
+  ),
+);
+
+const MantenedorSuspensionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-suspension/pages/forms/MantenedorSuspensionPage'
+      ),
+  ),
+);
+
+const UpdateMantenedorSuspensionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/mantenedor-suspension/pages/forms/UpdateMantenedorSuspensionPage'
+      ),
+  ),
+);
+
 const MantenedorAplicacionesPage = Loadable(
   lazy(
     () =>
@@ -2666,6 +2695,21 @@ const AppRouter = [
             path: ROUTER_PATHS.cartera
               .parametrosSolucionMantenedorBeneficiosEditar,
             element: <UpdateSolucionMantenedorBeneficiosPage />,
+          },
+
+          // Solucion mantenedor aplicaciones
+
+          {
+            path: ROUTER_PATHS.cartera.parametrosMantenedorSuspensionNav,
+            element: <MantenedorSuspensionByStatePage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.parametrosMantenedorSuspensionCrear,
+            element: <MantenedorSuspensionPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.parametrosMantenedorSuspensionEditar,
+            element: <UpdateMantenedorSuspensionPage />,
           },
 
           ///* Promesas pago
