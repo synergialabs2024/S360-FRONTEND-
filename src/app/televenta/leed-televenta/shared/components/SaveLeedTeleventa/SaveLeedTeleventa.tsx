@@ -4,28 +4,28 @@ import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 
 import {
-  CreateLeedTeleventaParamsBase,
-  useCreateLeedteleventa,
   useFetchAreas,
   useFetchCanalVentas,
   useFetchDepartamentos,
   useFetchPlanInternets,
+  useCreateLeedteleventa,
   useUpdateLeedteleventa,
+  CreateLeedTeleventaParamsBase,
 } from '@/actions/app';
 import {
   Area,
+  useLoaders,
   CanalVenta,
+  PlanInternet,
   Departamento,
   gridSizeMdLg6,
   LeedTeleventa,
-  leedteleventaFormSchema,
   PermissionsEnum,
-  PlanInternet,
-  useLoaders,
+  leedteleventaFormSchema,
 } from '@/shared';
-import { CustomAutocomplete, SingleFormBoxScene } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { returnUrlLeedTeleventaPage } from '../../../pages/tables/LeedTeleventaPages';
+import { CustomAutocomplete, SingleFormBoxScene } from '@/shared/components';
+import { returnUrlLeedTeleventaPage } from '../../../pages/tables/LeedTeleventaMainPage';
 
 export interface SaveLeedTeleventaProps {
   title: string;
