@@ -67,10 +67,7 @@ const SaveUpdInfoInstallOT: React.FC<SaveUpdInfoInstallOTProps> = ({
       customMessageToast:
         'Orden de trabajo de instalación actualizada con éxito',
       navigate,
-      // returnUrl: returnUrlInstallAsignadasOT,
-      customOnSuccess() {
-        setConfirmDialogIsOpen(false);
-      },
+      returnUrl: returnUrlInstallAsignadasOT,
     },
   );
 
@@ -82,17 +79,25 @@ const SaveUpdInfoInstallOT: React.FC<SaveUpdInfoInstallOTProps> = ({
       subtitle:
         'Una vez guardados no podrás modificar la información y esta se enviará a revisión',
       onConfirm: () => {
-        approveOtInstall.mutate({
-          direccion_referencia: data.direccion_referencia,
-          potencia_ont: data.potencia_ont,
-          observaciones_adicionales: data.observaciones_adicionales,
-          coordenadas: data.coordenadas,
-          sector: data.sector,
-          zona: data.zona,
-          nap: data.nap,
-          distancia_nap: data.distancia_nap,
-          puerto_nap: data.puerto_nap,
-        });
+        setConfirmDialogIsOpen(false);
+        approveOtInstall.mutate(
+          {
+            direccion_referencia: data.direccion_referencia,
+            potencia_ont: data.potencia_ont,
+            observaciones_adicionales: data.observaciones_adicionales,
+            coordenadas: data.coordenadas,
+            sector: data.sector,
+            zona: data.zona,
+            nap: data.nap,
+            distancia_nap: data.distancia_nap,
+            puerto_nap: data.puerto_nap,
+          },
+          {
+            onSuccess: () => {
+              navigate(returnUrlInstallAsignadasOT);
+            },
+          },
+        );
       },
     });
   };
