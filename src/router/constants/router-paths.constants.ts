@@ -918,4 +918,15 @@ export const ROUTER_PATHS = {
     clientesSuspendidosAsignada: 'clientes-suspendidos/:uuid',
     clientesSuspendidosAsignadasNav: '/buzon-tareas/clientes-suspendidos',
   },
+
+  /////* TELEVENTA ----------------
+  televentas: {
+    root: 'televentas',
+
+    ///* Leed Televenta
+    leedTeleventas: 'leed-televenta',
+    leedTeleventasCrear: 'leed-televenta/crear',
+    leedTeleventasEditar: 'leed-televenta/editar/:uuid',
+    leedTeleventasNav: '/televentas/leed-televenta',
+  },
 };

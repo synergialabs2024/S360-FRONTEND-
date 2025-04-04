@@ -127,6 +127,8 @@ export enum SidenavModulesEnum {
   TICKETS_EVENTO_MENSAJERIA_TICKET_MASIVO = 'TICKETS.EVENTO_MENSAJERIA_TICKET_MASIVO',
   TICKETS_PRIORIDAD_INCIDENCIA_TICEKT_MASIVO = 'TICKETS.PRIORIDAD_INCIDENCIA_TICEKT_MASIVO',
 
+  TELEVENTA_LEED_TELEVENTA = 'TELEVENTA.LEED_TELEVENTA',
+
   // TODO: modulo temporal visto solo por admin
 
   // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values

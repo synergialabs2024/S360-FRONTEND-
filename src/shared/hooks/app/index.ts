@@ -13,5 +13,6 @@ export * from './operaciones';
 export * from './rubros';
 export * from './saldos';
 export * from './tecnico';
+export * from './televenta';
 export * from './transacciones';
 export * from './tickets';

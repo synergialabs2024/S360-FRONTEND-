@@ -103,7 +103,7 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
         size={gridSizeMdLg6}
       />
       <CustomTextField
-        label="Codido"
+        label="Codigo"
         name="code"
         control={form.control}
         defaultValue={form.getValues().code}

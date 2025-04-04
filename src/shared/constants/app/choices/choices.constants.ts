@@ -1465,3 +1465,33 @@ export const TIPO_TICKET_TICKET_MASIVO_NOC_ARRAY_CHOICES = [
   TipoTicketMasivoNocEnumChoice.INCIDENCIA,
   TipoTicketMasivoNocEnumChoice.EVENTO,
 ];
+
+export enum LeedTeleventa_Origen_TMEnumChoice {
+  TOTEM = 'TOTEM',
+  ENLINEAWEB = '24ENLINEAWEB',
+  ENLINEAAPP = '24ENLINEAAPP',
+  CHATBOT = 'CHATBOT',
+}
+
+export const LEED_TELEVENTA_ORIGEN_ARRAY_CHOICES = [
+  LeedTeleventa_Origen_TMEnumChoice.TOTEM,
+  LeedTeleventa_Origen_TMEnumChoice.ENLINEAWEB,
+  LeedTeleventa_Origen_TMEnumChoice.ENLINEAAPP,
+  LeedTeleventa_Origen_TMEnumChoice.CHATBOT,
+];
+
+export enum LeedTeleventa_Estado_TMEnumChoice {
+  ESPERA = 'ESPERA',
+  SEPARADO = 'SEPARADO',
+  REGISTRA_SOLICITUD_SERVICIO = 'REGISTRA SOLICITUD SERVICIO',
+  SIN_GESTION = 'SIN GESTION',
+  RECHAZADO = 'RECHAZADO',
+}
+
+export const LEED_TELEVENTA_ESTADO_ARRAY_CHOICES = [
+  LeedTeleventa_Estado_TMEnumChoice.ESPERA,
+  LeedTeleventa_Estado_TMEnumChoice.SEPARADO,
+  LeedTeleventa_Estado_TMEnumChoice.REGISTRA_SOLICITUD_SERVICIO,
+  LeedTeleventa_Estado_TMEnumChoice.SIN_GESTION,
+  LeedTeleventa_Estado_TMEnumChoice.RECHAZADO,
+];

@@ -2139,6 +2139,32 @@ const CreatePendientesActivacionPage = Loadable(
   ),
 );
 
+// Leed Televenta
+const LeedTeleventaMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/televenta/leed-televenta/pages/tables/LeedTeleventaMainPage'
+      ),
+  ),
+);
+const CreateLeedTeleventaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/televenta/leed-televenta/pages/forms/CreateLeedTeleventaPage'
+      ),
+  ),
+);
+const UpdateLeedTeleventaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/televenta/leed-televenta/pages/forms/UpdateLeedTeleventaPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -3797,6 +3823,27 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignada,
             element: <CreatePendientesActivacionPage />,
+          },
+        ],
+      },
+
+      //////////* Televenta ------------
+      {
+        path: ROUTER_PATHS.televentas.root,
+        element: <AdministrationModule />,
+        children: [
+          ///* Leed Televenta
+          {
+            path: ROUTER_PATHS.televentas.leedTeleventas,
+            element: <LeedTeleventaMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.televentas.leedTeleventasCrear,
+            element: <CreateLeedTeleventaPage />,
+          },
+          {
+            path: ROUTER_PATHS.televentas.leedTeleventasEditar,
+            element: <UpdateLeedTeleventaPage />,
           },
         ],
       },

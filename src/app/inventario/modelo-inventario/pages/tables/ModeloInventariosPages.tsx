@@ -67,7 +67,7 @@ const ModeloInventariosPages: React.FC<ModeloInventariosPagesProps> = () => {
   const onEdit = (modelo_inventario: ModeloInventario) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Brass',
+      title: 'Editar Modelo Inventario',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);

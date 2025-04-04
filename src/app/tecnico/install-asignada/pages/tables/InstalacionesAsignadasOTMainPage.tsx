@@ -41,7 +41,7 @@ const InstalacionesAsignadasOTMainPage: React.FC<
         {/* <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} /> */}
         <Tab label={'ESPERA REVISIÓN'} value={5} {...a11yProps(5)} />
 
-        <Tab label={'PENDIENTES CORECCIÓN'} value={6} {...a11yProps(6)} />
+        <Tab label={'PENDIENTES CORRECCIÓN'} value={6} {...a11yProps(6)} />
 
         <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
 

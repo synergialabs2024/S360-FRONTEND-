@@ -13,4 +13,5 @@ export * from './nomina';
 export * from './operaciones';
 export * from './servicios';
 export * from './tecnico';
+export * from './televenta';
 export * from './tickets';

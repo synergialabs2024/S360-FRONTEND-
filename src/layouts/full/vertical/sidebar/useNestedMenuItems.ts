@@ -431,7 +431,7 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.INVENTARIO_PRODUCTO, {
               id: 'inventariables',
-              title: 'Iventariables',
+              title: 'Inventariables',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.productosNav,
             }),
@@ -1462,6 +1462,21 @@ export const useNestedMenu = () => {
               title: 'Departamento de ticket masivo',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.tickets.departamentoTMNav,
+            }),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+        /////* Televenta ----------------
+        {
+          id: 'televenta',
+          title: 'Televenta',
+          type: MenuItemType.COLLAPSE,
+          icon: IconRouter,
+          children: [
+            renderByModule(SidenavModulesEnum.TELEVENTA_LEED_TELEVENTA, {
+              id: 'leed-televentas',
+              title: 'Leed Televenta',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.televentas.leedTeleventasNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },

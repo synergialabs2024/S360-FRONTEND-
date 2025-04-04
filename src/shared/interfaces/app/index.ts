@@ -14,5 +14,6 @@ export * from './operaciones';
 export * from './servicios';
 export * from './supervision-comercial';
 export * from './tecnico';
+export * from './televenta';
 export * from './ticket';
 export * from './cobranza';
