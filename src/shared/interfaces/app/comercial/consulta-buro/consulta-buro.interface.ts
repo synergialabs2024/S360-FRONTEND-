@@ -26,6 +26,11 @@ export interface ConsultaBuro {
   excedida: boolean; // monthly quota - canal_venta per user
   consulta_externa: boolean; // not cached or own db microservice
 
+  // -----
+  uuid_consulta?: string;
+  plan_sugerido?: string;
+  resultado_politicas?: ResultadoPoliticasEquifaxType[];
+
   ///* fk
   solicitud_servicio?: number;
   area?: number;
@@ -39,3 +44,9 @@ export interface ConsultaBuro {
   canal_venta_data?: CanalVentaLimitData;
   solicitud_servicio_data?: SolicitudServicioLimitData;
 }
+
+export type ResultadoPoliticasEquifaxType = {
+  valor: string;
+  decision: string;
+  politica: string;
+};

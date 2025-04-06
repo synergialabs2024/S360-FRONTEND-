@@ -18,6 +18,7 @@ import {
   CustomSearch,
   CustomTable,
   SingleTableBoxScene,
+  TableModalGeneric,
 } from '@/shared/components';
 
 export type ConsultasBuroPageProps = {};
@@ -60,7 +61,7 @@ const ConsultasBuroPage: React.FC<ConsultasBuroPageProps> = () => {
   const columns = useMemo<MRT_ColumnDef<ConsultaBuro>[]>(
     () => [
       {
-        accessorKey: 'solicitud_servicio_data.name',
+        accessorKey: 'solicitud_servicio__name',
         header: 'SOLICITUD SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
@@ -70,13 +71,13 @@ const ConsultasBuroPage: React.FC<ConsultasBuroPageProps> = () => {
           ]),
       },
       {
-        accessorKey: 'identificacion',
+        accessorKey: 'solicitud_servicio__identificacion',
         header: 'IDENTIFICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'identificacion'),
       },
       {
-        accessorKey: 'tipo_identificacion',
+        accessorKey: 'solicitud_servicio__tipo_identificacion',
         header: 'TIPO DE IDENTIFICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_identificacion'),
@@ -97,27 +98,59 @@ const ConsultasBuroPage: React.FC<ConsultasBuroPageProps> = () => {
         filterSelectOptions: MODEL_BOOLEAN,
         Cell: ({ row }) => formatBooleanCell(row, 'excedida'),
       },
+
+      // {
+      //   accessorKey: 'uuid_consulta',
+      //   header: 'UID CONSULTA EXTERNA',
+      //   size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+      //   Cell: ({ row }) => emptyCellOneLevel(row, 'uuid_consulta'),
+      // },
       {
-        accessorKey: 'vendedor_data.name',
+        accessorKey: 'plan_sugerido',
+        header: 'PLAN SUGERIDO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_sugerido'),
+      },
+      {
+        accessorKey: 'resultado_politicas',
+        header: 'RESULTADO POLITICAS',
+        enableColumnFilter: false,
+        enableSorting: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => {
+          const data = row.original?.resultado_politicas || [];
+
+          return (
+            <TableModalGeneric
+              Arrays={data}
+              isDiamondIcon
+              Title="RESULTADO POLITICAS EQUIFAX"
+            />
+          );
+        },
+      },
+
+      {
+        accessorKey: 'vendedor__name',
         header: 'VENDEDOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
       {
-        accessorKey: 'canal_venta_data.name',
+        accessorKey: 'canal_venta__name',
         header: 'CANAL DE VENTA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['canal_venta_data', 'name']),
       },
       {
-        accessorKey: 'departamento_data.name',
+        accessorKey: 'departamento__name',
         header: 'DEPARTAMENTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['departamento_data', 'name']),
       },
       {
-        accessorKey: 'area_data.name',
+        accessorKey: 'area__name',
         header: 'ÁREA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['area_data', 'name']),

@@ -1,16 +1,16 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { IconHistory } from '@tabler/icons-react';
 import { Grid, IconButton } from '@mui/material';
-import { useState } from 'react';
-import { useMemo } from 'react';
+import { IconDiamond, IconHistory } from '@tabler/icons-react';
+import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo, useState } from 'react';
 
-import { ScrollableDialogProps } from '@/shared/components';
 import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps } from '@/shared/components';
 
 export type TableModalGenericProps = {
   Arrays: any;
   Title?: string;
   icon?: React.ReactNode;
+  isDiamondIcon?: boolean;
 };
 
 const getDynamicColumns = (data: any): MRT_ColumnDef<any>[] => {
@@ -51,6 +51,7 @@ const TableModalGeneric: React.FC<TableModalGenericProps> = ({
   Arrays,
   icon = <IconHistory />,
   Title = 'Cambios',
+  isDiamondIcon = false,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -104,7 +105,7 @@ const TableModalGeneric: React.FC<TableModalGenericProps> = ({
         onClick={() => setOpen(!open)}
         style={{ cursor: 'pointer' }}
       >
-        {icon}
+        {isDiamondIcon ? <IconDiamond size={20} /> : icon}
       </IconButton>
       {open && (
         <ScrollableDialogProps
