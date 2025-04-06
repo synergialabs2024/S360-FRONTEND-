@@ -64,6 +64,7 @@ export type InstallAsignOTSaveFormData = CreateOrdenTrabajoParamsBase &
   Partial<Preventa> & {
     metraje_autorizado_fibra: string;
     rawNap?: Nap;
+    prevCoords?: string;
   };
 
 const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
@@ -531,6 +532,9 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
       metraje_autorizado_fibra:
         ordentrabajo?.ciudad_data?.metraje_autorizado || '',
       rawNap: ordentrabajo?.nap_data || undefined,
+
+      // to preserve data after change tab (NAP coords)
+      prevCoords: undefined,
     };
 
     reset({

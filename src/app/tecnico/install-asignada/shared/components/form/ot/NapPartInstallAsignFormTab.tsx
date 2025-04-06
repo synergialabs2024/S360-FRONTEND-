@@ -25,16 +25,19 @@ export type NapPartInstallAsignFormTabProps = {
   form: UseFormReturn<InstallAsignOTSaveFormData>;
   ordenTrabajo: OrdenTrabajo;
   onlyView?: boolean;
+  isEdit?: boolean;
 };
 
 const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
   form,
   ordenTrabajo,
   onlyView = false, // auditoria
+  isEdit = true,
 }) => {
   ///* form ---------------------
   const { errors } = form.formState;
   const watchedRawNap = form.watch('rawNap');
+  const watchedPrevCoords = form.watch('prevCoords');
 
   ///* local state ---------------------
   const [openChangePortDialog, setOpenChangePortDialog] =
@@ -56,24 +59,55 @@ const NapPartInstallAsignFormTab: React.FC<NapPartInstallAsignFormTabProps> = ({
         <>
           <LocationZonePolygonFormPart
             form={form}
-            initialCoords={ordenTrabajo?.solicitud_servicio_data?.coordenadas}
-            isEdit={true}
+            initialCoords={
+              watchedPrevCoords ||
+              ordenTrabajo?.solicitud_servicio_data?.coordenadas
+            }
+            isEdit={isEdit}
             ptLabel="0px"
             showSectionTitle={false}
-            onChangeCoordsInput={coords => {
-              if (onlyView) return;
+            // onChangeCoordsInput={coords => {
+            //   if (onlyView) return;
+            //   // console.log('coords INPUT', coords);
+            //   // form.setValue('prevCoords', coords);
 
-              form.reset({
-                ...form.getValues(),
-                coordenadas: coords,
-                nap: '' as any,
-                distancia_nap: '' as any,
-                puerto_nap: '' as any,
-              });
-            }}
+            //   // form.reset({
+            //   //   ...form.getValues(),
+            //   //   coordenadas: coords,
+            //   //   nap: '' as any,
+            //   //   distancia_nap: '' as any,
+            //   //   puerto_nap: '' as any,
+            //   // });
+            // }}
             disabledInputCoords={onlyView}
             canDragMarker={!onlyView}
             disabledAddressInput={onlyView}
+            onChangeGlobalCoords={coords => {
+              if (onlyView) return;
+
+              if (
+                ordenTrabajo?.solicitud_servicio_data?.coordenadas !== coords
+              ) {
+                // ya hay prevCoords y no ha cambiado nuevamente al regresar al tab se mantiene
+                if (watchedPrevCoords && coords !== watchedPrevCoords) {
+                  form.reset({
+                    ...form.getValues(),
+                    coordenadas: coords,
+                    nap: undefined as any,
+                    distancia_nap: undefined as any,
+                    puerto_nap: undefined as any,
+                  });
+                  console.log({
+                    coords,
+                    prevCoords: watchedPrevCoords,
+                    ordenTrabajoCoords:
+                      ordenTrabajo?.solicitud_servicio_data?.coordenadas,
+                  });
+                }
+              }
+
+              form.setValue('prevCoords', coords);
+            }}
           />
         </>
 

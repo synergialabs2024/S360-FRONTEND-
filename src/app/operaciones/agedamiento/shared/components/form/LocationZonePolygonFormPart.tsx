@@ -41,6 +41,7 @@ export type LocationZonePolygonFormPartProps = {
   ptLabel?: string;
   showSectionTitle?: boolean;
   onChangeCoordsInput?: (value: string) => void;
+  onChangeGlobalCoords?: (value: string) => void;
 
   disabledInputCoords?: boolean;
   canDragMarker?: boolean;
@@ -58,6 +59,7 @@ const LocationZonePolygonFormPart: React.FC<
   ptLabel = '0px',
   showSectionTitle = true,
   onChangeCoordsInput,
+  onChangeGlobalCoords,
 
   disabledInputCoords = false,
   canDragMarker = true,
@@ -199,6 +201,14 @@ const LocationZonePolygonFormPart: React.FC<
       );
     }
   }, [watchedZone, sectoresPaging, isLoadingSectores, isRefetchingSectores]);
+
+  useEffect(() => {
+    if (latLng.lat && latLng.lng) {
+      onChangeGlobalCoords &&
+        onChangeGlobalCoords(`${latLng.lat},${latLng.lng}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latLng]);
 
   const customLoading =
     isLoadingNaps || isRefetchingNaps || isLoadingZonas || isRefetchingZonas;

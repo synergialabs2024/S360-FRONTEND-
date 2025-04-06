@@ -4,6 +4,8 @@ import { Controller, FieldError } from 'react-hook-form';
 
 import { gridSize } from '@/shared/constants/ui';
 import { GridSizeType, SxPropsThemeType } from '@/shared/interfaces';
+import debounce from 'lodash/debounce';
+import { useEffect, useMemo } from 'react';
 import { CustomFormLabel } from '../Labels';
 
 type CustomCoordsTextFieldProps = {
@@ -63,6 +65,18 @@ const CustomCoordsTextField: React.FC<CustomCoordsTextFieldProps> = ({
 }) => {
   const [isInvalidInputValue, setIsInvalidInputValue] = useState(false);
 
+  const debouncedOnChangeValue = useMemo(() => {
+    return debounce((val: string, isValid: boolean) => {
+      onChangeValue && onChangeValue(val, isValid);
+    }, 600);
+  }, [onChangeValue]);
+
+  useEffect(() => {
+    return () => {
+      debouncedOnChangeValue.cancel();
+    };
+  }, [debouncedOnChangeValue]);
+
   return (
     <Grid item {...size} sx={sxGrid}>
       <FormControl fullWidth variant="outlined">
@@ -78,14 +92,8 @@ const CustomCoordsTextField: React.FC<CustomCoordsTextFieldProps> = ({
               const regex: RegExp =
                 /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/;
               const isValid = regex.test(currentValue);
-
-              if (isValid) {
-                setIsInvalidInputValue(false);
-              } else {
-                setIsInvalidInputValue(true);
-              }
-
-              onChangeValue && onChangeValue(currentValue, isValid);
+              setIsInvalidInputValue(!isValid);
+              debouncedOnChangeValue(currentValue, isValid);
               return field.onChange(currentValue);
             };
 
@@ -135,7 +143,7 @@ const CustomCoordsTextField: React.FC<CustomCoordsTextFieldProps> = ({
               </>
             );
           }}
-        ></Controller>
+        />
       </FormControl>
     </Grid>
   );
