@@ -93,6 +93,14 @@ export const useColumnsRubrosCliente = ({
         Cell: ({ row }) => formatDateWithTimeCellOnlyDate(row, 'fecha_emision'),
       },
       {
+        accessorKey: 'fecha_a_pagar',
+        header: 'FECHA A PAGAR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => formatDateWithTimeCellOnlyDate(row, 'fecha_a_pagar'),
+      },
+      {
         accessorKey: 'fecha_vencimiento',
         header: 'VENCIMIENTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
