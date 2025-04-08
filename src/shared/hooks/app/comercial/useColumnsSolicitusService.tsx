@@ -10,6 +10,7 @@ import {
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import type { SolicitudServicio } from '@/shared/interfaces';
 import {
+  emptyCellNested,
   emptyCellOneLevel,
   formatBooleanCell,
   formatDateWithTime,
@@ -76,16 +77,12 @@ export const useColumnsSolicitusService = (
         Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'codigo'),
       },
       {
-        accessorKey: 'vendedor_ingresa',
+        accessorKey: 'vendedor__razon_social',
         header: 'VENDEDOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: false,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidadData = row.original.trazabilidad_data;
-          const created = trazabilidadData?.at(0);
-
-          return created ? created?.user_data?.razon_social : 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
 
       // only supervisor to top
