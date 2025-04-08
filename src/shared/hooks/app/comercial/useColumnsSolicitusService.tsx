@@ -13,8 +13,8 @@ import {
   emptyCellNested,
   emptyCellOneLevel,
   formatBooleanCell,
-  formatDateWithTime,
   formatDateWithTimeCell,
+  formatTrazabilidadCell,
 } from '@/shared/utils';
 import { useAuthStore } from '@/store/auth';
 
@@ -67,22 +67,6 @@ export const useColumnsSolicitusService = (
         enableSorting: true,
         Cell: ({ row }: MRTSServiceType) =>
           emptyCellOneLevel(row, 'razon_social'),
-      },
-      {
-        accessorKey: 'codigo',
-        header: 'CODIGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'codigo'),
-      },
-      {
-        accessorKey: 'vendedor__razon_social',
-        header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        enableColumnFilter: false,
-        Cell: ({ row }: MRTSServiceType) =>
-          emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
 
       // only supervisor to top
@@ -163,6 +147,23 @@ export const useColumnsSolicitusService = (
         Cell: ({ row }: MRTSServiceType) =>
           formatBooleanCell(row, 'tiene_cobertura'),
       },
+
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }: MRTSServiceType) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'vendedor__razon_social',
+        header: 'VENDEDOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        Cell: ({ row }: MRTSServiceType) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
+      },
     ],
     [isSalesman],
   );
@@ -176,38 +177,24 @@ export const useColumnsSolicitusService = (
               header: 'SOICITO DESBLOQUEO',
               size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
               enableColumnFilter: false,
-              Cell: ({ row }: MRTSServiceType) => {
-                const trazabilidad = row.original?.trazabilidad_data?.find(
-                  item =>
-                    item?.modelo_estado ===
-                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
-                );
-                const message =
-                  `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
-                    trazabilidad?.timestamp,
-                  )}` || 'N/A';
-
-                return message;
-              },
+              Cell: ({ row }: MRTSServiceType) =>
+                formatTrazabilidadCell(
+                  row,
+                  SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_ESPERA,
+                  'user_data.razon_social',
+                ),
             },
             {
               accessorKey: 'admin_aprueba_desbloqueo',
               header: 'APRUEBA DESBLOQUEO',
               size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
               enableColumnFilter: false,
-              Cell: ({ row }: MRTSServiceType) => {
-                const trazabilidad = row.original?.trazabilidad_data?.find(
-                  item =>
-                    item?.modelo_estado ===
-                    SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
-                );
-                const message =
-                  `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
-                    trazabilidad?.timestamp,
-                  )}` || 'N/A';
-
-                return message;
-              },
+              Cell: ({ row }: MRTSServiceType) =>
+                formatTrazabilidadCell(
+                  row,
+                  SalesStatesActionsEnumChoice.SOLICITUD_DESBLOQUEO_APROBADO,
+                  'user_data.razon_social',
+                ),
             },
           ]),
 
@@ -268,32 +255,26 @@ export const useColumnsSolicitusService = (
         accessorKey: 'razon_social__finaliza_sol_serv',
         header: 'FINALIZADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__FINALIZADO,
-          );
-
-          return trazabilidad?.user_data?.razon_social || 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__FINALIZADO,
+            'user_data.razon_social',
+            true,
+          ),
       },
       {
         accessorKey: 'fecha_finalizado',
         header: 'FECHA FINALIZADO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__FINALIZADO,
-          );
-
-          return trazabilidad
-            ? formatDateWithTime(trazabilidad?.timestamp)
-            : 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__FINALIZADO,
+            'timestamp',
+            true,
+          ),
       },
     ],
     [solServiceCreatedAt, solicitudServicioBase01],
@@ -307,32 +288,25 @@ export const useColumnsSolicitusService = (
         accessorKey: 'razon_social__cancela_sol_serv',
         header: 'CANCELADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__CANCELADO,
-          );
-
-          return trazabilidad?.user_data?.razon_social || 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__CANCELADO,
+            'user_data.razon_social',
+            true,
+          ),
       },
       {
         accessorKey: 'fecha_cancelado',
         header: 'FECHA CANCELADO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__CANCELADO,
-          );
-
-          return trazabilidad
-            ? formatDateWithTime(trazabilidad?.timestamp)
-            : 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__CANCELADO,
+            'timestamp',
+          ),
       },
     ],
     [solServiceCreatedAt, solicitudServicioBase01],
@@ -348,32 +322,25 @@ export const useColumnsSolicitusService = (
         accessorKey: 'razon_social__rechazada_sol_serv',
         header: 'RECHAZADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__RECHAZADO,
-          );
-
-          return trazabilidad?.user_data?.razon_social || 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__RECHAZADO,
+            'user_data.razon_social',
+            true,
+          ),
       },
       {
         accessorKey: 'fecha_rechazado',
         header: 'FECHA RECHAZADO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__RECHAZADO,
-          );
-
-          return trazabilidad
-            ? formatDateWithTime(trazabilidad?.timestamp)
-            : 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.SOLICITUD_SERVICIO__RECHAZADO,
+            'timestamp',
+          ),
       },
     ],
     [solServiceCreatedAt, solicitudServicioBase01],

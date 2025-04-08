@@ -12,8 +12,8 @@ import { Preventa } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
-  formatDateWithTime,
   formatDateWithTimeCell,
+  formatTrazabilidadCell,
 } from '@/shared/utils';
 import { ToastWrapper } from '@/shared/wrappers';
 import { useAuthStore } from '@/store/auth';
@@ -79,18 +79,12 @@ export const useColumnsPreventa = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
       {
-        accessorKey: 'vendedor',
+        accessorKey: 'vendedor__razon_social',
         header: 'VENDEDOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidadData =
-            row.original.solicitud_servicio_data?.trazabilidad_data;
-          const created = trazabilidadData?.at(0);
-
-          return created ? created?.user_data?.razon_social : 'N/A';
-        },
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        Cell: ({ row }: MRTSServiceType) =>
+          emptyCellNested(row, ['vendedor_data', 'razon_social']),
       },
 
       {
@@ -282,32 +276,25 @@ export const useColumnsPreventa = () => {
         accessorKey: 'razon_social__finaliza_preventa',
         header: 'REALIZADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
-          );
-
-          return trazabilidad?.user_data?.razon_social || 'N/A';
-        },
+        cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
+            'user_data.razon_social',
+            true,
+          ),
       },
       {
         accessorKey: 'fecha_finalizado',
         header: 'FECHA FINALIZADO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
-          );
-
-          return trazabilidad
-            ? formatDateWithTime(trazabilidad?.timestamp)
-            : 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
+            'timestamp',
+          ),
       },
     ],
     [preventaBaseColumns, preventaBaseColumns01],
@@ -321,32 +308,25 @@ export const useColumnsPreventa = () => {
         accessorKey: 'razon_social__cancela_preventa',
         header: 'CANCELADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__CANCELADO,
-          );
-
-          return trazabilidad?.user_data?.razon_social || 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.PREVENTA__CANCELADO,
+            'user_data.razon_social',
+            true,
+          ),
       },
       {
         accessorKey: 'fecha_cancelado',
         header: 'FECHA CANCELADO',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__CANCELADO,
-          );
-
-          return trazabilidad
-            ? formatDateWithTime(trazabilidad?.timestamp)
-            : 'N/A';
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.PREVENTA__CANCELADO,
+            'timestamp',
+          ),
       },
     ],
     [preventaBaseColumns, preventaBaseColumns01],
@@ -360,38 +340,24 @@ export const useColumnsPreventa = () => {
         header: 'SOICITO DESBLOQUEO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: false,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__SIN_GESTION,
-          );
-          const message =
-            `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
-              trazabilidad?.timestamp,
-            )}` || 'N/A';
-
-          return message;
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.PREVENTA__SIN_GESTION,
+            'user_data.razon_social',
+          ),
       },
       {
         accessorKey: 'admin_aprueba_desbloqueo',
         header: 'APRUEBA DESBLOQUEO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         enableColumnFilter: false,
-        Cell: ({ row }: MRTSServiceType) => {
-          const trazabilidad = row.original?.trazabilidad_data?.find(
-            item =>
-              item?.modelo_estado ===
-              SalesStatesActionsEnumChoice.PREVENTA__SIN_GESTION,
-          );
-          const message =
-            `${trazabilidad?.user_data?.razon_social} | ${formatDateWithTime(
-              trazabilidad?.timestamp,
-            )}` || 'N/A';
-
-          return message;
-        },
+        Cell: ({ row }: MRTSServiceType) =>
+          formatTrazabilidadCell(
+            row,
+            SalesStatesActionsEnumChoice.PREVENTA__SIN_GESTION,
+            'user_data.razon_social',
+          ),
       },
     ],
     [preventaBaseColumns],

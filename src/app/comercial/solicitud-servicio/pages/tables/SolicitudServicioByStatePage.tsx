@@ -97,7 +97,7 @@ const SolicitudServicioByStatePage: React.FC<
           // solicitudServicioBase
           state === EstadoSolicitudServicioEnumChoice.INGRESADO
             ? solicitudServicioBase
-            : state === EstadoSolicitudServicioEnumChoice.GESTIONANDO
+            : state === EstadoSolicitudServicioEnumChoice.FINALIZADO
               ? solicitudServicioFinalizadas
               : state === EstadoSolicitudServicioEnumChoice.CANCELADO
                 ? solicitudServicioFallidas

@@ -1,3 +1,4 @@
+import { TrazabilidadVentas } from '@/shared/interfaces';
 import { Typography, TypographyProps } from '@mui/material';
 import dayjs from 'dayjs';
 import {
@@ -189,4 +190,42 @@ export const formatConcat2valuesCell = (
       {`${value1} ${value2}`}
     </Typography>
   );
+};
+
+export const formatTrazabilidadCell = (
+  row: any,
+  modeloEstado: string,
+  keyPath: string,
+  onlyValue: boolean = false,
+  defaultValue: string = 'N/A',
+) => {
+  const trazabilidadData: TrazabilidadVentas[] =
+    row?.original?.trazabilidad_data;
+  if (!trazabilidadData || !Array.isArray(trazabilidadData)) {
+    return defaultValue;
+  }
+
+  const item = trazabilidadData.find(i => i?.modelo_estado === modeloEstado);
+  if (!item) return defaultValue;
+
+  const value = keyPath
+    .split('.')
+    .reduce(
+      (acc: any, k) =>
+        acc && acc[k as keyof TrazabilidadVentas] != null
+          ? acc[k as keyof TrazabilidadVentas]
+          : null,
+      item,
+    );
+
+  if (value) {
+    if (keyPath === 'timestamp') {
+      return formatDateWithTime(value);
+    }
+    return onlyValue
+      ? value
+      : `${value} -- ${formatDateWithTime(item.timestamp)}`;
+  } else {
+    return defaultValue;
+  }
 };
