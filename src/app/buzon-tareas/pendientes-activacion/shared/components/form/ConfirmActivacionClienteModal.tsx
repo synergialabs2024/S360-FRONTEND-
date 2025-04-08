@@ -181,10 +181,12 @@ const ConfirmActivacionClienteModal: React.FC<
   }, [isLoading, motivosRubroAdicionalPagingRes, open]);
 
   useEffect(() => {
-    createSolRecoordinacionAgenda.mutate({
-      linea_servicio: serviceLine.id,
-    });
-  }, []);
+    if (open) {
+      createSolRecoordinacionAgenda.mutate({
+        linea_servicio: serviceLine.id,
+      });
+    }
+  }, [open]); // Dependencia del open
 
   useLoaders(isLoading);
 

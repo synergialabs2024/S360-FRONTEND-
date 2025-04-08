@@ -50,6 +50,7 @@ const SuspendServiceLineModal: React.FC<SuspendServiceLineModalProps> = ({
     enabled: open,
     params: {
       page_size: 400,
+      state: true,
       tipo_rubro_adicional:
         tipoRubroAdicionalMantenedorEnumChoice.MANTENEDOR_SUSPENSIONES,
     },
@@ -135,6 +136,9 @@ const SuspendServiceLineModal: React.FC<SuspendServiceLineModalProps> = ({
               control={form.control}
               error={errors.reason_suspension}
               helperText={errors.reason_suspension?.message}
+              onChangeRawValue={e => {
+                console.log(e);
+              }}
             />
 
             <Grid item xs={12}>

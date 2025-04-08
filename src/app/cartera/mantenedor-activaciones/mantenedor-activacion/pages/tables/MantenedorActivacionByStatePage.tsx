@@ -22,7 +22,6 @@ import {
   useUpdateMantenedorActivacion,
 } from '@/actions/app/cartera/mantenedor-activacion/mantenedor-activacion.actions';
 import { MantenedorActivacion } from '@/shared/interfaces/app/cartera/mantenedor-activaciones/mantenedor-activacion.interface';
-import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useNavigate } from 'react-router';
@@ -115,9 +114,6 @@ const MantenedorActivacionByStatePage: React.FC<
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.tecnico_change_asuntoticket))
-                  return;
-
                 setConfirmDialog({
                   isOpen: true,
                   title: 'Cambiar state',

@@ -2,6 +2,7 @@ import {
   emptyCellOneLevel,
   EstadoTicketTecnicoEnumChoice,
   formatBooleanCell,
+  MODEL_STATE_BOOLEAN,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -9,20 +10,22 @@ import {
 } from '@/shared';
 import {
   CustomSearch,
+  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import {
-  CambioPlan,
-  MantenedorSuspension,
-} from '@/shared/interfaces/app/cartera';
+import { MantenedorSuspension } from '@/shared/interfaces/app/cartera';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useNavigate } from 'react-router';
-import { useFetchMantenedorSuspensiones } from '@/actions/app/cartera/mantenedor-suspension/mantenedor-suspension.actions';
+import {
+  useFetchMantenedorSuspensiones,
+  useUpdateMantenedorSuspension,
+} from '@/actions/app/cartera/mantenedor-suspension/mantenedor-suspension.actions';
+import { hasPermission } from '@/shared/utils/auth';
 
 export type MantenedorSuspensionByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
@@ -45,6 +48,10 @@ const MantenedorSuspensionByStatePage: React.FC<
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  const changeState = useUpdateMantenedorSuspension({
+    enableNavigate: false,
+  });
 
   ///* table
   const {
@@ -73,13 +80,51 @@ const MantenedorSuspensionByStatePage: React.FC<
   });
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<CambioPlan>[]>(
+  const columns = useMemo<MRT_ColumnDef<MantenedorSuspension>[]>(
     () => [
       {
         accessorKey: 'code',
         header: 'CODIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
+      {
+        accessorKey: 'state',
+        header: 'ESTADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.state === 'boolean' ? (
+            <CustomSwitch
+              title="state"
+              checked={row.original?.state}
+              onChangeChecked={() => {
+                if (!hasPermission(PermissionsEnum.tecnico_change_asuntoticket))
+                  return;
+
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar state',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el state de este registro?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        state: !row.original.state,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
       },
       {
         accessorKey: 'criterio',
@@ -143,7 +188,7 @@ const MantenedorSuspensionByStatePage: React.FC<
   const onEdit = (mantenedorActivacionBase: MantenedorSuspension) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Mantenedor Activacion Base',
+      title: 'Editar Mantenedor Suspension',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);

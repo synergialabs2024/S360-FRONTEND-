@@ -9,6 +9,7 @@ import {
   CustomNumberTextField,
   CustomTextField,
   CustomTypoLabel,
+  SampleCheckbox,
   SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
@@ -337,6 +338,15 @@ const SaveMantenedorSuspension: React.FC<SaveMantenedorSuspensionProps> = ({
           helperText={errors.grupos_usuario_autorizados?.message}
           onlyActualValueKey
           required={false}
+          size={gridSizeMdLg12}
+        />
+
+        <SampleCheckbox
+          label="state"
+          name="state"
+          control={form.control}
+          defaultValue={form.getValues().state!}
+          isState
           size={gridSizeMdLg12}
         />
       </>

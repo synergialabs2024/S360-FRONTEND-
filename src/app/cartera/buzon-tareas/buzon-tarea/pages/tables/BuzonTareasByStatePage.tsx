@@ -18,6 +18,7 @@ import { useMemo } from 'react';
 import { useFetchCambioPlanes } from '@/actions/app/cartera';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useAuthStore } from '@/store/auth';
+import { hasPermission } from '@/shared/utils/auth';
 
 export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
 
@@ -82,7 +83,9 @@ const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
     <SingleTableBoxScene
       title="Buzon de Tareas"
       createPageUrl={`${returnUrlBuzonTareasPage}/crear`}
-      showCreateBtn={true}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.cartera_add_buzontareamantenedor,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -108,6 +111,9 @@ const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         // crud
+        canEdit={hasPermission(
+          PermissionsEnum.cartera_change_buzontareamantenedor,
+        )}
         canDelete={false}
       />
     </SingleTableBoxScene>
