@@ -170,9 +170,10 @@ function CustomTableSelection<T>({
   };
 
   const handleSelectAllRows = () => {
-    if (Object.keys(rowSelection).length === 0) {
+    const visibleRows = table.getRowModel().rows;
+    if (Object.keys(rowSelection).length !== visibleRows.length) {
       setRowSelection(() => {
-        return data.reduce((acc: MRT_RowSelectionState, row: any) => {
+        return visibleRows.reduce((acc: MRT_RowSelectionState, row) => {
           acc[row.id] = true;
           return acc;
         }, {});
@@ -183,7 +184,8 @@ function CustomTableSelection<T>({
   };
 
   const getButtonLabel = () => {
-    return Object.keys(rowSelection).length === 0
+    const visibleRows = table.getRowModel().rows;
+    return Object.keys(rowSelection).length !== visibleRows.length
       ? 'Seleccionar Todo'
       : 'Deseleccionar Todo';
   };

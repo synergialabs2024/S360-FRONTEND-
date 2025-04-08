@@ -17,7 +17,7 @@ export type CodigosOtpSupervicionComercialMainPageProps = {};
 const CodigosOtpSupervicionComercialMainPage: React.FC<
   CodigosOtpSupervicionComercialMainPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.administration_view_codigootp);
+  useCheckPermission(PermissionsEnum.comercial_view_codigootp);
 
   const { tabValue, handleTabChange } = useTabsOnly();
 

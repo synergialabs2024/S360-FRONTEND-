@@ -18,7 +18,7 @@ export const returnUrlCodigosOtpMainPage = ROUTER_PATHS.comercial.codigosOtpNav;
 export type CodigosOtpMainPageProps = {};
 
 const CodigosOtpMainPage: React.FC<CodigosOtpMainPageProps> = () => {
-  useCheckPermission(PermissionsEnum.administration_view_codigootp);
+  useCheckPermission(PermissionsEnum.comercial_view_codigootp);
 
   const { tabValue, handleTabChange } = useTabsOnly();
 

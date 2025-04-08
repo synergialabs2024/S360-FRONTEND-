@@ -34,7 +34,7 @@ type MRTSCodigoOTPType = { row: MRT_Row<CodigoOtp> };
 const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
   state,
 }) => {
-  useCheckPermission(PermissionsEnum.administration_view_codigootp);
+  useCheckPermission(PermissionsEnum.comercial_view_codigootp);
   const theme = useTheme();
 
   // server side filters - colums table
