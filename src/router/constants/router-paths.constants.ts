@@ -379,6 +379,17 @@ export const ROUTER_PATHS = {
     configuracionPlantillaCliente: 'configuracion-plantilla-cliente',
     configuracionPlantillaClienteNav:
       '/cartera/configuracion-plantilla-cliente',
+
+    ///* promesas de pago
+    activacionManualWithFilter: 'activacionManualWithFilter',
+    activacionManualWithFilterCrear: 'activacionManualWithFilter/crear',
+    activacionManualWithFilterEditar: 'activacionManualWithFilter/editar/:uuid',
+    activacionManualWithFilterNav: '/cartera/activacionManualWithFilter',
+
+    activacionManual: 'activacionManual',
+    activacionManualCrear: 'activacionManual/crear',
+    activacionManualEditar: 'activacionManual/editar/:uuid',
+    activacionManualNav: '/cartera/activacionManual',
   },
   /////* Cobranza ----------------
   cobranza: {

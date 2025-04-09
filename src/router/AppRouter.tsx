@@ -1109,6 +1109,25 @@ const ConfiguracionPlantillaClienteCarteraPage = Loadable(
       ),
   ),
 );
+
+const ActivacionManualWithFilterByStatePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/activacion-manual/pages/tables/ActivacionManualWithFilterByStatePage'
+      ),
+  ),
+);
+
+const ActivacionManualByStatePage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/activacion-manual/pages/tables/ActivacionManualByStatePage'
+      ),
+  ),
+);
+
 const FacturasPage = Loadable(
   lazy(() => import('@/app/cobranza/factura/pages/tables/FacturasPage')),
 );
@@ -2807,6 +2826,18 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cartera.configuracionPlantillaCliente,
             element: <ConfiguracionPlantillaClienteCarteraPage />,
+          },
+
+          ///* Activacion manual
+          {
+            path: ROUTER_PATHS.cartera.activacionManualWithFilter,
+            element: <ActivacionManualWithFilterByStatePage />,
+          },
+
+          ///* Activacion manual
+          {
+            path: ROUTER_PATHS.cartera.activacionManual,
+            element: <ActivacionManualByStatePage />,
           },
         ],
       },

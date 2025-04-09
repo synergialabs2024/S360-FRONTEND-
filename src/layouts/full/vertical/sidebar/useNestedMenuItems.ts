@@ -910,6 +910,20 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.cartera.configuracionPlantillaClienteNav,
             }),
 
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'activacionmanual',
+              title: 'Activacion manual',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.activacionManualWithFilterNav,
+            }),
+
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'activaciones',
+              title: 'Activaciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.activacionManualNav,
+            }),
+
             // MANTENEDOR ACTIVACIONES
 
             {
