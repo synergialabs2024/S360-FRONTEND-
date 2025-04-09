@@ -75,7 +75,10 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
       PermissionsEnum.users_view_user,
     ]);
 
-    if (permisos && state == LeedTeleventa_Estado_TMEnumChoice.ESPERA) {
+    if (
+      (permisos && state == LeedTeleventa_Estado_TMEnumChoice.ESPERA) ||
+      state == LeedTeleventa_Estado_TMEnumChoice.SEPARADO
+    ) {
       return true;
     }
     return false;
@@ -92,17 +95,30 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
       return;
     }
 
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Apartar Leed de Televenta',
-      subtitle: '¿Está seguro que desea tomar ese leed?',
-      onConfirm: async () => {
-        setConfirmDialogIsOpen(false);
-        updateLeedTeleventaTakeOneMutation.mutate({
-          id: row.id!,
-        });
-      },
-    });
+    if (state == LeedTeleventa_Estado_TMEnumChoice.ESPERA) {
+      setConfirmDialog({
+        isOpen: true,
+        title: 'Apartar Leed de Televenta',
+        subtitle: '¿Está seguro que desea tomar ese leed?',
+        onConfirm: async () => {
+          setConfirmDialogIsOpen(false);
+          updateLeedTeleventaTakeOneMutation.mutate({
+            id: row.id!,
+          });
+        },
+      });
+    } else if (state == LeedTeleventa_Estado_TMEnumChoice.SEPARADO) {
+      setConfirmDialog({
+        isOpen: true,
+        title: 'Solicitud Servicio',
+        subtitle:
+          '¿Está seguro que desea crearle una solicitud servicio a este leed?',
+        onConfirm: async () => {
+          setConfirmDialogIsOpen(false);
+          console.log('xd');
+        },
+      });
+    }
   };
 
   ///* columns

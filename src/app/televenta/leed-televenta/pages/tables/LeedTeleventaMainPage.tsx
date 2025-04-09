@@ -34,13 +34,9 @@ const LeedTeleventaMainPage: React.FC<LeedTeleventaPageProps> = () => {
         handleTabChange={handleTabChange}
         isMainTableStates
       >
-        <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
-        <Tab label={'SEPARADO'} value={2} {...a11yProps(2)} />
-        <Tab
-          label={'REGISTRA SOLICITUD SERVICIO'}
-          value={3}
-          {...a11yProps(3)}
-        />
+        <Tab label={'DISPONIBLES'} value={1} {...a11yProps(1)} />
+        <Tab label={'MIS GESTIONES PENDIENTES'} value={2} {...a11yProps(2)} />
+        <Tab label={'MIS GESTIONES'} value={3} {...a11yProps(3)} />
         <Tab label={'SIN GESTION'} value={4} {...a11yProps(4)} />
         <Tab label={'RECHAZADO'} value={5} {...a11yProps(5)} />
       </BoxFormTabsOnly>

@@ -218,7 +218,7 @@ const ClienteFibraRubroAlquilerModal: React.FC<
                   if (compValor) {
                     const valor = prodValor / value;
                     const num = valor;
-                    const n = num.toFixed();
+                    const n = num.toFixed(2); // Redondear a 2 decimales
                     form.setValue('valor_base_cuota', String(n));
                   } else {
                     form.setValue('valor_base_cuota', String(prodValor as any));
