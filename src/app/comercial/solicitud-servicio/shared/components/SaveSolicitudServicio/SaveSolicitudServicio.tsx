@@ -75,6 +75,7 @@ import ServicesAlertModal from './ServicesAlertModal';
 export interface SaveSolicitudServicioProps {
   title: string;
   solicitudservicio?: SolicitudServicio;
+  leed?: string;
 }
 
 type SaveFormData = CreateSolicitudServicioParamsBase & {
@@ -92,7 +93,10 @@ type SaveFormData = CreateSolicitudServicioParamsBase & {
 const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   title,
   solicitudservicio,
+  leed,
 }) => {
+  console.log(leed);
+
   const navigate = useNavigate();
 
   ///* local state -----------------

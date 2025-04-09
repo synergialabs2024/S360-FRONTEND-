@@ -1,4 +1,5 @@
 import { MdArrowRightAlt } from 'react-icons/md';
+import { useNavigate } from 'react-router';
 
 import {
   CustomTable,
@@ -20,6 +21,7 @@ import {
 } from '@/shared';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { hasAllPermissions } from '@/shared/utils/auth';
+import { returnUrlSolicitudsServicioPage } from '@/app/comercial/solicitud-servicio/pages/tables/SolicitudesServicioMainPage';
 
 export type LeedTeleventaByStatePageProps = {
   state: string;
@@ -31,6 +33,8 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+
+  const navigate = useNavigate();
 
   ///* global state
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -115,7 +119,9 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
           '¿Está seguro que desea crearle una solicitud servicio a este leed?',
         onConfirm: async () => {
           setConfirmDialogIsOpen(false);
-          console.log('xd');
+          navigate(`${returnUrlSolicitudsServicioPage}/crear`, {
+            state: { leed: row.uuid },
+          });
         },
       });
     }
