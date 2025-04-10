@@ -43,6 +43,56 @@ export const solicitudServicioFormSchema = yup.object({
     .required('El campo direccion es requerido')
     .max(255, 'El campo direccion no debe exceder los 255 caracteres'),
 
+  // RUC -------------------------
+  tipo_contribuyente: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(200, 'El campo tipo contribuyente no debe exceder los 200 caracteres')
+    .when('tipo_identificacion', {
+      is: IdentificationTypeEnumChoice.RUC,
+      then: schema =>
+        schema.required('El campo tipo contribuyente es requerido para RUC'),
+    }),
+  estado_contribuyente: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      200,
+      'El campo estado contribuyente no debe exceder los 200 caracteres',
+    )
+    .when('tipo_identificacion', {
+      is: IdentificationTypeEnumChoice.RUC,
+      then: schema =>
+        schema.required('El campo estado contribuyente es requerido para RUC'),
+    }),
+  regimen: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(200, 'El campo régimen no debe exceder los 200 caracteres')
+    .when('tipo_identificacion', {
+      is: IdentificationTypeEnumChoice.RUC,
+      then: schema => schema.required('El campo régimen es requerido para RUC'),
+    }),
+  actividad_economica_principal: yup
+    .string()
+    .optional()
+    .nullable()
+    .max(
+      200,
+      'El campo actividad económica principal no debe exceder los 200 caracteres',
+    )
+    .when('tipo_identificacion', {
+      is: IdentificationTypeEnumChoice.RUC,
+      then: schema =>
+        schema.required(
+          'El campo actividad económica principal es requerido para RUC',
+        ),
+    }),
+  // ---------------------------
+
   // direccion: yup
   //   .string()
   //   .required('El campo direccion es requerido')

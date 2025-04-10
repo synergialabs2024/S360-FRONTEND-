@@ -100,6 +100,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
   const [clientData, setClientData] = useState<ClienteExist | null>(null);
+  const [canInsertSRIDataManually, setCanInsertSRIDataManually] =
+    useState<boolean>(false);
 
   const [aplicaRestriccionCiudadano, setAplicaRestriccionCiudadano] =
     useState<boolean>(false);
@@ -203,10 +205,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       return;
     }
 
-    if (personaInformacion?.registro_civil_down)
+    if (personaInformacion?.registro_civil_down) {
       ToastWrapper.warning(
         'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos faltantes manualmente',
       );
+      setCanInsertSRIDataManually(true);
+    }
 
     const applayCiudadanoValidation = !!personaInformacion?.registro_res;
     setCondicionCedulado(
@@ -293,6 +297,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         isFormBlocked: false,
         isValidIdentificacion: true,
       });
+
+      if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
+        setCanInsertSRIDataManually(true);
+      }
+
       // solicitud_servicio in process
     } else if (status === HTTPResStatusCodeEnum.CONFLICTS_OR_ACTIVE_SESSION) {
       if (blockedUntil) {
@@ -533,14 +542,6 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   const isCustomLoading = isLoadingPaises || isRefetchingPaises;
   useLoaders(isCustomLoading);
 
-  console.log({
-    haveDebt,
-    watchedIsFormBlocked,
-    watchedIsValidIdentificacion,
-    appp: aplicaRestriccionCiudadano && isExtranjeroCedulado,
-    isDefuncion,
-  });
-
   return (
     <SingleFormBoxScene
       titlePage={title}
@@ -582,6 +583,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           disableClearable
           onChangeValue={() => {
             clearForm();
+            setCanInsertSRIDataManually(false);
           }}
         />
         {/*<CustomTextFieldNoForm
@@ -606,6 +608,12 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
               onChangeValue={value => {
                 if (!value?.length) {
                   clearForm();
+                  if (
+                    watchedIdentificationType ==
+                    IdentificationTypeEnumChoice.RUC
+                  ) {
+                    setCanInsertSRIDataManually(false);
+                  }
                 }
               }}
             />
@@ -693,7 +701,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           helperText={errors.pais?.message}
           size={gridSizeMdLg6}
           disabled={
-            watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+            watchedIdentificationType === IdentificationTypeEnumChoice.RUC &&
+            !canInsertSRIDataManually
           }
         />
         <CustomAutocomplete<any>
@@ -713,7 +722,8 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           helperText={errors.pais?.message}
           size={gridSizeMdLg6}
           disabled={
-            watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+            watchedIdentificationType === IdentificationTypeEnumChoice.RUC &&
+            !canInsertSRIDataManually
           }
         />
 
