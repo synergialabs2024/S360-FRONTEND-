@@ -7,7 +7,7 @@ export type MantenedorActivacionesBasePageProps = {};
 const MantenedorActivacionesBasePage: React.FC<
   MantenedorActivacionesBasePageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cartera_add_mantenedoractivacionbase);
+  useCheckPermission(PermissionsEnum.cartera_add_mantenedorsuspension);
 
   return <SaveMantenedorSuspension title="Crear Mantenedor Suspension" />;
 };

@@ -11,7 +11,7 @@ export type UpdateMantenedorSuspensionPageProps = {};
 const UpdateMantenedorSuspensionPage: React.FC<
   UpdateMantenedorSuspensionPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cartera_change_mantenedoractivacionbase);
+  useCheckPermission(PermissionsEnum.cartera_change_mantenedorsuspension);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetMantenedorSuspension(uuid!);
