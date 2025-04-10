@@ -25,6 +25,7 @@ export interface SolicitudServicio {
   numero_referencia: string;
   codigo: string;
 
+  // ci ------------
   tipo_identificacion: string;
   identificacion: string;
   razon_social: string;
@@ -37,6 +38,12 @@ export interface SolicitudServicio {
   es_cliente: boolean;
   fecha_nacimiento: string;
   edad: number;
+
+  // ruc ------------
+  tipo_contribuyente?: string;
+  estado_contribuyente?: string;
+  regimen?: string;
+  actividad_economica_principal?: string;
 
   coordenadas: string; // to get factibilidad directly
   tiene_cobertura: boolean;

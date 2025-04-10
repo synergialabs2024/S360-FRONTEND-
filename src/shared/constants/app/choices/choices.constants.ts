@@ -16,6 +16,9 @@ export const IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE = [
     value: IdentificationTypeEnumChoice.CEDULA,
   },
 ];
+export const CountryISOCodeEnumChoice = {
+  ECUADOR: 'EC',
+};
 
 export enum UserRolesEnumChoice {
   GERENCIA = 'GERENCIA', // all business

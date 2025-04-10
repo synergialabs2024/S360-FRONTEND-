@@ -36,6 +36,7 @@ import {
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
+  CountryISOCodeEnumChoice,
   EstadoSolicitudServicioEnumChoice,
   GeneralModelStatesEnumChoice,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
@@ -75,7 +76,6 @@ import ServicesAlertModal from './ServicesAlertModal';
 export interface SaveSolicitudServicioProps {
   title: string;
   solicitudservicio?: SolicitudServicio;
-  leed?: string;
 }
 
 type SaveFormData = CreateSolicitudServicioParamsBase & {
@@ -93,10 +93,7 @@ type SaveFormData = CreateSolicitudServicioParamsBase & {
 const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   title,
   solicitudservicio,
-  leed,
 }) => {
-  console.log(leed);
-
   const navigate = useNavigate();
 
   ///* local state -----------------
@@ -170,6 +167,40 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       null;
     const fechaNacimiento =
       nacimiento || personaInformacion?.registro_res?.fechaNacimiento;
+
+    // RUC --------------------------------
+    if (
+      watchedIdentificationType === IdentificationTypeEnumChoice.RUC &&
+      personaInformacion?.tipo_identificacion === 'ruc'
+    ) {
+      const rucData = personaInformacion?.sri_data;
+      const ecuador = paisesPaging?.data?.items?.find(
+        c => c?.iso_code === CountryISOCodeEnumChoice.ECUADOR,
+      );
+      const correctFechaNacimiento = dayjs(
+        fechaNacimiento,
+        nacimiento ? 'YYYY-MM-DD' : 'DD/MM/YYYY',
+      ).format('YYYY-MM-DD');
+
+      form.reset({
+        ...form.getValues(),
+        razon_social: rucData?.razon_social,
+        tipo_contribuyente: rucData?.tipoContribuyente,
+        estado_contribuyente: rucData?.estadoContribuyenteRuc,
+        regimen: rucData?.regimen,
+        actividad_economica_principal: rucData?.actividadEconomicaPrincipal,
+        pais: ecuador?.id,
+        nacionalidad: ecuador?.nationality,
+        fecha_nacimiento: correctFechaNacimiento,
+        edad: personaInformacion?.edad,
+
+        email: getEmailPersonaInfo(personaInformacion),
+        celular: getCelulcarPersoanInfo(personaInformacion),
+        direccion_referencia: getAddressesPersonaInfo(personaInformacion),
+        es_cliente: false,
+      });
+      return;
+    }
 
     if (personaInformacion?.registro_civil_down)
       ToastWrapper.warning(
@@ -608,34 +639,37 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           error={errors.razon_social}
           helperText={errors.razon_social?.message}
         />
-        <CustomDatePicker
-          label="Fecha nacimiento"
-          name="fecha_nacimiento"
-          control={form.control}
-          defaultValue={form.getValues().fecha_nacimiento}
-          error={errors.fecha_nacimiento}
-          helperText={errors.fecha_nacimiento?.message}
-          size={gridSizeMdLg6}
-          onChangeValue={value => {
-            // 1997-05-10
-            const age = calcAge(value);
-            form.setValue('edad', age);
-            form.setValue('es_tercera_edad', calcIsTerceraEdad(value));
+        <>
+          <CustomDatePicker
+            label="Fecha nacimiento"
+            name="fecha_nacimiento"
+            control={form.control}
+            defaultValue={form.getValues().fecha_nacimiento}
+            error={errors.fecha_nacimiento}
+            helperText={errors.fecha_nacimiento?.message}
+            size={gridSizeMdLg6}
+            onChangeValue={value => {
+              // 1997-05-10
+              const age = calcAge(value);
+              form.setValue('edad', age);
+              form.setValue('es_tercera_edad', calcIsTerceraEdad(value));
 
-            // apply logic (planes,promos 3era edad, etc)
-          }}
-        />
-        <CustomNumberTextField
-          label="Edad"
-          name="edad"
-          control={form.control}
-          defaultValue={form.getValues().edad}
-          error={errors.edad}
-          helperText={errors.edad?.message}
-          size={gridSizeMdLg6}
-          min={0}
-          disabled
-        />
+              // apply logic (planes,promos 3era edad, etc)
+            }}
+          />
+          <CustomNumberTextField
+            label="Edad"
+            name="edad"
+            control={form.control}
+            defaultValue={form.getValues().edad}
+            error={errors.edad}
+            helperText={errors.edad?.message}
+            size={gridSizeMdLg6}
+            min={0}
+            disabled
+          />
+        </>
+
         <CustomAutocomplete<Pais>
           label="Pais"
           name="pais"
@@ -648,6 +682,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           error={errors.pais}
           helperText={errors.pais?.message}
           size={gridSizeMdLg6}
+          disabled={
+            watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+          }
         />
         <CustomAutocomplete<any>
           label="Nacionalidad"
@@ -665,6 +702,9 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           error={errors.pais}
           helperText={errors.pais?.message}
           size={gridSizeMdLg6}
+          disabled={
+            watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+          }
         />
 
         <CustomTextField

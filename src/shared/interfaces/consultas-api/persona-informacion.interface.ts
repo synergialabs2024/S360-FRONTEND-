@@ -1,4 +1,5 @@
 import { CedulaCitizen } from './cedula-citizen.interface';
+import { CompanyRUCSRI } from './company-ruc-sri.nterface';
 
 export interface PersonaInformacion {
   id: string;
@@ -24,8 +25,13 @@ export interface PersonaInformacion {
   contactos?: Contacto[];
   es_tercera_edad: boolean;
   edad: number;
+
+  // // helpers ---------------------
+  tipo_identificacion?: 'ruc' | 'ci';
   registro_res?: CedulaCitizen;
   registro_civil_down?: boolean;
+  sri_data?: CompanyRUCSRI;
+  sri_down?: boolean;
 }
 
 export interface Buro {
