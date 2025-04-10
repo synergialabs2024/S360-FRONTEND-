@@ -25,7 +25,7 @@ const LeedTeleventaMainPage: React.FC<LeedTeleventaPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Leed de Televenta"
+      title="Lead de Televenta"
       showCreateBtn={false}
       isMainTableStates
     >

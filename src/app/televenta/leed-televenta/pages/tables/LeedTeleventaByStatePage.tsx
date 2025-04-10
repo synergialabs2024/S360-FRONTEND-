@@ -8,6 +8,7 @@ import {
 } from '@/shared/components';
 import {
   useFetchLeedteleventas,
+  useFetchLeedteleventasNoJerarquia,
   useUpdateLeedteleventaTakeOne,
 } from '@/actions/app';
 import {
@@ -61,11 +62,25 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      username: searchTerm,
+      razon_social: searchTerm,
       ...filterObject,
       filterByState: false,
 
       estado_leed: state,
+    },
+  });
+  const {
+    data: LeedTeleventaNJPagingRes,
+    isLoading: isLoadingLeedNJ,
+    isRefetching: isRefetchingLeedNJ,
+  } = useFetchLeedteleventasNoJerarquia({
+    params: {
+      page: pageIndex + 1,
+      page_size: pageSize,
+      razon_social: searchTerm,
+      ...filterObject,
+
+      estado_leed: LeedTeleventa_Estado_TMEnumChoice.ESPERA,
     },
   });
 
@@ -93,6 +108,8 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
     enableErrorNavigate: true,
   });
 
+  const isEspera = state === LeedTeleventa_Estado_TMEnumChoice.ESPERA;
+
   ///* handlers
   const onEdit = (row: LeedTeleventa) => {
     if (row.id === undefined) {
@@ -119,9 +136,9 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
           '¿Está seguro que desea crearle una solicitud servicio a este leed?',
         onConfirm: async () => {
           setConfirmDialogIsOpen(false);
-          navigate(`${returnUrlSolicitudsServicioPage}/crear`, {
-            state: { leed: row.uuid },
-          });
+          navigate(
+            `${returnUrlSolicitudsServicioPage}/crear?televentas_id=${row.uuid}`,
+          );
         },
       });
     }
@@ -140,9 +157,13 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
 
       <CustomTable<LeedTeleventa>
         columns={leedteleventasColumns}
-        data={LeedTeleventaPagingRes?.data?.items || []}
-        isLoading={isLoading}
-        isRefetching={isRefetching}
+        data={
+          isEspera
+            ? LeedTeleventaNJPagingRes?.data?.items || []
+            : LeedTeleventaPagingRes?.data?.items || []
+        }
+        isLoading={isEspera ? isLoadingLeedNJ : isLoading}
+        isRefetching={isEspera ? isRefetchingLeedNJ : isRefetching}
         // // filters - server side
         enableManualFiltering={true}
         columnFilters={columnFilters}
@@ -152,7 +173,11 @@ const LeedTeleventaByStatePage: React.FC<LeedTeleventaByStatePageProps> = ({
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={LeedTeleventaPagingRes?.data?.meta?.count}
+        rowCount={
+          isEspera
+            ? LeedTeleventaNJPagingRes?.data?.meta?.count
+            : LeedTeleventaPagingRes?.data?.meta?.count
+        }
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={calcEnableActionsColumn()}

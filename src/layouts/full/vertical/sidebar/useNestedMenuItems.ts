@@ -1488,7 +1488,7 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.TELEVENTA_LEED_TELEVENTA, {
               id: 'leed-televentas',
-              title: 'Leed Televenta',
+              title: 'Lead Televenta',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.televentas.leedTeleventasNav,
             }),
