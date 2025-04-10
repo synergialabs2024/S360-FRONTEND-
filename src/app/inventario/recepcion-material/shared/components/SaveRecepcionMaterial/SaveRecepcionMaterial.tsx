@@ -31,7 +31,6 @@ import {
   useFetchBodegas,
   useFetchProductos,
   useFetchUbicacions,
-  useCreateIngresoMaterial,
   useUpdateRecepcionMaterial,
   CreateRecepcionMaterialParamsBase,
 } from '@/actions/app';
@@ -125,12 +124,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       enableErrorNavigate: true,
     });
 
-  const createIngresoMaterialMutation = useCreateIngresoMaterial({
-    navigate,
-    returnUrl: returnUrlIngresoMaterialesPage,
-    enableErrorNavigate: false,
-  });
-
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
@@ -169,34 +162,11 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
         );
         return;
       }
-
-      // Validaciones según `requiere_series`
-      if (
-        detalles.requiere_series &&
-        (!prod.series || prod.series.length === 0)
-      ) {
-        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
-        return;
-      } else if (
-        detalles.requiere_series &&
-        prod.series.length !== prod.cantidad
-      ) {
-        ToastWrapper.error(
-          `La cantidad del producto "${detalles.nombre}" debe ser igual a la cantidad de series existente.`,
-        );
-        return;
-      } else if (!detalles.requiere_series && prod.series.length > 0) {
-        ToastWrapper.error(
-          `El producto "${detalles.nombre}" no necesita series.`,
-        );
-        return;
-      }
     }
 
     data.estado_solicitud = 'APROBADO';
     data.productos = mappedProductos;
 
-    //*onSuccessCreateIngreso(data as RecepcionMaterial);
     const preparedData = {
       state: data.state,
       observacion: data.observacion,
@@ -211,13 +181,16 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       subtitle: '¿Desea ingresar la solicitud de este material?',
       onConfirm: () => {
         try {
+          navigate(`${returnUrlIngresoMaterialesPage}/crear`, {
+            state: { solicitud: preparedData },
+          });
           setConfirmDialogIsOpen(false);
-          createIngresoMaterialMutation.mutate(preparedData);
-          if (!data.id) {
-            ToastWrapper.error('No se encontró el ID de la solicitud.');
-            return;
+          if (data.id !== undefined) {
+            updateRecepcionMaterialAprobarMutation.mutate({
+              id: data.id,
+              data,
+            });
           }
-          updateRecepcionMaterialAprobarMutation.mutate({ id: data.id, data });
         } catch (error) {
           setConfirmDialogIsOpen(false);
           ToastWrapper.error(`${error}`);
@@ -275,7 +248,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   }, [reset, productosPaging]);
 
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsProductosDisponibles();
+  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
 
   return (
     <>
@@ -347,7 +320,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
           />
         )}
         <CustomMinimalTable<ProductosDisponiblesTableType>
-          columns={crearMaterialColumns}
+          columns={crearMaterialColumnsSinSerie}
           data={productosDisponibles || []}
           enablePagination
           density="comfortable"

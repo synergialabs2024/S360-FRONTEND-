@@ -37,6 +37,8 @@ export const returnUrlMantenedorSuspensionPage =
 const MantenedorSuspensionByStatePage: React.FC<
   MantenedorSuspensionByStatePageProps
 > = () => {
+  useCheckPermission(PermissionsEnum.cartera_view_mantenedorsuspension);
+
   const navigate = useNavigate();
   ///* global state ---------------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
@@ -44,7 +46,6 @@ const MantenedorSuspensionByStatePage: React.FC<
     s => s.setConfirmDialogIsOpen,
   );
 
-  useCheckPermission(PermissionsEnum.cartera_view_mantenedoractivacionbase);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -203,7 +204,9 @@ const MantenedorSuspensionByStatePage: React.FC<
     <SingleTableBoxScene
       title="Mantenedor Suspension"
       createPageUrl={`${returnUrlMantenedorSuspensionPage}/crear`}
-      showCreateBtn={true}
+      showCreateBtn={hasPermission(
+        PermissionsEnum.cartera_add_mantenedorsuspension,
+      )}
     >
       <CustomSearch
         onChange={onChangeFilter}
@@ -228,7 +231,13 @@ const MantenedorSuspensionByStatePage: React.FC<
         rowCount={CambioPlanesPagingRes?.data?.meta?.count}
         // // actions
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasPermission(
+          PermissionsEnum.cartera_change_mantenedorsuspension,
+        )}
         // crud
+        canEdit={hasPermission(
+          PermissionsEnum.cartera_change_mantenedorsuspension,
+        )}
         canDelete={false}
         onEdit={onEdit}
       />

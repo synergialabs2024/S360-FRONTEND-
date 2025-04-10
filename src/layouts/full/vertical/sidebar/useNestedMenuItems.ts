@@ -573,7 +573,7 @@ export const useNestedMenu = () => {
             }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solcitud-devoluciones',
+              id: 'solicitud-devoluciones',
               title: 'Recepción de solicitud de devolución',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
@@ -911,13 +911,20 @@ export const useNestedMenu = () => {
             }),
 
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'parametrosMantenedorSuspension',
+              title: 'Mantenedor Suspension',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cartera.parametrosMantenedorSuspensionNav,
+            }),
+
+            renderByModule(SidenavModulesEnum.CARTERA_MANTENEDOR_ACTIVACIONES, {
               id: 'activacionmanual',
               title: 'Activacion manual',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.activacionManualWithFilterNav,
             }),
 
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_MANTENEDOR_ACTIVACIONES, {
               id: 'activaciones',
               title: 'Activaciones',
               type: MenuItemType.ITEM,
@@ -1022,13 +1029,6 @@ export const useNestedMenu = () => {
                       type: MenuItemType.ITEM,
                       url: ROUTER_PATHS.cartera
                         .parametrosSolucionMantenedorBeneficiosNav,
-                    }),
-                    renderByModule(SidenavModulesEnum.CARTERA_BUZON_TAREAS, {
-                      id: 'parametrosMantenedorSuspension',
-                      title: 'Mantenedor Suspension',
-                      type: MenuItemType.ITEM,
-                      url: ROUTER_PATHS.cartera
-                        .parametrosMantenedorSuspensionNav,
                     }),
                   ],
                 },
@@ -1488,7 +1488,7 @@ export const useNestedMenu = () => {
           children: [
             renderByModule(SidenavModulesEnum.TELEVENTA_LEED_TELEVENTA, {
               id: 'leed-televentas',
-              title: 'Leed Televenta',
+              title: 'Lead Televenta',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.televentas.leedTeleventasNav,
             }),

@@ -36,6 +36,21 @@ export const useFetchLeedteleventas = ({
   });
 };
 
+export const useFetchLeedteleventasNoJerarquia = ({
+  enabled = true,
+  params,
+}: UseFetchEnabledParams<GetLeedTeleventasParams>) => {
+  return useQuery({
+    queryKey: [
+      LeedteleventaTSQEnum.LEEDTELEVENTAS,
+      ...Object.values(params || {}),
+    ],
+    queryFn: () => getLeedTeleventasNoJerarquia(params),
+    enabled: enabled,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useGetLeedteleventa = (uuid: string) => {
   return useQuery({
     queryKey: [LeedteleventaTSQEnum.LEEDTELEVENTA, uuid],
@@ -182,6 +197,16 @@ export const getLeedTeleventas = async (params?: GetLeedTeleventasParams) => {
   const queryParams = getUrlParams(stateParams);
   return get<LeedTeleventaPaginatedRes>(
     `/leed-televenta/?${queryParams}`,
+    true,
+  );
+};
+export const getLeedTeleventasNoJerarquia = async (
+  params?: GetLeedTeleventasParams,
+) => {
+  const stateParams = { ...params };
+  const queryParams = getUrlParams(stateParams);
+  return get<LeedTeleventaPaginatedRes>(
+    `/leed-televenta/no-jerarquia/?${queryParams}`,
     true,
   );
 };

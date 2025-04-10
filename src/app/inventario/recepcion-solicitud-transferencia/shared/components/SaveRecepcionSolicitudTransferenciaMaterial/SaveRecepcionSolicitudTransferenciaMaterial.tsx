@@ -23,22 +23,21 @@ import {
   gridSizeMdLg6,
   ProductosDisponiblesTableType,
   SolicitudTransferenciaMaterial,
-  useColumnsTransferenciaMaterial,
+  useColumnsProductosDisponibles,
   solicitudTransferenciaMaterialFormSchema,
 } from '@/shared';
 import {
   useFetchBodegas,
   useFetchProductos,
   useFetchUbicacions,
-  useCreateTransferenciaMaterial,
   useUpdateSolicitudTransferenciaMaterial,
   CreateSolicitudTransferenciaMaterialParamsBase,
 } from '@/actions/app';
 import { useProductosStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import ProductosDisponiblesModal from '@/shared/hooks/app/inventario/modals/ProductosDisponiblesModal';
-import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
 import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
+import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
 
 export interface SaveRecepcionSolicitudTransferenciaMaterialProps {
   title: string;
@@ -139,7 +138,6 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         returnUrl: returnUrlRecepcionSolicitudTransferenciaMaterialesPage,
       },
     );
-
   const updateRecepcionSolicitudTransferenciaAprobarMutation =
     useUpdateSolicitudTransferenciaMaterial<CreateSolicitudTransferenciaMaterialParamsBase>(
       {
@@ -147,12 +145,6 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         enableErrorNavigate: true,
       },
     );
-
-  const createTransferenciaMaterialMutation = useCreateTransferenciaMaterial({
-    navigate,
-    returnUrl: returnUrlTransferenciaMaterialesPage,
-    enableErrorNavigate: false,
-  });
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
@@ -205,27 +197,6 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         );
         return;
       }
-
-      // Validaciones según `requiere_series`
-      if (
-        detalles.requiere_series &&
-        (!prod.series || prod.series.length === 0)
-      ) {
-        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
-        return;
-      } else if (!detalles.requiere_series && prod.series.length > 0) {
-        ToastWrapper.error(
-          `El producto "${detalles.nombre}" no necesita series.`,
-        );
-        return;
-      }
-
-      if (detalles.requiere_series && prod.series.length !== prod.cantidad) {
-        ToastWrapper.error(
-          `El producto "${detalles.codigo}" debe tener una cantidad de series de ${prod.cantidad}.`,
-        );
-        return;
-      }
     }
 
     data.estado_solicitud = 'APROBADO';
@@ -246,16 +217,16 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
       subtitle: '¿Desea ingresar la solicitud de este material?',
       onConfirm: () => {
         try {
-          setConfirmDialogIsOpen(false);
-          createTransferenciaMaterialMutation.mutate(preparedData);
-          if (!data.id) {
-            ToastWrapper.error('No se encontró el ID de la solicitud.');
-            return;
-          }
-          updateRecepcionSolicitudTransferenciaAprobarMutation.mutate({
-            id: data.id,
-            data,
+          navigate(`${returnUrlTransferenciaMaterialesPage}/crear`, {
+            state: { solicitud: preparedData },
           });
+          setConfirmDialogIsOpen(false);
+          if (data.id !== undefined) {
+            updateRecepcionSolicitudTransferenciaAprobarMutation.mutate({
+              id: data.id,
+              data,
+            });
+          }
         } catch (error) {
           setConfirmDialogIsOpen(false);
           ToastWrapper.error(`${error}`);
@@ -359,7 +330,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
   useLoaders(customLoader);
 
   ///* columns --------------------
-  const { crearMaterialColumnsRecepcion } = useColumnsTransferenciaMaterial();
+  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -497,7 +468,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         )}
 
         <CustomMinimalTable<ProductosDisponiblesTableType>
-          columns={crearMaterialColumnsRecepcion}
+          columns={crearMaterialColumnsSinSerie}
           data={productosDisponibles || []}
           enablePagination
           density="comfortable"

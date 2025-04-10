@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -43,14 +44,17 @@ import { useAuthStore } from '@/store/auth';
 export interface SaveTransferenciaMaterialProps {
   title: string;
   transferenciaMaterial?: TransferenciaMaterial;
+  solicitud?: TransferenciaMaterial;
 }
 
 type SaveFormData = CreateTransferenciaMaterialParamsBase & {};
 
 const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
   title,
+  solicitud,
 }) => {
   const user = useAuthStore(s => s.user);
+  console.log(solicitud);
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
@@ -74,6 +78,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
 
   const {
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = form;
 
@@ -233,9 +238,9 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
-    productosEnviar([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!solicitud) return;
+    reset(solicitud);
+  }, [solicitud, reset]);
 
   useEffect(() => {
     if (
@@ -365,8 +370,8 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         options={
           watchedBodegaOrigen === watchedBodegaDestino
             ? ubicacionDestinoPaging?.data.items.filter(
-              item => item.id !== watchedUbicacionOrigen,
-            ) || []
+                item => item.id !== watchedUbicacionOrigen,
+              ) || []
             : ubicacionDestinoPaging?.data.items || []
         }
         isLoadingData={
