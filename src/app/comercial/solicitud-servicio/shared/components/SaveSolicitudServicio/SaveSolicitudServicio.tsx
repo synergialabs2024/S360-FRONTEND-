@@ -421,6 +421,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
   });
   const searchCedulaMutation =
     useValidateCedulaSolService<ValidateIdentificacionParams>({
+      customMessageToast: 'Identificación validada correctamente.',
       enableErrorNavigate: false,
       customOnSuccess: data => {
         onSuccessSearchCedula(data as PersonaInformacion);
@@ -731,6 +732,49 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
           helperText={errors.celular?.message}
           size={gridSizeMdLg6}
         />
+
+        {/* ------------ RUC ------------ */}
+        <>
+          {watchedIdentificationType === IdentificationTypeEnumChoice.RUC && (
+            <>
+              <CustomTextField
+                label="Tipo de contribuyente"
+                name="tipo_contribuyente"
+                control={form.control}
+                defaultValue={form.getValues().tipo_contribuyente}
+                error={errors.tipo_contribuyente}
+                helperText={errors.tipo_contribuyente?.message}
+                // size={gridSizeMdLg6}
+              />
+              <CustomTextField
+                label="Estado contribuyente"
+                name="estado_contribuyente"
+                control={form.control}
+                defaultValue={form.getValues().estado_contribuyente}
+                error={errors.estado_contribuyente}
+                helperText={errors.estado_contribuyente?.message}
+                size={gridSizeMdLg6}
+              />
+              <CustomTextField
+                label="Regimen"
+                name="regimen"
+                control={form.control}
+                defaultValue={form.getValues().regimen}
+                error={errors.regimen}
+                helperText={errors.regimen?.message}
+                size={gridSizeMdLg6}
+              />
+              <CustomTextField
+                label="Actividad económica principal"
+                name="actividad_economica_principal"
+                control={form.control}
+                defaultValue={form.getValues().actividad_economica_principal}
+                error={errors.actividad_economica_principal}
+                helperText={errors.actividad_economica_principal?.message}
+              />
+            </>
+          )}
+        </>
 
         <Grid item container xs={12} justifyContent="space-between">
           <Grid item {...gridSizeMdLg7}>
