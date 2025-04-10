@@ -198,6 +198,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         celular: getCelulcarPersoanInfo(personaInformacion),
         direccion_referencia: getAddressesPersonaInfo(personaInformacion),
         es_cliente: false,
+        isValidIdentificacion: true,
       });
       return;
     }
@@ -531,6 +532,14 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   const isCustomLoading = isLoadingPaises || isRefetchingPaises;
   useLoaders(isCustomLoading);
+
+  console.log({
+    haveDebt,
+    watchedIsFormBlocked,
+    watchedIsValidIdentificacion,
+    appp: aplicaRestriccionCiudadano && isExtranjeroCedulado,
+    isDefuncion,
+  });
 
   return (
     <SingleFormBoxScene
