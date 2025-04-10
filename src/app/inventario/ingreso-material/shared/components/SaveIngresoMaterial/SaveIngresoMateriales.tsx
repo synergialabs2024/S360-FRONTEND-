@@ -42,12 +42,14 @@ import { returnUrlIngresoMaterialesPage } from '../../../pages/tables/IngresoMat
 export interface SaveIngresoMaterialesProps {
   title: string;
   ingresoMaterial?: IngresoMaterial;
+  solicitud?: IngresoMaterial;
 }
 
 type SaveFormData = CreateIngresoMaterialParamsBase & {};
 
 const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
   title,
+  solicitud,
 }) => {
   const user = useAuthStore(s => s.user);
 
@@ -73,6 +75,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
 
   const {
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = form;
 
@@ -197,9 +200,9 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
 
   ///* effects
   useEffect(() => {
-    productosEnviar([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!solicitud) return;
+    reset(solicitud);
+  }, [solicitud, reset]);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)

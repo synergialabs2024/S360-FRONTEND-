@@ -187,29 +187,6 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
         );
         return;
       }
-
-      // Validaciones según `requiere_series`
-      if (
-        detalles.requiere_series &&
-        (!prod.series || prod.series.length === 0)
-      ) {
-        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
-        return;
-      } else if (!detalles.requiere_series && prod.series.length > 0) {
-        ToastWrapper.error(
-          `El producto "${detalles.nombre}" no necesita series.`,
-        );
-        return;
-      }
-      if (
-        detalles.requiere_series == true &&
-        prod.series.length !== prod.cantidad
-      ) {
-        ToastWrapper.error(
-          `El producto "${detalles.codigo}" debe tener una cantidad de series de ${prod.cantidad}.`,
-        );
-        return;
-      }
     }
 
     const preparedData = {
@@ -267,7 +244,7 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
   useLoaders(customLoader);
 
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsProductosDisponibles();
+  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
 
   const productosConUbicacion = productosDisponibles.map(producto => {
     return {
@@ -401,7 +378,7 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
         )}
 
         <CustomMinimalTable<ProductosDisponiblesTableType>
-          columns={crearMaterialColumns}
+          columns={crearMaterialColumnsSinSerie}
           data={productosConUbicacion || []}
           enablePagination
           density="comfortable"

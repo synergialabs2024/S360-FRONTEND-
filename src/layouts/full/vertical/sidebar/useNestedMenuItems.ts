@@ -573,7 +573,7 @@ export const useNestedMenu = () => {
             }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solcitud-devoluciones',
+              id: 'solicitud-devoluciones',
               title: 'Recepción de solicitud de devolución',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
