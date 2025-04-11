@@ -1,8 +1,8 @@
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import {
   CustomProgressBar,
   CustomSwitchNaps,
   ScrollableDialogProps,
+  SimpleTable,
   SingleIconButton,
 } from '@/shared/components';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';

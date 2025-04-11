@@ -1,6 +1,7 @@
+import { MRT_ColumnDef } from 'material-react-table';
+import { Box, Grid, Tab } from '@mui/material';
 import { useFetchOLTs } from '@/actions/app';
 import { useMemo } from 'react';
-import { MRT_ColumnDef } from 'material-react-table';
 
 import {
   ConfigOLT,
@@ -14,10 +15,9 @@ import {
   CustomTabPanel,
   FormTabsOnly,
   NestedTabsScene,
+  SimpleTable,
 } from '@/shared/components';
 import AppCard from '@/shared/components/AppCard/AppCard';
-import { Box, Grid, Tab } from '@mui/material';
-import { SimpleTable } from '../../../pages/custom';
 
 export type OLTScenceProps = {
   data?: Record<string, any>;

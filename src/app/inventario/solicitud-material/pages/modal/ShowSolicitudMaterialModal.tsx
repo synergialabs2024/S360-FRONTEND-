@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Producto } from '@/shared';
 import { useFetchProductos } from '@/actions/app';
-import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { useColumnsSolicitudMaterialProductos } from '../../shared/hooks/useColumnsSolicitudMaterialProductos';
 
 export type ShowSeriesModalMaterialProps = {

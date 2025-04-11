@@ -3,8 +3,7 @@ import { IconDiamond, IconHistory } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo, useState } from 'react';
 
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { ScrollableDialogProps } from '@/shared/components';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 
 export type TableModalGenericProps = {
   Arrays: any;

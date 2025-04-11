@@ -5,8 +5,7 @@ import { Radius } from '@/shared/interfaces';
 import { ROUTER_PATHS } from '@/router/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { SingleTableBoxScene } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { SimpleTable, SingleTableBoxScene } from '@/shared/components';
 import { fetchCombinedDataRadiusToken, useFetchRadiuss } from '@/actions/app';
 
 export const returnUrlRadiusPage = ROUTER_PATHS.administracionRed.radiusNav;

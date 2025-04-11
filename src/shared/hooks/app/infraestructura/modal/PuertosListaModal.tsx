@@ -2,7 +2,6 @@ import { Button, Grid } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import {
   emptyCellOneLevel,
   gridSize,
@@ -13,7 +12,11 @@ import {
   TABLE_CONSTANTS,
   useIsMediaQuery,
 } from '@/shared';
-import { CustomSwitchNaps, ScrollableDialogProps } from '@/shared/components';
+import {
+  CustomSwitchNaps,
+  ScrollableDialogProps,
+  SimpleTable,
+} from '@/shared/components';
 
 export type PuertosListaModalProps = {
   data?: Record<string, any>;

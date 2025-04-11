@@ -3,8 +3,7 @@ import { Grid, IconButton } from '@mui/material';
 import { IconDeviceMobileDollar } from '@tabler/icons-react';
 
 import { PlanPagoCuotaShow, useColumnsPlanPagoCuota } from '../columns';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { ScrollableDialogProps } from '@/shared/components';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 
 export type ShowPlanPagoCuotaModalProps = {
   Arrays: any;

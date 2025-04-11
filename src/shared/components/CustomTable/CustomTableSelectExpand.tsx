@@ -28,7 +28,7 @@ import { ColorButtonType } from '@/shared/interfaces';
 import { CustomSingleButton } from '../CustomButtons';
 import { CustomCircularPorgress } from '../Loaders';
 
-export interface CustomTableSelectionProps<T> {
+export interface CustomTableSelectExpandProps<T> {
   columns: any;
   data: T[] | any;
 
@@ -91,12 +91,17 @@ export interface CustomTableSelectionProps<T> {
   editIconColor?: ColorButtonType;
   editIconTooltipPlacement?: TooltipProps['placement'];
 
-  //Select ids
+  // Select ids
+  canSelect?: boolean;
   onDataIdSelects?: (data: any[]) => void;
   maxRowSelection?: number;
+
+  // Expand ids
+  canExpand?: boolean;
+  ExpandShow?: (row: T) => React.ReactNode;
 }
 
-function CustomTableSelection<T>({
+function CustomTableSelectExpand<T>({
   columns,
   data,
 
@@ -157,9 +162,14 @@ function CustomTableSelection<T>({
   arrowIcon = false,
 
   // Selects
+  canSelect = false,
   onDataIdSelects,
   maxRowSelection = Infinity,
-}: CustomTableSelectionProps<T>) {
+
+  // Expand
+  canExpand = false,
+  ExpandShow,
+}: CustomTableSelectExpandProps<T>) {
   const theme = useTheme();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [isFetching, setIsFetching] = useState(false);
@@ -352,16 +362,18 @@ function CustomTableSelection<T>({
           >
             Total Registros: {rowCount}
           </Typography>
-          <Grid container spacing={3} justifyContent="flex-end">
-            <Grid item>
-              <CustomSingleButton
-                label="Enviar"
-                color="success"
-                variant="contained"
-                onClick={handleSendSelected}
-              />
+          {canSelect ? (
+            <Grid container spacing={3} justifyContent="flex-end">
+              <Grid item>
+                <CustomSingleButton
+                  label="Enviar"
+                  color="success"
+                  variant="contained"
+                  onClick={handleSendSelected}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          ) : null}
         </>
       );
     },
@@ -377,7 +389,7 @@ function CustomTableSelection<T>({
       showGlobalFilter: false,
     },
     state: {
-      expanded: true,
+      //expanded: true,
       ...(pagination && { pagination }),
       isLoading,
       isFetching,
@@ -393,7 +405,7 @@ function CustomTableSelection<T>({
     muiTableProps,
 
     enableSelectAll: false,
-    enableRowSelection: true,
+    enableRowSelection: canSelect,
     getRowId: row => row.id,
     onRowSelectionChange: updater => {
       setRowSelection(prevSelection => {
@@ -405,6 +417,23 @@ function CustomTableSelection<T>({
         return newSelection;
       });
     },
+
+    enableExpanding: canExpand,
+    getRowCanExpand: () => canExpand,
+    renderDetailPanel:
+      canExpand && ExpandShow
+        ? ({ row }) => (
+            <Box
+              sx={{
+                padding: '16px',
+                backgroundColor: '#f5f5f5',
+                borderRadius: '8px',
+              }}
+            >
+              {ExpandShow(row.original as T)}
+            </Box>
+          )
+        : null,
 
     ///* filtering - server side filters
     ...(enableManualFiltering && {
@@ -422,31 +451,34 @@ function CustomTableSelection<T>({
       adapterLocale="es"
     >
       {isFetching && <CustomCircularPorgress />}
+      {canSelect ? (
+        <Grid sx={{ m: '5px' }}>
+          <Grid container justifyContent="flex-end" spacing={2}>
+            <Grid item>
+              <CustomSingleButton
+                label={getButtonAllData()}
+                color="primary"
+                variant="text"
+                startIcon={<IconTablePlus />}
+                onClick={handleToggleViewAll}
+              />
+            </Grid>
+            <Grid item>
+              <CustomSingleButton
+                label={getButtonLabel()}
+                color="secondary"
+                variant="text"
+                startIcon={<IconCheck />}
+                onClick={handleSelectAllRows}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      ) : null}
 
-      <Grid container spacing={3}>
-        <Grid item xs={8}></Grid>
-        <Grid item xs={1.5}>
-          <CustomSingleButton
-            label={getButtonAllData()}
-            color="primary"
-            variant="text"
-            startIcon={<IconTablePlus />}
-            onClick={handleToggleViewAll}
-          />
-        </Grid>
-        <Grid item>
-          <CustomSingleButton
-            label={getButtonLabel()}
-            color="secondary"
-            variant="text"
-            startIcon={<IconCheck />}
-            onClick={handleSelectAllRows}
-          />
-        </Grid>
-      </Grid>
       <MaterialReactTable table={table} />
     </LocalizationProvider>
   );
 }
 
-export default CustomTableSelection;
+export default CustomTableSelectExpand;

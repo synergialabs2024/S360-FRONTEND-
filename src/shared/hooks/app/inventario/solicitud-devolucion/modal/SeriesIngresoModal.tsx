@@ -6,8 +6,7 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { IngresosDisponiblesTableType } from '../columns';
-import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { MaterialSeries } from '@/shared/hooks/app/inventario/modals/SeriesProductoModal';
 
 export type SeriesIngresoModalProps = {

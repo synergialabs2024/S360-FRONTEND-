@@ -3,9 +3,8 @@ import { Grid, IconButton } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import { useFetchProductos } from '@/actions/app';
-import { ScrollableDialogProps } from '@/shared/components';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { Producto, useColumnsProductosDisponibles } from '@/shared';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 
 export type ShowSeriesModalProps = {
   Arrays: any;

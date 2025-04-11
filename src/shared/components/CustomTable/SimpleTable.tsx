@@ -13,6 +13,7 @@ export interface SimpleTableProps<T extends MRT_RowData> {
   enableGlobalFilter?: boolean;
   centerColumns?: boolean;
   showTotal?: boolean;
+  isSubTable?: boolean;
 }
 
 function SimpleTable<T extends MRT_RowData>({
@@ -22,12 +23,24 @@ function SimpleTable<T extends MRT_RowData>({
   enableGlobalFilter = true,
   centerColumns = false,
   showTotal = true,
+  isSubTable = false, // <-- NUEVO
 }: SimpleTableProps<T>) {
   const theme = useTheme();
 
   const table = useMaterialReactTable({
     columns,
     data,
+
+    localization: MRT_Localization_ES,
+    enableTopToolbar: true,
+    enableGlobalFilter: enableGlobalFilter,
+    positionGlobalFilter: 'left',
+    enablePagination: true,
+    enableFullScreenToggle: false,
+
+    muiTablePaperProps: {
+      elevation: 0,
+    },
 
     muiTableHeadCellProps: {
       sx: {
@@ -37,25 +50,27 @@ function SimpleTable<T extends MRT_RowData>({
         letterSpacing: '0.0075em',
         padding: '16px',
         textTransform: 'capitalize',
-        textAlign: centerColumns ? 'center' : 'left', // Centrar el título
+        textAlign: centerColumns ? 'center' : 'left',
       },
     },
 
     muiTableBodyCellProps: {
       sx: {
-        textAlign: centerColumns ? 'center' : 'left', // Centrar las celdas
+        textAlign: centerColumns ? 'center' : 'left',
       },
     },
 
-    localization: MRT_Localization_ES,
-    enableTopToolbar: true,
-    enableGlobalFilter: enableGlobalFilter,
-    positionGlobalFilter: 'left',
-    enablePagination: true,
-    enableFullScreenToggle: false,
-    muiTablePaperProps: {
-      elevation: 0,
+    muiPaginationProps: {
+      rowsPerPageOptions: isSubTable ? [3] : [10, 25, 50, 100],
     },
+
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: isSubTable ? 3 : 10,
+      },
+    },
+
     state: {
       isLoading,
     },

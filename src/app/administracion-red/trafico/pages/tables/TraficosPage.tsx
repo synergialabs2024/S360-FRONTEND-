@@ -12,8 +12,7 @@ import { ROUTER_PATHS } from '@/router/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { ModalDetalleConsumo } from '../../custom';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { SingleTableBoxScene } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { SimpleTable, SingleTableBoxScene } from '@/shared/components';
 
 export const returnUrlTraficosPage = ROUTER_PATHS.administracionRed.traficosNav;
 

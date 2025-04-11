@@ -20,7 +20,6 @@ import {
 } from '@/shared/components';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { AuditLogPrioridadIncidencia } from '../modals';
 import { useUpdatePrioridadIncidenciaTM } from '@/actions/app';
 import { TABLE_CONSTANTS, MODEL_STATE_BOOLEAN } from '@/shared/constants';
 
@@ -147,17 +146,6 @@ export const useColumnsPrioridadIncidenciaTM = () => {
   >(
     () => [
       ...prioridadincidenciatmBaseColumns01,
-      {
-        accessorKey: 'audit_logs',
-        header: 'HISTORIAL',
-        enableColumnFilter: false,
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        Cell: ({ row }) => {
-          return (
-            <AuditLogPrioridadIncidencia Arrays={row.original.audit_logs} />
-          );
-        },
-      },
       {
         accessorKey: 'created_at',
         header: 'CREADO',

@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router';
 
 import {
-  CustomTable,
+  SimpleTable,
   CustomSearch,
   SingleTableBoxScene,
+  CustomTableSelectExpand,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import {
+  AuditLogsPITM,
   useTableFilter,
   PermissionsEnum,
   TABLE_CONSTANTS,
@@ -85,8 +87,8 @@ const PrioridadIncidenciaTMPage: React.FC<
   };
 
   ///* columns
-  const { prioridadincidenciatmColumns } = useColumnsPrioridadIncidenciaTM();
-
+  const { prioridadincidenciatmColumns, prioridadincidenciaHistorialColumns } =
+    useColumnsPrioridadIncidenciaTM();
   return (
     <SingleTableBoxScene
       title="Prioridad Incidencia Ticket Masivo"
@@ -100,7 +102,7 @@ const PrioridadIncidenciaTMPage: React.FC<
           text="por nombre"
         />
 
-        <CustomTable<PrioridadIncidenciaTM>
+        <CustomTableSelectExpand<PrioridadIncidenciaTM>
           columns={prioridadincidenciatmColumns}
           data={PrioridadIncidenciaTMPagingRes?.data?.items || []}
           isLoading={isLoading}
@@ -125,6 +127,22 @@ const PrioridadIncidenciaTMPage: React.FC<
             PermissionsEnum.tecnico_view_prioridadincidenciaticketmasivo,
           ])}
           onEdit={onEdit}
+          //* Select
+          canSelect={true}
+          onDataIdSelects={row => console.log(row)}
+          //* Extendible
+          canExpand={true}
+          ExpandShow={(row: PrioridadIncidenciaTM) => (
+            <SimpleTable<AuditLogsPITM>
+              columns={prioridadincidenciaHistorialColumns}
+              data={Array.isArray(row.audit_logs) ? row.audit_logs : []}
+              isLoading={isLoading || isRefetching}
+              enableGlobalFilter={true}
+              showTotal={false}
+              //Subtable
+              isSubTable={true}
+            />
+          )}
         />
       </GridTableTabsContainerOnly>
     </SingleTableBoxScene>

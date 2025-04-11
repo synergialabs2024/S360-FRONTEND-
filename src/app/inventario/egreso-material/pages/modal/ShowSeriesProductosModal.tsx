@@ -1,10 +1,9 @@
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import {
   emptyCellOneLevel,
   TABLE_CONSTANTS,
   UbicacionProducto,
 } from '@/shared';
-import { ScrollableDialogProps } from '@/shared/components';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { Grid, IconButton } from '@mui/material';
 import { IconBrandCodesandbox } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'material-react-table';

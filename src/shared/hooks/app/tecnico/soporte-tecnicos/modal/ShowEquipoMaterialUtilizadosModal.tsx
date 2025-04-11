@@ -3,8 +3,7 @@ import { Grid, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 import { useColumnsEqMaUtilizado } from '../columns';
-import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 
 export type ShowEquipoMaterialUtilizadosModalProps = {
   Arrays: any;

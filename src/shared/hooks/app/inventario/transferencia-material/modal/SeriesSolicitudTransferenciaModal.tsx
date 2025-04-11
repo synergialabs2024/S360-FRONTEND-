@@ -11,8 +11,7 @@ import { useUiStore } from '@/store/ui';
 import { Producto } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { TABLE_CONSTANTS } from '@/shared/constants';
-import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { MaterialSeries } from '@/shared/hooks/app/inventario/modals/SeriesProductoModal';
 
 export type SeriesSolicitudTranferenciaModalProps = {

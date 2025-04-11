@@ -17,8 +17,7 @@ import {
 } from '@/shared/constants';
 import { getTraficoPing } from '@/actions/app';
 import { TraficoPing } from '@/shared/interfaces';
-import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { SelectArrayStringSimple } from '@/app/administracion-red/trafico/custom';
 
 export type ShowPingModalProps = {

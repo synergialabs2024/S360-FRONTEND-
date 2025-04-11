@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { useForm } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
@@ -12,10 +13,13 @@ import {
   TRAFICO_TYPE_ARRAY_CHOICES,
   TraficoDetalleConsumo,
 } from '@/shared';
-import { DateRangePicker, ScrollableDialogProps } from '@/shared/components';
+import {
+  DateRangePicker,
+  ScrollableDialogProps,
+  SimpleTable,
+} from '@/shared/components';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { useGetTraficoConsulta } from '@/actions/app';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
 import { cambioTiempo } from '../../pages/functions';
 import {
   CustomSimpleNumber,
@@ -243,24 +247,24 @@ const ModalDetalleConsumo: React.FC<ModalDetalleConsumoProps> = ({
                         <Grid item xs={6}>
                           {selectedDateRange.date_1 &&
                           selectedDateRange.date_2 ? (
-                              <Box
-                                display="flex"
-                                style={{ textTransform: 'uppercase' }}
-                                pl={2}
+                            <Box
+                              display="flex"
+                              style={{ textTransform: 'uppercase' }}
+                              pl={2}
+                            >
+                              <Typography variant="button">
+                                <strong>Desde</strong> <br />
+                                {selectedDateRange.date_1}
+                              </Typography>
+                              <Typography
+                                variant="button"
+                                style={{ paddingLeft: 10 }}
                               >
-                                <Typography variant="button">
-                                  <strong>Desde</strong> <br />
-                                  {selectedDateRange.date_1}
-                                </Typography>
-                                <Typography
-                                  variant="button"
-                                  style={{ paddingLeft: 10 }}
-                                >
-                                  <strong>Hasta</strong> <br />
-                                  {selectedDateRange.date_2}
-                                </Typography>
-                              </Box>
-                            ) : null}
+                                <strong>Hasta</strong> <br />
+                                {selectedDateRange.date_2}
+                              </Typography>
+                            </Box>
+                          ) : null}
                         </Grid>
                       </Grid>
                     </Grid>

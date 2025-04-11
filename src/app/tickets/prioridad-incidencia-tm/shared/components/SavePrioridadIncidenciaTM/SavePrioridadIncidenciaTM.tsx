@@ -10,7 +10,8 @@ import {
 } from '@/shared/components';
 import {
   gridSizeMdLg1,
-  gridSizeMdLg6,
+  gridSizeMdLg2,
+  gridSizeMdLg5,
   gridSizeMdLg11,
   PermissionsEnum,
   PrioridadIncidenciaTM,
@@ -82,8 +83,6 @@ const SavePrioridadIncidenciaTM: React.FC<SavePrioridadIncidenciaTMProps> = ({
       return;
     }
 
-    console.log(data);
-
     ///* create
     createPrioridadIncidenciaTMMutation.mutate(data);
   };
@@ -107,7 +106,7 @@ const SavePrioridadIncidenciaTM: React.FC<SavePrioridadIncidenciaTMProps> = ({
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg5}
       />
       <CustomTextField
         label="Codigo"
@@ -116,8 +115,16 @@ const SavePrioridadIncidenciaTM: React.FC<SavePrioridadIncidenciaTMProps> = ({
         defaultValue={form.getValues().code}
         error={errors.code}
         helperText={errors.code?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg5}
         disabled={!!prioridadincidenciaTM?.id}
+      />
+      <SampleCheckbox
+        label="state"
+        name="state"
+        control={form.control}
+        defaultValue={form.getValues().state}
+        isState
+        size={gridSizeMdLg2}
       />
       <CustomTextField
         label="Color Hex"
@@ -135,14 +142,6 @@ const SavePrioridadIncidenciaTM: React.FC<SavePrioridadIncidenciaTMProps> = ({
         onData={row => {
           form.setValue('color_hex', row);
         }}
-      />
-      <SampleCheckbox
-        label="state"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
-        size={gridSizeMdLg6}
       />
     </SingleFormBoxScene>
   );

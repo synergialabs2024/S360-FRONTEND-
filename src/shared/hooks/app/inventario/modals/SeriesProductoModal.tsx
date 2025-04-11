@@ -10,8 +10,7 @@ import {
 import * as XLSX from 'xlsx';
 
 import { useUiStore } from '@/store/ui';
-import { ScrollableDialogProps } from '@/shared/components';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { emptyCellOneLevel, Producto, TABLE_CONSTANTS } from '@/shared';
 
 export type SeriesProductoModalProps = {

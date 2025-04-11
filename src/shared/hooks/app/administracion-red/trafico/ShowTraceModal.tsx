@@ -1,6 +1,5 @@
 import { getTraficoTrace } from '@/actions/app';
-import { SimpleTable } from '@/app/infraestructura/olt/pages/custom';
-import { ScrollableDialogProps } from '@/shared/components';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { TraficoTrace } from '@/shared/interfaces';
 import { Button, IconButton, Tooltip, Typography } from '@mui/material';
