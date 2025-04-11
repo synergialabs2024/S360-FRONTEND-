@@ -26,7 +26,7 @@ import {
   CustomCardAlert,
   CustomCellphoneTextField,
   CustomDatePicker,
-  CustomIdentificacionTextField,
+  CustomIdentificacionTextField2,
   CustomNumberTextField,
   CustomScanLoad,
   CustomTextField,
@@ -45,6 +45,7 @@ import {
   SalesStatesActionsEnumChoice,
 } from '@/shared/constants/app';
 import {
+  gridSize,
   gridSizeMdLg12,
   gridSizeMdLg4,
   gridSizeMdLg6,
@@ -397,6 +398,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     } else {
       form.reset({
         isFormBlocked: true,
+        tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
       });
       handleAxiosError(err);
     }
@@ -508,16 +510,16 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     }
   };
 
-  const clearForm = () => {
+  const clearForm = (clearIdentificaicon = true) => {
     form.reset({
       ...form.getValues(),
+      ...(clearIdentificaicon && { identificacion: '' }),
       razon_social: '',
       es_discapacitado: false,
       es_tercera_edad: false,
       fecha_nacimiento: '',
       edad: undefined,
       direccion_referencia: '',
-      identificacion: '',
       tiene_cobertura: false,
       email: '',
       celular: '',
@@ -527,6 +529,11 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
       pais: undefined,
       nacionalidad: '',
+      tipo_contribuyente: undefined,
+      estado_contribuyente: undefined,
+      regimen: undefined,
+      actividad_economica_principal: undefined,
+      direccion: '',
     });
 
     setAplicaRestriccionCiudadano(false);
@@ -570,7 +577,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       <Grid item container {...gridSizeMdLg6} spacing={2}>
         <CustomTypoLabel text="Datos personales" />
 
-        <CustomAutocompleteArrString
+        {/* <CustomAutocompleteArrString
           label="Tipo de identificación"
           name="tipo_identificacion"
           control={form.control}
@@ -585,6 +592,23 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
             clearForm();
             setCanInsertSRIDataManually(false);
           }}
+        /> */}
+        <CustomAutocompleteArrString
+          label="Tipo de identificación"
+          name="tipo_identificacion"
+          options={IDENTIFICATION_TYPE_ARRAY_CHOICES || []}
+          control={form.control}
+          defaultValue={form.getValues().tipo_identificacion}
+          error={errors.tipo_identificacion}
+          helperText={errors.tipo_identificacion?.message}
+          isLoadingData={false}
+          size={gridSizeMdLg6}
+          disableClearable
+          onChangeValue={() => {
+            clearForm();
+            setCanInsertSRIDataManually(false);
+          }}
+          // disabled
         />
         {/*<CustomTextFieldNoForm
           label="Tipo de identificación"
@@ -593,7 +617,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         /> */}
         <InputAndBtnGridSpace
           inputNode={
-            <CustomIdentificacionTextField
+            <CustomIdentificacionTextField2
               label="Identificación"
               name="identificacion"
               control={form.control}
@@ -604,18 +628,36 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
               onFetchCedulaRucInfo={async value => {
                 await handleFetchCedulaRucInfo(value);
               }}
-              disabled={!watchedIdentificationType}
-              onChangeValue={value => {
-                if (!value?.length) {
+              autofocus
+              onChange={identificacion => {
+                if (
+                  identificacion === '' /* || identificacion?.length < 10 */
+                ) {
                   clearForm();
-                  if (
-                    watchedIdentificationType ==
-                    IdentificationTypeEnumChoice.RUC
-                  ) {
-                    setCanInsertSRIDataManually(false);
-                  }
+                  setCanInsertSRIDataManually(false);
+                  form.setValue(
+                    'tipo_identificacion',
+                    IdentificationTypeEnumChoice.CEDULA,
+                  );
+                }
+
+                if (identificacion.length > 10 && identificacion.length <= 13) {
+                  form.setValue(
+                    'tipo_identificacion',
+                    IdentificationTypeEnumChoice.RUC,
+                  );
+                  clearForm(false);
+                  form.setValue('identificacion', identificacion);
+                  setCanInsertSRIDataManually(false);
+                }
+                if (identificacion.length === 10) {
+                  form.setValue(
+                    'tipo_identificacion',
+                    IdentificationTypeEnumChoice.CEDULA,
+                  );
                 }
               }}
+              size={gridSize}
             />
           }
           btnLabel="Buscar"
