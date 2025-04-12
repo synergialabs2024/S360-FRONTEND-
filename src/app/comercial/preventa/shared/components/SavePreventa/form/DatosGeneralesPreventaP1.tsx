@@ -1,10 +1,15 @@
 import { UseFormReturn } from 'react-hook-form';
 
-import { gridSizeMdLg6 } from '@/shared';
+import {
+  gridSize,
+  gridSizeMdLg6,
+  IdentificationTypeEnumChoice,
+} from '@/shared';
 import {
   CustomCardAlert,
   CustomNumberTextField,
   CustomTextField,
+  CustomTextFieldNoForm,
   CustomTypoLabel,
 } from '@/shared/components';
 import { SaveFormDataPreventa } from '../SavePreventa';
@@ -22,6 +27,7 @@ const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
 
   const watchedEsTerceraEdad = form.watch('es_tercera_edad');
   const watchedEsDiscapacitado = form.watch('es_discapacitado');
+  const watchedIdentificationType = form.watch('tipo_identificacion');
 
   return (
     <>
@@ -87,6 +93,36 @@ const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
         helperText={errors.email?.message}
         disabled={!canEditEmail}
       />
+
+      {/* ------------ RUC ------------ */}
+      <>
+        {watchedIdentificationType === IdentificationTypeEnumChoice.RUC && (
+          <>
+            <CustomTextFieldNoForm
+              label="Tipo de contribuyente"
+              value={form.getValues().tipo_contribuyente}
+              disabled
+              size={gridSize}
+            />
+            <CustomTextFieldNoForm
+              label="Estado contribuyente"
+              value={form.getValues().estado_contribuyente}
+              disabled
+            />
+            <CustomTextFieldNoForm
+              label="Regimen"
+              value={form.getValues().regimen}
+              disabled
+            />
+            <CustomTextFieldNoForm
+              label="Actividad económica principal"
+              value={form.getValues().actividad_economica_principal}
+              disabled
+              size={gridSize}
+            />
+          </>
+        )}
+      </>
 
       <>
         {watchedEsTerceraEdad && (

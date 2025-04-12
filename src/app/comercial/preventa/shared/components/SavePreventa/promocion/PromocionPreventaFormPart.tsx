@@ -32,6 +32,7 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
   const watchedCity = form.watch('ciudad');
   const watchedZone = form.watch('zona');
   const watchedSector = form.watch('sector');
+  // const watchedServicePlan = form.watch('tipo_plan');
 
   ///* fetch data ----------------
   const {
@@ -56,6 +57,9 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       sector: watchedSector!,
       plan: watchedInternetPlan!,
       payment_method: watchedPaymentMethod!,
+      // ...(watchedServicePlan === InternetPlanInternetTypeEnumChoice.PYMES && {
+      //   is_pymes: true,
+      // }),
     },
   });
 

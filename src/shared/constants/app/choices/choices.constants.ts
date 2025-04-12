@@ -99,7 +99,7 @@ export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_ALL = [
 
 export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES = [
   InternetPlanInternetTypeEnumChoice.HOGAR,
-  InternetPlanInternetTypeEnumChoice.CORPORATIVO,
+  InternetPlanInternetTypeEnumChoice.PYMES,
 ];
 
 /* 

@@ -28,6 +28,14 @@ interface PreventaState {
   setShowReferidosPart: (showReferidosPart: boolean) => void;
   toggleShowReferidosPart: () => void;
 
+  // helpers servicio form part --------
+  suggestedPlansBuroKey: string[];
+  setSuggestedPlansBuroKey: (suggestedPlansBuroKey: string[]) => void;
+  alreadyConsultedEquifax: boolean;
+  setAlreadyConsultedEquifax: (alreadyConsultedEquifax: boolean) => void;
+  showEquiposPart: boolean;
+  setShowEquiposPart: (showEquiposPart: boolean) => void;
+
   clearAll: () => void;
 }
 
@@ -61,6 +69,16 @@ export const usePreventaStore = create<PreventaState>(set => ({
   toggleShowReferidosPart: () =>
     set(state => ({ showReferidosPart: !state.showReferidosPart })),
 
+  // helpers servicio form part --------
+  suggestedPlansBuroKey: [],
+  setSuggestedPlansBuroKey: suggestedPlansBuroKey =>
+    set({ suggestedPlansBuroKey }),
+  alreadyConsultedEquifax: false,
+  setAlreadyConsultedEquifax: alreadyConsultedEquifax =>
+    set({ alreadyConsultedEquifax }),
+  showEquiposPart: false,
+  setShowEquiposPart: showEquiposPart => set({ showEquiposPart }),
+
   clearAll: () =>
     set({
       isOTPVerified: false,
@@ -73,5 +91,10 @@ export const usePreventaStore = create<PreventaState>(set => ({
       salectedPromociones: [],
 
       showReferidosPart: false,
+
+      //
+      suggestedPlansBuroKey: [],
+      alreadyConsultedEquifax: false,
+      showEquiposPart: false,
     }),
 }));

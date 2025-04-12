@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsSendCheckFill } from 'react-icons/bs';
-import { CiSearch } from 'react-icons/ci';
 import { FaMapLocationDot } from 'react-icons/fa6';
 import { IoMdSend, IoMdUnlock } from 'react-icons/io';
 import { MdChangeCircle, MdOutlineTextsms } from 'react-icons/md';
@@ -16,14 +15,9 @@ import {
   CreatePreventaParamsBase,
   getSolicitudServicio,
   RequestUnlockOtpCodeParams,
-  useConsultarEquifax,
   useCreateOtpCode,
   useCreatePreventa,
-  useFetchEntidadFinancieras,
-  useFetchMetodoPagos,
-  useFetchPlanInternets,
   useFetchSectores,
-  useFetchTarjetas,
   useFetchZonas,
   useGetZoneByCoords,
   useUpdateCodigoOtp,
@@ -41,46 +35,30 @@ import {
 import {
   BucketKeyNameEnumChoice,
   BucketTypeEnumChoice,
-  ClasificacionPlanesScoreBuroEnumChoice,
   CodigoOtp,
-  EntidadFinanciera,
-  EquifaxEdentificationType,
-  HTTPResStatusCodeEnum,
-  IdentificationTypeEnumChoice,
-  InternetPlanInternetTypeEnumChoice,
-  InternetServiceTypeEnumChoice,
   MetodoPago,
   MetodoPagoEnumUUID,
   Nullable,
   OtpStatesEnumChoice,
-  PlanInternet,
   Sector,
-  Tarjeta,
   TimerSolicitudServicioEnum,
-  TIPO_CUENTA_BANCARIA_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
   useUploadImageGeneric,
 } from '@/shared';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 import {
-  ChipModelState,
   CustomAutocomplete,
   CustomCardAlert,
   CustomCellphoneTextField,
   CustomCoordsTextField,
-  CustomCreditCardTextField,
-  CustomExpirateDateTextField,
   CustomScanLoad,
   CustomSingleButton,
   CustomTextArea,
   CustomTextField,
-  CustomTextFieldNoForm,
   CustomTypoLabel,
-  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
   MapModalComponent,
-  SelectTextFieldArrayString,
   SingleIconButton,
   StepperBoxScene,
   useCustomStepper,
@@ -97,14 +75,12 @@ import {
   PreventaPromocionSelectedOptions,
   SolicitudServicio,
 } from '@/shared/interfaces';
-import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
 import {
   formatCountDownTimer,
   getKeysFormErrorsMessage,
   preventaFormSchema,
   sanitizeDataForSend,
   sanitizeDataResetForm,
-  validarCedulaEcuador,
 } from '@/shared/utils';
 import {
   GenericInventoryStoreKey,
@@ -119,12 +95,10 @@ import CountDownOTPPReventa from './CountDownOTPPReventa';
 import DocsSavePreventaStep from './DocsSavePreventaStep';
 import GeneralDataSavePreventaStep from './GeneralDataSavePreventaStep';
 import ValidButton from './ValidButton';
-import { EquiposVentaPreventaPartStep, EquipoVentasDetalle } from './form';
+import { EquipoVentasDetalle, PreventaServicioFormPart } from './form';
 import { EquiposSeleccionadosProductoType } from './form/equipos/EquiposSeleccionadosPreventa';
 
 import { SelectedEqPromoctionType } from '@/app/comercial/promocion/shared/components/SavePromocion/SavePromocion';
-import Cards from 'react-credit-cards-2';
-import { PromocionPreventaFormPart } from './promocion';
 
 export interface SavePreventaProps {
   title: React.ReactNode;
@@ -151,7 +125,6 @@ export type SaveFormDataPreventa = CreatePreventaParamsBase &
     estadoOtp?: Nullable<OtpStatesEnumChoice>;
 
     // helpers ----------------
-    tipoIdentificacion?: string;
 
     // promociones ----------------
     // to safe selected options after unmount in PromocionPreventaFormPart
@@ -194,13 +167,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     useState<boolean>(false);
   const [isCheckingCedula, setIsCheckingCedula] = useState<boolean>(false);
 
-  const [suggestedPlansBuroKey, setSuggestedPlansBuroKey] = useState<string[]>(
-    [],
-  );
-  const [isCheckingIdentificacionEquifax, setIsCheckingIdentificacionEquifax] =
-    useState<boolean>(false);
-  const [alreadyConsultedEquifax, setAlreadyConsultedEquifax] =
-    useState<boolean>(false);
+  const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
 
   // otp ------
   const [canChangeCelular, setCanChangeCelular] = useState<boolean>(false);
@@ -210,7 +177,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const setIsComponentBlocked = usePreventaStore(s => s.setIsComponentBlocked);
   const setCachedOtpData = usePreventaStore(s => s.setCachedOtpData);
   const clearAllPreventaStore = usePreventaStore(s => s.clearAll);
-  const setScoreServicio = usePreventaStore(s => s.setScoreServicio);
 
   const startTimer = useGenericCountdownStore(s => s.start);
   const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
@@ -219,7 +185,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   );
 
   // equipos venta -----------------
-  const [showEquiposPart, setShowEquiposPart] = useState<boolean>(false);
   const {
     items: equiposSeleccionados,
     clearOneRecord: clearAllEquiposSelecStore,
@@ -243,6 +208,11 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       initialStep: 0,
     });
 
+  ///* global state ---------------------
+  const alreadyConsultedEquifax = usePreventaStore(
+    s => s.alreadyConsultedEquifax,
+  );
+
   ///* form --------------------------
   const form = useForm<SaveFormDataPreventa>({
     resolver: yupResolver(preventaFormSchema) as any,
@@ -251,8 +221,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       es_referido: false,
       estadoOtp: null,
 
-      tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
-      tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
+      // tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
+      // tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
 
       selectedPromoOptions: [],
     },
@@ -263,7 +233,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     reset,
     formState: { errors, isValid },
   } = form;
-  const watchedTipoReferido = form.watch('tipo_referido');
 
   const watchedZone = form.watch('zona');
   const watchedThereIsCoverage = form.watch('thereIsCoverage');
@@ -274,19 +243,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   // promociones
   const watchedIs3raEdad = form.watch('es_tercera_edad');
 
-  const watchedServiceType = form.watch('tipo_servicio');
-  const watchedServicePlan = form.watch('tipo_plan');
-
   const watchedCelular = form.watch('celular');
   const watchedEstadoOtp = form.watch('estadoOtp');
-
-  const watchedIdentificationType = form.watch('tipoIdentificacion');
-  const watchedIdentification = form.watch('identificacion');
-  const watchedSuggestedPlansBuro = form.watch('plan_sugerido_buro');
-
-  const watcherNumberCreditCard = form.watch('numero_tarjeta_credito');
-  const watcherExpirateCreditCard = form.watch('fecha_vencimiento_tarjeta');
-  const watcherOwnerCreditCard = form.watch('titular_tarjeta');
 
   // map ---------------
   const {
@@ -336,54 +294,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     params: {
       page_size: 900,
       zona: watchedZone,
-    },
-  });
-
-  // payment methods
-  const {
-    data: metodoPagosPaging,
-    isLoading: isLoadingMetodoPagos,
-    isRefetching: isRefetchingMetodoPagos,
-  } = useFetchMetodoPagos({
-    params: {
-      page_size: 900,
-    },
-  });
-  const {
-    data: entidadFinancierasPaging,
-    isLoading: isLoadingEntidadFinancieras,
-    isRefetching: isRefetchingEntidadFinancieras,
-  } = useFetchEntidadFinancieras({
-    params: {
-      page_size: 900,
-    },
-  });
-  const {
-    data: tarjetasPaging,
-    isLoading: isLoadingTarjetas,
-    isRefetching: isRefetchingTarjetas,
-  } = useFetchTarjetas({
-    params: {
-      page_size: 900,
-    },
-  });
-
-  // internet service
-  const {
-    data: planInternetsPaging,
-    isLoading: isLoadingPlanInternets,
-    isRefetching: isRefetchingPlanInternets,
-  } = useFetchPlanInternets({
-    enabled:
-      !!watchedServiceType &&
-      !!watchedServicePlan &&
-      !!watchedSuggestedPlansBuro &&
-      !!alreadyConsultedEquifax,
-    params: {
-      page_size: 900,
-      tipo_servicio: watchedServiceType,
-      tipo_plan: watchedServicePlan,
-      clasificacion_score_buro: watchedSuggestedPlansBuro, // only filters
     },
   });
 
@@ -492,10 +402,9 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       estadoOtp:
         updatedSolServicio?.codigos_otp_data?.at(0)?.estado_otp || null,
 
-      tipoIdentificacion: solicitudServicio?.tipo_identificacion,
       email: prevForm.email,
-      tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
-      tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
+      // tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
+      // tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
     });
   };
 
@@ -570,6 +479,15 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ToastWrapper.error('El código OTP no ha sido verificado');
       return;
     }
+
+    // --------------------
+    if (!alreadyConsultedEquifax) {
+      ToastWrapper.error(
+        'No se ha realizado la consulta al servicio del buró de crédito.',
+      );
+      return;
+    }
+    // --------------------
 
     // validate images -----------
     if (!cedulaFrontalImg || !cedulaPosteriorImg)
@@ -704,84 +622,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     });
   };
 
-  // // Equifax ------
-  const onSuccessEquifax = async (data: EquifaxServicioCedula) => {
-    const suggestedPlansKey =
-      data?.plan_sugerido?.map(plan => plan.planSugerido) || [];
-
-    setSuggestedPlansBuroKey(suggestedPlansKey);
-    const scoreServicio = data?.score_servicios?.decision || '';
-    form.reset({
-      ...form.getValues(),
-      rango_capacidad_pago: data.plan_sugerido?.[0]?.rangoCapacidadDePago || '',
-      score_servicios: scoreServicio || '',
-      plan_sugerido_buro: suggestedPlansKey.join(','),
-      score_sobreendeudamiento: data.score_sobreendeudamiento.decision || '',
-      planes_sugeridos_buro:
-        suggestedPlansKey as ClasificacionPlanesScoreBuroEnumChoice[],
-    });
-    setIsCheckingIdentificacionEquifax(false);
-    setScoreServicio(scoreServicio);
-  };
-  const onErrorEquifax = async (err: any) => {
-    if (err?.response?.status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
-      ToastWrapper.error(
-        'El servicio de consulta de buro de crédito no está disponible en este momento',
-      );
-    } else {
-      handleAxiosError(err);
-    }
-    setIsCheckingIdentificacionEquifax(false);
-    return ToastWrapper.warning(
-      'No se podrá continuar con la preventa hasta que vuelva a estar operativo el servicio de consulta de buro de crédito',
-    );
-
-    // // // Ahora SI bloquea la venta totalmente el equifax -------
-    // const suggestedPlansBuroKey = [
-    //   ClasificacionPlanesScoreBuroEnumChoice.BASICO,
-    // ];
-
-    // setAlreadyConsultedEquifax(true);
-    // setSuggestedPlansBuroKey(suggestedPlansBuroKey);
-    // form.reset({
-    //   ...form.getValues(),
-    //   rango_capacidad_pago: '0-150',
-    //   score_servicios: 'E',
-    //   plan_sugerido_buro: suggestedPlansBuroKey.join(','),
-    //   score_sobreendeudamiento: 'E',
-    //   planes_sugeridos_buro: suggestedPlansBuroKey,
-    // });
-    // setIsCheckingIdentificacionEquifax(false);
-    // setScoreServicio('E');
-  };
-
-  const consultarEquifax = useConsultarEquifax({
-    customOnSuccess: data => {
-      onSuccessEquifax(data as EquifaxServicioCedula);
-    },
-    customOnError: err => {
-      onErrorEquifax(err);
-    },
-  });
-
-  const handleConsultaEquifax = async () => {
-    const identificationType =
-      watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA
-        ? EquifaxEdentificationType.CEDULA
-        : watchedIdentificationType === IdentificationTypeEnumChoice.RUC
-          ? EquifaxEdentificationType.RUC
-          : EquifaxEdentificationType.CEDULA;
-
-    setIsCheckingIdentificacionEquifax(true);
-    await consultarEquifax.mutateAsync({
-      identificacion: watchedIdentification!,
-      tipo_identificacion: identificationType,
-      solicitud_servicio: solicitudServicio?.id!,
-    });
-    setIsCheckingIdentificacionEquifax(false);
-    setAlreadyConsultedEquifax(true);
-  };
-
   ///* promociones ---------------------
   const { clearAllStore: clearAllStoreEquiposPromocion } =
     useTypedGenericInventoryStore<SelectedEqPromoctionType>(
@@ -798,9 +638,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
       ...sanitizedSolicitudServicio,
       estadoOtp: solicitudServicio?.codigos_otp_data?.at(0)?.estado_otp || null,
 
-      tipoIdentificacion: solicitudServicio?.tipo_identificacion,
-      tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
-      tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
+      // tipo_plan: InternetPlanInternetTypeEnumChoice.HOGAR,
+      // tipo_servicio: InternetServiceTypeEnumChoice.FIBRA,
 
       selectedPromoOptions: [],
     });
@@ -869,64 +708,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     latLng?.lat,
     latLng?.lng,
   ]);
-  // internet service
-  useEffect(() => {
-    if (
-      isLoadingPlanInternets ||
-      isRefetchingPlanInternets ||
-      !watchedServiceType ||
-      !watchedServicePlan
-    )
-      return;
 
-    !planInternetsPaging?.data?.items?.length &&
-      alreadyConsultedEquifax &&
-      ToastWrapper.error(
-        'No se encontraron planes de internet para la combinación de tipos de servicio y plan seleccionados',
-      );
-  }, [
-    alreadyConsultedEquifax,
-    isLoadingPlanInternets,
-    isRefetchingPlanInternets,
-    planInternetsPaging?.data?.items?.length,
-    watchedServicePlan,
-    watchedServiceType,
-  ]);
-  // payment methods, entidad financiera, tarjetas, flotas
-  useEffect(() => {
-    if (
-      isLoadingMetodoPagos ||
-      isRefetchingMetodoPagos ||
-      isLoadingEntidadFinancieras ||
-      isRefetchingEntidadFinancieras ||
-      isLoadingTarjetas ||
-      isRefetchingTarjetas
-    )
-      return;
-    if (!watchedRawPaymentMethod || !watchedTipoReferido) return;
-
-    // entidad financiera
-    if (!entidadFinancierasPaging?.data?.items?.length)
-      ToastWrapper.error(
-        'No se encontraron entidades financieras para el método de pago seleccionado',
-      );
-    // tarjetas
-    if (!tarjetasPaging?.data?.items?.length)
-      ToastWrapper.error(
-        'No se encontraron tarjetas para el método de pago seleccionado',
-      );
-  }, [
-    entidadFinancierasPaging,
-    isLoadingEntidadFinancieras,
-    isLoadingMetodoPagos,
-    isLoadingTarjetas,
-    isRefetchingEntidadFinancieras,
-    isRefetchingMetodoPagos,
-    isRefetchingTarjetas,
-    tarjetasPaging?.data?.items?.length,
-    watchedRawPaymentMethod,
-    watchedTipoReferido,
-  ]);
   // clear all timers when unmount
   useEffect(() => {
     return () => {
@@ -946,15 +728,7 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
     isLoadingZonaByCoords ||
     isRefetchingZonaByCoords ||
     isLoadingSectores ||
-    isRefetchingSectores ||
-    isLoadingMetodoPagos ||
-    isRefetchingMetodoPagos ||
-    isLoadingEntidadFinancieras ||
-    isRefetchingEntidadFinancieras ||
-    isLoadingTarjetas ||
-    isRefetchingTarjetas ||
-    isLoadingPlanInternets ||
-    isRefetchingPlanInternets;
+    isRefetchingSectores;
   useLoaders(isCustomLoading);
 
   return (
@@ -1155,354 +929,12 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       {/* ========================= Service ========================= */}
       {activeStep === 2 && (
-        <>
-          <>
-            <CustomTypoLabel
-              text="Consulta buró de crédito"
-              pt={CustomTypoLabelEnum.ptMiddlePosition}
-            />
-
-            <CustomTextField
-              label="Tipo identificación"
-              name="tipo_identificacion"
-              control={form.control}
-              defaultValue={form.getValues().tipo_identificacion}
-              error={errors.tipo_identificacion}
-              helperText={errors.tipo_identificacion?.message}
-              disabled
-              size={gridSizeMdLg6}
-            />
-            <InputAndBtnGridSpace
-              inputNode={
-                <CustomTextField
-                  label="Identificación"
-                  name="identificacion"
-                  control={form.control}
-                  defaultValue={form.getValues().identificacion}
-                  error={errors.identificacion}
-                  helperText={errors.identificacion?.message}
-                  disabled
-                />
-              }
-              btnLabel="Buscar"
-              iconBtn={<CiSearch />}
-              disabledBtn={
-                watchedIdentificationType ===
-                IdentificationTypeEnumChoice.PASAPORTE
-              }
-              onClick={() => {
-                if (!validarCedulaEcuador(watchedIdentification!)) {
-                  ToastWrapper.warning(
-                    'El número de cédula ingresado no es válido',
-                  );
-                  return;
-                }
-                handleConsultaEquifax();
-              }}
-            />
-          </>
-
-          <>
-            <CustomTypoLabel
-              text="Plan de Internet"
-              pt={CustomTypoLabelEnum.ptMiddlePosition}
-            />
-
-            {/* <CustomAutocompleteArrString
-              label="Tipo de servicio"
-              name="tipo_servicio"
-              options={INTERNET_SERVICE_TYPE_ARRAY_CHOICES_VENTAHOME}
-              isLoadingData={false}
-              control={form.control}
-              defaultValue={form.getValues().tipo_servicio}
-              error={errors.tipo_servicio}
-              helperText={errors.tipo_servicio?.message}
-              size={gridSizeMdLg6}
-              onChangeValue={() => {
-                // reset related fields
-                form.setValue('plan_internet', '' as any);
-              }}
-            /> */}
-            <CustomTextFieldNoForm
-              label="Tipo de servicio"
-              value={InternetServiceTypeEnumChoice.FIBRA}
-              disabled
-            />
-            <CustomTextFieldNoForm
-              label="Tipo de plan"
-              value={InternetPlanInternetTypeEnumChoice.HOGAR}
-              disabled
-            />
-            {/* <CustomAutocompleteArrString
-              label="Tipo de plan"
-              name="tipo_plan"
-              options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES}
-              isLoadingData={false}
-              control={form.control}
-              defaultValue={form.getValues().tipo_plan}
-              error={errors.tipo_plan}
-              helperText={errors.tipo_plan?.message}
-              size={gridSizeMdLg6}
-              onChangeValue={() => {
-                // reset related fields
-                form.setValue('plan_internet', '' as any);
-              }}
-            /> */}
-            <CustomAutocomplete<PlanInternet>
-              label="Planes de internet"
-              name="plan_internet"
-              // options
-              options={planInternetsPaging?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().plan_internet}
-              isLoadingData={false}
-              // vaidation
-              control={form.control}
-              error={errors.plan_internet}
-              helperText={errors.plan_internet?.message}
-              size={gridSizeMdLg6}
-              disabled={
-                !watchedServicePlan ||
-                !watchedServiceType ||
-                !alreadyConsultedEquifax
-              }
-              onChangeValue={() => {
-                form.setValue('selectedPromoOptions', []);
-              }}
-            />
-            <Grid
-              item
-              container
-              {...gridSizeMdLg6}
-              justifyContent="center"
-              alignItems="flex-end"
-              spacing={1}
-            >
-              {!suggestedPlansBuroKey?.length && (
-                <CustomCardAlert
-                  sizeType="small"
-                  alertMessage="Consultar Equifax para ver los planes"
-                  alertSeverity="info"
-                />
-              )}
-
-              {suggestedPlansBuroKey?.map((plan, index) => (
-                <Grid item key={index}>
-                  <ChipModelState label={plan} color="info" />
-                </Grid>
-              ))}
-            </Grid>
-          </>
-
-          <>
-            <EquiposVentaPreventaPartStep
-              solicitudServicio={solicitudServicio!}
-              showEquiposPart={showEquiposPart}
-              setShowEquiposPart={setShowEquiposPart}
-            />
-          </>
-
-          <>
-            <CustomTypoLabel
-              text="Método de pago"
-              pt={CustomTypoLabelEnum.ptMiddlePosition}
-            />
-
-            <CustomAutocomplete<MetodoPago>
-              label="Método de pago"
-              name="metodo_pago"
-              // options
-              options={metodoPagosPaging?.data?.items || []}
-              valueKey="name"
-              actualValueKey="id"
-              defaultValue={form.getValues().metodo_pago}
-              isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
-              // vaidation
-              control={form.control}
-              error={errors.metodo_pago}
-              helperText={errors.metodo_pago?.message}
-              size={gridSizeMdLg6}
-              onChangeValue={() => {
-                // reset related fields
-                form.setValue('entidad_financiera', '' as any);
-                form.setValue('tipo_cuenta_bancaria', '' as any);
-                form.setValue('numero_cuenta_bancaria', '');
-                form.setValue('tarjeta', '' as any);
-                form.setValue('numero_tarjeta_credito', '');
-                form.setValue('fecha_vencimiento_tarjeta', '');
-                form.setValue('titular_tarjeta', '');
-              }}
-              onChangeRawValue={rawValue => {
-                form.setValue('rawPaymentMethod', rawValue);
-                form.setValue('selectedPromoOptions', []);
-              }}
-            />
-            {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
-              <>
-                <CustomAutocomplete<EntidadFinanciera>
-                  label="Entidad financiera"
-                  name="entidad_financiera"
-                  // options
-                  options={entidadFinancierasPaging?.data?.items || []}
-                  valueKey="name"
-                  actualValueKey="id"
-                  defaultValue={form.getValues().entidad_financiera}
-                  isLoadingData={
-                    isLoadingEntidadFinancieras ||
-                    isRefetchingEntidadFinancieras
-                  }
-                  // vaidation
-                  control={form.control}
-                  error={errors.entidad_financiera}
-                  helperText={errors.entidad_financiera?.message}
-                  size={gridSizeMdLg6}
-                />
-                <SelectTextFieldArrayString
-                  label="Tipo cuenta bancaria"
-                  name="tipo_cuenta_bancaria"
-                  textFieldKey="tipo_cuenta_bancaria"
-                  // options
-                  options={TIPO_CUENTA_BANCARIA_ARRAY_CHOICES}
-                  defaultValue={form.getValues()?.tipo_cuenta_bancaria || ''}
-                  // errors
-                  control={form.control}
-                  error={form.formState.errors.tipo_cuenta_bancaria}
-                  helperText={
-                    form.formState.errors.tipo_cuenta_bancaria?.message
-                  }
-                  gridSize={gridSizeMdLg6}
-                />
-                <CustomTextField
-                  label="Número cuenta bancaria"
-                  name="numero_cuenta_bancaria"
-                  control={form.control}
-                  defaultValue={form.getValues().numero_cuenta_bancaria}
-                  error={errors.numero_cuenta_bancaria}
-                  helperText={errors.numero_cuenta_bancaria?.message}
-                  onlyNumbers
-                  maxLength={25}
-                  size={gridSizeMdLg6}
-                />
-              </>
-            ) : watchedRawPaymentMethod?.uuid ===
-              MetodoPagoEnumUUID.RECAUDACIONES ? (
-              <>
-                <CustomAutocomplete<EntidadFinanciera>
-                  label="Entidad financiera"
-                  name="entidad_financiera"
-                  // options
-                  options={entidadFinancierasPaging?.data?.items || []}
-                  valueKey="name"
-                  actualValueKey="id"
-                  defaultValue={form.getValues().entidad_financiera}
-                  isLoadingData={
-                    isLoadingEntidadFinancieras ||
-                    isRefetchingEntidadFinancieras
-                  }
-                  // vaidation
-                  control={form.control}
-                  error={errors.entidad_financiera}
-                  helperText={errors.entidad_financiera?.message}
-                  size={gridSizeMdLg6}
-                />
-              </>
-            ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
-              <>
-                <CustomAutocomplete<Tarjeta>
-                  label="Tarjeta de crédito"
-                  name="tarjeta"
-                  // options
-                  options={tarjetasPaging?.data?.items || []}
-                  valueKey="name"
-                  actualValueKey="id"
-                  defaultValue={form.getValues().tarjeta}
-                  isLoadingData={
-                    isLoadingEntidadFinancieras ||
-                    isRefetchingEntidadFinancieras
-                  }
-                  // vaidation
-                  control={form.control}
-                  error={errors.tarjeta}
-                  helperText={errors.tarjeta?.message}
-                  size={gridSizeMdLg6}
-                  disabled
-                />
-                <Grid item xs={12} pt={4}>
-                  <Cards
-                    number={watcherNumberCreditCard || ''}
-                    expiry={watcherExpirateCreditCard || ''}
-                    cvc=""
-                    name={watcherOwnerCreditCard || ''}
-                  />
-                </Grid>
-                <CustomCreditCardTextField
-                  label="Número tarjeta crédito"
-                  name="numero_tarjeta_credito"
-                  control={form.control}
-                  defaultValue={form.getValues().numero_tarjeta_credito}
-                  error={errors.numero_tarjeta_credito}
-                  helperText={errors.numero_tarjeta_credito?.message}
-                  onlyNumbers
-                  maxLength={16}
-                  onChangeCardType={cardType => {
-                    const card = tarjetasPaging?.data?.items.find(
-                      card => card?.code === cardType,
-                    );
-                    form.setValue('tarjeta', card?.id);
-                  }}
-                  size={gridSizeMdLg6}
-                />
-                <CustomAutocomplete<EntidadFinanciera>
-                  label="Entidad financiera"
-                  name="entidad_financiera"
-                  // options
-                  options={entidadFinancierasPaging?.data?.items || []}
-                  valueKey="name"
-                  actualValueKey="id"
-                  defaultValue={form.getValues().entidad_financiera}
-                  isLoadingData={
-                    isLoadingEntidadFinancieras ||
-                    isRefetchingEntidadFinancieras
-                  }
-                  // vaidation
-                  control={form.control}
-                  error={errors.entidad_financiera}
-                  helperText={errors.entidad_financiera?.message}
-                  size={gridSizeMdLg6}
-                />
-                <CustomTextField
-                  label="Titular tarjeta"
-                  name="titular_tarjeta"
-                  control={form.control}
-                  defaultValue={form.getValues().titular_tarjeta}
-                  error={errors.titular_tarjeta}
-                  helperText={errors.titular_tarjeta?.message}
-                  size={gridSizeMdLg6}
-                  maxLength={25}
-                />
-                <CustomExpirateDateTextField
-                  label="Fecha vencimiento tarjeta"
-                  name="fecha_vencimiento_tarjeta"
-                  control={form.control}
-                  defaultValue={form.getValues().fecha_vencimiento_tarjeta}
-                  error={errors.fecha_vencimiento_tarjeta}
-                  helperText={errors.fecha_vencimiento_tarjeta?.message}
-                  size={gridSizeMdLg6}
-                />
-              </>
-            ) : null}
-          </>
-
-          <>
-            <CustomTypoLabel
-              text="Promociones"
-              pt={CustomTypoLabelEnum.ptMiddlePosition}
-            />
-
-            <PromocionPreventaFormPart form={form} />
-          </>
-        </>
+        <PreventaServicioFormPart
+          form={form}
+          solicitudServicio={solicitudServicio}
+          showEquiposPart={showEquiposPart}
+          setShowEquiposPart={setShowEquiposPart}
+        />
       )}
 
       {/* ========================= OTP & docs ========================= */}
@@ -1751,7 +1183,6 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
 
       {/* ========================= loaders ========================= */}
       <CustomScanLoad isOpen={isCheckingCedula} name="archivo" />
-      <CustomScanLoad isOpen={isCheckingIdentificacionEquifax} name="cedula" />
     </StepperBoxScene>
   );
 };

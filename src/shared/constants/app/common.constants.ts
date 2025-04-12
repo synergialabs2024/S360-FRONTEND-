@@ -1,3 +1,5 @@
+import { InternetPlanInternetTypeEnumChoice } from './choices';
+
 export const ALL_MONTHS_STRING: string[] = [
   'ENERO',
   'FEBRERO',
@@ -533,4 +535,16 @@ export const DIAS_RECORDATORIO_PAGO_ARRAY_OBJ = [
     value: '0',
   },
   ...DIAS_1_TO_25_OBJ,
+];
+
+// INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES
+export const INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_OBJECT = [
+  {
+    label: 'HOGAR',
+    value: InternetPlanInternetTypeEnumChoice.HOGAR,
+  },
+  {
+    label: 'PYMES',
+    value: InternetPlanInternetTypeEnumChoice.PYMES,
+  },
 ];

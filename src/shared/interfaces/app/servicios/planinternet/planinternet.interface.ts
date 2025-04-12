@@ -36,9 +36,10 @@ export interface PlanInternet {
   tipo_plan: string;
   clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice | string;
 
-  // helpers no models -----
+  // helpers no models ----------
   name_valor_iva?: string;
   name_valor_base?: string;
+  name_valor_base_tipo_plan?: string;
 }
 
 export type PlanInternetLimitData = Pick<PlanInternet, 'uuid' | 'name' | 'id'>;

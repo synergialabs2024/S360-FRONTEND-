@@ -41,6 +41,8 @@ export interface Promocion {
   zonas?: number[] | string[];
   sectores?: number[] | string[];
   canales_venta?: number[] | string[];
+  // tipos_plan?: string[];
+  tipo_plan?: string;
   planes?: number[] | string[];
   metodo_pagos?: number[] | string[];
 

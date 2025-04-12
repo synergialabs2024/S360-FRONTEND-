@@ -23,6 +23,7 @@ import {
 import { useColumnsEquiposPreventa } from '@/app/comercial/preventa/shared/hooks';
 import {
   a11yProps,
+  CustomAutocompleteArrString,
   CustomAutocompleteMultiple,
   CustomDatePicker,
   CustomMinimalTable,
@@ -43,6 +44,7 @@ import {
   DiscountTypeEnumChoice,
   FACTURAS_CUOTAS_ARRAY_OBJECT,
   FacturasCuotasObjArray,
+  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES,
   InvetarioCodesEnum,
   SAVE_PROMOCION_PERMISSIONS,
   valueTipoRecuerrenciaAlquilerEnumChoice,
@@ -190,6 +192,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const watchedCiudades = form.watch('ciudades');
   const watchedZonas = form.watch('zonas');
 
+  const watchedPlanType = form.watch('tipo_plan');
+
   ///* fetch data ----------------
   const {
     data: provinciasPaging,
@@ -255,8 +259,10 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoading: isLoadingPlanes,
     isRefetching: isRefetchingPlanes,
   } = useFetchPlanInternets({
+    enabled: !!watchedPlanType,
     params: {
-      page_size: 600,
+      page_size: 900,
+      tipo_plan: watchedPlanType,
     },
   });
   const {
@@ -1033,59 +1039,6 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
             }
           />
 
-          {/* --------- PLANES --------- */}
-          <InputAndBtnGridSpace
-            mainGridSize={gridSize}
-            inputNode={
-              <CustomAutocompleteMultiple<PlanInternet>
-                label="Planes"
-                name="planes"
-                textFieldKey="nombre"
-                valueKey="name"
-                actualValueKey="id"
-                // options
-                options={planesPaging?.data?.items || []}
-                defaultValue={
-                  form.getValues().planes?.length
-                    ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
-                        (form.getValues().planes as any[])?.includes(plan?.id!),
-                      )
-                    : []
-                }
-                isLoadingData={isLoadingPlanes || isRefetchingPlanes}
-                // errors
-                control={form.control}
-                error={undefined}
-                helperText={errors.planes?.message}
-                disabled={watchedAllPlanes || !!promocion?.id}
-                onlyActualValueKey
-                required={false}
-              />
-            }
-            overrideBtnNode
-            customBtnNode={
-              <SampleCheckbox
-                label="TODOS"
-                name="allPlanes"
-                control={form.control}
-                defaultValue={!!form.getValues().allPlanes}
-                onChangeValue={value => {
-                  if (value) return form.setValue('planes', ['*']);
-                  form.setValue('planes', []);
-                }}
-                // disabled
-                disabled={!planesPaging?.data?.items?.length || !!promocion?.id}
-                onClickDisabled={() => {
-                  if (promocion?.id) return;
-
-                  ToastWrapper.warning(
-                    'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
-                  );
-                }}
-              />
-            }
-          />
-
           {/* --------- Payment methods --------- */}
           <InputAndBtnGridSpace
             mainGridSize={gridSize}
@@ -1138,6 +1091,75 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
 
                   ToastWrapper.warning(
                     'No se puede seleccionar todos los métodos de pago ya que no se tienen registros disponibles',
+                  );
+                }}
+              />
+            }
+          />
+
+          {/* --------- PLANES --------- */}
+          <CustomAutocompleteArrString
+            label="Tipo de plan"
+            name="tipo_plan"
+            options={INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES}
+            isLoadingData={false}
+            control={form.control}
+            defaultValue={form.getValues().tipo_plan}
+            error={errors.tipo_plan}
+            helperText={errors.tipo_plan?.message}
+            onChangeValue={() => {
+              // reset related fields
+              form.setValue('planes', []);
+              form.setValue('allPlanes', false);
+            }}
+            disabled={!!promocion?.id}
+          />
+          <InputAndBtnGridSpace
+            mainGridSize={gridSize}
+            inputNode={
+              <CustomAutocompleteMultiple<PlanInternet>
+                label="Planes"
+                name="planes"
+                textFieldKey="nombre"
+                valueKey="name_valor_base_tipo_plan"
+                actualValueKey="id"
+                // options
+                options={planesPaging?.data?.items || []}
+                defaultValue={
+                  form.getValues().planes?.length
+                    ? planesPaging?.data?.items?.filter((plan: PlanInternet) =>
+                        (form.getValues().planes as any[])?.includes(plan?.id!),
+                      )
+                    : []
+                }
+                isLoadingData={isLoadingPlanes || isRefetchingPlanes}
+                // errors
+                control={form.control}
+                error={undefined}
+                helperText={errors.planes?.message}
+                disabled={watchedAllPlanes || !!promocion?.id}
+                onlyActualValueKey
+                required={false}
+              />
+            }
+            overrideBtnNode
+            customBtnNode={
+              <SampleCheckbox
+                label="TODOS"
+                name="allPlanes"
+                control={form.control}
+                defaultValue={!!form.getValues().allPlanes}
+                onChangeValue={value => {
+                  if (value) return form.setValue('planes', ['*']);
+                  form.setValue('planes', []);
+                }}
+                // disabled
+                disabled={!planesPaging?.data?.items?.length || !!promocion?.id}
+                onClickDisabled={() => {
+                  if (promocion?.id) return;
+
+                  ToastWrapper.warning(
+                    'No se puede seleccionar todos los planes ya que no se tienen registros disponibles',
                   );
                 }}
               />
