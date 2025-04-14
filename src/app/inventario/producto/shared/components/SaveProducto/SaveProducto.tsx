@@ -117,7 +117,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     isRefetching: isRefetchingCuentaContable,
   } = useFetchCuentaContables({
     params: {
-      page_size: 300,
+      page_size: 5000,
     },
   });
 
@@ -288,18 +288,20 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
       <CustomCuentaContable<CuentaContable_Producto>
         label="Cuenta Contable"
         name="cuentas_contables"
-        options={(cuentaContablePaginatedRes?.data?.items || []).filter(
-          (cuenta): cuenta is CuentaContable_Producto =>
-            cuenta.id !== undefined,
-        )}
+        options={
+          cuentaContablePaginatedRes?.data?.items
+            ?.filter(item => item.id !== undefined)
+            .map(item => ({
+              id: item.id as number,
+              nombre: item.nombre,
+              codigo: item.codigo,
+            })) || []
+        }
         isLoadingData={isLoadingCuentaContable || isRefetchingCuentaContable}
         control={control}
         size={gridSizeMdLg12}
         limitTags={7}
-        defaultValue={form
-          .getValues()
-          .cuentas_contables?.map(item => item.id)
-          .filter(id => id !== undefined)}
+        defaultValue={form.getValues().cuentas_contables}
       />
 
       <SampleCheckbox

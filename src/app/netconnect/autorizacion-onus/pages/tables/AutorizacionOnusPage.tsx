@@ -1,7 +1,7 @@
 import { gridSizeMdLg8 } from '@/shared/constants/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { Button } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import {
   useFetchOLTs,
@@ -15,6 +15,7 @@ import {
   CustomSearch,
   SelectArrayChip,
   SingleTableBoxScene,
+  CustomSingleButton,
 } from '@/shared/components';
 import {
   useTableFilter,
@@ -25,6 +26,7 @@ import { ToastWrapper } from '@/shared';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { AutorizacionOnu, OLT, PermissionsEnum } from '@/shared/interfaces';
+import { IconSearch } from '@tabler/icons-react';
 
 type SaveFormData = CreateAuthOnuParamsBase & {};
 
@@ -154,9 +156,18 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
               titleArray={['name', 'hostname']}
               maxSelectable={3}
             />
-            <Button sx={{ mt: 3 }} onClick={handleSubmit(onSave, () => {})}>
-              Buscar ONTs
-            </Button>
+            <Grid sx={{ m: '5px', mt: 3 }}>
+              <CustomSingleButton
+                label="Buscar ONTs"
+                color="primary"
+                variant="text"
+                startIcon={<IconSearch />}
+                onClick={() => {
+                  handleSubmit(onSave, () => {});
+                }}
+                justifyContent="flex-end"
+              />
+            </Grid>
           </>
         }
       />

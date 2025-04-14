@@ -1,19 +1,23 @@
-import { useFetchIngresoMateriales } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
+import { FiPlus } from 'react-icons/fi';
+import { Grid } from '@mui/material';
+
 import {
+  useTableFilter,
   IngresoMaterial,
   PermissionsEnum,
   useColumnsIngresoMaterial,
-  useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
+  CustomSingleButton,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { useCheckPermission } from '@/shared/hooks/auth';
+import { ROUTER_PATHS } from '@/router/constants';
 import { hasPermission } from '@/shared/utils/auth';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { useFetchIngresoMateriales } from '@/actions/app';
 
 export const returnUrlIngresoMaterialesPage =
   ROUTER_PATHS.inventario.ingresoMaterialesNav;
@@ -68,6 +72,20 @@ const IngresoMaterialesPage: React.FC<IngresoMaterialesPageProps> = () => {
         onChange={onChangeFilter}
         value={globalFilter}
         text="por nombre"
+        customSpaceNode={
+          <Grid sx={{ m: '5px' }}>
+            <CustomSingleButton
+              label="Carga Ingreso"
+              color="primary"
+              variant="text"
+              startIcon={<FiPlus />}
+              onClick={() => {
+                console.log('Subir EXCEL');
+              }}
+              justifyContent="flex-end"
+            />
+          </Grid>
+        }
       />
 
       <CustomTable<IngresoMaterial>

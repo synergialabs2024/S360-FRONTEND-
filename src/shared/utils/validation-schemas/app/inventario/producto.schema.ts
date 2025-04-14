@@ -52,11 +52,7 @@ export const productoFormSchema = yup.object().shape({
 
   cuentas_contables: yup
     .array()
-    .of(
-      yup.object({
-        id: yup.string().required('El campo id es obligatorio'),
-      }),
-    )
+    .of(yup.number().required('El campo cuenta contable es obligatorio'))
     .required('Las cuentas contables son obligatorias')
     .min(1, 'Debe haber al menos una cuenta contable'),
 

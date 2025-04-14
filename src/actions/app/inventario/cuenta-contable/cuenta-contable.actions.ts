@@ -8,6 +8,7 @@ import {
   PagingPartialParams,
   UseFetchEnabledParams,
   CuentaContablePaginatedRes,
+  CuentaContable_CargaMasiva,
 } from '@/shared';
 import { useUiStore } from '@/store/ui';
 import { erpAPI } from '@/shared/axios/erp-api';
@@ -66,6 +67,45 @@ export const useCreateCuentaContable = <T>({
       enableToast &&
         ToastWrapper.success(
           customMessageToast || 'Cuenta Contable creado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+export const useCreateCuentaContableCargaMasiva = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateCuentaContableParams<T>) =>
+      createCuentaContableCargaMasiva(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [CuentaContableTSQEnum.CUENTACONTABLES],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Carga Masiva creada correctamente',
         );
     },
     onError: error => {
@@ -162,6 +202,18 @@ export const createCuentaContable = async <T>(
   setIsGlobalLoading(true);
 
   return post<CuentaContable>('/cuenta_contable/', data, true);
+};
+export const createCuentaContableCargaMasiva = async <T>(
+  data: CreateCuentaContableParams<T>,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<CuentaContable_CargaMasiva>(
+    '/cuenta_contable/carga-masiva/',
+    data,
+    true,
+  );
 };
 export const updateCuentaContable = async <T>({
   id,

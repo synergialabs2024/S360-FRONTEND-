@@ -5,4 +5,5 @@ export * from './useTableFilter';
 export * from './useTableServerSideFiltering';
 export * from './useTabOnlyNuqs';
 export * from './useTabsOnly';
+export * from './useUploadFileGeneric';
 export * from './useUploadImageGeneric';

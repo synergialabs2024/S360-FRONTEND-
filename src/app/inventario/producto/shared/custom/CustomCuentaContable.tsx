@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { Control, Controller } from 'react-hook-form';
 import {
@@ -16,11 +16,14 @@ import { CustomCircularPorgress, CustomFormLabel } from '@/shared/components';
 const icon = <MdCheckBoxOutlineBlank />;
 const checkedIcon = <MdCheckBox />;
 
-export type CustomCuentaContableProps<
-  T extends { id: string | number; nombre: string },
-> = {
+type FormattedOption = {
+  id: number;
+  label: string;
+};
+
+export type CustomCuentaContableProps<T> = {
   options: T[];
-  defaultValue?: (string | number)[];
+  defaultValue?: any[];
   loadingText?: string;
   isLoadingData: boolean;
   control: Control<any, any>;
@@ -34,86 +37,43 @@ export type CustomCuentaContableProps<
 };
 
 export default function CustomCuentaContable<
-  T extends {
-    cuenta_padre_data: null;
-    id: string | number;
-    nombre: string;
-  },
+  T extends { id: number; nombre: string; codigo: string },
 >({
   options,
+  defaultValue = [],
   isLoadingData,
   loadingText = 'Cargando...',
   label,
   name,
   control,
-  defaultValue,
   helperText,
   required = true,
   disabled = false,
   size = gridSize,
   limitTags = 2,
 }: CustomCuentaContableProps<T>) {
-  const [selectedValue, setSelectedValue] = useState<T[]>([]);
-  const hasLoggedRef = useRef(false);
-
-  const formatCuentaData = (
-    cuenta: any,
-    parentId: string = '',
-    parentNombre: string = '',
-  ): any[] => {
-    const idModificada = parentId ? `${parentId}.${cuenta.id}` : `${cuenta.id}`;
-    const label = parentNombre
-      ? `${parentNombre} - ${idModificada}`
-      : `${cuenta.nombre} - ${idModificada}`;
-
-    let formattedData = [
-      {
-        id: idModificada,
-        label: label,
-      },
-    ];
-
-    if (cuenta.cuentas_hijas_data && cuenta.cuentas_hijas_data.length > 0) {
-      cuenta.cuentas_hijas_data.forEach((hija: any) => {
-        formattedData = [
-          ...formattedData,
-          ...formatCuentaData(
-            hija,
-            idModificada,
-            parentNombre || cuenta.nombre,
-          ),
-        ];
-      });
-    }
-
-    return formattedData;
-  };
-
-  const filteredOptions = options.filter(
-    option => option.cuenta_padre_data === null,
-  );
-
-  const formattedOptions = useMemo(() => {
-    return filteredOptions.flatMap(option => formatCuentaData(option));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const formattedOptions = useMemo<FormattedOption[]>(() => {
+    return options.map(option => ({
+      id: option.id,
+      label: `${option.nombre} - ${option.codigo}`,
+    }));
   }, [options]);
 
+  const [selectedValue, setSelectedValue] = useState<FormattedOption[]>([]);
+
   useEffect(() => {
-    if (defaultValue) {
-      const selectedOptions = formattedOptions.filter(option =>
-        defaultValue.includes(option.id),
+    if (defaultValue?.length) {
+      const selected = formattedOptions.filter(opt =>
+        defaultValue.includes(opt.id),
       );
-      setSelectedValue(selectedOptions);
+      setSelectedValue(selected);
     }
   }, [defaultValue, formattedOptions]);
 
-  useEffect(() => {
-    if (!hasLoggedRef.current) {
-      hasLoggedRef.current = true;
-    }
-  }, []);
-
-  const onChange = (_event: React.ChangeEvent<{}>, newValue: T[]) => {
+  const onChange = (
+    _event: React.ChangeEvent<{}>,
+    newValue: FormattedOption[],
+  ) => {
     setSelectedValue(newValue);
   };
 
@@ -126,7 +86,7 @@ export default function CustomCuentaContable<
           <Controller
             name={name}
             control={control}
-            defaultValue={defaultValue}
+            defaultValue={defaultValue ?? []}
             render={({ field }) => (
               <>
                 <CustomFormLabel
@@ -145,11 +105,14 @@ export default function CustomCuentaContable<
                   loading={isLoadingData}
                   loadingText={loadingText}
                   disableCloseOnSelect
-                  getOptionLabel={(option: any) => option.label}
+                  getOptionLabel={option => option.label}
                   renderOption={(props, option, { selected }) => {
-                    const { key, ...restProps } = props;
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { key, ...rest } = props;
                     return (
-                      <li key={key} {...restProps}>
+                      <li key={option.id} {...rest}>
+                        {' '}
+                        {/* Usamos el `key` directamente */}
                         <Checkbox
                           icon={icon}
                           checkedIcon={checkedIcon}
@@ -161,7 +124,7 @@ export default function CustomCuentaContable<
                     );
                   }}
                   onChange={(event, newValue) => {
-                    field.onChange(newValue);
+                    field.onChange(newValue.map(opt => opt.id)); // solo enviamos los IDs al form
                     onChange(event, newValue);
                   }}
                   disabled={disabled}
@@ -179,9 +142,6 @@ export default function CustomCuentaContable<
                     />
                   )}
                 />
-                {helperText && (
-                  <div style={{ marginTop: '8px' }}>{helperText}</div>
-                )}
               </>
             )}
           />

@@ -150,6 +150,7 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
         error={errors.codigo}
         helperText={errors.codigo?.message}
         size={gridSizeMdLg6}
+        disabled={!!cuenta_contable?.id}
       />
       <CustomTextArea
         label="Descripción"

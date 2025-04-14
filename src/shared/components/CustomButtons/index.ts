@@ -4,6 +4,8 @@ export { default as CreateOrCancelButtonsForm } from './CreateOrCancelButtonsFor
 export { default as CustomSingleButton } from './CustomSingleButton';
 export { default as SingleIconButton } from './SingleIconButton';
 export { default as SingleImageAndBtnCell } from './SingleImageAndBtnCell';
+export { default as UploadFileDropZone } from './UploadFileDropZone';
+export { default as UploadFilePreviewBtn } from './UploadFilePreviewBtn';
 export { default as UploadImageDropZone } from './UploadImageDropZone';
 export { default as UploadImagePreviewBtn } from './UploadImagePreviewBtn';
 export { default as UploadUpdatedImagePreviewBtn } from './UploadUpdatedImagePreviewBtn';

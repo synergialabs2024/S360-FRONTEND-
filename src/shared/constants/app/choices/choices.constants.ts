@@ -557,6 +557,9 @@ export enum BucketTypeEnumChoice {
 
   // ticket masivo
   IMAGES_EMAIL_TM = 'images/email',
+
+  // Cuenta Contable
+  FILES_CUENTA_CONTABLE = 'files/cuenta_contable',
 }
 
 export enum BucketKeyNameEnumChoice {
@@ -1429,6 +1432,21 @@ export enum modeAuthorizateTypeEnumChoice {
 export const MODE_AUTHORIZATE_TYPE_ARRAY_CHOICES = [
   modeAuthorizateTypeEnumChoice.ROUTING,
   modeAuthorizateTypeEnumChoice.BRIDGING,
+];
+
+export type fileCuentaContableEnumChoiceType = {
+  label: string;
+  value: string;
+};
+export const FILE_CUENTA_CONTABLE_ARRAY_OBJ_ONT = [
+  {
+    label: '1.1.1.1',
+    value: '1',
+  },
+  {
+    label: '101010',
+    value: '2',
+  },
 ];
 
 //* TICKET MASIVO

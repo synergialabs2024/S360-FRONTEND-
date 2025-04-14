@@ -1,5 +1,5 @@
-import { CustomTypoLabel, CustomTypoLabelEnum } from '@/shared/components';
 import { UploadImagePreviewBtnProps } from '@/shared/components/CustomButtons/UploadImageDropZone';
+import { CustomTypoLabel, CustomTypoLabelEnum } from '@/shared/components';
 
 export type SaveEventoMensajeriaTMImageProps = {
   Image_url: File | null;

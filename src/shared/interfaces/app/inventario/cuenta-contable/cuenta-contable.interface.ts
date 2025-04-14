@@ -26,15 +26,13 @@ export interface CuentaContable {
 
 export interface CuentaContable_Producto {
   id: number;
-  label: string;
   nombre: string;
-  cuenta_padre: number;
-  cuentas_hijas_data?: string[];
-  cuenta_padre_data: null;
-
   codigo: string;
-  descripcion: string;
-  estado: boolean;
+}
+
+export interface CuentaContable_CargaMasiva {
+  url: string;
+  tipo: string;
 }
 
 export type CuentaContableLimitData = Pick<
