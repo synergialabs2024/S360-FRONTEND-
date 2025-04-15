@@ -81,7 +81,7 @@ export const solicitudServicioFormSchema = yup.object({
     .optional()
     .nullable()
     .max(
-      200,
+      600,
       'El campo actividad económica principal no debe exceder los 200 caracteres',
     )
     .when('tipo_identificacion', {
