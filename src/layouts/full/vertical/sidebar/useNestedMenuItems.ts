@@ -347,6 +347,12 @@ export const useNestedMenu = () => {
             //   type: MenuItemType.ITEM,
             //   url: ROUTER_PATHS.comercial.instalacionPreRechazadaOT,
             // }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'alquileres',
+              title: 'Alquileres',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.comercial.alquileresNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Supervision Comercial ----------------
@@ -897,12 +903,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.buzontareasNav,
             }), */
-            renderByModule(SidenavModulesEnum.CARTERA_ALQUILER, {
-              id: 'alquileres',
-              title: 'Alquileres',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.cartera.alquileresNav,
-            }),
             renderByModule(SidenavModulesEnum.CARTERA_CONFIGURACION_PLANTILLA, {
               id: 'configuracion-plantilla',
               title: 'Configuraciones de plantilla',
@@ -1049,7 +1049,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cobranza.planpagocuotasNav,
             }),
-            renderByModule(SidenavModulesEnum.COBRANZA_FACTURA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'facturas',
               title: 'Facturas',
               type: MenuItemType.ITEM,

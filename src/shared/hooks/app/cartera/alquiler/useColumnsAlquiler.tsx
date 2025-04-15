@@ -328,27 +328,8 @@ export const useColumnsAlquiler = () => {
     [alquilerBaseColumns01, alquilerBaseColumns03, onEditStateAlquiler],
   );
   const alquilerColumns = useMemo<MRT_ColumnDef<Alquiler>[]>(
-    () => [
-      ...alquilerBaseColumns02,
-      ...alquilerBaseColumns04,
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
-    ],
-    [alquilerBaseColumns02, alquilerBaseColumns04],
+    () => [...alquilerBaseColumns01, ...alquilerBaseColumns03],
+    [alquilerBaseColumns01, alquilerBaseColumns03],
   );
   const alquilerCancelarColumns = useMemo<MRT_ColumnDef<Alquiler>[]>(
     () => [

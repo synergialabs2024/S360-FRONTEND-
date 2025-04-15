@@ -1086,8 +1086,11 @@ const CambioPropietarioPagoPage = Loadable(
       ),
   ),
 );
-const AlquilerMainPage = Loadable(
-  lazy(() => import('@/app/cartera/alquiler/pages/tables/AlquilerMainPage')),
+const AlquilerPages = Loadable(
+  lazy(() => import('@/app/cartera/alquiler/pages/tables/AlquilerPages')),
+);
+const AlquilerFormPage = Loadable(
+  lazy(() => import('@/app/cartera/alquiler/pages/forms/AlquilerFormPage')),
 );
 
 const RubrosPage = Loadable(
@@ -2816,12 +2819,6 @@ const AppRouter = [
             element: <SaldosPage />,
           },
 
-          ///* Alquiler
-          {
-            path: ROUTER_PATHS.cartera.alquileres,
-            element: <AlquilerMainPage />,
-          },
-
           ///* Configuracion plantilla cliente
           {
             path: ROUTER_PATHS.cartera.configuracionPlantillaCliente,
@@ -3146,6 +3143,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.comercial.instalacionPreRechazadaOT,
             element: <InstalacionPreRechazadaOT />,
+          },
+
+          ///* Alquiler
+          {
+            path: ROUTER_PATHS.comercial.alquileres,
+            element: <AlquilerPages />,
+          },
+          {
+            path: ROUTER_PATHS.comercial.alquileresCrear,
+            element: <AlquilerFormPage />,
           },
         ],
       },

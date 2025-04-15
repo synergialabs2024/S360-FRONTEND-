@@ -369,12 +369,6 @@ export const ROUTER_PATHS = {
     saldos: 'saldos',
     saldosNav: '/cartera/saldos',
 
-    ///* promesas de pago
-    alquileres: 'alquileres',
-    alquileresCrear: 'alquileres/crear',
-    alquileresEditar: 'alquileres/editar/:uuid',
-    alquileresNav: '/cartera/alquileres',
-
     ///* configuracion de plantilla
     configuracionPlantillaCliente: 'configuracion-plantilla-cliente',
     configuracionPlantillaClienteNav:
@@ -480,6 +474,11 @@ export const ROUTER_PATHS = {
     instalacionesNav: '/comercial/instalaciones',
     instalacionesPreRechazadas: 'instalaciones',
     instalacionPreRechazadaOT: 'instalaciones/:uuid',
+
+    ///* promesas de pago
+    alquileres: 'alquileres',
+    alquileresCrear: 'alquileres/crear/:uuid',
+    alquileresNav: '/comercial/alquileres',
   },
 
   /////* Operaciones ----------------

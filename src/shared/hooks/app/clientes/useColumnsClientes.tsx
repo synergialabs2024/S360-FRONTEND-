@@ -10,7 +10,7 @@ import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 type MRTClienteType = { row: MRT_Row<Cliente> };
 
 export const useColumnsClientes = () => {
-  const clientesFibraColumnsB01 = useMemo<MRT_ColumnDef<Cliente>[]>(
+  const clientesFibraColumnsB00 = useMemo<MRT_ColumnDef<Cliente>[]>(
     () => [
       {
         accessorKey: 'identificacion',
@@ -42,7 +42,11 @@ export const useColumnsClientes = () => {
           );
         },
       },
-
+    ],
+    [],
+  );
+  const clientesFibraColumnsB01 = useMemo<MRT_ColumnDef<Cliente>[]>(
+    () => [
       // first line service: contract, ...
       {
         accessorKey: 'numero_contrato__first_line',
@@ -153,6 +157,51 @@ export const useColumnsClientes = () => {
 
   const clientesFibraColumnsActivos = useMemo<MRT_ColumnDef<Cliente>[]>(
     () => [
+      ...clientesFibraColumnsB00,
+      ...clientesFibraColumnsB01,
+      ...clientesFibraColumnsB02,
+      ...clientesFibraColumnsB03,
+      {
+        accessorKey: 'created_at',
+        header: 'CREADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+      {
+        accessorKey: 'modified_at',
+        header: 'MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [
+      clientesFibraColumnsB00,
+      clientesFibraColumnsB01,
+      clientesFibraColumnsB02,
+      clientesFibraColumnsB03,
+    ],
+  );
+
+  const clientesFibraColumnsActivosNoLink = useMemo<MRT_ColumnDef<Cliente>[]>(
+    () => [
+      {
+        accessorKey: 'identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }: MRTClienteType) =>
+          emptyCellOneLevel(row, 'identificacion'),
+      },
+      {
+        accessorKey: 'razon_social',
+        header: 'NOMBRES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }: MRTClienteType) =>
+          emptyCellOneLevel(row, 'razon_social'),
+      },
       ...clientesFibraColumnsB01,
       ...clientesFibraColumnsB02,
       ...clientesFibraColumnsB03,
@@ -178,5 +227,6 @@ export const useColumnsClientes = () => {
 
   return {
     clientesFibraColumnsActivos,
+    clientesFibraColumnsActivosNoLink,
   };
 };
