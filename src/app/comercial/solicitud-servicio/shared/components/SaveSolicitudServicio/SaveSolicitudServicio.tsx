@@ -29,6 +29,7 @@ import {
   CustomIdentificacionTextField2,
   CustomNumberTextField,
   CustomScanLoad,
+  CustomTextArea,
   CustomTextField,
   CustomTypoLabel,
   InputAndBtnGridSpace,
@@ -825,7 +826,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
                 helperText={errors.regimen?.message}
                 size={gridSizeMdLg6}
               />
-              <CustomTextField
+              <CustomTextArea
                 label="Actividad económica principal"
                 name="actividad_economica_principal"
                 control={form.control}

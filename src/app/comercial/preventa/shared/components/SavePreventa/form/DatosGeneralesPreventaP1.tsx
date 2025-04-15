@@ -8,6 +8,7 @@ import {
 import {
   CustomCardAlert,
   CustomNumberTextField,
+  CustomTextAreaNoForm,
   CustomTextField,
   CustomTextFieldNoForm,
   CustomTypoLabel,
@@ -114,7 +115,7 @@ const DatosGeneralesPreventaP1: React.FC<DatosGeneralesPreventaP1Props> = ({
               value={form.getValues().regimen}
               disabled
             />
-            <CustomTextFieldNoForm
+            <CustomTextAreaNoForm
               label="Actividad económica principal"
               value={form.getValues().actividad_economica_principal}
               disabled
