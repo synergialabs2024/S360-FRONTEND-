@@ -1,6 +1,5 @@
 import {
-  emptyCellOneLevel,
-  EstadoTicketTecnicoEnumChoice,
+  EstadoTareaEnumChoice,
   PermissionsEnum,
   TABLE_CONSTANTS,
   useTableFilter,
@@ -9,26 +8,21 @@ import {
 import {
   CustomSearch,
   CustomTable,
-  SingleTableBoxScene,
+  GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { CambioPlan } from '@/shared/interfaces/app/cartera';
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
-import { useFetchCambioPlanes } from '@/actions/app/cartera';
-import { ROUTER_PATHS } from '@/router/constants';
-import { useAuthStore } from '@/store/auth';
 import { hasPermission } from '@/shared/utils/auth';
-
-export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
+import { useFetchBuzonTareas } from '@/actions/app/cartera/buzon-tareas';
+import { useColumnsBuzonTareas } from '@/shared/hooks/app/buzon-tareas';
 
 export type BuzonTareasByStatePageProps = {
-  state: EstadoTicketTecnicoEnumChoice;
+  state: EstadoTareaEnumChoice;
 };
 
-const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
-  const user = useAuthStore(s => s.user);
-  console.log('user', user);
+const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = ({
+  state,
+}) => {
   useCheckPermission(PermissionsEnum.cartera_view_buzontareamantenedor);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -49,7 +43,7 @@ const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
     data: CambioPlanesPagingRes,
     isLoading,
     isRefetching,
-  } = useFetchCambioPlanes({
+  } = useFetchBuzonTareas({
     enabled: true,
     params: {
       page: pageIndex + 1,
@@ -57,44 +51,36 @@ const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
       name: searchTerm,
       ...filterObject,
       filterByState: false,
+      estado_tarea: state,
     },
   });
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<CambioPlan>[]>(
-    () => [
-      {
-        accessorKey: 'plan_internet_anterior',
-        header: 'PLAN INTERNET ANTERIOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_internet_anterior'),
-      },
-      {
-        accessorKey: 'plan_internet_nuevo',
-        header: 'PLAN INTERNET NUEVO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'plan_internet_nuevo'),
-      },
-    ],
-    [],
-  );
+  const { tareasBaseColumns } = useColumnsBuzonTareas();
 
   return (
-    <SingleTableBoxScene
-      title="Buzon de Tareas"
-      createPageUrl={`${returnUrlBuzonTareasPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.cartera_add_buzontareamantenedor,
-      )}
-    >
+    <GridTableTabsContainerOnly>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por identificación"
+        sxContainer={{
+          mb: 5,
+        }}
       />
 
       <CustomTable<CambioPlan>
-        columns={columns}
+        columns={
+          state === EstadoTareaEnumChoice.EN_BORRADOR
+            ? tareasBaseColumns
+            : state === EstadoTareaEnumChoice.GESTIONADO
+              ? tareasBaseColumns
+              : state === EstadoTareaEnumChoice.RECHAZADO
+                ? tareasBaseColumns
+                : state === EstadoTareaEnumChoice.SEPARADO
+                  ? tareasBaseColumns
+                  : tareasBaseColumns
+        }
         data={CambioPlanesPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -116,7 +102,7 @@ const BuzonTareasByStatePage: React.FC<BuzonTareasByStatePageProps> = () => {
         )}
         canDelete={false}
       />
-    </SingleTableBoxScene>
+    </GridTableTabsContainerOnly>
   );
 };
 

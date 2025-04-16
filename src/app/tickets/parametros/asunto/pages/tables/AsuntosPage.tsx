@@ -106,12 +106,12 @@ const AsuntosPage: React.FC<AsuntosPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'valor_cobrar'),
       },
       {
-        accessorKey: 'tipo_ticket',
+        accessorKey: 'tipo_asunto_ticket',
         header: 'TIPO TICKET',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_ticket'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_asunto_ticket'),
       },
 
       {

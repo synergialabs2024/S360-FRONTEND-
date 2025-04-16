@@ -5,37 +5,56 @@ import { useNavigate } from 'react-router-dom';
 import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
 import {
   CustomAutocomplete,
+  CustomDatePicker,
   CustomIdentificacionTextField,
   CustomScanLoad,
+  CustomTextArea,
+  CustomTextField,
   CustomTextFieldNoForm,
-  CustomTypoLabel,
   InputAndBtnGridSpace,
+  SelectArrayString,
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
-  CreateSolicitudServicioParamsBase,
-  useFetchPlanInternets,
-  useGetClienteByIdentificacion,
-  useGetLineaServicio,
+  useFetchAsuntos,
+  useFetchOrigenes,
+  useGetZoneByCoords,
+  useSearchCedulaMutation,
 } from '@/actions/app';
 import {
+  ApiResponse,
+  Asunto,
+  BucketKeyTicketEnumChoice,
+  BucketTypeEnumChoice,
   ContratoData,
-  EstadoSolicitudServicioEnumChoice,
+  FindByIdentification,
   getKeysFormErrorsMessage,
   IdentificationTypeEnumChoice,
-  InternetPlanInternetTypeEnumChoice,
-  PlanInternet,
+  Origen,
   ToastWrapper,
+  TURNOS_TICKETS_ARRAY_CHOICES,
+  useLoaders,
+  useUploadImageGeneric,
 } from '@/shared';
 import { CiSearch } from 'react-icons/ci';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { cambioPlanFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-plan';
+import DocsSaveFotosOpenTicket from '@/app/tickets/tickets/shared/components/SaveFotosOpenTicket/DocsSaveFotosOpenTicket';
+import {
+  CreateCambioDomicilioParamsBase,
+  useCreateCambioDomicilio,
+} from '@/actions/app/cartera/cambio-domicilio';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
+import { uploadFileToBucket } from '@/actions/statics-api';
+import { returnUrlCambioDomicilioPage } from '../../../pages/tables/CambioDomicilioPage';
+import { cambioDomicilioFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-domicilio';
 
 export interface SavePromesaPagoProps {
   title: string;
 }
-type SaveFormData = CreateSolicitudServicioParamsBase & {
+type SaveFormData = CreateCambioDomicilioParamsBase & {
   // helper
   isFormBlocked?: boolean;
   isValidIdentificacion?: boolean;
@@ -43,13 +62,34 @@ type SaveFormData = CreateSolicitudServicioParamsBase & {
   cityName?: string;
   provinceName?: string;
   zoneName?: string;
+  sectorName?: string;
   thereIsCoverage?: boolean;
   thereAreNaps?: boolean;
   tipo_servicio?: string;
   tipo_plan?: string;
   plan_internet?: string;
+  //
+  identificacion?: string;
+  tipo_identificacion?: string;
+  //
+  sector?: number; // select
+  //
+  coordenadas: string; // to get factibilidad directly
+  zona?: number;
+  tiene_cobertura: boolean;
+  direccion_referencia: string;
+  ciudad?: number;
+  provincia?: number;
+  pais?: number;
+  plan_sugerido_buro: string;
 };
 const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
+  ///* local state -------------------
+
+  ///* mutations ---------------------
+
+  const searchCedulaMutation = useSearchCedulaMutation();
+
   const navigate = useNavigate();
   const [isCheckingIdentificacion, setIsCheckingIdentificacion] =
     useState<boolean>(false);
@@ -57,17 +97,19 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
     useState<boolean>(false); */
   ///* form -----------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(cambioPlanFormSchema) as any,
+    resolver: yupResolver(cambioDomicilioFormSchema) as any,
     defaultValues: {
-      estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
-      es_tercera_edad: false,
-      es_discapacitado: false,
-      es_cliente: false,
-      tiene_cobertura: false,
-      isFormBlocked: false,
-      thereIsCoverage: false,
-      thereAreNaps: false,
+      // estado_solicitud: EstadoSolicitudServicioEnumChoice.INGRESADO,
+      // es_tercera_edad: false,
+      // es_discapacitado: false,
+      // es_cliente: false,
+      // tiene_cobertura: false,
+      // isFormBlocked: false,
+      // thereIsCoverage: false,
+      // thereAreNaps: false,
+      // tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
       tipo_identificacion: IdentificationTypeEnumChoice.CEDULA,
+      // reset es cliente modal alert
     },
   });
 
@@ -75,57 +117,303 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
     handleSubmit,
     formState: { errors },
   } = form;
+
   const watchedIdentification = form.watch('identificacion');
   const watchedIdentificationType = form.watch('tipo_identificacion');
-  const watchedNumeroContrato = form.watch('numero_contrato');
-  //
-  const watchedPlanInternet = form.watch('plan_internet');
-  console.log(watchedPlanInternet);
-  const { data: dataCliente } = useGetClienteByIdentificacion(
-    watchedIdentification!,
+
+  const watchedCoors = form.watch('coordenadas');
+
+  // map ---------------
+  const { latLng, napsByCoords, isLoadingNaps, isRefetchingNaps, setLatLng } =
+    useMapComponent({
+      form,
+      initialCoords: watchedCoors ? watchedCoors : '',
+      enableFetchNaps: true,
+    });
+  useLocationCoords({
+    isEditting: true,
+    form,
+    setLatLng,
+  });
+
+  ///* fetch data ---------------------
+
+  const {
+    data: zonaByCoordsRes,
+    isLoading: isLoadingZonaByCoords,
+    isRefetching: isRefetchingZonaByCoords,
+  } = useGetZoneByCoords(
+    {
+      coords: `${latLng?.lat},${latLng?.lng}`,
+    },
+    !!latLng?.lat && !!latLng?.lng,
   );
 
-  const { data: lineaServicio } = useGetLineaServicio(watchedNumeroContrato!);
+  ///* handlers ---------------------
 
-  const onSave = async () => {
-    console.log('watchedIdentificationType', watchedIdentificationType);
-  };
-  const { data: planInternetsPaging } = useFetchPlanInternets({
+  const {
+    UploadImageDropZoneComponent,
+    image1: viviendaImg,
+    setImage1: setViviendaImg,
+    image2: opcionalImg,
+    setImage2: setOpcionalImg,
+  } = useUploadImageGeneric();
+
+  ///* fetch data ---------------------
+
+  const {
+    data: origenesPaginatedRes,
+    isLoading: isLoadingOrigenes,
+    isRefetching: isRefetchingOrigenes,
+  } = useFetchOrigenes({
     params: {
-      page_size: 600,
+      page_size: 200,
     },
   });
-  console.log('planes de internet', planInternetsPaging);
+
+  const {
+    data: asuntosPaginatedRes,
+    isLoading: isLoadingAsuntos,
+    isRefetching: isRefetchingAsunto,
+  } = useFetchAsuntos({
+    params: {
+      page_size: 200,
+    },
+  });
+
+  //
+
+  const [cedulaData, setCedulaData] =
+    useState<ApiResponse<FindByIdentification> | null>(null);
+  const [numeroContrato, setNumeroContrato] = useState<string | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    if (Array.isArray(cedulaData?.data)) {
+      console.log('cedulaData.data', cedulaData.data);
+
+      if (cedulaData.data.length === 0) {
+        ToastWrapper.error('No existen lineas para la cedula digitada');
+      }
+
+      const contrato = cedulaData.data.find(
+        item => item.contrato_data.numero_contrato === numeroContrato,
+      );
+
+      console.log('contrato', contrato);
+
+      if (contrato) {
+        const ticketVisitaBody = {
+          ...contrato.solicitud_servicio_data,
+          celular_adicional: contrato.celular_adicional,
+          telefono: contrato.solicitud_servicio_data.celular,
+          zona: contrato.zona_data.name, // Actualizas solo la propiedad zona
+          nap: contrato.nap_data.name,
+        };
+        form.setValue('ticket_visita_body', ticketVisitaBody);
+        form.setValue('coordenadas', ticketVisitaBody.coordenadas);
+      } else {
+        console.log('No se encontró el contrato con el número especificado.');
+      }
+    }
+  }, [numeroContrato, cedulaData, form]);
+
+  // set zone to up
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+
+    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
+    const zone = zonaByCoordsRes?.data;
+    if (!zone) {
+      ToastWrapper.error(
+        'No se encontraron zonas con cobertura para las coordenadas proporcionadas',
+      );
+      form.reset({
+        ...form.getValues(),
+        thereIsCoverage: false,
+        tiene_cobertura: false,
+      });
+      return;
+    }
+    form.reset({
+      ...form.getValues(),
+      zona: zone?.id,
+      ciudad: zone?.ciudad_data?.id!,
+      provincia: zone?.provincia_data?.id!,
+      cityName: zone?.ciudad_data?.name,
+      provinceName: zone?.provincia_data?.name,
+      zoneName: zone?.name,
+      thereIsCoverage: true,
+      tiene_cobertura: true,
+    });
+  }, [
+    zonaByCoordsRes,
+    isLoadingZonaByCoords,
+    isRefetchingZonaByCoords,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
+  //// alerts
+  // naps available
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+    if (isLoadingNaps || isRefetchingNaps) return;
+    const thereAreNaps = !!napsByCoords?.length;
+    if (!thereAreNaps) {
+      form.reset({
+        ...form.getValues(),
+        thereAreNaps: false,
+      });
+      ToastWrapper.error(
+        'No se encontraron cajas disponibles para las coordenadas ingresadas',
+      );
+    }
+    form.reset({
+      ...form.getValues(),
+      thereAreNaps,
+    });
+  }, [
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
+
+  const createSolUnblockSolServiceMutation = useCreateCambioDomicilio({
+    enableErrorNavigate: false,
+    customOnSuccess: () => {
+      navigate(returnUrlCambioDomicilioPage);
+    },
+    navigate,
+    returnUrl: returnUrlCambioDomicilioPage,
+  });
+
+  const requiredImages = [
+    {
+      label: 'Foto vivienda',
+      image: viviendaImg,
+      setImage: setViviendaImg,
+      isRequired: true,
+    },
+    {
+      label: 'Foto opcional',
+      image: viviendaImg,
+      setImage: setOpcionalImg,
+      isRequired: false,
+    },
+  ];
+
+  const onSave = async (data: SaveFormData) => {
+    console.log('data', data);
+    let atLeastOneImageUploaded = false;
+
+    requiredImages.forEach(({ isRequired, image }) => {
+      if (isRequired && image) {
+        atLeastOneImageUploaded = true;
+      }
+    });
+
+    if (!atLeastOneImageUploaded) {
+      ToastWrapper.error('No se ha subido ninguna imagen requerida.');
+      return;
+    }
+
+    const [viviendaUrl, opcionalUrl] = await Promise.all([
+      uploadFileToBucket({
+        file: viviendaImg!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_VIVIENDA,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+      uploadFileToBucket({
+        file: opcionalImg!,
+        file_name: BucketKeyTicketEnumChoice.FOTO_OPCIONAL,
+        bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+      }),
+    ]);
+
+    createSolUnblockSolServiceMutation.mutate({
+      linea_servicio: data.ticket_visita_body.linea_servicio,
+      ticket_visita_body: {
+        url_foto_vivienda: viviendaUrl?.streamUlr || '',
+        url_foto_opcional: opcionalUrl?.streamUlr || '',
+        linea_servicio: parseInt(data?.numero_contrato),
+        origen_ticket: data.ticket_visita_body.origen_ticket,
+        asunto_ticket: data.ticket_visita_body.asunto_ticket,
+        detalle_adicional_ticket:
+          data.ticket_visita_body.detalle_adicional_ticket,
+        fecha_sugerida_visita: data.ticket_visita_body.fecha_sugerida_visita,
+        franja_horaria: data.ticket_visita_body.franja_horaria,
+      },
+      new_coordenadas: data.coordenadas,
+      new_direccion_referencia: data.direccion_referencia,
+      new_pais: data.ticket_visita_body.pais,
+      new_provincia: data.provincia,
+      new_ciudad: data.ciudad,
+      new_zona: data.zona,
+      new_sector: data.sector,
+    });
+  };
+
   const handleFetchCedulaRucInfo = async (value: string) => {
-    console.log('value', value);
-    setIsCheckingIdentificacion(false);
-    /* if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
+    if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
       setIsCheckingIdentificacion(true);
-      await Promise.all([
-        searchCedulaMutation.mutateAsync({
+      try {
+        const response = await searchCedulaMutation.mutateAsync({
           identificacion: value,
-        }),
-      ]);
-  
-      setIsCheckingIdentificacion(false);
+        });
+        // Respuesta
+        setCedulaData(response ?? null);
+      } catch (error) {
+        // Manejo de errores si la mutación falla
+        ToastWrapper.error('Error al obtener los datos');
+      } finally {
+        setIsCheckingIdentificacion(false);
+      }
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
       setIsCheckingIdentificacion(true);
-      await Promise.all([
-        searchCedulaMutation.mutateAsync({
+      try {
+        const response = await searchCedulaMutation.mutateAsync({
           identificacion: value,
-        }),
-      ]);
-      setIsCheckingIdentificacion(false);
-    } */
+        });
+        setCedulaData(response ?? null);
+        // Ahora puedes acceder a la respuesta
+        console.log(searchCedulaMutation.data); // Aquí obtienes la data
+      } catch (error) {
+        // Manejo de errores si la mutación falla
+        ToastWrapper.error('Error al obtener los datos');
+      } finally {
+        setIsCheckingIdentificacion(false);
+      }
+    }
   };
+
+  const isCustomLoadingOrigenes = isLoadingOrigenes || isRefetchingOrigenes;
+  useLoaders(isCustomLoadingOrigenes);
+
+  const isCustomLoadingAsuntos = isLoadingAsuntos || isRefetchingAsunto;
+  useLoaders(isCustomLoadingAsuntos);
+
+  const isCustomLoading =
+    isLoadingNaps ||
+    isRefetchingNaps ||
+    isRefetchingNaps ||
+    isLoadingNaps ||
+    isLoadingZonaByCoords ||
+    isRefetchingZonaByCoords;
+  useLoaders(isCustomLoading);
 
   return (
     <SingleFormBoxScene
       titlePage={title}
-      onCancel={() => navigate('')}
+      onCancel={() => navigate(returnUrlCambioDomicilioPage)}
       onSave={handleSubmit(onSave, errors => {
-        const keys = getKeysFormErrorsMessage(errors);
-        ToastWrapper.error(`Errores en: ${keys}`);
+        ToastWrapper.error(
+          `Faltan campos requeridos: ${getKeysFormErrorsMessage(errors)}`,
+        );
       })}
       maxWidth="xl"
       gridSizeForm={gridSizeMdLg12}
@@ -142,19 +430,20 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
               label="Identificación"
               name="identificacion"
               control={form.control}
-              selectedDocumentType={watchedIdentificationType}
-              defaultValue={form.getValues('identificacion')}
+              selectedDocumentType={watchedIdentificationType!}
+              defaultValue={form.getValues().identificacion}
               error={errors.identificacion}
               helperText={errors.identificacion?.message}
               onFetchCedulaRucInfo={async value => {
                 await handleFetchCedulaRucInfo(value);
               }}
               disabled={!watchedIdentificationType}
-              /* onChangeValue={value => {
-              if (!value?.length) {
-                clearForm();
-              }
-            }} */
+              onChangeValue={value => {
+                if (!value?.length || value.length === 10) {
+                  // clearForm();
+                  setNumeroContrato(undefined);
+                }
+              }}
             />
           }
           btnLabel="Buscar"
@@ -172,29 +461,29 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
                 IdentificationTypeEnumChoice.CEDULA &&
               watchedIdentification?.length < 10
             )
-              return ToastWrapper.warning('Ingrese una cécula válida');
+              return ToastWrapper.warning('Ingrese una cédula válida');
             if (
               watchedIdentificationType == IdentificationTypeEnumChoice.RUC &&
               watchedIdentification?.length < 13
             )
               return ToastWrapper.warning('Ingrese RUC válido');
-
             handleFetchCedulaRucInfo(watchedIdentification);
           }}
         />
         <CustomAutocomplete<ContratoData>
-          label="Línea de servicio"
+          label="Numero de contrato"
           name="numero_contrato"
+          // options
           options={
-            Array.isArray(dataCliente?.data)
-              ? dataCliente.data.map(item => ({
+            Array.isArray(cedulaData?.data)
+              ? cedulaData.data.map(item => ({
                   ...item,
                   numero_contrato: item?.contrato_data?.numero_contrato,
                 }))
               : []
           }
           valueKey="numero_contrato"
-          actualValueKey="uuid"
+          actualValueKey="id"
           defaultValue={form.getValues().numero_contrato}
           isLoadingData={false}
           // vaidation
@@ -203,77 +492,187 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
           helperText={errors.numero_contrato?.message}
           size={gridSizeMdLg6}
           onChangeRawValue={i => {
-            console.log(i);
+            console.log(form.getValues().identificacion);
+            setNumeroContrato(i.numero_contrato);
           }}
         />
       </Grid>
-      <CustomTextFieldNoForm
-        label="Plan actual"
-        size={gridSizeMdLg12}
-        value={
-          lineaServicio?.data?.contrato_data?.plan_internet_actual_data?.name
-        }
-        disabled
-      />
-      {/* ============= Nuevo Plan ============= */}
-      <CustomTextFieldNoForm
-        label="Tipo de plan"
-        value={InternetPlanInternetTypeEnumChoice.HOGAR}
-        disabled
-      />
-      <CustomAutocomplete<PlanInternet>
-        label="Planes de internet"
-        name="plan_internet"
-        // options
-        options={planInternetsPaging?.data?.items || []}
-        valueKey="name"
-        actualValueKey="id"
-        defaultValue={form.getValues().plan_internet}
-        isLoadingData={false}
-        // vaidation
-        control={form.control}
-        error={errors.plan_internet}
-        helperText={errors.plan_internet?.message}
-        size={gridSizeMdLg6}
-      />
-      <CustomTextFieldNoForm label="Adicional prox factura" />
 
-      <CustomTypoLabel text="" />
-      <Grid item container {...gridSizeMdLg12} spacing={2}>
-        <CustomTypoLabel text="DETALLE DE PORPORCIONAL POR CAMBIO DE PLAN" />
-        <CustomTextFieldNoForm
-          size={gridSizeMdLg12}
-          label="Precio plan actual"
-          value={
-            lineaServicio?.data?.contrato_data?.plan_internet_actual_data?.valor
-          }
-          disabled
-          startAdornment="$"
-        />
-        <CustomTextFieldNoForm size={gridSizeMdLg12} label="Costo por dia" />
-        <CustomTextFieldNoForm
-          size={gridSizeMdLg12}
-          label="Precio plan nuevo"
-        />
-        <CustomTextFieldNoForm
-          size={gridSizeMdLg12}
-          label="Costo por dia plan nuevo"
-        />
-      </Grid>
-      <Grid item container {...gridSizeMdLg12} spacing={2}>
-        <CustomTextFieldNoForm size={gridSizeMdLg12} label="Fecha pago" />
+      {numeroContrato === undefined ? (
+        <></>
+      ) : (
+        <>
+          <CustomTextField
+            label={
+              watchedIdentificationType === IdentificationTypeEnumChoice.RUC
+                ? 'Razón social'
+                : 'Nombre y Apellido'
+            }
+            name="ticket_visita_body.razon_social"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.razon_social}
+            error={errors.ticket_visita_body?.razon_social}
+            helperText={errors.ticket_visita_body?.razon_social?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
 
-        <CustomTextFieldNoForm size={gridSizeMdLg12} label="Fecha de cambio" />
-        <CustomTextFieldNoForm
-          size={gridSizeMdLg12}
-          label="Fecha de diferencia"
-        />
-        <CustomTextFieldNoForm size={gridSizeMdLg12} label="Porporcional" />
-        <CustomTextFieldNoForm
-          size={gridSizeMdLg12}
-          label="Valor total en pagar en fecha de pago"
-        />
-      </Grid>
+          <CustomTextField
+            label={'Coordenadas'}
+            name="ticket_visita_body.coordenadas"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.coordenadas}
+            error={errors.ticket_visita_body?.coordenadas}
+            helperText={errors.ticket_visita_body?.coordenadas?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
+
+          <CustomTextField
+            label={'Zona'}
+            name="ticket_visita_body.zona"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.zona}
+            error={errors.ticket_visita_body?.zona}
+            helperText={errors.ticket_visita_body?.zona?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
+
+          <CustomTextField
+            label={'Telefono'}
+            name="ticket_visita_body.telefono"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.telefono}
+            error={errors.ticket_visita_body?.telefono}
+            helperText={errors.ticket_visita_body?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
+
+          <CustomTextField
+            label={'Celular adicional'}
+            name="ticket_visita_body.celular_adicional"
+            control={form.control}
+            defaultValue={
+              form.getValues().ticket_visita_body?.celular_adicional
+            }
+            error={errors.ticket_visita_body?.celular_adicional}
+            helperText={errors.ticket_visita_body?.celular_adicional?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
+
+          <CustomTextField
+            label={'Caja'}
+            name="ticket_visita_body.nap"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.nap}
+            error={errors.ticket_visita_body?.nap}
+            helperText={errors.ticket_visita_body?.nap?.message}
+            size={gridSizeMdLg6}
+            disabled
+          />
+
+          <CustomAutocomplete<Origen>
+            label="Origen"
+            name="ticket_visita_body.origen_ticket"
+            valueKey="name"
+            actualValueKey="id"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.origen_ticket}
+            options={origenesPaginatedRes?.data.items || []}
+            isLoadingData={isLoadingOrigenes}
+            error={errors.ticket_visita_body?.origen_ticket}
+            helperText={errors.ticket_visita_body?.origen_ticket?.message}
+            size={gridSizeMdLg6}
+          />
+
+          <CustomAutocomplete<Asunto>
+            label="Asunto"
+            name="ticket_visita_body.asunto_ticket"
+            valueKey="name"
+            actualValueKey="id"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.asunto_ticket}
+            options={asuntosPaginatedRes?.data.items || []}
+            isLoadingData={isLoadingAsuntos}
+            error={errors.ticket_visita_body?.asunto_ticket}
+            helperText={errors.ticket_visita_body?.asunto_ticket?.message}
+            size={gridSizeMdLg6}
+          />
+
+          <CustomTextField
+            label={'Valor a cobrar'}
+            name="ticket_visita_body.valor_a_cobrar"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.valor_a_cobrar}
+            error={errors.ticket_visita_body?.valor_a_cobrar}
+            helperText={errors.ticket_visita_body?.valor_a_cobrar?.message}
+            disabled
+          />
+
+          <SelectArrayString
+            label="Franja Horaria"
+            name="ticket_visita_body.franja_horaria"
+            control={form.control}
+            defaultValue={form.getValues().ticket_visita_body?.franja_horaria}
+            error={errors.ticket_visita_body?.franja_horaria}
+            helperText={errors.ticket_visita_body?.franja_horaria?.message}
+            options={TURNOS_TICKETS_ARRAY_CHOICES}
+            gridSize={gridSizeMdLg6}
+          />
+
+          <CustomDatePicker
+            label="Fecha Sugerida Visita"
+            name="ticket_visita_body.fecha_sugerida_visita"
+            control={form.control}
+            defaultValue={
+              form.getValues().ticket_visita_body?.fecha_sugerida_visita ?? ''
+            }
+            error={errors.ticket_visita_body?.fecha_sugerida_visita}
+            helperText={
+              errors.ticket_visita_body?.fecha_sugerida_visita?.message
+            }
+            size={gridSizeMdLg6}
+          />
+
+          <CustomTextArea
+            label={'Detalle Adicional Ticket'}
+            name="ticket_visita_body.detalle_adicional_ticket"
+            control={form.control}
+            defaultValue={
+              form.getValues().ticket_visita_body?.detalle_adicional_ticket
+            }
+            error={errors.ticket_visita_body?.detalle_adicional_ticket}
+            helperText={
+              errors.ticket_visita_body?.detalle_adicional_ticket?.message
+            }
+          />
+
+          {/* ============= Corrección Docs ============= */}
+          <DocsSaveFotosOpenTicket
+            UploadImageDropZoneComponent={UploadImageDropZoneComponent}
+            viviendaImg={viviendaImg}
+            setViviendaImg={setViviendaImg}
+            // cedula no rostro
+            opcionalImg={opcionalImg}
+            setOpcionalImg={setOpcionalImg}
+          />
+
+          {/*  */}
+
+          {/* ------------- location ------------- */}
+          <Grid item container {...gridSizeMdLg12} spacing={2}>
+            <LocationZonePolygonFormPart
+              form={form}
+              initialCoords={''}
+              isEdit={false}
+              // ptLabel={CustomTypoLabelEnum.ptMiddlePosition}
+            />
+          </Grid>
+        </>
+      )}
 
       {/* ============= loaders ============= */}
       <CustomScanLoad isOpen={isCheckingIdentificacion} name="cedula" />

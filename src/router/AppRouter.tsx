@@ -769,6 +769,13 @@ const CreateVentaConvenioPage = Loadable(
       ),
   ),
 );
+
+const CambioDomicilioPage = Loadable(
+  lazy(
+    () =>
+      import('@/app/cartera/cambio-domicilio/pages/tables/CambioDomicilioPage'),
+  ),
+);
 const CreateCambioDomicilioPage = Loadable(
   lazy(
     () =>
@@ -827,20 +834,20 @@ const MantenedorActivacionByStatePage = Loadable(
 
 // Buzon tareas
 
-const BuzonTareasByStatePage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/cartera/buzon-tareas/buzon-tarea/pages/tables/BuzonTareasByStatePage'
-      ),
-  ),
-);
-
 const BuzonTareasPage = Loadable(
   lazy(
     () =>
       import(
-        '@/app/cartera/buzon-tareas/buzon-tarea/pages/forms/BuzonTareasPage'
+        '@/app/cartera/buzon-tareas/buzon-tarea/pages/tables/BuzonTareasPage'
+      ),
+  ),
+);
+
+const CreateBuzonTareasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cartera/buzon-tareas/buzon-tarea/pages/forms/CreateBuzonTareasPage'
       ),
   ),
 );
@@ -2610,6 +2617,10 @@ const AppRouter = [
           ///* cambio domiclio
           {
             path: ROUTER_PATHS.cartera.cambiodomicilioNav,
+            element: <CambioDomicilioPage />,
+          },
+          {
+            path: ROUTER_PATHS.cartera.cambiodomicilioCrear,
             element: <CreateCambioDomicilioPage />,
           },
           ///* venta convenio
@@ -2636,11 +2647,11 @@ const AppRouter = [
 
           {
             path: ROUTER_PATHS.cartera.buzontareasNav,
-            element: <BuzonTareasByStatePage />,
+            element: <BuzonTareasPage />,
           },
           {
             path: ROUTER_PATHS.cartera.buzontareasCrear,
-            element: <BuzonTareasPage />,
+            element: <CreateBuzonTareasPage />,
           },
 
           // Criterio mantenedor activaciones

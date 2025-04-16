@@ -49,7 +49,7 @@ import {
 import { SubtipoMantenedorBeneficios } from '@/shared/interfaces/app/cartera/buzon-tareas/parametros/subtipo-mantenedor-beneficios';
 import { useFetchCausaMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/causa-mantenedor-beneficios';
 import { buzonTareaFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/buzon-tareas.schema';
-import { returnUrlBuzonTareasPage } from '../../../pages/tables/BuzonTareasByStatePage';
+import { returnUrlBuzonTareasPage } from '../../../pages/tables/BuzonTareasPage';
 
 export interface SaveBuzonTareasProps {
   title: string;

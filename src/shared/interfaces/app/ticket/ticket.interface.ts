@@ -34,7 +34,7 @@ export interface Ticket {
   fecha_hora_visita?: string;
   fecha_instalacion: string;
   hora_instalacion: string;
-
+  pais?: number;
   motivo_rechazo?: string;
 
   url_foto_antes_solucion?: string;

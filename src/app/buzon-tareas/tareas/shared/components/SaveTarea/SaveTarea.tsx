@@ -24,8 +24,8 @@ import {
 import { Grid } from '@mui/material';
 import { useUiConfirmModalStore } from '@/store/ui';
 import {
+  BuzonTareasTSQEnum,
   CreateBuzonTareaParamsBase,
-  useCreateBuzonTarea,
 } from '@/actions/app/cartera/buzon-tareas';
 import { useAuthStore } from '@/store/auth';
 import dayjs from 'dayjs';
@@ -38,6 +38,7 @@ import {
 import { useFetchSolucionMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/solucion-mantenedor-beneficios';
 import { useFetchBeneficioMantenedorBeneficios } from '@/actions/app/cartera/buzon-tareas/parametros/beneficio-mantenedor-beneficios';
 import { tareaGestionadaFormSchema } from '@/shared/utils/validation-schemas/app/cartera/buzon-tareas/tarea.schema';
+import { useGenericPATCH } from '@/actions/shared';
 
 export interface SaveTareaProps {
   title: string;
@@ -76,12 +77,17 @@ const SaveTarea: React.FC<SaveTareaProps> = ({ title, buzonTarea }) => {
 
   ///* mutations ---------------------
 
-  const createBuzonTarea = useCreateBuzonTarea({
-    navigate,
-    returnUrl: returnUrlCambioPlanPage,
-    enableErrorNavigate: false,
-    customOnSuccess: () => {},
-  });
+  const createBuzonTarea = useGenericPATCH(
+    `/buzon-tarea-mantenedor/manage-task/${buzonTarea?.id!}/`,
+    BuzonTareasTSQEnum.BUZONTAREA,
+    {
+      customMessageToast: 'Activacion realizada con éxito',
+      navigate,
+      returnUrl: returnUrlCambioPlanPage,
+      enableErrorNavigate: false,
+      customOnSuccess: () => {},
+    },
+  );
 
   //
 
@@ -122,9 +128,9 @@ const SaveTarea: React.FC<SaveTareaProps> = ({ title, buzonTarea }) => {
       onConfirm: () => {
         createBuzonTarea.mutate({
           beneficio: data.beneficio,
+          aplica_beneficio: data.beneficio_aplicado,
           aplica_beneficio_solucion: data.aplica_beneficio_solucion,
           detalle_solucion: data.detalle_solucion,
-          aplica_beneficio: data.aplica_beneficio,
           solucion_tarea: data.solucion_tarea,
           departamento_gestiona: buzonTarea?.departamento_asignado,
         });

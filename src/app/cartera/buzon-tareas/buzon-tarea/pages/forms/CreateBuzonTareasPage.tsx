@@ -7,10 +7,10 @@ export type BuzonTareasPageProps = {};
 
 export const returnUrlCambioPlanPage = ROUTER_PATHS.cartera.promesapagoNav;
 
-const BuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
+const CreateBuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
   useCheckPermission(PermissionsEnum.cartera_add_buzontareamantenedor);
 
   return <SaveBuzonTareas title="Buzon de Tareas" />;
 };
 
-export default BuzonTareasPage;
+export default CreateBuzonTareasPage;

@@ -1461,13 +1461,15 @@ export const TIPO_CAUSA_TICKET_MASIVO_ARRAY_CHOICES = [
 ];
 
 export enum tipoTicketAsuntoEnumChoice {
-  MASIVO = 'MASIVO',
-  INDIVIDUAL = 'INDIVIDUAL',
+  VISITA_TECNICA = 'VISITA TECNICA',
+  CROSS_SELLING = 'CROSS SELLING',
+  CAMBIO_DOMICILIO = 'CAMBIO DOMICILIO',
 }
 
 export const TIPO_TICKET_ASUNTO_ARRAY_CHOICES = [
-  tipoTicketAsuntoEnumChoice.MASIVO,
-  tipoTicketAsuntoEnumChoice.INDIVIDUAL,
+  tipoTicketAsuntoEnumChoice.VISITA_TECNICA,
+  tipoTicketAsuntoEnumChoice.CROSS_SELLING,
+  tipoTicketAsuntoEnumChoice.CAMBIO_DOMICILIO,
 ];
 
 export enum ImageEventoMensajeriaTMNameEnumChoice {

@@ -109,13 +109,13 @@ const SaveAsunto: React.FC<SaveAsuntoProps> = ({ title, asunto }) => {
       />
       <CustomAutocompleteArrString
         label="Tipo Ticket"
-        name="tipo_ticket"
+        name="tipo_asunto_ticket"
         control={form.control}
-        defaultValue={form.getValues('tipo_ticket')}
+        defaultValue={form.getValues('tipo_asunto_ticket')}
         options={TIPO_TICKET_ASUNTO_ARRAY_CHOICES}
         isLoadingData={false}
-        error={errors.tipo_ticket}
-        helperText={errors.tipo_ticket?.message}
+        error={errors.tipo_asunto_ticket}
+        helperText={errors.tipo_asunto_ticket?.message}
         size={gridSizeMdLg6}
         disableClearable
       />

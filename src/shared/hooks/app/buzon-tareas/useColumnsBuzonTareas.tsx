@@ -7,12 +7,38 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
+import { BuzonTarea } from '@/shared/interfaces';
 
 export const useColumnsBuzonTareas = () => {
   // table base columns ---------------------
-  const tareasBaseColumns01 = useMemo<MRT_ColumnDef<Ticket>[]>(
+  const tareasBaseColumns01 = useMemo<MRT_ColumnDef<BuzonTarea>[]>(
     () => [
+      {
+        accessorKey: 'linea_servicio_data__cliente_data__name',
+        header: 'RAZON SOCIAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'cliente_data',
+            'razon_social',
+          ]),
+      },
+      {
+        accessorKey: 'linea_servicio_data__cliente_data__identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'cliente_data',
+            'identificacion',
+          ]),
+      },
       {
         accessorKey: 'tipo_tarea__name',
         header: 'TIPO TAREA',
@@ -24,16 +50,9 @@ export const useColumnsBuzonTareas = () => {
         Cell: ({ row }) => emptyCellNested(row, ['subtipo_tarea_data', 'name']),
       },
       {
-        accessorKey: 'causa_tarea__name',
+        accessorKey: 'causa_tarea_data__name',
         header: 'CAUSA TAREA',
         Cell: ({ row }) => emptyCellNested(row, ['causa_tarea_data', 'name']),
-      },
-
-      {
-        accessorKey: 'departamento_asignado_data__name',
-        header: 'DEPARTAMENTO ASIGNADO',
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['departamento_asignado_data', 'name']),
       },
 
       {
@@ -43,6 +62,24 @@ export const useColumnsBuzonTareas = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'detalle_caso'),
+      },
+
+      {
+        accessorKey: 'departamento_asignado_data__name',
+        header: 'DEPARTAMENTO ASIGNADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['departamento_asignado_data', 'name']),
+      },
+
+      {
+        accessorKey: 'aplica_beneficio_segun_perfil',
+        header: 'APLICA BENEFICIO SEGUN PERFIL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) =>
+          emptyCellOneLevel(row, 'aplica_beneficio_segun_perfil'),
       },
 
       {
@@ -74,7 +111,7 @@ export const useColumnsBuzonTareas = () => {
   );
 
   // table columns ---------------------
-  const tareasBaseColumns = useMemo<MRT_ColumnDef<Ticket>[]>(
+  const tareasBaseColumns = useMemo<MRT_ColumnDef<BuzonTarea>[]>(
     () => [...tareasBaseColumns01],
     [tareasBaseColumns01],
   );
