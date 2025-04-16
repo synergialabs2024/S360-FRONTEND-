@@ -14,6 +14,7 @@ export interface CambioDomicilio {
   created_at?: string;
   modified_at?: string;
 
+  estado_cambio_domicilio: string;
   linea_servicio: number;
   ticket_visita_body: Ticket;
   new_coordenadas: string;

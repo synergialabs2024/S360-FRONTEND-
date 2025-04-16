@@ -779,7 +779,9 @@ const CambioDomicilioPage = Loadable(
 const CreateCambioDomicilioPage = Loadable(
   lazy(
     () =>
-      import('@/app/cartera/cambio-domicilio/pages/forms/CambioDomicilioPage'),
+      import(
+        '@/app/cartera/cambio-domicilio/pages/forms/CreateCambioDomicilioPage'
+      ),
   ),
 );
 const CambioPlanPage = Loadable(

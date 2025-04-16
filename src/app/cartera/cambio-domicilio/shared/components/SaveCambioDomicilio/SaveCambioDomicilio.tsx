@@ -48,7 +48,7 @@ import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
 import { uploadFileToBucket } from '@/actions/statics-api';
-import { returnUrlCambioDomicilioPage } from '../../../pages/tables/CambioDomicilioPage';
+import { returnUrlCambioDomicilioPage } from '../../../pages/tables/CambioDomicilioByStatePage';
 import { cambioDomicilioFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-domicilio';
 
 export interface SavePromesaPagoProps {

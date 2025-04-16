@@ -1527,3 +1527,17 @@ export const LEED_TELEVENTA_ESTADO_ARRAY_CHOICES = [
   LeedTeleventa_Estado_TMEnumChoice.SIN_GESTION,
   LeedTeleventa_Estado_TMEnumChoice.RECHAZADO,
 ];
+
+export enum EstadoCambioDomicilioEnumChoice {
+  ESPERA = 'ESPERA',
+  FINALIZADO = 'FINALIZADO',
+  SIN_FACTIBILIDAD = 'SIN FACTIBILIDAD',
+  CANCELADO = 'CANCELADO',
+}
+
+export const ESTADO_CAMBIO_DOMICILIO_ARRAY_CHOICES = [
+  EstadoCambioDomicilioEnumChoice.ESPERA,
+  EstadoCambioDomicilioEnumChoice.FINALIZADO,
+  EstadoCambioDomicilioEnumChoice.SIN_FACTIBILIDAD,
+  EstadoCambioDomicilioEnumChoice.CANCELADO,
+];

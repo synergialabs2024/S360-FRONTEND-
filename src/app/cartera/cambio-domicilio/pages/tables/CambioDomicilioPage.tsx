@@ -1,159 +1,61 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
-
 import { ROUTER_PATHS } from '@/router/constants';
+import { EstadoCambioDomicilioEnumChoice, useTabsOnly } from '@/shared';
 import {
-  CustomSearch,
-  CustomTable,
+  a11yProps,
+  BoxFormTabsOnly,
+  CustomTabPanel,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { CambioDomicilio, PermissionsEnum } from '@/shared/interfaces';
-import { emptyCellOneLevel } from '@/shared/utils';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
-import { useUpdateTipoMantenedorBeneficio } from '@/actions/app/cartera/buzon-tareas/parametros/tipo-mantenedor-beneficios';
-import { useNavigate } from 'react-router';
-import { useFetchCambioDomicilios } from '@/actions/app/cartera/cambio-domicilio';
+import { Tab } from '@mui/material';
+import CambioDomicilioByStatePage from './CambioDomicilioByStatePage';
 
-export const returnUrlCambioDomicilioPage =
-  ROUTER_PATHS.cartera.cambiodomicilioNav;
+export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
 
 export type CambioDomicilioPageProps = {};
 
 const CambioDomicilioPage: React.FC<CambioDomicilioPageProps> = () => {
-  const navigate = useNavigate();
-
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
-
-  /* const navigate = useNavigate(); */
-
-  // server side filters - colums table
-  const { filterObject, columnFilters, setColumnFilters } =
-    useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
-
-  ///* mutations
-  const changeState = useUpdateTipoMantenedorBeneficio({
-    enableNavigate: false,
-  });
-
-  ///* table
-  const {
-    globalFilter,
-    pagination,
-    searchTerm,
-    onChangeFilter,
-    setPagination,
-  } = useTableFilter();
-  const { pageIndex, pageSize } = pagination;
-
-  ///* fetch data
-  const {
-    data: TipoMantenedorBeneficiosPaginatedRes,
-    isLoading,
-    isRefetching,
-  } = useFetchCambioDomicilios({
-    enabled: true,
-    params: {
-      page: pageIndex + 1,
-      page_size: pageSize,
-      name: searchTerm,
-      ...filterObject,
-      filterByState: false,
-    },
-  });
-
-  ///* handlers
-  /* const onEdit = (TipoMantenedorBeneficios: TipoMantenedorBeneficios) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Tipo',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(
-          `${returnUrlTipoMantenedorBeneficiosPage}/editar/${TipoMantenedorBeneficios.uuid}`,
-        );
-      },
-    });
-  }; */
-
-  ///* columns
-  const columns = useMemo<MRT_ColumnDef<CambioDomicilio>[]>(
-    () => [
-      {
-        accessorKey: 'estado_cambio_domicilio',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_cambio_domicilio'),
-      },
-      {
-        accessorKey: 'new_direccion_referencia',
-        header: 'NUEVA DIRECCION REFERENCIA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'new_direccion_referencia'),
-      },
-    ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
-  );
-
-  const onEdit = (row: CambioDomicilio) => {
-    navigate(`${returnUrlCambioDomicilioPage}/editar/${row.uuid}`);
-  };
+  const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
     <SingleTableBoxScene
-      title="Cambio domicilio"
-      createPageUrl={`${returnUrlCambioDomicilioPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.cartera_add_tipomantenedorbeneficios,
-      )}
+      title="Cambio de Domicilio"
+      showCreateBtn={false}
+      isMainTableStates
     >
-      <CustomSearch
-        onChange={onChangeFilter}
-        value={globalFilter}
-        text="por nombre"
-      />
+      <BoxFormTabsOnly
+        tabValue={tabValue}
+        handleTabChange={handleTabChange}
+        isMainTableStates
+      >
+        <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
+        <Tab label={'FINALIZADO'} value={2} {...a11yProps(2)} />
+        <Tab label={'SIN FACTIBILIDAD'} value={3} {...a11yProps(3)} />
+        <Tab label={'CANCELADO'} value={4} {...a11yProps(4)} />
+      </BoxFormTabsOnly>
 
-      <CustomTable<CambioDomicilio>
-        columns={columns}
-        data={TipoMantenedorBeneficiosPaginatedRes?.data?.items || []}
-        isLoading={isLoading}
-        isRefetching={isRefetching}
-        // // filters - server side
-        enableManualFiltering={true}
-        columnFilters={columnFilters}
-        onColumnFiltersChange={setColumnFilters}
-        // // search
-        enableGlobalFilter={false}
-        // // pagination
-        pagination={pagination}
-        onPaging={setPagination}
-        rowCount={TipoMantenedorBeneficiosPaginatedRes?.data?.meta?.count}
-        // // actions
-        /* actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        enableActionsColumn={hasPermission(
-          PermissionsEnum.tecnico_change_asuntoticket,
-        )} */
-        // crud
-        canEdit={hasPermission(
-          PermissionsEnum.cartera_change_tipomantenedorbeneficios,
-        )}
-        onEdit={onEdit}
-        canDelete={false}
-      />
+      <CustomTabPanel value={tabValue} index={1} ptGrid="0">
+        <CambioDomicilioByStatePage
+          state={EstadoCambioDomicilioEnumChoice.ESPERA}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={2} ptGrid="0">
+        <CambioDomicilioByStatePage
+          state={EstadoCambioDomicilioEnumChoice.FINALIZADO}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={3} ptGrid="0">
+        <CambioDomicilioByStatePage
+          state={EstadoCambioDomicilioEnumChoice.SIN_FACTIBILIDAD}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+        <CambioDomicilioByStatePage
+          state={EstadoCambioDomicilioEnumChoice.CANCELADO}
+        />
+      </CustomTabPanel>
     </SingleTableBoxScene>
   );
 };
