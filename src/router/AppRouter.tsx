@@ -1633,6 +1633,11 @@ const UpdateCuentaContablePage = Loadable(
       ),
   ),
 );
+const PlanCuentaPages = Loadable(
+  lazy(
+    () => import('@/app/inventario/plan-cuenta/pages/tables/PlanCuentaPages'),
+  ),
+);
 
 ///* Logistica ------------
 //TipoInstalacion
@@ -3506,6 +3511,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.cuentaContablesEditar,
             element: <UpdateCuentaContablePage />,
+          },
+
+          ///* Plan de Cuentas
+          {
+            path: ROUTER_PATHS.inventario.plancuentas,
+            element: <PlanCuentaPages />,
           },
         ],
       },

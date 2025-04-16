@@ -577,6 +577,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'plan-cuenta',
+              title: 'Plan de Cuenta',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.plancuentasNav,
+            }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-devoluciones',

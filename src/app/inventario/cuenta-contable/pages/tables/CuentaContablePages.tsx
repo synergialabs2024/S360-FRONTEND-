@@ -109,14 +109,16 @@ const CuentaContablePages: React.FC<CuentaContablePageProps> = () => {
   });
 
   ///* handlers
-  const onEdit = (brass: CuentaContable) => {
+  const onEdit = (cuenta_contable: CuentaContable) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Editar Brass',
+      title: 'Editar Cuenta Contable',
       subtitle: '¿Está seguro que desea editar este registro?',
       onConfirm: () => {
         setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlCuentaContablePage}/editar/${brass.uuid}`);
+        navigate(
+          `${returnUrlCuentaContablePage}/editar/${cuenta_contable.uuid}`,
+        );
       },
     });
   };
@@ -161,7 +163,7 @@ const CuentaContablePages: React.FC<CuentaContablePageProps> = () => {
           contentNode={
             <>
               <CustomAutocompleteNoForm<fileCuentaContableEnumChoiceType>
-                label=""
+                label="TIPO DE CODIGO"
                 value={valueCC}
                 actualValueKey="value"
                 onChange={v => {
@@ -174,13 +176,15 @@ const CuentaContablePages: React.FC<CuentaContablePageProps> = () => {
                 disableClearable
                 size={gridSizeMdLg6}
               />
-              <UploadFileDropZone
-                buttonLabel="Excel"
-                type="excel"
-                selectedFile={File_url}
-                setSelectedFile={setFile_url}
-                sizeContainer={gridSizeMdLg4}
-              />
+              <Grid sx={{ mt: 1 }}>
+                <UploadFileDropZone
+                  buttonLabel="Excel"
+                  type="excel"
+                  selectedFile={File_url}
+                  setSelectedFile={setFile_url}
+                  sizeContainer={gridSizeMdLg4}
+                />
+              </Grid>
             </>
           }
         />

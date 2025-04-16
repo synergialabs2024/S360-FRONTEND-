@@ -4,7 +4,11 @@ import { useMemo } from 'react';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useUpdateCuentaContable } from '@/actions/app';
-import { CuentaContable, PermissionsEnum } from '@/shared/interfaces';
+import {
+  CuentaContable,
+  CuentaContable_SubTable,
+  PermissionsEnum,
+} from '@/shared/interfaces';
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 import { CustomSwitch, ViewMoreTextModalTableCell } from '@/shared/components';
@@ -133,7 +137,52 @@ export const useColumnsCuentaContable = () => {
     [cuentaContableBaseColumns01, cuentaContableBaseColumns02],
   );
 
+  const planCuentasBaseColumns01 = useMemo<
+    MRT_ColumnDef<CuentaContable_SubTable>[]
+  >(
+    () => [
+      {
+        accessorKey: 'nombre',
+        header: 'NOMBRE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
+      },
+      {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'descripcion',
+        header: 'DESCRIPCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          console.log(row);
+          const str = row?.original?.descripcion
+            ? row.original.descripcion
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle={`Descripcion de ${row?.original?.nombre}`}
+            />
+          );
+        },
+      },
+    ],
+    [],
+  );
+
   return {
     cuentaContableColumns,
+    planCuentasBaseColumns01,
   };
 };
