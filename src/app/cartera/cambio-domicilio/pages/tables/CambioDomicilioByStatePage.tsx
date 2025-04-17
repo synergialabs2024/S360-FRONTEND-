@@ -1,4 +1,3 @@
-import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
   CustomTable,
@@ -15,9 +14,7 @@ import { hasPermission } from '@/shared/utils/auth';
 import { useNavigate } from 'react-router';
 import { useFetchCambioDomicilios } from '@/actions/app/cartera/cambio-domicilio';
 import { EstadoCambioDomicilioEnumChoice } from '@/shared';
-
-export const returnUrlCambioDomicilioPage =
-  ROUTER_PATHS.cartera.cambiodomicilioNav;
+import { returnUrlCambioDomicilioPage } from './CambioDomicilioPage';
 
 export type CambioDomicilioByStatePageProps = {
   state: EstadoCambioDomicilioEnumChoice;
@@ -59,6 +56,7 @@ const CambioDomicilioByStatePage: React.FC<CambioDomicilioByStatePageProps> = ({
       linea_servicio_data__cliente_data__name: searchTerm,
       ...filterObject,
       filterByState: false,
+      estado_cambio_domicilio: state,
     },
   });
 
@@ -82,7 +80,7 @@ const CambioDomicilioByStatePage: React.FC<CambioDomicilioByStatePageProps> = ({
 
   const calcEnableActionsColumn = () => {
     const permisos = hasPermission(
-      PermissionsEnum.cartera_change_tipomantenedorbeneficios,
+      PermissionsEnum.cartera_change_cambiodomicilio,
     );
 
     if (permisos && state === EstadoCambioDomicilioEnumChoice.ESPERA) {

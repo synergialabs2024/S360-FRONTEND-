@@ -84,6 +84,46 @@ export const useCreateCambioDomicilio = <T>({
   });
 };
 
+export const useCreateCambioDomicilioNotFeasible = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateCambioDomicilioParams<T>) =>
+      createCambioDomicilioNotFeasible(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [CambioDomicilioTSQEnum.CAMBIODOMICILIO],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Cambio domicilio creado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
 export const useGetCambioDomicilioComputeValores = <T>({
   navigate,
   returnUrl,
@@ -209,6 +249,15 @@ export const createCambioDomicilio = async <T>(
   setIsGlobalLoading(true);
 
   return post<CambioDomicilio>('/cambio-domicilio/', data, true);
+};
+
+export const createCambioDomicilioNotFeasible = async <T>(
+  data: CreateCambioDomicilioParams<T>,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<CambioDomicilio>('/cambio-domicilio/not-feasible/', data, true);
 };
 
 export const getCambioDomicilioComputeValores = async <T>(

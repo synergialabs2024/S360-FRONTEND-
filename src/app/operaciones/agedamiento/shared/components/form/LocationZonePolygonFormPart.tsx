@@ -214,6 +214,11 @@ const LocationZonePolygonFormPart: React.FC<
     isLoadingNaps || isRefetchingNaps || isLoadingZonas || isRefetchingZonas;
   useLoaders(customLoading);
 
+  useEffect(() => {
+    console.log('watchedThereIsCoverage', watchedThereIsCoverage);
+    console.log('form', form);
+  });
+
   return (
     <>
       {showSectionTitle && <CustomTypoLabel text="Ubicación" pt={ptLabel} />}

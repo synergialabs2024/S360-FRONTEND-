@@ -1,5 +1,9 @@
 import { ROUTER_PATHS } from '@/router/constants';
-import { EstadoCambioDomicilioEnumChoice, useTabsOnly } from '@/shared';
+import {
+  EstadoCambioDomicilioEnumChoice,
+  PermissionsEnum,
+  useTabsOnly,
+} from '@/shared';
 import {
   a11yProps,
   BoxFormTabsOnly,
@@ -8,8 +12,10 @@ import {
 } from '@/shared/components';
 import { Tab } from '@mui/material';
 import CambioDomicilioByStatePage from './CambioDomicilioByStatePage';
+import { hasPermission } from '@/shared/utils/auth';
 
-export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
+export const returnUrlCambioDomicilioPage =
+  ROUTER_PATHS.cartera.cambiodomicilioNav;
 
 export type CambioDomicilioPageProps = {};
 
@@ -19,7 +25,8 @@ const CambioDomicilioPage: React.FC<CambioDomicilioPageProps> = () => {
   return (
     <SingleTableBoxScene
       title="Cambio de Domicilio"
-      showCreateBtn={false}
+      createPageUrl={`${returnUrlCambioDomicilioPage}/crear`}
+      showCreateBtn={hasPermission(PermissionsEnum.cartera_add_cambiodomicilio)}
       isMainTableStates
     >
       <BoxFormTabsOnly

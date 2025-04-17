@@ -577,12 +577,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'plan-cuenta',
-              title: 'Plan de Cuenta',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.plancuentasNav,
-            }),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'solicitud-devoluciones',
@@ -916,7 +910,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.cartera.configuracionPlantillaClienteNav,
             }),
 
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.CARTERA_MANTENEDOR_SUSPENSIONES, {
               id: 'parametrosMantenedorSuspension',
               title: 'Mantenedor Suspension',
               type: MenuItemType.ITEM,

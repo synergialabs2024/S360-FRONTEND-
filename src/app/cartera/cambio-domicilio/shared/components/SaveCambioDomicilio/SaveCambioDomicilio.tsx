@@ -43,13 +43,14 @@ import DocsSaveFotosOpenTicket from '@/app/tickets/tickets/shared/components/Sav
 import {
   CreateCambioDomicilioParamsBase,
   useCreateCambioDomicilio,
+  useCreateCambioDomicilioNotFeasible,
 } from '@/actions/app/cartera/cambio-domicilio';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { LocationZonePolygonFormPart } from '@/app/operaciones/agedamiento/shared/components/form';
 import { uploadFileToBucket } from '@/actions/statics-api';
-import { returnUrlCambioDomicilioPage } from '../../../pages/tables/CambioDomicilioByStatePage';
 import { cambioDomicilioFormSchema } from '@/shared/utils/validation-schemas/app/cartera/cambio-domicilio';
+import { returnUrlCambioDomicilioPage } from '../../../pages/tables/CambioDomicilioPage';
 
 export interface SavePromesaPagoProps {
   title: string;
@@ -292,6 +293,15 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
     returnUrl: returnUrlCambioDomicilioPage,
   });
 
+  const createCambioDomicilioNotFeasible = useCreateCambioDomicilioNotFeasible({
+    enableErrorNavigate: false,
+    customOnSuccess: () => {
+      navigate(returnUrlCambioDomicilioPage);
+    },
+    navigate,
+    returnUrl: returnUrlCambioDomicilioPage,
+  });
+
   const requiredImages = [
     {
       label: 'Foto vivienda',
@@ -309,6 +319,7 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
 
   const onSave = async (data: SaveFormData) => {
     console.log('data', data);
+    console.log('data.thereAreNaps', data.thereAreNaps);
     let atLeastOneImageUploaded = false;
 
     requiredImages.forEach(({ isRequired, image }) => {
@@ -335,27 +346,41 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
       }),
     ]);
 
-    createSolUnblockSolServiceMutation.mutate({
-      linea_servicio: data.ticket_visita_body.linea_servicio,
-      ticket_visita_body: {
-        url_foto_vivienda: viviendaUrl?.streamUlr || '',
-        url_foto_opcional: opcionalUrl?.streamUlr || '',
-        linea_servicio: parseInt(data?.numero_contrato),
-        origen_ticket: data.ticket_visita_body.origen_ticket,
-        asunto_ticket: data.ticket_visita_body.asunto_ticket,
-        detalle_adicional_ticket:
-          data.ticket_visita_body.detalle_adicional_ticket,
-        fecha_sugerida_visita: data.ticket_visita_body.fecha_sugerida_visita,
-        franja_horaria: data.ticket_visita_body.franja_horaria,
-      },
-      new_coordenadas: data.coordenadas,
-      new_direccion_referencia: data.direccion_referencia,
-      new_pais: data.ticket_visita_body.pais,
-      new_provincia: data.provincia,
-      new_ciudad: data.ciudad,
-      new_zona: data.zona,
-      new_sector: data.sector,
-    });
+    if (data.thereAreNaps) {
+      createSolUnblockSolServiceMutation.mutate({
+        linea_servicio: data.ticket_visita_body.linea_servicio,
+        ticket_visita_body: {
+          url_foto_vivienda: viviendaUrl?.streamUlr || '',
+          url_foto_opcional: opcionalUrl?.streamUlr || '',
+          linea_servicio: parseInt(data?.numero_contrato),
+          origen_ticket: data.ticket_visita_body.origen_ticket,
+          asunto_ticket: data.ticket_visita_body.asunto_ticket,
+          detalle_adicional_ticket:
+            data.ticket_visita_body.detalle_adicional_ticket,
+          fecha_sugerida_visita: data.ticket_visita_body.fecha_sugerida_visita,
+          franja_horaria: data.ticket_visita_body.franja_horaria,
+        },
+        new_coordenadas: data.coordenadas,
+        new_direccion_referencia: data.direccion_referencia,
+        new_pais: data.ticket_visita_body.pais,
+        new_provincia: data.provincia,
+        new_ciudad: data.ciudad,
+        new_zona: data.zona,
+        new_sector: data.sector,
+      });
+    } else {
+      createCambioDomicilioNotFeasible.mutate({
+        linea_servicio: data.ticket_visita_body.linea_servicio,
+        tipo_no_factibilidad: 'PRIMARIA SIN PUERTOS LOGICOS',
+        new_coordenadas: data.coordenadas,
+        new_direccion_referencia: data.direccion_referencia,
+        new_pais: data.ticket_visita_body.pais,
+        new_provincia: data.provincia,
+        new_ciudad: data.ciudad,
+        new_zona: data.zona,
+        new_sector: data.sector,
+      });
+    }
   };
 
   const handleFetchCedulaRucInfo = async (value: string) => {
