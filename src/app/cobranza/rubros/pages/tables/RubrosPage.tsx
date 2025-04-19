@@ -52,169 +52,11 @@ const RubrosPage: React.FC<RubrosPageProps> = () => {
 
   ///* columns -----
   const { columnsRubrosGeneric } = useColumnsRubrosCliente();
-  // const columns = useMemo<MRT_ColumnDef<Rubro>[]>(
-  //   () => [
-  //     {
-  //       accessorKey: 'tipo_rubro',
-  //       header: 'TIPO RUBRO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_rubro'),
-  //     },
-
-  //     {
-  //       accessorKey: 'estado_rubro',
-  //       header: 'ESTADO RUBRO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'estado_rubro'),
-  //     },
-
-  //     {
-  //       accessorKey: 'concepto',
-  //       header: 'CONCEPTO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'concepto'),
-  //     },
-
-  //     {
-  //       accessorKey: 'subtotal',
-  //       header: 'SUBTOTAL',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'subtotal'),
-  //     },
-
-  //     {
-  //       accessorKey: 'valor_taxes',
-  //       header: 'VALOR TAXES',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'valor_taxes'),
-  //     },
-
-  //     {
-  //       accessorKey: 'valor_total',
-  //       header: 'VALOR TOTAL',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'valor_total'),
-  //     },
-
-  //     {
-  //       accessorKey: 'valor_ice',
-  //       header: 'VALOR ICE',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'valor_ice'),
-  //     },
-
-  //     {
-  //       accessorKey: 'valor_pagado',
-  //       header: 'VALOR PAGADO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'valor_pagado'),
-  //     },
-
-  //     {
-  //       accessorKey: 'detalle',
-  //       header: 'DETALLE',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'detalle'),
-  //     },
-
-  //     {
-  //       accessorKey: 'fecha_pago',
-  //       header: 'FECHA PAGO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_pago'),
-  //     },
-
-  //     {
-  //       accessorKey: 'fecha_emision',
-  //       header: 'FECHA EMISION',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_emision'),
-  //     },
-
-  //     {
-  //       accessorKey: 'fecha_vencimiento',
-  //       header: 'FECHA VENCIMIENTO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_vencimiento'),
-  //     },
-
-  //     {
-  //       accessorKey: 'created_at',
-  //       header: 'CREADO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: false,
-  //       enableSorting: false,
-  //       Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-  //     },
-
-  //     {
-  //       accessorKey: 'modified_at',
-  //       header: 'MODIFICADO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: false,
-  //       enableSorting: false,
-  //       Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-  //     },
-
-  //     {
-  //       accessorKey: 'cliente',
-  //       header: 'CLIENTE',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'cliente'),
-  //     },
-
-  //     {
-  //       accessorKey: 'linea_servicio',
-  //       header: 'LINEA SERVICIO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'linea_servicio'),
-  //     },
-
-  //     {
-  //       accessorKey: 'contrato',
-  //       header: 'CONTRATO',
-  //       size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-  //       enableColumnFilter: true,
-  //       enableSorting: true,
-  //       Cell: ({ row }) => emptyCellOneLevel(row, 'contrato'),
-  //     },
-  //   ],
-  //   [],
-  // );
 
   return (
     <SingleTableBoxScene
       title="Rubros"
       createPageUrl={`${returnUrlRubrosPage}/crear`}
-      // showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_rubro)}
       showCreateBtn={false}
     >
       <CustomSearch
@@ -240,6 +82,7 @@ const RubrosPage: React.FC<RubrosPageProps> = () => {
         rowCount={RubrosPagingRes?.data?.meta?.count}
         // // actions
         enableActionsColumn={false}
+        // no requiere crear ni editar, entonces no maneja store (activeServiceLine)
         // crud
       />
     </SingleTableBoxScene>

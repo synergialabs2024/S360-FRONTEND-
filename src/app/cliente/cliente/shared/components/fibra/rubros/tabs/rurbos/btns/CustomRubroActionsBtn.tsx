@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { useState } from 'react';
 import { MdEditDocument } from 'react-icons/md';
 import { TbCancel } from 'react-icons/tb';
 
@@ -6,7 +7,9 @@ import { RubroTSQEnum } from '@/actions/app';
 import { useGenericPATCH } from '@/actions/shared';
 import { EstadoRubroEnumChoice, Rubro } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
+import { useRubroStore } from '@/store/app/rubros';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { ClienteFibraRubroServiceModal } from '../servicio';
 
 export type CustomRubroActionsBtnProps = {
   rubro: Rubro;
@@ -15,11 +18,16 @@ export type CustomRubroActionsBtnProps = {
 const CustomRubroActionsBtn: React.FC<CustomRubroActionsBtnProps> = ({
   rubro,
 }) => {
+  ///* local state ----------------
+  const [isOpenServiceRubroModal, setIsOpenServiceRubroModal] =
+    useState<boolean>(false);
+
   ///* global state ----------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
+  const setActiveRubro = useRubroStore(s => s.setActiveRubro);
 
   ///* mutations ----------------
   const anularRubro = useGenericPATCH<any, any>(
@@ -44,9 +52,13 @@ const CustomRubroActionsBtn: React.FC<CustomRubroActionsBtnProps> = ({
                   label="Editar"
                   startIcon={<MdEditDocument />}
                   color="inherit"
-                  onClick={() => {}}
+                  onClick={() => {
+                    setActiveRubro(rubro);
+                    setIsOpenServiceRubroModal(true);
+                  }}
                 />
               </Grid>
+
               <Grid item>
                 <SingleIconButton
                   label="Anular"
@@ -68,6 +80,13 @@ const CustomRubroActionsBtn: React.FC<CustomRubroActionsBtnProps> = ({
           ) : null}
         </>
       </Grid>
+
+      <>
+        <ClienteFibraRubroServiceModal
+          open={isOpenServiceRubroModal}
+          onClose={() => setIsOpenServiceRubroModal(false)}
+        />
+      </>
     </>
   );
 };

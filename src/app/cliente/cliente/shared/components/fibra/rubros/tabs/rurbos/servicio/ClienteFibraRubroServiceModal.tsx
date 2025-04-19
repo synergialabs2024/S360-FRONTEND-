@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import {
   createRubroServiceClienteFormSchema,
   getKeysFormErrorsMessage,
-  LineaServicio,
   Rubro,
   ToastWrapper,
 } from '@/shared';
@@ -19,7 +18,6 @@ import ClienteFibraRubroServiceDetailRubroItem from './ClienteFibraRubroServiceD
 export type ClienteFibraRubroServiceModalProps = {
   open: boolean;
   onClose: () => void;
-  serviceLine: LineaServicio;
 
   // isCreating?: boolean;
   // isEditing?: boolean;
@@ -29,10 +27,11 @@ export type RubroServicioClienteFormData = Partial<Rubro> & {};
 
 const ClienteFibraRubroServiceModal: React.FC<
   ClienteFibraRubroServiceModalProps
-> = ({ open, serviceLine, onClose }) => {
+> = ({ open, onClose }) => {
   ///* global state --------------------------
   const activeRubro = useRubroStore(s => s.activeRubro); // to edit
-  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllMinusSL = useRubroStore(s => s.clearAllMinusSL);
+  const serviceLine = useRubroStore(s => s.activeServiceLine);
 
   ///* form --------------------------
   const form = useForm<RubroServicioClienteFormData>({
@@ -54,7 +53,7 @@ const ClienteFibraRubroServiceModal: React.FC<
   const handleClose = () => {
     // form.reset();
     onClose();
-    clearAllRubroStore();
+    clearAllMinusSL();
   };
 
   ///* effects --------------------------
@@ -69,7 +68,7 @@ const ClienteFibraRubroServiceModal: React.FC<
   return (
     <>
       <ScrollableDialogProps
-        title="Editar Rubro de Servicio"
+        title={`Editar Rubro de Servicio: ${activeRubro?.numero_referencia || ''}`}
         open={open}
         onClose={handleClose}
         minWidth="81%"
@@ -88,7 +87,7 @@ const ClienteFibraRubroServiceModal: React.FC<
               <Grid item xs={12}>
                 <ClienteFibraRubroLibreHeader
                   form={form}
-                  serviceLine={serviceLine}
+                  serviceLine={serviceLine!}
                 />
                 <Divider></Divider>
               </Grid>

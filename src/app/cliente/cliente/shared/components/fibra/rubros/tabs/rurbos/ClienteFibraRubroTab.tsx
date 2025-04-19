@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 
 import { RubroTSQEnum, useFetchRubros } from '@/actions/app';
@@ -15,7 +15,7 @@ import {
 import { CustomSingleButton, CustomTable } from '@/shared/components';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { ClienteFibraRubroLibreModal } from './libre';
-import { ClienteFibraRubroServiceModal } from './servicio';
+import { useRubroStore } from '@/store/app/rubros';
 
 export type ClienteFibraRubroTabProps = {
   serviceLine?: LineaServicio;
@@ -27,14 +27,14 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   ///* local state -------------------------
   const [isOpenFreeRubroModal, setIsOpenFreeRubroModal] =
     useState<boolean>(false);
-  const [isOpenServiceRubroModal, setIsOpenServiceRubroModal] =
-    useState<boolean>(false);
 
   ///* global state -------------------------
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
+  const setActiveServiceLine = useRubroStore(s => s.setActiveServiceLine); // to edit
+  const clearAllRubroStore = useRubroStore(s => s.clearAll);
 
   ///* table -------------------------
   // server side filters - colums table
@@ -89,6 +89,20 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
     showNumberRubro: false,
     showActionColumn: true,
   });
+
+  ///* effects -------------------------
+  useEffect(() => {
+    if (!serviceLine) return;
+    setActiveServiceLine(serviceLine);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceLine]);
+  // clear store
+  useEffect(() => {
+    return () => {
+      clearAllRubroStore();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -161,13 +175,6 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
         open={isOpenFreeRubroModal}
         onClose={() => setIsOpenFreeRubroModal(false)}
         serviceLine={serviceLine!}
-      />
-
-      <ClienteFibraRubroServiceModal
-        open={isOpenServiceRubroModal}
-        onClose={() => setIsOpenServiceRubroModal(false)}
-        serviceLine={serviceLine!}
-        // isCreating={isCreatingRubro}
       />
     </>
   );
