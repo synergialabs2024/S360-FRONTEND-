@@ -15,7 +15,7 @@ import { useRubroStore } from '@/store/app/rubros';
 import ClienteFibraRubroLibreHeader from '../libre/ClienteFibraRubroLibreHeader';
 import ClienteFibraRubroServiceDetailRubroItem from './ClienteFibraRubroServiceDetailRubroItem';
 
-export type ClienteFibraRubroServiceModalProps = {
+export type ClienteFibraEditServiceRubroModalProps = {
   open: boolean;
   onClose: () => void;
 
@@ -25,8 +25,8 @@ export type ClienteFibraRubroServiceModalProps = {
 
 export type RubroServicioClienteFormData = Partial<Rubro> & {};
 
-const ClienteFibraRubroServiceModal: React.FC<
-  ClienteFibraRubroServiceModalProps
+const ClienteFibraEditServiceRubroModal: React.FC<
+  ClienteFibraEditServiceRubroModalProps
 > = ({ open, onClose }) => {
   ///* global state --------------------------
   const activeRubro = useRubroStore(s => s.activeRubro); // to edit
@@ -104,4 +104,4 @@ const ClienteFibraRubroServiceModal: React.FC<
   );
 };
 
-export default ClienteFibraRubroServiceModal;
+export default ClienteFibraEditServiceRubroModal;

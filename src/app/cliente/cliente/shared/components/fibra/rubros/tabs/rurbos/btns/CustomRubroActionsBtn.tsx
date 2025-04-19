@@ -9,7 +9,7 @@ import { EstadoRubroEnumChoice, Rubro } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { ClienteFibraRubroServiceModal } from '../servicio';
+import { ClienteFibraEditServiceRubroModal } from '../servicio';
 
 export type CustomRubroActionsBtnProps = {
   rubro: Rubro;
@@ -82,7 +82,7 @@ const CustomRubroActionsBtn: React.FC<CustomRubroActionsBtnProps> = ({
       </Grid>
 
       <>
-        <ClienteFibraRubroServiceModal
+        <ClienteFibraEditServiceRubroModal
           open={isOpenServiceRubroModal}
           onClose={() => setIsOpenServiceRubroModal(false)}
         />

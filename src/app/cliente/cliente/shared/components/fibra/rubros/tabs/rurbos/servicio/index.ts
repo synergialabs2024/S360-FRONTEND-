@@ -1,2 +1,2 @@
 export { default as ClienteFibraRubroServiceDetailRubroItem } from './ClienteFibraRubroServiceDetailRubroItem';
-export { default as ClienteFibraRubroServiceModal } from './ClienteFibraRubroServiceModal';
+export { default as ClienteFibraEditServiceRubroModal } from './ClienteFibraEditServiceRubroModal';
