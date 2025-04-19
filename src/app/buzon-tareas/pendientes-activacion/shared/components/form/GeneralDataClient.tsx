@@ -28,7 +28,7 @@ const GeneralDataClient: React.FC<GeneralFibraClientProps> = ({
   const { tabValue, handleTabChange } = useTabOnlyNuqs();
 
   ///* global state ----------------------
-  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
 
   ///* effects ----------------
   useEffect(() => {

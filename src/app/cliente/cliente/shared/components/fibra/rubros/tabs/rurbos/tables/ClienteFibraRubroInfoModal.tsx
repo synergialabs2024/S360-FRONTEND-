@@ -41,7 +41,7 @@ const ClienteFibraRobroInfoModal: React.FC<ClienteFibraRobroInfoModalProps> = ({
       <ScrollableDialogProps
         open={open}
         title={`Rubro: ${rubroType || ''} - ${rubro?.numero_referencia}`}
-        minWidth="87%"
+        minWidth="90%"
         cancelTextBtn="Cerrar"
         onClose={handleClose}
         contentNode={

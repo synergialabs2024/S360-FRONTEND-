@@ -22,6 +22,8 @@ export interface Contrato {
   direccion: string; // sol servicio
   direccion_referencia: string; // sol servicio
 
+  es_nuevo_sistema: boolean;
+
   // profile classificator
   perfil_ingreso: string;
   perfil_actual: string;

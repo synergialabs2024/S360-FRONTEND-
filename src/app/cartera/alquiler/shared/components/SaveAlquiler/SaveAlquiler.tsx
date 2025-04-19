@@ -58,7 +58,7 @@ const SaveAlquiler: React.FC<SaveAlquilerProps> = ({ soporte_tecnico }) => {
     useState<boolean>(false);
 
   ///* global state ----------------------
-  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =

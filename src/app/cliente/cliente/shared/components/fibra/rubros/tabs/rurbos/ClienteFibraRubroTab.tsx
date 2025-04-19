@@ -13,9 +13,9 @@ import {
   useTableServerSideFiltering,
 } from '@/shared';
 import { CustomSingleButton, CustomTable } from '@/shared/components';
+import { useRubroStore } from '@/store/app/rubros';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { ClienteFibraRubroLibreModal } from './libre';
-import { useRubroStore } from '@/store/app/rubros';
 
 export type ClienteFibraRubroTabProps = {
   serviceLine?: LineaServicio;
@@ -33,8 +33,7 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
-  const setActiveServiceLine = useRubroStore(s => s.setActiveServiceLine); // to edit
-  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
 
   ///* table -------------------------
   // server side filters - colums table
@@ -91,11 +90,6 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   });
 
   ///* effects -------------------------
-  useEffect(() => {
-    if (!serviceLine) return;
-    setActiveServiceLine(serviceLine);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serviceLine]);
   // clear store
   useEffect(() => {
     return () => {

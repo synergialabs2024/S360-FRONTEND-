@@ -37,7 +37,8 @@ const ClienteFibraEditServiceRubroModal: React.FC<
   const form = useForm<RubroServicioClienteFormData>({
     resolver: yupResolver(createRubroServiceClienteFormSchema) as any,
     defaultValues: {
-      fecha_emision: dayjs().format(),
+      fecha_emision: dayjs(activeRubro?.fecha_emision).format(),
+      fecha_vencimiento: dayjs(activeRubro?.fecha_vencimiento).format(),
     },
   });
 
@@ -58,20 +59,24 @@ const ClienteFibraEditServiceRubroModal: React.FC<
 
   ///* effects --------------------------
   useEffect(() => {
-    if (!open) return;
+    if (!open || !activeRubro) return;
 
-    console.log({
-      activeRubro,
+    form.reset({
+      ...activeRubro,
+      fecha_emision: dayjs(activeRubro?.fecha_emision).format(),
+      fecha_vencimiento: dayjs(activeRubro?.fecha_vencimiento).format(),
     });
   }, [activeRubro, form, open]);
+
+  if (!open || !activeRubro || !serviceLine) return null;
 
   return (
     <>
       <ScrollableDialogProps
-        title={`Editar Rubro de Servicio: ${activeRubro?.numero_referencia || ''}`}
+        title={`Editar Rubro: ${activeRubro?.tipo_rubro} - ${activeRubro?.numero_referencia || ''}`}
         open={open}
         onClose={handleClose}
-        minWidth="81%"
+        minWidth="90%"
         // confirm --------
         onConfirm={form.handleSubmit(onSave, errors => {
           const keys = getKeysFormErrorsMessage(errors);

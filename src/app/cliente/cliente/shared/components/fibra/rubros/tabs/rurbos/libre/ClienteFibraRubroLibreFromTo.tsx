@@ -16,7 +16,9 @@ const ClienteFibraRubroLibreFromTo: React.FC<
   const toInvoide = {
     billTo: customer?.razon_social,
     billToEmail: customer?.email,
-    billToAddress: serviceLine?.contrato_data?.direccion,
+    billToAddress:
+      serviceLine?.contrato_data?.direccion_referencia ||
+      serviceLine?.contrato_data?.direccion,
     billToPhone: customer?.celular,
   };
   const fromInvoice = {
@@ -47,7 +49,7 @@ const ClienteFibraRubroLibreFromTo: React.FC<
         <Paper variant="outlined">
           <Box p={3} display="flex" flexDirection="column" gap="4px">
             <Typography variant="h6" mb={2}>
-              To :
+              Para :
             </Typography>
             <Typography variant="body1">{toInvoide.billTo}</Typography>
             <Typography variant="body1">{toInvoide.billToEmail}</Typography>

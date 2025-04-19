@@ -34,7 +34,7 @@ const ClienteFibraRubroLibreModal: React.FC<
 > = ({ open, onClose, serviceLine }) => {
   ///* global state --------------------------
   const activeRubro = useRubroStore(s => s.activeRubro);
-  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
   const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
 
   ///* form --------------------------

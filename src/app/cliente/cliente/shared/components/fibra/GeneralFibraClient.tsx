@@ -1,10 +1,13 @@
 import { Tab } from '@mui/material';
 import { useEffect } from 'react';
 
+import { useFetchCalendarioFacturaciones } from '@/actions/app';
 import {
   gridSize,
   gridSizeMdLg10,
   LineaServicio,
+  ToastWrapper,
+  useLoaders,
   useTabOnlyNuqs,
 } from '@/shared';
 import {
@@ -32,13 +35,49 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 
   ///* global state ----------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const setCalendariosFacturacion = useRubroStore(
+    s => s.setCalendariosFacturacion,
+  );
+
+  ///* fetch data ----------------
+  const {
+    data: calendarioFacturacionesPagingRes,
+    isLoading: isCalendarioFacturacionesLoading,
+    isRefetching: isCalendarioFacturacionesRefetching,
+  } = useFetchCalendarioFacturaciones({
+    enabled: !!serviceLine?.id,
+    params: {
+      page_size: 1002,
+    },
+  });
+
+  const isCustomLoading =
+    isCalendarioFacturacionesLoading || isCalendarioFacturacionesRefetching;
+  useLoaders(isCustomLoading);
 
   ///* effects ----------------
+  useEffect(() => {
+    if (!serviceLine || isCustomLoading) return;
+
+    // alert no calendarios
+    if (calendarioFacturacionesPagingRes?.data?.meta.count === 0) {
+      ToastWrapper.error('No se encontraron calendarios de facturación.');
+    }
+    // set calendarios
+    setCalendariosFacturacion(
+      calendarioFacturacionesPagingRes?.data?.items || [],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceLine, isCustomLoading, calendarioFacturacionesPagingRes]);
+
   useEffect(() => {
     return () => {
       clearAllRubroStore();
     };
-  }, [clearAllRubroStore]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isCustomLoading || !serviceLine) return null;
 
   return (
     <TabsFormBoxScene

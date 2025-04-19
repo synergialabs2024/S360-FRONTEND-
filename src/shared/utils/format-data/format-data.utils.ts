@@ -7,6 +7,15 @@ export const formatCurrency = (value: string | number): string => {
     currency: 'USD',
   });
 };
+export function formatToNDecimals(value: number, decimals: number = 2): string {
+  // 1) Creamos un factor 10^decimals
+  const factor = 10 ** decimals;
+  // 2) Sumamos un pequeño EPSILON para minimizar errores de IEEE754
+  //    Luego redondeamos al entero más cercano y devolvemos
+  const rounded = Math.round((value + Number.EPSILON) * factor) / factor;
+  // 3) toFixed se encarga de rellenar con ceros si hace falta
+  return rounded.toFixed(decimals);
+}
 
 export const formatQuantity = (value: string | number): string => {
   return (+value).toLocaleString('en-US', {

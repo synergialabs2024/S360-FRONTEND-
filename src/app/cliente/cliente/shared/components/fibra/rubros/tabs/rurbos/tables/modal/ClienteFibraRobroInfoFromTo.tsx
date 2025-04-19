@@ -53,7 +53,7 @@ const ClienteFibraRobroInfoFromTo: React.FC<
           <Paper variant="outlined">
             <Box p={3} display="flex" flexDirection="column" gap="4px">
               <Typography variant="h6" mb={2}>
-                To :
+                Para :
               </Typography>
               <Typography variant="body1">{toInvoide.billTo}</Typography>
               <Typography variant="body1">{toInvoide.billToEmail}</Typography>

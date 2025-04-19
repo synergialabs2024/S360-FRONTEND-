@@ -75,7 +75,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
   const navigate = useNavigate();
 
   ///* global state ----------------------
-  const clearAllRubroStore = useRubroStore(s => s.clearAll);
+  const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
