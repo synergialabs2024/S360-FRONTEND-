@@ -376,6 +376,10 @@ export const ESTADO_SOLICITUD_SERVICIO_ARRAY_CHOICES = [
   EstadoSolicitudServicioEnumChoice.ESPERA_DESBLOQUEO,
   EstadoSolicitudServicioEnumChoice.DESBLOQUEADO,
 ];
+export enum EstadosContribuyenteEnumRUC {
+  SUSPENDIDO = 'SUSPENDIDO',
+  ACTIVO = 'ACTIVO',
+}
 
 export enum EstadoPreventaEnumChoice {
   ESPERA = 'ESPERA',
