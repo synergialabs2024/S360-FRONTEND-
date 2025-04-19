@@ -38,6 +38,7 @@ import {
 } from '@/shared/components';
 import {
   CountryISOCodeEnumChoice,
+  EstadosContribuyenteEnumRUC,
   EstadoSolicitudServicioEnumChoice,
   GeneralModelStatesEnumChoice,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
@@ -289,8 +290,18 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     const minutesBlocked = now.diff(createdAt, 'minutes') || 1;
     const timeBlocked = minutesBlocked > 60 ? hoursBlocked : minutesBlocked;
 
-    // sri api is down
+    // external apis down ---
     if (status === HTTPResStatusCodeEnum.EXTERNAL_SERVER_ERROR) {
+      // si es ruc no cnotinua, bloquea el form
+      if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
+        ToastWrapper.error(
+          'El servicio de consulta de RUC no está disponible en este momento. No se puede proceder con la contratación de un nuevo servicio bajo este tipo de identificación.',
+        );
+        form.setValue('isFormBlocked', true);
+        setCanInsertSRIDataManually(false);
+        return;
+      }
+
       ToastWrapper.warning(
         'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos manualmente',
       );
@@ -357,26 +368,42 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       // 412
     } else if (status === HTTPResStatusCodeEnum.CLIENTE_EXISTS_IN_DB) {
       ToastWrapper.info(err?.response?.data?.message);
-      data?.sri_down &&
+      data?.registro_civil_down &&
         ToastWrapper.warning(
           'Servicio de consulta de cédula no disponible en este momento. Ingresa los datos manualmente',
         );
 
-      const correctFechaNacimiento = dayjs(
-        data?.fechaNacimiento,
-        'DD/MM/YYYY',
-      ).format('YYYY-MM-DD');
-      const currentCountry = paisesPaging?.data.items.find(
-        country => country.nationality === data?.nacionalidad,
+      const estadoContribuyente = data?.sri_data?.estadoContribuyenteRuc;
+      const tipoIdentificacion = data?.cliente?.tipo_identificacion;
+      const correctFechaNacimiento = dayjs(data?.fechaNacimiento).format(
+        'YYYY-MM-DD',
       );
       const haveDebt = data?.have_debt;
-
       setHaveDebt(haveDebt);
+      form.setValue('isFormBlocked', false);
+
       if (data?.have_debt) {
         ToastWrapper.error(
           'Este cliente tiene una deuda pendiente. No se puede proceder con la contratación de un nuevo servicio.',
         );
+        form.setValue('isFormBlocked', true);
       }
+
+      if (tipoIdentificacion === IdentificationTypeEnumChoice.RUC) {
+        if (estadoContribuyente === EstadosContribuyenteEnumRUC.SUSPENDIDO) {
+          ToastWrapper.error(
+            'Este cliente tiene un estado de contribuyente suspendido. No se puede proceder con la contratación de un nuevo servicio con el RUC ingresado.',
+          );
+          form.setValue('isFormBlocked', true);
+        }
+        if (data?.sri_down) {
+          ToastWrapper.warning(
+            'Servicio de consulta de RUC no disponible en este momento. No se puede proceder con la contratación de un nuevo servicio.',
+          );
+          form.setValue('isFormBlocked', true);
+        }
+      }
+
       form.reset({
         ...form.getValues(),
         es_cliente: true,
@@ -385,14 +412,24 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
         es_discapacitado: !!data?.esDiscapacitado,
         es_tercera_edad: !!data?.esTerceraEdad,
         fecha_nacimiento: correctFechaNacimiento,
-        edad: data?.edad,
-        direccion_referencia: data?.domicilio,
-        isFormBlocked: false,
+        edad: calcAge(correctFechaNacimiento),
         isValidIdentificacion: true,
-        pais: currentCountry?.id,
-        nacionalidad: data?.nacionalidad,
-        email: data?.cliente?.email,
-        celular: data?.cliente?.celular,
+        pais: data?.cliente?.pais_data?.id,
+        nacionalidad: data?.cliente?.pais_data?.nationality,
+        email:
+          getEmailPersonaInfo(data?.identificacion_data) ||
+          data?.cliente?.email,
+        celular:
+          getCelulcarPersoanInfo(data?.identificacion_data) ||
+          data?.cliente?.celular,
+        direccion_referencia: getAddressesPersonaInfo(
+          data?.identificacion_data,
+        ),
+        estado_contribuyente: estadoContribuyente,
+        tipo_contribuyente: data?.sri_data?.tipoContribuyente,
+        regimen: data?.sri_data?.regimen,
+        actividad_economica_principal:
+          data?.sri_data?.actividadEconomicaPrincipal,
       });
 
       setClientData(data);
@@ -452,6 +489,7 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
     });
 
   const handleFetchCedulaRucInfo = async (value: string) => {
+    clearForm(false);
     if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
       setIsCheckingIdentificacion(true);
       await Promise.all([
@@ -535,10 +573,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
       regimen: undefined,
       actividad_economica_principal: undefined,
       direccion: '',
+
+      //
+      isFormBlocked: false,
     });
 
     setAplicaRestriccionCiudadano(false);
     setIsExtranjeroCedulado(false);
+    setIsDefuncion(false);
+    setHaveDebt(false);
   };
 
   ///* effects -----------------
@@ -549,6 +592,15 @@ const SaveSolicitudServicio: React.FC<SaveSolicitudServicioProps> = ({
 
   const isCustomLoading = isLoadingPaises || isRefetchingPaises;
   useLoaders(isCustomLoading);
+
+  console.log({
+    haveDebt,
+    watchedIsFormBlocked,
+    notWatchedIsValidIdentificacion: !watchedIsValidIdentificacion,
+    aplicaRestriccionCiudadano,
+    isExtranjeroCedulado,
+    isDefuncion,
+  });
 
   return (
     <SingleFormBoxScene
