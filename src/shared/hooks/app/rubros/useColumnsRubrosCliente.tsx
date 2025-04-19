@@ -7,7 +7,11 @@ import {
   ClienteFibraRubroChipState,
   ClienteFibraRubroInfoTableCell,
 } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/rurbos/tables';
-import { TABLE_CONSTANTS } from '@/shared/constants';
+import {
+  ESTADOS_RUBRO_FILTERS,
+  TABLE_CONSTANTS,
+  TIPOS_RUBRO_FILTERS,
+} from '@/shared/constants';
 import { type Rubro } from '@/shared/interfaces';
 import {
   emptyCellNested,
@@ -81,6 +85,8 @@ export const useColumnsRubrosCliente = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: TIPOS_RUBRO_FILTERS,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_rubro'),
       },
 
@@ -116,6 +122,8 @@ export const useColumnsRubrosCliente = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: ESTADOS_RUBRO_FILTERS,
         Cell: ({ row }) => {
           const rubroState = row.original?.estado_rubro;
           return <ClienteFibraRubroChipState state={rubroState} />;

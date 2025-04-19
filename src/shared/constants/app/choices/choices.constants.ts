@@ -1029,10 +1029,16 @@ export const TIPO_RUBRO_ARRAY_CHOICES = [
   TipoRubroEnumChoice.PRODUCTOS,
   TipoRubroEnumChoice.LIBRE,
 ];
+export const TIPOS_RUBRO_FILTERS = [
+  { label: 'SERVICIO', value: TipoRubroEnumChoice.SERVICIO },
+  { label: 'PRODUCTOS', value: TipoRubroEnumChoice.PRODUCTOS },
+  { label: 'LIBRE', value: TipoRubroEnumChoice.LIBRE },
+];
 export enum EstadoRubroEnumChoice {
   NO_PAGADO = 'NO_PAGADO',
   PAGADO = 'PAGADO',
   PAGO_INCOMPLETO = 'PAGO_INCOMPLETO',
+  REVERSADO = 'REVERSADO',
   VENCIDO = 'VENCIDO',
   ANULADO = 'ANULADO',
 }
@@ -1041,7 +1047,13 @@ export const ESTADO_RUBRO_ARRAY_CHOICES = [
   EstadoRubroEnumChoice.PAGADO,
   EstadoRubroEnumChoice.PAGO_INCOMPLETO,
   EstadoRubroEnumChoice.VENCIDO,
+  EstadoRubroEnumChoice.REVERSADO,
   EstadoRubroEnumChoice.ANULADO,
+];
+export const ESTADOS_RUBRO_FILTERS = [
+  { label: 'NO PAGADO', value: EstadoRubroEnumChoice.NO_PAGADO },
+  { label: 'PAGADO', value: EstadoRubroEnumChoice.PAGADO },
+  { label: 'ANULADO', value: EstadoRubroEnumChoice.ANULADO },
 ];
 
 export enum EstadoSaldoEnumChoice {
