@@ -1,15 +1,22 @@
 import { Grid, Paper, TextField } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
+import { IoMdAdd } from 'react-icons/io';
 import { MdDeleteForever } from 'react-icons/md';
+import { v4 as uuid } from 'uuid';
 
 import {
   formatCurrency,
   formatToNDecimals,
   TABLE_CONSTANTS,
+  TipoRubroEnumChoice,
   ToastWrapper,
 } from '@/shared';
-import { CustomMinimalTable, SingleIconButton } from '@/shared/components';
+import {
+  CustomMinimalTable,
+  CustomSingleButton,
+  SingleIconButton,
+} from '@/shared/components';
 import { RubroItemDataType, useRubroStore } from '@/store/app/rubros';
 
 export type ClienteFibraRubroServiceDetailRubroItemProps = {};
@@ -26,6 +33,7 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     s => s.softDeleteSelectedRubroItem,
   );
   const removeSelectedRubroItem = useRubroStore(s => s.removeSelectedRubroItem);
+  const addNewRubroItemLine = useRubroStore(s => s.addNewRubroItemLine);
 
   ///* handlers --------------------------
   const onChangeDescription = useCallback(
@@ -85,6 +93,19 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     },
     [removeSelectedRubroItem, softDeleteSelectedRubroItem],
   );
+  const onAddRubroItem = useCallback(() => {
+    const newItem: RubroItemDataType = {
+      id: `${uuid()}___new` as any,
+      tipo_rubro_item: TipoRubroEnumChoice.SERVICIO,
+      descripcion: '',
+      valor_base: '0.00',
+      cantidad: 1,
+      impuesto: '0.00',
+      removible: true,
+      state: true,
+    };
+    addNewRubroItemLine({ item: newItem });
+  }, [addNewRubroItemLine]);
 
   ///* columns --------------------------
   const columnsEditRubro = useMemo<MRT_ColumnDef<RubroItemDataType>[]>(
@@ -284,18 +305,38 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
   return (
     <>
       <Paper variant="outlined">
-        <>
-          <CustomMinimalTable<RubroItemDataType>
-            columns={columnsEditRubro}
-            data={
-              activeRubro?.rubro_items_data?.filter(
-                (item: RubroItemDataType) => item.state !== false,
-              ) || []
-            }
-            enablePagination
-            density="compact"
-          />
-        </>
+        <Grid
+          item
+          container
+          xs={12}
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Grid item xs={12} pt={2} pr={2}>
+            <CustomSingleButton
+              label="AGREGAR LINEA"
+              justifyContent="flex-end"
+              startIcon={<IoMdAdd />}
+              onClick={() => {
+                onAddRubroItem();
+              }}
+              variant="outlined"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <CustomMinimalTable<RubroItemDataType>
+              columns={columnsEditRubro}
+              data={
+                activeRubro?.rubro_items_data?.filter(
+                  (item: RubroItemDataType) => item.state !== false,
+                ) || []
+              }
+              enablePagination
+              density="compact"
+            />
+          </Grid>
+        </Grid>
       </Paper>
     </>
   );
