@@ -1,6 +1,7 @@
 import { formatCurrency, formatToNDecimals } from '@/shared';
 import { useRubroStore } from '@/store/app/rubros';
 import { Box, Typography } from '@mui/material';
+import { useEffect } from 'react';
 
 export type ClienteFibraEditRubroAmountProps = {};
 
@@ -8,9 +9,10 @@ const ClienteFibraEditRubroAmount: React.FC<
   ClienteFibraEditRubroAmountProps
 > = () => {
   ///* global state --------------------------
-  const activeRubro = useRubroStore(s => s.activeRubro); // to edit
+  const activeRubro = useRubroStore(s => s.activeRubro)!;
   const rubroItems =
     activeRubro?.rubro_items_data?.filter(item => item?.state !== false) || [];
+  const setActiveRubro = useRubroStore(s => s.setActiveRubro);
 
   ///* handlers --------------------------
   // saldos ---
@@ -27,22 +29,39 @@ const ClienteFibraEditRubroAmount: React.FC<
       : onlyNegativesSaldoConsume;
 
   // calc subtotal ------
-  const subtotal = rubroItems.reduce((acc, item) => {
-    const itemTotal =
-      parseFloat(item.valor_base) *
-      parseFloat((+(item?.cantidad || 0)).toString());
-    return acc + itemTotal;
+  const subtotalRaw = rubroItems.reduce((acc, item) => {
+    const base = parseFloat(item.valor_base) || 0;
+    const qty = item.cantidad || 0;
+    return acc + base * qty;
   }, 0);
   // calc taxes ------
-  const taxes = rubroItems.reduce((acc, item) => {
-    const itemTotal =
-      parseFloat(item.valor_base) *
-      parseFloat((+(item?.cantidad || 0)).toString());
-    const itemTaxes = itemTotal * (parseFloat(item.impuesto) / 100);
-    return acc + itemTaxes;
+  const taxesRaw = rubroItems.reduce((acc, item) => {
+    const base = parseFloat(item.valor_base) || 0;
+    const qty = item.cantidad || 0;
+    const pct = (parseFloat(item.impuesto) || 0) / 100;
+    return acc + base * qty * pct;
   }, 0);
   // calc total ------
-  const total = subtotal + taxes + discount2;
+  const totalRaw = subtotalRaw + taxesRaw + discount2;
+  const subtotal = formatToNDecimals(subtotalRaw, 2).toString();
+  const valor_taxes = formatToNDecimals(taxesRaw, 2).toString();
+  const valor_total = formatToNDecimals(totalRaw, 2).toString();
+
+  ///* effects --------------------------
+  useEffect(() => {
+    if (
+      activeRubro.subtotal !== subtotal ||
+      activeRubro.valor_taxes !== valor_taxes ||
+      activeRubro.valor_total !== valor_total
+    ) {
+      setActiveRubro({
+        ...activeRubro,
+        subtotal: subtotal,
+        valor_taxes: valor_taxes,
+        valor_total: valor_total,
+      });
+    }
+  }, [subtotal, valor_taxes, valor_total, activeRubro, setActiveRubro]);
 
   return (
     <Box p={3} bgcolor="primary.light" mt={3}>
@@ -51,7 +70,7 @@ const ClienteFibraEditRubroAmount: React.FC<
           Sub Total:
         </Typography>
         <Typography variant="body1" fontWeight={600}>
-          {formatCurrency(formatToNDecimals(subtotal, 2))}
+          {formatCurrency(subtotal)}
         </Typography>
       </Box>
 
@@ -60,7 +79,7 @@ const ClienteFibraEditRubroAmount: React.FC<
           Impuesto:
         </Typography>
         <Typography variant="body1" fontWeight={600}>
-          {formatCurrency(formatToNDecimals(taxes, 2))}
+          {formatCurrency(valor_taxes)}
         </Typography>
       </Box>
 
@@ -78,7 +97,7 @@ const ClienteFibraEditRubroAmount: React.FC<
           Total:
         </Typography>
         <Typography variant="body1" fontWeight={600}>
-          {formatCurrency(formatToNDecimals(total, 2))}
+          {formatCurrency(valor_total)}
         </Typography>
       </Box>
 
