@@ -53,7 +53,7 @@ export const useColumnsSaldos = () => {
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         Cell: ({ row }) => row.original?.descripcion || '-',
       },
     ],

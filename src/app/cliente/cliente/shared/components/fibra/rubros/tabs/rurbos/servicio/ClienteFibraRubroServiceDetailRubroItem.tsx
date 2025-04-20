@@ -1,16 +1,16 @@
-import { Paper, TextField } from '@mui/material';
+import { Grid, Paper, TextField } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
+import { MdDeleteForever } from 'react-icons/md';
 
 import {
   formatCurrency,
   formatToNDecimals,
-  RubroItemData,
   TABLE_CONSTANTS,
   ToastWrapper,
 } from '@/shared';
-import { CustomMinimalTable } from '@/shared/components';
-import { useRubroStore } from '@/store/app/rubros';
+import { CustomMinimalTable, SingleIconButton } from '@/shared/components';
+import { RubroItemDataType, useRubroStore } from '@/store/app/rubros';
 
 export type ClienteFibraRubroServiceDetailRubroItemProps = {};
 
@@ -22,10 +22,14 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
   const updateSelectedRubroItemValue = useRubroStore(
     s => s.updateSelectedRubroItemValue,
   );
+  const softDeleteSelectedRubroItem = useRubroStore(
+    s => s.softDeleteSelectedRubroItem,
+  );
+  const removeSelectedRubroItem = useRubroStore(s => s.removeSelectedRubroItem);
 
   ///* handlers --------------------------
   const onChangeDescription = useCallback(
-    (value: string, item: RubroItemData) => {
+    (value: string, item: RubroItemDataType) => {
       updateSelectedRubroItemValue({
         item: {
           ...item,
@@ -36,7 +40,7 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     [updateSelectedRubroItemValue],
   );
   const onChangePrice = useCallback(
-    (value: string, item: RubroItemData) => {
+    (value: string, item: RubroItemDataType) => {
       console.log('value', value);
       updateSelectedRubroItemValue({
         item: {
@@ -48,7 +52,7 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     [updateSelectedRubroItemValue],
   );
   const onChangeQuantity = useCallback(
-    (value: string, item: RubroItemData) => {
+    (value: string, item: RubroItemDataType) => {
       updateSelectedRubroItemValue({
         item: {
           ...item,
@@ -59,7 +63,7 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     [updateSelectedRubroItemValue],
   );
   const onChangeTax = useCallback(
-    (value: string, item: RubroItemData) => {
+    (value: string, item: RubroItemDataType) => {
       updateSelectedRubroItemValue({
         item: {
           ...item,
@@ -69,14 +73,26 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     },
     [updateSelectedRubroItemValue],
   );
+  const onDeleteRubroItem = useCallback(
+    (item: RubroItemDataType) => {
+      // si el id es string que termina con `___new` es un item nuevo y si se elimina, este usa el removeSelectedRubroItem, caso contrario usa el softDeleteSelectedRubroItem
+      if (item.id && item.id.toString().endsWith('___new')) {
+        removeSelectedRubroItem({ item });
+        return;
+      }
+
+      softDeleteSelectedRubroItem({ item });
+    },
+    [removeSelectedRubroItem, softDeleteSelectedRubroItem],
+  );
 
   ///* columns --------------------------
-  const columnsEditRubro = useMemo<MRT_ColumnDef<RubroItemData>[]>(
+  const columnsEditRubro = useMemo<MRT_ColumnDef<RubroItemDataType>[]>(
     () => [
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_EXTRA_LARGE,
         Cell: ({ row }) => {
           return (
             <TextField
@@ -225,11 +241,42 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
           const subtotal =
             Number(row.original?.valor_base) * Number(row.original?.cantidad);
           const total = subtotal * (Number(row.original?.impuesto) / 100 + 1);
-          return <span>{formatCurrency(formatToNDecimals(total, 2))}</span>;
+          return (
+            <>
+              <Grid
+                item
+                container
+                xs={12}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Grid item xs={6}>
+                  <span>{formatCurrency(formatToNDecimals(total, 2))}</span>
+                </Grid>
+                <Grid item xs={6}>
+                  <SingleIconButton
+                    startIcon={<MdDeleteForever />}
+                    color="error"
+                    label="Remover"
+                    tooltipPlacement="right-end"
+                    onClick={() => {
+                      onDeleteRubroItem(row.original);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          );
         },
       },
     ],
-    [onChangeDescription, onChangePrice, onChangeQuantity, onChangeTax],
+    [
+      onChangeDescription,
+      onChangePrice,
+      onChangeQuantity,
+      onChangeTax,
+      onDeleteRubroItem,
+    ],
   );
 
   if (!activeRubro) return null;
@@ -238,9 +285,13 @@ const ClienteFibraRubroServiceDetailRubroItem: React.FC<
     <>
       <Paper variant="outlined">
         <>
-          <CustomMinimalTable<RubroItemData>
+          <CustomMinimalTable<RubroItemDataType>
             columns={columnsEditRubro}
-            data={activeRubro?.rubro_items_data || []}
+            data={
+              activeRubro?.rubro_items_data?.filter(
+                (item: RubroItemDataType) => item.state !== false,
+              ) || []
+            }
             enablePagination
             density="compact"
           />

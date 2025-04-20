@@ -8,9 +8,10 @@ import {
   RubroItemData,
 } from '@/shared';
 
+export type RubroItemDataType = RubroItemData & {};
 type RubroItemStoreType = {
-  item: RubroItemData;
-  idKey?: keyof RubroItemData;
+  item: RubroItemDataType;
+  idKey?: keyof RubroItemDataType;
 };
 
 interface RubroState {
@@ -23,6 +24,7 @@ interface RubroState {
 
   // rubro items operations ---
   removeSelectedRubroItem: (data: RubroItemStoreType) => void;
+  softDeleteSelectedRubroItem: (data: RubroItemStoreType) => void;
   updateSelectedRubroItemValue: (data: RubroItemStoreType) => void;
   addNewRubroItemLine: (data: RubroItemStoreType) => void;
 
@@ -50,7 +52,7 @@ export const useRubroStore = create<RubroState>()(set => ({
         activeRubro: {
           ...state.activeRubro,
           rubro_items_data: (state.activeRubro.rubro_items_data ?? []).filter(
-            (i: RubroItemData) => i[idKey] !== item[idKey],
+            (i: RubroItemDataType) => i[idKey] !== item[idKey],
           ),
         },
       };
@@ -63,7 +65,7 @@ export const useRubroStore = create<RubroState>()(set => ({
         activeRubro: {
           ...state.activeRubro,
           rubro_items_data: (state.activeRubro.rubro_items_data ?? []).map(
-            (i: RubroItemData) =>
+            (i: RubroItemDataType) =>
               i[idKey] === item[idKey] ? { ...i, ...item } : i,
           ),
         },
@@ -80,6 +82,21 @@ export const useRubroStore = create<RubroState>()(set => ({
             ...(state.activeRubro.rubro_items_data ?? []),
             item,
           ],
+        },
+      };
+    });
+  },
+  softDeleteSelectedRubroItem: ({ item, idKey = 'id' }) => {
+    // only set state to false
+    set(state => {
+      if (!state.activeRubro) return {};
+      return {
+        activeRubro: {
+          ...state.activeRubro,
+          rubro_items_data: (state.activeRubro.rubro_items_data ?? []).map(
+            (i: RubroItemDataType) =>
+              i[idKey] === item[idKey] ? { ...i, state: false } : i,
+          ),
         },
       };
     });

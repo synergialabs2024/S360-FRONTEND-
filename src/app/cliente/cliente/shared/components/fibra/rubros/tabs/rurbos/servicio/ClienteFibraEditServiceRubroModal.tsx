@@ -13,6 +13,7 @@ import {
 import { ScrollableDialogProps } from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
 import ClienteFibraRubroLibreHeader from '../libre/ClienteFibraRubroLibreHeader';
+import ClienteFibraEditRubroAmount from './ClienteFibraEditRubroAmount';
 import ClienteFibraRubroServiceDetailRubroItem from './ClienteFibraRubroServiceDetailRubroItem';
 
 export type ClienteFibraEditServiceRubroModalProps = {
@@ -100,6 +101,11 @@ const ClienteFibraEditServiceRubroModal: React.FC<
               {/* ==================== detail body ==================== */}
               <Grid item xs={12}>
                 <ClienteFibraRubroServiceDetailRubroItem />
+              </Grid>
+
+              {/* ==================== info amount ==================== */}
+              <Grid item xs={12}>
+                <ClienteFibraEditRubroAmount />
               </Grid>
             </Grid>
           </>
