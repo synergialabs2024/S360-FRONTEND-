@@ -507,7 +507,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
         ...(wifiMeshPhoto && { url_foto_wifi_mesh: wifiMeshPhoto?.streamUlr }),
 
         // upd hora inicio/fin ----------
-        hora_fin: dayjs().format(),
+        hora_fin_real: dayjs().format(),
       });
       return;
     }
