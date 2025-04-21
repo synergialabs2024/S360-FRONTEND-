@@ -1,7 +1,8 @@
-import { formatCurrency, formatToNDecimals } from '@/shared';
-import { useRubroStore } from '@/store/app/rubros';
-import { Box, Typography } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
+
+import { formatCurrency, formatToNDecimals, ToastWrapper } from '@/shared';
+import { useRubroStore } from '@/store/app/rubros';
 
 export type ClienteFibraEditRubroAmountProps = {};
 
@@ -13,6 +14,7 @@ const ClienteFibraEditRubroAmount: React.FC<
   const rubroItems =
     activeRubro?.rubro_items_data?.filter(item => item?.state !== false) || [];
   const setActiveRubro = useRubroStore(s => s.setActiveRubro);
+  const updateActiveRubro = useRubroStore(s => s.updateActiveRubro);
 
   ///* handlers --------------------------
   // saldos ---
@@ -101,15 +103,47 @@ const ClienteFibraEditRubroAmount: React.FC<
         </Typography>
       </Box>
 
-      <Box display="flex" justifyContent="end" gap={3}>
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        gap={3}
+        mt={2}
+      >
         <Typography variant="body1" fontWeight={600}>
           Total Factura:
         </Typography>
-        <Typography variant="body1" fontWeight={600}>
+        {/* <Typography variant="body1" fontWeight={600}>
           {formatCurrency(
             formatToNDecimals(+(activeRubro?.valor_factura || 0), 2),
           )}
-        </Typography>
+        </Typography> */}
+        <TextField
+          variant="outlined"
+          value={activeRubro?.valor_factura || ''}
+          onChange={e => {
+            const newValue = e.target.value;
+            // si no es numero, forzar a 0
+            if (isNaN(Number(newValue)) || newValue === '') {
+              updateActiveRubro({ valor_factura: '0' });
+              return;
+            }
+            // si tiene mas de 2 decimales, retornar alerta con erro y no dejar continuar
+            const decimalCount = newValue.split('.')[1]?.length || 0;
+            if (decimalCount > 2) {
+              return ToastWrapper.error(
+                'El precio unitario no puede tener más de 2 decimales',
+              );
+            }
+          }}
+          type="number"
+          inputProps={{
+            min: 0,
+            step: 0.01,
+            max: 1200,
+            style: { textAlign: 'right' },
+          }}
+        />
       </Box>
     </Box>
   );

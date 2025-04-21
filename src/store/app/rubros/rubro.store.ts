@@ -18,6 +18,7 @@ interface RubroState {
   // rubro -----------------------------
   activeRubro: Nullable<Rubro>;
   setActiveRubro: (value: Nullable<Rubro>) => void;
+  updateActiveRubro: (value: Partial<Rubro>) => void;
 
   calendariosFacturacion: CalendarioFacturacion[];
   setCalendariosFacturacion: (value: CalendarioFacturacion[]) => void;
@@ -43,6 +44,16 @@ export const useRubroStore = create<RubroState>()(set => ({
   setActiveRubro: value => set({ activeRubro: value }),
   setActiveServiceLine: value => set({ activeServiceLine: value }),
   setCalendariosFacturacion: value => set({ calendariosFacturacion: value }),
+
+  // solo se actualiza lo q viene en el payload partial ---
+  updateActiveRubro: value => {
+    set(state => ({
+      activeRubro: {
+        ...state.activeRubro!,
+        ...value,
+      } as Rubro,
+    }));
+  },
 
   // operations -----------------------------
   removeSelectedRubroItem: ({ item, idKey = 'id' }) => {
