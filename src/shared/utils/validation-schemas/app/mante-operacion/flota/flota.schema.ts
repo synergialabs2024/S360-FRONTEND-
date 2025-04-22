@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { passwordYupValidation2 } from '../../../auth';
 
 const currentYear = new Date().getFullYear();
 
@@ -149,4 +150,12 @@ export const flotaFormSchema = yup.object({
           'El campo bodega es requerido cuando es bodega está activo',
         ),
     }),
+});
+
+export const changePasswordSchema = yup.object({
+  password: passwordYupValidation2,
+  confirm_password: yup
+    .string()
+    .required('Debes confirmar la contraseña')
+    .oneOf([yup.ref('password')], 'Las contraseñas no coinciden'),
 });
