@@ -1,6 +1,10 @@
 /* eslint-disable indent */
 import { gridSize, gridSizeMdLg6, LineaServicio } from '@/shared';
-import { CustomTextFieldNoForm, CustomTypoLabel } from '@/shared/components';
+import {
+  CustomTextFieldNoForm,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
+} from '@/shared/components';
 import FibraClientInfoPart from './FibraClientInfoPart';
 import LineStateFibraClient from './LineStateFibraClient';
 
@@ -111,6 +115,60 @@ const ContractFibraClientPart: React.FC<ContractFibraClientPartProps> = ({
         }
         disabled
       />
+
+      {/* ------------------------- */}
+      <CustomTypoLabel
+        text="Datos GPON"
+        pt={CustomTypoLabelEnum.ptMiddlePosition}
+      />
+      <>
+        <CustomTextFieldNoForm
+          label="Nodo"
+          value={serviceLine?.contrato_data?.nodo_data?.name || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="OLT"
+          value={serviceLine?.contrato_data?.olt_data?.name || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="NAP"
+          value={serviceLine?.contrato_data?.nap_data?.name || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="Puerto NAP"
+          value={serviceLine?.contrato_data?.puerto_nap || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="IPv4"
+          value={serviceLine?.contrato_data?.ipv4 || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="IPv6"
+          value={serviceLine?.contrato_data?.ipv6 || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="PPPoE"
+          value={serviceLine?.contrato_data?.pppoe || ''}
+          disabled
+          size={gridSize}
+        />
+        <CustomTextFieldNoForm
+          label="PPPassword"
+          value={serviceLine?.contrato_data?.pppassword || ''}
+          disabled
+        />
+        <CustomTextFieldNoForm
+          label="Serie ONT"
+          value={serviceLine?.contrato_data?.serie_ont || ''}
+          disabled
+        />
+      </>
 
       <FibraClientInfoPart serviceLine={serviceLine} />
     </>
