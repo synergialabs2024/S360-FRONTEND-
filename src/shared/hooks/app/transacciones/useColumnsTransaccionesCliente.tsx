@@ -95,7 +95,7 @@ export const useColumnsTransaccionesCliente = () => {
         header: 'FORMA DE PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
-          emptyCellNested(row, ['entidad_financiera__data', 'name']),
+          emptyCellNested(row, ['entidad_financiera_data', 'name']),
       },
 
       {
