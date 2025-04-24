@@ -1,5 +1,5 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { MetodoPago } from '../administration';
+import { EntidadFinanciera, MetodoPago } from '../administration';
 import { Cliente, LineaServicio } from '../cliente';
 import { Rubro } from './rubros.interface';
 import { Saldo } from './saldo.interface';
@@ -41,4 +41,5 @@ export interface Transaccion {
   linea_servicio_data?: LineaServicio;
   metodo_pago_data?: MetodoPago;
   saldo_data?: Saldo;
+  entidad_financiera_data?: EntidadFinanciera;
 }

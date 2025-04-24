@@ -91,17 +91,11 @@ export const useColumnsTransaccionesCliente = () => {
       },
 
       {
-        accessorKey: 'ifi',
-        header: 'IFI',
+        accessorKey: 'entidad_financiera__name',
+        header: 'FORMA DE PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'ifi'),
-      },
-
-      {
-        accessorKey: 'metodo_pago__name',
-        header: 'METODO PAGO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['metodo_pago_data', 'name']),
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['entidad_financiera__data', 'name']),
       },
 
       {
@@ -109,12 +103,6 @@ export const useColumnsTransaccionesCliente = () => {
         header: 'ID SWITCH',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'id_switch'),
-      },
-      {
-        accessorKey: 'entidad_financiera',
-        header: 'ENTIDAD FINANCIERA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'entidad_financiera'),
       },
     ],
     [],
