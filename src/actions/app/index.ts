@@ -15,3 +15,4 @@ export * from './servicios';
 export * from './tecnico';
 export * from './televenta';
 export * from './tickets';
+export * from './customer-experience';

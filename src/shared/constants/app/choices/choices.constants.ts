@@ -1557,3 +1557,10 @@ export const ESTADO_CAMBIO_DOMICILIO_ARRAY_CHOICES = [
   EstadoCambioDomicilioEnumChoice.SIN_FACTIBILIDAD,
   EstadoCambioDomicilioEnumChoice.CANCELADO,
 ];
+
+export enum EncuestaPlantillaTypeEnumChoice {
+  BOOLEAN = 'BOOLEAN',
+}
+export const ENCUESTA_PLANTILLA_TYPE_ARRAY_CHOICES = [
+  EncuestaPlantillaTypeEnumChoice.BOOLEAN,
+];

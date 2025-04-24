@@ -15,6 +15,7 @@ import {
   IconUsersGroup,
   IconUserShield,
   IconWallet,
+  IconDevices,
 } from '@tabler/icons-react';
 import { useCallback, useMemo } from 'react';
 
@@ -682,12 +683,15 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'recoordinacion-tickets-visita',
-              title: 'Recoordinación de tickets visita',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.OPERACIONES_RECOORDINACION_TICKET_VISITA,
+              {
+                id: 'recoordinacion-tickets-visita',
+                title: 'Recoordinación de tickets visita',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.operaciones.ticketsVisitaNav,
+              },
+            ),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'rechazo-agendas',
@@ -708,15 +712,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(
-              SidenavModulesEnum.OPERACIONES_APROBACION_TICKET_VISITA,
-              {
-                id: 'aprobacion-ticket-visita',
-                title: 'Aprobación de Ticket visita',
-                type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
-              },
-            ),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'aprobacion-ticket-visita',
+              title: 'Aprobación de Ticket visita',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Logistica ----------------
@@ -1134,6 +1135,38 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+        {
+          id: 'customer-experience',
+          title: 'Customer Experience',
+          type: MenuItemType.COLLAPSE,
+          icon: IconDevices,
+          children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'encuesta-asesores',
+              title: 'Encuesta Asesores',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.customerExperience.encuestaAsesoresNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'encuesta-totems',
+              title: 'Encuesta Totems',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.customerExperience.encuestaTotemsNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'encuesta-pagos',
+              title: 'Encuesta Pagos',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.customerExperience.encuestaPagosNav,
+            }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'encuesta-plantillas',
+              title: 'Encuesta Plantillas',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.customerExperience.encuestaPlantillasNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Administracion de Red ----------------

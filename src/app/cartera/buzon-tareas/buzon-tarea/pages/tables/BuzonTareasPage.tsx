@@ -19,7 +19,8 @@ const BuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
   return (
     <SingleTableBoxScene
       title="Buzon de Tareas"
-      showCreateBtn={false}
+      createPageUrl={`${returnUrlBuzonTareasPage}/crear`}
+      showCreateBtn={true}
       isMainTableStates
     >
       <BoxFormTabsOnly

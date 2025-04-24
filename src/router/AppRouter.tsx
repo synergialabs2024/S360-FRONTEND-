@@ -8,6 +8,7 @@ import Loadable from '@/layouts/full/shared/loadable/Loadable';
 import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
+import CustomerExperienceModule from '@/app/customer-experience/CustomerExperienceModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -2201,6 +2202,51 @@ const UpdateLeedTeleventaPage = Loadable(
   ),
 );
 
+// Customer Experience
+const EncuestaAsesoresPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-asesores/pages/tables/EncuestaAsesoresPage'
+      ),
+  ),
+);
+
+const EncuestaPagosPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-pagos/pages/tables/EncuestaPagosPage'
+      ),
+  ),
+);
+
+const EncuestaTotemsPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-totems/pages/tables/EncuestaTotemsPage'
+      ),
+  ),
+);
+
+const EncuestaPlantillasPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-plantillas/pages/tables/EncuestaPlantillasPage'
+      ),
+  ),
+);
+const EncuestaPlantillasFormPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-plantillas/pages/forms/EncuestaPlantillasFormPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -3906,6 +3952,41 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.televentas.leedTeleventasEditar,
             element: <UpdateLeedTeleventaPage />,
+          },
+        ],
+      },
+
+      //////////* Customer Experience ------------
+      {
+        path: ROUTER_PATHS.customerExperience.root,
+        element: <CustomerExperienceModule />,
+        children: [
+          ///* Encuesta Asesores
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaAsesores,
+            element: <EncuestaAsesoresPage />,
+          },
+
+          ///* Encuesta Totems
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaTotems,
+            element: <EncuestaTotemsPage />,
+          },
+
+          ///* Encuesta Pagos
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaPagos,
+            element: <EncuestaPagosPage />,
+          },
+
+          ///* Encuesta Plantillas
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaPlantillas,
+            element: <EncuestaPlantillasPage />,
+          },
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaPlantillasCrear,
+            element: <EncuestaPlantillasFormPage />,
           },
         ],
       },

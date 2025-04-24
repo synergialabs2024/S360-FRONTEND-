@@ -45,13 +45,13 @@ const AprobacionTicketsVisitaPage: React.FC<
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
         <AprobacionTicketsVisitaByStatePage
-          state={EstadoTicketTecnicoEnumChoice.REALIZADO}
+          state={EstadoTicketTecnicoEnumChoice.ESPERA}
         />
       </CustomTabPanel>
 
       <CustomTabPanel value={tabValue} index={2} ptGrid="0">
         <AprobacionTicketsVisitaByStatePage
-          state={EstadoTicketTecnicoEnumChoice.CERRADO}
+          state={EstadoTicketTecnicoEnumChoice.REALIZADO}
         />
       </CustomTabPanel>
 
