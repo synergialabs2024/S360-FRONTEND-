@@ -11,7 +11,7 @@ import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 
-export type ClienteInfoPagoManualModalProps = {
+export type ClienteInfoReversoModalProps = {
   open: boolean;
   onClose: () => void;
   rubro?: Rubro;
@@ -24,7 +24,7 @@ export type RubrosClienteFormData = Partial<Rubro> & {
   categoria_producto?: number;
 };
 
-const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
+const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   open,
   onClose,
   rubro,
@@ -38,14 +38,14 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
     defaultValues: {},
   });
   ///* mutations --------------------------
-  const createPagoManual = async (accessToken: string) => {
+  const createReverso = async (accessToken: string) => {
     const fechaTransaccion = dayjs().format('YYYYMMDD');
     const partesContrato =
       rubro?.contrato_data?.numero_contrato?.split('-') || [];
     const linea = partesContrato[1] || 'L1';
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/nuevo-pago/',
+        'http://192.168.10.107/api/v1/nuevo-reverso/',
         {
           contrapartida: rubro?.cliente_data?.identificacion,
           linea: linea,
@@ -105,7 +105,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   return (
     <>
       <ScrollableDialogProps
-        title={'Crear Pago Manual'}
+        title={'Reverso Manual'}
         open={open}
         onClose={handleClose}
         minWidth="50%"
@@ -120,8 +120,8 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
             const tokenData = await fetchAuthToken();
             console.log('Token data:', tokenData);
 
-            const pagoManual = await createPagoManual(tokenData.access_token);
-            console.log('pagoManual:', pagoManual);
+            const pagoReverso = await createReverso(tokenData.access_token);
+            console.log('pagoManual:', pagoReverso);
 
             // Aquí puedes continuar con el resto de tu lógica usando el token
             /* createPagoManual.mutate({
@@ -132,6 +132,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
               fechaTransaccion: fechaTransaccion,
               ifi: 'S360',
             }); */
+
             // createPagoManual.mutate({
             //   contrapartida: rubro?.cliente_data?.identificacion,
             //   linea: linea,
@@ -150,7 +151,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
           ToastWrapper.error(`Campos requeridos: ${keys}`);
         })} */
         confirmVariantBtn="outlined"
-        confirmTextBtn="Generar Pago"
+        confirmTextBtn="Generar Reverso"
         // // content --------
         contentNode={
           <>
@@ -257,4 +258,4 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   );
 };
 
-export default ClienteInfoPagoManualModal;
+export default ClienteInfoReversoModal;
