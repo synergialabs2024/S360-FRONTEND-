@@ -90,6 +90,7 @@ const ScheduleInstallAgendaOpe: React.FC<ScheduleInstallAgendaOpeProps> = ({
               form={form as any}
               preventa={agendamiento.preventa_data!}
               cacheKey={`${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_OPERACIONES}_${agendamiento?.uuid!}`}
+              showFleetName
               // showFleetName - supervisor no lo ve
             />
           </>

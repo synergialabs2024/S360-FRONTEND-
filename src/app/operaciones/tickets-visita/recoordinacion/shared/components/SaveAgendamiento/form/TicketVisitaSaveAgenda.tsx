@@ -56,6 +56,7 @@ const TicketVisitaSaveAgenda: React.FC<TicketVisitaSaveAgendaProps> = ({
           form={form}
           ticket={ticket!}
           cacheKey={`${CacheBaseKeysPreventaEnum.HORARIO_VISITA_AGENDA_VENTAS}_${ticket?.uuid!}`}
+          showFleetName
         />
       </>
     </>
