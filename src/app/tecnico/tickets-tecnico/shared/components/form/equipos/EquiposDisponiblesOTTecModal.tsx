@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useFetchUbicacionProductos } from '@/actions/app';
 import {
   InventarioEnumUUID,
-  TipoProductoEnumChoice,
   ToastWrapper,
   UbicacionProducto,
   useLoaders,
@@ -98,15 +97,6 @@ const EquiposDisponiblesTicketModal: React.FC<
             color="primary"
             onClick={() => {
               // Verifica si el equipo es de tipo ONT
-              const isONT =
-                item?.producto_data?.tipo === TipoProductoEnumChoice.ONT;
-
-              if (isONT) {
-                ToastWrapper.warning(
-                  'No se pueden agregar equipos del tipo ONT.',
-                );
-                return; // No agrega el equipo
-              }
 
               let series: string[] = item?.series || [];
               const tempSeries = item?.series_temporal || [];

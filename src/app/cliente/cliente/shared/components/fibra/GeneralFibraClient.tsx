@@ -19,6 +19,7 @@ import { ConfigPlantillaClienteFibraPart } from './plantilla';
 import { ClienteFibrRubrosTab } from './rubros';
 import { ServiceFibraClientPart } from './servicio';
 import FibraClientSummaryFormPart from './summary/FibraClientSummaryFormPart';
+import ClientesPagosManualesByStatePage from './pagos-manuales/ClientesPagosManualesByStatePage';
 
 export type GeneralFibraClientProps = {
   serviceLine?: LineaServicio;
@@ -53,6 +54,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
           <Tab label="DOCUMENTOS" value={4} {...a11yProps(4)} />
           <Tab label="RUBROS" value={5} {...a11yProps(5)} />
           <Tab label="LOGS" value={6} {...a11yProps(6)} />
+          <Tab label="PAGOS MANUALES" value={7} {...a11yProps(7)} />
         </FormTabsOnly>
       }
       formSize={gridSize}
@@ -85,6 +87,11 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
       {/* ========================= Logs ========================= */}
       <CustomTabPanel index={6} value={tabValue}>
         Logs
+      </CustomTabPanel>
+
+      {/* ========================= Pagos Manuales ========================= */}
+      <CustomTabPanel index={7} value={tabValue}>
+        <ClientesPagosManualesByStatePage serviceLine={serviceLine!} />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );
