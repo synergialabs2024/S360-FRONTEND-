@@ -110,6 +110,7 @@ const SaveBodega: React.FC<SaveBodegaProps> = ({ title, bodega }) => {
         error={errors.codigo}
         helperText={errors.codigo?.message}
         size={gridSizeMdLg6}
+        disabled={!!bodega?.id}
       />
       <CustomAutocomplete<CentroCosto>
         label="Centro Costo"

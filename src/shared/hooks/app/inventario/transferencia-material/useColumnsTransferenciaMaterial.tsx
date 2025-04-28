@@ -62,6 +62,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'secuencial',
         header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
@@ -104,6 +106,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'bodega_origen__nombre',
         header: 'BODEGA ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['bodega_origen_data', 'nombre']),
       },
@@ -111,6 +115,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'ubicacion_origen__nombre',
         header: 'UBICACIÓN ORIGEN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ubicacion_origen_data', 'nombre']),
       },
@@ -118,6 +124,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'bodega_destino__nombre',
         header: 'BODEGA DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['bodega_destino_data', 'nombre']),
       },
@@ -125,6 +133,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'ubicacion_destino__nombre',
         header: 'UBICACIÓN DESTINO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ubicacion_destino_data', 'nombre']),
       },
@@ -132,6 +142,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'motivo_transferencia__nombre',
         header: 'MOTIVO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['motivo_transferencia_data', 'nombre']),
       },
@@ -139,6 +151,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['user_create_data', 'razon_social']),
       },
@@ -179,20 +193,25 @@ export const useColumnsTransferenciaMaterial = () => {
       {
         accessorKey: 'categoria_data__nombre',
         header: 'CATEGORIA',
-        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
       },
       {
         accessorKey: 'codigo',
         header: 'CÓDIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
       },
     ],
@@ -208,6 +227,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'cantidad_pedida',
         header: 'CANTIDAD PEDIDA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => {
           return (
             <TextField
@@ -223,6 +244,8 @@ export const useColumnsTransferenciaMaterial = () => {
         accessorKey: 'cantidad_aprobada',
         header: 'CANTIDAD APROBADA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => {
           return (
             <TextField

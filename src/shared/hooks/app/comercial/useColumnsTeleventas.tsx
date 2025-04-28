@@ -114,7 +114,7 @@ export const useColumnsTeleventas = () => {
 
       {
         accessorKey: 'tipo_plan',
-        header: 'TIPO PLAN',
+        header: 'PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,

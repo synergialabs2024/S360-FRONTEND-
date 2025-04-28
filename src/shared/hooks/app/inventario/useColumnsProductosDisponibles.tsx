@@ -13,8 +13,8 @@ import {
 } from '@/shared';
 import { SingleIconButton } from '@/shared/components';
 import {
-  ProductosDisponiblesStoreKey,
   useProductosStore,
+  ProductosDisponiblesStoreKey,
 } from '@/store/app/inventario/productos-disponible.store';
 import ShowSeriesProductosModal from '@/app/inventario/egreso-material/pages/modal/ShowSeriesProductosModal';
 
@@ -25,6 +25,7 @@ export type ProductosDisponiblesTableType = Producto & {
   series?: any[];
   productos?: string[];
   stock_up?: number;
+  ubicacion?: number;
 
   usedQuantity?: number;
   selectedSeries?: string[];
@@ -90,6 +91,12 @@ export const useColumnsProductosDisponibles = ({
         header: 'CÓDIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
+        accessorKey: 'nombre',
+        header: 'NOMBRE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
       },
       {
         accessorKey: 'descripcion',
@@ -161,6 +168,43 @@ export const useColumnsProductosDisponibles = ({
     [baseColumnsIngreso02, onChangeSerieInit],
   );
 
+  const baseColumnsProductosDisponibles02_1 = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
+      ...baseColumnsIngreso02,
+      {
+        accessorKey: 'producto__series',
+        header: 'SERIES',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          const cantidad = row.original.cantidad;
+
+          function obtenerValor(valueCantidad: number | undefined): boolean {
+            if (valueCantidad !== undefined) {
+              return false;
+            }
+            return true;
+          }
+
+          return (
+            <SeriesProductoModal
+              tipoSerie={row.original.requiere_series}
+              Arrays={row.original}
+              randomButton={true}
+              isIngreso={true}
+              modalTitle={`Serie para ${row?.original?.codigo}`}
+              cantidadBoolean={obtenerValor(cantidad)}
+              onDataChange={newData => onChangeSerieInit(newData, row.original)}
+            />
+          );
+        },
+      },
+    ],
+    [baseColumnsIngreso02, onChangeSerieInit],
+  );
+
   const seriesIngresoColumns = useMemo<
     MRT_ColumnDef<ProductosDisponiblesTableType>[]
   >(
@@ -181,7 +225,11 @@ export const useColumnsProductosDisponibles = ({
             <TextField
               disabled={true}
               variant="outlined"
-              value={row.original.cantidad || ''}
+              value={
+                row.original.cantidad && row.original.cantidad >= 0
+                  ? row.original.cantidad
+                  : 0
+              }
               type="number"
               inputProps={{
                 min: 0,
@@ -271,7 +319,16 @@ export const useColumnsProductosDisponibles = ({
             <TextField
               variant="outlined"
               value={row.original.cantidad || ''}
-              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              onChange={e => {
+                const value = e.target.value;
+                const numericValue = Number(value);
+                if (
+                  value === '' ||
+                  (numericValue >= 0 && !isNaN(numericValue))
+                ) {
+                  onChangePuntaInit(value, row.original);
+                }
+              }}
               type="number"
               inputProps={{
                 min: 0,
@@ -287,6 +344,69 @@ export const useColumnsProductosDisponibles = ({
     [
       baseColumnsIngreso01,
       baseColumnsProductosDisponibles02,
+      onChangePuntaInit,
+      removeSelectedItem,
+    ],
+  );
+
+  const crearMaterialColumnsIngreso = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
+      {
+        accessorKey: 'remove',
+        header: 'ACCIONES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => (
+          <SingleIconButton
+            label="Remover"
+            startIcon={<IoMdTrash />}
+            color="error"
+            tooltipPlacement="right-end"
+            onClick={() => {
+              removeSelectedItem({
+                item: row.original,
+                keyStore: ProductosDisponiblesStoreKey.productosDisponibles,
+              });
+            }}
+            justifyContent="center"
+          />
+        ),
+      },
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              onChange={e => {
+                const value = e.target.value;
+                const numericValue = Number(value);
+                if (
+                  value === '' ||
+                  (numericValue >= 0 && !isNaN(numericValue))
+                ) {
+                  onChangePuntaInit(value, row.original);
+                }
+              }}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      ...baseColumnsProductosDisponibles02_1,
+      ...baseColumnsIngreso01,
+    ],
+    [
+      baseColumnsIngreso01,
+      baseColumnsProductosDisponibles02_1,
       onChangePuntaInit,
       removeSelectedItem,
     ],
@@ -325,7 +445,52 @@ export const useColumnsProductosDisponibles = ({
             <TextField
               variant="outlined"
               value={row.original.cantidad || ''}
-              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              onChange={e => {
+                const value = e.target.value;
+                const numericValue = Number(value);
+                if (
+                  value === '' ||
+                  (numericValue >= 0 && !isNaN(numericValue))
+                ) {
+                  onChangePuntaInit(value, row.original);
+                }
+              }}
+              type="number"
+              inputProps={{
+                min: 0,
+                step: 1,
+              }}
+            />
+          );
+        },
+      },
+      ...baseColumnsIngreso01,
+    ],
+    [baseColumnsIngreso01, onChangePuntaInit, removeSelectedItem],
+  );
+  const crearMaterialColumnsSolicitud = useMemo<
+    MRT_ColumnDef<ProductosDisponiblesTableType>[]
+  >(
+    () => [
+      {
+        accessorKey: 'cantidad',
+        header: 'CANTIDAD',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <TextField
+              variant="outlined"
+              value={row.original.cantidad || ''}
+              onChange={e => {
+                const value = e.target.value;
+                const numericValue = Number(value);
+                if (
+                  value === '' ||
+                  (numericValue >= 0 && !isNaN(numericValue))
+                ) {
+                  onChangePuntaInit(value, row.original);
+                }
+              }}
               type="number"
               inputProps={{
                 min: 0,
@@ -369,7 +534,16 @@ export const useColumnsProductosDisponibles = ({
             <TextField
               variant="outlined"
               value={row.original.cantidad || ''}
-              onChange={e => onChangePuntaInit(e.target.value, row.original)}
+              onChange={e => {
+                const value = e.target.value;
+                const numericValue = Number(value);
+                if (
+                  value === '' ||
+                  (numericValue >= 0 && !isNaN(numericValue))
+                ) {
+                  onChangePuntaInit(value, row.original);
+                }
+              }}
               type="number"
               inputProps={{
                 min: 0,
@@ -406,8 +580,10 @@ export const useColumnsProductosDisponibles = ({
   return {
     modalMaterialColumns,
     crearMaterialColumns,
+    crearMaterialColumnsIngreso,
     crearMaterialColumnsSinSerie,
     crearMaterialColumnsRecepcion,
+    crearMaterialColumnsSolicitud,
     seriesIngresoColumns,
   };
 };

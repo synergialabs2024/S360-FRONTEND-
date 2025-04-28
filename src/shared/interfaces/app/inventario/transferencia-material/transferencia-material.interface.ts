@@ -1,8 +1,8 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
-import { UbicacionProducto } from '../ubicacion-producto.interface';
-import { Producto } from '../producto.interface';
+//import { Producto } from '../producto.interface';
 import { Bodega } from '../bodega';
 import { Ubicacion } from '../ubicacion.interface';
+import { Producto } from '../producto.interface';
 
 export interface TransferenciaMaterialesPaginatedRes {
   status: number;
@@ -17,22 +17,27 @@ export interface TransferenciaMaterial {
   state: boolean;
 
   observacion: string;
-  productos: UbicacionProducto[];
+  productos: Producto[];
 
   ///* fk
-  producto: number;
-  bodega_origen: number;
-  ubicacion_origen: number;
-  bodega_destino: number;
-  ubicacion_destino: number;
+  bodega_origen?: number;
+  ubicacion_origen?: number;
+  bodega_destino?: number;
+  ubicacion_destino?: number;
   motivo_transferencia?: number;
-  user_create: number;
+  user_create?: number;
 
-  producto_data?: Producto;
+  //producto_data?: Producto;
   bodega_origen_data?: Bodega;
   bodega_destino_data?: Bodega;
   ubicacion_destino_data?: Ubicacion;
   ubicacion_origen_data?: Ubicacion;
+
+  //* solicitudes
+  data?: string[];
+  bodega?: number;
+  ubicacion?: number;
+  ubicacion_data?: string[];
 
   created_at?: string;
   modified_at?: string;

@@ -14,7 +14,7 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg12 } from '@/shared/constants/ui';
+import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { EntidadFinanciera } from '@/shared/interfaces';
 import { entidadFinancieraFormSchema } from '@/shared/utils';
 import { returnUrlEntidadesFinancieraPage } from '../../../pages/tables/EntidadesFinancieraPage';
@@ -95,6 +95,17 @@ const SaveEntidadFinanciera: React.FC<SaveEntidadFinancieraProps> = ({
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Codigo"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        size={gridSizeMdLg6}
+        disabled={!!entidadfinanciera?.id}
       />
       <CustomTextArea
         label="Descripción"

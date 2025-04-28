@@ -123,7 +123,8 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
       if (
         prod.cantidad === undefined ||
         prod.cantidad === null ||
-        prod.cantidad === 0
+        prod.cantidad === 0 ||
+        prod.cantidad < 0
       ) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" necesita cantidad.`,

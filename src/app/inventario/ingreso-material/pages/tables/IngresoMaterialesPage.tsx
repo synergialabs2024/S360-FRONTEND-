@@ -51,7 +51,8 @@ const IngresoMaterialesPage: React.FC<IngresoMaterialesPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+
+      secuencial: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -71,7 +72,7 @@ const IngresoMaterialesPage: React.FC<IngresoMaterialesPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por Numero de Registro"
         customSpaceNode={
           <Grid sx={{ m: '5px' }}>
             <CustomSingleButton

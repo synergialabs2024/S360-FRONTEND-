@@ -1,8 +1,7 @@
-/* eslint-disable indent */
-import { TextField } from '@mui/material';
+import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useCallback, useMemo } from 'react';
 import { IoMdTrash } from 'react-icons/io';
-import { MRT_ColumnDef, MRT_Row } from 'material-react-table';
+import { TextField } from '@mui/material';
 
 import {
   emptyCellNested,
@@ -65,6 +64,12 @@ export const useColumnsSolicitudMaterialProductos = ({
         Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
       },
       {
+        accessorKey: 'nombre',
+        header: 'NOMBRE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'nombre'),
+      },
+      {
         accessorKey: 'codigo',
         header: 'CÓDIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -116,14 +121,14 @@ export const useColumnsSolicitudMaterialProductos = ({
 
       ...(showActionColumn
         ? [
-            {
-              accessorKey: 'action',
-              enableColumnFilter: false,
-              header: 'ACCIÓN',
-              Cell: ({ row }: MRTProductoTableType) =>
-                onActionProductosRowNode?.(row.original),
-            },
-          ]
+          {
+            accessorKey: 'action',
+            enableColumnFilter: false,
+            header: 'ACCIÓN',
+            Cell: ({ row }: MRTProductoTableType) =>
+              onActionProductosRowNode?.(row.original),
+          },
+        ]
         : []),
     ],
     [baseColumnsIngreso01, onActionProductosRowNode, showActionColumn],

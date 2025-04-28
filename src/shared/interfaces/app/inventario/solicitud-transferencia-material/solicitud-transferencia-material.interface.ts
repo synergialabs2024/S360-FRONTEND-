@@ -30,6 +30,12 @@ export interface SolicitudTransferenciaMaterial {
   ubicacion_destino_data?: Ubicacion;
   ubicacion_origen_data?: Ubicacion;
 
+  //* solicitudes
+  data?: string[];
+  bodega?: number;
+  ubicacion?: number;
+  ubicacion_data?: Ubicacion;
+
   created_at?: string;
   modified_at?: string;
 }

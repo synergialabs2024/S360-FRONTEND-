@@ -1,22 +1,18 @@
-import { useFetchPlanPagoCuota } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
-  PermissionsEnum,
   PlanPagoCuota,
-  TABLE_CONSTANTS,
-  useColumnsPlanPagoCuota,
   useTableFilter,
+  PermissionsEnum,
+  useColumnsPlanPagoCuota,
   useTableServerSideFiltering,
 } from '@/shared';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
 } from '@/shared/components';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useFetchPlanPagoCuota } from '@/actions/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
-import { useNavigate } from 'react-router';
 
 export const returnUrlPlanPagoCuotasPage =
   ROUTER_PATHS.cobranza.planpagocuotasNav;
@@ -26,17 +22,9 @@ export type PlanPagoCuotasPageProps = {};
 const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
   useCheckPermission(PermissionsEnum.cobranza_view_planpagocuota);
 
-  const navigate = useNavigate();
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table
   const {
@@ -64,6 +52,7 @@ const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
   });
 
   ///* handlers
+  /*
   const onEdit = (planpagocuota: PlanPagoCuota) => {
     setConfirmDialog({
       isOpen: true,
@@ -75,16 +64,13 @@ const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
       },
     });
   };
+  */
 
   ///* columns
   const { planPagoMaterialColumns } = useColumnsPlanPagoCuota();
 
   return (
-    <SingleTableBoxScene
-      title="Plan pago cuota"
-      createPageUrl={`${returnUrlPlanPagoCuotasPage}/crear`}
-      showCreateBtn={hasPermission(PermissionsEnum.cobranza_add_planpagocuota)}
-    >
+    <SingleTableBoxScene title="Plan pago cuota" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
@@ -107,6 +93,8 @@ const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
         onPaging={setPagination}
         rowCount={planPagoCuotaPagingRes?.data?.meta?.count}
         // // actions
+        enableActionsColumn={false}
+        /*
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
           PermissionsEnum.cobranza_change_planpagocuota,
@@ -115,6 +103,7 @@ const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
         canEdit={hasPermission(PermissionsEnum.cobranza_change_planpagocuota)}
         onEdit={onEdit}
         canDelete={false}
+        */
       />
     </SingleTableBoxScene>
   );

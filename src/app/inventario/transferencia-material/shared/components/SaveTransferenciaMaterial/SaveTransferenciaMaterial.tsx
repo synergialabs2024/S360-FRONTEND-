@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -44,17 +43,15 @@ import { useAuthStore } from '@/store/auth';
 export interface SaveTransferenciaMaterialProps {
   title: string;
   transferenciaMaterial?: TransferenciaMaterial;
-  solicitud?: TransferenciaMaterial;
 }
 
 type SaveFormData = CreateTransferenciaMaterialParamsBase & {};
 
 const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
   title,
-  solicitud,
+  transferenciaMaterial,
 }) => {
   const user = useAuthStore(s => s.user);
-  console.log(solicitud);
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
@@ -189,7 +186,8 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       if (
         prod.cantidad === undefined ||
         prod.cantidad === null ||
-        prod.cantidad === 0
+        prod.cantidad === 0 ||
+        prod.cantidad < 0
       ) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" necesita cantidad.`,
@@ -232,15 +230,19 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       ...data,
       productos: mappedProductos,
     };
-
+    productosEnviar([]);
     createTransferenciaMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
   useEffect(() => {
-    if (!solicitud) return;
-    reset(solicitud);
-  }, [solicitud, reset]);
+    productosEnviar([]);
+    if (!transferenciaMaterial) return;
+    reset(transferenciaMaterial);
+    productosEnviar(transferenciaMaterial?.productos);
+    console.log(transferenciaMaterial?.ubicacion_origen_data?.uuid);
+    setUUIDUbicacion(transferenciaMaterial?.ubicacion_origen_data?.uuid || '');
+  }, [transferenciaMaterial, reset, productosEnviar]);
 
   useEffect(() => {
     if (
@@ -314,7 +316,6 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         onChangeRawValue={value => {
           form.setValue('bodega_origen', Number(value?.id));
           form.setValue('ubicacion_origen', '' as any);
-          productosEnviar([]);
         }}
         size={gridSizeMdLg6}
       />
@@ -334,7 +335,6 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         onChangeRawValue={value => {
           form.setValue('bodega_destino', Number(value?.id));
           form.setValue('ubicacion_destino', '' as any);
-          productosEnviar([]);
         }}
         size={gridSizeMdLg6}
       />
@@ -345,7 +345,13 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         // options
         valueKey="nombre"
         actualValueKey="id"
-        options={ubicacionOrigenPaging?.data.items || []}
+        options={
+          watchedBodegaDestino === watchedBodegaOrigen
+            ? ubicacionOrigenPaging?.data.items.filter(
+              item => item.id !== watchedUbicacionDestino,
+            ) || []
+            : ubicacionOrigenPaging?.data.items || []
+        }
         isLoadingData={isLoadingUbicacionOrigen || isRefetchingUbicacionOrigen}
         disableClearable
         // errors
@@ -356,8 +362,6 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         onChangeRawValue={value => {
           setUUIDUbicacion(value?.uuid);
           form.setValue('ubicacion_origen', Number(value?.id));
-          form.setValue('ubicacion_destino', '' as any);
-          productosEnviar([]);
         }}
       />
       <CustomAutocomplete<Ubicacion>
@@ -370,8 +374,8 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         options={
           watchedBodegaOrigen === watchedBodegaDestino
             ? ubicacionDestinoPaging?.data.items.filter(
-                item => item.id !== watchedUbicacionOrigen,
-              ) || []
+              item => item.id !== watchedUbicacionOrigen,
+            ) || []
             : ubicacionDestinoPaging?.data.items || []
         }
         isLoadingData={
@@ -385,7 +389,6 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         size={gridSizeMdLg6}
         onChangeRawValue={value => {
           form.setValue('ubicacion_destino', Number(value?.id));
-          productosEnviar([]);
         }}
       />
       <CustomAutocomplete<MotivoTransferencia>

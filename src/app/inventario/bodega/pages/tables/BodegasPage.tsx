@@ -137,7 +137,7 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
         accessorKey: 'centro_costo__name',
         header: 'CENTRO COSTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellNested(row, ['centro_costo', 'name']),
+        Cell: ({ row }) => emptyCellNested(row, ['centro_costo_data', 'name']),
       },
       {
         accessorKey: 'state',

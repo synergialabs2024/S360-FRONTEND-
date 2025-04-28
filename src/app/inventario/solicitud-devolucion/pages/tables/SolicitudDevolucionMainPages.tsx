@@ -33,7 +33,7 @@ const SolicitudDevolucionMainPage: React.FC<
         <Tab label={'PENDIENTES'} value={1} {...a11yProps(1)} />
         <Tab label={'APROBADAS'} value={2} {...a11yProps(2)} />
         <Tab label={'RECHAZADAS'} value={3} {...a11yProps(3)} />
-        <Tab label={'CANECLADO'} value={4} {...a11yProps(4)} />
+        <Tab label={'CANCELADO'} value={4} {...a11yProps(4)} />
         <Tab label={'FINALIZADAS'} value={5} {...a11yProps(4)} />
       </BoxFormTabsOnly>
 

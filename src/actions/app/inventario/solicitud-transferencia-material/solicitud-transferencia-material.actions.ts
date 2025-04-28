@@ -46,6 +46,21 @@ export const useGetSolicitudTransferenciaMaterial = (uuid: string) => {
   });
 };
 
+export const useGetSolicitudTransferenciaMaterial_Transferencia = (
+  uuid: string,
+  p0?: { enabled: boolean },
+) => {
+  console.log(p0);
+  return useQuery({
+    queryKey: [
+      solicitudTransferenciaMaterialTSQEnum.SOLICITUDTRANSFERENCIAMATERIAL,
+      uuid,
+    ],
+    queryFn: () => getsolicitudTransferenciaMaterial_Transferencia(uuid),
+    retry: false,
+  });
+};
+
 export const useCreateSolicitudTransferenciaMaterial = <T>({
   navigate,
   returnUrl,
@@ -175,6 +190,14 @@ export const getsolicitudTransferenciaMaterial = async (uuid: string) => {
   } catch (error) {
     handleAxiosError(error);
   }
+};
+export const getsolicitudTransferenciaMaterial_Transferencia = async (
+  uuid: string,
+) => {
+  return await get<SolicitudTransferenciaMaterial>(
+    `/solicitud_transferencia_material/${uuid}`,
+    true,
+  );
 };
 
 export const createsolicitudTransferenciaMaterial = async <T>(

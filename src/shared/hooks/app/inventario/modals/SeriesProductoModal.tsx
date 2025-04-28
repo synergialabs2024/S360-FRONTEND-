@@ -10,8 +10,13 @@ import {
 import * as XLSX from 'xlsx';
 
 import { useUiStore } from '@/store/ui';
-import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
+import {
+  ScrollableDialogProps,
+  SelectArrayWrite,
+  SimpleTable,
+} from '@/shared/components';
 import { emptyCellOneLevel, Producto, TABLE_CONSTANTS } from '@/shared';
+import { useForm } from 'react-hook-form';
 
 export type SeriesProductoModalProps = {
   Arrays: any;
@@ -20,10 +25,15 @@ export type SeriesProductoModalProps = {
   onDataChange?: (data: any[]) => void;
   tipoSerie?: boolean;
   randomButton?: boolean;
+  isIngreso?: boolean;
 };
 
 export interface MaterialSeries {
   series: string;
+}
+
+interface FormValues {
+  sn: string;
 }
 
 const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
@@ -33,12 +43,23 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   cantidadBoolean,
   tipoSerie = true,
   randomButton = false,
+  isIngreso = false,
 }) => {
   //* State local
   const [open, setOpen] = useState(false);
-  const [dataExcel, setDataExcel] = useState<any[]>([]);
+  const [dataExcel, setDataExcel] = useState<string[]>([]);
+  const [dataTotal, setDataTotal] = useState<any[]>([]);
   const [cantidadTF, setCantidadTF] = useState(false);
   const [data, setData] = useState<any[]>([]);
+
+  const form = useForm<FormValues>({
+    defaultValues: {
+      sn: '',
+    },
+  });
+  const {
+    formState: { errors },
+  } = form;
 
   useEffect(() => {
     if (tipoSerie) {
@@ -102,11 +123,23 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
 
         const cantidadReal = Math.min(Arrays.cantidad, copiaSeries.length);
         const primerosDatos = copiaSeries.slice(0, cantidadReal);
-
         setDataExcel(primerosDatos);
       }
     }
   };
+
+  useEffect(() => {
+    const ubicacionEncontrada =
+      Arrays.ubicacion === ''
+        ? []
+        : (data.find(i => i.ubicacion === Arrays.ubicacion) ?? []);
+    if (ubicacionEncontrada) {
+      const copiaSeries = ubicacionEncontrada.series;
+      setDataTotal(copiaSeries);
+    } else {
+      setDataTotal([]);
+    }
+  }, [data, Arrays.ubicacion]);
 
   const handleSeriesChange = () => {
     setIsGlobalLoading(true);
@@ -174,17 +207,40 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   const ExcelSection = () => (
     <>
       <Box display="flex" gap={2} mb={2}>
-        <TextField
-          inputRef={serieIndividualRef}
-          label="Número de Serie"
-          variant="outlined"
-        />
-        <Button
-          onClick={handleSeriesChange}
-          disabled={cantidadBoolean || cantidadTF}
-        >
-          Añadir
-        </Button>
+        {isIngreso ? (
+          <>
+            <TextField
+              inputRef={serieIndividualRef}
+              label="Número de Serie"
+              variant="outlined"
+            />
+            <Button
+              onClick={handleSeriesChange}
+              disabled={cantidadBoolean || cantidadTF}
+            >
+              Añadir
+            </Button>
+          </>
+        ) : (
+          <SelectArrayWrite
+            label=""
+            name="sn"
+            control={form.control}
+            error={errors.sn}
+            helperText={errors.sn?.message}
+            defaultValue={form.getValues('sn')}
+            options={dataTotal}
+            required={false}
+            onChangeValue={row => {
+              if (row !== null) {
+                setDataExcel(prev =>
+                  Array.from(new Set([...prev, String(row)])),
+                );
+              }
+            }}
+            disabled={cantidadBoolean || cantidadTF}
+          />
+        )}
         <Button
           onClick={handleButtonClick}
           startIcon={<IconUpload />}
@@ -239,6 +295,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         size="small"
         onClick={() => setOpen(!open)}
         style={{ cursor: 'pointer' }}
+        disabled={!Arrays.ubicacion}
       >
         <IconBrandCodesandbox />
       </IconButton>

@@ -118,6 +118,7 @@ const SaveUbicacion: React.FC<SaveUbicacionProps> = ({ title, ubicacion }) => {
         error={errors.codigo}
         helperText={errors.codigo?.message}
         size={gridSizeMdLg6}
+        disabled={!!ubicacion?.id}
       />
 
       <CustomAutocomplete<Bodega>

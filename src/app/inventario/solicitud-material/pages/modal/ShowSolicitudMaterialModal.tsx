@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Producto } from '@/shared';
 import { useFetchProductos } from '@/actions/app';
 import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
-import { useColumnsSolicitudMaterialProductos } from '../../shared/hooks/useColumnsSolicitudMaterialProductos';
+import { useColumnsSolicitudMaterialProductos } from '../../shared/hooks';
 
 export type ShowSeriesModalMaterialProps = {
   Arrays: any;

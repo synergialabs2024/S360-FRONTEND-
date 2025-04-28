@@ -58,7 +58,7 @@ const RecepcionSolicitudTransferenciaMaterialStatePage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       ...filterObject,
 
       estado_solicitud: state,
@@ -101,7 +101,7 @@ const RecepcionSolicitudTransferenciaMaterialStatePage: React.FC<
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por identificación"
+        text="por Numero de Registro"
       />
       <CustomTable<SolicitudTransferenciaMaterial>
         columns={transferenciaMaterialColumns}

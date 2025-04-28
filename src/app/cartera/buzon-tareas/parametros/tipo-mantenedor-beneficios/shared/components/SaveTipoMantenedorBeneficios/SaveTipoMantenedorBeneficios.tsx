@@ -111,6 +111,7 @@ const SaveTipoMantenedorBeneficios: React.FC<
         error={errors.code}
         helperText={errors.code?.message}
         size={gridSizeMdLg6}
+        disabled={!!tipoMantenedorBeneficios?.id}
       />
 
       <CustomTextArea

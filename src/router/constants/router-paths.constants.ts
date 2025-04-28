@@ -415,8 +415,8 @@ export const ROUTER_PATHS = {
 
     ///* cambio propietario
     planpagocuotas: 'plan_pago_cuota',
-    planpagocuotasCrear: 'plan_pago_cuota/crear',
-    planpagocuotasEditar: 'plan_pago_cuota/editar/:uuid',
+    //planpagocuotasCrear: 'plan_pago_cuota/crear',
+    //planpagocuotasEditar: 'plan_pago_cuota/editar/:uuid',
     planpagocuotasNav: '/cobranza/plan_pago_cuota',
 
     ///* cliente pendiente devolucion
@@ -425,6 +425,10 @@ export const ROUTER_PATHS = {
     clientependientedevolucionEditar:
       'cliente-pendiente-devolucion/editar/:uuid',
     clientependientedevolucionNav: '/cobranza/cliente-pendiente-devolucion',
+
+    ///* Plan Cuenta
+    plancuentas: 'plan-cuenta',
+    plancuentasNav: '/cobranza/plan-cuenta',
   },
 
   /////* Comercial ----------------
@@ -720,9 +724,17 @@ export const ROUTER_PATHS = {
 
     ///* solicitud devolucion
     solicitudDevolucion: 'solicitud-devolucion',
-    solicitudDevolucionCrear: 'solicitud-devolucion/crear',
-    solicitudDevolucionEditar: 'solicitud-devolucion/editar/:uuid',
+    //solicitudDevolucionCrear: 'solicitud-devolucion/crear',
+    //solicitudDevolucionEditar: 'solicitud-devolucion/editar/:uuid',
     solicitudDevolucionNav: '/inventario/solicitud-devolucion',
+
+    ///* Recepcion solicitud material
+    recepcionSolicitudDevolucionMateriales:
+      'recepcion-solicitud-devolucion-material',
+    //recepcionSolicitudDevolucionMaterialesCrear: 'recepcion-solicitud-devolucion-material/crear',
+    //recepcionSolicitudDevolucionMaterialesEditar:'recepcion-solicitud-devolucion-material/editar/:uuid',
+    recepcionSolicitudDevolucionMaterialesNav:
+      '/inventario/recepcion-solicitud-devolucion-material',
 
     ///* solicitud material
     solicitudMaterial: 'solicitud-material',
@@ -751,6 +763,8 @@ export const ROUTER_PATHS = {
     ///* Transferencia Material
     transferenciaMateriales: 'transferencia-materiales',
     transferenciaMaterialesCrear: 'transferencia-materiales/crear',
+    transferenciaMaterialesSolicitud:
+      'transferencia-materiales/solicitud/:uuid',
     transferenciaMaterialesEditar: 'transferencia-materiales/editar/:uuid',
     transferenciaMaterialesNav: '/inventario/transferencia-materiales',
 
@@ -812,10 +826,6 @@ export const ROUTER_PATHS = {
     cuentaContablesCrear: 'cuenta-contable/crear',
     cuentaContablesEditar: 'cuenta-contable/editar/:uuid',
     cuentaContablesNav: '/inventario/cuenta-contable',
-
-    ///* Plan Cuenta
-    plancuentas: 'plan-cuenta',
-    plancuentasNav: '/inventario/plan-cuenta',
   },
   // // LOGISTICA =================================
   logistica: {

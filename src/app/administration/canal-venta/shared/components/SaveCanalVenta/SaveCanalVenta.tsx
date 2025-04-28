@@ -101,8 +101,8 @@ const SaveCanalVenta: React.FC<SaveCanalVentaProps> = ({
         defaultValue={form.getValues().code}
         error={errors.code}
         helperText={errors.code?.message}
-        disabled={!!canalventa?.id}
         size={gridSizeMdLg6}
+        disabled={!!canalventa?.id}
       />
       <CustomNumberTextField
         label="Consultas Buro al mes por usuario"

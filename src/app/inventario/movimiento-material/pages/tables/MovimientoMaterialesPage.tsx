@@ -70,7 +70,7 @@ const MovimientoMaterialesPage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       ...filterObject,
       filterByState: false,
 
@@ -101,14 +101,14 @@ const MovimientoMaterialesPage: React.FC<
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por Numero de Registro"
         sxContainer={{
           mb: 3,
         }}
         customSpaceNode={
           <>
             <CustomAutocompletSearchNoForm<{ id: number; nombre: string }>
-              label="Buscar por Tipo producto"
+              label="Buscar por Tipo Movimiento"
               options={TIPO_PRODUCTO_ARRAY_OBJ_INVENTARIO.map(u => ({
                 id: u.value,
                 nombre: u.nombre,
