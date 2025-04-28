@@ -53,7 +53,7 @@ const CambioDomicilioByStatePage: React.FC<CambioDomicilioByStatePageProps> = ({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      linea_servicio_data__cliente_data__name: searchTerm,
+      linea_servicio_data__cliente_name: searchTerm,
       ...filterObject,
       filterByState: false,
       estado_cambio_domicilio: state,

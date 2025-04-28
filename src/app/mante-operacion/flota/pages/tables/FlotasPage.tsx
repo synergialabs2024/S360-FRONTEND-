@@ -17,6 +17,7 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { Flota, PermissionsEnum } from '@/shared/interfaces';
 import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import { CustomFleetTableBtns } from '../../shared/components';
 
 export const returnUrlFlotasPage =
   ROUTER_PATHS.mantenimientoOperacion.flotasNav;
@@ -118,6 +119,11 @@ const FlotasPage: React.FC<FlotasPageProps> = () => {
         ])}
         onEdit={onEdit}
         canDelete={false}
+        //
+        showCustomButtonsSpaceEnd
+        customButtonsSpaceEnd={(fleet: Flota) => (
+          <CustomFleetTableBtns fleet={fleet} />
+        )}
       />
     </SingleTableBoxScene>
   );

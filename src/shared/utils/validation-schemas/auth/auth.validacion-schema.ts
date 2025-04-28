@@ -12,3 +12,11 @@ export const loginFormSchema = yup.object({
   password: passwordYupValidation,
   // empresa: yup.string().required('La empresa es requerida'),
 });
+
+export const passwordYupValidation2 = yup
+  .string()
+  .required('La contraseña es requerida')
+  .matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.]{8,}$/,
+    'La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial (.,!@#$%^&*)',
+  );

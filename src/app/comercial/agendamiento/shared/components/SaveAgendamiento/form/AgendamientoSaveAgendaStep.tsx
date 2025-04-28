@@ -66,6 +66,7 @@ const AgendamientoSaveAgendaStep: React.FC<AgendamientoSaveAgendaStepProps> = ({
           form={form}
           preventa={preventa!}
           cacheKey={`${CacheBaseKeysPreventaEnum.HORARIO_INSTALACION_AGENDA_VENTAS}_${preventa?.uuid!}`}
+          showFleetName
         />
       </>
     </>

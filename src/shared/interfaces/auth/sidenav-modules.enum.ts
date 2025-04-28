@@ -150,4 +150,7 @@ export enum SidenavModulesEnum {
 
   // Buzon tareas
   BUZONTAREAS_ASIGNADA = 'BUZONTAREAS.ASIGNADA',
+
+  // Customer Experience
+  CX_ENCUESTA_ASESORES = 'CUSTOMEREXPERIENCE.ENCUESTA_ASESORES',
 }

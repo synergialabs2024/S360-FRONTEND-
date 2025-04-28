@@ -943,4 +943,27 @@ export const ROUTER_PATHS = {
     leedTeleventasEditar: 'leed-televenta/editar/:uuid',
     leedTeleventasNav: '/televentas/leed-televenta',
   },
+
+  /////* CUSTOMER EXPERIENCE ----------------
+  customerExperience: {
+    root: 'customer-experience',
+
+    ///* Encuesta Asesores
+    encuestaAsesores: 'encuesta-asesores',
+    encuestaAsesoresNav: '/customer-experience/encuesta-asesores',
+
+    ///* Encuesta Totems
+    encuestaTotems: 'encuesta-totems',
+    encuestaTotemsNav: '/customer-experience/encuesta-totems',
+
+    ///* Encuesta Pagos
+    encuestaPagos: 'encuesta-pagos',
+    encuestaPagosNav: '/customer-experience/encuesta-pagos',
+
+    ///* Encuesta Pagos
+    encuestaPlantillas: 'encuesta-plantillas',
+    encuestaPlantillasCrear: 'encuesta-plantillas/crear',
+    encuestaPlantillasEditar: 'encuesta-plantillas/editar/:uuid',
+    encuestaPlantillasNav: '/customer-experience/encuesta-plantillas',
+  },
 };

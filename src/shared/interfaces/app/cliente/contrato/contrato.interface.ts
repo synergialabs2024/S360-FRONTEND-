@@ -1,4 +1,11 @@
-import type { ConfiguracionPlantillaCliente, PlanInternet } from '@/shared';
+import type {
+  BrasLimitData,
+  ConfiguracionPlantillaCliente,
+  NapLimitData,
+  NodoLimitData,
+  OLTLimitData,
+  PlanInternet,
+} from '@/shared';
 import type { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface ContratosPaginatedRes {
@@ -30,6 +37,18 @@ export interface Contrato {
 
   created_at?: string;
   modified_at?: string;
+
+  //
+  nodo_data?: NodoLimitData;
+  olt_data?: OLTLimitData;
+  brass_data?: BrasLimitData;
+  nap_data?: Omit<NapLimitData, 'puertos_list'>;
+  puerto_nap?: string;
+  ipv4?: string;
+  ipv6?: string;
+  pppoe?: string;
+  pppassword?: string;
+  serie_ont?: string;
 
   ///* fk
   config_plantilla_cliente?: number;
