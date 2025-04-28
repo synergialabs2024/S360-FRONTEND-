@@ -47,7 +47,7 @@ const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -67,7 +67,7 @@ const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por Numero de Registro"
       />
 
       <CustomTable<EgresoMaterial>

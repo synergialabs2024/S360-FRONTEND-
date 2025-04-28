@@ -158,7 +158,8 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
       if (
         prod.cantidad === undefined ||
         prod.cantidad === null ||
-        prod.cantidad === 0
+        prod.cantidad === 0 ||
+        prod.cantidad < 0
       ) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" necesita cantidad.`,
@@ -222,7 +223,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
   useLoaders(customLoader);
 
   ///* columns --------------------
-  const { crearMaterialColumns } = useColumnsProductosDisponibles();
+  const { crearMaterialColumnsIngreso } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -315,7 +316,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
         )}
       </Grid>
       <CustomMinimalTable<ProductosDisponiblesTableType>
-        columns={crearMaterialColumns}
+        columns={crearMaterialColumnsIngreso}
         data={productosDisponibles || []}
         enablePagination
         density="comfortable"

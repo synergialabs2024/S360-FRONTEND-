@@ -169,6 +169,7 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
         error={errors.code}
         helperText={errors.code?.message}
         size={gridSizeMdLg6}
+        disabled={!!subtipoMantenedorBeneficios?.id}
       />
 
       <CustomTextField

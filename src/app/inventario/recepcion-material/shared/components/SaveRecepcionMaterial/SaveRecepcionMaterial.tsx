@@ -1,19 +1,17 @@
 /* eslint-disable indent */
 import { useQueryClient } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { FiPlus } from 'react-icons/fi';
+import { useEffect } from 'react';
 
 import {
   CustomTextArea,
   CustomTypoLabel,
   CustomAutocomplete,
   CustomMinimalTable,
-  CustomSingleButton,
-  CustomTypoLabelEnum,
   SingleFormBoxScene,
+  CustomTypoLabelEnum,
 } from '@/shared/components';
 import {
   Bodega,
@@ -22,7 +20,6 @@ import {
   gridSizeMdLg6,
   PermissionsEnum,
   RecepcionMaterial,
-  ProductosDisponiblesModal,
   solicitudMaterialFormSchema,
   ProductosDisponiblesTableType,
   useColumnsProductosDisponibles,
@@ -38,7 +35,7 @@ import { useProductosStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
-import { returnUrlIngresoMaterialesPage } from '@/app/inventario/ingreso-material/pages/tables/IngresoMaterialesPage';
+import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
 
 export interface SaveRecepcionMaterialProps {
   title: string;
@@ -52,9 +49,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   recepcionMaterial,
 }) => {
   useCheckPermission(PermissionsEnum.inventario_view_solicitudmaterial);
-
-  ///* local state --------------------
-  const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
@@ -167,23 +161,19 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
     data.estado_solicitud = 'APROBADO';
     data.productos = mappedProductos;
 
-    const preparedData = {
-      state: data.state,
-      observacion: data.observacion,
-      productos: data.productos,
-      bodega: data.bodega,
-      ubicacion: data.ubicacion,
-      user_create: data.user_create,
-    };
     setConfirmDialog({
       isOpen: true,
       title: 'Solicitud de material creada',
       subtitle: '¿Desea ingresar la solicitud de este material?',
       onConfirm: () => {
+        productosEnviar([]);
         try {
-          navigate(`${returnUrlIngresoMaterialesPage}/crear`, {
-            state: { solicitud: preparedData },
-          });
+          navigate(
+            `${returnUrlTransferenciaMaterialesPage}/solicitud/${data.uuid}`,
+            {
+              state: { solicitud: 'solicitud_material' },
+            },
+          );
           setConfirmDialogIsOpen(false);
           if (data.id !== undefined) {
             updateRecepcionMaterialAprobarMutation.mutate({
@@ -202,6 +192,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
         setConfirmDialogIsOpen(false);
         updateRecepcionMaterialMutation.mutate({ id: data.id!, data });
         navigate(returnUrlRecepcionMaterialPage);
+        productosEnviar([]);
       },
     });
   };
@@ -240,7 +231,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
           : null;
       })
       .filter(Boolean);
-
     productosEnviar(dataP?.filter(item => item !== null) || []);
     if (!recepcionMaterial?.id) return;
     reset(recepcionMaterial);
@@ -248,7 +238,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   }, [reset, productosPaging]);
 
   ///* columns --------------------
-  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
+  const { crearMaterialColumnsSolicitud } = useColumnsProductosDisponibles();
 
   return (
     <>
@@ -307,29 +297,11 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
           text="Productos"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        {!!recepcionMaterial?.ubicacion && (
-          <CustomSingleButton
-            label="AGREGAR PRODUCTO"
-            color="primary"
-            variant="text"
-            startIcon={<FiPlus />}
-            onClick={() => {
-              setOpenAddProducts(true);
-            }}
-            justifyContent="flex-end"
-          />
-        )}
         <CustomMinimalTable<ProductosDisponiblesTableType>
-          columns={crearMaterialColumnsSinSerie}
+          columns={crearMaterialColumnsSolicitud}
           data={productosDisponibles || []}
           enablePagination
           density="comfortable"
-        />
-        <ProductosDisponiblesModal
-          askADD={true}
-          pk_ubicacion={recepcionMaterial?.ubicacion_data?.uuid}
-          open={openAddProducts}
-          onClose={() => setOpenAddProducts(false)}
         />
       </SingleFormBoxScene>
     </>

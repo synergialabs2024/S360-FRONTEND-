@@ -8,6 +8,7 @@ import {
   SolicitudMaterial,
   SolicitudMaterialPaginatedRes,
   ToastWrapper,
+  TransferenciaMaterial,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared';
@@ -29,15 +30,27 @@ export const useFetchSolicitudMaterial = ({
       solicitudMaterialTSQEnum.SOLICITUDMATERIALES,
       ...Object.values(params || {}),
     ],
-    queryFn: () => getSolicitudMaterial(params),
+    queryFn: () => getSolicitudMateriales(params),
     enabled: enabled,
   });
 };
 
-export const useGetsolicitudMaterial = (uuid: string) => {
+export const useGetSolicitudMaterial = (uuid: string) => {
   return useQuery({
     queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL, uuid],
-    queryFn: () => getsolicitudMaterial(uuid),
+    queryFn: () => getSolicitudMaterial(uuid),
+    retry: false,
+  });
+};
+
+export const useGetSolicitudMaterial_Transferencia = (
+  uuid: string,
+  p0: { enabled: boolean },
+) => {
+  console.log(p0);
+  return useQuery({
+    queryKey: [solicitudMaterialTSQEnum.SOLICITUDMATERIAL, uuid],
+    queryFn: () => getSolicitudMaterial_Transeferencia(uuid),
     retry: false,
   });
 };
@@ -139,7 +152,7 @@ export interface UpdatesolicitudMaterialParams<T> {
   data: T;
 }
 
-export const getSolicitudMaterial = async (
+export const getSolicitudMateriales = async (
   params?: GetSolicitudMaterialParams,
 ) => {
   const stateParams = { ...params };
@@ -159,12 +172,18 @@ export const getSolicitudMaterial = async (
   );
 };
 
-export const getsolicitudMaterial = async (uuid: string) => {
+export const getSolicitudMaterial = async (uuid: string) => {
   try {
-    return await get<SolicitudMaterial>(`/solicitud-material/${uuid}`, true);
+    return await get<TransferenciaMaterial>(
+      `/solicitud-material/${uuid}`,
+      true,
+    );
   } catch (error) {
     handleAxiosError(error);
   }
+};
+export const getSolicitudMaterial_Transeferencia = async (uuid: string) => {
+  return await get<TransferenciaMaterial>(`/solicitud-material/${uuid}`, true);
 };
 
 export const createsolicitudMaterial = async <T>(

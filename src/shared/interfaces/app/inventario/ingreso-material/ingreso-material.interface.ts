@@ -17,6 +17,8 @@ export interface IngresoMaterial {
   observacion: string;
   productos: Producto[];
 
+  producto?: number;
+
   ///* fk
   bodega: number;
   ubicacion: number;

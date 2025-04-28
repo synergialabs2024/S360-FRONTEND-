@@ -109,8 +109,8 @@ const SaveArea: React.FC<SaveAreaProps> = ({ title, area }) => {
         defaultValue={form.getValues().code}
         error={errors.code}
         helperText={errors.code?.message}
-        disabled={!!area?.id}
         size={gridSizeMdLg6}
+        disabled={!!area?.id}
       />
       <CustomAutocomplete<CentroCosto>
         label="Centro Costo"

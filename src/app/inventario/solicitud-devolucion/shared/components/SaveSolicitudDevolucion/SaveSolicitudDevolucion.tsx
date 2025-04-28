@@ -13,10 +13,9 @@ import {
   CustomSingleButton,
   SingleFormBoxScene,
   CustomTypoLabelEnum,
+  CustomTextFieldNoForm,
 } from '@/shared/components';
 import {
-  Bodega,
-  Ubicacion,
   useLoaders,
   ToastWrapper,
   gridSizeMdLg4,
@@ -25,12 +24,10 @@ import {
   SolicitudDevolucion,
   IngresosDisponiblesTableType,
   solicitudDevolucionFormSchema,
-  useColumnsIngresosDisponibles,
+  useColumnsProductosDisponibles,
 } from '@/shared';
 import {
-  useFetchBodegas,
   useFetchProductos,
-  useFetchUbicacions,
   useFetchIngresoMateriales,
   useCreateSolicitudDevolucion,
   CreateSolicitudDevolucionParamsBase,
@@ -74,6 +71,8 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
     defaultValues: {
       state: true,
       user_create: user?.id,
+      bodega: user?.flota_data?.ubicacion_data?.bodega,
+      ubicacion: user?.flota_data?.ubicacion_data?.id,
     },
   });
 
@@ -83,40 +82,18 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
     formState: { errors, isValid },
   } = form;
 
-  const watchedBodega = form.watch('bodega');
-  const watchedUbicacion = form.watch('ubicacion');
   const watchedIngresoMaterial = form.watch('ingreso_material');
 
   ///* fetch data ---------------------
-  const {
-    data: bodegasPagingRes,
-    isLoading: isLoadingBodegas,
-    isRefetching: isRefetchingBodegas,
-  } = useFetchBodegas({
-    params: {
-      page_size: 600,
-    },
-  });
-  const {
-    data: ubicacionesPaging,
-    isLoading: isLoadingUbicaciones,
-    isRefetching: isRefetchingUbicaciones,
-  } = useFetchUbicacions({
-    enabled: !!watchedBodega,
-    params: {
-      page_size: 1200,
-      bodega: watchedBodega!,
-    },
-  });
   const {
     data: ingresoMaterialPaging,
     isLoading: isLoadingIngresoMaterial,
     isRefetching: isRefetchingIngresoMaterial,
   } = useFetchIngresoMateriales({
-    enabled: !!watchedUbicacion || !!watchedBodega,
+    enabled: !!user?.flota_data?.ubicacion_data?.id,
     params: {
       page_size: 1200,
-      ubicacion: watchedUbicacion!,
+      ubicacion: user?.flota_data?.ubicacion_data?.id!,
     },
   });
   const { data: productosPaging } = useFetchProductos({
@@ -135,13 +112,18 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+    console.log(ingresosDisponibles);
 
     const mappedProductos = ingresosDisponibles.map(i => ({
       producto: i.id,
-      cantidad: i.cantidad,
+      cantidad: i.cantidad_pedida,
       series: i.series ? i.series : [],
     }));
 
+    if (mappedProductos.length === 0) {
+      ToastWrapper.error('Campo Productos es requerido');
+      return;
+    }
     // Validaciones
     for (const prod of mappedProductos) {
       const detalles = productosPaging?.data.items.find(
@@ -149,7 +131,6 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
       );
 
       if (!detalles) {
-        console.error(`No se encontró el producto con ID ${prod.producto}`);
         ToastWrapper.error(
           `No se encontró el producto con ID ${prod.producto}`,
         );
@@ -160,38 +141,21 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
       if (
         prod.cantidad === undefined ||
         prod.cantidad === null ||
-        prod.cantidad === 0
+        prod.cantidad === 0 ||
+        prod.cantidad < 0
       ) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" necesita cantidad.`,
         );
         return;
       }
-
-      // Validaciones según `requiere_series`
-      if (
-        detalles.requiere_series &&
-        (!prod.series || prod.series.length === 0)
-      ) {
-        ToastWrapper.error(`El producto "${detalles.codigo}" requiere series.`);
-        return;
-      } else if (!detalles.requiere_series && prod.series.length > 0) {
-        ToastWrapper.error(
-          `El producto "${detalles.nombre}" no necesita series.`,
-        );
-        return;
-      }
     }
 
-    if (mappedProductos.length === 0) {
-      ToastWrapper.error('Campo Productos es requerido');
-      return;
-    }
     const preparedData = {
       ...data,
       productos: mappedProductos,
     };
-
+    console.log(preparedData);
     createSolicitudDevolucionMutation.mutate(preparedData);
     productosEnviar([]);
   };
@@ -200,48 +164,31 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
   useEffect(() => {
     if (!solicitud_devolucion?.id) return;
     reset(solicitud_devolucion);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reset]);
+  }, [solicitud_devolucion, reset]);
 
   useEffect(() => {
-    if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)
-      return;
-    !ubicacionesPaging?.data?.items?.length &&
-      ToastWrapper.error(
-        'No se encontraron ubicaciones para la bodega seleccionada',
-      );
-
     if (
       isLoadingIngresoMaterial ||
       isRefetchingIngresoMaterial ||
-      !watchedUbicacion
+      !user?.flota_data?.ubicacion_data
     )
       return;
-    !ubicacionesPaging?.data?.items?.length &&
+    !user?.flota_data?.ubicacion_data &&
       ToastWrapper.error(`
         No se encontraron ingreso de material para la ubicacion
         seleccionada
       `);
   }, [
-    watchedBodega,
-    watchedUbicacion,
-    ubicacionesPaging,
     ingresoMaterialPaging,
-    isLoadingUbicaciones,
     isLoadingIngresoMaterial,
-    isRefetchingUbicaciones,
     isRefetchingIngresoMaterial,
   ]);
 
-  const customLoader =
-    isLoadingUbicaciones ||
-    isRefetchingUbicaciones ||
-    isLoadingIngresoMaterial ||
-    isRefetchingIngresoMaterial;
+  const customLoader = isLoadingIngresoMaterial || isRefetchingIngresoMaterial;
   useLoaders(customLoader);
 
   ///* columns --------------------
-  const { crearMaterialColumnsRecepcion } = useColumnsIngresosDisponibles();
+  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -249,45 +196,17 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
       onCancel={() => navigate(returnUrlSolicitudDevolucionPage)}
       onSave={handleSubmit(onSave, () => {})}
     >
-      <CustomAutocomplete<Bodega>
+      <CustomTextFieldNoForm
         label="Bodega"
-        name="bodega"
-        // options
-        options={bodegasPagingRes?.data?.items || []}
-        valueKey="nombre"
-        actualValueKey="id"
-        defaultValue={form.getValues().bodega}
-        isLoadingData={isLoadingBodegas || isRefetchingBodegas}
-        // vaidation
-        control={form.control}
-        error={errors.bodega}
-        helperText={errors.bodega?.message}
+        value={user?.flota_data?.bodega_data?.nombre}
+        disabled
         size={gridSizeMdLg4}
-        onChangeRawValue={() => {
-          form.setValue('ubicacion', '' as any);
-          form.setValue('ingreso_material', '' as any);
-          productosEnviar([]);
-        }}
       />
-      <CustomAutocomplete<Ubicacion>
+      <CustomTextFieldNoForm
         label="Ubicacion"
-        name="ubicacion"
-        defaultValue={form.getValues().ubicacion}
-        // options
-        valueKey="nombre"
-        actualValueKey="id"
-        options={ubicacionesPaging?.data.items || []}
-        isLoadingData={isLoadingUbicaciones || isRefetchingUbicaciones}
-        disableClearable
-        // errors
-        control={form.control}
-        error={errors.ubicacion}
-        helperText={errors.ubicacion?.message}
+        value={user?.flota_data?.ubicacion_data?.nombre}
+        disabled
         size={gridSizeMdLg4}
-        onChangeRawValue={() => {
-          form.setValue('ingreso_material', '' as any);
-          productosEnviar([]);
-        }}
       />
       <CustomAutocomplete<IngresoMaterial>
         label="Ingreso Material"
@@ -336,7 +255,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
         )}
       </Grid>
       <CustomMinimalTable<IngresosDisponiblesTableType>
-        columns={crearMaterialColumnsRecepcion}
+        columns={crearMaterialColumnsSinSerie}
         data={ingresosDisponibles || []}
         enablePagination
         density="comfortable"

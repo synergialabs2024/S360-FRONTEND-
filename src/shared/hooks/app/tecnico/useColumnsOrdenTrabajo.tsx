@@ -20,6 +20,8 @@ export const useColumnsOrdenTrabajo = () => {
         accessorKey: 'identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
       },
@@ -51,6 +53,34 @@ export const useColumnsOrdenTrabajo = () => {
           emptyCellNested(row, ['agendamiento_data', 'hora_instalacion']),
       },
       {
+        accessorKey: 'solicitud_servicio__direccion',
+        header: 'DIRECCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'direccion']),
+      },
+      {
+        accessorKey: 'solicitud_servicio__celular',
+        header: 'NUMERO CONTACTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'celular']),
+      },
+      {
+        accessorKey: 'solicitud_servicio__coordenadas',
+        header: 'COORDENADAS',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['solicitud_servicio_data', 'coordenadas']),
+      },
+      /*
+      {
         accessorKey: 'solicitud_servicio__tipo_identificacion',
         header: 'TIPO IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -62,6 +92,7 @@ export const useColumnsOrdenTrabajo = () => {
             'tipo_identificacion',
           ]),
       },
+      */
     ],
     [],
   );
@@ -91,6 +122,7 @@ export const useColumnsOrdenTrabajo = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_activacion'),
       },
+      /*
       {
         accessorKey: 'ipv4',
         header: 'IPV4',
@@ -139,6 +171,7 @@ export const useColumnsOrdenTrabajo = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'punta_final_fibra'),
       },
+      */
       {
         accessorKey: 'metraje_utilizado_fibra',
         header: 'METRAJE UTILIZADO EN FIBRA',
@@ -167,8 +200,8 @@ export const useColumnsOrdenTrabajo = () => {
         accessorKey: 'imagen',
         header: 'IMAGENES',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
+        enableColumnFilter: false,
+        enableSorting: false,
         Cell: ({ row }) => {
           return (
             <ImgModalComponent
@@ -194,6 +227,7 @@ export const useColumnsOrdenTrabajo = () => {
   );
   const otColumnsBase03 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
+      /*
       {
         accessorKey: 'preventa__tipo_servicio',
         header: 'TIPO SERVICIO',
@@ -203,6 +237,7 @@ export const useColumnsOrdenTrabajo = () => {
         Cell: ({ row }) =>
           emptyCellNested(row, ['preventa_data', 'tipo_servicio']),
       },
+      */
       {
         accessorKey: 'preventa__tipo_plan',
         header: 'TIPO PLAN',
@@ -213,13 +248,14 @@ export const useColumnsOrdenTrabajo = () => {
       },
       {
         accessorKey: 'preventa__name_plan',
-        header: 'TIPO PLAN',
+        header: 'PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['preventa_data', 'plan_internet_data', 'name']),
       },
+      /*
       {
         accessorKey: 'preventa__tipo_cuenta_bancaria',
         header: 'TIPO CUENTA BANCARIA',
@@ -242,6 +278,7 @@ export const useColumnsOrdenTrabajo = () => {
             'name',
           ]),
       },
+      */
       {
         accessorKey: 'flota__name',
         header: 'FLOTA',
@@ -279,6 +316,7 @@ export const useColumnsOrdenTrabajo = () => {
   );
   const otColumnsBase04 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
+      /*
       {
         accessorKey: 'ubicacion__provincia',
         header: 'PROVINCIA',
@@ -287,6 +325,7 @@ export const useColumnsOrdenTrabajo = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['provincia_data', 'name']),
       },
+      */
       {
         accessorKey: 'ubicacion__ciudad',
         header: 'CIUDAD',
@@ -311,7 +350,7 @@ export const useColumnsOrdenTrabajo = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['sector_data', 'name']),
       },
-
+      /*
       {
         accessorKey: 'codigo',
         header: 'CODIGO',
@@ -326,16 +365,21 @@ export const useColumnsOrdenTrabajo = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
       },
+      */
       {
         accessorKey: 'lider__razon_social',
         header: 'LIDER UNIDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['lider_data', 'razon_social']),
       },
       {
         accessorKey: 'auxiliar__razon_social',
         header: 'AUXILIAR UNIDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['auxiliar_data', 'razon_social']),
       },
@@ -355,6 +399,8 @@ export const useColumnsOrdenTrabajo = () => {
         accessorKey: 'razon_social__asignada_orde_trabajo',
         header: 'ASIGNADA POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -368,8 +414,9 @@ export const useColumnsOrdenTrabajo = () => {
       {
         accessorKey: 'fecha_asignada',
         header: 'FECHA ASIGNADA',
-        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -398,6 +445,8 @@ export const useColumnsOrdenTrabajo = () => {
         accessorKey: 'razon_social__asignada_recoordinada_orden_trabajo',
         header: 'ASIGNADA RECOORDINADA POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -411,8 +460,9 @@ export const useColumnsOrdenTrabajo = () => {
       {
         accessorKey: 'fecha_asignada_recoordinada',
         header: 'FECHA ASIGNADA RECOORDINADA',
-        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -439,6 +489,8 @@ export const useColumnsOrdenTrabajo = () => {
         accessorKey: 'razon_social__finaliza_orden_trabajo',
         header: 'FINALIZADA POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -452,8 +504,9 @@ export const useColumnsOrdenTrabajo = () => {
       {
         accessorKey: 'fecha_finalizado',
         header: 'FECHA FINALIZADA',
-        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -497,6 +550,8 @@ export const useColumnsOrdenTrabajo = () => {
         accessorKey: 'razon_social__pre_rechazada_orden_trabajo',
         header: 'PRE RECHAZADA POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>
@@ -510,8 +565,9 @@ export const useColumnsOrdenTrabajo = () => {
       {
         accessorKey: 'fecha_pre_rechazada',
         header: 'FECHA PRE RECHAZADA',
-        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTOTrabajoType) => {
           const trazabilidad = row.original?.trazabilidad_data?.find(
             item =>

@@ -1,26 +1,26 @@
 import { Button, Grid } from '@mui/material';
+import { useForm } from 'react-hook-form';
 
 import {
+  CustomTable,
+  CustomSearch,
+  CustomDatePicker,
+  SingleTableBoxScene,
+} from '@/shared/components';
+import {
+  gridSizeMdLg6,
   useTableFilter,
   PermissionsEnum,
   UbicacionProducto,
   useColumnsReporteStock,
   useTableServerSideFiltering,
-  gridSizeMdLg6,
 } from '@/shared';
 import {
-  CustomTable,
-  CustomSearch,
-  SingleTableBoxScene,
-  DateRangePicker,
-} from '@/shared/components';
+  useFetchUbicacionProductos,
+  ReportUbicacionProductoExcel,
+} from '@/actions/app';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import {
-  ReportUbicacionProductoExcel,
-  useFetchUbicacionProductos,
-} from '@/actions/app';
-import { useForm } from 'react-hook-form';
 
 export const returnUrlReporteStockPages =
   ROUTER_PATHS.inventario.reporteStocksNav;
@@ -28,13 +28,18 @@ export const returnUrlReporteStockPages =
 const MotivoReporteStockPages: React.FC = () => {
   useCheckPermission(PermissionsEnum.inventario_view_ubicacionproducto);
 
-  const { control, watch } = useForm({
+  const {
+    control,
+    watch,
+    getValues,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
-      fecha_rango: { date_1: '', date_2: '' },
+      fecha: '',
     },
   });
 
-  const selectedDateRange = watch('fecha_rango');
+  const selectedDate = watch('fecha');
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -63,8 +68,8 @@ const MotivoReporteStockPages: React.FC = () => {
       producto__nombre: searchTerm,
       ...filterObject,
 
-      created_at__gte: selectedDateRange.date_1,
-      created_at__lte: selectedDateRange.date_2,
+      created_at__gte: '2000-01-01',
+      created_at__lte: selectedDate,
     },
   });
 
@@ -77,8 +82,8 @@ const MotivoReporteStockPages: React.FC = () => {
       ...filterObject,
       filterByState: false,
 
-      created_at__gte: selectedDateRange.date_1,
-      created_at__lte: selectedDateRange.date_2,
+      created_at__gte: '2000-01-01',
+      created_at__lte: selectedDate,
     });
   };
 
@@ -87,16 +92,18 @@ const MotivoReporteStockPages: React.FC = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por producto"
+        text="por Producto"
         sxContainer={{ mb: 3 }}
         customSpaceNode={
           <>
-            <DateRangePicker
-              sxGrid={{ m: [0, 0, 3, 1.5], width: '12.5cm' }}
-              label="RANGO FECHA"
-              name="fecha_rango"
-              control={control}
+            <CustomDatePicker
+              label=""
               required={false}
+              name="fecha"
+              control={control}
+              defaultValue={getValues().fecha}
+              error={errors.fecha}
+              helperText={errors.fecha?.message}
               size={gridSizeMdLg6}
             />
             <Grid sx={{ m: '5px' }}>

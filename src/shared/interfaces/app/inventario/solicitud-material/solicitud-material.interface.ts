@@ -23,6 +23,14 @@ export interface SolicitudMaterial {
   ubicacion: number;
   user_create: number;
 
+  //* solicitudes
+  data?: string[];
+  bodega_origen?: number;
+  ubicacion_origen?: number;
+  bodega_destino?: number;
+  ubicacion_destino?: number;
+  ubicacion_origen_data?: string[];
+
   created_at?: string;
   modified_at?: string;
 }

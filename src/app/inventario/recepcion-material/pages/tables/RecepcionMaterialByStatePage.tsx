@@ -58,7 +58,7 @@ const RecepcionMaterialByStatePage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       ...filterObject,
       filterByState: false,
 
@@ -97,7 +97,7 @@ const RecepcionMaterialByStatePage: React.FC<
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por identificación"
+        text="por Numero de Registro"
       />
       <CustomTable<SolicitudMaterial>
         columns={solicitudMaterialColumns}

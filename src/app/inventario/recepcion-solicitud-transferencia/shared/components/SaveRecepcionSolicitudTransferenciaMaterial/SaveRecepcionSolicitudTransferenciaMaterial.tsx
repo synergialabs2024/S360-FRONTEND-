@@ -201,25 +201,19 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
 
     data.estado_solicitud = 'APROBADO';
     data.productos = mappedProductos;
-    const preparedData = {
-      state: data.state,
-      observacion: data.observacion,
-      productos: data.productos,
-      bodega_origen: data.bodega_origen,
-      ubicacion_origen: data.ubicacion_origen,
-      bodega_destino: data.bodega_destino,
-      ubicacion_destino: data.ubicacion_destino,
-      user_create: data.user_create,
-    };
+
     setConfirmDialog({
       isOpen: true,
       title: 'Solicitud de material creada',
       subtitle: '¿Desea ingresar la solicitud de este material?',
       onConfirm: () => {
         try {
-          navigate(`${returnUrlTransferenciaMaterialesPage}/crear`, {
-            state: { solicitud: preparedData },
-          });
+          navigate(
+            `${returnUrlTransferenciaMaterialesPage}/solicitud/${data.uuid}`,
+            {
+              state: { solicitud: 'solicitud_transferencia' },
+            },
+          );
           setConfirmDialogIsOpen(false);
           if (data.id !== undefined) {
             updateRecepcionSolicitudTransferenciaAprobarMutation.mutate({
@@ -276,7 +270,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
               cantidad_pedida: prod.cantidad,
               cantidad_aprobada: prod.cantidad,
               ubicacion:
-                solicitudTransferenciaMaterial.ubicacion_origen_data?.uuid,
+                solicitudTransferenciaMaterial.ubicacion_origen_data?.id,
               series: prod.series,
             }
           : null;
@@ -330,7 +324,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
   useLoaders(customLoader);
 
   ///* columns --------------------
-  const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
+  const { crearMaterialColumnsSolicitud } = useColumnsProductosDisponibles();
 
   return (
     <SingleFormBoxScene
@@ -468,7 +462,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         )}
 
         <CustomMinimalTable<ProductosDisponiblesTableType>
-          columns={crearMaterialColumnsSinSerie}
+          columns={crearMaterialColumnsSolicitud}
           data={productosDisponibles || []}
           enablePagination
           density="comfortable"

@@ -221,8 +221,8 @@ const SaveMantenedorActivacionesBase: React.FC<
           error={errors.code}
           helperText={errors.code?.message}
           defaultHelperText="El código debe ser único"
-          disabled={!!mantenedorActivacionBase?.id}
           size={gridSizeMdLg6}
+          disabled={!!mantenedorActivacionBase?.id}
         />
 
         <CustomNumberTextField

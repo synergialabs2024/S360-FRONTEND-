@@ -16,6 +16,7 @@ export interface EntidadFinanciera {
 
   name: string;
   state: boolean;
+  code: string;
   description: string;
 }
 

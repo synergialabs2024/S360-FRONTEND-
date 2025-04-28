@@ -322,7 +322,7 @@ export const useNestedMenu = () => {
             }),
             */
 
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.TELEVENTA_LEED_TELEVENTA, {
               id: 'televentas',
               title: 'Televentas',
               type: MenuItemType.ITEM,
@@ -348,7 +348,7 @@ export const useNestedMenu = () => {
             //   type: MenuItemType.ITEM,
             //   url: ROUTER_PATHS.comercial.instalacionPreRechazadaOT,
             // }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.COBRANZA_ALQUILER, {
               id: 'alquileres',
               title: 'Alquileres',
               type: MenuItemType.ITEM,
@@ -497,22 +497,6 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
               },
             ),
-            ///* Inventario Solicitudes
-            renderByModule(SidenavModulesEnum.INVENTARIO_SOLICITUD_DEVOLUCION, {
-              id: 'solicitud-devolucion',
-              title: 'Solicitud de devolucion',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
-            }),
-            renderByModule(
-              SidenavModulesEnum.INVENTARIO_SOLICITUD_TRANSFERENCIA_MATERIAL,
-              {
-                id: 'solicitud-transferencia-material',
-                title: 'Solicitud de transferencia material',
-                type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
-              },
-            ),
             ///* Inventario Recepciones
             renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
               id: 'recepcion-solicitud-materiales',
@@ -520,6 +504,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
             }),
+            /*
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'recepcion-solicitud-devoluciones',
+              title: 'Recepción de solicitudes de devoluciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario
+                .recepcionSolicitudDevolucionMaterialesNav,
+            }),
+            */
             renderByModule(
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {
@@ -615,6 +608,24 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudMaterialNav,
             }),
+            ///* Inventario Solicitudes
+            /*
+            renderByModule(SidenavModulesEnum.INVENTARIO_SOLICITUD_DEVOLUCION, {
+              id: 'solicitud-devolucion',
+              title: 'Solicitud de devolucion',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
+            }),
+            */
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_SOLICITUD_TRANSFERENCIA_MATERIAL,
+              {
+                id: 'solicitud-transferencia-material',
+                title: 'Solicitud de transferencia material',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.solicitudTransferenciaMaterialNav,
+              },
+            ),
             /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'detalle-materiales',
@@ -1050,7 +1061,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cobranza.planpagocuotasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.COBRANZA_FACTURA, {
               id: 'facturas',
               title: 'Facturas',
               type: MenuItemType.ITEM,
@@ -1135,6 +1146,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
+            renderByModule(SidenavModulesEnum.CONTABILIDAD_PLAN_CUENTA, {
+              id: 'plan-cuenta',
+              title: 'Plan de Cuenta',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.plancuentasNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         {
@@ -1255,26 +1272,26 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.netconnect.autorizacionOnusNav,
             }),
+            /*
             renderByModule(SidenavModulesEnum.NETCONNECT_GESTION_ONUS, {
               id: 'gestion-onus',
               title: 'Gestión de ONUs',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.netconnect.gestionOnusNav,
             }),
-            /*
             renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'estado-caidas',
               title: 'Estado de caídas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.notFound,
             }),
-            */
             renderByModule(SidenavModulesEnum.NETCONNECT_ONUS_CONFIGURADA, {
               id: 'registro-onus-configuracion',
               title: 'Registro de ONUs configuradas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.netconnect.onusConfiguradasNav,
             }),
+            */
             renderByModule(SidenavModulesEnum.NETCONNECT_VLANS, {
               id: 'vlans',
               title: 'VLANS',
@@ -1516,12 +1533,15 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.tickets.prioridadincidenciaTMNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'departamento-ticket-masivo',
-              title: 'Departamento de ticket masivo',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.tickets.departamentoTMNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.TICKETS_DEPARTAMENTO_TICKET_MASIVO,
+              {
+                id: 'departamento-ticket-masivo',
+                title: 'Departamento de ticket masivo',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.tickets.departamentoTMNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Televenta ----------------

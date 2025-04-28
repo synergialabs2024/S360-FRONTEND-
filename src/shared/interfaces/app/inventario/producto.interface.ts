@@ -35,6 +35,8 @@ export interface Producto {
   created_at?: string;
   modified_at?: string;
 
+  producto?: number;
+
   ///* fk
   iva?: number;
   modelo?: number;

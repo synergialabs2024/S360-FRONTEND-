@@ -27,11 +27,15 @@ export const useColumnsUbicacionProducto = ({
         accessorKey: 'producto__codigo',
         header: 'CÓDIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
       {
         accessorKey: 'producto__nombre',
         header: 'NOMBRE',
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
 

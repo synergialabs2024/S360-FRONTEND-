@@ -139,6 +139,18 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
+    const userFlotaId = user?.flota_data?.ubicacion_data?.id;
+
+    if (
+      userFlotaId &&
+      watchedUbicacionDestino !== userFlotaId &&
+      watchedUbicacionOrigen !== userFlotaId
+    ) {
+      return ToastWrapper.error(
+        'Debes seleccionar este usuario como flota en el origen o destino.',
+      );
+    }
+
     const mappedProductos = productosDisponibles.map(producto => ({
       producto: producto.id,
       cantidad: producto.cantidad,
@@ -174,7 +186,8 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
       if (
         prod.cantidad === undefined ||
         prod.cantidad === null ||
-        prod.cantidad === 0
+        prod.cantidad === 0 ||
+        prod.cantidad < 0
       ) {
         ToastWrapper.error(
           `El producto "${detalles.codigo}" necesita cantidad.`,
@@ -306,7 +319,13 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
         // options
         valueKey="nombre"
         actualValueKey="id"
-        options={ubicacionOrigenPaging?.data.items || []}
+        options={
+          watchedBodegaDestino === watchedBodegaOrigen
+            ? ubicacionOrigenPaging?.data.items.filter(
+                item => item.id !== watchedUbicacionDestino,
+              ) || []
+            : ubicacionOrigenPaging?.data.items || []
+        }
         isLoadingData={isLoadingUbicacionOrigen || isRefetchingUbicacionOrigen}
         disableClearable
         // errors
@@ -317,7 +336,6 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
         onChangeRawValue={value => {
           setUUIDUbicacion(value?.uuid);
           form.setValue('ubicacion_origen', Number(value?.id));
-          form.setValue('ubicacion_destino', '' as any);
           productosEnviar([]);
         }}
       />

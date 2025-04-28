@@ -88,6 +88,7 @@ const SaveServicio: React.FC<SaveServicioProps> = ({ title, servicio }) => {
         defaultValue={form.getValues().codigo}
         error={errors.codigo}
         helperText={errors.codigo?.message}
+        disabled={!!servicio?.id}
       />
       <CustomTextField
         label="Descripcion"

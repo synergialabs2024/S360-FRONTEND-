@@ -1,16 +1,17 @@
-import { useFetchSolicitudDevolucion } from '@/actions/app';
 import {
-  SolicitudDevolucion,
-  TABLE_CONSTANTS,
-  useColumnsSolicitudDevolucion,
   useTableFilter,
+  TABLE_CONSTANTS,
+  SolicitudDevolucion,
   useTableServerSideFiltering,
+  useColumnsSolicitudDevolucion,
 } from '@/shared';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
+import { useFetchSolicitudDevolucion } from '@/actions/app';
+import { useAuthStore } from '@/store/auth';
 
 export type SolicitudDevolucionStatePageProps = {
   state: string;
@@ -19,6 +20,8 @@ export type SolicitudDevolucionStatePageProps = {
 const SolicitudDevolucionStatePage: React.FC<
   SolicitudDevolucionStatePageProps
 > = ({ state }) => {
+  const user = useAuthStore(s => s.user);
+
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -46,6 +49,7 @@ const SolicitudDevolucionStatePage: React.FC<
       name: searchTerm,
       ...filterObject,
       filterByState: false,
+      user_create: user?.id,
 
       estado_solicitud: state,
     },

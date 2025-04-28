@@ -1192,6 +1192,7 @@ const PlanPagoCuotasPage = Loadable(
       import('@/app/cobranza/plan-pago-cuota/pages/tables/PlanPagoCuotasPage'),
   ),
 );
+/*
 const CreatePlanPagoCuotaPage = Loadable(
   lazy(
     () =>
@@ -1206,6 +1207,7 @@ const PlanPagoCuotaPage = Loadable(
       import('@/app/cobranza/plan-pago-cuota/pages/forms/UpdatePlanPagoCuota'),
   ),
 );
+*/
 const ClientePendienteDevolucionMainPage = Loadable(
   lazy(
     () =>
@@ -1213,6 +1215,9 @@ const ClientePendienteDevolucionMainPage = Loadable(
         '@/app/cobranza/cliente-pendiente-devolucion/pages/tables/ClientePendienteDevolucionMainPage'
       ),
   ),
+);
+const PlanCuentaPages = Loadable(
+  lazy(() => import('@/app/cobranza/plan-cuenta/pages/tables/PlanCuentaPages')),
 );
 
 ///* Operaciones ------------
@@ -1448,6 +1453,14 @@ const CreateTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
+const UpdateTransferenciaMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/transferencia-material/pages/forms/UpdateTransferenciaMaterialPage'
+      ),
+  ),
+);
 const RecepcionMaterialMainPage = Loadable(
   lazy(
     () =>
@@ -1488,6 +1501,7 @@ const UpdateModeloInventariosPages = Loadable(
       ),
   ),
 );
+/*
 const SolicitudDevolucionMainPages = Loadable(
   lazy(
     () =>
@@ -1504,6 +1518,7 @@ const CreateSolicitudDevolucionPages = Loadable(
       ),
   ),
 );
+*/
 const SolicitudTransferenciaMaterialMainPages = Loadable(
   lazy(
     () =>
@@ -1536,6 +1551,24 @@ const CreateRecepcionSolicitudTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
+/*
+const RecepcionSolDevolucionMainPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-devolucion/pages/tables/RecepcionSolDevolucionMainPages'
+      ),
+  ),
+);
+const UpdateRecepSolDevolucionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-devolucion/pages/forms/UpdateRecepSolDevolucionPage'
+      ),
+  ),
+);
+*/
 const MotivoEgresoPages = Loadable(
   lazy(
     () =>
@@ -1634,12 +1667,6 @@ const UpdateCuentaContablePage = Loadable(
       ),
   ),
 );
-const PlanCuentaPages = Loadable(
-  lazy(
-    () => import('@/app/inventario/plan-cuenta/pages/tables/PlanCuentaPages'),
-  ),
-);
-
 ///* Logistica ------------
 //TipoInstalacion
 const TipoInstalacionesPage = Loadable(
@@ -2940,6 +2967,7 @@ const AppRouter = [
             path: ROUTER_PATHS.cobranza.planpagocuotas,
             element: <PlanPagoCuotasPage />,
           },
+          /*
           {
             path: ROUTER_PATHS.cobranza.planpagocuotasCrear,
             element: <CreatePlanPagoCuotaPage />,
@@ -2948,6 +2976,7 @@ const AppRouter = [
             path: ROUTER_PATHS.cobranza.planpagocuotasEditar,
             element: <PlanPagoCuotaPage />,
           },
+          */
 
           ///* Cobranza
           {
@@ -2959,6 +2988,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.clientependientedevolucion,
             element: <ClientePendienteDevolucionMainPage />,
+          },
+
+          ///* Plan de Cuentas
+          {
+            path: ROUTER_PATHS.cobranza.plancuentas,
+            element: <PlanCuentaPages />,
           },
         ],
       },
@@ -3440,7 +3475,10 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario.transferenciaMaterialesCrear,
             element: <CreateTransferenciaMaterialPage />,
           },
-
+          {
+            path: ROUTER_PATHS.inventario.transferenciaMaterialesSolicitud,
+            element: <UpdateTransferenciaMaterialPage />,
+          },
           ///* Recepcion Material
           {
             path: ROUTER_PATHS.inventario.RecepcionMateriales,
@@ -3466,6 +3504,7 @@ const AppRouter = [
           },
 
           ///* Solicitud Devolucion
+          /*
           {
             path: ROUTER_PATHS.inventario.solicitudDevolucion,
             element: <SolicitudDevolucionMainPages />,
@@ -3474,6 +3513,7 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario.solicitudDevolucionCrear,
             element: <CreateSolicitudDevolucionPages />,
           },
+          */
 
           ///* Solicitud Transferencia Material
           {
@@ -3496,6 +3536,20 @@ const AppRouter = [
               .recepcionSolicitudTransferenciaMaterialesEditar,
             element: <CreateRecepcionSolicitudTransferenciaMaterialPage />,
           },
+
+          ///* Recepcion Solicitud Devolucion
+          /*
+          {
+            path: ROUTER_PATHS.inventario
+              .recepcionSolicitudDevolucionMateriales,
+            element: <RecepcionSolDevolucionMainPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario
+              .recepcionSolicitudDevolucionMaterialesEditar,
+            element: <UpdateRecepSolDevolucionPage />,
+          },
+          */
 
           ///* Motivo Egreso
           {
@@ -3557,12 +3611,6 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.cuentaContablesEditar,
             element: <UpdateCuentaContablePage />,
-          },
-
-          ///* Plan de Cuentas
-          {
-            path: ROUTER_PATHS.inventario.plancuentas,
-            element: <PlanCuentaPages />,
           },
         ],
       },

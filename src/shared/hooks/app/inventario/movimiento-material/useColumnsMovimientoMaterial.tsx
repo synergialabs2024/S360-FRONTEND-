@@ -21,12 +21,16 @@ export const useColumnsMovimientoMaterial = () => {
         accessorKey: 'secuencial',
         header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
         accessorKey: 'cantidad',
         header: 'CANTIDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'cantidad'),
       },
       {
@@ -52,6 +56,8 @@ export const useColumnsMovimientoMaterial = () => {
         accessorKey: 'tipo_movimiento',
         header: 'TIPO MOVIMIENTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_movimiento'),
       },
     ],
@@ -66,6 +72,8 @@ export const useColumnsMovimientoMaterial = () => {
         accessorKey: 'producto__nombre',
         header: 'PRODUCTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
       {
@@ -148,6 +156,8 @@ export const useColumnsMovimientoMaterial = () => {
         accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['user_create_data', 'razon_social']),
       },

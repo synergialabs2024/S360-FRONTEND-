@@ -43,6 +43,18 @@ export const useGetsolicitudDevolucion = (uuid: string) => {
   });
 };
 
+export const useGetsolicitudDevolucion_Transferencia = (
+  uuid: string,
+  p0: { enabled: boolean },
+) => {
+  return useQuery({
+    queryKey: [solicitudDevolucionTSQEnum.SOLICITUDDEVOLUCION, uuid],
+    queryFn: () => getsolicitudDevolucion_Transferencia(uuid),
+    retry: false,
+    enabled: p0.enabled,
+  });
+};
+
 export const useCreateSolicitudDevolucion = <T>({
   navigate,
   returnUrl,
@@ -103,7 +115,7 @@ export const useUpdatesolicitudDevolucion = <T>({
       updatesolicitudDevolucion(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [solicitudDevolucionTSQEnum.SOLICITUDDEVOLUCION],
+        queryKey: [solicitudDevolucionTSQEnum.SOLICITUDDEVOLUCIONES],
       });
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
@@ -133,7 +145,7 @@ export type CreateSolicitudDevolucionParams<T> = T;
 export type CreateSolicitudDevolucionParamsBase = Omit<
   SolicitudDevolucion,
   'id'
->;
+> & { id?: number };
 export interface UpdatesolicitudDevolucionParams<T> {
   id: number;
   data: T;
@@ -168,6 +180,9 @@ export const getsolicitudDevolucion = async (uuid: string) => {
   } catch (error) {
     handleAxiosError(error);
   }
+};
+export const getsolicitudDevolucion_Transferencia = async (uuid: string) => {
+  return await get<SolicitudDevolucion>(`/solicitud_devolicion/${uuid}`, true);
 };
 
 export const createsolicitudDevolucion = async <T>(
