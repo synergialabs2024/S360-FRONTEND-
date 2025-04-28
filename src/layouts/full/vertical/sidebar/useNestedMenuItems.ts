@@ -712,7 +712,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.TICKETS_APROBACION, {
               id: 'aprobacion-ticket-visita',
               title: 'Aprobación de Ticket visita',
               type: MenuItemType.ITEM,
@@ -1143,30 +1143,42 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconDevices,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'encuesta-asesores',
-              title: 'Encuesta Asesores',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.customerExperience.encuestaAsesoresNav,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'encuesta-totems',
-              title: 'Encuesta Totems',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.customerExperience.encuestaTotemsNav,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'encuesta-pagos',
-              title: 'Encuesta Pagos',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.customerExperience.encuestaPagosNav,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'encuesta-plantillas',
-              title: 'Encuesta Plantillas',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.customerExperience.encuestaPlantillasNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.CUSTOMEREXPERIENCE_ENCUESTA_ASESORES,
+              {
+                id: 'encuesta-asesores',
+                title: 'Encuesta Asesores',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.customerExperience.encuestaAsesoresNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.CUSTOMEREXPERIENCE_ENCUESTA_TOTEMS,
+              {
+                id: 'encuesta-totems',
+                title: 'Encuesta Totems',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.customerExperience.encuestaTotemsNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.CUSTOMEREXPERIENCE_ENCUESTA_PAGOS,
+              {
+                id: 'encuesta-pagos',
+                title: 'Encuesta Pagos',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.customerExperience.encuestaPagosNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.CUSTOMEREXPERIENCE_ENCUESTA_PLANTILLAS,
+              {
+                id: 'encuesta-plantillas',
+                title: 'Encuesta Plantillas',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.customerExperience.encuestaPlantillasNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Administracion de Red ----------------
@@ -1439,7 +1451,7 @@ export const useNestedMenu = () => {
             //   type: MenuItemType.ITEM,
             //   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
             // }),
-            renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+            renderByModule(SidenavModulesEnum.TICKETS, {
               id: 'lista-tickets',
               title: 'Tickets',
               type: MenuItemType.ITEM,
@@ -1451,13 +1463,13 @@ export const useNestedMenu = () => {
               type: MenuItemType.COLLAPSE,
               icon: IconBuildingWarehouse,
               children: [
-                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ASUNTO, {
                   id: 'asuntos',
                   title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
-                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ORIGEN, {
                   id: 'origenes',
                   title: 'Origen ticket',
                   type: MenuItemType.ITEM,
@@ -1535,18 +1547,21 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.BUZONTAREAS_ASIGNADA, {
               id: 'tareas',
               title: 'Tareas',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'clientes-suspendidos',
-              title: 'Clientes suspendidos',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignadasNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.BUZONTAREAS_CLIENTES_SUSPENDIDOS,
+              {
+                id: 'clientes-suspendidos',
+                title: 'Clientes suspendidos',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignadasNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
       ],
