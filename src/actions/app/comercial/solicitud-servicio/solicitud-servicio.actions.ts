@@ -10,6 +10,7 @@ import {
   PagingPartialParamsOnly,
   SolicitudServicio,
   SolicitudServiciosPaginatedRes,
+  SoporteTecnicoCliente,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
@@ -140,6 +141,10 @@ export type GetSolicitudServiciosParams = Partial<SolicitudServicio> &
   PagingPartialParamsOnly;
 export type CreateSolicitudServicioParams<T> = T;
 export type CreateSolicitudServicioParamsBase = Omit<SolicitudServicio, 'id'>;
+export type CreateSolicitudServicioClienteParamsBase = Omit<
+  SoporteTecnicoCliente,
+  'id'
+>;
 export interface UpdateSolicitudServicioParams<T> {
   id: number;
   data: T;

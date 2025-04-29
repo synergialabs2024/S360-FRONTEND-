@@ -14,4 +14,10 @@ export interface SoporteTecnico {
   cedula: number;
 }
 
+export interface SoporteTecnicoCliente {
+  celular: string;
+  email: string;
+  direccion_referencia: string;
+}
+
 export type SoporteTecnicoLimitData = Pick<SoporteTecnico, 'cedula'>;
