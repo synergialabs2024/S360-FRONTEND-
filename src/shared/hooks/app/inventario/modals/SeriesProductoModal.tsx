@@ -24,7 +24,6 @@ export type SeriesProductoModalProps = {
   cantidadBoolean: boolean;
   onDataChange?: (data: any[]) => void;
   tipoSerie?: boolean;
-  randomButton?: boolean;
   isIngreso?: boolean;
 };
 
@@ -42,7 +41,6 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   onDataChange,
   cantidadBoolean,
   tipoSerie = true,
-  randomButton = false,
   isIngreso = false,
 }) => {
   //* State local
@@ -248,7 +246,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         >
           CARGAR EXCEL
         </Button>
-        {randomButton ? (
+        {!isIngreso ? (
           <Button
             onClick={cargarSeries}
             startIcon={<IconArrowsShuffle2 />}
@@ -295,7 +293,7 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
         size="small"
         onClick={() => setOpen(!open)}
         style={{ cursor: 'pointer' }}
-        disabled={!Arrays.ubicacion}
+        disabled={isIngreso == false ? !Arrays.ubicacion : false}
       >
         <IconBrandCodesandbox />
       </IconButton>

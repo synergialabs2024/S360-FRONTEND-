@@ -156,7 +156,6 @@ export const useColumnsProductosDisponibles = ({
             <SeriesProductoModal
               tipoSerie={row.original.requiere_series}
               Arrays={row.original}
-              randomButton={true}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               cantidadBoolean={obtenerValor(cantidad)}
               onDataChange={newData => onChangeSerieInit(newData, row.original)}
@@ -192,7 +191,6 @@ export const useColumnsProductosDisponibles = ({
             <SeriesProductoModal
               tipoSerie={row.original.requiere_series}
               Arrays={row.original}
-              randomButton={true}
               isIngreso={true}
               modalTitle={`Serie para ${row?.original?.codigo}`}
               cantidadBoolean={obtenerValor(cantidad)}
