@@ -226,11 +226,16 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       }
     }
 
+    if (data.ubicacion_origen_data) {
+      delete data.ubicacion_origen_data;
+    }
     const preparedData = {
       ...data,
       productos: mappedProductos,
     };
-    productosEnviar([]);
+
+    console.log(preparedData);
+
     createTransferenciaMaterialMutation.mutate(preparedData);
   };
 

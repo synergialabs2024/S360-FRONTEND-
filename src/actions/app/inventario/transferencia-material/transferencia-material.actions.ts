@@ -8,6 +8,7 @@ import {
 } from '@/shared';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
+import { useProductosStore } from '@/store/app';
 import { useUiStore } from '@/store/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -53,6 +54,7 @@ export const useCreateTransferenciaMaterial = <T>({
 }: UseMutationParams) => {
   const queryClient = useQueryClient();
   const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
 
   return useMutation({
     mutationFn: (params: CreateTransferenciaMaterialParams<T>) =>
@@ -66,6 +68,7 @@ export const useCreateTransferenciaMaterial = <T>({
         ToastWrapper.success(
           customMessageToast || 'Transferencia Material creado correctamente',
         );
+      productosEnviar([]);
     },
     onError: error => {
       enableErrorNavigate &&
