@@ -8,6 +8,7 @@ import {
   PagingPartialParams,
   UseFetchEnabledParams,
   SoporteTecnicoPaginatedRes,
+  SoporteTecnicoCliente,
 } from '@/shared';
 import { useUiStore } from '@/store/ui';
 import { erpAPI } from '@/shared/axios/erp-api';
@@ -67,7 +68,7 @@ export const useCreateSoporteTecnico = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'SoporteTecnicos creado correctamente',
+          customMessageToast || 'Cliente creado correctamente',
         );
     },
     onError: error => {
@@ -107,7 +108,47 @@ export const useUpdateSoporteTecnico = <T>({
       enableNavigate && navigate && returnUrl && navigate(returnUrl);
       enableToast &&
         ToastWrapper.success(
-          customMessageToast || 'SoporteTecnicos actualizado correctamente',
+          customMessageToast || 'Cliente actualizado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const useUpdateSoporteTecnicoCliente = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: SoporteTecnicoClienteParams<T>) =>
+      updateSoporteTecnicoCliente(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [SoporteTecnicoTSQEnum.SOPORTETECNICOS],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Cliente actualizado correctamente',
         );
     },
     onError: error => {
@@ -130,6 +171,10 @@ export type GetSoporteTecnicosParams = Partial<SoporteTecnico> &
 export type CreateSoporteTecnicoParams<T> = T;
 export type CreateSoporteTecnicoParamsBase = Omit<SoporteTecnico, 'id'>;
 export interface UpdateSoporteTecnicoParams<T> {
+  id: number;
+  data: T;
+}
+export interface SoporteTecnicoClienteParams<T> {
   id: number;
   data: T;
 }
@@ -169,4 +214,18 @@ export const updateSoporteTecnico = async <T>({
   setIsGlobalLoading(true);
 
   return patch<SoporteTecnico>(`/soportetecnicos/${id}/`, data, true);
+};
+
+export const updateSoporteTecnicoCliente = async <T>({
+  id,
+  data,
+}: SoporteTecnicoClienteParams<T>) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return patch<SoporteTecnicoCliente>(
+    `/contrato/tech-support/${id}/`,
+    data,
+    true,
+  );
 };

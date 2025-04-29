@@ -1,37 +1,43 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 
 import {
+  CustomTextArea,
   ChipModelState,
   CustomFormLabel,
+  CustomTypoLabel,
+  CustomTextField,
   ImgModalComponent,
   SingleFormBoxScene,
-  CustomTextFieldNoForm,
-  CustomTypoLabel,
   CustomTypoLabelEnum,
-  CustomTextField,
-  CustomTextArea,
+  CustomNumberTextField,
+  CustomTextFieldNoForm,
 } from '@/shared/components';
 import {
   ColorChipType,
+  LineaServicio,
+  ShowPingModal,
   gridSizeMdLg1,
   gridSizeMdLg4,
   gridSizeMdLg6,
-  LineaServicio,
-  gridSizeMdLg12,
-  PermissionsEnum,
   gridSizeMdLg7,
+  gridSizeMdLg12,
   ShowTraceModal,
-  ShowPingModal,
+  PermissionsEnum,
+  soporteTecnicoFormSchema,
   ShowEquipoMaterialUtilizadosModal,
 } from '@/shared';
+import {
+  useUpdateSolicitudServicio,
+  CreateSolicitudServicioClienteParamsBase,
+} from '@/actions/app';
 import { useRubroStore } from '@/store/app/rubros';
 import SoporteTecnicoTitle from './SoporteTecnicoTitle';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlSoporteTecnico } from '../../../pages/tables/SoporteTecnicoPages';
-import { CreateSolicitudServicioParamsBase } from '@/actions/app';
 
 export interface SaveSoporteTecnicoProps {
   soporte_tecnico?: LineaServicio & {
@@ -39,7 +45,7 @@ export interface SaveSoporteTecnicoProps {
   };
 }
 
-type SaveFormData = CreateSolicitudServicioParamsBase & {};
+type SaveFormData = CreateSolicitudServicioClienteParamsBase & {};
 
 type TipoUtilizado = 'equipo' | 'material';
 
@@ -50,7 +56,13 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
 
   ///* form
   const form = useForm<SaveFormData>({
-    defaultValues: {},
+    resolver: yupResolver(soporteTecnicoFormSchema) as any,
+    defaultValues: {
+      celular: soporte_tecnico?.solicitud_servicio_data?.celular,
+      direccion_referencia:
+        soporte_tecnico?.solicitud_servicio_data?.direccion_referencia,
+      email: soporte_tecnico?.solicitud_servicio_data?.email,
+    },
   });
 
   const {
@@ -77,10 +89,22 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
   ///* global state ----------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
 
+  const updateClienteMutation =
+    useUpdateSolicitudServicio<CreateSolicitudServicioClienteParamsBase>({
+      navigate,
+      returnUrl: returnUrlSoporteTecnico,
+    });
+
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    console.log(data);
+    if (soporte_tecnico?.solicitud_servicio_data?.id) {
+      updateClienteMutation.mutate({
+        id: soporte_tecnico.solicitud_servicio_data.id!,
+        data,
+      });
+      return;
+    }
   };
 
   ///* effects ----------------
@@ -347,17 +371,17 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         required={false}
         disabled
       />
-      <CustomTextField
+      <CustomNumberTextField
         label="Telefono"
         name="celular"
-        type="number"
         control={form.control}
         defaultValue={soporte_tecnico?.solicitud_servicio_data?.celular}
         error={errors.celular}
         helperText={errors.celular?.message}
         size={gridSizeMdLg6}
         required={false}
-        ignoreTransform
+        min={0}
+        max={20}
       />
       <CustomTextField
         label="Email"
