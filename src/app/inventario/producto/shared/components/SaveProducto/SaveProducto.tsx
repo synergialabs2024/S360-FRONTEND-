@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import {
   CreateProductoParamsBase,
@@ -13,7 +13,7 @@ import {
   useUpdateProducto,
 } from '@/actions/app';
 import {
-  PrecioProducto,
+  CodigoModeloProductoEnumChoice,
   TIPO_PRODUCTO_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
@@ -29,6 +29,7 @@ import {
 import {
   gridSizeMdLg12,
   gridSizeMdLg2,
+  gridSizeMdLg4,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
 import {
@@ -36,6 +37,7 @@ import {
   CuentaContable_Producto,
   IVA,
   ModeloInventario,
+  PrecioProducto,
   Producto,
 } from '@/shared/interfaces';
 import { getKeysFormErrorsMessage, productoFormSchema } from '@/shared/utils';
@@ -51,6 +53,9 @@ export interface SaveProductoProps {
 type SaveFormData = CreateProductoParamsBase & {};
 
 const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
+  const [isPreconectizada, setIsPreconectizada] = useState<boolean>(false);
+  const [isValidMetraje, setIsValidMetraje] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   ///* form ---------------------
@@ -132,10 +137,15 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     returnUrl: returnUrlProductosPage,
   });
 
+  const watchedMetrajeRelativo = form.watch('metraje_relativo');
+
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-
+    if (isPreconectizada && watchedMetrajeRelativo == '') {
+      setIsValidMetraje(true);
+      return ToastWrapper.error('El campo Metraje Relativo es obligatorio');
+    }
     ///* upd
     if (producto?.id) {
       updateProductoMutation.mutate({
@@ -173,7 +183,6 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
     isLoadingCategorias ||
     isRefetchingCategorias;
   useLoaders(isCustomLoading);
-
   return (
     <SingleFormBoxScene
       titlePage={title}
@@ -237,7 +246,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.tipo}
         helperText={errors.tipo?.message}
-        gridSize={gridSizeMdLg6}
+        gridSize={gridSizeMdLg4}
       />
       <CustomAutocomplete<CategoriaProducto>
         label="Categoría"
@@ -250,7 +259,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.categoria}
         helperText={errors.categoria?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
 
       <CustomAutocomplete<IVA>
@@ -266,7 +275,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.iva}
         helperText={errors.iva?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
       />
       <CustomAutocomplete<ModeloInventario>
         label="Modelo"
@@ -283,8 +292,43 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         control={control}
         error={errors.modelo}
         helperText={errors.modelo?.message}
-        size={gridSizeMdLg6}
+        size={isPreconectizada ? gridSizeMdLg6 : gridSizeMdLg12}
+        onChangeRawValue={row => {
+          setValue('metraje_relativo', '');
+          if (
+            row.codigo === CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA
+          ) {
+            setIsPreconectizada(true);
+          } else {
+            setIsPreconectizada(false);
+          }
+        }}
       />
+      {isPreconectizada ? (
+        <CustomTextField
+          label="Metraje Relativo"
+          name="metraje_relativo"
+          type="number"
+          control={form.control}
+          defaultValue={form.getValues().metraje_relativo}
+          error={
+            isValidMetraje
+              ? {
+                type: 'required',
+                message: 'El campo modelo es requerido',
+                ref: HTMLInputElement,
+              }
+              : undefined
+          }
+          helperText={
+            isValidMetraje ? 'El campo modelo es requerido' : undefined
+          }
+          size={gridSizeMdLg6}
+          required={false}
+          ignoreTransform
+          onChangeValue={() => setIsValidMetraje(false)}
+        />
+      ) : null}
       <CustomCuentaContable<CuentaContable_Producto>
         label="Cuenta Contable"
         name="cuentas_contables"
