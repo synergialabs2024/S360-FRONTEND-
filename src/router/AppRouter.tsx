@@ -1219,6 +1219,14 @@ const ClientePendienteDevolucionMainPage = Loadable(
 const PlanCuentaPages = Loadable(
   lazy(() => import('@/app/cobranza/plan-cuenta/pages/tables/PlanCuentaPages')),
 );
+const PagoOficinaVirtualPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/pago-oficina-virtual/pages/tables/PagoOficinaVirtualPages'
+      ),
+  ),
+);
 
 ///* Operaciones ------------
 // const AgendamientosMainPage = Loadable(
@@ -2994,6 +3002,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.plancuentas,
             element: <PlanCuentaPages />,
+          },
+
+          ///* Plan de Cuentas
+          {
+            path: ROUTER_PATHS.cobranza.pagooficinavirtual,
+            element: <PagoOficinaVirtualPages />,
           },
         ],
       },

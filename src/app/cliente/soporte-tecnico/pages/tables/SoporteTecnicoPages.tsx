@@ -74,7 +74,7 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por identificación"
       />
 
       <CustomTable<Cliente>

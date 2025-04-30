@@ -1152,6 +1152,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cobranza.plancuentasNav,
             }),
+            renderByModule(SidenavModulesEnum.COBRANZA_PAGO_OFICINA_VIRTUAL, {
+              id: 'pago-oficina-virtual',
+              title: 'Pago Oficina Virtual',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.cobranza.pagooficinavirtualNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         {
