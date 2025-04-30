@@ -16,6 +16,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
@@ -31,6 +33,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'razon_social',
         header: 'NOMBRES',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
@@ -52,6 +56,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'numero_contrato__first_line',
         header: 'NUMERO CONTRATO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
@@ -79,6 +85,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'tipo_identificacion',
         header: 'TIPO IDENT.',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) =>
           emptyCellOneLevel(row, 'tipo_identificacion'),
       },
@@ -92,6 +100,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'tipo_servicio',
         header: 'TIPO SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) =>
           emptyCellOneLevel(row, 'tipo_servicio'),
       },
@@ -99,6 +109,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'tipo_plan',
         header: 'TIPO PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => emptyCellOneLevel(row, 'tipo_plan'),
       },
     ],
@@ -111,6 +123,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'linea_servicio__identificacion_pago',
         header: 'IDENTIFICACION DE PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
@@ -125,6 +139,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'linea_servicio__tipo_plan',
         header: 'NOMBRE PLAN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
@@ -141,6 +157,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'linea_servicio__direccion',
         header: 'DIRECCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) => {
           const original = row?.original;
           const firstLine = original?.linea_servicio_data?.[0];
@@ -192,6 +210,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) =>
           emptyCellOneLevel(row, 'identificacion'),
       },
@@ -199,6 +219,8 @@ export const useColumnsClientes = () => {
         accessorKey: 'razon_social',
         header: 'NOMBRES',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }: MRTClienteType) =>
           emptyCellOneLevel(row, 'razon_social'),
       },

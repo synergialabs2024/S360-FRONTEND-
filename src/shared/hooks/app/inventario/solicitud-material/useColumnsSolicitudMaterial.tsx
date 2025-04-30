@@ -20,6 +20,8 @@ export const useColumnsSolicitudMaterial = () => {
         accessorKey: 'secuencial',
         header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
@@ -62,18 +64,24 @@ export const useColumnsSolicitudMaterial = () => {
         accessorKey: 'bodega__nombre',
         header: 'BODEGA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
       },
       {
         accessorKey: 'ubicacion__nombre',
         header: 'UBICACIÓN',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
       },
       {
         accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['user_create_data', 'razon_social']),
       },
