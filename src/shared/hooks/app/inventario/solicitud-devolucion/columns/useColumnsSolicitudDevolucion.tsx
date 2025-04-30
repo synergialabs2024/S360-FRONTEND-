@@ -20,6 +20,8 @@ export const useColumnsSolicitudDevolucion = () => {
         accessorKey: 'secuencial',
         header: 'NUMERO REGISTRO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial'),
       },
       {
@@ -62,6 +64,8 @@ export const useColumnsSolicitudDevolucion = () => {
         accessorKey: 'bodega__nombre',
         header: 'BODEGA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
       },
       {
@@ -74,6 +78,8 @@ export const useColumnsSolicitudDevolucion = () => {
         accessorKey: 'ingreso_material__secuencial',
         header: 'INGRESO MATERIAL',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['ingreso_material_data', 'secuencial']),
       },
@@ -81,6 +87,8 @@ export const useColumnsSolicitudDevolucion = () => {
         accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) =>
           emptyCellNested(row, ['user_create_data', 'razon_social']),
       },

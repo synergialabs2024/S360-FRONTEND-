@@ -85,20 +85,25 @@ export const useColumnsIngresosDisponibles = ({
       {
         accessorKey: 'categoria_data__name',
         header: 'CATEGORIA',
-        enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['categoria_data', 'nombre']),
       },
       {
         accessorKey: 'codigo',
         header: 'CÓDIGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
       },
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'descripcion'),
       },
     ],
@@ -148,6 +153,8 @@ export const useColumnsIngresosDisponibles = ({
         accessorKey: 'cantidad_pedida',
         header: 'CANTIDAD PEDIDA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => {
           return (
             <TextField
@@ -163,6 +170,8 @@ export const useColumnsIngresosDisponibles = ({
         accessorKey: 'cantidad',
         header: 'CANTIDAD APROBADA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
         Cell: ({ row }) => {
           return (
             <TextField
