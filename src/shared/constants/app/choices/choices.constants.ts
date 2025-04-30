@@ -15,6 +15,10 @@ export const IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE = [
     label: 'CEDULA',
     value: IdentificationTypeEnumChoice.CEDULA,
   },
+  {
+    label: 'RUC',
+    value: IdentificationTypeEnumChoice.RUC,
+  },
 ];
 export const CountryISOCodeEnumChoice = {
   ECUADOR: 'EC',
@@ -1345,6 +1349,17 @@ export enum YesNoEnumChoice {
 }
 
 export const YES_NO_ARRAY_CHOICES = [YesNoEnumChoice.SI, YesNoEnumChoice.NO];
+
+export const TRUE_FALSE_TYPE_ARRAY_CHOICES = [
+  {
+    label: 'SI',
+    value: true,
+  },
+  {
+    label: 'NO',
+    value: false,
+  },
+];
 
 export enum canalReferenciaMantenedoresEnumChoice {
   RRSS = 'RRSS',

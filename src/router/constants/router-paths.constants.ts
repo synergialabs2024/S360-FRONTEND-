@@ -429,6 +429,10 @@ export const ROUTER_PATHS = {
     ///* Plan Cuenta
     plancuentas: 'plan-cuenta',
     plancuentasNav: '/cobranza/plan-cuenta',
+
+    ///* Pago Oficina Virtual
+    pagooficinavirtual: 'pago-oficina-virtual',
+    pagooficinavirtualNav: '/cobranza/pago-oficina-virtual',
   },
 
   /////* Comercial ----------------

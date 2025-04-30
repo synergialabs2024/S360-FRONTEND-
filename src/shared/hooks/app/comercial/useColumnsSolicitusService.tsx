@@ -4,7 +4,9 @@ import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
 import {
+  IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
   SalesStatesActionsEnumChoice,
+  TRUE_FALSE_TYPE_ARRAY_CHOICES,
   UserRolesEnumChoice,
 } from '@/shared/constants';
 import { TABLE_CONSTANTS } from '@/shared/constants/ui';
@@ -56,8 +58,9 @@ export const useColumnsSolicitusService = (
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) =>
-          emptyCellOneLevel(row, 'tipo_identificacion'),
+        filterVariant: 'select',
+        filterSelectOptions: IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_identificacion'),
       },
       {
         accessorKey: 'razon_social',
@@ -110,15 +113,15 @@ export const useColumnsSolicitusService = (
                 emptyCellOneLevel(row, 'coordenadas'),
             },
           ]),
-
       {
         accessorKey: 'es_discapacitado',
         header: 'ES DISCAPACITADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatBooleanCell(row, 'es_discapacitado'),
+        filterVariant: 'select',
+        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        Cell: ({ row }) => formatBooleanCell(row, 'es_discapacitado'),
       },
       {
         accessorKey: 'es_tercera_edad',
@@ -126,8 +129,9 @@ export const useColumnsSolicitusService = (
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatBooleanCell(row, 'es_tercera_edad'),
+        filterVariant: 'select',
+        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        Cell: ({ row }) => formatBooleanCell(row, 'es_tercera_edad'),
       },
       {
         accessorKey: 'es_cliente',
@@ -135,8 +139,9 @@ export const useColumnsSolicitusService = (
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatBooleanCell(row, 'es_cliente'),
+        filterVariant: 'select',
+        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        Cell: ({ row }) => formatBooleanCell(row, 'es_cliente'),
       },
       {
         accessorKey: 'tiene_cobertura',
@@ -144,10 +149,10 @@ export const useColumnsSolicitusService = (
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }: MRTSServiceType) =>
-          formatBooleanCell(row, 'tiene_cobertura'),
+        filterVariant: 'select',
+        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        Cell: ({ row }) => formatBooleanCell(row, 'tiene_cobertura'),
       },
-
       {
         accessorKey: 'codigo',
         header: 'CODIGO',

@@ -42,7 +42,7 @@ const PreventaEsperaAgendaPage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      solicitud_servicio__identificacion: searchTerm,
       ...filterObject,
       // estado_preventa: EstadoPreventaEnumChoice.ESPERA,
       // contrato_aceptado: true,
