@@ -2,17 +2,14 @@ import {
   EstadoTareaEnumChoice,
   LineaServicio,
   Rubro,
-  useColumnsRubrosCliente,
   useLoaders,
-  useTableFilter,
-  useTableServerSideFiltering,
 } from '@/shared';
 import { CustomTable } from '@/shared/components';
-import { useFetchRubros } from '@/actions/app';
 import { Grid } from '@mui/material';
-import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoReversoModal';
+import axios from 'axios';
+import { useFetchTransaccions } from '@/actions/app';
 
 export type ClientesReversoByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -23,152 +20,195 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   serviceLine,
 }) => {
   const [open, setOpen] = useState(false);
+  const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
+  const [transaccionFiltrada, setTransaccionFiltrada] = useState<any>(null); // Nueva variable de estado
 
-  // const navigate = useNavigate();
-
-  ///* global state -------------------------
-
-  ///* table -------------------------
-  // server side filters - colums table
-  const { filterObject, columnFilters, setColumnFilters } =
-    useTableServerSideFiltering();
   const {
-    // globalFilter,
-    pagination,
-    searchTerm,
-    // onChangeFilter,
-    setPagination,
-  } = useTableFilter();
-  const { pageIndex, pageSize } = pagination;
-
-  ///* fetch data
-  const {
-    data: rubrosPagingRes,
-    isLoading: isRubrosLoading,
-    isRefetching: isRubrosRefetching,
-  } = useFetchRubros({
-    enabled: !!serviceLine?.uuid,
+    data: TransaccionsPagingRes,
+    isLoading: isTransaccionsLoading,
+    isRefetching: isTransaccionsRefetching,
+  } = useFetchTransaccions({
     params: {
-      page: pageIndex + 1,
-      page_size: pageSize,
-      ...filterObject,
-
-      cliente: serviceLine?.cliente,
-      linea_servicio: serviceLine?.id,
-
-      concepto: searchTerm,
-      estado_rubro: 'PAGADO',
+      cliente: serviceLine?.cliente_data?.id!,
     },
   });
 
-  const isCustomLoading = isRubrosLoading || isRubrosRefetching;
-  useLoaders(isCustomLoading);
-
-  ///* mutations -------------------------
-  // const createPagoManual = useGenericPOST<any, any>(
-  //   '/nuevo-pago/',
-  //   RubroTSQEnum.RUBROS,
-  //   {
-  //     customMessageToast: 'Rubro de servicio pagado correctamente',
-  //     customOnSuccess() {},
-  //     customOnSettled() {
-  //       setConfirmDialogIsOpen(false);
-  //     },
-  //   },
-  // );
-
-  const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
-
-  ///* handlers ---------------------
-  const onEdit = (rubro: Rubro) => {
-    setSelectedRubro(rubro);
-    const fechaTransaccion = dayjs().format('YYYYMMDD');
-    const partesContrato =
-      rubro.contrato_data?.numero_contrato?.split('-') || [];
-    const linea = partesContrato[1] || 'L1'; // Valor por defecto 'L2' si no se encuentra
-    console.log('linea', linea);
-    console.log('fechaTransaccion', fechaTransaccion);
-    console.log('rubro', rubro);
-    setOpen(true);
-    // setConfirmDialog({
-    //   isOpen: true,
-    //   title: 'Aplicar pago manual',
-    //   subtitle: '¿Está seguro que desea realizar el pago manual?',
-    //   onConfirm: () => {
-    //     createPagoManual.mutate({
-    //       contrapartida: rubro.cliente_data?.identificacion,
-    //       linea: linea,
-    //       deuda: rubro.valor_total,
-    //       canalPago: 'WEB',
-    //       fechaTransaccion: fechaTransaccion,
-    //       ifi: 'S360',
-    //     });
-    //     setConfirmDialogIsOpen(false);
-    //     // navigate(`${returnUrlClientesSuspendidosAsignadas}/${firstLine}`);
-    //   },
-    // });
+  const fetchAuthToken = async () => {
+    try {
+      const response = await axios.post(
+        'http://192.168.10.107/api/v1/oauth/token/',
+        {
+          client_id: 'admin',
+          client_secret: 'admin',
+          grant_type: 'client_credentials',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error de Axios:', error.response?.data || error.message);
+      }
+      throw error;
+    }
   };
 
-  ///* columns -------------------------
-  const { columnsRubrosClientView } = useColumnsRubrosCliente();
+  const fetchTransacciones = async (
+    accessToken: string,
+    contrapartida: string,
+  ) => {
+    console.log('contrapartida', contrapartida);
+    try {
+      const response = await axios.get(
+        `http://192.168.10.107/api/v1/transaccion/?counterpart=${contrapartida}&reversado=false`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error de Axios:', error.response?.data || error.message);
+      }
+      throw error;
+    }
+  };
+
+  const [transaccionesData, setTransaccionesData] = useState<any[]>([]);
+
+  // Columnas de la tabla
+  const columns = [
+    {
+      accessorKey: 'codigo',
+      header: 'Código Transacción',
+    },
+    {
+      accessorKey: 'service_code',
+      header: 'Línea',
+    },
+    {
+      accessorKey: 'monto',
+      header: 'Monto',
+      cell: (info: any) => `$${info.getValue()}`,
+    },
+    {
+      accessorKey: 'tipo_transaccion',
+      header: 'Tipo',
+    },
+    {
+      accessorKey: 'estado_transaccion',
+      header: 'Estado',
+      cell: (info: any) => (
+        <span
+          style={{
+            color: info.getValue() === 'COMPLETADO' ? 'green' : 'orange',
+            fontWeight: 'bold',
+          }}
+        >
+          {info.getValue()}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'payment_date',
+      header: 'Fecha Pago',
+      cell: (info: any) => new Date(info.getValue()).toLocaleDateString(),
+    },
+    {
+      accessorKey: 'numeroAutorizacion',
+      header: 'N° Autorización',
+    },
+    {
+      accessorKey: 'reversado',
+      header: 'Reversado',
+      cell: (info: any) => (info.getValue() ? 'Sí' : 'No'),
+    },
+  ];
+
+  // Handler para editar
+  const onEdit = (rowData: any) => {
+    setSelectedRubro(rowData);
+    setOpen(true);
+  };
+
+  // 3. Modifica el useEffect para guardar los datos
+  useEffect(() => {
+    const loadData = async () => {
+      if (!serviceLine?.cliente_data?.identificacion) return;
+
+      try {
+        const tokenData = await fetchAuthToken();
+        const transacciones = await fetchTransacciones(
+          tokenData.access_token,
+          serviceLine.cliente_data.identificacion,
+        );
+
+        // Filtrar solo transacciones completadas
+        const transaccionesCompletadas = transacciones.data?.data || [];
+
+        setTransaccionesData(transaccionesCompletadas);
+
+        // Extraer el numeroAutorizacion de la primera transacción (si existe)
+        if (transaccionesCompletadas.length > 0) {
+          const numeroAutorizacion =
+            transaccionesCompletadas[0].numeroAutorizacion;
+
+          // Filtrar TransaccionsPagingRes para encontrar la transacción con el mismo numero_transaccion
+          if (TransaccionsPagingRes?.data?.items) {
+            const transaccionEncontrada = TransaccionsPagingRes.data.items.find(
+              (item: any) => item.numero_transaccion === numeroAutorizacion,
+            );
+
+            if (transaccionEncontrada) {
+              setTransaccionFiltrada(transaccionEncontrada);
+              console.log('Transacción filtrada:', transaccionEncontrada);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error al cargar transacciones:', error);
+      }
+    };
+    loadData();
+  }, [serviceLine, TransaccionsPagingRes]);
+
+  const isCustomLoading = isTransaccionsLoading || isTransaccionsRefetching;
+  useLoaders(isCustomLoading);
 
   return (
     <>
       <Grid item container xs={12}>
-        {/* ================= table ================= */}
         <Grid item xs={12}>
-          <CustomTable<Rubro>
-            columns={columnsRubrosClientView}
-            data={rubrosPagingRes?.data?.items || []}
-            isLoading={isRubrosLoading}
-            isRefetching={isRubrosRefetching}
-            // // filters - server side
-            enableManualFiltering={true}
-            columnFilters={columnFilters}
-            onColumnFiltersChange={setColumnFilters}
-            // // search
+          <CustomTable
+            columns={columns}
+            data={transaccionesData}
+            isLoading={isCustomLoading}
+            isRefetching={false}
+            enableManualFiltering={false}
             enableGlobalFilter={false}
-            // // pagination
-            pagination={pagination}
-            onPaging={setPagination}
-            rowCount={rubrosPagingRes?.data?.meta?.count}
-            // // actions
             enableActionsColumn={true}
-            // crud
-            editIconToolTipTitle="Gestionar"
-            canEdit={true}
+            editIconToolTipTitle="Reversar Pago"
+            canEdit={true} // Solo permite editar si hay un rubro
             onEdit={onEdit}
             arrowIcon
             showCustomButtonsSpaceEnd={true}
-            canDelete={false}
           />
         </Grid>
 
-        {/* -------------- modals -------------- */}
         <ClienteInfoPagoManualModal
           open={open}
           onClose={() => setOpen(false)}
           rubro={selectedRubro!}
+          serviceLine={serviceLine}
+          transaccionesData={transaccionesData}
+          transaccionFiltrada={transaccionFiltrada}
         />
-
-        {/* <ScrollableDialogProps
-          title="Editar Rubro de Servicio"
-          open={open}
-          onClose={handleClose}
-          minWidth="81%"
-          // confirm --------
-          onConfirm={form.handleSubmit(onSave, errors => {
-            const keys = getKeysFormErrorsMessage(errors);
-            ToastWrapper.error(`Campos requeridos: ${keys}`);
-          })}
-          confirmVariantBtn="outlined"
-          confirmTextBtn="Guardar"
-          // // content --------
-          contentNode={
-            <>
-            </>
-          }
-        /> */}
       </Grid>
     </>
   );

@@ -20,7 +20,7 @@ import { useUiConfirmModalStore } from '@/store/ui';
 import { useNavigate } from 'react-router';
 import { BuzonTarea } from '@/shared/interfaces/app/cartera/buzon-tareas';
 import { useGenericPATCH } from '@/actions/shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TareaAsignPendienteTableBtns from '../../shared/components/table/TareaAsignPendienteTableBtns';
 import { useAuthStore } from '@/store/auth';
 
@@ -111,6 +111,11 @@ const TareasByStatePage: React.FC<TareasByStatePageProps> = ({ state }) => {
       },
     });
   };
+
+  useEffect(() => {
+    console.log('user', user);
+    console.log('user?.departamento', user?.departamento);
+  });
 
   return (
     <GridTableTabsContainerOnly>

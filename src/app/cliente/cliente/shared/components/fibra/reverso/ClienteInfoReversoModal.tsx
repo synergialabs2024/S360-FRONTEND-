@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
-import { formatDate, Rubro } from '@/shared';
+import { LineaServicio, Rubro, useLoaders } from '@/shared';
 import {
   CustomTextFieldNoForm,
   ScrollableDialogProps,
@@ -10,11 +10,16 @@ import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
+import { useEffect } from 'react';
+import { useGetTransaccion } from '@/actions/app';
 
 export type ClienteInfoReversoModalProps = {
   open: boolean;
   onClose: () => void;
-  rubro?: Rubro;
+  rubro?: any;
+  serviceLine: LineaServicio;
+  transaccionesData: any;
+  transaccionFiltrada: any;
 };
 
 export type RubrosClienteFormData = Partial<Rubro> & {
@@ -28,7 +33,15 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   open,
   onClose,
   rubro,
+  serviceLine,
+  transaccionesData,
+  transaccionFiltrada,
 }) => {
+  const {
+    data: transactionPagingRes,
+    isLoading: isTransactionLoading,
+    isRefetching: isTransactionRefetching,
+  } = useGetTransaccion(serviceLine?.cliente_data?.identificacion.toString()!);
   ///* global state --------------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
   const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
@@ -39,20 +52,22 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   });
   ///* mutations --------------------------
   const createReverso = async (accessToken: string) => {
+    console.log('transactionPagingRes', transactionPagingRes);
+    console.log(
+      'transactionPagingRes?.data?.id_switch',
+      transactionPagingRes?.data?.id_switch,
+    );
     const fechaTransaccion = dayjs().format('YYYYMMDD');
-    const partesContrato =
-      rubro?.contrato_data?.numero_contrato?.split('-') || [];
-    const linea = partesContrato[1] || 'L1';
     try {
       const response = await axios.post(
         'http://192.168.10.107/api/v1/nuevo-reverso/',
         {
-          contrapartida: rubro?.cliente_data?.identificacion,
-          linea: linea,
-          deuda: rubro?.valor_total,
-          canalPago: 'WEB',
+          contrapartida: serviceLine?.cliente_data?.identificacion,
+          linea: rubro?.service_code,
+          idTransaccion: transaccionFiltrada?.id_switch,
+          numeroAutorizacion: 'S000000019',
+          valorPagado: rubro?.monto,
           fechaTransaccion: fechaTransaccion,
-          ifi: '360',
         },
         {
           headers: {
@@ -101,6 +116,11 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
     clearAllRubroStore();
     clearAllItemsStore();
   };
+
+  useEffect(() => {}, [rubro, serviceLine, transaccionesData]);
+
+  const isCustomLoading = isTransactionLoading || isTransactionRefetching;
+  useLoaders(isCustomLoading);
 
   return (
     <>
@@ -163,90 +183,36 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
               mb={2}
             >
               <CustomTextFieldNoForm
-                label="RAZON SOCIAL"
-                value={rubro?.cliente_data?.razon_social}
+                label="LINEA"
+                value={rubro?.service_code}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="IDENTIFICACION"
-                value={rubro?.cliente_data?.identificacion}
+                label="NUMERO AUDITORIA"
+                value={rubro?.audit_number}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="NUMERO CONTRATO"
-                value={rubro?.contrato_data?.numero_contrato}
+                label="NUMERO AUTORIZACION"
+                value={rubro?.numeroAutorizacion}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="TIPO"
-                value={rubro?.tipo_rubro}
+                label="FECHA PAGO"
+                value={rubro?.payment_date}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="EMISION"
-                value={
-                  rubro?.fecha_emision ? formatDate(rubro?.fecha_emision) : ''
-                }
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="VENCIMIENTO"
-                value={
-                  rubro?.fecha_vencimiento
-                    ? formatDate(rubro?.fecha_vencimiento)
-                    : ''
-                }
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="NUM REFERENCIA"
-                value={rubro?.numero_referencia}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="NUM RUBRO"
-                value={rubro?.numero_rubro}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="CONCEPTO"
-                value={rubro?.concepto}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="SUBTOTAL"
-                value={rubro?.subtotal}
-                required={false}
-                disabled
-              />
-              <CustomTextFieldNoForm
-                label="TAXES"
-                value={rubro?.valor_taxes}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="VALOR TOTAL A PAGAR"
-                value={rubro?.valor_total}
+                label="VALOR TOTAL PAGADO"
+                value={rubro?.monto}
                 required={false}
                 disabled
               />
