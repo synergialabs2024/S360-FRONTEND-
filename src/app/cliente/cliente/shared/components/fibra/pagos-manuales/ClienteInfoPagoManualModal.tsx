@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
-import { formatDate, Rubro } from '@/shared';
 import {
   CustomTextFieldNoForm,
   ScrollableDialogProps,
@@ -10,14 +9,17 @@ import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
+import { LineaServicio } from '@/shared';
+import { useEffect } from 'react';
 
 export type ClienteInfoPagoManualModalProps = {
   open: boolean;
   onClose: () => void;
-  rubro?: Rubro;
+  rubro?: any;
+  serviceLine: LineaServicio;
 };
 
-export type RubrosClienteFormData = Partial<Rubro> & {
+export type RubrosClienteFormData = Partial<any> & {
   // helpers to fetch items ------------
   bodega?: number;
   ubicacion?: number;
@@ -28,6 +30,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   open,
   onClose,
   rubro,
+  serviceLine,
 }) => {
   ///* global state --------------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
@@ -40,18 +43,16 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   ///* mutations --------------------------
   const createPagoManual = async (accessToken: string) => {
     const fechaTransaccion = dayjs().format('YYYYMMDD');
-    const partesContrato =
-      rubro?.contrato_data?.numero_contrato?.split('-') || [];
-    const linea = partesContrato[1] || 'L1';
     try {
       const response = await axios.post(
         'http://192.168.10.107/api/v1/nuevo-pago/',
         {
-          contrapartida: rubro?.cliente_data?.identificacion,
-          linea: linea,
-          deuda: rubro?.valor_total,
+          contrapartida: serviceLine?.cliente_data?.identificacion,
+          linea: rubro?.linea,
+          deuda: rubro?.deuda,
           canalPago: 'WEB',
           fechaTransaccion: fechaTransaccion,
+          numeroAutorizacion: 'S0000000020',
           ifi: '360',
         },
         {
@@ -71,7 +72,6 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   };
 
   const fetchAuthToken = async () => {
-    console.log('Entra');
     try {
       const response = await axios.post(
         'http://192.168.10.107/api/v1/oauth/token/',
@@ -102,6 +102,9 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
     clearAllItemsStore();
   };
 
+  useEffect(() => {
+    console.log('serviceLine', serviceLine);
+  }, []);
   return (
     <>
       <ScrollableDialogProps
@@ -118,10 +121,8 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
 
           try {
             const tokenData = await fetchAuthToken();
-            console.log('Token data:', tokenData);
 
-            const pagoManual = await createPagoManual(tokenData.access_token);
-            console.log('pagoManual:', pagoManual);
+            await createPagoManual(tokenData.access_token);
 
             // Aquí puedes continuar con el resto de tu lógica usando el token
             /* createPagoManual.mutate({
@@ -163,89 +164,28 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
             >
               <CustomTextFieldNoForm
                 label="RAZON SOCIAL"
-                value={rubro?.cliente_data?.razon_social}
+                value={rubro?.cliente}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="IDENTIFICACION"
-                value={rubro?.cliente_data?.identificacion}
+                label="LINEA"
+                value={rubro?.linea}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="NUMERO CONTRATO"
-                value={rubro?.contrato_data?.numero_contrato}
+                label="DEUDA"
+                value={rubro?.deuda}
                 required={false}
                 disabled
               />
 
               <CustomTextFieldNoForm
-                label="TIPO"
-                value={rubro?.tipo_rubro}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="EMISION"
-                value={
-                  rubro?.fecha_emision ? formatDate(rubro?.fecha_emision) : ''
-                }
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="VENCIMIENTO"
-                value={
-                  rubro?.fecha_vencimiento
-                    ? formatDate(rubro?.fecha_vencimiento)
-                    : ''
-                }
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="NUM REFERENCIA"
-                value={rubro?.numero_referencia}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="NUM RUBRO"
-                value={rubro?.numero_rubro}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="CONCEPTO"
-                value={rubro?.concepto}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="SUBTOTAL"
-                value={rubro?.subtotal}
-                required={false}
-                disabled
-              />
-              <CustomTextFieldNoForm
-                label="TAXES"
-                value={rubro?.valor_taxes}
-                required={false}
-                disabled
-              />
-
-              <CustomTextFieldNoForm
-                label="VALOR TOTAL A PAGAR"
-                value={rubro?.valor_total}
+                label="DIRECCION"
+                value={rubro?.direccion}
                 required={false}
                 disabled
               />

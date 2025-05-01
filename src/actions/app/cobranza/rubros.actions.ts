@@ -31,6 +31,14 @@ export const useFetchRubros = ({
   });
 };
 
+export const useFetchRubrosPagados = (identificacion: string) => {
+  return useQuery({
+    queryKey: [RubroTSQEnum.RUBRO, identificacion],
+    queryFn: () => getRubrosPagados(identificacion),
+    retry: false,
+  });
+};
+
 export const useGetRubro = (uuid: string) => {
   return useQuery({
     queryKey: [RubroTSQEnum.RUBRO, uuid],
@@ -134,6 +142,17 @@ export const getRubros = async (params?: GetRubrosParams) => {
 export const getRubro = async (uuid: string) => {
   try {
     return await get<Rubro>(`/rubro/${uuid}`, true);
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const getRubrosPagados = async (identificacion: string) => {
+  try {
+    return await get<Rubro>(
+      `/rubro/identificacion/pagados/${identificacion}`,
+      true,
+    );
   } catch (error) {
     handleAxiosError(error);
   }

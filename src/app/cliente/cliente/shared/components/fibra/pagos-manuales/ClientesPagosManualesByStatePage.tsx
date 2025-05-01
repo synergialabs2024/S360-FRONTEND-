@@ -1,18 +1,9 @@
-import {
-  EstadoTareaEnumChoice,
-  LineaServicio,
-  Rubro,
-  useColumnsRubrosCliente,
-  useLoaders,
-  useTableFilter,
-  useTableServerSideFiltering,
-} from '@/shared';
+import { EstadoTareaEnumChoice, LineaServicio, Rubro } from '@/shared';
 import { CustomTable } from '@/shared/components';
-import { useFetchRubros } from '@/actions/app';
 import { Grid } from '@mui/material';
-import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoPagoManualModal';
+import axios from 'axios';
 
 export type ClientesPagosManualesByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -30,39 +21,6 @@ const ClientesPagosManualesByStatePage: React.FC<
 
   ///* table -------------------------
   // server side filters - colums table
-  const { filterObject, columnFilters, setColumnFilters } =
-    useTableServerSideFiltering();
-  const {
-    // globalFilter,
-    pagination,
-    searchTerm,
-    // onChangeFilter,
-    setPagination,
-  } = useTableFilter();
-  const { pageIndex, pageSize } = pagination;
-
-  ///* fetch data
-  const {
-    data: rubrosPagingRes,
-    isLoading: isRubrosLoading,
-    isRefetching: isRubrosRefetching,
-  } = useFetchRubros({
-    enabled: !!serviceLine?.uuid,
-    params: {
-      page: pageIndex + 1,
-      page_size: pageSize,
-      ...filterObject,
-
-      cliente: serviceLine?.cliente,
-      linea_servicio: serviceLine?.id,
-
-      concepto: searchTerm,
-      estado_rubro: 'NO_PAGADO',
-    },
-  });
-
-  const isCustomLoading = isRubrosLoading || isRubrosRefetching;
-  useLoaders(isCustomLoading);
 
   ///* mutations -------------------------
   // const createPagoManual = useGenericPOST<any, any>(
@@ -82,13 +40,6 @@ const ClientesPagosManualesByStatePage: React.FC<
   ///* handlers ---------------------
   const onEdit = (rubro: Rubro) => {
     setSelectedRubro(rubro);
-    const fechaTransaccion = dayjs().format('YYYYMMDD');
-    const partesContrato =
-      rubro.contrato_data?.numero_contrato?.split('-') || [];
-    const linea = partesContrato[1] || 'L1'; // Valor por defecto 'L2' si no se encuentra
-    console.log('linea', linea);
-    console.log('fechaTransaccion', fechaTransaccion);
-    console.log('rubro', rubro);
     setOpen(true);
     // setConfirmDialog({
     //   isOpen: true,
@@ -109,38 +60,117 @@ const ClientesPagosManualesByStatePage: React.FC<
     // });
   };
 
-  ///* columns -------------------------
-  const { columnsRubrosClientView } = useColumnsRubrosCliente();
+  const fetchAuthToken = async () => {
+    try {
+      const response = await axios.post(
+        'http://192.168.10.107/api/v1/oauth/token/',
+        {
+          client_id: 'admin',
+          client_secret: 'admin',
+          grant_type: 'client_credentials',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error de Axios:', error.response?.data || error.message);
+      }
+      throw error;
+    }
+  };
+
+  const fetchNuevaConsultaContrapartida = async (accessToken: string) => {
+    try {
+      const response = await axios.post(
+        'http://192.168.10.107/api/v1/nueva-consulta-contrapartida/',
+        {
+          contrapartida: serviceLine?.cliente_data?.identificacion,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error de Axios:', error.response?.data || error.message);
+      }
+      throw error;
+    }
+  };
+
+  // 1. Agrega un estado para guardar los datos de las líneas
+  const [lineasData, setLineasData] = useState<any[]>([]);
+
+  // 2. Crea columnas específicas para los datos de líneas
+  const columnsLineasView = [
+    {
+      accessorKey: 'linea',
+      header: 'Línea',
+    },
+    {
+      accessorKey: 'deuda',
+      header: 'Deuda',
+    },
+    {
+      accessorKey: 'cliente',
+      header: 'Cliente',
+    },
+    {
+      accessorKey: 'direccion',
+      header: 'Dirección',
+    },
+  ];
+
+  // 3. Modifica el useEffect para guardar los datos
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tokenData = await fetchAuthToken();
+
+        const consultaData = await fetchNuevaConsultaContrapartida(
+          tokenData.access_token,
+        );
+
+        // Guarda las líneas en el estado
+        if (consultaData?.lineas) {
+          setLineasData(consultaData.lineas);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
       <Grid item container xs={12}>
         {/* ================= table ================= */}
+        {/* ================= Tabla de Líneas ================= */}
         <Grid item xs={12}>
-          <CustomTable<Rubro>
-            columns={columnsRubrosClientView}
-            data={rubrosPagingRes?.data?.items || []}
-            isLoading={isRubrosLoading}
-            isRefetching={isRubrosRefetching}
-            // // filters - server side
-            enableManualFiltering={true}
-            columnFilters={columnFilters}
-            onColumnFiltersChange={setColumnFilters}
-            // // search
+          <CustomTable
+            columns={columnsLineasView}
+            data={lineasData}
+            isLoading={false}
+            isRefetching={false}
+            enableManualFiltering={false}
             enableGlobalFilter={false}
-            // // pagination
-            pagination={pagination}
-            onPaging={setPagination}
-            rowCount={rubrosPagingRes?.data?.meta?.count}
-            // // actions
             enableActionsColumn={true}
-            // crud
             editIconToolTipTitle="Gestionar"
             canEdit={true}
             onEdit={onEdit}
             arrowIcon
             showCustomButtonsSpaceEnd={true}
-            canDelete={false}
           />
         </Grid>
 
@@ -149,6 +179,7 @@ const ClientesPagosManualesByStatePage: React.FC<
           open={open}
           onClose={() => setOpen(false)}
           rubro={selectedRubro!}
+          serviceLine={serviceLine}
         />
 
         {/* <ScrollableDialogProps
