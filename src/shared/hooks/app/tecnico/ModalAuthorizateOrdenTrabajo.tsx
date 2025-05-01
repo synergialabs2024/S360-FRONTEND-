@@ -16,6 +16,7 @@ import {
   CustomTypoLabelEnum,
   ScrollableDialogProps,
   CustomNumberTextField,
+  CustomTextFieldNoForm,
   CustomAutocompleteNoForm,
 } from '@/shared/components';
 import {
@@ -65,6 +66,7 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
   // State management
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [nameBtn, setNameBtn] = useState<string | undefined>('');
+  const [planInternet, setPlanInternet] = useState<string | undefined>('');
   const [dataBeing, setDataBeing] = useState<boolean>(false);
   const [optionsState, setOptionsState] = useState({
     vlans: null as string | null,
@@ -119,9 +121,11 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
     ) {
       setDataBeing(true);
       setNameBtn('Enviar');
+      setPlanInternet(authOnu?.preventa_data?.plan_internet_data?.name);
     } else {
       setNameBtn('Reintentar');
       setDataBeing(false);
+      setPlanInternet('');
     }
   }, [AuthOnusPagingRes, OltsPagingRes, openModal]);
 
@@ -351,6 +355,13 @@ const ModalAuthorizateOrdenTrabajo: React.FC<
                     error={errors.cedula_cliente}
                     helperText={errors.cedula_cliente?.message}
                     size={gridSizeMdLg6}
+                    required={false}
+                    disabled
+                  />
+                  <CustomTextFieldNoForm
+                    label="PLAN DE INTERNET"
+                    size={gridSizeMdLg6}
+                    value={planInternet}
                     required={false}
                     disabled
                   />

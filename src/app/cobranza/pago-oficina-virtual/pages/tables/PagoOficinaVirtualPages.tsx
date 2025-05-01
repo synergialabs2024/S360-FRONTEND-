@@ -47,6 +47,7 @@ const PagoOficinaVirtualPages: React.FC<PagoOficinaVirtualPagesProps> = () => {
       page: pageIndex + 1,
       page_size: pageSize,
       identificacion: searchTerm,
+      estado: 'APROVADO',
 
       ...filterObject,
       filterByState: false,

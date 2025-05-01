@@ -29,6 +29,7 @@ export const empleadoFormSchema = yup.object({
     .string()
     .required('El campo phone 1 es requerido')
     .max(200, 'El campo phone 1 no debe exceder los 200 caracteres'),
+  /*
   phone_2: yup
     .string()
     .required('El campo phone 2 es requerido')
@@ -41,6 +42,7 @@ export const empleadoFormSchema = yup.object({
     .string()
     .required('El campo salary es requerido')
     .max(200, 'El campo salary no debe exceder los 200 caracteres'),
+    */
   state: fieldStateYupValidation,
   tipo_empleado: yup
     .string()
