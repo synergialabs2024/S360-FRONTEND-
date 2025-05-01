@@ -3,11 +3,9 @@ import { useEffect } from 'react';
 
 import { useFetchIVAs } from '@/actions/app';
 import {
+  CalendarioFacturacion,
   CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ,
-  DIAS_GRACIA_ARRAY_OBJ_NUM_VALUE,
-  DIAS_PAGO_OBJ_01_TO_28,
   DiasAntesCreacionFacturaType,
-  DiasGraciaType,
   gridSizeMdLg3,
   gridSizeMdLg4,
   gridSizeMdLg6,
@@ -16,10 +14,11 @@ import {
 } from '@/shared';
 import {
   CustomAutocomplete,
+  CustomTextFieldNoForm,
   SampleCheckbox,
-  SelectTextFieldArrayString,
 } from '@/shared/components';
 import { SaveFormDataConfigPlantilla } from './SaveConfiguracionPlantilla';
+import { useRubroStore } from '@/store/app/rubros';
 
 export type ConfiguracionPlantillaFacturacionPartProps = {
   form: UseFormReturn<SaveFormDataConfigPlantilla>;
@@ -28,8 +27,13 @@ export type ConfiguracionPlantillaFacturacionPartProps = {
 const ConfiguracionPlantillaFacturacionPart: React.FC<
   ConfiguracionPlantillaFacturacionPartProps
 > = ({ form }) => {
+  ///* global state --------------------------
+  const calendariosFacturacion = useRubroStore(s => s.calendariosFacturacion);
+
   ///* form ---------------------
   const { errors } = form?.formState || {};
+
+  console.log(form.getValues('dia_pago'));
 
   ///* fetch data ---------------------
   const {
@@ -58,45 +62,55 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
   return (
     <>
       {/* ---------- CalendarioFacturacion ---------- */}
-      <SelectTextFieldArrayString
-        label="Día de pago"
+      <CustomAutocomplete<CalendarioFacturacion>
+        label="Dia de pago"
         name="dia_pago"
-        textFieldKey="dia_pago"
         // options
-        options={DIAS_PAGO_OBJ_01_TO_28.map(i => i.value)}
-        defaultValue={form.getValues()?.dia_pago || ''}
-        // errors
+        options={
+          calendariosFacturacion.filter(i => i.aplica_nuevo == true) || []
+        }
+        valueKey="dia_pago"
+        defaultValue={form.getValues().dia_pago}
+        isLoadingData={false}
+        // vaidation
         control={form.control}
-        error={form.formState.errors.dia_pago}
-        helperText={form.formState.errors.dia_pago?.message}
-        gridSize={gridSizeMdLg4}
+        error={errors.dia_pago}
+        helperText={errors.dia_pago?.message}
+        size={gridSizeMdLg4}
+        onChangeRawValue={row => {
+          form.setValue('dia_facturacion', row.dia_facturacion);
+          form.setValue('dia_suspension', row.dia_suspension);
+          form.setValue('dia_pago_limite', row.dia_maximo_pago);
+          form.setValue('dias_gracia', row.dias_gracia);
+        }}
       />
-      <SelectTextFieldArrayString
+      <CustomTextFieldNoForm
         label="Día de facturación"
-        name="dia_facturacion"
-        textFieldKey="dia_facturacion"
-        // options
-        options={DIAS_PAGO_OBJ_01_TO_28.map(i => i.value)}
-        defaultValue={form.getValues()?.dia_facturacion || ''}
-        // errors
-        control={form.control}
-        error={form.formState.errors.dia_facturacion}
-        helperText={form.formState.errors.dia_facturacion?.message}
-        gridSize={gridSizeMdLg4}
+        size={gridSizeMdLg4}
+        value={form.getValues().dia_facturacion}
+        required={false}
         disabled
       />
-      <SelectTextFieldArrayString
+      <CustomTextFieldNoForm
         label="Día de suspensión"
-        name="dia_suspension"
-        textFieldKey="dia_suspension"
-        // options
-        options={DIAS_PAGO_OBJ_01_TO_28.map(i => i.value)}
-        defaultValue={form.getValues()?.dia_suspension || ''}
-        // errors
-        control={form.control}
-        error={form.formState.errors.dia_suspension}
-        helperText={form.formState.errors.dia_suspension?.message}
-        gridSize={gridSizeMdLg4}
+        size={gridSizeMdLg4}
+        value={form.getValues().dia_suspension}
+        required={false}
+        disabled
+      />
+
+      <CustomTextFieldNoForm
+        label="Día maximo de pago"
+        size={gridSizeMdLg4}
+        value={form.getValues().dia_pago_limite}
+        required={false}
+        disabled
+      />
+      <CustomTextFieldNoForm
+        label="Día de gracia"
+        size={gridSizeMdLg4}
+        value={form.getValues().dias_gracia}
+        required={false}
         disabled
       />
 
@@ -113,24 +127,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         control={form.control}
         error={errors.crea_factura}
         helperText={errors.crea_factura?.message}
-        size={gridSizeMdLg6}
-        disabled
-      />
-
-      <CustomAutocomplete<DiasGraciaType>
-        label="Días de gracia"
-        name="dias_gracia"
-        // options
-        options={DIAS_GRACIA_ARRAY_OBJ_NUM_VALUE}
-        valueKey="label"
-        actualValueKey="value"
-        defaultValue={form.getValues().dias_gracia}
-        isLoadingData={false}
-        // vaidation
-        control={form.control}
-        error={errors.dias_gracia}
-        helperText={errors.dias_gracia?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
         disabled
       />
 

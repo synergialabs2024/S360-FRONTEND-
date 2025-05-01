@@ -42,7 +42,7 @@ export const useColumnsSoporteTecnico = () => {
       },
       {
         accessorKey: 'solicitud_servicio__identificacion',
-        header: 'TIPO IDENTIFICACION',
+        header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,

@@ -1353,11 +1353,11 @@ export const YES_NO_ARRAY_CHOICES = [YesNoEnumChoice.SI, YesNoEnumChoice.NO];
 export const TRUE_FALSE_TYPE_ARRAY_CHOICES = [
   {
     label: 'SI',
-    value: true,
+    value: 'true',
   },
   {
     label: 'NO',
-    value: false,
+    value: 'false',
   },
 ];
 

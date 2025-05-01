@@ -1,17 +1,19 @@
-/* eslint-disable indent */
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { ImgModalComponent } from '@/shared/components';
 import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
 import {
+  IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
+  TRUE_FALSE_TYPE_ARRAY_CHOICES,
 } from '@/shared/constants';
 import { Preventa } from '@/shared/interfaces';
 import {
   emptyCellNested,
   emptyCellOneLevel,
+  formatBooleanCell,
   formatDateWithTimeCell,
   formatTrazabilidadCell,
 } from '@/shared/utils';
@@ -44,11 +46,13 @@ export const useColumnsPreventa = () => {
           emptyCellNested(row, ['solicitud_servicio_data', 'identificacion']),
       },
       {
-        accessorKey: 'solicitud_servicio__tipo_identificacion',
+        accessorKey: 'tipo_identificacion',
         header: 'TIPO IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
         Cell: ({ row }) =>
           emptyCellNested(row, [
             'solicitud_servicio_data',
@@ -93,7 +97,9 @@ export const useColumnsPreventa = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'es_referido'),
+        filterVariant: 'select',
+        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        Cell: ({ row }) => formatBooleanCell(row, 'es_referido'),
       },
 
       {
@@ -151,7 +157,7 @@ export const useColumnsPreventa = () => {
       },
 
       {
-        accessorKey: 'entidad_financiera',
+        accessorKey: 'entidad_financiera__name',
         header: 'ENTIDAD FINANCIERA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -161,19 +167,23 @@ export const useColumnsPreventa = () => {
       },
 
       {
-        accessorKey: 'solicitud_servicio__tipo_plan',
+        accessorKey: 'plan_internet__tipo_plan',
         header: 'TIPO PLAN SOl. SERVICIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) =>
-          emptyCellNested(row, [
-            'solicitud_servicio_data',
-            'linea_servicio_data',
-            'contrato_data',
-            'plan_internet_ingreso_data',
-            'tipo_plan',
-          ]),
+          emptyCellNested(row, ['plan_internet_data', 'tipo_plan']),
+      },
+
+      {
+        accessorKey: 'plan_internet__permanencia',
+        header: 'PERMANENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, ['plan_internet_data', 'permanencia']),
       },
       {
         accessorKey: 'solicitud_servicio__codigo',
@@ -182,29 +192,9 @@ export const useColumnsPreventa = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) =>
-          emptyCellNested(row, [
-            'solicitud_servicio_data',
-            'linea_servicio_data',
-            'contrato_data',
-            'plan_internet_ingreso_data',
-            'codigo',
-          ]),
+          emptyCellNested(row, ['solicitud_servicio_data', 'codigo']),
       },
-      {
-        accessorKey: 'solicitud_servicio__permanencia',
-        header: 'PERMANENCIA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, [
-            'solicitud_servicio_data',
-            'linea_servicio_data',
-            'contrato_data',
-            'plan_internet_ingreso_data',
-            'permanencia',
-          ]),
-      },
+      /*
       {
         accessorKey: 'solicitud_servicio__tipo_servicio',
         header: 'TIPO SERVICIO SOL. SERVICIO',
@@ -220,34 +210,35 @@ export const useColumnsPreventa = () => {
             'tipo_servicio',
           ]),
       },
+      */
 
       ...(!user?.is_valid_salesman
         ? [
-            {
-              accessorKey: 'imagen',
-              header: 'IMAGENES',
-              size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-              enableColumnFilter: false,
-              enableSorting: false,
-              Cell: ({ row }: any) => {
-                return (
-                  <ImgModalComponent
-                    urls={{
-                      foto_aceptacion: row.original.url_foto_aceptacion || '',
-                      foto_cedula_frontal:
+          {
+            accessorKey: 'imagen',
+            header: 'IMAGENES',
+            size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+            enableColumnFilter: false,
+            enableSorting: false,
+            Cell: ({ row }: any) => {
+              return (
+                <ImgModalComponent
+                  urls={{
+                    foto_aceptacion: row.original.url_foto_aceptacion || '',
+                    foto_cedula_frontal:
                         row.original.url_foto_cedula_frontal || '',
-                      foto_cedula_trasera:
+                    foto_cedula_trasera:
                         row.original.url_foto_cedula_trasera || '',
-                      foto_documento_cuenta:
+                    foto_documento_cuenta:
                         row.original.url_foto_documento_cuenta || '',
-                      foto_tarjeta: row.original.url_foto_tarjeta || '',
-                      foto_vivienda: row.original.url_foto_vivienda || '',
-                    }}
-                  />
-                );
-              },
+                    foto_tarjeta: row.original.url_foto_tarjeta || '',
+                    foto_vivienda: row.original.url_foto_vivienda || '',
+                  }}
+                />
+              );
             },
-          ]
+          },
+        ]
         : []),
 
       {
@@ -270,19 +261,21 @@ export const useColumnsPreventa = () => {
 
   const preventaRealizadas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
-      ...preventaBaseColumns01,
       ...preventaBaseColumns,
       {
         accessorKey: 'razon_social__finaliza_preventa',
-        header: 'REALIZADO POR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
-        cell: ({ row }: MRTSServiceType) =>
-          formatTrazabilidadCell(
+        header: 'FINALIZADO POR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          return formatTrazabilidadCell(
             row,
             SalesStatesActionsEnumChoice.PREVENTA__FINALIZADO,
             'user_data.razon_social',
             true,
-          ),
+          );
+        },
       },
       {
         accessorKey: 'fecha_finalizado',
@@ -297,7 +290,7 @@ export const useColumnsPreventa = () => {
           ),
       },
     ],
-    [preventaBaseColumns, preventaBaseColumns01],
+    [preventaBaseColumns],
   );
 
   const preventaFallidas = useMemo<MRT_ColumnDef<Preventa>[]>(
