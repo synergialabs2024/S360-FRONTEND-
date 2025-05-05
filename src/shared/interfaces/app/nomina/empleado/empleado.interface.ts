@@ -1,3 +1,4 @@
+import { TipoVinculacionFlotaEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import {
   AreaLimitData,
@@ -20,7 +21,7 @@ export interface EmpleadosPaginatedRes {
   items: Empleado[];
 }
 
-export interface Empleado {
+export interface Empleado extends EmpleadoAdditionalHelperData {
   id?: number;
   uuid?: string;
 
@@ -39,6 +40,7 @@ export interface Empleado {
   modified_at?: string;
 
   tipo_empleado: string; // choice
+  tipo_vinculacion?: TipoVinculacionFlotaEnumChoice;
 
   ///* fk
   empresa?: number;
@@ -66,3 +68,7 @@ export interface Empleado {
   zona_data?: ZonaLimitData;
   sector_data?: SectorLimitData;
 }
+
+export type EmpleadoAdditionalHelperData = {
+  empleado_vinculacion?: string;
+};

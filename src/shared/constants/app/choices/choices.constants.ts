@@ -1579,3 +1579,32 @@ export enum EncuestaPlantillaTypeEnumChoice {
 export const ENCUESTA_PLANTILLA_TYPE_ARRAY_CHOICES = [
   EncuestaPlantillaTypeEnumChoice.BOOLEAN,
 ];
+
+// // FLOTA --------------------------
+export enum TipoFlotaEnumChoice {
+  INTERNA = 'INTERNA',
+  EXTERNA = 'EXTERNA',
+}
+export const TIPO_FLOTA_ARRAY_CHOICES = [
+  TipoFlotaEnumChoice.INTERNA,
+  TipoFlotaEnumChoice.EXTERNA,
+];
+export enum TipoGestionFlotaPlanificadorEnumChoice {
+  INSTALACION = 'INSTALACION',
+  VISITA_TECNICA = 'VISITA TECNICA',
+  INSTALACION_Y_VISITA_TECNICA = 'INSTALACION Y VISITA TECNICA',
+}
+export const TIPO_GESTION_FLOTA_PLANIFICADOR_ARRAY_CHOICES = [
+  TipoGestionFlotaPlanificadorEnumChoice.INSTALACION,
+  TipoGestionFlotaPlanificadorEnumChoice.VISITA_TECNICA,
+  TipoGestionFlotaPlanificadorEnumChoice.INSTALACION_Y_VISITA_TECNICA,
+];
+
+export enum TipoVinculacionFlotaEnumChoice {
+  INTERNO = 'INTERNO',
+  EXTERNO = 'EXTERNO',
+}
+export const TIPO_VINCULACION_FLOTA_ARRAY_CHOICES = [
+  TipoVinculacionFlotaEnumChoice.INTERNO,
+  TipoVinculacionFlotaEnumChoice.EXTERNO,
+];

@@ -35,6 +35,7 @@ import {
   EMPLOYEE_TYPE_ARRAY_CHOICES,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
   SAVE_EMPLEADO_PERMISSIONS,
+  TIPO_VINCULACION_FLOTA_ARRAY_CHOICES,
 } from '@/shared/constants/app';
 import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
@@ -349,7 +350,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
         />
 
         <CustomTextField
-          label="Razón social"
+          label="Nombre Completo"
           name="razon_social"
           control={form.control}
           defaultValue={form.getValues().razon_social}
@@ -365,6 +366,19 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
         error={errors.email}
         helperText={errors.email?.message}
         type="email"
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocompleteArrString
+        name="tipo_vinculacion"
+        label="Tipo de Vinculación"
+        options={TIPO_VINCULACION_FLOTA_ARRAY_CHOICES}
+        defaultValue={form.getValues('tipo_vinculacion')}
+        isLoadingData={false}
+        control={form.control}
+        error={errors.tipo_vinculacion}
+        helperText={errors.tipo_vinculacion?.message}
+        size={gridSizeMdLg6}
+        disableClearable
       />
 
       {/* -------- Cargo -------- */}
@@ -458,6 +472,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
         customType="currency"
         min={0}
         size={gridSizeMdLg6}
+        required={false}
       />
 
       {/* ----------- contact info ----------- */}
@@ -482,6 +497,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
           error={errors.phone_2}
           helperText={errors.phone_2?.message}
           size={gridSizeMdLg6}
+          required={false}
         />
         <CustomCellphoneTextField
           label="Teléfono 3"

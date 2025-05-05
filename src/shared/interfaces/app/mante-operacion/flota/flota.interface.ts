@@ -1,3 +1,7 @@
+import {
+  TipoFlotaEnumChoice,
+  TipoGestionFlotaPlanificadorEnumChoice,
+} from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { SystemUserLimitData } from '../../administration';
 import { Bodega, Ubicacion } from '../../inventario';
@@ -27,6 +31,9 @@ export interface Flota {
 
   es_ubicacion: boolean;
 
+  // planificador ---------
+  tipo_flota?: TipoFlotaEnumChoice;
+  tipo_gestion_planificador?: TipoGestionFlotaPlanificadorEnumChoice;
   hora_inicio_instalacion?: string; // HH:MM:SS
   hora_fin_instalacion?: string; // HH:MM:SS
 

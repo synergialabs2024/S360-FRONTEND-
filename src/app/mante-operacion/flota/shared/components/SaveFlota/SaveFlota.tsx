@@ -27,9 +27,12 @@ import {
   getKeysFormErrorsMessage,
   gridSize,
   gridSizeMdLg11,
+  gridSizeMdLg4,
   gridSizeMdLg6,
   gridSizeMdLg8,
   TABLE_CONSTANTS,
+  TIPO_FLOTA_ARRAY_CHOICES,
+  TIPO_GESTION_FLOTA_PLANIFICADOR_ARRAY_CHOICES,
   ToastWrapper,
   useLoaders,
   useMapPolygonComponent,
@@ -39,6 +42,7 @@ import {
 import {
   a11yProps,
   CustomAutocomplete,
+  CustomAutocompleteArrString,
   CustomCellphoneTextField,
   CustomMinimalTable,
   CustomNumberTextField,
@@ -379,12 +383,38 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             error={errors.name}
             helperText={errors.name?.message}
           />
+          <>
+            <CustomAutocompleteArrString
+              name="tipo_flota"
+              label="Tipo flota"
+              options={TIPO_FLOTA_ARRAY_CHOICES}
+              defaultValue={form.getValues('tipo_flota')}
+              isLoadingData={false}
+              control={form.control}
+              error={errors.tipo_flota}
+              helperText={errors.tipo_flota?.message}
+              size={gridSizeMdLg6}
+              disableClearable
+            />
+            <CustomAutocompleteArrString
+              name="tipo_gestion_planificador"
+              label="Gestiona según planificador"
+              options={TIPO_GESTION_FLOTA_PLANIFICADOR_ARRAY_CHOICES}
+              defaultValue={form.getValues('tipo_gestion_planificador')}
+              isLoadingData={false}
+              control={form.control}
+              error={errors.tipo_gestion_planificador}
+              helperText={errors.tipo_gestion_planificador?.message}
+              size={gridSizeMdLg6}
+              disableClearable
+            />
+          </>
           <CustomAutocomplete<Empleado>
             label="Lider"
             name="lider"
             // options
             options={tecnicosDataPagingRes?.data?.items || []}
-            valueKey="razon_social"
+            valueKey="empleado_vinculacion"
             actualValueKey="id"
             defaultValue={form.getValues().lider}
             isLoadingData={isLoadingTecnicos || isRefetchingTecnicos}
@@ -407,7 +437,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
                 item => item.id !== watchedLider,
               ) || []
             }
-            valueKey="razon_social"
+            valueKey="empleado_vinculacion"
             actualValueKey="id"
             defaultValue={form.getValues().auxiliar}
             isLoadingData={isLoadingTecnicos || isRefetchingTecnicos}
@@ -415,7 +445,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             control={form.control}
             error={errors.auxiliar}
             helperText={errors.auxiliar?.message}
-            size={gridSizeMdLg6}
+            size={gridSizeMdLg8}
           />
           <CustomCellphoneTextField
             label="Telefono 1"
@@ -424,7 +454,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
             defaultValue={form.getValues().telefono_1}
             error={errors.telefono_1}
             helperText={errors.telefono_1?.message}
-            size={gridSizeMdLg6}
+            size={gridSizeMdLg4}
           />
           <CustomTextField
             label="Email"
