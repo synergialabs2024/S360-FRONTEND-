@@ -3,7 +3,12 @@ import { useMemo } from 'react';
 
 import { useUpdateFlota } from '@/actions/app';
 import { CustomSwitch } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
+import {
+  MODEL_STATE_BOOLEAN,
+  TABLE_CONSTANTS,
+  TIPO_FLOTA_ARRAY_CHOICES,
+  TIPO_GESTION_FLOTA_PLANIFICADOR_ARRAY_CHOICES,
+} from '@/shared/constants';
 import { Flota, PermissionsEnum } from '@/shared/interfaces';
 import {
   emptyCellNested,
@@ -39,7 +44,7 @@ export const useColumnsFlota = () => {
       {
         accessorKey: 'lider__razon_social',
         header: 'LIDER',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['lider_data', 'razon_social']),
@@ -47,7 +52,7 @@ export const useColumnsFlota = () => {
       {
         accessorKey: 'auxiliar__razon_social',
         header: 'AUXILIAR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) =>
@@ -61,6 +66,36 @@ export const useColumnsFlota = () => {
         enableColumnFilter: true,
         enableSorting: true,
         Cell: ({ row }) => emptyCellNested(row, ['user_data', 'username']),
+      },
+      {
+        accessorKey: 'tipo_flota',
+        header: 'TIPO FLOTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: Object.entries(TIPO_FLOTA_ARRAY_CHOICES).map(
+          ([, value]) => ({
+            text: value,
+            value: value,
+          }),
+        ),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_flota'),
+      },
+      {
+        accessorKey: 'tipo_gestion_planificador',
+        header: 'TIPO GESTION PLANIFICADOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: Object.entries(
+          TIPO_GESTION_FLOTA_PLANIFICADOR_ARRAY_CHOICES,
+        ).map(([, value]) => ({
+          text: value,
+          value: value,
+        })),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_gestion_planificador'),
       },
 
       {
@@ -187,6 +222,23 @@ export const useColumnsFlota = () => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => emptyCellOneLevel(row, 'zonas'),
+      },
+
+      {
+        accessorKey: 'bodega__nombre',
+        header: 'BODEGA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
+      },
+      {
+        accessorKey: 'ubicacion__nombre',
+        header: 'UBICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
       },
 
       {

@@ -94,7 +94,7 @@ const SaveFlota: React.FC<SaveFlotaProps> = ({ title, flota }) => {
     resolver: yupResolver(flotaFormSchema) as any,
     defaultValues: {
       state: true,
-      es_ubicacion: false,
+      es_ubicacion: true,
     },
   });
 
