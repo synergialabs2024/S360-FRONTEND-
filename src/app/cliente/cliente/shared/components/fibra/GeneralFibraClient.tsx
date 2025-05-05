@@ -24,6 +24,7 @@ import { ServiceFibraClientPart } from './servicio';
 import FibraClientSummaryFormPart from './summary/FibraClientSummaryFormPart';
 import ClientesPagosManualesByStatePage from './pagos-manuales/ClientesPagosManualesByStatePage';
 import ClientesReversoByStatePage from './reverso/ClientesReversoByStatePage';
+import GenericHistoricoTicketsTab from './historial-tickets/tabs/GenericHistoricoTicketsTab';
 
 export type GeneralFibraClientProps = {
   serviceLine?: LineaServicio;
@@ -96,6 +97,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
           <Tab label="LOGS" value={6} {...a11yProps(6)} />
           <Tab label="PAGOS MANUALES" value={7} {...a11yProps(7)} />
           <Tab label="REVERSO" value={8} {...a11yProps(8)} />
+          <Tab label="HISTORICO TICKETS" value={9} {...a11yProps(9)} />
         </FormTabsOnly>
       }
       formSize={gridSize}
@@ -138,6 +140,13 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
       {/* ========================= Reverso ========================= */}
       <CustomTabPanel index={8} value={tabValue}>
         <ClientesReversoByStatePage serviceLine={serviceLine!} />
+      </CustomTabPanel>
+
+      {/* ========================= Historico Tickets ========================= */}
+      <CustomTabPanel index={9} value={tabValue}>
+        <GenericHistoricoTicketsTab
+          cedula={serviceLine?.cliente_data?.identificacion!}
+        />
       </CustomTabPanel>
     </TabsFormBoxScene>
   );
