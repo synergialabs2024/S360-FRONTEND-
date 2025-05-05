@@ -15,49 +15,12 @@ const ClientesPagosManualesByStatePage: React.FC<
 > = ({ serviceLine }) => {
   const [open, setOpen] = useState(false);
 
-  // const navigate = useNavigate();
-
-  ///* global state -------------------------
-
-  ///* table -------------------------
-  // server side filters - colums table
-
-  ///* mutations -------------------------
-  // const createPagoManual = useGenericPOST<any, any>(
-  //   '/nuevo-pago/',
-  //   RubroTSQEnum.RUBROS,
-  //   {
-  //     customMessageToast: 'Rubro de servicio pagado correctamente',
-  //     customOnSuccess() {},
-  //     customOnSettled() {
-  //       setConfirmDialogIsOpen(false);
-  //     },
-  //   },
-  // );
-
   const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
 
   ///* handlers ---------------------
   const onEdit = (rubro: Rubro) => {
     setSelectedRubro(rubro);
     setOpen(true);
-    // setConfirmDialog({
-    //   isOpen: true,
-    //   title: 'Aplicar pago manual',
-    //   subtitle: '¿Está seguro que desea realizar el pago manual?',
-    //   onConfirm: () => {
-    //     createPagoManual.mutate({
-    //       contrapartida: rubro.cliente_data?.identificacion,
-    //       linea: linea,
-    //       deuda: rubro.valor_total,
-    //       canalPago: 'WEB',
-    //       fechaTransaccion: fechaTransaccion,
-    //       ifi: 'S360',
-    //     });
-    //     setConfirmDialogIsOpen(false);
-    //     // navigate(`${returnUrlClientesSuspendidosAsignadas}/${firstLine}`);
-    //   },
-    // });
   };
 
   const fetchAuthToken = async () => {
@@ -170,6 +133,7 @@ const ClientesPagosManualesByStatePage: React.FC<
             canEdit={true}
             onEdit={onEdit}
             arrowIcon
+            rowCount={lineasData?.length}
             showCustomButtonsSpaceEnd={true}
           />
         </Grid>
@@ -181,25 +145,6 @@ const ClientesPagosManualesByStatePage: React.FC<
           rubro={selectedRubro!}
           serviceLine={serviceLine}
         />
-
-        {/* <ScrollableDialogProps
-          title="Editar Rubro de Servicio"
-          open={open}
-          onClose={handleClose}
-          minWidth="81%"
-          // confirm --------
-          onConfirm={form.handleSubmit(onSave, errors => {
-            const keys = getKeysFormErrorsMessage(errors);
-            ToastWrapper.error(`Campos requeridos: ${keys}`);
-          })}
-          confirmVariantBtn="outlined"
-          confirmTextBtn="Guardar"
-          // // content --------
-          contentNode={
-            <>
-            </>
-          }
-        /> */}
       </Grid>
     </>
   );

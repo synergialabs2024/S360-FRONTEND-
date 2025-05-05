@@ -98,7 +98,7 @@ const PromocionProductosDisponiblesModal: React.FC<
           color="primary"
           onClick={() => {
             addSelectedItem({
-              idKey: 'id',
+              idKey: 'codigo',
               item: {
                 uuid: uuidv4(),
                 ...item,

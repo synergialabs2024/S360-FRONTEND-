@@ -33,7 +33,7 @@ export interface UserLoginResponse {
 
   area?: string;
   departamento?: string;
-  canal_venta?: string;
+  canal_venta?: number;
   centro_costo?: number;
   role?: UserRolesEnumChoice; // choice
   company_data?: CompanyLoginResponse; // build in login action

@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreatePromocionParamsBase,
   useCreatePromocion,
+  useFetchCanalVentas,
   useFetchCiudades,
   useFetchMetodoPagos,
   useFetchPlanInternets,
@@ -57,6 +58,7 @@ import {
 import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import { useCheckPermissionsArray } from '@/shared/hooks/auth';
 import type {
+  CanalVenta,
   Ciudad,
   MetodoPago,
   OpcionProductoPromocionItem,
@@ -96,6 +98,7 @@ type SaveFormData = CreatePromocionParamsBase & {
   allSectores?: boolean;
   allPlanes?: boolean;
   allMetodosPago?: boolean;
+  allCanalesVentas?: boolean;
 };
 
 export type SelectedEqPromoctionType = Producto & {
@@ -186,6 +189,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
   const watchedTipoDescuento = form.watch('tipo_descuento');
   const watchedAllPlanes = form.watch('allPlanes');
   const watchedAllMetodosPago = form.watch('allMetodosPago');
+  const watchedAllCanalesVentas = form.watch('allCanalesVentas');
 
   const watchedFechaInicio = form.watch('fecha_inicio');
   const watchedProvincias = form.watch('provincias');
@@ -270,6 +274,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoading: isLoadingMetodoPagos,
     isRefetching: isRefetchingMetodoPagos,
   } = useFetchMetodoPagos({
+    params: {
+      page_size: 1100,
+    },
+  });
+  const {
+    data: canalesVentasPaging,
+    isLoading: isLoadingCanalesVentas,
+    isRefetching: isRefetchingCanalesVentas,
+  } = useFetchCanalVentas({
     params: {
       page_size: 1100,
     },
@@ -390,7 +403,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       }),
     );
 
-    ///* upd
+    ///* upd ------
     if (promocion?.id) {
       updatePromocionMutation.mutate({
         id: promocion.id!,
@@ -405,7 +418,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       return;
     }
 
-    ///* create
+    ///* create ------
     setConfirmDialog({
       isOpen: true,
       title: 'Crear Promoción',
@@ -436,6 +449,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     const allSectores = (promocion.sectores as any[])?.includes('*');
     const allPlanes = (promocion.planes as any[])?.includes('*');
     const allMetodosPago = (promocion.metodo_pagos as any[])?.includes('*');
+    const allCanalesVentas = (promocion.canales_venta as any[])?.includes('*');
 
     const eqP = promocion?.opciones_productos_incluye?.map(op => ({
       ...op,
@@ -453,6 +467,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
       allSectores,
       allPlanes,
       allMetodosPago,
+      allCanalesVentas,
       facturas_gratis: promocion?.facturas_gratis || [],
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -477,7 +492,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
     isLoadingPlanes ||
     isRefetchingPlanes ||
     isLoadingMetodoPagos ||
-    isRefetchingMetodoPagos;
+    isRefetchingMetodoPagos ||
+    isLoadingCanalesVentas ||
+    isRefetchingCanalesVentas;
   useLoaders(customLoading);
 
   //
@@ -525,15 +542,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                   ...row?.original,
                   productoOptionItemList: [],
                 },
-                idKey: 'id',
+                idKey: 'codigo',
               });
             }}
-            disabled={!!promocion?.id}
+            // disabled={!!promocion?.id}
           />
         ),
       },
     ],
-    [productsBaseColumns, promocion?.id, removeSelectedItem, setSelectedRow],
+    [productsBaseColumns, removeSelectedItem, setSelectedRow],
   );
 
   const selectedItemsDisccountColumns = useMemo<
@@ -568,15 +585,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                   ...row?.original,
                   productoOptionItemList: [],
                 },
-                idKey: 'id',
+                idKey: 'codigo',
               });
             }}
-            disabled={!!promocion?.id}
+            // disabled={!!promocion?.id}
           />
         ),
       },
     ],
-    [productsBaseColumns, promocion?.id, removeDisccountItem],
+    [productsBaseColumns, removeDisccountItem],
   );
 
   const selectedItemsPremioColumns = useMemo<
@@ -611,15 +628,15 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                   ...row?.original,
                   productoOptionItemList: [],
                 },
-                idKey: 'id',
+                idKey: 'codigo',
               });
             }}
-            disabled={!!promocion?.id}
+            // disabled={!!promocion?.id}
           />
         ),
       },
     ],
-    [productsBaseColumns, promocion?.id, removePremioItem],
+    [productsBaseColumns, removePremioItem],
   );
 
   return (
@@ -812,7 +829,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 control={form.control}
                 error={undefined}
                 helperText={errors.provincias?.message}
-                disabled={watchedAllProvincias || !!promocion?.id}
+                disabled={watchedAllProvincias /* || !!promocion?.id */}
                 onlyActualValueKey
                 required={false}
               />
@@ -830,7 +847,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 }}
                 // disabled
                 disabled={
-                  !provinciasPaging?.data?.items?.length || !!promocion?.id
+                  !provinciasPaging?.data?.items
+                    ?.length /* || !!promocion?.id */
                 }
                 onClickDisabled={() => {
                   if (promocion?.id) return;
@@ -870,9 +888,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 error={undefined}
                 helperText={errors.ciudades?.message}
                 disabled={
-                  watchedAllCities ||
-                  !watchedProvincias?.length ||
-                  !!promocion?.id
+                  watchedAllCities || !watchedProvincias?.length /* ||
+                  !!promocion?.id */
                 }
                 onlyActualValueKey
                 required={false}
@@ -892,8 +909,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 // disabled
                 disabled={
                   !provinciasPaging?.data?.items?.length ||
-                  !watchedProvincias?.length ||
-                  !!promocion?.id
+                  !watchedProvincias?.length /* ||
+                  !!promocion?.id */
                 }
                 onClickDisabled={() => {
                   if (promocion?.id) return;
@@ -936,7 +953,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 error={undefined}
                 helperText={errors.zonas?.message}
                 disabled={
-                  watchedAllZones || !watchedCiudades?.length || !!promocion?.id
+                  watchedAllZones ||
+                  !watchedCiudades?.length /* || !!promocion?.id */
                 }
                 onlyActualValueKey
                 required={false}
@@ -1002,7 +1020,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 error={undefined}
                 helperText={errors.sectores?.message}
                 disabled={
-                  watchedAllSectores || !watchedZonas?.length || !!promocion?.id
+                  watchedAllSectores ||
+                  !watchedZonas?.length /* || !!promocion?.id */
                 }
                 onlyActualValueKey
                 required={false}
@@ -1068,7 +1087,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 helperText={errors.metodo_pagos?.message}
                 onlyActualValueKey
                 required={false}
-                disabled={watchedAllMetodosPago || !!promocion?.id}
+                disabled={watchedAllMetodosPago /* || !!promocion?.id */}
               />
             }
             overrideBtnNode
@@ -1084,7 +1103,8 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 }}
                 // disabled
                 disabled={
-                  !metodoPagosPaging?.data?.items?.length || !!promocion?.id
+                  !metodoPagosPaging?.data?.items
+                    ?.length /* || !!promocion?.id */
                 }
                 onClickDisabled={() => {
                   if (promocion?.id) return;
@@ -1112,7 +1132,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               form.setValue('planes', []);
               form.setValue('allPlanes', false);
             }}
-            disabled={!!promocion?.id}
+            // disabled={!!promocion?.id}
           />
           <InputAndBtnGridSpace
             mainGridSize={gridSize}
@@ -1137,7 +1157,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 control={form.control}
                 error={undefined}
                 helperText={errors.planes?.message}
-                disabled={watchedAllPlanes || !!promocion?.id}
+                disabled={watchedAllPlanes /* || !!promocion?.id */}
                 onlyActualValueKey
                 required={false}
               />
@@ -1154,7 +1174,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                   form.setValue('planes', []);
                 }}
                 // disabled
-                disabled={!planesPaging?.data?.items?.length || !!promocion?.id}
+                disabled={
+                  !planesPaging?.data?.items?.length /* || !!promocion?.id */
+                }
                 onClickDisabled={() => {
                   if (promocion?.id) return;
 
@@ -1166,6 +1188,67 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
             }
           />
         </>
+
+        {/* --------- Canal Ventas --------- */}
+        <InputAndBtnGridSpace
+          mainGridSize={gridSize}
+          inputNode={
+            <CustomAutocompleteMultiple<CanalVenta>
+              label="Canales de venta"
+              name="canales_venta"
+              textFieldKey="nombre"
+              valueKey="name"
+              actualValueKey="id"
+              // options
+              options={canalesVentasPaging?.data?.items || []}
+              defaultValue={
+                form.getValues().canales_venta?.length
+                  ? canalesVentasPaging?.data?.items?.filter(
+                      (canalVenta: CanalVenta) =>
+                        (form.getValues().canales_venta as any[])?.includes(
+                          canalVenta?.id!,
+                        ),
+                    )
+                  : []
+              }
+              isLoadingData={
+                isLoadingCanalesVentas || isRefetchingCanalesVentas
+              }
+              // errors
+              control={form.control}
+              error={undefined}
+              helperText={errors.canales_venta?.message}
+              disabled={watchedAllCanalesVentas /* || !!promocion?.id */}
+              onlyActualValueKey
+              required={false}
+            />
+          }
+          overrideBtnNode
+          customBtnNode={
+            <SampleCheckbox
+              label="TODOS"
+              name="allCanalesVentas"
+              control={form.control}
+              defaultValue={!!form.getValues().allCanalesVentas}
+              onChangeValue={value => {
+                if (value) return form.setValue('canales_venta', ['*']);
+                form.setValue('canales_venta', []);
+              }}
+              // disabled
+              disabled={
+                !canalesVentasPaging?.data?.items
+                  ?.length /* || !!promocion?.id */
+              }
+              onClickDisabled={() => {
+                if (promocion?.id) return;
+
+                ToastWrapper.warning(
+                  'No se puede seleccionar todos los canales de venta ya que no se tienen registros disponibles',
+                );
+              }}
+            />
+          }
+        />
 
         {/* ==================== PRODUCTOS ==================== */}
         {/* ------------- Inventariables EQUIPOS ------------- */}
@@ -1185,7 +1268,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 setIsOpenProductModal(true);
               }}
               justifyContent="flex-end"
-              disabled={!!promocion?.id}
+              // disabled={!!promocion?.id}
             />
 
             <Grid item xs={12}>
@@ -1209,7 +1292,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
               setIsOpenProductOptionsModal(false);
               setSelectedRow(null);
             }}
-            isEdditingForm={!!promocion?.id}
+            // isEdditingForm={!!promocion?.id}
           />
         </>
 
@@ -1230,7 +1313,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 setIsOpenDisccountProductModal(true);
               }}
               justifyContent="flex-end"
-              disabled={!!promocion?.id}
+              // disabled={!!promocion?.id}
             />
 
             <Grid item xs={12}>
@@ -1251,7 +1334,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
           />
         </>
 
-        {/* ------------- premiso ------------- */}
+        {/* ------------- premios ------------- */}
         <>
           <Grid item xs={12} container justifyContent="flex-end" pb={3}>
             <CustomTypoLabel
@@ -1267,7 +1350,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 setIsOpenPremioProductModal(true);
               }}
               justifyContent="flex-end"
-              disabled={!!promocion?.id}
+              // disabled={!!promocion?.id}
             />
 
             <Grid item xs={12}>

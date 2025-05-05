@@ -13,6 +13,7 @@ import {
 } from '@/store/app';
 import type { SaveFormDataPreventa } from '../SavePreventa';
 import PromocionPreventaComponent from './PromocionPreventaComponent';
+import { useAuthStore } from '@/store/auth';
 
 export type PromocionPreventaFormPartProps = {
   form: UseFormReturn<SaveFormDataPreventa>;
@@ -23,6 +24,9 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
 }) => {
   ///* local state ----------------
   const [isMounted, setIsMounted] = useState(false);
+
+  ///* global state ----------------
+  const user = useAuthStore(state => state.user);
 
   ///* form ----------------
   const watchedIs3raEdad = form.watch('es_tercera_edad');
@@ -60,6 +64,7 @@ const PromocionPreventaFormPart: React.FC<PromocionPreventaFormPartProps> = ({
       // ...(watchedServicePlan === InternetPlanInternetTypeEnumChoice.PYMES && {
       //   is_pymes: true,
       // }),
+      canal_venta: user?.canal_venta!,
     },
   });
 
