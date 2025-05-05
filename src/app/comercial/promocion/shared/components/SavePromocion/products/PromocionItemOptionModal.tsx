@@ -269,7 +269,8 @@ const PromocionItemOptionModal: React.FC<PromocionItemOptionModalProps> = ({
           );
 
         updateSelectedItemValue({
-          idKey: 'id',
+          // idKey: 'id',
+          idKey: 'codigo',
           updatedItem: {
             ...selectedRow,
           } as any,
