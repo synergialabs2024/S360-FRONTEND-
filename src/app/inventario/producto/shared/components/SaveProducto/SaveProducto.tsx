@@ -175,6 +175,12 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
   useEffect(() => {
     if (!producto?.id) return;
     reset(producto);
+    if (
+      producto.modelo_data?.codigo ==
+      CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA
+    ) {
+      return setIsPreconectizada(true);
+    }
   }, [producto, reset]);
 
   const isCustomLoading =
@@ -294,7 +300,7 @@ const SaveProducto: React.FC<SaveProductoProps> = ({ title, producto }) => {
         helperText={errors.modelo?.message}
         size={isPreconectizada ? gridSizeMdLg6 : gridSizeMdLg12}
         onChangeRawValue={row => {
-          setValue('metraje_relativo', '');
+          setValue('metraje_relativo', '0.00');
           if (
             row.codigo === CodigoModeloProductoEnumChoice.FIBRA_PRECONECTORIZADA
           ) {
