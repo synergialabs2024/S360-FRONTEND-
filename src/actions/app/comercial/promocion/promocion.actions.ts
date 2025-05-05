@@ -132,6 +132,7 @@ export type GetPromocionsParams = Partial<Promocion> &
     sector?: number;
     plan?: number;
     payment_method?: number;
+    canal_venta?: number;
   };
 export type CreatePromocionParams<T> = T;
 export type CreatePromocionParamsBase = Omit<Promocion, 'id'>;

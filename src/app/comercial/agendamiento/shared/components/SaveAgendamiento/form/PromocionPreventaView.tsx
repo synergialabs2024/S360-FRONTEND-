@@ -37,13 +37,6 @@ const PromocionPreventaView: React.FC<PromocionPreventaViewProps> = ({
   ///* effects ----------------
   useEffect(() => {
     if (!preventa) return;
-    console.log(
-      '------------>',
-      {
-        preventa,
-      },
-      '<------------',
-    );
 
     const promocion: Promocion =
       (preventa?.promociones_data?.at(0) as Promocion) || ({} as Promocion);
