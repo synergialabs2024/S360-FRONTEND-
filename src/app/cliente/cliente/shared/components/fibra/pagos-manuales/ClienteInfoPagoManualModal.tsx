@@ -10,7 +10,7 @@ import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 import { LineaServicio } from '@/shared';
-import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export type ClienteInfoPagoManualModalProps = {
   open: boolean;
@@ -40,6 +40,11 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   const form = useForm<FormData>({
     defaultValues: {},
   });
+  const generateRandomAuthorizationNumber = (): string => {
+    const randomNumber = Math.floor(Math.random() * 10000000000); // Genera un número entre 0 y 9999999999
+    const paddedNumber = randomNumber.toString().padStart(10, '0'); // Asegura que siempre tenga 10 dígitos
+    return `S${paddedNumber}`;
+  };
   ///* mutations --------------------------
   const createPagoManual = async (accessToken: string) => {
     const fechaTransaccion = dayjs().format('YYYYMMDD');
@@ -52,7 +57,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
           deuda: rubro?.deuda,
           canalPago: 'WEB',
           fechaTransaccion: fechaTransaccion,
-          numeroAutorizacion: 'S0000000020',
+          numeroAutorizacion: generateRandomAuthorizationNumber(),
           ifi: '360',
         },
         {
@@ -62,11 +67,13 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
           },
         },
       );
+      toast.success('Pago manual generado correctamente');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Error de Axios:', error.response?.data || error.message);
       }
+      toast.error('Ha ocurrido un error al generar el pago manual');
       throw error;
     }
   };
@@ -102,9 +109,6 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
     clearAllItemsStore();
   };
 
-  useEffect(() => {
-    console.log('serviceLine', serviceLine);
-  }, []);
   return (
     <>
       <ScrollableDialogProps
@@ -114,42 +118,14 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
         minWidth="50%"
         // confirm --------
         onConfirm={async () => {
-          // const fechaTransaccion = dayjs().format('YYYYMMDD');
-          // const partesContrato =
-          //   rubro?.contrato_data?.numero_contrato?.split('-') || [];
-          // const linea = partesContrato[1] || 'L1';
-
           try {
             const tokenData = await fetchAuthToken();
-
             await createPagoManual(tokenData.access_token);
-
-            // Aquí puedes continuar con el resto de tu lógica usando el token
-            /* createPagoManual.mutate({
-              contrapartida: data.cliente_data?.identificacion,
-              linea: linea,
-              deuda: data.valor_total,
-              canalPago: 'WEB',
-              fechaTransaccion: fechaTransaccion,
-              ifi: 'S360',
-            }); */
-            // createPagoManual.mutate({
-            //   contrapartida: rubro?.cliente_data?.identificacion,
-            //   linea: linea,
-            //   deuda: rubro?.valor_total,
-            //   canalPago: 'WEB',
-            //   fechaTransaccion: fechaTransaccion,
-            //   ifi: '360',
-            // });
+            handleClose();
           } catch (error) {
             console.error('Error en onSave:', error);
-            // Manejar el error según necesites
           }
         }}
-        /* onConfirm={form.handleSubmit(onSave, errors => {
-          const keys = getKeysFormErrorsMessage(errors);
-          ToastWrapper.error(`Campos requeridos: ${keys}`);
-        })} */
         confirmVariantBtn="outlined"
         confirmTextBtn="Generar Pago"
         // // content --------

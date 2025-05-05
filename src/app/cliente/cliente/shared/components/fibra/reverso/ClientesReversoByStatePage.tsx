@@ -197,6 +197,7 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
             canEdit={true} // Solo permite editar si hay un rubro
             onEdit={onEdit}
             arrowIcon
+            rowCount={transaccionesData?.length}
             showCustomButtonsSpaceEnd={true}
           />
         </Grid>
