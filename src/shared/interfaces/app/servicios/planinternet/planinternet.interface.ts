@@ -36,6 +36,14 @@ export interface PlanInternet {
   tipo_plan: string;
   clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice | string;
 
+  // fk ------
+  paises?: number[] | string[];
+  provincias?: number[] | string[];
+  ciudades?: number[] | string[];
+  zonas?: number[];
+  sectores?: number[];
+  metodo_pagos?: number[];
+
   // helpers no models ----------
   name_valor_iva?: string;
   name_valor_base?: string;

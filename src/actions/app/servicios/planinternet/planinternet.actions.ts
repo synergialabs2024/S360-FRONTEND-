@@ -5,6 +5,7 @@ import { handleAxiosError } from '@/shared/axios/axios.utils';
 
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
+  PagingPartialParams,
   PlanesInternetPaginatedRes,
   PlanInternet,
   UseFetchEnabledParams,
@@ -121,12 +122,15 @@ export const useUpdatePlanInternet = <T>({
 };
 
 ///* axios ---------------
-export type GetPlanInternetsParams = Partial<PlanInternet> & {
-  page?: number;
-  page_size?: number;
-
-  filterByState?: boolean;
-};
+export type GetPlanInternetsParams = Partial<PlanInternet> &
+  PagingPartialParams & {
+    use_exclusion_logic?: boolean;
+    province?: number;
+    city?: number;
+    zone?: number;
+    sector?: number;
+    payment_method?: number;
+  };
 export type CreatePlanInternetParams<T> = T;
 export type CreatePlanInternetParamsBase = Omit<PlanInternet, 'id'>;
 export interface UpdatePlanInternetParams<T> {

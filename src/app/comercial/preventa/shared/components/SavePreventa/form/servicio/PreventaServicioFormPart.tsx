@@ -79,6 +79,12 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
   const watchedServicePlan = form.watch('tipo_plan');
   const watchedSuggestedPlansBuro = form.watch('plan_sugerido_buro');
 
+  const watchedProvince = form.watch('provincia');
+  const watchedCity = form.watch('ciudad');
+  const watchedZone = form.watch('zona');
+  const watchedSector = form.watch('sector');
+  const watchedPaymentMethod = form.watch('metodo_pago');
+
   ///* fetch data ----------------------------
   // internet service ---
   const {
@@ -90,12 +96,24 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
       !!watchedServiceType &&
       !!watchedServicePlan &&
       !!watchedSuggestedPlansBuro &&
-      !!alreadyConsultedEquifax,
+      !!alreadyConsultedEquifax &&
+      !!watchedProvince &&
+      !!watchedCity &&
+      !!watchedZone &&
+      !!watchedSector &&
+      !!watchedPaymentMethod,
     params: {
-      page_size: 900,
+      page_size: 1200,
       tipo_servicio: watchedServiceType,
       tipo_plan: watchedServicePlan,
       clasificacion_score_buro: watchedSuggestedPlansBuro, // only filters
+      //
+      use_exclusion_logic: true,
+      province: watchedProvince!,
+      city: watchedCity!,
+      zone: watchedZone!,
+      sector: watchedSector!,
+      payment_method: watchedPaymentMethod!,
     },
   });
 
@@ -184,7 +202,8 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
       isLoadingPlanInternets ||
       isRefetchingPlanInternets ||
       !watchedServiceType ||
-      !watchedServicePlan
+      !watchedServicePlan ||
+      !watchedPaymentMethod
     )
       return;
 
@@ -200,10 +219,15 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
     planInternetsPaging?.data?.items?.length,
     watchedServicePlan,
     watchedServiceType,
+    watchedPaymentMethod,
   ]);
 
   return (
     <>
+      {/* -------------- Payment Methods -------------- */}
+      <PaymentMethodPreventaFormPart form={form} />
+
+      {/* -------------- Equifax & Plan Internet -------------- */}
       <>
         <CustomTypoLabel
           text="Consulta buró de crédito"
@@ -252,6 +276,7 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
         />
       </>
 
+      {/* -------------- Internet Plan -------------- */}
       <>
         <CustomTypoLabel
           text="Plan de Internet"
@@ -315,7 +340,8 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
           disabled={
             !watchedServicePlan ||
             !watchedServiceType ||
-            !alreadyConsultedEquifax
+            !alreadyConsultedEquifax ||
+            !watchedPaymentMethod
           }
           onChangeValue={() => {
             form.setValue('selectedPromoOptions', []);
@@ -329,19 +355,33 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
           alignItems="flex-end"
           spacing={1}
         >
-          {!suggestedPlansBuroKey?.length && (
-            <CustomCardAlert
-              sizeType="small"
-              alertMessage="Consultar Equifax para ver los planes"
-              alertSeverity="info"
-            />
-          )}
+          <>
+            {!watchedPaymentMethod ? (
+              <>
+                <CustomCardAlert
+                  sizeType="small"
+                  alertMessage="Seleccionar método de pago"
+                  alertSeverity="info"
+                />
+              </>
+            ) : (
+              <>
+                {!suggestedPlansBuroKey?.length && (
+                  <CustomCardAlert
+                    sizeType="small"
+                    alertMessage="Consultar Equifax para ver los planes"
+                    alertSeverity="info"
+                  />
+                )}
 
-          {suggestedPlansBuroKey?.map((plan, index) => (
-            <Grid item key={index}>
-              <ChipModelState label={plan} color="info" />
-            </Grid>
-          ))}
+                {suggestedPlansBuroKey?.map((plan, index) => (
+                  <Grid item key={index}>
+                    <ChipModelState label={plan} color="info" />
+                  </Grid>
+                ))}
+              </>
+            )}
+          </>
         </Grid>
       </>
 
@@ -351,9 +391,6 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
         showEquiposPart={showEquiposPart}
         setShowEquiposPart={setShowEquiposPart}
       />
-
-      {/* -------------- Payment Methods -------------- */}
-      <PaymentMethodPreventaFormPart form={form} />
 
       {/* -------------- Promociones -------------- */}
       <>
