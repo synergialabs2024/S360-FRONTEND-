@@ -33,6 +33,7 @@ const DocsSaveONTModalStep: React.FC<DocsSaveONTModalStepProps> = ({
         buttonLabel="Imagen"
         selectedImage={Image_url}
         setSelectedImage={setImage_url}
+        //maxFileSizeMB={5}
       />
     </>
   );

@@ -37,6 +37,7 @@ const DocsSaveCorreccion: React.FC<DocsSaveCorreccionProps> = ({
             buttonLabel="Foto corrección - Cédula frontal"
             selectedImage={cedulaNoRostroImg}
             setSelectedImage={setCedulaNoRostroImg}
+            //maxFileSizeMB={5}
           />
         </>
       )}
@@ -48,6 +49,7 @@ const DocsSaveCorreccion: React.FC<DocsSaveCorreccionProps> = ({
             buttonLabel="Foto corrección - Aceptación"
             selectedImage={fotoAceptacionNoRostroImg}
             setSelectedImage={setFotoAceptacionNoRostroImg}
+            //maxFileSizeMB={5}
           />
         </>
       )}
@@ -59,12 +61,14 @@ const DocsSaveCorreccion: React.FC<DocsSaveCorreccionProps> = ({
             buttonLabel="Foto corrección - Cédula frontal"
             selectedImage={cedulaNoRostroImg}
             setSelectedImage={setCedulaNoRostroImg}
+            //maxFileSizeMB={5}
           />
 
           <UploadImageDropZoneComponent
             buttonLabel="Foto corrección - Aceptación"
             selectedImage={fotoAceptacionNoRostroImg}
             setSelectedImage={setFotoAceptacionNoRostroImg}
+            //maxFileSizeMB={5}
           />
         </>
       )}

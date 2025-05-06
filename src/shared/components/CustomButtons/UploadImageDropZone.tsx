@@ -8,6 +8,7 @@ import {
   JustifyContentType,
   SxPropsType,
 } from '@/shared/interfaces';
+import { ToastWrapper } from '@/shared/wrappers';
 
 export interface UploadImagePreviewBtnProps {
   buttonLabel: string;
@@ -27,6 +28,9 @@ export interface UploadImagePreviewBtnProps {
   onChangeImage?: (imageUrl?: any, selectedImage?: any) => void;
   maxWidthPreview?: string;
   maxHeightPreview?: string;
+
+  ///*
+  maxFileSizeMB?: number;
 }
 const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
   buttonLabel,
@@ -42,24 +46,61 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
   sxGrid,
   maxWidthPreview = '85%',
   maxHeightPreview = 'auto',
+
+  ///*
+  maxFileSizeMB,
 }) => {
   const [imagenUrl, setImagenUrl] = useState<string | undefined>(imageUrl);
   const [dragActive, setDragActive] = useState(false);
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+
+  const validateImage = (file: File): Promise<boolean> => {
+    return new Promise(resolve => {
+      if (maxFileSizeMB && file.size > maxFileSizeMB * 1024 * 1024) {
+        ToastWrapper.error(
+          `La imagen no debe superar los ${maxFileSizeMB} MB.`,
+        );
+        return resolve(false);
+      }
+
+      const img = new Image();
+      img.onload = () => {
+        resolve(true);
+      };
+      img.onerror = () => {
+        ToastWrapper.error('Error al cargar la imagen para validación.');
+        resolve(false);
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const selectedFile = files[0];
+
+      ///*
+      const isValid = await validateImage(selectedFile);
+      if (!isValid) {
+        return setSelectedImage(null);
+      }
+
       setSelectedImage(selectedFile);
       onChangeImage && onChangeImage(imageUrl, selectedFile);
     }
     event.target.value = '';
   };
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     setDragActive(false);
     if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
       const file = event.dataTransfer.files[0];
+
+      ///*
+      const isValid = await validateImage(file);
+      if (!isValid) return;
+
       setSelectedImage(file);
       onChangeImage && onChangeImage(imageUrl, file);
     }

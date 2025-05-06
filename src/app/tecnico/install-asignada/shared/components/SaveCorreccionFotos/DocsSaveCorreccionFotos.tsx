@@ -106,6 +106,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Ont"
           selectedImage={ontImg}
           setSelectedImage={setOntImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -124,6 +125,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Potencia Ont"
           selectedImage={potenciaOntImg}
           setSelectedImage={setPotenciaOntImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -142,6 +144,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Ont Encontrada en Casa"
           selectedImage={ontEncontradaCasaImg}
           setSelectedImage={setOntEncontradaCasaImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -160,6 +163,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Etiqueta"
           selectedImage={etiquetaImg}
           setSelectedImage={setEtiquetaImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -178,6 +182,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Nap"
           selectedImage={napImg}
           setSelectedImage={setNapImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -196,6 +201,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Potencia Nap"
           selectedImage={potenciaNapImg}
           setSelectedImage={setPotenciaNapImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -214,6 +220,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Premio"
           selectedImage={premioImg}
           setSelectedImage={setPremioImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -232,6 +239,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Test Speed"
           selectedImage={testSpeedImg}
           setSelectedImage={setTestSpeedImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -250,6 +258,7 @@ const DocsSaveCorreccionFotos: React.FC<DocsSaveCorreccionFotosProps> = ({
           buttonLabel="Foto corrección - Acta Entrega Ups"
           selectedImage={actaEntregaUpsImg}
           setSelectedImage={setActaEntregaUpsImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
     </>

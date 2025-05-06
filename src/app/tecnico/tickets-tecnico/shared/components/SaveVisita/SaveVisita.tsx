@@ -432,6 +432,7 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
             buttonLabel={label}
             selectedImage={image}
             setSelectedImage={setImage as any}
+            //maxFileSizeMB={5}
           />
         ))}
       </CustomTabPanel>
