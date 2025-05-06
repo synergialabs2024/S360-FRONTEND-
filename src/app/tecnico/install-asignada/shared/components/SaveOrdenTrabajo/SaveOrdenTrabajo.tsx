@@ -600,6 +600,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
             buttonLabel={label}
             selectedImage={image}
             setSelectedImage={setImage as any}
+            //maxFileSizeMB={5}
           />
         ))}
 
@@ -608,6 +609,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
             buttonLabel="Foto Wifi Mesh"
             selectedImage={fotoWifiMesh}
             setSelectedImage={setFotoWifiMesh}
+            //maxFileSizeMB={5}
           />
         )}
         {useInstalacionesStore.getState().isRequiredMiniUPS && (
@@ -615,6 +617,7 @@ const SaveOrdenTrabajo: React.FC<SaveOrdenTrabajoProps> = ({
             buttonLabel="Foto Acta de entrega UPS"
             selectedImage={fotoActaEntregaUPS}
             setSelectedImage={setFotoActaEntregaUPS}
+            //maxFileSizeMB={5}
           />
         )}
       </CustomTabPanel>

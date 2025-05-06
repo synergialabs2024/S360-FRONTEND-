@@ -1,4 +1,4 @@
-import { Box, Card, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import {
   MRT_RowData,
   MaterialReactTable,
@@ -84,21 +84,15 @@ const CustomMinimalTable = <T extends MRT_RowData>({
 
   //using MRT_Table instead of MaterialReactTable if we do not need any of the toolbar components or features
   return (
-    <Grid item container justifyContent="center" p={2} {...gridSizeTable}>
-      <Card
+    <Grid item {...gridSizeTable}>
+      <Box
         sx={{
           width: '100%',
         }}
       >
-        <Box
-          sx={{
-            width: '100%',
-          }}
-        >
-          <MaterialReactTable table={table} />
-          {/* <MRT_Table table={table} /> */}
-        </Box>
-      </Card>
+        <MaterialReactTable table={table} />
+        {/* <MRT_Table table={table} /> */}
+      </Box>
     </Grid>
   );
 };
