@@ -50,6 +50,7 @@ const DocsSaveFotosOpenTicket: React.FC<DocsSaveFotosOpenTicketProps> = ({
           buttonLabel="Foto vivienda *"
           selectedImage={viviendaImg}
           setSelectedImage={setViviendaImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
 
@@ -68,6 +69,7 @@ const DocsSaveFotosOpenTicket: React.FC<DocsSaveFotosOpenTicketProps> = ({
           buttonLabel="Foto Opcional"
           selectedImage={opcionalImg}
           setSelectedImage={setOpcionalImg}
+          //maxFileSizeMB={5}
         />
       </Grid>
     </>

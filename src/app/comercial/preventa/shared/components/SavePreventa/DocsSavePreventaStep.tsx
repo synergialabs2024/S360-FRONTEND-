@@ -89,11 +89,13 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
         buttonLabel="Foto cédula frontal"
         selectedImage={cedulaFrontalImg}
         setSelectedImage={setCedulaFrontalImg}
+        //maxFileSizeMB={5}
       />
       <UploadImageDropZoneComponent
         buttonLabel="Foto cédula posterior"
         selectedImage={cedulaPosteriorImg}
         setSelectedImage={setCedulaPosteriorImg}
+        //maxFileSizeMB={5}
       />
 
       <UploadImageDropZoneComponent
@@ -101,6 +103,7 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
         selectedImage={viviendaImg}
         setSelectedImage={setViviendaImg}
         sizeContainer={gridSize}
+        //maxFileSizeMB={5}
       />
 
       {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
@@ -108,6 +111,7 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
           buttonLabel="Anexo cuenta bancaria"
           selectedImage={documentoCuentaBancariaImg}
           setSelectedImage={setDocumentoCuentaBancairaImg}
+          //maxFileSizeMB={5}
         />
       ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
         <>
@@ -127,6 +131,7 @@ const DocsSavePreventaStep: React.FC<DocsSavePreventaStepProps> = ({
             selectedImage={planillaServicioBasicoImg}
             setSelectedImage={setPlanillaServicioBasicoImg}
             sizeContainer={gridSize}
+            //maxFileSizeMB={5}
           />
         </>
       ) : null}
