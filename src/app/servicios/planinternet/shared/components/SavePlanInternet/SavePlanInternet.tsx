@@ -18,6 +18,7 @@ import {
 import { planinternetFormSchema, ToastWrapper, useTabsOnly } from '@/shared';
 import {
   a11yProps,
+  CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomAutocompleteMultiple,
   CustomNumberTextField,
@@ -91,6 +92,8 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
   const watchedProvincias = form.watch('provincias');
   const watchedCiudades = form.watch('ciudades');
   const watchedZonas = form.watch('zonas');
+
+  const watchedMetodoPagoExclusivo = form.watch('metodo_pago_exclusivo');
 
   ///* fetch data ----------------
   const {
@@ -254,6 +257,23 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
           defaultValue={form.getValues().clasificacion_score_buro}
           error={errors.clasificacion_score_buro}
           helperText={errors.clasificacion_score_buro?.message}
+          size={gridSizeMdLg6}
+        />
+        <CustomAutocomplete<MetodoPago>
+          label="Método de pago"
+          name="metodo_pago_exclusivo"
+          // options
+          options={metodoPagosPaging?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().metodo_pago_exclusivo}
+          isLoadingData={isLoadingMetodoPagos || isRefetchingMetodoPagos}
+          // vaidation
+          control={form.control}
+          error={errors.metodo_pago_exclusivo}
+          helperText={errors.metodo_pago_exclusivo?.message}
+          size={gridSizeMdLg6}
+          required={false}
         />
 
         <CustomTextArea
@@ -524,7 +544,14 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
             valueKey="name"
             actualValueKey="id"
             // options
-            options={metodoPagosPaging?.data?.items || []}
+            options={
+              watchedMetodoPagoExclusivo
+                ? metodoPagosPaging?.data?.items?.filter(
+                    (metodoPago: MetodoPago) =>
+                      metodoPago?.id !== watchedMetodoPagoExclusivo,
+                  ) || []
+                : metodoPagosPaging?.data?.items || []
+            }
             defaultValue={
               form.getValues().metodo_pagos?.length
                 ? metodoPagosPaging?.data?.items?.filter(

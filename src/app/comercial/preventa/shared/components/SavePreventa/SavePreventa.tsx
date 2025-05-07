@@ -72,6 +72,7 @@ import {
 import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
 import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
 import {
+  PlanInternet,
   PreventaPromocionSelectedOptions,
   SolicitudServicio,
 } from '@/shared/interfaces';
@@ -125,6 +126,7 @@ export type SaveFormDataPreventa = CreatePreventaParamsBase &
     estadoOtp?: Nullable<OtpStatesEnumChoice>;
 
     // helpers ----------------
+    rawPlanInternet?: PlanInternet;
 
     // promociones ----------------
     // to safe selected options after unmount in PromocionPreventaFormPart

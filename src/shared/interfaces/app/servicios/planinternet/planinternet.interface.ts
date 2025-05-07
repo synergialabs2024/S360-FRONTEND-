@@ -1,5 +1,6 @@
 import { ClasificacionPlanesScoreBuroEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { MetodoPago } from '../../administration';
 
 export interface PlanesInternetPaginatedRes {
   status: number;
@@ -37,12 +38,16 @@ export interface PlanInternet {
   clasificacion_score_buro: ClasificacionPlanesScoreBuroEnumChoice | string;
 
   // fk ------
+  metodo_pago_exclusivo?: number; // solo para ese pm
+
   paises?: number[] | string[];
   provincias?: number[] | string[];
   ciudades?: number[] | string[];
   zonas?: number[];
   sectores?: number[];
   metodo_pagos?: number[];
+
+  metodo_pago_exclusivo_data?: MetodoPago;
 
   // helpers no models ----------
   name_valor_iva?: string;

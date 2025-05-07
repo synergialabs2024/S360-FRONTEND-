@@ -43,6 +43,8 @@ const PaymentMethodPreventaFormPart: React.FC<
   const watcherOwnerCreditCard = form.watch('titular_tarjeta');
   const watchedRawPaymentMethod = form.watch('rawPaymentMethod');
 
+  const watchedRawPlanInternet = form.watch('rawPlanInternet');
+
   ///* fetch data -------------
   // payment methods ---
   const {
@@ -142,7 +144,22 @@ const PaymentMethodPreventaFormPart: React.FC<
         onChangeRawValue={rawValue => {
           form.setValue('rawPaymentMethod', rawValue);
           form.setValue('selectedPromoOptions', []);
+
+          if (
+            watchedRawPlanInternet?.metodo_pago_exclusivo_data?.id !==
+              rawValue.id ||
+            !rawValue
+          ) {
+            form.setValue('plan_internet', '' as any);
+            form.setValue('rawPlanInternet', undefined);
+          }
         }}
+        disabled={
+          !!watchedRawPlanInternet &&
+          !!watchedRawPaymentMethod &&
+          watchedRawPlanInternet?.metodo_pago_exclusivo_data?.id ===
+            watchedRawPaymentMethod?.id
+        }
       />
       {watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.DEBITO ? (
         <>

@@ -327,7 +327,18 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
           label="Planes de internet"
           name="plan_internet"
           // options
-          options={planInternetsPaging?.data?.items || []}
+          options={
+            planInternetsPaging?.data?.items?.filter(pi => {
+              // si el plan tiene metodo_pago_exclusivo y el watchedPaymentMethod no es ese, se filtra para no mostrarlo, pero si si es, pues se muestra y no se filtra. Pero si NO tiene metodo_pago_exclusivo, se muestra todos
+              if (pi.metodo_pago_exclusivo) {
+                return (
+                  pi.metodo_pago_exclusivo === watchedPaymentMethod ||
+                  pi.metodo_pago_exclusivo === null
+                );
+              }
+              return true;
+            }) || []
+          }
           valueKey="name"
           actualValueKey="id"
           defaultValue={form.getValues().plan_internet}
@@ -345,6 +356,15 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
           }
           onChangeValue={() => {
             form.setValue('selectedPromoOptions', []);
+          }}
+          onChangeRawValue={value => {
+            form.setValue('rawPlanInternet', value);
+            if (value?.metodo_pago_exclusivo_data?.id) {
+              form.setValue(
+                'metodo_pago',
+                value?.metodo_pago_exclusivo_data?.id,
+              );
+            }
           }}
         />
         <Grid
