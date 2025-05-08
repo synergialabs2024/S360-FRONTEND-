@@ -202,7 +202,9 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
                 error={errors.entidad_financiera}
                 helperText={errors.entidad_financiera?.message}
                 size={gridSizeMdLg6}
-                disabled
+                onChangeRawValue={e => {
+                  console.log(e);
+                }}
               />
             </Grid>
           </>

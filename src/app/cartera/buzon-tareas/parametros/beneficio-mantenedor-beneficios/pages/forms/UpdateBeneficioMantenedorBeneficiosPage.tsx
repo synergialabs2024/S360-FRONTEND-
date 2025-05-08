@@ -12,7 +12,7 @@ export type UpdateBeneficioMantenedorBeneficiosPageProps = {};
 const UpdateBeneficioMantenedorBeneficiosPage: React.FC<
   UpdateBeneficioMantenedorBeneficiosPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.cartera_add_tipomantenedorbeneficios);
+  useCheckPermission(PermissionsEnum.cartera_change_tipomantenedorbeneficios);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetBeneficioMantenedorBeneficio(

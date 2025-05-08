@@ -99,6 +99,8 @@ const ClientesPagosManualesByStatePage: React.FC<
       try {
         const tokenData = await fetchAuthToken();
 
+        console.log('tokenData', tokenData);
+
         const consultaData = await fetchNuevaConsultaContrapartida(
           tokenData.access_token,
         );
