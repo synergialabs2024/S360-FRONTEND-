@@ -55,7 +55,7 @@ const SaveEncuestaPlantillas: React.FC<SaveEncuestaPlantillasProps> = ({
   } = form;
 
   ///* mutations
-  const createCiudadMutation = useCreateEncuestaPlantilla({
+  const createEncuestaMutation = useCreateEncuestaPlantilla({
     navigate,
     returnUrl: returnUrlEncuestaPlantillasPage,
     enableErrorNavigate: false,
@@ -66,9 +66,22 @@ const SaveEncuestaPlantillas: React.FC<SaveEncuestaPlantillasProps> = ({
       returnUrl: returnUrlEncuestaPlantillasPage,
     });
 
+  const crearSlug = (text: string): string => {
+    return text
+      .toLowerCase() // Minúsculas
+      .normalize('NFD') // Separa tildes (á → a + ´)
+      .replace(/[\u0300-\u036f]/g, '') // Elimina tildes
+      .replace(/[^\w\s-]/g, '') // Elimina símbolos (excepto guiones)
+      .trim() // Quita espacios al inicio/final
+      .replace(/\s+/g, '-') // Espacios → guiones
+      .replace(/-+/g, '-'); // Evita guiones dobles
+  };
+
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
+
+    const slug = crearSlug(data.name);
 
     ///* upd
     if (encuestaPlantillas?.id) {
@@ -77,7 +90,14 @@ const SaveEncuestaPlantillas: React.FC<SaveEncuestaPlantillasProps> = ({
     }
 
     ///* create
-    createCiudadMutation.mutate(data);
+    // createCiudadMutation.mutate(data);
+    createEncuestaMutation.mutate({
+      name: data.name,
+      state: data.state,
+      slug: slug,
+      description: data.description,
+      questions: data.questions,
+    });
   };
 
   ///* effects
@@ -88,7 +108,7 @@ const SaveEncuestaPlantillas: React.FC<SaveEncuestaPlantillasProps> = ({
 
   return (
     <SingleFormBoxScene
-      titlePage={title}
+      titleNode={title}
       onCancel={() => navigate(returnUrlEncuestaPlantillasPage)}
       onSave={handleSubmit(onSave, errors => {
         const keys = getKeysFormErrorsMessage(errors);

@@ -12,6 +12,7 @@ import { Grid } from '@mui/material';
 import axios from 'axios';
 import { useGetTransaccion } from '@/actions/app';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 export type ClienteInfoReversoModalProps = {
   open: boolean;
@@ -36,6 +37,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   serviceLine,
   transaccionFiltrada,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     isLoading: isTransactionLoading,
     isRefetching: isTransactionRefetching,
@@ -50,6 +52,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   });
   ///* mutations --------------------------
   const createReverso = async (accessToken: string) => {
+    setIsLoading(true);
     const fechaTransaccion = dayjs().format('YYYYMMDD');
     try {
       const response = await axios.post(
@@ -69,12 +72,16 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
           },
         },
       );
+      toast.success('Reverso generado correctamente');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Error de Axios:', error.response?.data || error.message);
       }
+      toast.error('Ha ocurrido un error al generar el reverso');
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -93,13 +100,11 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
           },
         },
       );
-      toast.success('Reverso generado correctamente');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Error de Axios:', error.response?.data || error.message);
       }
-      toast.error('Ha ocurrido un error al generar el reverso');
       throw error;
     }
   };
@@ -127,7 +132,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
         onConfirm={async () => {
           try {
             const tokenData = await fetchAuthToken();
-            createReverso(tokenData.access_token);
+            await createReverso(tokenData.access_token);
             handleClose();
           } catch (error) {
             console.error('Error en onSave:', error);
@@ -135,6 +140,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
         }}
         confirmVariantBtn="outlined"
         confirmTextBtn="Generar Reverso"
+        disabledConfirmBtn={isLoading}
         // // content --------
         contentNode={
           <>

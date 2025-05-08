@@ -25,7 +25,7 @@ const TicketsVisitaByStatePage: React.FC<TicketsVisitaByStatePageProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();

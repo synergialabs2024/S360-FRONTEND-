@@ -176,9 +176,7 @@ const SectoresPage: React.FC<SectoresPageProps> = () => {
             title="Estado"
             checked={row.original?.state}
             onChangeChecked={() => {
-              if (
-                !hasPermission(PermissionsEnum.administration_change_provincia)
-              )
+              if (!hasPermission(PermissionsEnum.administration_change_sector))
                 return;
 
               setConfirmDialog({

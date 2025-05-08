@@ -181,9 +181,7 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
             title="Estado"
             checked={row.original?.state}
             onChangeChecked={() => {
-              if (
-                !hasPermission(PermissionsEnum.administration_change_provincia)
-              )
+              if (!hasPermission(PermissionsEnum.administration_change_zona))
                 return;
 
               setConfirmDialog({
