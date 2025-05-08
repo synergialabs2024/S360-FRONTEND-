@@ -23,6 +23,7 @@ import {
   SlotAgendamientoEstadosEnumChoice,
   SystemParamsSlugsEnum,
   TimeMapPlanificador,
+  TipoGestionFlotaPlanificadorEnumChoice,
   useLoaders,
 } from '@/shared';
 
@@ -141,6 +142,7 @@ export const usePlanificadorAgendamiento = ({
     params: {
       zonas: watchedZone! as any, // filter by pk not [pk]
       page_size: 900,
+      tipo_gestion_planificadores: `${TipoGestionFlotaPlanificadorEnumChoice.INSTALACION_Y_VISITA_TECNICA}, ${TipoGestionFlotaPlanificadorEnumChoice.INSTALACION}`,
     },
   });
 

@@ -114,7 +114,10 @@ export const useUpdateFlota = <T>({
 };
 
 ///* axios ---------------
-export type GetFlotasParams = Partial<Flota> & PagingPartialParams;
+export type GetFlotasParams = Partial<Flota> &
+  PagingPartialParams & {
+    tipo_gestion_planificadores?: string; // x,y,z
+  };
 export type CreateFlotaParams<T> = T;
 export type CreateFlotaParamsBase = Omit<Flota, 'id'>;
 export interface UpdateFlotaParams<T> {

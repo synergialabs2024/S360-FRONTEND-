@@ -23,6 +23,7 @@ import {
   SlotAgendamientoEstadosEnumChoice,
   SystemParamsSlugsEnum,
   TimeMapTicketVisitaPlanificador,
+  TipoGestionFlotaPlanificadorEnumChoice,
   useLoaders,
 } from '@/shared';
 
@@ -141,6 +142,8 @@ export const usePlanificadorAgendamientoTv = ({
     params: {
       zonas: watchedZone! as any, // filter by pk not [pk]
       page_size: 900,
+      // TODO: review in visita tecnica
+      tipo_gestion_planificadores: `${TipoGestionFlotaPlanificadorEnumChoice.INSTALACION_Y_VISITA_TECNICA}, ${TipoGestionFlotaPlanificadorEnumChoice.VISITA_TECNICA}`,
     },
   });
 
