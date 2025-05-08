@@ -137,7 +137,11 @@ const SubtipoMantenedorBeneficiosPage: React.FC<
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.tecnico_change_asuntoticket))
+                if (
+                  !hasPermission(
+                    PermissionsEnum.cartera_change_subtipomantenedorbeneficios,
+                  )
+                )
                   return;
 
                 setConfirmDialog({
