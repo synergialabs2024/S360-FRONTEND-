@@ -20,7 +20,7 @@ export type TicketsByStatePageProps = {
 };
 
 const TicketsByStatePage: React.FC<TicketsByStatePageProps> = ({ state }) => {
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
