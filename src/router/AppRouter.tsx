@@ -2282,6 +2282,15 @@ const EncuestaPlantillasFormPage = Loadable(
   ),
 );
 
+const UpdateEncuestaPlantillasFormPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-plantillas/pages/forms/UpdateEncuestaPlantillasFormPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -4049,6 +4058,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.customerExperience.encuestaPlantillasCrear,
             element: <EncuestaPlantillasFormPage />,
+          },
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaPlantillasEditar,
+            element: <UpdateEncuestaPlantillasFormPage />,
           },
         ],
       },

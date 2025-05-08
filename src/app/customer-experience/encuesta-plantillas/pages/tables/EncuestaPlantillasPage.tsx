@@ -4,19 +4,22 @@ import { useMemo } from 'react';
 import { ROUTER_PATHS } from '@/router/constants';
 import {
   CustomSearch,
+  CustomSwitch,
   CustomTable,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { EncuestaTotems, PermissionsEnum } from '@/shared/interfaces';
+import { EncuestaPlantillas, PermissionsEnum } from '@/shared/interfaces';
 import { emptyCellOneLevel } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { Asunto } from '@/shared/interfaces/app/ticket';
-import { useUpdateAsunto } from '@/actions/app/tickets/parametros/asunto/asunto.actions';
-import { useFetchEncuestaPlantillas } from '@/actions/app/customer-experience';
+import {
+  useFetchEncuestaPlantillas,
+  useUpdateEncuestaPlantilla,
+} from '@/actions/app/customer-experience';
+import { useNavigate } from 'react-router';
 
 export const returnUrlEncuestaPlantillasPage =
   ROUTER_PATHS.customerExperience.encuestaPlantillasNav;
@@ -25,6 +28,8 @@ export type EncuestaPlantillasPageProps = {};
 
 const EncuestaPlantillasPage: React.FC<EncuestaPlantillasPageProps> = () => {
   useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+
+  const navigate = useNavigate();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -37,7 +42,7 @@ const EncuestaPlantillasPage: React.FC<EncuestaPlantillasPageProps> = () => {
   );
 
   ///* mutations
-  const changeState = useUpdateAsunto({
+  const changeState = useUpdateEncuestaPlantilla({
     enableNavigate: false,
   });
 
@@ -68,7 +73,7 @@ const EncuestaPlantillasPage: React.FC<EncuestaPlantillasPageProps> = () => {
   });
 
   ///* columns
-  const columns = useMemo<MRT_ColumnDef<EncuestaTotems>[]>(
+  const columns = useMemo<MRT_ColumnDef<EncuestaPlantillas>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -78,9 +83,59 @@ const EncuestaPlantillasPage: React.FC<EncuestaPlantillasPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
+      {
+        accessorKey: 'state',
+        header: 'ESTADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
+        Cell: ({ row }) => {
+          return typeof row.original?.state === 'boolean' ? (
+            <CustomSwitch
+              title="state"
+              checked={row.original?.state}
+              onChangeChecked={() => {
+                setConfirmDialog({
+                  isOpen: true,
+                  title: 'Cambiar state',
+                  subtitle:
+                    '¿Está seguro que desea cambiar el state de este registro?',
+                  onConfirm: () => {
+                    changeState.mutate({
+                      id: row.original.id!,
+                      data: {
+                        state: !row.original.state,
+                      },
+                    });
+                    setConfirmDialogIsOpen(false);
+                  },
+                });
+              }}
+            />
+          ) : (
+            'N/A'
+          );
+        },
+      },
     ],
     [changeState, setConfirmDialog, setConfirmDialogIsOpen],
   );
+
+  ///* handlers
+  const onEdit = (encuestaPlantillas: EncuestaPlantillas) => {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Editar Plantilla',
+      subtitle: '¿Está seguro que desea editar esta plantilla?',
+      onConfirm: () => {
+        setConfirmDialogIsOpen(false);
+        navigate(
+          `${returnUrlEncuestaPlantillasPage}/editar/${encuestaPlantillas.uuid}`,
+        );
+      },
+    });
+  };
 
   return (
     <SingleTableBoxScene
@@ -94,7 +149,7 @@ const EncuestaPlantillasPage: React.FC<EncuestaPlantillasPageProps> = () => {
         text="por nombre"
       />
 
-      <CustomTable<Asunto>
+      <CustomTable<EncuestaPlantillas>
         columns={columns}
         data={AsuntosPagingRes?.data?.items || []}
         isLoading={isLoading}
@@ -114,6 +169,9 @@ const EncuestaPlantillasPage: React.FC<EncuestaPlantillasPageProps> = () => {
         enableActionsColumn={hasPermission(
           PermissionsEnum.tecnico_change_asuntoticket,
         )}
+        //
+        canEdit={true}
+        onEdit={onEdit}
       />
     </SingleTableBoxScene>
   );

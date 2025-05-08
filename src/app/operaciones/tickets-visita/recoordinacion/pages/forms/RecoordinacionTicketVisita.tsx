@@ -12,7 +12,7 @@ export type RecoordinacionTicketVisitaProps = {};
 const RecoordinacionTicketVisita: React.FC<
   RecoordinacionTicketVisitaProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_change_ordentrabajo);
+  useCheckPermission(PermissionsEnum.tecnico_change_tickettecnico);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetTicket(uuid!);

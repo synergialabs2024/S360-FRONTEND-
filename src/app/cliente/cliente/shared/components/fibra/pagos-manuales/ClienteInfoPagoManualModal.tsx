@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
 import {
+  CustomAutocomplete,
   CustomTextFieldNoForm,
   ScrollableDialogProps,
 } from '@/shared/components';
@@ -9,8 +10,10 @@ import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
-import { LineaServicio } from '@/shared';
+import { EntidadFinanciera, gridSizeMdLg6, LineaServicio } from '@/shared';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { useFetchEntidadFinancieras } from '@/actions/app';
 
 export type ClienteInfoPagoManualModalProps = {
   open: boolean;
@@ -19,11 +22,9 @@ export type ClienteInfoPagoManualModalProps = {
   serviceLine: LineaServicio;
 };
 
-export type RubrosClienteFormData = Partial<any> & {
-  // helpers to fetch items ------------
-  bodega?: number;
-  ubicacion?: number;
-  categoria_producto?: number;
+export type SaveFormDataPagoManual = {
+  entidad_financiera?: number;
+  entidad_financiera_data?: EntidadFinanciera;
 };
 
 const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
@@ -32,14 +33,18 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   rubro,
   serviceLine,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   ///* global state --------------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
   const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
 
   ///* form --------------------------
-  const form = useForm<FormData>({
+  const form = useForm<SaveFormDataPagoManual>({
     defaultValues: {},
   });
+
+  const { errors } = form.formState;
+
   const generateRandomAuthorizationNumber = (): string => {
     const randomNumber = Math.floor(Math.random() * 10000000000); // Genera un número entre 0 y 9999999999
     const paddedNumber = randomNumber.toString().padStart(10, '0'); // Asegura que siempre tenga 10 dígitos
@@ -47,6 +52,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   };
   ///* mutations --------------------------
   const createPagoManual = async (accessToken: string) => {
+    setIsLoading(true);
     const fechaTransaccion = dayjs().format('YYYYMMDD');
     try {
       const response = await axios.post(
@@ -75,6 +81,8 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
       }
       toast.error('Ha ocurrido un error al generar el pago manual');
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,6 +117,17 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
     clearAllItemsStore();
   };
 
+  ///* fetch data
+  const {
+    data: entidadFinancierasPaging,
+    isLoading: isLoadingEntidadFinancieras,
+    isRefetching: isRefetchingEntidadFinancieras,
+  } = useFetchEntidadFinancieras({
+    params: {
+      page_size: 900,
+    },
+  });
+
   return (
     <>
       <ScrollableDialogProps
@@ -128,6 +147,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
         }}
         confirmVariantBtn="outlined"
         confirmTextBtn="Generar Pago"
+        disabledConfirmBtn={isLoading}
         // // content --------
         contentNode={
           <>
@@ -163,6 +183,25 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
                 label="DIRECCION"
                 value={rubro?.direccion}
                 required={false}
+                disabled
+              />
+
+              <CustomAutocomplete<EntidadFinanciera>
+                label="Entidad financiera"
+                name="entidad_financiera"
+                // options
+                options={entidadFinancierasPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().entidad_financiera}
+                isLoadingData={
+                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
+                }
+                // vaidation
+                control={form.control}
+                error={errors.entidad_financiera}
+                helperText={errors.entidad_financiera?.message}
+                size={gridSizeMdLg6}
                 disabled
               />
             </Grid>
