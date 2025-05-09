@@ -1,7 +1,7 @@
 import { EstadoTareaEnumChoice, LineaServicio, Rubro } from '@/shared';
 import { CustomTable } from '@/shared/components';
 import { Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoPagoManualModal';
 import axios from 'axios';
 
@@ -94,28 +94,25 @@ const ClientesPagosManualesByStatePage: React.FC<
   ];
 
   // 3. Modifica el useEffect para guardar los datos
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const tokenData = await fetchAuthToken();
+  const fetchData = useCallback(async () => {
+    try {
+      const tokenData = await fetchAuthToken();
+      const consultaData = await fetchNuevaConsultaContrapartida(
+        tokenData.access_token,
+      );
 
-        console.log('tokenData', tokenData);
-
-        const consultaData = await fetchNuevaConsultaContrapartida(
-          tokenData.access_token,
-        );
-
-        // Guarda las líneas en el estado
-        if (consultaData?.lineas) {
-          setLineasData(consultaData.lineas);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      // Guarda las líneas en el estado
+      if (consultaData?.lineas) {
+        setLineasData(consultaData.lineas);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, [serviceLine?.cliente_data?.identificacion]);
 
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <>
@@ -146,6 +143,7 @@ const ClientesPagosManualesByStatePage: React.FC<
           onClose={() => setOpen(false)}
           rubro={selectedRubro!}
           serviceLine={serviceLine}
+          onSuccess={fetchData}
         />
       </Grid>
     </>
