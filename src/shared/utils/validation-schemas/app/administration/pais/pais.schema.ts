@@ -8,7 +8,8 @@ export const paisFormSchema = yup.object({
   iso_code: yup
     .string()
     .required('El campo iso code es requerido')
-    .max(28, 'El campo iso code no debe exceder los 2 caracteres'),
+    .max(28, 'El campo iso code no debe exceder los 28 caracteres')
+    .matches(/^[A-Za-z]+$/, 'El campo iso code solo debe contener letras'),
   nationality: yup
     .string()
     .required('El campo nationality es requerido')

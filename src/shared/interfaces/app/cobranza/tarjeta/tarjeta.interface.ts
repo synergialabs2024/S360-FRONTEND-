@@ -1,3 +1,4 @@
+import { TarjetaCodeTMEnumChoice } from '@/shared/constants';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 
 export interface TarjetasPaginatedRes {
@@ -11,8 +12,7 @@ export interface Tarjeta {
   id?: number;
   uuid?: string;
 
-  code: string;
-
+  code: TarjetaCodeTMEnumChoice;
   name: string;
   state: boolean;
 

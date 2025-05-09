@@ -5,9 +5,9 @@ import { ImgModalComponent } from '@/shared/components';
 import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
 import {
   IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
+  MODEL_STATE_BOOLEAN,
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
-  TRUE_FALSE_TYPE_ARRAY_CHOICES,
 } from '@/shared/constants';
 import { Preventa } from '@/shared/interfaces';
 import {
@@ -98,7 +98,7 @@ export const useColumnsPreventa = () => {
         enableColumnFilter: true,
         enableSorting: true,
         filterVariant: 'select',
-        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
         Cell: ({ row }) => formatBooleanCell(row, 'es_referido'),
       },
 

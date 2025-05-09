@@ -1456,17 +1456,6 @@ export enum YesNoEnumChoice {
 
 export const YES_NO_ARRAY_CHOICES = [YesNoEnumChoice.SI, YesNoEnumChoice.NO];
 
-export const TRUE_FALSE_TYPE_ARRAY_CHOICES = [
-  {
-    label: 'SI',
-    value: 'true',
-  },
-  {
-    label: 'NO',
-    value: 'false',
-  },
-];
-
 export enum canalReferenciaMantenedoresEnumChoice {
   RRSS = 'RRSS',
   WEB = 'WEB',
@@ -1713,4 +1702,34 @@ export enum TipoVinculacionFlotaEnumChoice {
 export const TIPO_VINCULACION_FLOTA_ARRAY_CHOICES = [
   TipoVinculacionFlotaEnumChoice.INTERNO,
   TipoVinculacionFlotaEnumChoice.EXTERNO,
+];
+
+export enum TarjetaCodeTMEnumChoice {
+  visa = 'visa',
+  mastercard = 'mastercard',
+  american_express = 'american-express',
+  diners_club = 'diners-club',
+  discover = 'discover',
+  jcb = 'jcb',
+  unionpay = 'unionpay',
+  maestro = 'maestro',
+  mir = 'mir',
+  elo = 'elo',
+  hiper = 'hiper',
+  hipercard = 'hipercard',
+}
+
+export const TARJETA_CODE_ARRAY_CHOICES = [
+  TarjetaCodeTMEnumChoice.visa,
+  TarjetaCodeTMEnumChoice.mastercard,
+  TarjetaCodeTMEnumChoice.american_express,
+  TarjetaCodeTMEnumChoice.diners_club,
+  TarjetaCodeTMEnumChoice.discover,
+  TarjetaCodeTMEnumChoice.jcb,
+  TarjetaCodeTMEnumChoice.unionpay,
+  TarjetaCodeTMEnumChoice.maestro,
+  TarjetaCodeTMEnumChoice.mir,
+  TarjetaCodeTMEnumChoice.elo,
+  TarjetaCodeTMEnumChoice.hiper,
+  TarjetaCodeTMEnumChoice.hipercard,
 ];
