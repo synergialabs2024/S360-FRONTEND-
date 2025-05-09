@@ -248,6 +248,8 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
   const watchedCelular = form.watch('celular');
   const watchedEstadoOtp = form.watch('estadoOtp');
 
+  const watchedPlanInternet = form.watch('plan_internet');
+
   // map ---------------
   const {
     Map,
@@ -859,6 +861,10 @@ const SavePreventa: React.FC<SavePreventaProps> = ({
                 helperText={errors.sector?.message}
                 onChangeValue={() => {
                   form.setValue('selectedPromoOptions', []);
+                  if (watchedPlanInternet) {
+                    form.setValue('rawPaymentMethod', undefined);
+                    form.setValue('metodo_pago', '' as any);
+                  }
                 }}
               />
               <CustomTextField
