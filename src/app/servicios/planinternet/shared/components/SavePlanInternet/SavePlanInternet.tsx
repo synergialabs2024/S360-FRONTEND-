@@ -171,6 +171,26 @@ const SavePlanInternet: React.FC<SavePlanInternetProps> = ({
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
 
+    // validate matrix: si hay algo en provincias, ciudades, zonas o sectores, es requerido el metodo de pago
+    const isLocationMatrixEmpty =
+      !data.provincias?.length &&
+      !data.ciudades?.length &&
+      !data.zonas?.length &&
+      !data.sectores?.length;
+    const isMetodoPagosEmpty = !data.metodo_pagos?.length;
+    if (!isLocationMatrixEmpty && isMetodoPagosEmpty) {
+      ToastWrapper.error(
+        'Es requerido al menos un método de pago cuando se selecciona una provincia, ciudad, zona o sector en la matriz de exclusión',
+      );
+      return;
+    }
+    if (!isMetodoPagosEmpty && isLocationMatrixEmpty) {
+      ToastWrapper.error(
+        'No es permitido seleccionar un método de pago sin seleccionar una provincia, ciudad, zona o sector en la matriz de exclusión',
+      );
+      return;
+    }
+
     ///* upd
     if (planinternet?.id) {
       updatePlanInternetMutation.mutate({ id: planinternet.id!, data });
