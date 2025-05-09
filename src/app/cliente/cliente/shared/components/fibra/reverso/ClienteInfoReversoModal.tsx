@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useGetTransaccion } from '@/actions/app';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { getEnvs } from '@/shared/utils/get-evns';
 
 export type ClienteInfoReversoModalProps = {
   open: boolean;
@@ -39,6 +40,8 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   transaccionFiltrada,
   onSuccess,
 }) => {
+  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
+
   const [isLoading, setIsLoading] = useState(false);
   const {
     isLoading: isTransactionLoading,
@@ -58,7 +61,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
     const fechaTransaccion = dayjs().format('YYYYMMDD');
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/nuevo-reverso/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/nuevo-reverso/',
         {
           contrapartida: serviceLine?.cliente_data?.identificacion,
           linea: rubro?.service_code,
@@ -90,11 +93,11 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/oauth/token/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: 'admin',
-          client_secret: 'admin',
-          grant_type: 'client_credentials',
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          grant_type: GRANT_TYPE,
         },
         {
           headers: {
