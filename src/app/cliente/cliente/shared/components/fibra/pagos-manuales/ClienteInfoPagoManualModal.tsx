@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import {
   CustomAutocomplete,
+  CustomTextField,
   CustomTextFieldNoForm,
   ScrollableDialogProps,
 } from '@/shared/components';
@@ -10,21 +11,32 @@ import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
-import { EntidadFinanciera, gridSizeMdLg6, LineaServicio } from '@/shared';
+import {
+  EntidadFinanciera,
+  getKeysFormErrorsMessage,
+  gridSizeMdLg6,
+  LineaServicio,
+  pagoManualFormSchema,
+  ToastWrapper,
+} from '@/shared';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useFetchEntidadFinancieras } from '@/actions/app';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export type ClienteInfoPagoManualModalProps = {
   open: boolean;
   onClose: () => void;
   rubro?: any;
   serviceLine: LineaServicio;
+  onSuccess?: () => void;
 };
 
 export type SaveFormDataPagoManual = {
   entidad_financiera?: number;
   entidad_financiera_data?: EntidadFinanciera;
+  numero_autorizacion?: string;
+  code?: string;
 };
 
 const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
@@ -32,24 +44,30 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   onClose,
   rubro,
   serviceLine,
+  onSuccess,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [code, setCode] = useState('');
   ///* global state --------------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
   const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
-
-  ///* form --------------------------
-  const form = useForm<SaveFormDataPagoManual>({
-    defaultValues: {},
-  });
-
-  const { errors } = form.formState;
 
   const generateRandomAuthorizationNumber = (): string => {
     const randomNumber = Math.floor(Math.random() * 10000000000); // Genera un número entre 0 y 9999999999
     const paddedNumber = randomNumber.toString().padStart(10, '0'); // Asegura que siempre tenga 10 dígitos
     return `S${paddedNumber}`;
   };
+
+  ///* form --------------------------
+  const form = useForm<SaveFormDataPagoManual>({
+    resolver: yupResolver(pagoManualFormSchema) as any,
+    defaultValues: {
+      numero_autorizacion: generateRandomAuthorizationNumber(),
+    },
+  });
+
+  const { errors } = form.formState;
+
   ///* mutations --------------------------
   const createPagoManual = async (accessToken: string) => {
     setIsLoading(true);
@@ -63,8 +81,8 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
           deuda: rubro?.deuda,
           canalPago: 'WEB',
           fechaTransaccion: fechaTransaccion,
-          numeroAutorizacion: generateRandomAuthorizationNumber(),
-          ifi: '360',
+          numeroAutorizacion: form.getValues().numero_autorizacion,
+          ifi: form.getValues().code,
         },
         {
           headers: {
@@ -128,6 +146,18 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
     },
   });
 
+  ///* handlers ---------------------
+  const onSave = async () => {
+    try {
+      const tokenData = await fetchAuthToken();
+      await createPagoManual(tokenData.access_token);
+      handleClose();
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Error en onSave:', error);
+    }
+  };
+
   return (
     <>
       <ScrollableDialogProps
@@ -136,15 +166,10 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
         onClose={handleClose}
         minWidth="50%"
         // confirm --------
-        onConfirm={async () => {
-          try {
-            const tokenData = await fetchAuthToken();
-            await createPagoManual(tokenData.access_token);
-            handleClose();
-          } catch (error) {
-            console.error('Error en onSave:', error);
-          }
-        }}
+        onConfirm={form.handleSubmit(onSave, errors => {
+          const keys = getKeysFormErrorsMessage(errors);
+          ToastWrapper.error(`Faltan campos: ${keys}`);
+        })}
         confirmVariantBtn="outlined"
         confirmTextBtn="Generar Pago"
         disabledConfirmBtn={isLoading}
@@ -203,9 +228,32 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
                 helperText={errors.entidad_financiera?.message}
                 size={gridSizeMdLg6}
                 onChangeRawValue={e => {
-                  console.log(e);
+                  form.setValue('code', e.code);
+                  setCode(e.code);
                 }}
               />
+
+              {form.watch('code') ? (
+                <>
+                  <CustomTextFieldNoForm
+                    label="IFI"
+                    value={code}
+                    required={false}
+                    disabled
+                  />
+
+                  <CustomTextField
+                    label="Numero authorizacion"
+                    name="numero_autorizacion"
+                    control={form.control}
+                    defaultValue={form.getValues().numero_autorizacion}
+                    error={errors.numero_autorizacion}
+                    helperText={errors.numero_autorizacion?.message}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
             </Grid>
           </>
         }

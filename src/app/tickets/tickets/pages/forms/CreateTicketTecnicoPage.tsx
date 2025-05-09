@@ -5,7 +5,7 @@ import SaveTicketTecnico from '../../shared/components/SaveTicketTecnico/SaveTic
 export type CreateTicketTecnicoPageProps = {};
 
 const CreateTicketTecnicoPage: React.FC<CreateTicketTecnicoPageProps> = () => {
-  useCheckPermission(PermissionsEnum.inventario_add_ubicacion);
+  useCheckPermission(PermissionsEnum.tecnico_add_tickettecnico);
 
   return <SaveTicketTecnico title="Crear Ticket" />;
 };
