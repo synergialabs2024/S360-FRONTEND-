@@ -84,6 +84,7 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
   const watchedZone = form.watch('zona');
   const watchedSector = form.watch('sector');
   const watchedPaymentMethod = form.watch('metodo_pago');
+  const watchedPlanInternet = form.watch('plan_internet');
 
   ///* fetch data ----------------------------
   // internet service ---
@@ -296,6 +297,10 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
           onChangeValue={() => {
             // reset related fields
             form.setValue('plan_internet', '' as any);
+            if (watchedPlanInternet) {
+              form.setValue('metodo_pago', '' as any);
+              form.setValue('rawPaymentMethod', undefined);
+            }
           }}
         />
         {/* <CustomTextFieldNoForm
@@ -321,6 +326,10 @@ const PreventaServicioFormPart: React.FC<PreventaServicioFormPartProps> = ({
           onChangeValue={() => {
             // reset related fields
             form.setValue('plan_internet', '' as any);
+            if (watchedPlanInternet) {
+              form.setValue('rawPaymentMethod', undefined);
+              form.setValue('metodo_pago', '' as any);
+            }
           }}
         />
         <CustomAutocomplete<PlanInternet>
