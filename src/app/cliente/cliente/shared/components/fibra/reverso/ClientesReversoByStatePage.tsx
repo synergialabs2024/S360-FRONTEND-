@@ -6,7 +6,7 @@ import {
 } from '@/shared';
 import { CustomTable } from '@/shared/components';
 import { Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoReversoModal';
 import axios from 'axios';
 import { useFetchTransaccions } from '@/actions/app';
@@ -61,7 +61,6 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
     accessToken: string,
     contrapartida: string,
   ) => {
-    console.log('contrapartida', contrapartida);
     try {
       const response = await axios.get(
         `http://192.168.10.107/api/v1/transaccion/?counterpart=${contrapartida}&reversado=false`,
@@ -138,45 +137,46 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   };
 
   // 3. Modifica el useEffect para guardar los datos
-  useEffect(() => {
-    const loadData = async () => {
-      if (!serviceLine?.cliente_data?.identificacion) return;
+  const loadData = useCallback(async () => {
+    if (!serviceLine?.cliente_data?.identificacion) return;
 
-      try {
-        const tokenData = await fetchAuthToken();
-        const transacciones = await fetchTransacciones(
-          tokenData.access_token,
-          serviceLine.cliente_data.identificacion,
-        );
+    try {
+      const tokenData = await fetchAuthToken();
+      const transacciones = await fetchTransacciones(
+        tokenData.access_token,
+        serviceLine.cliente_data.identificacion,
+      );
 
-        // Filtrar solo transacciones completadas
-        const transaccionesCompletadas = transacciones.data?.data || [];
+      // Filtrar solo transacciones completadas
+      const transaccionesCompletadas = transacciones.data?.data || [];
 
-        setTransaccionesData(transaccionesCompletadas);
+      setTransaccionesData(transaccionesCompletadas);
 
-        // Extraer el numeroAutorizacion de la primera transacción (si existe)
-        if (transaccionesCompletadas.length > 0) {
-          const numeroAutorizacion =
-            transaccionesCompletadas[0].numeroAutorizacion;
+      // Extraer el numeroAutorizacion de la primera transacción (si existe)
+      if (transaccionesCompletadas.length > 0) {
+        const numeroAutorizacion =
+          transaccionesCompletadas[0].numeroAutorizacion;
 
-          // Filtrar TransaccionsPagingRes para encontrar la transacción con el mismo numero_transaccion
-          if (TransaccionsPagingRes?.data?.items) {
-            const transaccionEncontrada = TransaccionsPagingRes.data.items.find(
-              (item: any) => item.numero_transaccion === numeroAutorizacion,
-            );
+        // Filtrar TransaccionsPagingRes para encontrar la transacción con el mismo numero_transaccion
+        if (TransaccionsPagingRes?.data?.items) {
+          const transaccionEncontrada = TransaccionsPagingRes.data.items.find(
+            (item: any) => item.numero_transaccion === numeroAutorizacion,
+          );
 
-            if (transaccionEncontrada) {
-              setTransaccionFiltrada(transaccionEncontrada);
-              console.log('Transacción filtrada:', transaccionEncontrada);
-            }
+          if (transaccionEncontrada) {
+            setTransaccionFiltrada(transaccionEncontrada);
           }
         }
-      } catch (error) {
-        console.error('Error al cargar transacciones:', error);
       }
-    };
+    } catch (error) {
+      console.error('Error al cargar transacciones:', error);
+    }
+  }, [serviceLine, TransaccionsPagingRes?.data?.items]);
+
+  // 2. Actualiza el useEffect
+  useEffect(() => {
     loadData();
-  }, [serviceLine, TransaccionsPagingRes]);
+  }, [loadData]);
 
   const isCustomLoading = isTransaccionsLoading || isTransaccionsRefetching;
   useLoaders(isCustomLoading);
@@ -209,6 +209,7 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
           serviceLine={serviceLine}
           transaccionesData={transaccionesData}
           transaccionFiltrada={transaccionFiltrada}
+          onSuccess={loadData}
         />
       </Grid>
     </>

@@ -21,6 +21,7 @@ export type ClienteInfoReversoModalProps = {
   serviceLine: LineaServicio;
   transaccionesData: any;
   transaccionFiltrada: any;
+  onSuccess?: () => void;
 };
 
 export type RubrosClienteFormData = Partial<Rubro> & {
@@ -36,6 +37,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   rubro,
   serviceLine,
   transaccionFiltrada,
+  onSuccess,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -134,6 +136,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
             const tokenData = await fetchAuthToken();
             await createReverso(tokenData.access_token);
             handleClose();
+            if (onSuccess) onSuccess();
           } catch (error) {
             console.error('Error en onSave:', error);
           }
