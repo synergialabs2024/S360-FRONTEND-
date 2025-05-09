@@ -9,6 +9,7 @@ import {
   useUpdateTarjeta,
 } from '@/actions/app';
 import {
+  CustomAutocompleteArrString,
   CustomTextField,
   SampleCheckbox,
   SingleFormBoxScene,
@@ -16,6 +17,7 @@ import {
 import { Tarjeta } from '@/shared/interfaces';
 import { tarjetaFormSchema } from '@/shared/utils';
 import { returnUrlTarjetasPage } from '../../../pages/tables/TarjetasPage';
+import { gridSizeMdLg6, TARJETA_CODE_ARRAY_CHOICES } from '@/shared';
 
 export interface SaveTarjetaProps {
   title: string;
@@ -85,6 +87,20 @@ const SaveTarjeta: React.FC<SaveTarjetaProps> = ({ title, tarjeta }) => {
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomAutocompleteArrString
+        label="Codigo"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues('code')}
+        options={TARJETA_CODE_ARRAY_CHOICES}
+        isLoadingData={false}
+        error={errors.code}
+        helperText={errors.code?.message}
+        size={gridSizeMdLg6}
+        disableClearable
+        disabled={!!tarjeta?.id}
       />
 
       <SampleCheckbox

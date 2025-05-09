@@ -1,22 +1,22 @@
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useFetchRutas, useUpdateRuta } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
-  CustomSearch,
-  CustomSwitch,
+  useTableFilter,
+  useColumnsRuta,
+  useTableServerSideFiltering,
+} from '@/shared/hooks';
+import {
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
+import { useFetchRutas } from '@/actions/app';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { hasAllPermissions } from '@/shared/utils/auth';
+import { TABLE_CONSTANTS } from '@/shared/constants/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, Ruta } from '@/shared/interfaces';
-import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
-import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
 
 export const returnUrlRutasPage = ROUTER_PATHS.infraestructura.rutasNav;
 
@@ -36,11 +36,6 @@ const RutasPage: React.FC<RutasPageProps> = () => {
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
-
-  ///* mutations
-  const changeState = useUpdateRuta({
-    enableNavigate: false,
-  });
 
   ///* table
   const {
@@ -62,7 +57,7 @@ const RutasPage: React.FC<RutasPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      status: searchTerm,
+      name: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -81,74 +76,7 @@ const RutasPage: React.FC<RutasPageProps> = () => {
     });
   };
 
-  ///* columns
-  const columns = useMemo<MRT_ColumnDef<Ruta>[]>(
-    () => [
-      {
-        accessorKey: 'status',
-        header: 'Estado',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'status'),
-      },
-      {
-        accessorKey: 'state',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
-        enableSorting: false,
-        filterVariant: 'select',
-        filterSelectOptions: MODEL_STATE_BOOLEAN,
-        Cell: ({ row }) => {
-          return typeof row.original?.state === 'boolean' ? (
-            <CustomSwitch
-              title="state"
-              checked={row.original?.state}
-              onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.infraestructura_change_ruta))
-                  return;
-
-                setConfirmDialog({
-                  isOpen: true,
-                  title: 'Cambiar state',
-                  subtitle:
-                    '¿Está seguro que desea cambiar el state de este registro?',
-                  onConfirm: () => {
-                    changeState.mutate({
-                      id: row.original.id!,
-                      data: {
-                        state: !row.original.state,
-                      },
-                    });
-                    setConfirmDialogIsOpen(false);
-                  },
-                });
-              }}
-            />
-          ) : (
-            'N/A'
-          );
-        },
-      },
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
-      {
-        accessorKey: 'modified_at',
-        header: 'MODIFICADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
-      },
-    ],
-    [changeState, setConfirmDialog, setConfirmDialogIsOpen],
-  );
+  const { rutaColumns } = useColumnsRuta();
 
   return (
     <SingleTableBoxScene
@@ -163,9 +91,8 @@ const RutasPage: React.FC<RutasPageProps> = () => {
         value={globalFilter}
         text="por nombre"
       />
-
       <CustomTable<Ruta>
-        columns={columns}
+        columns={rutaColumns}
         data={OsLTPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}

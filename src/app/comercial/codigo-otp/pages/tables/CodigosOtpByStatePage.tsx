@@ -67,7 +67,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      solicitudes_servicio__numero_referencia: searchTerm,
       ...filterObject,
       estado_otp: state,
     },
@@ -241,7 +241,7 @@ const CodigosOtpByStatePage: React.FC<CodigosOtpByStatePageProps> = ({
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por identificación"
+        text="por numero referencia"
         sxContainer={{
           mb: 5,
         }}

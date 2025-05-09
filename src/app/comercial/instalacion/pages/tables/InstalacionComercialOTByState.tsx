@@ -112,7 +112,7 @@ const InstalacionComercialOTByState: React.FC<
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por identificación"
       />
       <CustomTable<OrdenTrabajo>
         columns={

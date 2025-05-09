@@ -1,24 +1,18 @@
 import { UseFormReturn } from 'react-hook-form';
 import { useEffect } from 'react';
 
-import { useFetchIVAs } from '@/actions/app';
 import {
-  CalendarioFacturacion,
-  CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ,
-  DiasAntesCreacionFacturaType,
-  gridSizeMdLg3,
-  gridSizeMdLg4,
-  gridSizeMdLg6,
-  ToastWrapper,
   useLoaders,
+  ToastWrapper,
+  gridSizeMdLg4,
+  CalendarioFacturacion,
+  DiasAntesCreacionFacturaType,
+  CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ,
 } from '@/shared';
-import {
-  CustomAutocomplete,
-  CustomTextFieldNoForm,
-  SampleCheckbox,
-} from '@/shared/components';
-import { SaveFormDataConfigPlantilla } from './SaveConfiguracionPlantilla';
+import { useFetchIVAs } from '@/actions/app';
 import { useRubroStore } from '@/store/app/rubros';
+import { SaveFormDataConfigPlantilla } from './SaveConfiguracionPlantilla';
+import { CustomAutocomplete, CustomTextFieldNoForm } from '@/shared/components';
 
 export type ConfiguracionPlantillaFacturacionPartProps = {
   form: UseFormReturn<SaveFormDataConfigPlantilla>;
@@ -84,6 +78,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
           form.setValue('dias_gracia', row.dias_gracia);
         }}
       />
+      {/*
       <CustomTextFieldNoForm
         label="Día de facturación"
         size={gridSizeMdLg4}
@@ -91,14 +86,14 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         required={false}
         disabled
       />
+      */}
       <CustomTextFieldNoForm
-        label="Día de suspensión"
+        label="Día de gracia"
         size={gridSizeMdLg4}
-        value={form.getValues().dia_suspension}
+        value={form.getValues().dias_gracia}
         required={false}
         disabled
       />
-
       <CustomTextFieldNoForm
         label="Día maximo de pago"
         size={gridSizeMdLg4}
@@ -107,9 +102,9 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         disabled
       />
       <CustomTextFieldNoForm
-        label="Día de gracia"
+        label="Día de suspensión"
         size={gridSizeMdLg4}
-        value={form.getValues().dias_gracia}
+        value={form.getValues().dia_suspension}
         required={false}
         disabled
       />
@@ -130,7 +125,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         size={gridSizeMdLg4}
         disabled
       />
-
+      {/*
       <SampleCheckbox
         label="Bajar velocidad"
         name="bajar_velocidad"
@@ -156,6 +151,7 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         defaultValue={form.getValues().aplica_reconexion}
         size={gridSizeMdLg3}
       />
+      */}
       {/*
         <>
           <CustomAutocomplete<IVA>

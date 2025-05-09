@@ -15,7 +15,7 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { gridSizeMdLg3, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { useLoaders } from '@/shared/hooks';
 import { Pais, PermissionsEnum, Provincia } from '@/shared/interfaces';
 import { provinciaFormSchema } from '@/shared/utils';
@@ -138,14 +138,14 @@ const SaveProvincia: React.FC<SaveProvinciaProps> = ({ title, provincia }) => {
         name="has_coverage"
         control={form.control}
         defaultValue={form.getValues().has_coverage}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg3}
       />
       <SampleCheckbox
         label="Estado"
         name="state"
         control={form.control}
         defaultValue={form.getValues().state}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg3}
         isState
       />
     </SingleFormBoxScene>

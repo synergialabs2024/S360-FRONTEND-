@@ -92,7 +92,14 @@ const TarjetasPage: React.FC<TarjetasPageProps> = () => {
         enableSorting: true,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
-
+      {
+        accessorKey: 'code',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
       {
         accessorKey: 'state',
         header: 'ESTADO',

@@ -6,10 +6,9 @@ import { useMemo } from 'react';
 import {
   IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
   SalesStatesActionsEnumChoice,
-  TRUE_FALSE_TYPE_ARRAY_CHOICES,
   UserRolesEnumChoice,
 } from '@/shared/constants';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
+import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants/ui';
 import type { SolicitudServicio } from '@/shared/interfaces';
 import {
   emptyCellNested,
@@ -120,7 +119,7 @@ export const useColumnsSolicitusService = (
         enableColumnFilter: true,
         enableSorting: true,
         filterVariant: 'select',
-        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
         Cell: ({ row }) => formatBooleanCell(row, 'es_discapacitado'),
       },
       {
@@ -130,7 +129,7 @@ export const useColumnsSolicitusService = (
         enableColumnFilter: true,
         enableSorting: true,
         filterVariant: 'select',
-        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
         Cell: ({ row }) => formatBooleanCell(row, 'es_tercera_edad'),
       },
       {
@@ -140,7 +139,7 @@ export const useColumnsSolicitusService = (
         enableColumnFilter: true,
         enableSorting: true,
         filterVariant: 'select',
-        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
         Cell: ({ row }) => formatBooleanCell(row, 'es_cliente'),
       },
       {
@@ -150,7 +149,7 @@ export const useColumnsSolicitusService = (
         enableColumnFilter: true,
         enableSorting: true,
         filterVariant: 'select',
-        filterSelectOptions: TRUE_FALSE_TYPE_ARRAY_CHOICES,
+        filterSelectOptions: MODEL_STATE_BOOLEAN,
         Cell: ({ row }) => formatBooleanCell(row, 'tiene_cobertura'),
       },
       {
