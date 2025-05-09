@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoPagoManualModal';
 import axios from 'axios';
+import { getEnvs } from '@/shared/utils/get-evns';
 
 export type ClientesPagosManualesByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -13,6 +14,8 @@ export type ClientesPagosManualesByStatePageProps = {
 const ClientesPagosManualesByStatePage: React.FC<
   ClientesPagosManualesByStatePageProps
 > = ({ serviceLine }) => {
+  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
+
   const [open, setOpen] = useState(false);
 
   const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
@@ -26,11 +29,11 @@ const ClientesPagosManualesByStatePage: React.FC<
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/oauth/token/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: 'admin',
-          client_secret: 'admin',
-          grant_type: 'client_credentials',
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          grant_type: GRANT_TYPE,
         },
         {
           headers: {
@@ -50,7 +53,7 @@ const ClientesPagosManualesByStatePage: React.FC<
   const fetchNuevaConsultaContrapartida = async (accessToken: string) => {
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/nueva-consulta-contrapartida/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/nueva-consulta-contrapartida/',
         {
           contrapartida: serviceLine?.cliente_data?.identificacion,
         },

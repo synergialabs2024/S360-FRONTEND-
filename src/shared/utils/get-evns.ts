@@ -14,4 +14,8 @@ export const getEnvs = () => ({
   VITE_YIGA5_RADIUS_USER: import.meta.env.VITE_YIGA5_RADIUS_USER,
   VITE_YIGA5_RADIUS_PASS: import.meta.env.VITE_YIGA5_RADIUS_PASS,
   VITE_YIGA5_URL_RADIUS: import.meta.env.VITE_YIGA5_URL_RADIUS,
+
+  CLIENT_ID: import.meta.env.CLIENT_ID,
+  CLIENT_SECRET: import.meta.env.CLIENT_SECRET,
+  GRANT_TYPE: import.meta.env.GRANT_TYPE,
 });

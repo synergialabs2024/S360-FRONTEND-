@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoReversoModal';
 import axios from 'axios';
 import { useFetchTransaccions } from '@/actions/app';
+import { getEnvs } from '@/shared/utils/get-evns';
 
 export type ClientesReversoByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -19,6 +20,8 @@ export type ClientesReversoByStatePageProps = {
 const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   serviceLine,
 }) => {
+  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
+
   const [open, setOpen] = useState(false);
   const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
   const [transaccionFiltrada, setTransaccionFiltrada] = useState<any>(null); // Nueva variable de estado
@@ -36,11 +39,11 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/oauth/token/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: 'admin',
-          client_secret: 'admin',
-          grant_type: 'client_credentials',
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          grant_type: GRANT_TYPE,
         },
         {
           headers: {
@@ -63,7 +66,7 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   ) => {
     try {
       const response = await axios.get(
-        `http://192.168.10.107/api/v1/transaccion/?counterpart=${contrapartida}&reversado=false`,
+        `https://s360-switch-transaccional.yiga5.com/api/v1/transaccion/?counterpart=${contrapartida}&reversado=false`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

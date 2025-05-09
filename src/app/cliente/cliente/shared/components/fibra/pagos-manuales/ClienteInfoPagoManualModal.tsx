@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useFetchEntidadFinancieras } from '@/actions/app';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { getEnvs } from '@/shared/utils/get-evns';
 
 export type ClienteInfoPagoManualModalProps = {
   open: boolean;
@@ -46,6 +47,8 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   serviceLine,
   onSuccess,
 }) => {
+  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
+
   const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState('');
   ///* global state --------------------------
@@ -74,7 +77,7 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
     const fechaTransaccion = dayjs().format('YYYYMMDD');
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/nuevo-pago/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/nuevo-pago/',
         {
           contrapartida: serviceLine?.cliente_data?.identificacion,
           linea: rubro?.linea,
@@ -107,11 +110,11 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.10.107/api/v1/oauth/token/',
+        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: 'admin',
-          client_secret: 'admin',
-          grant_type: 'client_credentials',
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          grant_type: GRANT_TYPE,
         },
         {
           headers: {
