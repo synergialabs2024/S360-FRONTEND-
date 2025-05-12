@@ -20,7 +20,7 @@ export type ClientesReversoByStatePageProps = {
 const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   serviceLine,
 }) => {
-  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
+  const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
 
   const [open, setOpen] = useState(false);
   const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
@@ -41,9 +41,9 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
       const response = await axios.post(
         'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: CLIENT_ID,
-          client_secret: CLIENT_SECRET,
-          grant_type: GRANT_TYPE,
+          client_id: VITE_CLIENT_ID,
+          client_secret: VITE_CLIENT_SECRET,
+          grant_type: VITE_GRANT_TYPE,
         },
         {
           headers: {
@@ -66,7 +66,7 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   ) => {
     try {
       const response = await axios.get(
-        `https://s360-switch-transaccional.yiga5.com/api/v1/transaccion/?counterpart=${contrapartida}&reversado=false`,
+        `https://s360-switch-transaccional.yiga5.com/api/v1/transaccion/?numeroAutorizacion=${contrapartida}&reversado=false`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -141,45 +141,53 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
 
   // 3. Modifica el useEffect para guardar los datos
   const loadData = useCallback(async () => {
-    if (!serviceLine?.cliente_data?.identificacion) return;
+    if (!TransaccionsPagingRes?.data?.items?.length) return;
 
     try {
       const tokenData = await fetchAuthToken();
-      const transacciones = await fetchTransacciones(
-        tokenData.access_token,
-        serviceLine.cliente_data.identificacion,
-      );
+      const allTransacciones = [];
 
-      // Filtrar solo transacciones completadas
-      const transaccionesCompletadas = transacciones.data?.data || [];
-
-      setTransaccionesData(transaccionesCompletadas);
-
-      // Extraer el numeroAutorizacion de la primera transacción (si existe)
-      if (transaccionesCompletadas.length > 0) {
-        const numeroAutorizacion =
-          transaccionesCompletadas[0].numeroAutorizacion;
-
-        // Filtrar TransaccionsPagingRes para encontrar la transacción con el mismo numero_transaccion
-        if (TransaccionsPagingRes?.data?.items) {
-          const transaccionEncontrada = TransaccionsPagingRes.data.items.find(
-            (item: any) => item.numero_transaccion === numeroAutorizacion,
+      // Recorrer todos los items y buscar sus transacciones
+      for (const item of TransaccionsPagingRes.data.items) {
+        if (item.numero_transaccion) {
+          const transacciones = await fetchTransacciones(
+            tokenData.access_token,
+            item.numero_transaccion,
           );
 
-          if (transaccionEncontrada) {
-            setTransaccionFiltrada(transaccionEncontrada);
+          if (transacciones.data?.data?.length) {
+            allTransacciones.push(...transacciones.data.data);
           }
+        }
+      }
+
+      console.log('Transacciones encontradas:', allTransacciones);
+      setTransaccionesData(allTransacciones);
+
+      // Si hay transacciones, establecer la primera como filtrada
+      if (allTransacciones.length > 0) {
+        const numeroAutorizacion = allTransacciones[0].numeroAutorizacion;
+        const transaccionEncontrada = TransaccionsPagingRes.data.items.find(
+          (item: any) => item.numero_transaccion === numeroAutorizacion,
+        );
+
+        if (transaccionEncontrada) {
+          setTransaccionFiltrada(transaccionEncontrada);
         }
       }
     } catch (error) {
       console.error('Error al cargar transacciones:', error);
     }
-  }, [serviceLine, TransaccionsPagingRes?.data?.items]);
+  }, [TransaccionsPagingRes?.data?.items]);
 
   // 2. Actualiza el useEffect
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    console.log('TransaccionsPagingRes', TransaccionsPagingRes);
+  }, []);
 
   const isCustomLoading = isTransaccionsLoading || isTransaccionsRefetching;
   useLoaders(isCustomLoading);

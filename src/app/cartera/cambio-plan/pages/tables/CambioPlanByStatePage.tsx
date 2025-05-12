@@ -26,7 +26,7 @@ export type CambioPlanByStatePageProps = {
 };
 
 const CambioPlanByStatePage: React.FC<CambioPlanByStatePageProps> = () => {
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.cartera_view_cambioplan);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();

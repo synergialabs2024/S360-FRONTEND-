@@ -37,6 +37,8 @@ export interface LineaServicio {
   estado_linea: LineaServicioEnumChoice;
   linea_numero: number;
 
+  numero_transaccion: string;
+
   created_at?: string;
   modified_at?: string;
 

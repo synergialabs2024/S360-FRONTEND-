@@ -25,6 +25,8 @@ import { useFetchEntidadFinancieras } from '@/actions/app';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getEnvs } from '@/shared/utils/get-evns';
 
+const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
+
 export type ClienteInfoPagoManualModalProps = {
   open: boolean;
   onClose: () => void;
@@ -47,8 +49,6 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
   serviceLine,
   onSuccess,
 }) => {
-  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
-
   const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState('');
   ///* global state --------------------------
@@ -112,9 +112,9 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
       const response = await axios.post(
         'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: CLIENT_ID,
-          client_secret: CLIENT_SECRET,
-          grant_type: GRANT_TYPE,
+          client_id: VITE_CLIENT_ID,
+          client_secret: VITE_CLIENT_SECRET,
+          grant_type: VITE_GRANT_TYPE,
         },
         {
           headers: {

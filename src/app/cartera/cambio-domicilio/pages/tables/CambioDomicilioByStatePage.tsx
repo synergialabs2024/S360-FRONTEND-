@@ -25,7 +25,7 @@ const CambioDomicilioByStatePage: React.FC<CambioDomicilioByStatePageProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+  useCheckPermission(PermissionsEnum.cartera_view_cambiodomicilio);
 
   /* const navigate = useNavigate(); */
 
