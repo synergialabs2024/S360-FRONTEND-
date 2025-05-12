@@ -32,9 +32,7 @@ const SubtipoMantenedorBeneficiosPage: React.FC<
 > = () => {
   const navigate = useNavigate();
 
-  useCheckPermission(
-    PermissionsEnum.cartera_change_subtipomantenedorbeneficios,
-  );
+  useCheckPermission(PermissionsEnum.cartera_view_subtipomantenedorbeneficios);
 
   /* const navigate = useNavigate(); */
 

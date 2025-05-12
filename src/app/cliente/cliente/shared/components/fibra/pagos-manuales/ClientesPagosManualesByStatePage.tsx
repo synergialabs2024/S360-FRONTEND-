@@ -1,10 +1,12 @@
-import { EstadoTareaEnumChoice, LineaServicio, Rubro } from '@/shared';
+import { EstadoTareaEnumChoice, getEnvs, LineaServicio, Rubro } from '@/shared';
 import { CustomTable } from '@/shared/components';
 import { Grid } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoPagoManualModal';
 import axios from 'axios';
-import { getEnvs } from '@/shared/utils/get-evns';
+
+const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE, VITE_ERPAPI_URL } =
+  getEnvs();
 
 export type ClientesPagosManualesByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -14,8 +16,6 @@ export type ClientesPagosManualesByStatePageProps = {
 const ClientesPagosManualesByStatePage: React.FC<
   ClientesPagosManualesByStatePageProps
 > = ({ serviceLine }) => {
-  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
-
   const [open, setOpen] = useState(false);
 
   const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
@@ -31,9 +31,9 @@ const ClientesPagosManualesByStatePage: React.FC<
       const response = await axios.post(
         'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: CLIENT_ID,
-          client_secret: CLIENT_SECRET,
-          grant_type: GRANT_TYPE,
+          client_id: VITE_CLIENT_ID,
+          client_secret: VITE_CLIENT_SECRET,
+          grant_type: VITE_GRANT_TYPE,
         },
         {
           headers: {
@@ -116,6 +116,13 @@ const ClientesPagosManualesByStatePage: React.FC<
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    console.log('VITE_CLIENT_ID', VITE_CLIENT_ID);
+    console.log('VITE_CLIENT_SECRET', VITE_CLIENT_SECRET);
+    console.log('VITE_GRANT_TYPE', VITE_GRANT_TYPE);
+    console.log('VITE_ERPAPI_URL', VITE_ERPAPI_URL);
+  });
 
   return (
     <>

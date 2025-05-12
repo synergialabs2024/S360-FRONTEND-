@@ -32,7 +32,7 @@ const TipoMantenedorBeneficiosPage: React.FC<
 > = () => {
   const navigate = useNavigate();
 
-  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
+  useCheckPermission(PermissionsEnum.cartera_view_tipomantenedorbeneficios);
 
   /* const navigate = useNavigate(); */
 

@@ -2,7 +2,8 @@ import SaveTarea from '../../shared/components/SaveTarea/SaveTarea';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useGetBuzonTarea } from '@/actions/app/cartera/buzon-tareas';
 import { Navigate, useParams } from 'react-router';
-import { useLoaders } from '@/shared';
+import { PermissionsEnum, useLoaders } from '@/shared';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export const returnUrlCambioPlanPage =
   ROUTER_PATHS.buzonTareas.buzonTareasAsignadasNav;
@@ -10,6 +11,7 @@ export const returnUrlCambioPlanPage =
 export type CreateTareaPageProps = {};
 
 const CreateTareaPage: React.FC<CreateTareaPageProps> = () => {
+  useCheckPermission(PermissionsEnum.cartera_view_buzontareamantenedor);
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetBuzonTarea(uuid!);
   useLoaders(isLoading || isRefetching);

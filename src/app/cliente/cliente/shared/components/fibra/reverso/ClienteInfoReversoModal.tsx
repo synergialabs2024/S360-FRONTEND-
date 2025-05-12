@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
-import { LineaServicio, Rubro, useLoaders } from '@/shared';
+import { LineaServicio, Rubro } from '@/shared';
 import {
   CustomTextFieldNoForm,
   ScrollableDialogProps,
@@ -10,10 +10,11 @@ import { useInstalacionesStore } from '@/store/app';
 import { useRubroStore } from '@/store/app/rubros';
 import { Grid } from '@mui/material';
 import axios from 'axios';
-import { useGetTransaccion } from '@/actions/app';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { getEnvs } from '@/shared/utils/get-evns';
+
+const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
 
 export type ClienteInfoReversoModalProps = {
   open: boolean;
@@ -40,13 +41,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   transaccionFiltrada,
   onSuccess,
 }) => {
-  const { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE } = getEnvs();
-
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    isLoading: isTransactionLoading,
-    isRefetching: isTransactionRefetching,
-  } = useGetTransaccion(serviceLine?.cliente_data?.identificacion.toString()!);
   ///* global state --------------------------
   const clearAllRubroStore = useRubroStore(s => s.clearAll);
   const clearAllItemsStore = useInstalacionesStore(s => s.clearAll);
@@ -95,9 +90,9 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
       const response = await axios.post(
         'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
         {
-          client_id: CLIENT_ID,
-          client_secret: CLIENT_SECRET,
-          grant_type: GRANT_TYPE,
+          client_id: VITE_CLIENT_ID,
+          client_secret: VITE_CLIENT_SECRET,
+          grant_type: VITE_GRANT_TYPE,
         },
         {
           headers: {
@@ -120,11 +115,6 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
     clearAllRubroStore();
     clearAllItemsStore();
   };
-
-  // useEffect(() => {}, [rubro, serviceLine, transaccionesData]);
-
-  const isCustomLoading = isTransactionLoading || isTransactionRefetching;
-  useLoaders(isCustomLoading);
 
   return (
     <>
