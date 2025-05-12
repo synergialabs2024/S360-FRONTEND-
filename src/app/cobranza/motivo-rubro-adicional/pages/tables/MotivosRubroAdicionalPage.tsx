@@ -126,7 +126,11 @@ const MotivosRubroAdicionalPage: React.FC<
               title="state"
               checked={row.original?.state}
               onChangeChecked={() => {
-                if (!hasPermission(PermissionsEnum.administration_change_iva))
+                if (
+                  !hasPermission(
+                    PermissionsEnum.cobranza_change_motivorubroadicional,
+                  )
+                )
                   return;
 
                 setConfirmDialog({

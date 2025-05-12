@@ -5,8 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoPagoManualModal';
 import axios from 'axios';
 
-const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE, VITE_ERPAPI_URL } =
-  getEnvs();
+const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
 
 export type ClientesPagosManualesByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -116,13 +115,6 @@ const ClientesPagosManualesByStatePage: React.FC<
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  useEffect(() => {
-    console.log('VITE_CLIENT_ID', VITE_CLIENT_ID);
-    console.log('VITE_CLIENT_SECRET', VITE_CLIENT_SECRET);
-    console.log('VITE_GRANT_TYPE', VITE_GRANT_TYPE);
-    console.log('VITE_ERPAPI_URL', VITE_ERPAPI_URL);
-  });
 
   return (
     <>

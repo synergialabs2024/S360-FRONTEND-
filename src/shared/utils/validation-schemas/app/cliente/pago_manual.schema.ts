@@ -4,6 +4,7 @@ export const pagoManualFormSchema = yup.object({
   entidad_financiera: yup
     .string()
     .required('El campo entidad financiera es requerido'),
+  code: yup.string().required('El campo ifi es requerido'),
   numero_autorizacion: yup.string().when('entidad_financiera', {
     is: (entidadFinanciera: number | undefined) =>
       entidadFinanciera !== undefined,
