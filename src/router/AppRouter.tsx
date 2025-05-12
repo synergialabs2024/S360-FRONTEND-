@@ -1509,7 +1509,6 @@ const UpdateModeloInventariosPages = Loadable(
       ),
   ),
 );
-/*
 const SolicitudDevolucionMainPages = Loadable(
   lazy(
     () =>
@@ -1526,7 +1525,6 @@ const CreateSolicitudDevolucionPages = Loadable(
       ),
   ),
 );
-*/
 const SolicitudTransferenciaMaterialMainPages = Loadable(
   lazy(
     () =>
@@ -1559,7 +1557,6 @@ const CreateRecepcionSolicitudTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
-/*
 const RecepcionSolDevolucionMainPages = Loadable(
   lazy(
     () =>
@@ -1576,7 +1573,6 @@ const UpdateRecepSolDevolucionPage = Loadable(
       ),
   ),
 );
-*/
 const MotivoEgresoPages = Loadable(
   lazy(
     () =>
@@ -3527,7 +3523,6 @@ const AppRouter = [
           },
 
           ///* Solicitud Devolucion
-          /*
           {
             path: ROUTER_PATHS.inventario.solicitudDevolucion,
             element: <SolicitudDevolucionMainPages />,
@@ -3536,7 +3531,6 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario.solicitudDevolucionCrear,
             element: <CreateSolicitudDevolucionPages />,
           },
-          */
 
           ///* Solicitud Transferencia Material
           {
@@ -3561,7 +3555,7 @@ const AppRouter = [
           },
 
           ///* Recepcion Solicitud Devolucion
-          /*
+
           {
             path: ROUTER_PATHS.inventario
               .recepcionSolicitudDevolucionMateriales,
@@ -3572,7 +3566,6 @@ const AppRouter = [
               .recepcionSolicitudDevolucionMaterialesEditar,
             element: <UpdateRecepSolDevolucionPage />,
           },
-          */
 
           ///* Motivo Egreso
           {

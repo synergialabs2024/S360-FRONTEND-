@@ -1,19 +1,20 @@
-import { useFetchTransferenciaMateriales } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
-  PermissionsEnum,
-  TransferenciaMaterial,
-  useColumnsTransferenciaMaterial,
-  useTableFilter,
-  useTableServerSideFiltering,
-} from '@/shared';
-import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { useCheckPermission } from '@/shared/hooks/auth';
+import {
+  useTableFilter,
+  PermissionsEnum,
+  TransferenciaMaterial,
+  useTableServerSideFiltering,
+  useColumnsTransferenciaMaterial,
+} from '@/shared';
+import { useAuthStore } from '@/store/auth';
+import { ROUTER_PATHS } from '@/router/constants';
 import { hasPermission } from '@/shared/utils/auth';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { useFetchTransferenciaMateriales } from '@/actions/app';
 
 export const returnUrlTransferenciaMaterialesPage =
   ROUTER_PATHS.inventario.transferenciaMaterialesNav;
@@ -24,6 +25,7 @@ const TransferenciaMaterialesPage: React.FC<
   TransferenciaMaterialesPageProps
 > = () => {
   useCheckPermission(PermissionsEnum.inventario_view_transferenciamaterial);
+  const user = useAuthStore(s => s.user);
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -50,6 +52,7 @@ const TransferenciaMaterialesPage: React.FC<
       page: pageIndex + 1,
       page_size: pageSize,
       secuencial: searchTerm,
+      user_create: user?.id,
       ...filterObject,
       filterByState: false,
     },

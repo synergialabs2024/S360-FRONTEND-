@@ -14,6 +14,7 @@ import {
   CustomSingleButton,
   SingleTableBoxScene,
 } from '@/shared/components';
+import { useAuthStore } from '@/store/auth';
 import { ROUTER_PATHS } from '@/router/constants';
 import { hasPermission } from '@/shared/utils/auth';
 import { useCheckPermission } from '@/shared/hooks/auth';
@@ -26,6 +27,7 @@ export type IngresoMaterialesPageProps = {};
 
 const IngresoMaterialesPage: React.FC<IngresoMaterialesPageProps> = () => {
   useCheckPermission(PermissionsEnum.inventario_view_ingresomaterial);
+  const user = useAuthStore(s => s.user);
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
@@ -53,6 +55,7 @@ const IngresoMaterialesPage: React.FC<IngresoMaterialesPageProps> = () => {
       page_size: pageSize,
 
       secuencial: searchTerm,
+      user_create: user?.id,
       ...filterObject,
       filterByState: false,
     },

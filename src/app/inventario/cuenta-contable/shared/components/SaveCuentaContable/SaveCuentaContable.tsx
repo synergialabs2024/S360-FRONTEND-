@@ -10,10 +10,10 @@ import {
   ToastWrapper,
 } from '@/shared';
 import {
-  CustomAutocomplete,
   CustomTextArea,
   CustomTextField,
   SampleCheckbox,
+  SelectArrayChip,
   SingleFormBoxScene,
 } from '@/shared/components';
 import {
@@ -65,8 +65,8 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
   ///* fetch data
   const {
     data: cuentaContablePagingRes,
-    isLoading: isLoadingPaises,
-    isRefetching: isRefetchingPaises,
+    isLoading: isLoadingCuentaContable,
+    isRefetching: isRefetchingCuentaContable,
   } = useFetchCuentaContables({
     params: {
       page_size: 1000,
@@ -127,6 +127,15 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
     form.setValue('tiene_cuenta_padre', !!form.getValues('cuenta_padre'));
   }, [form]);
 
+  const cuentaPadreId = form.getValues().cuenta_padre;
+  const opciones =
+    cuentaContablePagingRes?.data?.items.filter(item => {
+      if (cuenta_contable?.id) return item.id !== cuenta_contable?.id;
+      return true;
+    }) || [];
+
+  const cuentaPadre = opciones.find(op => op.id === cuentaPadreId);
+
   return (
     <SingleFormBoxScene
       titlePage={title}
@@ -177,27 +186,19 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
         size={gridSizeMdLg6}
       />
       {watchedTieneCuentaPadre ? (
-        <CustomAutocomplete<CuentaContable>
+        <SelectArrayChip<CuentaContable>
           label="Cuenta Padre"
-          name="cuenta_padre"
-          // Filtra las opciones
-          options={
-            cuentaContablePagingRes?.data?.items.filter(item => {
-              if (cuenta_contable?.id) {
-                return item.id !== cuenta_contable?.id;
-              }
-              return true;
-            }) || []
-          }
-          valueKey="nombre"
+          name="olt_data"
+          valueKey="cuenta_padre"
           actualValueKey="id"
-          defaultValue={Number(form.getValues().cuenta_padre)}
-          isLoadingData={isLoadingPaises || isRefetchingPaises}
-          // validación
+          options={opciones}
+          isLoadingData={isLoadingCuentaContable || isRefetchingCuentaContable}
           control={form.control}
-          error={errors.cuenta_padre}
-          helperText={errors.cuenta_padre?.message}
+          error={errors.cuenta_padre as any}
           required={false}
+          titleArray={['nombre', 'codigo']}
+          defaultValue={cuentaPadre ? [cuentaPadre] : []}
+          maxSelectable={3}
           onChangeValue={value => form.setValue('cuenta_padre', Number(value))}
         />
       ) : null}
