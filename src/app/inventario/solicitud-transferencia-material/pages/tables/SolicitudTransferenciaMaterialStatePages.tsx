@@ -1,16 +1,17 @@
-import { useFetchSolicitudTransferenciaMateriales } from '@/actions/app';
 import {
-  SolicitudTransferenciaMaterial,
-  TABLE_CONSTANTS,
-  useColumnsTransferenciaMaterial,
   useTableFilter,
+  TABLE_CONSTANTS,
   useTableServerSideFiltering,
+  SolicitudTransferenciaMaterial,
+  useColumnsTransferenciaMaterial,
 } from '@/shared';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
+import { useAuthStore } from '@/store/auth';
+import { useFetchSolicitudTransferenciaMateriales } from '@/actions/app';
 
 export type SolicitudTransferenciaMaterialStatePageProps = {
   state: string;
@@ -22,6 +23,7 @@ const SolicitudTransferenciaMaterialStatePage: React.FC<
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
+  const user = useAuthStore(s => s.user);
 
   ///* table
   const {
@@ -47,6 +49,7 @@ const SolicitudTransferenciaMaterialStatePage: React.FC<
       ...filterObject,
 
       estado_solicitud: state,
+      user_create: user?.id,
       filterByState: false,
     },
   });

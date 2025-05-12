@@ -504,15 +504,16 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
             }),
-            /*
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'recepcion-solicitud-devoluciones',
-              title: 'Recepción de solicitudes de devoluciones',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario
-                .recepcionSolicitudDevolucionMaterialesNav,
-            }),
-            */
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_DEVOLUCION,
+              {
+                id: 'recepcion-solicitud-devoluciones',
+                title: 'Recepción de solicitudes de devoluciones',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario
+                  .recepcionSolicitudDevolucionMaterialesNav,
+              },
+            ),
             renderByModule(
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {
@@ -571,14 +572,6 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
-            /*
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'solicitud-devoluciones',
-              title: 'Recepción de solicitud de devolución',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.notFound,
-            }),
-            */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------
@@ -609,14 +602,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.inventario.solicitudMaterialNav,
             }),
             ///* Inventario Solicitudes
-            /*
             renderByModule(SidenavModulesEnum.INVENTARIO_SOLICITUD_DEVOLUCION, {
               id: 'solicitud-devolucion',
               title: 'Solicitud de devolucion',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudDevolucionNav,
             }),
-            */
             renderByModule(
               SidenavModulesEnum.INVENTARIO_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {

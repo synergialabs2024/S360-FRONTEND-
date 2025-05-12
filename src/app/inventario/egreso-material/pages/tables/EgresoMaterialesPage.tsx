@@ -1,19 +1,20 @@
-import { useFetchEgresoMateriales } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
 import {
+  CustomTable,
+  CustomSearch,
+  SingleTableBoxScene,
+} from '@/shared/components';
+import {
+  useTableFilter,
   EgresoMaterial,
   PermissionsEnum,
   useColumnsEgresoMaterial,
-  useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
-import {
-  CustomSearch,
-  CustomTable,
-  SingleTableBoxScene,
-} from '@/shared/components';
-import { useCheckPermission } from '@/shared/hooks/auth';
+import { useAuthStore } from '@/store/auth';
+import { ROUTER_PATHS } from '@/router/constants';
 import { hasPermission } from '@/shared/utils/auth';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { useFetchEgresoMateriales } from '@/actions/app';
 
 export const returnUrlEgresoMaterialesPage =
   ROUTER_PATHS.inventario.egresoMaterialesNav;
@@ -21,6 +22,7 @@ export const returnUrlEgresoMaterialesPage =
 export type EgresoMaterialesPageProps = {};
 
 const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
+  const user = useAuthStore(s => s.user);
   useCheckPermission(PermissionsEnum.inventario_view_egresomaterial);
 
   // server side filters - colums table
@@ -48,6 +50,7 @@ const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
       page: pageIndex + 1,
       page_size: pageSize,
       secuencial: searchTerm,
+      user_create: user?.id,
       ...filterObject,
       filterByState: false,
     },

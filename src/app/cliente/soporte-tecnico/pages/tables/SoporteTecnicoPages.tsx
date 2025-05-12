@@ -63,7 +63,7 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
     navigate(`${returnUrlSoporteTecnico}/${firstLine?.uuid}`);
   };
   ///* columns ---------------------------
-  const { clientesFibraColumnsActivos } = useColumnsClientes();
+  const { clientesFibraColumnsActivosNoLink } = useColumnsClientes();
 
   return (
     <SingleTableBoxScene
@@ -78,7 +78,7 @@ const SoporteTecnicoPages: React.FC<SoporteTecnicoPagesProps> = () => {
       />
 
       <CustomTable<Cliente>
-        columns={clientesFibraColumnsActivos}
+        columns={clientesFibraColumnsActivosNoLink}
         data={clientesPagingRes?.data?.items || []}
         isLoading={isLoadingClientes}
         isRefetching={isRefetchingClientes}

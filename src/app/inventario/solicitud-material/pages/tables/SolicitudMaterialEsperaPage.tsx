@@ -1,18 +1,18 @@
 import {
   Preventa,
+  useTableFilter,
   TABLE_CONSTANTS,
   useColumnsSolicitudMaterial,
-  useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 
-import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 import { useAuthStore } from '@/store/auth';
+import { useFetchSolicitudMaterial } from '@/actions/app/inventario/solicitud-material';
 
 export type SolicitudMaterialStatePageProps = {
   state: string;
@@ -48,6 +48,7 @@ const SolicitudMaterialEsperaPage: React.FC<
       page: pageIndex + 1,
       page_size: pageSize,
       name: searchTerm,
+      user_create: user?.id,
       ...filterObject,
 
       por_agendar: true,
@@ -55,11 +56,6 @@ const SolicitudMaterialEsperaPage: React.FC<
     },
   });
 
-  const bodegaFilter = user?.flota_data?.ubicacion_data?.bodega;
-  const ubicacionFilter = user?.flota_data?.ubicacion_data?.id;
-  const filteredItems = preventasPagingRes?.data?.items.filter(
-    item => item.bodega === bodegaFilter && item.ubicacion === ubicacionFilter,
-  );
   ///* columns ------------------------
   const { solicitudMaterialColumns } = useColumnsSolicitudMaterial();
 
@@ -76,7 +72,7 @@ const SolicitudMaterialEsperaPage: React.FC<
 
       <CustomTable<Preventa>
         columns={solicitudMaterialColumns}
-        data={filteredItems || []}
+        data={preventasPagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
         // // filters - server side

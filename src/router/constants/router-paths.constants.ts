@@ -728,15 +728,17 @@ export const ROUTER_PATHS = {
 
     ///* solicitud devolucion
     solicitudDevolucion: 'solicitud-devolucion',
-    //solicitudDevolucionCrear: 'solicitud-devolucion/crear',
-    //solicitudDevolucionEditar: 'solicitud-devolucion/editar/:uuid',
+    solicitudDevolucionCrear: 'solicitud-devolucion/crear',
+    solicitudDevolucionEditar: 'solicitud-devolucion/editar/:uuid',
     solicitudDevolucionNav: '/inventario/solicitud-devolucion',
 
-    ///* Recepcion solicitud material
+    ///* Recepcion solicitud devolucion material
     recepcionSolicitudDevolucionMateriales:
       'recepcion-solicitud-devolucion-material',
-    //recepcionSolicitudDevolucionMaterialesCrear: 'recepcion-solicitud-devolucion-material/crear',
-    //recepcionSolicitudDevolucionMaterialesEditar:'recepcion-solicitud-devolucion-material/editar/:uuid',
+    recepcionSolicitudDevolucionMaterialesCrear:
+      'recepcion-solicitud-devolucion-material/crear',
+    recepcionSolicitudDevolucionMaterialesEditar:
+      'recepcion-solicitud-devolucion-material/editar/:uuid',
     recepcionSolicitudDevolucionMaterialesNav:
       '/inventario/recepcion-solicitud-devolucion-material',
 
