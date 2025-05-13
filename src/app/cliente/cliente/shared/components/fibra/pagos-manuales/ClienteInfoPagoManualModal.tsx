@@ -217,15 +217,19 @@ const ClienteInfoPagoManualModal: React.FC<ClienteInfoPagoManualModalProps> = ({
               <CustomAutocomplete<EntidadFinanciera>
                 label="Entidad financiera"
                 name="entidad_financiera"
-                // options
-                options={entidadFinancierasPaging?.data?.items || []}
+                // options Filtradas
+                options={
+                  entidadFinancierasPaging?.data?.items?.filter(
+                    item => item.code,
+                  ) || []
+                }
                 valueKey="name"
                 actualValueKey="id"
                 defaultValue={form.getValues().entidad_financiera}
                 isLoadingData={
                   isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
                 }
-                // vaidation
+                // validation
                 control={form.control}
                 error={errors.entidad_financiera}
                 helperText={errors.entidad_financiera?.message}
