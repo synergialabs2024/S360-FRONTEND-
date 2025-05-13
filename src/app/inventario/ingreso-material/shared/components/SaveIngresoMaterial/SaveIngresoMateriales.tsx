@@ -60,6 +60,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -124,6 +125,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
     navigate,
     returnUrl: returnUrlIngresoMaterialesPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => clearAllStore(),
   });
 
   ///* handlers
@@ -196,7 +198,6 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
     };
 
     createIngresoMaterialMutation.mutate(preparedData);
-    productosEnviar([]);
   };
 
   ///* effects

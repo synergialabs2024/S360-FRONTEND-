@@ -9,16 +9,17 @@ import {
   ToastWrapper,
   getKeysFormErrorsMessage,
   ProductosDisponiblesModal,
-  ProductosDisponiblesTableType,
   solicitudMaterialFormSchema,
+  ProductosDisponiblesTableType,
   useColumnsProductosDisponibles,
+  PermissionsEnum,
 } from '@/shared';
 
 import {
   CustomTextArea,
   CustomTypoLabel,
-  CustomMinimalTable,
   SingleFormBoxScene,
+  CustomMinimalTable,
   CustomSingleButton,
   CustomTypoLabelEnum,
   CustomTextFieldNoForm,
@@ -30,6 +31,7 @@ import {
   useCreateSolicitudMaterial,
   CreatesolicitudMaterialParamsBase,
 } from '@/actions/app/inventario/solicitud-material';
+import { useCheckPermission } from '@/shared/hooks/auth';
 import { useProductosStore } from '@/store/app/inventario/productos-disponible.store';
 import { SolicitudMaterial } from '@/shared/interfaces/app/inventario/solicitud-material';
 import { returnUrlSolicitudMaterialPage } from '../../../pages/tables/SolicitudMaterialMainPage';
@@ -46,6 +48,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   SolicitudMaterial,
 }) => {
   const user = useAuthStore(s => s.user);
+  useCheckPermission(PermissionsEnum.inventario_view_solicitudmaterial);
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
@@ -53,7 +56,6 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const clearAllStore = useProductosStore(s => s.clearAll);
-  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -139,13 +141,12 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
     };
 
     createSolicitudMaterialMutation.mutate(preparedData);
-    productosEnviar([]);
   };
 
   ///* effects
   useEffect(() => {
     reset(SolicitudMaterial);
-  }, [SolicitudMaterial, reset, productosEnviar]);
+  }, [SolicitudMaterial, reset]);
 
   ///* columns --------------------
   const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
