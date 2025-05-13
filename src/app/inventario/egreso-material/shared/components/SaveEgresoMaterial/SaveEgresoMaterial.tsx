@@ -60,6 +60,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -122,6 +123,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     navigate,
     returnUrl: returnUrlEgresoMaterialesPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => clearAllStore(),
   });
 
   ///* handlers
@@ -208,14 +210,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
     };
 
     createEgresoMaterialMutation.mutate(preparedData);
-    productosEnviar([]);
   };
-
-  ///* effects
-  useEffect(() => {
-    productosEnviar([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (isLoadingUbicaciones || isRefetchingUbicaciones || !watchedBodega)

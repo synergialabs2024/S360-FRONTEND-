@@ -57,6 +57,7 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -133,6 +134,7 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
       navigate,
       returnUrl: returnUrlSolicitudTransferenciaMaterialesPage,
       enableErrorNavigate: false,
+      customOnSuccess: () => clearAllStore(),
     });
 
   ///* handlers
@@ -209,12 +211,6 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
 
     createSolicitudTransferenciaMaterialMutation.mutate(preparedData);
   };
-
-  ///* effects
-  useEffect(() => {
-    productosEnviar([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (

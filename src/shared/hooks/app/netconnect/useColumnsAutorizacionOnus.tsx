@@ -1,10 +1,9 @@
-import { useMemo } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
 
-import { AutorizacionOnu } from '@/shared/interfaces';
-import { TABLE_CONSTANTS } from '@/shared/constants';
 import { emptyCellOneLevel } from '@/shared/utils';
-import ModalAutorizacionOnusPage from '@/app/netconnect/autorizacion-onus/components/ModalAutorizacionOnusPage';
+import { TABLE_CONSTANTS } from '@/shared/constants';
+import { AutorizacionOnu } from '@/shared/interfaces';
 
 export const useColumnsAutorizacionOnus = () => {
   const consumoAutorizacionOnusBase001 = useMemo<
@@ -80,35 +79,7 @@ export const useColumnsAutorizacionOnus = () => {
   );
 
   const consumoAutorizacion_Onus = useMemo<MRT_ColumnDef<AutorizacionOnu>[]>(
-    () => [
-      ...consumoAutorizacionOnusBase001,
-      {
-        accessorKey: 'opcion__authorize',
-        header: 'AUTHORIZE',
-        size: 50,
-        Cell: ({ row }) => {
-          return (
-            <ModalAutorizacionOnusPage
-              authOnu={row.original}
-              titleButton="AUTHORIZE"
-            />
-          );
-        },
-      },
-      {
-        accessorKey: 'opcion__provicionar',
-        header: 'XML',
-        size: 50,
-        Cell: ({ row }) => {
-          return (
-            <ModalAutorizacionOnusPage
-              authOnu={row.original}
-              titleButton="XML"
-            />
-          );
-        },
-      },
-    ],
+    () => [...consumoAutorizacionOnusBase001],
     [consumoAutorizacionOnusBase001],
   );
 
