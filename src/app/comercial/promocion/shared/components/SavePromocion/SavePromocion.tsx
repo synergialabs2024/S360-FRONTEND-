@@ -851,7 +851,7 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                     ?.length /* || !!promocion?.id */
                 }
                 onClickDisabled={() => {
-                  if (promocion?.id) return;
+                  // if (promocion?.id) return;
 
                   ToastWrapper.warning(
                     'No se puede seleccionar todas las provincias ya que no se tienen registros disponibles',
@@ -888,7 +888,9 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 error={undefined}
                 helperText={errors.ciudades?.message}
                 disabled={
-                  watchedAllCities || !watchedProvincias?.length /* ||
+                  watchedAllCities ||
+                  !watchedProvincias?.length ||
+                  !ciudadesPaging?.data?.meta?.count /* ||
                   !!promocion?.id */
                 }
                 onlyActualValueKey
@@ -909,11 +911,13 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 // disabled
                 disabled={
                   !provinciasPaging?.data?.items?.length ||
-                  !watchedProvincias?.length /* ||
+                  !watchedProvincias?.length ||
+                  !ciudadesPaging?.data?.meta?.count
+                  /* ||
                   !!promocion?.id */
                 }
                 onClickDisabled={() => {
-                  if (promocion?.id) return;
+                  // if (promocion?.id) return;
 
                   if (!watchedProvincias?.length)
                     return ToastWrapper.warning(
@@ -954,7 +958,11 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 helperText={errors.zonas?.message}
                 disabled={
                   watchedAllZones ||
-                  !watchedCiudades?.length /* || !!promocion?.id */
+                  !watchedCiudades?.length ||
+                  !ciudadesPaging?.data?.meta?.count ||
+                  !zonasPaging?.data?.meta?.count
+
+                  /* || !!promocion?.id */
                 }
                 onlyActualValueKey
                 required={false}
@@ -975,10 +983,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 disabled={
                   !ciudadesPaging?.data?.items?.length ||
                   !watchedCiudades?.length ||
-                  !!promocion?.id
+                  !ciudadesPaging?.data?.meta?.count ||
+                  !zonasPaging?.data?.meta?.count
+                  /* || !!promocion?.id */
                 }
                 onClickDisabled={() => {
-                  if (promocion?.id) return;
+                  // if (promocion?.id) return;
 
                   if (!watchedCiudades?.length)
                     return ToastWrapper.warning(
@@ -1021,7 +1031,10 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 helperText={errors.sectores?.message}
                 disabled={
                   watchedAllSectores ||
-                  !watchedZonas?.length /* || !!promocion?.id */
+                  !watchedZonas?.length ||
+                  !zonasPaging?.data?.meta?.count ||
+                  !sectoresPaging?.data?.meta?.count
+                  /* || !!promocion?.id */
                 }
                 onlyActualValueKey
                 required={false}
@@ -1042,10 +1055,12 @@ const SavePromocion: React.FC<SavePromocionProps> = ({ title, promocion }) => {
                 disabled={
                   !zonasPaging?.data?.items?.length ||
                   !watchedZonas?.length ||
-                  !!promocion?.id
+                  !zonasPaging?.data?.meta?.count ||
+                  !sectoresPaging?.data?.meta?.count
+                  /* !!promocion?.id */
                 }
                 onClickDisabled={() => {
-                  if (promocion?.id) return;
+                  // if (promocion?.id) return;
 
                   if (!watchedZonas?.length)
                     return ToastWrapper.warning('Seleccione al menos una zona');
