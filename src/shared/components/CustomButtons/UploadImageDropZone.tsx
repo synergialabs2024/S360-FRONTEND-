@@ -48,7 +48,7 @@ const UploadImageDropZone: React.FC<UploadImagePreviewBtnProps> = ({
   maxHeightPreview = 'auto',
 
   ///*
-  maxFileSizeMB,
+  maxFileSizeMB = 6,
 }) => {
   const [imagenUrl, setImagenUrl] = useState<string | undefined>(imageUrl);
   const [dragActive, setDragActive] = useState(false);

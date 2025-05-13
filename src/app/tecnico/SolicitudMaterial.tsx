@@ -51,6 +51,7 @@ const SolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -99,6 +100,7 @@ const SolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
     navigate,
     returnUrl: returnUrlIngresoMaterialesPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => clearAllStore(),
   });
 
   /*   const updateIngresoMaterialMutation =

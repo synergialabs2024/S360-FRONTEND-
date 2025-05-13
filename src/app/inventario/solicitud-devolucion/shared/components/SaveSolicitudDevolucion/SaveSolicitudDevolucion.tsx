@@ -8,7 +8,6 @@ import { Grid } from '@mui/material';
 import {
   CustomTextArea,
   CustomTypoLabel,
-  CustomAutocomplete,
   CustomMinimalTable,
   CustomSingleButton,
   SingleFormBoxScene,
@@ -16,27 +15,23 @@ import {
   CustomTextFieldNoForm,
 } from '@/shared/components';
 import {
-  useLoaders,
   ToastWrapper,
-  gridSizeMdLg4,
-  IngresoMaterial,
   PermissionsEnum,
   SolicitudDevolucion,
-  IngresosDisponiblesTableType,
   solicitudDevolucionFormSchema,
   useColumnsProductosDisponibles,
+  ProductosDisponiblesTableType,
+  ProductosDisponiblesModal,
 } from '@/shared';
 import {
   useFetchProductos,
-  useFetchIngresoMateriales,
   useCreateSolicitudDevolucion,
   CreateSolicitudDevolucionParamsBase,
 } from '@/actions/app';
 import { useAuthStore } from '@/store/auth';
-import { useIngresosStore } from '@/store/app';
+import { useProductosStore } from '@/store/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlSolicitudDevolucionPage } from '../../../pages/tables/SolicitudDevolucionMainPages';
-import IngresoDisponiblesModal from '@/shared/hooks/app/inventario/solicitud-devolucion/modal/IngresoDisponiblesModal';
 
 export interface SaveSolicitudDevolucionProps {
   title: string;
@@ -50,29 +45,33 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
   solicitud_devolucion,
 }) => {
   const user = useAuthStore(s => s.user);
-
   useCheckPermission(PermissionsEnum.inventario_view_solicituddevolicion);
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
-  const [uuidIngresoMaterial, setUUIDIngresoMaterial] = useState<
-    string | undefined
-  >('');
 
   ///* global state --------------------
-  const ingresosDisponibles = useIngresosStore(s => s.ingresosDisponibles);
-  const productosEnviar = useIngresosStore(s => s.setIngresosDisponibles);
+  const productosDisponibles = useProductosStore(s => s.productosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
+  ///* hooks ---------------
   const navigate = useNavigate();
 
   ///* form
   const form = useForm<SaveFormData>({
     resolver: yupResolver(solicitudDevolucionFormSchema) as any,
     defaultValues: {
-      state: true,
-      user_create: user?.id,
       bodega: user?.flota_data?.ubicacion_data?.bodega,
       ubicacion: user?.flota_data?.ubicacion_data?.id,
+      user_create: user?.id,
+      state: true,
+    },
+  });
+
+  ///* fetch data ---------------------
+  const { data: productosPaging } = useFetchProductos({
+    params: {
+      page_size: 90000,
     },
   });
 
@@ -82,41 +81,27 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
     formState: { errors, isValid },
   } = form;
 
-  const watchedIngresoMaterial = form.watch('ingreso_material');
-
-  ///* fetch data ---------------------
-  const {
-    data: ingresoMaterialPaging,
-    isLoading: isLoadingIngresoMaterial,
-    isRefetching: isRefetchingIngresoMaterial,
-  } = useFetchIngresoMateriales({
-    enabled: !!user?.flota_data?.ubicacion_data?.id,
-    params: {
-      page_size: 1200,
-      ubicacion: user?.flota_data?.ubicacion_data?.id!,
-    },
-  });
-  const { data: productosPaging } = useFetchProductos({
-    params: {
-      page_size: 90000,
-    },
-  });
-
   ///* mutations
   const createSolicitudDevolucionMutation = useCreateSolicitudDevolucion({
     navigate,
     returnUrl: returnUrlSolicitudDevolucionPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => clearAllStore(),
+  });
+
+  const productosConUbicacion = productosDisponibles.map(producto => {
+    return {
+      ...producto,
+      ubicacion: user?.flota_data?.ubicacion_data?.id,
+    };
   });
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    console.log(ingresosDisponibles);
-
-    const mappedProductos = ingresosDisponibles.map(i => ({
+    const mappedProductos = productosDisponibles.map(i => ({
       producto: i.id,
-      cantidad: i.cantidad_pedida,
+      cantidad: i.cantidad,
       series: i.series ? i.series : [],
     }));
 
@@ -155,37 +140,13 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
       ...data,
       productos: mappedProductos,
     };
-    console.log(preparedData);
     createSolicitudDevolucionMutation.mutate(preparedData);
-    productosEnviar([]);
   };
 
   ///* effects
   useEffect(() => {
-    if (!solicitud_devolucion?.id) return;
     reset(solicitud_devolucion);
   }, [solicitud_devolucion, reset]);
-
-  useEffect(() => {
-    if (
-      isLoadingIngresoMaterial ||
-      isRefetchingIngresoMaterial ||
-      !user?.flota_data?.ubicacion_data
-    )
-      return;
-    !user?.flota_data?.ubicacion_data &&
-      ToastWrapper.error(`
-        No se encontraron ingreso de material para la ubicacion
-        seleccionada
-      `);
-  }, [
-    ingresoMaterialPaging,
-    isLoadingIngresoMaterial,
-    isRefetchingIngresoMaterial,
-  ]);
-
-  const customLoader = isLoadingIngresoMaterial || isRefetchingIngresoMaterial;
-  useLoaders(customLoader);
 
   ///* columns --------------------
   const { crearMaterialColumnsSinSerie } = useColumnsProductosDisponibles();
@@ -200,33 +161,13 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
         label="Bodega"
         value={user?.flota_data?.bodega_data?.nombre}
         disabled
-        size={gridSizeMdLg4}
       />
       <CustomTextFieldNoForm
         label="Ubicacion"
         value={user?.flota_data?.ubicacion_data?.nombre}
         disabled
-        size={gridSizeMdLg4}
       />
-      <CustomAutocomplete<IngresoMaterial>
-        label="Ingreso Material"
-        name="ingreso_material"
-        // options
-        options={ingresoMaterialPaging?.data?.items || []}
-        valueKey="secuencial"
-        actualValueKey="id"
-        defaultValue={form.getValues().ingreso_material}
-        isLoadingData={isLoadingIngresoMaterial || isRefetchingIngresoMaterial}
-        // vaidation
-        control={form.control}
-        error={errors.ingreso_material}
-        helperText={errors.ingreso_material?.message}
-        size={gridSizeMdLg4}
-        onChangeRawValue={row => {
-          setUUIDIngresoMaterial(row?.uuid);
-          productosEnviar([]);
-        }}
-      />
+
       <CustomTextArea
         label="Observación"
         name="observacion"
@@ -241,7 +182,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
         pt={CustomTypoLabelEnum.ptMiddlePosition}
       />
       <Grid container justifyContent="flex-end">
-        {!!watchedIngresoMaterial && (
+        {!!user?.flota_data?.ubicacion_data?.id && (
           <CustomSingleButton
             label="AGREGAR PRODUCTO"
             color="primary"
@@ -254,14 +195,15 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
           />
         )}
       </Grid>
-      <CustomMinimalTable<IngresosDisponiblesTableType>
+      <CustomMinimalTable<ProductosDisponiblesTableType>
         columns={crearMaterialColumnsSinSerie}
-        data={ingresosDisponibles || []}
+        data={productosConUbicacion || []}
         enablePagination
         density="comfortable"
       />
-      <IngresoDisponiblesModal
-        uuid_ingreso={uuidIngresoMaterial}
+      <ProductosDisponiblesModal
+        askADD={false}
+        pk_ubicacion={user?.flota_data?.ubicacion_data?.uuid}
         open={openAddProducts}
         onClose={() => setOpenAddProducts(false)}
       />

@@ -504,16 +504,13 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
             }),
-            renderByModule(
-              SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_DEVOLUCION,
-              {
-                id: 'recepcion-solicitud-devoluciones',
-                title: 'Recepción de solicitudes de devoluciones',
-                type: MenuItemType.ITEM,
-                url: ROUTER_PATHS.inventario
-                  .recepcionSolicitudDevolucionMaterialesNav,
-              },
-            ),
+            renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
+              id: 'recepcion-solicitud-devoluciones',
+              title: 'Recepción de solicitudes de devoluciones',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario
+                .recepcionSolicitudDevolucionMaterialesNav,
+            }),
             renderByModule(
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {

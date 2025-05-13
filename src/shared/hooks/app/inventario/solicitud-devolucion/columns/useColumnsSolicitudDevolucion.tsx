@@ -6,10 +6,10 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { ShowSeriesModal } from '../../modals';
 import { TABLE_CONSTANTS } from '@/shared/constants';
 import { SolicitudDevolucion } from '@/shared/interfaces';
 import { ViewMoreTextModalTableCell } from '@/shared/components';
+import ShowSolicitudMaterialModal from '@/app/inventario/solicitud-material/pages/modal/ShowSolicitudMaterialModal';
 
 export const useColumnsSolicitudDevolucion = () => {
   const solicitudDevolucionBaseColumns01 = useMemo<
@@ -30,7 +30,7 @@ export const useColumnsSolicitudDevolucion = () => {
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
-          return <ShowSeriesModal Arrays={row.original} />;
+          return <ShowSolicitudMaterialModal Arrays={row.original} />;
         },
       },
       {

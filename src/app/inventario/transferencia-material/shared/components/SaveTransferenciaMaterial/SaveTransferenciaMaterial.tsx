@@ -60,6 +60,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
   const navigate = useNavigate();
@@ -145,6 +146,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     navigate,
     returnUrl: returnUrlTransferenciaMaterialesPage,
     enableErrorNavigate: false,
+    customOnSuccess: () => clearAllStore(),
   });
 
   ///* handlers
@@ -233,19 +235,14 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
       ...data,
       productos: mappedProductos,
     };
-
-    console.log(preparedData);
-
     createTransferenciaMaterialMutation.mutate(preparedData);
   };
 
   ///* effects
   useEffect(() => {
-    productosEnviar([]);
     if (!transferenciaMaterial) return;
     reset(transferenciaMaterial);
     productosEnviar(transferenciaMaterial?.productos);
-    console.log(transferenciaMaterial?.ubicacion_origen_data?.uuid);
     setUUIDUbicacion(transferenciaMaterial?.ubicacion_origen_data?.uuid || '');
   }, [transferenciaMaterial, reset, productosEnviar]);
 

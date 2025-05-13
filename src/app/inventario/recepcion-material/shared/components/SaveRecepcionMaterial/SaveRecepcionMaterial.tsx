@@ -53,6 +53,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
   const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
+  const clearAllStore = useProductosStore(s => s.clearAll);
 
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
@@ -110,12 +111,14 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
     useUpdateRecepcionMaterial<CreateRecepcionMaterialParamsBase>({
       navigate,
       returnUrl: returnUrlRecepcionMaterialPage,
+      customOnSuccess: () => clearAllStore(),
     });
 
   const updateRecepcionMaterialAprobarMutation =
     useUpdateRecepcionMaterial<CreateRecepcionMaterialParamsBase>({
       enableNavigate: true,
       enableErrorNavigate: true,
+      customOnSuccess: () => clearAllStore(),
     });
 
   ///* handlers
@@ -166,7 +169,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       title: 'Solicitud de material creada',
       subtitle: '¿Desea ingresar la solicitud de este material?',
       onConfirm: () => {
-        productosEnviar([]);
         try {
           navigate(
             `${returnUrlTransferenciaMaterialesPage}/solicitud/${data.uuid}`,
@@ -192,7 +194,6 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
         setConfirmDialogIsOpen(false);
         updateRecepcionMaterialMutation.mutate({ id: data.id!, data });
         navigate(returnUrlRecepcionMaterialPage);
-        productosEnviar([]);
       },
     });
   };
