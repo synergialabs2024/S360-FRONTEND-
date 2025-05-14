@@ -22,6 +22,7 @@ import {
 } from '@/shared/components';
 import ModalAuthorizateOrdenTrabajo from '@/shared/hooks/app/tecnico/ModalAuthorizateOrdenTrabajo';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { hasPermission } from '@/shared/utils/auth';
 
 export type ActivacionInstalacionOTByStateProps = {
   activacionState: EstadoActivacionEnumChoice;
@@ -118,6 +119,8 @@ const ActivacionInstalacionOTByState: React.FC<
   const { installAsignadasEsperaOTColumns, installGestionadasOTColumns } =
     useColumnsOrdenTrabajo();
 
+  console.log();
+
   return (
     <GridTableTabsContainerOnly>
       <CustomSearch
@@ -163,7 +166,10 @@ const ActivacionInstalacionOTByState: React.FC<
         canDelete={false}
         showCustomButtonsSpaceEnd
         customButtonsSpaceEnd={row => {
-          if (activacionState === EstadoActivacionEnumChoice.PENDIENTE) {
+          if (
+            activacionState === EstadoActivacionEnumChoice.PENDIENTE &&
+            hasPermission(PermissionsEnum.operaciones_change_agendamiento)
+          ) {
             return (
               <SingleIconButton
                 startIcon={<MdEditCalendar />}

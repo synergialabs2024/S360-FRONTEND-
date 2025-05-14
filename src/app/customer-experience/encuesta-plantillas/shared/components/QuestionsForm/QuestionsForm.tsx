@@ -112,7 +112,8 @@ const QuestionsForm: React.FC<SaveEncuestaPlantillasProps> = ({
           questionType === EncuestaPlantillaTypeEnumChoice.SELECCION_RANKING;
 
         const isAtributoSelection =
-          questionType === EncuestaPlantillaTypeEnumChoice.SELECCION_RANKING;
+          questionType ===
+          EncuestaPlantillaTypeEnumChoice.SELECCION_POR_ATRIBUTO;
 
         return (
           <Grid item container key={field.id} {...gridSizeMdLg12} spacing={2}>

@@ -116,7 +116,14 @@ export const useColumnsTransaccionesCliente = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
         Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
       },
-
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA TRANSACCION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
       {
         accessorKey: 'created_at',
         header: 'CREADO',
