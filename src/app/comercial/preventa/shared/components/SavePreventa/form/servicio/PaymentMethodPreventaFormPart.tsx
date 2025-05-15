@@ -205,109 +205,91 @@ const PaymentMethodPreventaFormPart: React.FC<
             size={gridSizeMdLg6}
           />
         </>
-      ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.RECAUDACIONES ? (
-        <>
-          <CustomAutocomplete<EntidadFinanciera>
-            label="Entidad financiera"
-            name="entidad_financiera"
-            // options
-            options={entidadFinancierasPaging?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().entidad_financiera}
-            isLoadingData={
-              isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
-            }
-            // vaidation
-            control={form.control}
-            error={errors.entidad_financiera}
-            helperText={errors.entidad_financiera?.message}
-            size={gridSizeMdLg6}
-          />
-        </>
-      ) : watchedRawPaymentMethod?.uuid === MetodoPagoEnumUUID.CREDITO ? (
-        <>
-          <CustomAutocomplete<Tarjeta>
-            label="Tarjeta de crédito"
-            name="tarjeta"
-            // options
-            options={tarjetasPaging?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().tarjeta}
-            isLoadingData={
-              isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
-            }
-            // vaidation
-            control={form.control}
-            error={errors.tarjeta}
-            helperText={errors.tarjeta?.message}
-            size={gridSizeMdLg6}
-            disabled
-          />
-          <Grid item xs={12} pt={4}>
-            <Cards
-              number={watcherNumberCreditCard || ''}
-              expiry={watcherExpirateCreditCard || ''}
-              cvc=""
-              name={watcherOwnerCreditCard || ''}
-            />
-          </Grid>
-          <CustomCreditCardTextField
-            label="Número tarjeta crédito"
-            name="numero_tarjeta_credito"
-            control={form.control}
-            defaultValue={form.getValues().numero_tarjeta_credito}
-            error={errors.numero_tarjeta_credito}
-            helperText={errors.numero_tarjeta_credito?.message}
-            onlyNumbers
-            maxLength={16}
-            onChangeCardType={cardType => {
-              const card = tarjetasPaging?.data?.items.find(
-                card => card?.code === cardType,
-              );
-              form.setValue('tarjeta', card?.id);
-            }}
-            size={gridSizeMdLg6}
-          />
-          <CustomAutocomplete<EntidadFinanciera>
-            label="Entidad financiera"
-            name="entidad_financiera"
-            // options
-            options={entidadFinancierasPaging?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().entidad_financiera}
-            isLoadingData={
-              isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
-            }
-            // vaidation
-            control={form.control}
-            error={errors.entidad_financiera}
-            helperText={errors.entidad_financiera?.message}
-            size={gridSizeMdLg6}
-          />
-          <CustomTextField
-            label="Titular tarjeta"
-            name="titular_tarjeta"
-            control={form.control}
-            defaultValue={form.getValues().titular_tarjeta}
-            error={errors.titular_tarjeta}
-            helperText={errors.titular_tarjeta?.message}
-            size={gridSizeMdLg6}
-            maxLength={25}
-          />
-          <CustomExpirateDateTextField
-            label="Fecha vencimiento tarjeta"
-            name="fecha_vencimiento_tarjeta"
-            control={form.control}
-            defaultValue={form.getValues().fecha_vencimiento_tarjeta}
-            error={errors.fecha_vencimiento_tarjeta}
-            helperText={errors.fecha_vencimiento_tarjeta?.message}
-            size={gridSizeMdLg6}
-          />
-        </>
-      ) : null}
+      ) : watchedRawPaymentMethod?.uuid ===
+        MetodoPagoEnumUUID.RECAUDACIONES ? null : watchedRawPaymentMethod?.uuid ===
+        MetodoPagoEnumUUID.CREDITO ? (
+            <>
+              <CustomAutocomplete<Tarjeta>
+                label="Tarjeta de crédito"
+                name="tarjeta"
+                // options
+                options={tarjetasPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().tarjeta}
+                isLoadingData={
+                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
+                }
+                // vaidation
+                control={form.control}
+                error={errors.tarjeta}
+                helperText={errors.tarjeta?.message}
+                size={gridSizeMdLg6}
+                disabled
+              />
+              <Grid item xs={12} pt={4}>
+                <Cards
+                  number={watcherNumberCreditCard || ''}
+                  expiry={watcherExpirateCreditCard || ''}
+                  cvc=""
+                  name={watcherOwnerCreditCard || ''}
+                />
+              </Grid>
+              <CustomCreditCardTextField
+                label="Número tarjeta crédito"
+                name="numero_tarjeta_credito"
+                control={form.control}
+                defaultValue={form.getValues().numero_tarjeta_credito}
+                error={errors.numero_tarjeta_credito}
+                helperText={errors.numero_tarjeta_credito?.message}
+                onlyNumbers
+                maxLength={16}
+                onChangeCardType={cardType => {
+                  const card = tarjetasPaging?.data?.items.find(
+                    card => card?.code === cardType,
+                  );
+                  form.setValue('tarjeta', card?.id);
+                }}
+                size={gridSizeMdLg6}
+              />
+              <CustomAutocomplete<EntidadFinanciera>
+                label="Entidad financiera"
+                name="entidad_financiera"
+                // options
+                options={entidadFinancierasPaging?.data?.items || []}
+                valueKey="name"
+                actualValueKey="id"
+                defaultValue={form.getValues().entidad_financiera}
+                isLoadingData={
+                  isLoadingEntidadFinancieras || isRefetchingEntidadFinancieras
+                }
+                // vaidation
+                control={form.control}
+                error={errors.entidad_financiera}
+                helperText={errors.entidad_financiera?.message}
+                size={gridSizeMdLg6}
+              />
+              <CustomTextField
+                label="Titular tarjeta"
+                name="titular_tarjeta"
+                control={form.control}
+                defaultValue={form.getValues().titular_tarjeta}
+                error={errors.titular_tarjeta}
+                helperText={errors.titular_tarjeta?.message}
+                size={gridSizeMdLg6}
+                maxLength={25}
+              />
+              <CustomExpirateDateTextField
+                label="Fecha vencimiento tarjeta"
+                name="fecha_vencimiento_tarjeta"
+                control={form.control}
+                defaultValue={form.getValues().fecha_vencimiento_tarjeta}
+                error={errors.fecha_vencimiento_tarjeta}
+                helperText={errors.fecha_vencimiento_tarjeta?.message}
+                size={gridSizeMdLg6}
+              />
+            </>
+          ) : null}
     </>
   );
 };
