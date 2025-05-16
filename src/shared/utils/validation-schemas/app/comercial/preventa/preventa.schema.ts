@@ -98,7 +98,7 @@ export const preventaFormSchema = yup.object({
 
   // DEBITO ----
   entidad_financiera: yup
-    .mixed()
+    .number()
     .optional()
     .nullable()
     .when('rawPaymentMethod', {
