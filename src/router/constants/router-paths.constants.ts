@@ -136,8 +136,8 @@ export const ROUTER_PATHS = {
 
     ///* configuracion plantilla
     configuracionPlantillas: 'configuracion-plantillas',
-    configuracionPlantillasCrear: 'configuracion-plantillas/crear',
-    configuracionPlantillasEditar: 'configuracion-plantillas/editar/:uuid',
+    //configuracionPlantillasCrear: 'configuracion-plantillas/crear',
+    //configuracionPlantillasEditar: 'configuracion-plantillas/editar/:uuid',
     configuracionPlantillasNav: '/parametrizacion/configuracion-plantillas',
 
     ///* score limit ventas

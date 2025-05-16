@@ -21,12 +21,18 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { PermissionsEnum, PlanInternet } from '@/shared/interfaces';
 import {
   emptyCellOneLevel,
-  formatConcat2valuesCell,
   formatCurrencyCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
 import { hasPermission } from '@/shared/utils/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
+import {
+  CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES,
+  INTERNET_PERMANENCE_ARRAY_CHOICES,
+  INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_ALL,
+  INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
+  INTERNET_UNIT_VELOCITY_ARRAY_CHOICES,
+} from '@/shared';
 
 export const returnUrlPlanInternetsPage =
   ROUTER_PATHS.servicios.planesinternetNav;
@@ -118,6 +124,8 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: CLASIFICACION_PLANES_SCORE_BURO_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'clasificacion_score_buro'),
       },
 
@@ -178,12 +186,7 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          formatConcat2valuesCell(
-            row,
-            'velocidad_descarga_minima',
-            'unidad_velocidad',
-          ),
+        Cell: ({ row }) => formatCurrencyCell(row, 'velocidad_descarga_minima'),
       },
       {
         accessorKey: 'velocidad_descarga_maxima',
@@ -191,12 +194,7 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          formatConcat2valuesCell(
-            row,
-            'velocidad_descarga_maxima',
-            'unidad_velocidad',
-          ),
+        Cell: ({ row }) => formatCurrencyCell(row, 'velocidad_descarga_minima'),
       },
       {
         accessorKey: 'velocidad_subida_minima',
@@ -204,12 +202,7 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          formatConcat2valuesCell(
-            row,
-            'velocidad_subida_minima',
-            'unidad_velocidad',
-          ),
+        Cell: ({ row }) => formatCurrencyCell(row, 'velocidad_subida_minima'),
       },
       {
         accessorKey: 'velocidad_subida_maxima',
@@ -217,12 +210,7 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) =>
-          formatConcat2valuesCell(
-            row,
-            'velocidad_subida_maxima',
-            'unidad_velocidad',
-          ),
+        Cell: ({ row }) => formatCurrencyCell(row, 'velocidad_subida_maxima'),
       },
       {
         accessorKey: 'comparticion',
@@ -247,6 +235,8 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: INTERNET_UNIT_VELOCITY_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'unidad_velocidad'),
       },
       {
@@ -255,6 +245,8 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: INTERNET_PERMANENCE_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'permanencia'),
       },
 
@@ -264,6 +256,8 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_servicio'),
       },
       {
@@ -272,6 +266,8 @@ const PlanInternetsPage: React.FC<PlanInternetsPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: INTERNET_PLAN_INTERNET_TYPE_ARRAY_CHOICES_ALL,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_plan'),
       },
 

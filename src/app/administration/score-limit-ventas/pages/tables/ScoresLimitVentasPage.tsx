@@ -92,14 +92,14 @@ const ScoresLimitVentasPage: React.FC<ScoresLimitVentasPageProps> = () => {
     () => [
       {
         accessorKey: 'score_letter',
-        header: 'SCORE LETTER',
+        header: 'SCORE LETRA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'score_letter'),
       },
 
       {
         accessorKey: 'monthly_limit',
-        header: 'MONTHLY LIMIT',
+        header: 'LIMITE MENSUAL',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'monthly_limit'),
       },

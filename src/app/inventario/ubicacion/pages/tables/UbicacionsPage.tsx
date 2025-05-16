@@ -66,7 +66,7 @@ const UbicacionsPage: React.FC<UbicacionsPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      nombre: searchTerm,
       ...filterObject,
       filterByState: false,
     },

@@ -89,13 +89,7 @@ const ConfiguracionsPlantillaPage: React.FC<
   const { genericColumns } = useColumnsConfigPlantillaCliente();
 
   return (
-    <SingleTableBoxScene
-      title="Configuracion Plantilla"
-      createPageUrl={`${returnUrlConfiguracionsPlantillaPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.administration_add_configplantillacliente,
-      )}
-    >
+    <SingleTableBoxScene title="Configuracion Plantilla" showCreateBtn={false}>
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
