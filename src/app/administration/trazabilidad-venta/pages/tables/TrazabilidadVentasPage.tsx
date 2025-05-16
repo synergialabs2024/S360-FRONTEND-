@@ -5,6 +5,7 @@ import {
   emptyCellOneLevel,
   formatDateWithTimeCell,
   TABLE_CONSTANTS,
+  TRAZABILIDAD_MODELO_NAME_ARRAY_CHOICES,
   TrazabilidadVenta,
   useTableFilter,
   useTableServerSideFiltering,
@@ -47,8 +48,9 @@ const TrazabilidadVentasPage: React.FC<TrazabilidadVentasPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      modelo_estado: searchTerm,
       ...filterObject,
+      filterByState: false,
     },
   });
 
@@ -67,18 +69,9 @@ const TrazabilidadVentasPage: React.FC<TrazabilidadVentasPageProps> = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,
         enableSorting: true,
-        Cell: ({ row }) => {
-          const str = row?.original?.modelo_name
-            ? row.original.modelo_name
-            : 'N/A';
-          return (
-            <ViewMoreTextModalTableCell
-              longText={str}
-              limit={27}
-              modalTitle={`Accion tomada del modelo ${row?.original?.modelo}`}
-            />
-          );
-        },
+        filterVariant: 'select',
+        filterSelectOptions: TRAZABILIDAD_MODELO_NAME_ARRAY_CHOICES,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'modelo_name'),
       },
       {
         accessorKey: 'modelo_estado',
@@ -139,7 +132,7 @@ const TrazabilidadVentasPage: React.FC<TrazabilidadVentasPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por estado del modelo"
       />
 
       <CustomTable<TrazabilidadVenta>

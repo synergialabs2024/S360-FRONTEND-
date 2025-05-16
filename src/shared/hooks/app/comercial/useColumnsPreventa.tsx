@@ -5,6 +5,7 @@ import { ImgModalComponent } from '@/shared/components';
 import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
 import {
   IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
+  INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
   MODEL_STATE_BOOLEAN,
   SalesStatesActionsEnumChoice,
   TABLE_CONSTANTS,
@@ -117,6 +118,8 @@ export const useColumnsPreventa = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: INTERNET_SERVICE_TYPE_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_servicio'),
       },
 
@@ -148,7 +151,7 @@ export const useColumnsPreventa = () => {
       },
 
       {
-        accessorKey: 'metodo_pago',
+        accessorKey: 'metodo_pago__name',
         header: 'METODO PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,

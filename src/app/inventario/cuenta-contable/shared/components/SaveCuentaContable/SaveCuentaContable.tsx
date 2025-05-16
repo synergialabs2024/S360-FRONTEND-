@@ -150,6 +150,7 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
         error={errors.nombre}
         helperText={errors.nombre?.message}
         size={gridSizeMdLg6}
+        ignoreTransform
       />
       <CustomTextField
         label="Codigo"
@@ -198,7 +199,7 @@ const SaveCuentaContable: React.FC<SaveCuentaContableProps> = ({
           required={false}
           titleArray={['nombre', 'codigo']}
           defaultValue={cuentaPadre ? [cuentaPadre] : []}
-          maxSelectable={3}
+          maxSelectable={1}
           onChangeValue={value => form.setValue('cuenta_padre', Number(value))}
         />
       ) : null}

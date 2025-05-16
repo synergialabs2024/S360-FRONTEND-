@@ -1968,6 +1968,7 @@ const ConfiguracionsPlantillaPage = Loadable(
       ),
   ),
 );
+/*
 const CreateConfiguracionPlantillaPage = Loadable(
   lazy(
     () =>
@@ -1984,7 +1985,7 @@ const UpdateConfiguracionPlantillaPage = Loadable(
       ),
   ),
 );
-
+*/
 // Tickets
 
 const TicketsPage = Loadable(
@@ -2567,6 +2568,7 @@ const AppRouter = [
             path: ROUTER_PATHS.administracion.configuracionPlantillas,
             element: <ConfiguracionsPlantillaPage />,
           },
+          /*
           {
             path: ROUTER_PATHS.administracion.configuracionPlantillasCrear,
             element: <CreateConfiguracionPlantillaPage />,
@@ -2575,6 +2577,7 @@ const AppRouter = [
             path: ROUTER_PATHS.administracion.configuracionPlantillasEditar,
             element: <UpdateConfiguracionPlantillaPage />,
           },
+          */
 
           ///*Calendario Facturacion
           {

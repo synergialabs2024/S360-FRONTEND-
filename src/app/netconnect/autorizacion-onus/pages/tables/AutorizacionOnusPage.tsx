@@ -117,7 +117,7 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      sn: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -135,7 +135,7 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por serial"
         sxContainer={{
           mb: 5,
         }}

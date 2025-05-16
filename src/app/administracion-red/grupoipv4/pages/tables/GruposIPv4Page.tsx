@@ -93,7 +93,7 @@ const GruposIPv4Page: React.FC<GruposIPv4PageProps> = () => {
     () => [
       {
         accessorKey: 'name',
-        header: 'NAME',
+        header: 'NOMBRE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },

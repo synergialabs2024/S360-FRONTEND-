@@ -58,7 +58,7 @@ const BrassPage: React.FC<BrassPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      username: searchTerm,
+      name: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -87,7 +87,7 @@ const BrassPage: React.FC<BrassPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Bras"
+      title="Brass"
       createPageUrl={`${returnUrlBrassPage}/crear`}
       isMainTableStates
     >

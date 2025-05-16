@@ -256,9 +256,11 @@ export const useColumnsSolicitusService = (
       ...solicitudServicioBase01,
       ...solServiceCreatedAt,
       {
-        accessorKey: 'razon_social__finaliza_sol_serv',
+        accessorKey: 'razon_social__finaliza_solicitud_servicio',
         header: 'FINALIZADO POR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        enableColumnFilter: false,
+        enableSorting: false,
         Cell: ({ row }: MRTSServiceType) =>
           formatTrazabilidadCell(
             row,

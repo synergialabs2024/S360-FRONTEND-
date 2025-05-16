@@ -78,7 +78,7 @@ const BodegasPage: React.FC<BodegasPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      nombre: searchTerm,
       ...filterObject,
       filterByState: false,
     },

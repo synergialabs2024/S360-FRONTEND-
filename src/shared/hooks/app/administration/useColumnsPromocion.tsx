@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useUpdatePromocion } from '@/actions/app';
 import { CustomSwitch, ViewMoreTextModalTableCell } from '@/shared/components';
 import {
+  DISCOUNT_TYPE_ARRAY_CHOICES,
   DiscountTypeEnumChoice,
   MODEL_STATE_BOOLEAN,
   TABLE_CONSTANTS,
@@ -48,6 +49,8 @@ export const useColumnsPromocion = ({
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
         enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: DISCOUNT_TYPE_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_descuento'),
       },
       {
