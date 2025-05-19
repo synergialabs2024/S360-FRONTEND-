@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
 
 import { MODEL_STATE_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
 import {
@@ -10,6 +10,7 @@ import {
 } from '@/shared/utils';
 import { PlanPagoCuota } from '@/shared/interfaces';
 import ShowPlanPagoCuotaModal from '../modal/ShowPlanPagoCuotaModal';
+import ShowPPCDeudaCuotaModal from '../modal/ShowPPCDeudaCuotaModal';
 
 export interface PlanPagoCuotaShow {
   codigo: string;
@@ -64,6 +65,17 @@ export const useColumnsPlanPagoCuota = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         Cell: ({ row }) => {
           return <ShowPlanPagoCuotaModal Arrays={row.original.detalle} />;
+        },
+      },
+      {
+        accessorKey: 'deuda_cuota',
+        header: 'DEUDA',
+        enableColumnFilter: false,
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => {
+          return (
+            <ShowPPCDeudaCuotaModal Arrays={row.original.deudas_cuota_data} />
+          );
         },
       },
       {
@@ -194,6 +206,53 @@ export const useColumnsPlanPagoCuota = () => {
     ],
     [],
   );
+  const ppcDeudaCuotaShowColumns = useMemo<MRT_ColumnDef<PlanPagoCuotaShow>[]>(
+    () => [
+      {
+        accessorKey: 'cuota_actual',
+        header: 'ESTADO ACTUAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_cuota'),
+      },
+      {
+        accessorKey: 'estado_cuota',
+        header: 'ESTADO DE CUENTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_cuota'),
+      },
+      {
+        accessorKey: 'fecha_vencimiento',
+        header: 'FECHA VENCIMIENTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_vencimiento'),
+      },
+      {
+        accessorKey: 'monto_cuota',
+        header: 'MONTO CUOTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'monto_cuota'),
+      },
+      {
+        accessorKey: 'rubro',
+        header: 'RUBRO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'rubro'),
+      },
+      {
+        accessorKey: 'subtotal_cuota',
+        header: 'SUBTOTAL CUOTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'subtotal_cuota'),
+      },
+      {
+        accessorKey: 'taxes_cuota',
+        header: 'TAXES CUOTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'taxes_cuota'),
+      },
+    ],
+    [],
+  );
 
   const planPagoMaterialColumns = useMemo<MRT_ColumnDef<PlanPagoCuota>[]>(
     () => [
@@ -220,5 +279,6 @@ export const useColumnsPlanPagoCuota = () => {
   return {
     planPagoMaterialColumns,
     planpagocuotaShowColumns,
+    ppcDeudaCuotaShowColumns,
   };
 };

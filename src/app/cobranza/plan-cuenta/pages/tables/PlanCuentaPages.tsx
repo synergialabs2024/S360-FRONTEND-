@@ -1,43 +1,29 @@
-import { useNavigate } from 'react-router';
-
 import {
   CustomTable,
   CustomSearch,
-  CustomTypoLabel,
   SingleTableBoxScene,
-  CustomTableSelectExpand,
 } from '@/shared/components';
 import {
   useTableFilter,
   CuentaContable,
   PermissionsEnum,
   TABLE_CONSTANTS,
-  CuentaContable_SubTable,
   useColumnsCuentaContable,
   useTableServerSideFiltering,
 } from '@/shared';
-import { useUiConfirmModalStore } from '@/store/ui';
-import { hasAllPermissions } from '@/shared/utils/auth';
+import { hasPermission } from '@/shared/utils/auth';
 import { useFetchCuentaContables } from '@/actions/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { returnUrlCuentaContablePage } from '@/app/inventario/cuenta-contable/pages/tables/CuentaContablePages';
+import ModalDaughterCC from '../customs/ModalDaughterCC';
 
 export type PlanCuentaPagesProps = {};
 
 const PlanCuentaPages: React.FC<PlanCuentaPagesProps> = () => {
   useCheckPermission(PermissionsEnum.contabilidad_view_cuentacontable);
 
-  const navigate = useNavigate();
-
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
-
-  ///* global state
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
-    s => s.setConfirmDialogIsOpen,
-  );
 
   ///* table
   const {
@@ -65,24 +51,8 @@ const PlanCuentaPages: React.FC<PlanCuentaPagesProps> = () => {
     },
   });
 
-  ///* handlers
-  const onEdit = (cuenta_contable: CuentaContable_SubTable) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Cuenta Contable',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(
-          `${returnUrlCuentaContablePage}/editar/${cuenta_contable.uuid}`,
-        );
-      },
-    });
-  };
-
   ///* columns
-  const { cuentaContableColumns, planCuentasBaseColumns01 } =
-    useColumnsCuentaContable();
+  const { plancuentaColumns } = useColumnsCuentaContable();
 
   return (
     <SingleTableBoxScene title="Plan de Cuentas" showCreateBtn={false}>
@@ -91,9 +61,8 @@ const PlanCuentaPages: React.FC<PlanCuentaPagesProps> = () => {
         value={globalFilter}
         text="por nombre"
       />
-
-      <CustomTableSelectExpand<CuentaContable>
-        columns={cuentaContableColumns}
+      <CustomTable<CuentaContable>
+        columns={plancuentaColumns}
         data={CuentaContablePagingRes?.data?.items || []}
         isLoading={isLoading}
         isRefetching={isRefetching}
@@ -106,46 +75,26 @@ const PlanCuentaPages: React.FC<PlanCuentaPagesProps> = () => {
         // // pagination
         pagination={pagination}
         onPaging={setPagination}
-        rowCount={CuentaContablePagingRes?.data?.meta?.count}
+        rowCount={CuentaContablePagingRes?.data?.meta.count}
         // // actions
-        enableActionsColumn={false}
-        // // expandible
-        canExpand={true}
-        ExpandShow={(row: CuentaContable) => (
-          <>
-            <CustomTypoLabel text="CUENTAS HIJAS" />
-            <CustomTable<CuentaContable_SubTable>
-              columns={planCuentasBaseColumns01}
-              data={
-                Array.isArray(row.cuentas_hijas_data)
-                  ? row.cuentas_hijas_data
-                  : []
-              }
-              isLoading={isLoading}
-              isRefetching={isRefetching}
-              // // filters - server side
-              enableManualFiltering={true}
-              columnFilters={columnFilters}
-              onColumnFiltersChange={setColumnFilters}
-              // // search
-              enableGlobalFilter={false}
-              // // pagination
-              pagination={pagination}
-              onPaging={setPagination}
-              rowCount={CuentaContablePagingRes?.data?.meta?.count}
-              // // actions
-              actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-              enableActionsColumn={hasAllPermissions([
-                PermissionsEnum.contabilidad_view_cuentacontable,
-              ])}
-              // crud
-              canEdit={hasAllPermissions([
-                PermissionsEnum.contabilidad_view_cuentacontable,
-              ])}
-              onEdit={onEdit}
-            />
-          </>
+        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
+        enableActionsColumn={hasPermission(
+          PermissionsEnum.contabilidad_change_cuentacontable,
         )}
+        // crud
+        canEdit={hasPermission(
+          PermissionsEnum.contabilidad_change_cuentacontable,
+        )}
+        editIconToolTipTitle="Gestionar"
+        showCustomButtonsSpaceEnd
+        customButtonsSpaceEnd={row => {
+          if (
+            hasPermission(PermissionsEnum.contabilidad_change_cuentacontable)
+          ) {
+            return <ModalDaughterCC Arrays={row} />;
+          }
+          return null;
+        }}
       />
     </SingleTableBoxScene>
   );

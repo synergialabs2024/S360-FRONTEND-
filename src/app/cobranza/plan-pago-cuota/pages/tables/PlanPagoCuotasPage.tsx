@@ -1,15 +1,15 @@
 import {
+  CustomTable,
+  CustomSearch,
+  SingleTableBoxScene,
+} from '@/shared/components';
+import {
   PlanPagoCuota,
   useTableFilter,
   PermissionsEnum,
   useColumnsPlanPagoCuota,
   useTableServerSideFiltering,
 } from '@/shared';
-import {
-  CustomTable,
-  CustomSearch,
-  SingleTableBoxScene,
-} from '@/shared/components';
 import { ROUTER_PATHS } from '@/router/constants';
 import { useFetchPlanPagoCuota } from '@/actions/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
@@ -50,21 +50,6 @@ const PlanPagoCuotasPage: React.FC<PlanPagoCuotasPageProps> = () => {
       ...filterObject,
     },
   });
-
-  ///* handlers
-  /*
-  const onEdit = (planpagocuota: PlanPagoCuota) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Editar Plan Pago Cuota',
-      subtitle: '¿Está seguro que desea editar este registro?',
-      onConfirm: () => {
-        setConfirmDialogIsOpen(false);
-        navigate(`${returnUrlPlanPagoCuotasPage}/editar/${planpagocuota.uuid}`);
-      },
-    });
-  };
-  */
 
   ///* columns
   const { planPagoMaterialColumns } = useColumnsPlanPagoCuota();

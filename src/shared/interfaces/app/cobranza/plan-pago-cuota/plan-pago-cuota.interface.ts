@@ -21,6 +21,7 @@ export interface PlanPagoCuota {
   fecha_fin: string;
 
   detalle: string[];
+  deudas_cuota_data: string[];
 
   ///* fk
   linea_servicio: number;

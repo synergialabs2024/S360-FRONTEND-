@@ -1,4 +1,5 @@
 export * from './cliente-pendiente-devolucion';
+export * from './deuda-cuota-equipos-venta';
 export * from './pago-oficina-virtual';
 export * from './factura.interface';
 export * from './motivo-rubro-adicional.interface';

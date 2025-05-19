@@ -1219,6 +1219,15 @@ const ClientePendienteDevolucionMainPage = Loadable(
 const PlanCuentaPages = Loadable(
   lazy(() => import('@/app/cobranza/plan-cuenta/pages/tables/PlanCuentaPages')),
 );
+const UpdateDeudaCuotaEquiposVenta = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/deuda-cuota-equipos-venta/pages/forms/UpdateDeudaCuotaEquiposVenta'
+      ),
+  ),
+);
+
 const PagoOficinaVirtualPages = Loadable(
   lazy(
     () =>
@@ -3012,7 +3021,12 @@ const AppRouter = [
             element: <PlanCuentaPages />,
           },
 
-          ///* Plan de Cuentas
+          {
+            path: ROUTER_PATHS.cobranza.deudacuotaEquipoVentaEditar,
+            element: <UpdateDeudaCuotaEquiposVenta />,
+          },
+
+          ///* Pago Oficina Virtual
           {
             path: ROUTER_PATHS.cobranza.pagooficinavirtual,
             element: <PagoOficinaVirtualPages />,

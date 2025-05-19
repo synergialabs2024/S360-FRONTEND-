@@ -1,30 +1,27 @@
-import { IconDeviceMobileDollar } from '@tabler/icons-react';
+import { CuentaContable, useColumnsCuentaContable } from '@/shared';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
 import { Grid, IconButton } from '@mui/material';
 import { useState } from 'react';
+import { MdArrowRightAlt } from 'react-icons/md';
 
-import { PlanPagoCuotaShow, useColumnsPlanPagoCuota } from '../columns';
-import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
-
-export type ShowPlanPagoCuotaModalProps = {
+export type ModalDaughterCCProps = {
   Arrays: any;
 };
 
-const ShowPlanPagoCuotaModal: React.FC<ShowPlanPagoCuotaModalProps> = ({
-  Arrays = [],
-}) => {
+const ModalDaughterCC: React.FC<ModalDaughterCCProps> = ({ Arrays = [] }) => {
   //* State local
   const [open, setOpen] = useState(false);
 
   ///* columns
-  const { planpagocuotaShowColumns } = useColumnsPlanPagoCuota();
+  const { plancuentahijaColumns } = useColumnsCuentaContable();
 
   const Section = () => (
     <>
       <Grid container spacing={2} mt={2} mb={3}>
         <Grid item xs={12}>
-          <SimpleTable<PlanPagoCuotaShow>
-            columns={planpagocuotaShowColumns}
-            data={Arrays || []}
+          <SimpleTable<CuentaContable>
+            columns={plancuentahijaColumns}
+            data={Arrays.cuentas_hijas_data || []}
             isLoading={false}
             centerColumns={true}
             enableGlobalFilter={true}
@@ -43,13 +40,14 @@ const ShowPlanPagoCuotaModal: React.FC<ShowPlanPagoCuotaModalProps> = ({
         onClick={() => setOpen(!open)}
         style={{ cursor: 'pointer' }}
       >
-        <IconDeviceMobileDollar />
+        <MdArrowRightAlt />
       </IconButton>
       {open && (
         <ScrollableDialogProps
           open={open}
           onClose={() => setOpen(false)}
-          title="DETALLES"
+          cancelTextBtn="Cerrar"
+          title="CUENTAS CONTABLES HIJAS"
           contentNode={<Section />}
         />
       )}
@@ -57,4 +55,4 @@ const ShowPlanPagoCuotaModal: React.FC<ShowPlanPagoCuotaModalProps> = ({
   );
 };
 
-export default ShowPlanPagoCuotaModal;
+export default ModalDaughterCC;

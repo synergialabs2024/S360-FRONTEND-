@@ -433,6 +433,10 @@ export const ROUTER_PATHS = {
     ///* Pago Oficina Virtual
     pagooficinavirtual: 'pago-oficina-virtual',
     pagooficinavirtualNav: '/cobranza/pago-oficina-virtual',
+
+    ///* Deuda Cuota Equipo Venta
+    deudacuotaEquipoVentaEditar: 'deuda-cuota-equipo-venta/editar/:uuid',
+    deudacuotaEquipoVentaNav: '/cobranza/deuda-cuota-equipo-venta',
   },
 
   /////* Comercial ----------------
