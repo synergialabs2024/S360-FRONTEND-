@@ -1,9 +1,18 @@
 import {
+  Box,
+  Tooltip,
+  useTheme,
+  IconButton,
+  Typography,
+  TooltipProps,
+} from '@mui/material';
+import {
+  MRT_RowData,
   MaterialReactTable,
   useMaterialReactTable,
-  MRT_RowData,
 } from 'material-react-table';
-import { Box, Typography, useTheme } from '@mui/material';
+import { ColorButtonType } from '@/shared/interfaces';
+import { MdArrowRightAlt, MdEdit } from 'react-icons/md';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 export interface SimpleTableProps<T extends MRT_RowData> {
@@ -14,6 +23,38 @@ export interface SimpleTableProps<T extends MRT_RowData> {
   centerColumns?: boolean;
   showTotal?: boolean;
   isSubTable?: boolean;
+
+  //crud
+  onEdit?: (original: T) => void | Promise<void>;
+  arrowIcon?: boolean;
+
+  onConditionEdit?: (original: T) => boolean;
+
+  //
+  positionActionsColumn?: 'first' | 'last';
+
+  // one custom button
+  showOneCustomButton?: boolean;
+  oneCustomButton?: (original: T) => React.ReactNode;
+  onConditionCustomButton?: (original: T) => boolean;
+
+  enableActionsColumn?: boolean;
+  ///* actions
+  actionsColumnSize?: number;
+  // crud
+  canEdit?: boolean;
+
+  // custom buttons space
+  showCustomButtonsSpace?: boolean;
+  customButtonsSpace?: (original: T) => React.ReactNode;
+  showCustomButtonsSpaceEnd?: boolean;
+  customButtonsSpaceEnd?: (original: T) => React.ReactNode;
+
+  // to reuse colums actions with cusom buttons
+  editIcon?: React.ReactNode;
+  editIconToolTipTitle?: string;
+  editIconColor?: ColorButtonType;
+  editIconTooltipPlacement?: TooltipProps['placement'];
 }
 
 function SimpleTable<T extends MRT_RowData>({
@@ -23,7 +64,36 @@ function SimpleTable<T extends MRT_RowData>({
   enableGlobalFilter = true,
   centerColumns = false,
   showTotal = true,
-  isSubTable = false, // <-- NUEVO
+  isSubTable = false,
+  enableActionsColumn = false,
+
+  //crud
+  onEdit,
+  arrowIcon = false,
+
+  // position actions column
+  positionActionsColumn = 'first',
+
+  // one custom button
+  showOneCustomButton = false,
+  onConditionCustomButton = showOneCustomButton ? () => true : () => false,
+  oneCustomButton,
+
+  ///* actions
+  actionsColumnSize = 90,
+  canEdit = true,
+  onConditionEdit = canEdit ? () => true : () => false,
+
+  // custom buttons space
+  showCustomButtonsSpace = false,
+  customButtonsSpace,
+  showCustomButtonsSpaceEnd = false,
+  customButtonsSpaceEnd,
+
+  editIcon,
+  editIconToolTipTitle = 'Editar',
+  editIconColor,
+  editIconTooltipPlacement = 'bottom',
 }: SimpleTableProps<T>) {
   const theme = useTheme();
 
@@ -53,6 +123,55 @@ function SimpleTable<T extends MRT_RowData>({
         textAlign: centerColumns ? 'center' : 'left',
       },
     },
+
+    enableEditing: enableActionsColumn,
+    enableColumnActions: true,
+    positionActionsColumn: positionActionsColumn,
+    displayColumnDefOptions: { 'mrt-row-actions': { size: actionsColumnSize } },
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '.15rem' }}>
+        {/* ======= custom action button ======= */}
+        {showCustomButtonsSpace &&
+          customButtonsSpace &&
+          customButtonsSpace(row.original as T)}
+
+        {canEdit &&
+        onEdit &&
+        onConditionEdit &&
+        onConditionEdit(row.original as T) ? (
+            <Tooltip
+              title={editIconToolTipTitle}
+              placement={editIconTooltipPlacement}
+            >
+              <IconButton
+                onClick={() => {
+                  onEdit(row.original as T);
+                }}
+                color={editIconColor}
+              >
+                {editIcon ? (
+                  editIcon
+                ) : arrowIcon ? (
+                  <MdArrowRightAlt />
+                ) : (
+                  <MdEdit />
+                )}
+              </IconButton>
+            </Tooltip>
+          ) : null}
+
+        {showOneCustomButton &&
+        oneCustomButton &&
+        onConditionCustomButton &&
+        onConditionCustomButton(row.original as T)
+          ? oneCustomButton(row.original as T)
+          : null}
+
+        {showCustomButtonsSpaceEnd &&
+          customButtonsSpaceEnd &&
+          customButtonsSpaceEnd(row.original as T)}
+      </Box>
+    ),
 
     muiTableBodyCellProps: {
       sx: {

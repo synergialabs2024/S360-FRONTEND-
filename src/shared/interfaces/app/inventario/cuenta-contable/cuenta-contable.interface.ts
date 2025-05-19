@@ -17,17 +17,10 @@ export interface CuentaContable {
   descripcion: string;
 
   cuenta_padre: number;
-  cuentas_hijas_data?: CuentaContable_SubTable[];
+  cuentas_hijas_data?: string[];
 
   created_at?: string;
   modified_at?: string;
-}
-
-export interface CuentaContable_SubTable {
-  uuid: string;
-  nombre: string;
-  codigo: string;
-  descripcion: string;
 }
 
 export interface CuentaContable_Producto {

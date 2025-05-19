@@ -1,4 +1,5 @@
 export * from './factura.actions';
+export * from './deuda-cuota-equipo-venta';
 export * from './motivo-rubro-adicional.actions';
 export * from './rubros.actions';
 export * from './saldo.actions';

@@ -1773,3 +1773,15 @@ export const TRAZABILIDAD_MODELO_NAME_ARRAY_CHOICES = [
   TrazabilidadModeloNameTMEnumChoice.SOLICITUD_DESBLOQUEO_VENTAS,
   TrazabilidadModeloNameTMEnumChoice.SOLICITUD_APROBACION_IA_PREVENTA,
 ];
+
+export enum DeudaCuotaEquipoVentaEstadoEnumChoice {
+  ACTIVO = 'ACTIVO',
+  APLICADO = 'APLICADO',
+  CANCELADO = 'CANCELADO',
+}
+
+export const DEUDA_CUOTA_EQUIPO_VENTA_ESTADO_ARRAY_CHOICES = [
+  DeudaCuotaEquipoVentaEstadoEnumChoice.ACTIVO,
+  DeudaCuotaEquipoVentaEstadoEnumChoice.APLICADO,
+  DeudaCuotaEquipoVentaEstadoEnumChoice.CANCELADO,
+];
