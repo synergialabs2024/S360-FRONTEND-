@@ -2,13 +2,17 @@ import type { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
 import { ClienteFibraSaldosActionBtnColumn } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/saldos';
-import { TABLE_CONSTANTS } from '@/shared/constants';
+import {
+  ESTADO_SALDO_ARRAY_CHOICES,
+  TABLE_CONSTANTS,
+} from '@/shared/constants';
 import { Saldo } from '@/shared/interfaces';
 import {
   emptyCellNested,
   formatCurrencyCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+import { ViewMoreTextModalTableCell } from '@/shared/components';
 
 export const useColumnsSaldos = () => {
   const baseColumsActions = useMemo<MRT_ColumnDef<Saldo>[]>(
@@ -47,14 +51,29 @@ export const useColumnsSaldos = () => {
         accessorKey: 'estado_saldo',
         header: 'ESTADO SALDO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: ESTADO_SALDO_ARRAY_CHOICES,
         Cell: ({ row }) => row.original?.estado_saldo || '-',
       },
-
       {
         accessorKey: 'descripcion',
         header: 'DESCRIPCION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
-        Cell: ({ row }) => row.original?.descripcion || '-',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const str = row?.original?.descripcion
+            ? row.original.descripcion
+            : 'N/A';
+          return (
+            <ViewMoreTextModalTableCell
+              longText={str}
+              limit={27}
+              modalTitle="Descripcion"
+            />
+          );
+        },
       },
     ],
     [],

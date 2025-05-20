@@ -62,7 +62,7 @@ const SaldosPage: React.FC<SaldosPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por cliente"
       />
 
       <CustomTable<Saldo>

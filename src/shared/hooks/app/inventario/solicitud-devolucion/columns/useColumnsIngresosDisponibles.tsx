@@ -83,7 +83,7 @@ export const useColumnsIngresosDisponibles = ({
   >(
     () => [
       {
-        accessorKey: 'categoria_data__name',
+        accessorKey: 'categoria__name',
         header: 'CATEGORIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,

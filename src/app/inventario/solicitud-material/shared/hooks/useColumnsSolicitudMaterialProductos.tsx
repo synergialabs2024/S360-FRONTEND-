@@ -57,7 +57,7 @@ export const useColumnsSolicitudMaterialProductos = ({
   >(
     () => [
       {
-        accessorKey: 'categoria_data__name',
+        accessorKey: 'categoria__name',
         header: 'CATEGORIA',
         enableColumnFilter: false,
         size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,

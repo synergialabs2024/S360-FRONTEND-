@@ -44,7 +44,7 @@ const FacturasPage: React.FC<FacturasPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      numero: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -62,7 +62,7 @@ const FacturasPage: React.FC<FacturasPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por numero"
       />
 
       <CustomTable<Factura>

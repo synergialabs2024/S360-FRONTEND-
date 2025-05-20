@@ -62,7 +62,7 @@ const RubrosPage: React.FC<RubrosPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por cliente"
       />
 
       <CustomTable<Rubro>

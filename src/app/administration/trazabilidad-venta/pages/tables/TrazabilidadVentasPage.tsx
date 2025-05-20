@@ -48,7 +48,7 @@ const TrazabilidadVentasPage: React.FC<TrazabilidadVentasPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      modelo_estado: searchTerm,
+      modelo: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -132,7 +132,7 @@ const TrazabilidadVentasPage: React.FC<TrazabilidadVentasPageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por estado del modelo"
+        text="por modelo"
       />
 
       <CustomTable<TrazabilidadVenta>

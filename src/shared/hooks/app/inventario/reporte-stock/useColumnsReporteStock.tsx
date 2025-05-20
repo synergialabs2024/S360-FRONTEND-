@@ -16,7 +16,7 @@ export const useColumnsReporteStock = () => {
   >(
     () => [
       {
-        accessorKey: 'producto_data__nombre',
+        accessorKey: 'producto__nombre',
         header: 'PRODUCTO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -24,7 +24,7 @@ export const useColumnsReporteStock = () => {
         Cell: ({ row }) => emptyCellNested(row, ['producto_data', 'nombre']),
       },
       {
-        accessorKey: 'bodega_data__nombre',
+        accessorKey: 'bodega__nombre',
         header: 'BODEGA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -32,7 +32,7 @@ export const useColumnsReporteStock = () => {
         Cell: ({ row }) => emptyCellNested(row, ['bodega_data', 'nombre']),
       },
       {
-        accessorKey: 'ubicacion_data__nombre',
+        accessorKey: 'ubicacion__nombre',
         header: 'UBICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -40,7 +40,7 @@ export const useColumnsReporteStock = () => {
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
       },
       {
-        accessorKey: 'categoria_data__nombre',
+        accessorKey: 'categoria__nombre',
         header: 'CATEGORIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,

@@ -10,7 +10,7 @@ export const useColumnsCambioDomicilio = () => {
   const cambioDomicilioColumns01 = useMemo<MRT_ColumnDef<CambioDomicilio>[]>(
     () => [
       {
-        accessorKey: 'linea_servicio_data__cliente_data__name',
+        accessorKey: 'linea_servicio__cliente__name',
         header: 'RAZON SOCIAL',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -23,7 +23,7 @@ export const useColumnsCambioDomicilio = () => {
           ]),
       },
       {
-        accessorKey: 'linea_servicio_data__cliente_data__identificacion',
+        accessorKey: 'linea_servicio__cliente__identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -37,7 +37,7 @@ export const useColumnsCambioDomicilio = () => {
       },
 
       {
-        accessorKey: 'new_pais_data__name',
+        accessorKey: 'new_pais__name',
         header: 'NUEVO PAIS',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -46,7 +46,7 @@ export const useColumnsCambioDomicilio = () => {
       },
 
       {
-        accessorKey: 'new_ciudad_data__name',
+        accessorKey: 'new_ciudad__name',
         header: 'NUEVA CIUDAD',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -55,7 +55,7 @@ export const useColumnsCambioDomicilio = () => {
       },
 
       {
-        accessorKey: 'new_provincia_data__name',
+        accessorKey: 'new_provincia__name',
         header: 'NUEVA PROVINCIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -64,7 +64,7 @@ export const useColumnsCambioDomicilio = () => {
       },
 
       {
-        accessorKey: 'new_sector_data__name',
+        accessorKey: 'new_sector__name',
         header: 'NUEVO SECTOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -73,7 +73,7 @@ export const useColumnsCambioDomicilio = () => {
       },
 
       {
-        accessorKey: 'new_zona_data__name',
+        accessorKey: 'new_zona__name',
         header: 'NUEVA ZONA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
