@@ -137,7 +137,7 @@ const MantenedorActivacionByStatePage: React.FC<
         },
       },
       {
-        accessorKey: 'criterio_data__name',
+        accessorKey: 'criterio__name',
         header: 'CRITERIO',
         size: 312,
         enableColumnFilter: true,
@@ -145,7 +145,7 @@ const MantenedorActivacionByStatePage: React.FC<
         Cell: ({ row }) => emptyCellNested(row, ['criterio_data', 'name']),
       },
       {
-        accessorKey: 'criterio_data__description',
+        accessorKey: 'criterio__description',
         header: 'DESCRIPCION CRITERIO',
         size: 312,
         enableColumnFilter: true,
@@ -154,7 +154,7 @@ const MantenedorActivacionByStatePage: React.FC<
           emptyCellNested(row, ['criterio_data', 'description']),
       },
       {
-        accessorKey: 'motivo_data__nombre',
+        accessorKey: 'motivo__nombre',
         header: 'MOTIVO',
         size: 312,
         enableColumnFilter: true,
@@ -162,7 +162,7 @@ const MantenedorActivacionByStatePage: React.FC<
         Cell: ({ row }) => emptyCellNested(row, ['motivo_data', 'nombre']),
       },
       {
-        accessorKey: 'motivo_data__descripcion',
+        accessorKey: 'motivo__descripcion',
         header: 'DESCRIPCION MOTIVO',
         size: 312,
         enableColumnFilter: true,

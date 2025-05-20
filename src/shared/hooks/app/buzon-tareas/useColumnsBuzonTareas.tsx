@@ -14,7 +14,7 @@ export const useColumnsBuzonTareas = () => {
   const tareasBaseColumns01 = useMemo<MRT_ColumnDef<BuzonTarea>[]>(
     () => [
       {
-        accessorKey: 'linea_servicio_data__cliente_data__name',
+        accessorKey: 'linea_servicio__cliente__name',
         header: 'RAZON SOCIAL',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -27,7 +27,7 @@ export const useColumnsBuzonTareas = () => {
           ]),
       },
       {
-        accessorKey: 'linea_servicio_data__cliente_data__identificacion',
+        accessorKey: 'linea_servicio__cliente__identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -50,7 +50,7 @@ export const useColumnsBuzonTareas = () => {
         Cell: ({ row }) => emptyCellNested(row, ['subtipo_tarea_data', 'name']),
       },
       {
-        accessorKey: 'causa_tarea_data__name',
+        accessorKey: 'causa_tarea__name',
         header: 'CAUSA TAREA',
         Cell: ({ row }) => emptyCellNested(row, ['causa_tarea_data', 'name']),
       },
@@ -65,7 +65,7 @@ export const useColumnsBuzonTareas = () => {
       },
 
       {
-        accessorKey: 'departamento_asignado_data__name',
+        accessorKey: 'departamento_asignado__name',
         header: 'DEPARTAMENTO ASIGNADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,
@@ -92,7 +92,7 @@ export const useColumnsBuzonTareas = () => {
       },
 
       {
-        accessorKey: 'usuario_creacion_data__name',
+        accessorKey: 'usuario_creacion__name',
         header: 'USUARIO APERTURA TAREA',
         Cell: ({ row }) =>
           emptyCellNested(row, ['usuario_creacion_data', 'username']),

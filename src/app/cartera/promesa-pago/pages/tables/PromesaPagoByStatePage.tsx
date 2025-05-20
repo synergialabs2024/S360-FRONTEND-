@@ -53,7 +53,7 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      estado_promesa: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -109,7 +109,7 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por estado de promesa"
       />
 
       <CustomTable<PromesaPago>
@@ -128,9 +128,7 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
         onPaging={setPagination}
         rowCount={CambioPlanesPagingRes?.data?.meta?.count}
         // // actions
-        actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
-        // crud
-        canDelete={false}
+        enableActionsColumn={false}
       />
     </SingleTableBoxScene>
   );

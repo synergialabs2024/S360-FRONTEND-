@@ -191,7 +191,7 @@ export const useColumnsTransferenciaMaterial = () => {
   >(
     () => [
       {
-        accessorKey: 'categoria_data__nombre',
+        accessorKey: 'categoria__nombre',
         header: 'CATEGORIA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
         enableColumnFilter: true,

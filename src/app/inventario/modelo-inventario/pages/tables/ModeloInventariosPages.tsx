@@ -58,7 +58,7 @@ const ModeloInventariosPages: React.FC<ModeloInventariosPagesProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      nombre: searchTerm,
       ...filterObject,
     },
   });

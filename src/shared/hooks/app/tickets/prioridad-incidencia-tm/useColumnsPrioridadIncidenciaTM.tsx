@@ -179,7 +179,7 @@ export const useColumnsPrioridadIncidenciaTM = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'action'),
       },
       {
-        accessorKey: 'user_data__razon_social',
+        accessorKey: 'user__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellNested(row, ['user_data', 'razon_social']),

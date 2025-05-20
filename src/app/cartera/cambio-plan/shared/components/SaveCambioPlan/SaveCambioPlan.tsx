@@ -304,8 +304,7 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
   const columns = useMemo<MRT_ColumnDef<CambioPlan>[]>(
     () => [
       {
-        accessorKey:
-          'linea_servicio_data__solicitud_servicio_data__razon_social',
+        accessorKey: 'linea_servicio__solicitud_servicio__razon_social',
         header: 'CLIENTE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
@@ -316,8 +315,7 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
           ]),
       },
       {
-        accessorKey:
-          'linea_servicio_data__solicitud_servicio_data__identificacion',
+        accessorKey: 'linea_servicio__solicitud_servicio__identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
@@ -328,28 +326,28 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
           ]),
       },
       {
-        accessorKey: 'plan_internet_anterior_data__name',
+        accessorKey: 'plan_internet_anterior__name',
         header: 'NOMBRE PLAN ANTERIOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['plan_internet_anterior_data', 'name']),
       },
       {
-        accessorKey: 'plan_internet_anterior_data__valor',
+        accessorKey: 'plan_internet_anterior__valor',
         header: 'VALOR PLAN ANTERIOR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['plan_internet_anterior_data', 'valor']),
       },
       {
-        accessorKey: 'plan_internet_nuevo_data__name',
+        accessorKey: 'plan_internet_nuevo__name',
         header: 'NOMBRE PLAN NUEVO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>
           emptyCellNested(row, ['plan_internet_nuevo_data', 'name']),
       },
       {
-        accessorKey: 'plan_internet_nuevo_data__valor',
+        accessorKey: 'plan_internet_nuevo__valor',
         header: 'VALOR PLAN NUEVO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) =>

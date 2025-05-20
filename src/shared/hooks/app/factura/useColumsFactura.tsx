@@ -12,6 +12,12 @@ export const useColumsFactura = () => {
   const columnsBase = useMemo<MRT_ColumnDef<Factura>[]>(
     () => [
       {
+        accessorKey: 'numero',
+        header: 'NUMERO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero'),
+      },
+      {
         accessorKey: 'fecha_emision',
         header: 'FECHA EMISION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -56,26 +62,20 @@ export const useColumsFactura = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'clave_acceso'),
       },
-
-      {
-        accessorKey: 'numero',
-        header: 'NUMERO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'numero'),
-      },
     ],
     [],
   );
 
   const auditColumns = useMemo<MRT_ColumnDef<Factura>[]>(
     () => [
+      /*
       {
         accessorKey: 'uuid',
         header: 'UUID',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'uuid'),
       },
-
+      */
       {
         accessorKey: 'created_at',
         header: 'CREADO',
