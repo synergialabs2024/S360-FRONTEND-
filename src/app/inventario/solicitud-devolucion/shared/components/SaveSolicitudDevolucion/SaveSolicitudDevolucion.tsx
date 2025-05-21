@@ -52,6 +52,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
+  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
   const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
@@ -145,6 +146,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
 
   ///* effects
   useEffect(() => {
+    productosEnviar([]);
     reset(solicitud_devolucion);
   }, [solicitud_devolucion, reset]);
 

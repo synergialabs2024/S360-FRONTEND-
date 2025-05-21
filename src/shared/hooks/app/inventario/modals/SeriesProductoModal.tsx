@@ -127,13 +127,18 @@ const SeriesProductoModal: React.FC<SeriesProductoModalProps> = ({
   };
 
   useEffect(() => {
+    if (!data || !Array.isArray(data)) {
+      setDataTotal([]);
+      return;
+    }
+
     const ubicacionEncontrada =
       Arrays.ubicacion === ''
         ? []
         : (data.find(i => i.ubicacion === Arrays.ubicacion) ?? []);
-    if (ubicacionEncontrada) {
-      const copiaSeries = ubicacionEncontrada.series;
-      setDataTotal(copiaSeries);
+
+    if (ubicacionEncontrada && ubicacionEncontrada.series) {
+      setDataTotal(ubicacionEncontrada.series);
     } else {
       setDataTotal([]);
     }

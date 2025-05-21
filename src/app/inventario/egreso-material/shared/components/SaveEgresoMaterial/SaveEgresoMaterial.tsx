@@ -229,6 +229,11 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
   const customLoader = isLoadingUbicaciones || isRefetchingUbicaciones;
   useLoaders(customLoader);
 
+  ///* effects
+  useEffect(() => {
+    productosEnviar([]);
+  }, []);
+
   ///* columns --------------------
   const { crearMaterialColumns } = useColumnsProductosDisponibles();
 
