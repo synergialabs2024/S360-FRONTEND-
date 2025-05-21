@@ -1,13 +1,132 @@
 import { MRT_ColumnDef } from 'material-react-table';
+import { IconSend } from '@tabler/icons-react';
 import { useMemo } from 'react';
 
 import { TABLE_CONSTANTS } from '@/shared/constants';
+import { CustomSingleButton } from '@/shared/components';
 import { TransaccionPichinchaPago } from '@/shared/interfaces';
 import { emptyCellOneLevel, formatDateWithTimeCell } from '@/shared/utils';
 
 export const useColumnsTransaccionPichinchaPago = () => {
   const baseColums01 = useMemo<MRT_ColumnDef<TransaccionPichinchaPago>[]>(
     () => [
+      {
+        accessorKey: 'created_at',
+        header: 'FECHA DE GENERACIÓN',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+      {
+        accessorKey: 'referencia_sobre',
+        header: 'REFERENCIA SOBRE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'referencia_sobre'),
+      },
+      {
+        accessorKey: 'secuencial_cobro',
+        header: 'SECUENCIAL DE COBRO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial_cobro'),
+      },
+      {
+        accessorKey: 'pais_banco_cuenta',
+        header: 'PAIS BANCO CUENTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'pais_banco_cuenta'),
+      },
+      {
+        accessorKey: 'contrapartida',
+        header: 'CONTRA PARTIDA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'contrapartida'),
+      },
+      {
+        accessorKey: 'referencia',
+        header: 'CLIENTE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'referencia'),
+      },
+      {
+        accessorKey: 'valor_procc',
+        header: 'VALOR PROCESADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_procc'),
+      },
+      {
+        accessorKey: 'valor',
+        header: 'VALOR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor'),
+      },
+      {
+        accessorKey: 'moneda',
+        header: 'MONEDA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'moneda'),
+      },
+      {
+        accessorKey: 'fecha_proceso',
+        header: 'FECHA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_proceso'),
+      },
+      {
+        accessorKey: 'hora_proceso',
+        header: 'HORA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'hora_proceso'),
+      },
+      {
+        accessorKey: 'referencia_adicional',
+        header: 'REFERENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'referencia_adicional'),
+      },
+      {
+        accessorKey: 'numero_documento',
+        header: 'NO. DOCUMENTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_documento'),
+      },
+      {
+        accessorKey: 'numero_cuenta',
+        header: 'NO. CUENTA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_cuenta'),
+      },
+      {
+        accessorKey: 'estado',
+        header: 'ESTADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado'),
+      },
+      {
+        accessorKey: 'bitmap40',
+        header: 'SMS. PROCESO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'bitmap40'),
+      },
+      {
+        accessorKey: 'procesar',
+        header: 'PROCESAR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: () => {
+          return (
+            <CustomSingleButton
+              label="Procesar"
+              color="primary"
+              variant="text"
+              startIcon={<IconSend />}
+              onClick={() => {
+                console.log('true');
+              }}
+            />
+          );
+        },
+      },
+      /*
       {
         accessorKey: 'id_sobre',
         header: 'ID SOBRE',
@@ -19,12 +138,6 @@ export const useColumnsTransaccionPichinchaPago = () => {
         header: 'ID ITEM',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'id_item'),
-      },
-      {
-        accessorKey: 'referencia_sobre',
-        header: 'REFERENCIA SOBRE',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'referencia_sobre'),
       },
       {
         accessorKey: 'pais',
@@ -45,82 +158,16 @@ export const useColumnsTransaccionPichinchaPago = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'formapago'),
       },
       {
-        accessorKey: 'pais_banco_cuenta',
-        header: 'PAIS CUENTA BANCO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'pais_banco_cuenta'),
-      },
-      {
-        accessorKey: 'contrapartida',
-        header: 'CONTRA PARTIDA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'contrapartida'),
-      },
-      {
-        accessorKey: 'referencia',
-        header: 'REFERENCIA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'referencia'),
-      },
-      {
-        accessorKey: 'valor_procc',
-        header: 'VALOR PROCC',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_procc'),
-      },
-      {
-        accessorKey: 'valor',
-        header: 'VALOR',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'valor'),
-      },
-      {
-        accessorKey: 'moneda',
-        header: 'MONEDA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'moneda'),
-      },
-      {
-        accessorKey: 'fecha_proceso',
-        header: 'FECHA PROCESO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'fecha_proceso'),
-      },
-      {
-        accessorKey: 'hora_proceso',
-        header: 'HORA PROCESO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'hora_proceso'),
-      },
-      {
         accessorKey: 'mensaje',
         header: 'MENSAJE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'mensaje'),
       },
       {
-        accessorKey: 'referencia_adicional',
-        header: 'REFERENCIA ADICIONAL',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'referencia_adicional'),
-      },
-      {
-        accessorKey: 'numero_documento',
-        header: 'NUMERO DOCUMENTO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_documento'),
-      },
-      {
         accessorKey: 'tipo_pago',
         header: 'TIPO PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_pago'),
-      },
-      {
-        accessorKey: 'numero_cuenta',
-        header: 'NUMERO CUENTA',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_cuenta'),
       },
       {
         accessorKey: 'no_documento',
@@ -135,12 +182,6 @@ export const useColumnsTransaccionPichinchaPago = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_impresion'),
       },
       {
-        accessorKey: 'secuencial_cobro',
-        header: 'SECUENCIAL COBRO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'secuencial_cobro'),
-      },
-      {
         accessorKey: 'numero_comprobante',
         header: 'NUMERO COMPROBANTE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
@@ -152,32 +193,18 @@ export const useColumnsTransaccionPichinchaPago = () => {
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'bitmap39'),
       },
-
       {
         accessorKey: 'bitmap40',
         header: 'BITMAP40',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         Cell: ({ row }) => emptyCellOneLevel(row, 'bitmap40'),
       },
-      {
-        accessorKey: 'estado',
-        header: 'ESTADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'estado'),
-      },
+      */
     ],
     [],
   );
   const baseColums02 = useMemo<MRT_ColumnDef<TransaccionPichinchaPago>[]>(
     () => [
-      {
-        accessorKey: 'created_at',
-        header: 'CREADO',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: false,
-        enableSorting: false,
-        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
-      },
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',

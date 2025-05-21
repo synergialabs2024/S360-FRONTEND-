@@ -1244,6 +1244,7 @@ const TransaccionPichinchaPagoPage = Loadable(
       ),
   ),
 );
+/*
 const CreateTransaccionPichinchaPagoPage = Loadable(
   lazy(
     () =>
@@ -1260,7 +1261,7 @@ const UpdateTransaccionPichinchaPagoPage = Loadable(
       ),
   ),
 );
-
+*/
 ///* Operaciones ------------
 // const AgendamientosMainPage = Loadable(
 //   lazy(
@@ -3061,6 +3062,7 @@ const AppRouter = [
             path: ROUTER_PATHS.cobranza.transaccionpichinchapago,
             element: <TransaccionPichinchaPagoPage />,
           },
+          /*
           {
             path: ROUTER_PATHS.cobranza.transaccionpichinchapagoCrear,
             element: <CreateTransaccionPichinchaPagoPage />,
@@ -3069,6 +3071,7 @@ const AppRouter = [
             path: ROUTER_PATHS.cobranza.transaccionpichinchapagoEditar,
             element: <UpdateTransaccionPichinchaPagoPage />,
           },
+          */
         ],
       },
 

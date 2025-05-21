@@ -440,8 +440,8 @@ export const ROUTER_PATHS = {
 
     ///* Transaccion Pichincha PAgo
     transaccionpichinchapago: 'transaccionpichinchapago',
-    transaccionpichinchapagoCrear: 'transaccionpichinchapago/crear',
-    transaccionpichinchapagoEditar: 'transaccionpichinchapago/editar/:uuid',
+    //transaccionpichinchapagoCrear: 'transaccionpichinchapago/crear',
+    //transaccionpichinchapagoEditar: 'transaccionpichinchapago/editar/:uuid',
     transaccionpichinchapagoNav: '/cobranza/transaccionpichinchapago',
   },
 
