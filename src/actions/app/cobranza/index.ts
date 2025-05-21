@@ -8,4 +8,5 @@ export * from './cliente-pendiente-devolucion';
 export * from './pago-oficina-virtual';
 export * from './plan-pago-cuota';
 export * from './tarjeta';
+export * from './transaccion-pichincha-pago';
 export * from './transaccion.actions';
