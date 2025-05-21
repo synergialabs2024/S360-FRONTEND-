@@ -22,8 +22,8 @@ import {
 } from '@/shared';
 import {
   useFetchProductos,
-  CreateSolicitudDevolucionParamsBase,
   useUpdatesolicitudDevolucion,
+  CreateSolicitudDevolucionParamsBase,
 } from '@/actions/app';
 import { useAuthStore } from '@/store/auth';
 import { useProductosStore } from '@/store/app';
@@ -230,12 +230,12 @@ const SaveRecepSolDevolucion: React.FC<SaveRecepSolDevolucionProps> = ({
     >
       <CustomTextFieldNoForm
         label="Bodega"
-        value={form.getValues().bodega}
+        value={form.getValues().bodega_data?.nombre}
         disabled
       />
       <CustomTextFieldNoForm
         label="Ubicacion"
-        value={form.getValues().ubicacion}
+        value={form.getValues().ubicacion_data?.nombre}
         disabled
       />
       <CustomTextArea

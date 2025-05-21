@@ -240,6 +240,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
+    productosEnviar([]);
     if (!transferenciaMaterial) return;
     reset(transferenciaMaterial);
     productosEnviar(transferenciaMaterial?.productos);

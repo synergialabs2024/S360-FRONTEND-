@@ -1,4 +1,4 @@
-import { Navigate, useLocation, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 
 import { PermissionsEnum } from '@/shared';
 import { useAuthStore } from '@/store/auth';
@@ -10,7 +10,6 @@ import {
 } from '@/actions/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { SaveTransferenciaMaterial } from '../../shared/components';
-import { returnUrlTransferenciaMaterialesPage } from '../tables/TransferenciaMaterialPage';
 
 export type UpdateTransferenciaMaterialPageProps = {};
 
@@ -95,10 +94,6 @@ const UpdateTransferenciaMaterialPage: React.FC<
       state: true,
       user_create: user?.id,
     };
-  }
-
-  if (!data?.id) {
-    return <Navigate to={returnUrlTransferenciaMaterialesPage} />;
   }
 
   return (

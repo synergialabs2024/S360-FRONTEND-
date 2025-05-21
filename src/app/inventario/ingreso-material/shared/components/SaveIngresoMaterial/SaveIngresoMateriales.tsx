@@ -202,6 +202,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
 
   ///* effects
   useEffect(() => {
+    productosEnviar([]);
     if (!solicitud) return;
     reset(solicitud);
   }, [solicitud, reset]);

@@ -213,6 +213,10 @@ const SaveSolicitudTransferenciaMaterial: React.FC<
   };
 
   useEffect(() => {
+    productosEnviar([]);
+  }, []);
+
+  useEffect(() => {
     if (
       isLoadingUbicacionOrigen ||
       isRefetchingUbicacionOrigen ||

@@ -55,6 +55,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
+  const productosEnviar = useProductosStore(s => s.setProductosDisponibles);
   const clearAllStore = useProductosStore(s => s.clearAll);
 
   ///* hooks ---------------
@@ -145,6 +146,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
 
   ///* effects
   useEffect(() => {
+    productosEnviar([]);
     reset(SolicitudMaterial);
   }, [SolicitudMaterial, reset]);
 
