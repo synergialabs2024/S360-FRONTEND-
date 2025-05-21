@@ -860,12 +860,15 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.cartera.transaccionesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'transaccion-pichincha-pago',
-              title: 'Transaccion Pichincha Pago',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.cobranza.transaccionpichinchapagoNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.COBRANZA_TRANSACCION_PICHINCHA_PAGO,
+              {
+                id: 'transaccion-pichincha-pago',
+                title: 'Transaccion Pichincha Pago',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.cobranza.transaccionpichinchapagoNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.CARTERA_SALDOS, {
               id: 'saldos',
               title: 'Saldos',
