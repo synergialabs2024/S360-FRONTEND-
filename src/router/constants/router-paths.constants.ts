@@ -437,6 +437,12 @@ export const ROUTER_PATHS = {
     ///* Deuda Cuota Equipo Venta
     deudacuotaEquipoVentaEditar: 'deuda-cuota-equipo-venta/editar/:uuid',
     deudacuotaEquipoVentaNav: '/cobranza/deuda-cuota-equipo-venta',
+
+    ///* Transaccion Pichincha PAgo
+    transaccionpichinchapago: 'transaccionpichinchapago',
+    transaccionpichinchapagoCrear: 'transaccionpichinchapago/crear',
+    transaccionpichinchapagoEditar: 'transaccionpichinchapago/editar/:uuid',
+    transaccionpichinchapagoNav: '/cobranza/transaccionpichinchapago',
   },
 
   /////* Comercial ----------------

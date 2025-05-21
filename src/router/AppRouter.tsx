@@ -1236,6 +1236,30 @@ const PagoOficinaVirtualPages = Loadable(
       ),
   ),
 );
+const TransaccionPichinchaPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/transaccion-pichincha-pago/pages/tables/TransaccionPichinchaPagoPage'
+      ),
+  ),
+);
+const CreateTransaccionPichinchaPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/transaccion-pichincha-pago/pages/forms/CreateTransaccionPichinchaPagoPage'
+      ),
+  ),
+);
+const UpdateTransaccionPichinchaPagoPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/cobranza/transaccion-pichincha-pago/pages/forms/UpdateTransaccionPichinchaPagoPage'
+      ),
+  ),
+);
 
 ///* Operaciones ------------
 // const AgendamientosMainPage = Loadable(
@@ -3030,6 +3054,20 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.cobranza.pagooficinavirtual,
             element: <PagoOficinaVirtualPages />,
+          },
+
+          ///* Transaccion Pichincha Pago
+          {
+            path: ROUTER_PATHS.cobranza.transaccionpichinchapago,
+            element: <TransaccionPichinchaPagoPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.transaccionpichinchapagoCrear,
+            element: <CreateTransaccionPichinchaPagoPage />,
+          },
+          {
+            path: ROUTER_PATHS.cobranza.transaccionpichinchapagoEditar,
+            element: <UpdateTransaccionPichinchaPagoPage />,
           },
         ],
       },
