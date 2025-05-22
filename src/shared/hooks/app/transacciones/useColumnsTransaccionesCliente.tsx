@@ -43,21 +43,13 @@ export const useColumnsTransaccionesCliente = () => {
         accessorKey: 'factura',
         header: 'N° FACTURA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => {
-          const rubro = row.original?.rubro_data;
-          const factura = rubro?.factura_data;
-
-          return factura?.numero || '-';
-        },
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_transaccion'),
       },
       {
         accessorKey: 'fecha_pago_rubro',
         header: 'FECHA PAGO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => {
-          const rubro = row.original?.rubro_data;
-          return rubro?.fecha_pago || '-';
-        },
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
       {
         accessorKey: 'monto',

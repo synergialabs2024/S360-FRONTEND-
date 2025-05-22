@@ -115,6 +115,10 @@ const QuestionsForm: React.FC<SaveEncuestaPlantillasProps> = ({
           questionType ===
           EncuestaPlantillaTypeEnumChoice.SELECCION_POR_ATRIBUTO;
 
+        const isNivelSelection =
+          questionType ===
+          EncuestaPlantillaTypeEnumChoice.SELECCION_NIVEL_SATISFACCION;
+
         return (
           <Grid item container key={field.id} {...gridSizeMdLg12} spacing={2}>
             <Grid item xs={6}>
@@ -160,7 +164,8 @@ const QuestionsForm: React.FC<SaveEncuestaPlantillasProps> = ({
             {(isSingleSelection ||
               isMultipleSelection ||
               isRankingSelection ||
-              isAtributoSelection) && (
+              isAtributoSelection ||
+              isNivelSelection) && (
               <Grid item xs={12}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>

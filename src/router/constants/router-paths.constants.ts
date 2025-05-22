@@ -987,6 +987,10 @@ export const ROUTER_PATHS = {
     encuestaPagosNav: '/customer-experience/encuesta-pagos',
 
     ///* Encuesta Pagos
+    encuestaRelacional: 'encuesta-relacional',
+    encuestaRelacionalNav: '/customer-experience/encuesta-relacional',
+
+    ///* Encuesta Pagos
     encuestaPlantillas: 'encuesta-plantillas',
     encuestaPlantillasCrear: 'encuesta-plantillas/crear',
     encuestaPlantillasEditar: 'encuesta-plantillas/editar/:uuid',

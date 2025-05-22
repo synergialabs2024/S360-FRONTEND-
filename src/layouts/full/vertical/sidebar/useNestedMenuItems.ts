@@ -1190,12 +1190,24 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.customerExperience.encuestaPagosNav,
               },
             ),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'encuesta-plantillas',
-              title: 'Encuesta Plantillas',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.customerExperience.encuestaPlantillasNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.CUSTOMEREXPERIENCE_ENCUESTA_RELACIONAL,
+              {
+                id: 'encuesta-relacional',
+                title: 'Encuesta relacional',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.customerExperience.encuestaRelacionalNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.CUSTOMEREXPERIENCE_ENCUESTA_PLANTILLAS,
+              {
+                id: 'encuesta-plantillas',
+                title: 'Encuesta Plantillas',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.customerExperience.encuestaPlantillasNav,
+              },
+            ),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Administracion de Red ----------------
