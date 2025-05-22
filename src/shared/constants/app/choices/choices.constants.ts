@@ -1785,3 +1785,35 @@ export const DEUDA_CUOTA_EQUIPO_VENTA_ESTADO_ARRAY_CHOICES = [
   DeudaCuotaEquipoVentaEstadoEnumChoice.APLICADO,
   DeudaCuotaEquipoVentaEstadoEnumChoice.CANCELADO,
 ];
+
+export enum PromesaPagoEstadoPromesaEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  CUMPLIDA = 'CUMPLIDA',
+  INCUMPLIDA = 'INCUMPLIDA',
+  INACTIVA = 'INACTIVA',
+}
+
+export const PROMESA_PAGO_ESTADO_PROMESA_ARRAY_CHOICES = [
+  PromesaPagoEstadoPromesaEnumChoice.PENDIENTE,
+  PromesaPagoEstadoPromesaEnumChoice.CUMPLIDA,
+  PromesaPagoEstadoPromesaEnumChoice.INCUMPLIDA,
+  PromesaPagoEstadoPromesaEnumChoice.INACTIVA,
+];
+
+export enum PromesaPagoEstadoLineaRegistrarEnumChoice {
+  ACTIVO = 'ACTIVO',
+  SUSPENDIDO = 'SUSPENDIDO',
+  RETIRADO = 'RETIRADO',
+  RETENCION = 'RETENCION',
+  CANCELADO = 'CANCELADO',
+  NO_INSTALADO = 'NO_INSTALADO',
+}
+
+export const PROMESA_PAGO_ESTADO_LINEA_REGISTRAR_ARRAY_CHOICES = [
+  PromesaPagoEstadoLineaRegistrarEnumChoice.ACTIVO,
+  PromesaPagoEstadoLineaRegistrarEnumChoice.SUSPENDIDO,
+  PromesaPagoEstadoLineaRegistrarEnumChoice.RETIRADO,
+  PromesaPagoEstadoLineaRegistrarEnumChoice.RETENCION,
+  PromesaPagoEstadoLineaRegistrarEnumChoice.CANCELADO,
+  PromesaPagoEstadoLineaRegistrarEnumChoice.NO_INSTALADO,
+];

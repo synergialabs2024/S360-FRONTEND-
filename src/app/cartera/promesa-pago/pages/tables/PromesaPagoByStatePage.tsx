@@ -1,22 +1,25 @@
+import { MRT_ColumnDef } from 'material-react-table';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useMemo } from 'react';
+
 import {
-  emptyCellOneLevel,
-  EstadoTicketTecnicoEnumChoice,
-  formatDateWithTimeCell,
-  PermissionsEnum,
-  TABLE_CONSTANTS,
-  useTableFilter,
-  useTableServerSideFiltering,
-} from '@/shared';
-import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
 } from '@/shared/components';
+import {
+  useTableFilter,
+  TABLE_CONSTANTS,
+  PermissionsEnum,
+  emptyCellOneLevel,
+  formatDateWithTimeCell,
+  useTableServerSideFiltering,
+  EstadoTicketTecnicoEnumChoice,
+  PROMESA_PAGO_ESTADO_PROMESA_ARRAY_CHOICES,
+  PROMESA_PAGO_ESTADO_LINEA_REGISTRAR_ARRAY_CHOICES,
+} from '@/shared';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { CambioPlan } from '@/shared/interfaces/app/cartera';
-import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
-import { ROUTER_PATHS } from '@/router/constants';
 import { useFetchPromesasPago } from '@/actions/app/cartera/promesa-pago/promesa-pago.actions';
 import { PromesaPago } from '@/shared/interfaces/app/cartera/promesa-pago/promesa-pago.interface';
 
@@ -53,7 +56,7 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      estado_promesa: searchTerm,
+      observacion: searchTerm,
       ...filterObject,
       filterByState: false,
     },
@@ -66,13 +69,27 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
         accessorKey: 'estado_promesa',
         header: 'ESTADO PROMESA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: PROMESA_PAGO_ESTADO_PROMESA_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_promesa'),
       },
       {
         accessorKey: 'estado_linea_al_registrar',
         header: 'ESTADO LINEA AL REGISTRAR',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        filterVariant: 'select',
+        filterSelectOptions: PROMESA_PAGO_ESTADO_LINEA_REGISTRAR_ARRAY_CHOICES,
         Cell: ({ row }) => emptyCellOneLevel(row, 'estado_linea_al_registrar'),
+      },
+      {
+        accessorKey: 'observacion',
+        header: 'OBSERVACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'observacion'),
       },
       {
         accessorKey: 'created_at',
@@ -90,12 +107,6 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_promesa_pago'),
       },
-      {
-        accessorKey: 'observacion',
-        header: 'OBSERVACION',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'observacion'),
-      },
     ],
     [],
   );
@@ -109,7 +120,7 @@ const PromesaPagoByStatePage: React.FC<PromesaPagoByStatePageProps> = () => {
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por estado de promesa"
+        text="por observación"
       />
 
       <CustomTable<PromesaPago>
