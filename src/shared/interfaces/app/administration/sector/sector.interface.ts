@@ -16,6 +16,7 @@ export interface Sector {
   uuid?: string;
   name: string;
   has_coverage: boolean;
+  code: string;
 
   state: boolean;
   created_at?: string;

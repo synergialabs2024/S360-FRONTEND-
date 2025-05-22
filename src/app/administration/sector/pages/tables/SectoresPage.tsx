@@ -107,6 +107,12 @@ const SectoresPage: React.FC<SectoresPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
+        accessorKey: 'code',
+        header: 'CODIGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
+      {
         accessorKey: 'has_coverage',
         header: 'COBERTURA',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,

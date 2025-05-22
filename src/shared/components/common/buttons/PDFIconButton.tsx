@@ -7,12 +7,14 @@ export type PDFIconButtonProps = {
   url: string;
   onClick?: () => void;
   isXml?: boolean;
+  disabled?: boolean;
 };
 
 const PDFIconButton: React.FC<PDFIconButtonProps> = ({
   onClick,
   url,
   isXml = false,
+  disabled = false,
 }) => {
   return (
     <>
@@ -20,6 +22,7 @@ const PDFIconButton: React.FC<PDFIconButtonProps> = ({
         label={`Ver ${isXml ? 'XML' : 'PDF'}`}
         startIcon={isXml ? <TbFileTypeXml /> : <FaFilePdf />}
         color={isXml ? 'inherit' : 'error'}
+        disabled={disabled}
         onClick={() => {
           if (onClick) {
             onClick();

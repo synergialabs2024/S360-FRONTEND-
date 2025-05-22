@@ -37,6 +37,7 @@ export interface Transaccion {
   entidad_financiera?: string;
 
   rubro_data?: Rubro;
+  rubros_data?: Rubro;
   cliente_data?: Cliente;
   linea_servicio_data?: LineaServicio;
   metodo_pago_data?: MetodoPago;

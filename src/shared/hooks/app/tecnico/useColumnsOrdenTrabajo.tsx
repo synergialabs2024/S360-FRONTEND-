@@ -526,7 +526,7 @@ export const useColumnsOrdenTrabajo = () => {
   const installPreRechazadoOTColumns = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
       {
-        accessorKey: 'preventa__name',
+        accessorKey: 'preventa_data__name',
         header: 'MOTIVO PRERECHAZO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: true,

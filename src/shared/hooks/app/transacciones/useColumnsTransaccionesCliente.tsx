@@ -1,16 +1,17 @@
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { ClienteFibraTransaccionesActionBtnColumns } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/transacciones';
-import { TABLE_CONSTANTS } from '@/shared/constants';
-import { Transaccion } from '@/shared/interfaces';
 import {
+  formatCurrency,
   emptyCellNested,
   emptyCellOneLevel,
-  formatCurrency,
   formatCurrencyCell,
   formatDateWithTimeCell,
 } from '@/shared/utils';
+import { PDFIconButton } from '@/shared/components';
+import { Rubro, Transaccion } from '@/shared/interfaces';
+import { MODEL_BOOLEAN, TABLE_CONSTANTS } from '@/shared/constants';
+import { ClienteFibraTransaccionesActionBtnColumns } from '@/app/cliente/cliente/shared/components/fibra/rubros/tabs/transacciones';
 
 export const useColumnsTransaccionesCliente = () => {
   const baseColumsActions = useMemo<MRT_ColumnDef<Transaccion>[]>(
@@ -22,7 +23,7 @@ export const useColumnsTransaccionesCliente = () => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => {
-          const facturaUrl = row.original?.rubro_data?.factura_data?.url_pdf;
+          const facturaUrl = row.original?.rubros_data;
           if (!facturaUrl) return null;
 
           return (
@@ -116,6 +117,7 @@ export const useColumnsTransaccionesCliente = () => {
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
+      /*
       {
         accessorKey: 'created_at',
         header: 'CREADO',
@@ -124,6 +126,7 @@ export const useColumnsTransaccionesCliente = () => {
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
       },
+      */
       {
         accessorKey: 'modified_at',
         header: 'MODIFICADO',
@@ -131,6 +134,159 @@ export const useColumnsTransaccionesCliente = () => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [],
+  );
+
+  const transaccionrubroColumns = useMemo<MRT_ColumnDef<Rubro>[]>(
+    () => [
+      {
+        accessorKey: 'numero_referencia',
+        header: 'NO REFERENCIA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_referencia'),
+      },
+      {
+        accessorKey: 'numero_rubro',
+        header: 'NO RUBRO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'numero_rubro'),
+      },
+      {
+        accessorKey: 'url_pdf',
+        header: 'PDF',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          const onPDF = !row.original.factura_data?.url_pdf;
+          return (
+            <PDFIconButton
+              url={row.original.factura_data?.url_pdf!}
+              disabled={onPDF}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'url_xml',
+        header: 'XML',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          const onXML = !row.original.factura_data?.url_xml;
+          return (
+            <PDFIconButton
+              url={row.original.factura_data?.url_xml!}
+              isXml
+              disabled={onXML}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: 'concepto',
+        header: 'CONCEPTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_LARGE,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'concepto'),
+      },
+      {
+        accessorKey: 'estado_rubro',
+        header: 'ESTADO RUBRO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'estado_rubro'),
+      },
+      {
+        accessorKey: 'fecha_a_pagar',
+        header: 'FECHA A PAGAR',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_a_pagar'),
+      },
+      {
+        accessorKey: 'fecha_emision',
+        header: 'FECHA EMISION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_emision'),
+      },
+      {
+        accessorKey: 'fecha_pago',
+        header: 'FECHA PAGO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_pago'),
+      },
+      {
+        accessorKey: 'fecha_vencimiento',
+        header: 'FECHA VENCIMIENTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'fecha_vencimiento'),
+      },
+      {
+        accessorKey: 'generar_factura',
+        header: 'GENERAR FACTURA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        filterVariant: 'select',
+        filterSelectOptions: MODEL_BOOLEAN,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'generar_factura'),
+      },
+      {
+        accessorKey: 'ifi',
+        header: 'IFI',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ifi'),
+      },
+      {
+        accessorKey: 'subtotal',
+        header: 'SUBTOTAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'subtotal'),
+      },
+      {
+        accessorKey: 'tipo_rubro',
+        header: 'tipo rubro',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'tipo_rubro'),
+      },
+      {
+        accessorKey: 'valor_factura',
+        header: 'VALOR FACTURA',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_factura'),
+      },
+      {
+        accessorKey: 'valor_ice',
+        header: 'VALOR ICE',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_ice'),
+      },
+      {
+        accessorKey: 'valor_pagado',
+        header: 'VALOR PAGADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_pagado'),
+      },
+      {
+        accessorKey: 'valor_taxes',
+        header: 'VALOR TAXES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_taxes'),
+      },
+      {
+        accessorKey: 'valor_total',
+        header: 'VALOR TOTAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'valor_total'),
       },
     ],
     [],
@@ -200,5 +356,9 @@ export const useColumnsTransaccionesCliente = () => {
     ],
   );
 
-  return { transaccionClienteTabColumns, generalTransaccionesColumns };
+  return {
+    transaccionClienteTabColumns,
+    generalTransaccionesColumns,
+    transaccionrubroColumns,
+  };
 };
