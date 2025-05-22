@@ -2287,6 +2287,15 @@ const EncuestaPagosPage = Loadable(
   ),
 );
 
+const EncuestaRelacionalPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/customer-experience/encuesta-relacional/pages/tables/EncuestaRelacionalPage'
+      ),
+  ),
+);
+
 const EncuestaTotemsPage = Loadable(
   lazy(
     () =>
@@ -4099,6 +4108,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.customerExperience.encuestaPagos,
             element: <EncuestaPagosPage />,
+          },
+
+          ///* Encuesta Relacional
+          {
+            path: ROUTER_PATHS.customerExperience.encuestaRelacional,
+            element: <EncuestaRelacionalPage />,
           },
 
           ///* Encuesta Plantillas
