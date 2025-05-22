@@ -4,12 +4,16 @@ import { fieldStateYupValidation } from '../../common';
 export const sectorFormSchema = yup.object({
   name: yup
     .string()
-    .required('El campo name es requerido')
-    .max(200, 'El campo name no debe exceder los 200 caracteres'),
+    .required('El campo nombre es requerido')
+    .max(200, 'El campo nombre no debe exceder los 200 caracteres'),
   has_coverage: yup
     .boolean()
     .typeError('El campo has coverage es requerido')
     .required('El campo has coverage es requerido'),
+  code: yup
+    .string()
+    .required('El campo codigo es requerido')
+    .max(200, 'El campo codigo no debe exceder los 200 caracteres'),
   state: fieldStateYupValidation,
 
   pais: yup

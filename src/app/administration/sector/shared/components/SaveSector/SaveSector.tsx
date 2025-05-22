@@ -188,6 +188,16 @@ const SaveSector: React.FC<SaveSectorProps> = ({ title, sector }) => {
         helperText={errors.name?.message}
         size={gridSizeMdLg6}
       />
+      <CustomTextField
+        label="Codigo"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        size={gridSizeMdLg6}
+        disabled={!!sector?.id}
+      />
       <CustomAutocomplete<Pais>
         label="Pais"
         name="pais"

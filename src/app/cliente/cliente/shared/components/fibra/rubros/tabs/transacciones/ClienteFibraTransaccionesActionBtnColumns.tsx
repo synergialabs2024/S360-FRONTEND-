@@ -1,7 +1,9 @@
-import { Grid } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
+import { MdArrowRightAlt } from 'react-icons/md';
+import { useState } from 'react';
 
-import { Transaccion } from '@/shared';
-import { PDFIconButton } from '@/shared/components';
+import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
+import { Rubro, Transaccion, useColumnsTransaccionesCliente } from '@/shared';
 
 export type ClienteFibraTransaccionesActionBtnColumnsProps = {
   transaccion: Transaccion;
@@ -10,19 +12,45 @@ export type ClienteFibraTransaccionesActionBtnColumnsProps = {
 const ClienteFibraTransaccionesActionBtnColumns: React.FC<
   ClienteFibraTransaccionesActionBtnColumnsProps
 > = ({ transaccion }) => {
-  const factura = transaccion?.rubro_data?.factura_data;
-  const facturaUrl = factura?.url_pdf;
-  const xmlUrl = factura?.url_xml;
+  //* State local
+  const [open, setOpen] = useState(false);
+  const { transaccionrubroColumns } = useColumnsTransaccionesCliente();
+
+  const Section = () => (
+    <Grid container spacing={2} mt={2} mb={3}>
+      <Grid item xs={12}>
+        <SimpleTable<Rubro>
+          columns={transaccionrubroColumns}
+          data={(transaccion?.rubros_data ?? []) as Rubro[]}
+          isLoading={false}
+          centerColumns={true}
+          enableGlobalFilter={true}
+        />
+      </Grid>
+    </Grid>
+  );
 
   return (
     <>
-      <Grid item container xs={12} spacing={1}>
-        <Grid item>
-          {facturaUrl ? <PDFIconButton url={facturaUrl} /> : null}
-        </Grid>
-
-        <Grid item>{xmlUrl ? <PDFIconButton url={xmlUrl} isXml /> : null}</Grid>
-      </Grid>
+      <IconButton
+        component="span"
+        color="primary"
+        size="small"
+        onClick={() => setOpen(!open)}
+        style={{ cursor: 'pointer' }}
+      >
+        <MdArrowRightAlt />
+      </IconButton>
+      {open && (
+        <ScrollableDialogProps
+          open={open}
+          minWidth="60%"
+          onClose={() => setOpen(false)}
+          cancelTextBtn="Cerrar"
+          title="Rubros de la transacción"
+          contentNode={<Section />}
+        />
+      )}
     </>
   );
 };
