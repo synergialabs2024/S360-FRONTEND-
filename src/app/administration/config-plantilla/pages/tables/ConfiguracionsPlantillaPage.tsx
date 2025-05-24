@@ -1,22 +1,17 @@
-import { useNavigate } from 'react-router-dom';
-
-import { useFetchConfiguracionPlantillas } from '@/actions/app';
-import { ROUTER_PATHS } from '@/router/constants';
-import { TipoPlantillaConfigClienteEnumChoice } from '@/shared';
 import {
-  CustomSearch,
   CustomTable,
+  CustomSearch,
   SingleTableBoxScene,
 } from '@/shared/components';
-import { TABLE_CONSTANTS } from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
 import {
-  ConfiguracionPlantillaCliente,
   PermissionsEnum,
+  ConfiguracionPlantillaCliente,
 } from '@/shared/interfaces';
-import { hasPermission } from '@/shared/utils/auth';
-import { useUiConfirmModalStore } from '@/store/ui';
+import { ROUTER_PATHS } from '@/router/constants';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { useFetchConfiguracionPlantillas } from '@/actions/app';
+import { TipoPlantillaConfigClienteEnumChoice } from '@/shared';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 import { useColumnsConfigPlantillaCliente } from '../../shared/hooks/useColumnsConfigPlantillaCliente';
 
 export const returnUrlConfiguracionsPlantillaPage =
@@ -31,17 +26,19 @@ const ConfiguracionsPlantillaPage: React.FC<
     PermissionsEnum.administration_view_configplantillacliente,
   );
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
 
   ///* global state
+  /*
   const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
   const setConfirmDialogIsOpen = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
+  */
 
   ///* table
   const {
@@ -71,6 +68,7 @@ const ConfiguracionsPlantillaPage: React.FC<
   });
 
   ///* handlers
+  /*
   const onEdit = (configuracionplantilla: ConfiguracionPlantillaCliente) => {
     setConfirmDialog({
       isOpen: true,
@@ -84,6 +82,7 @@ const ConfiguracionsPlantillaPage: React.FC<
       },
     });
   };
+  */
 
   ///* columns
   const { genericColumns } = useColumnsConfigPlantillaCliente();
@@ -112,6 +111,8 @@ const ConfiguracionsPlantillaPage: React.FC<
         onPaging={setPagination}
         rowCount={ConfiguracionsPlantillaPagingRes?.data?.meta?.count}
         // // actions
+        enableActionsColumn={false}
+        /*
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={hasPermission(
           PermissionsEnum.administration_change_configplantillacliente,
@@ -122,6 +123,7 @@ const ConfiguracionsPlantillaPage: React.FC<
         )}
         onEdit={onEdit}
         canDelete={false}
+        */
       />
     </SingleTableBoxScene>
   );
