@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import { Grid } from '@mui/material';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 
 import {
   CreateConfiguracionPlantillaParamsBase,
@@ -127,7 +127,9 @@ const ConfigPlantillaClienteFibraPart: React.FC<
           text="Facturación"
           pt={CustomTypoLabelEnum.ptMiddlePosition}
         />
-        <ConfiguracionPlantillaFacturacionPart form={form} />
+        {serviceLine?.id ? (
+          <ConfiguracionPlantillaFacturacionPart form={form} />
+        ) : null}
         <ConfigPlantillaClienteFibraFacturacionCards form={form} />
       </>
 

@@ -2,6 +2,11 @@ import { UseFormReturn } from 'react-hook-form';
 import { useEffect } from 'react';
 
 import {
+  CustomAutocomplete,
+  CustomTextFieldNoForm,
+  CustomAutocompleteSimple,
+} from '@/shared/components';
+import {
   useLoaders,
   ToastWrapper,
   gridSizeMdLg4,
@@ -9,10 +14,9 @@ import {
   DiasAntesCreacionFacturaType,
   CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ,
 } from '@/shared';
-import { useFetchIVAs } from '@/actions/app';
 import { useRubroStore } from '@/store/app/rubros';
+import { useFetchCalendarioFacturaciones } from '@/actions/app';
 import { SaveFormDataConfigPlantilla } from './SaveConfiguracionPlantilla';
-import { CustomAutocomplete, CustomTextFieldNoForm } from '@/shared/components';
 
 export type ConfiguracionPlantillaFacturacionPartProps = {
   form: UseFormReturn<SaveFormDataConfigPlantilla>;
@@ -22,54 +26,61 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
   ConfiguracionPlantillaFacturacionPartProps
 > = ({ form }) => {
   ///* global state --------------------------
-  const calendariosFacturacion = useRubroStore(s => s.calendariosFacturacion);
+  const setCalendariosFacturacion = useRubroStore(
+    s => s.setCalendariosFacturacion,
+  );
 
   ///* form ---------------------
   const { errors } = form?.formState || {};
 
-  console.log(form.getValues('dia_pago'));
-
-  ///* fetch data ---------------------
+  ///* fetch data ----------------
   const {
-    data: ivasPagingRes,
-    isLoading: isLoadingIvas,
-    isRefetching: isRefetchingIvas,
-  } = useFetchIVAs({
+    data: calendarioFacturacionesPagingRes,
+    isLoading: isCalendarioFacturacionesLoading,
+    isRefetching: isCalendarioFacturacionesRefetching,
+  } = useFetchCalendarioFacturaciones({
+    //enabled: !!serviceLine?.id,
     params: {
-      page_size: 1100,
+      page_size: 1002,
+      aplica_nuevo: true,
     },
   });
 
-  ///* effects ---------------------
-  useEffect(() => {
-    if (isLoadingIvas || isRefetchingIvas) return;
+  const isCustomLoading =
+    isCalendarioFacturacionesLoading || isCalendarioFacturacionesRefetching;
+  useLoaders(isCustomLoading);
 
-    if (!ivasPagingRes?.data?.items?.length) {
-      ToastWrapper.error(
-        'No se encontraron impuestos registrados en el sistema',
-      );
+  ///* effects ----------------
+  useEffect(() => {
+    if (isCustomLoading) return;
+
+    // alert no calendarios
+    if (calendarioFacturacionesPagingRes?.data?.meta.count === 0) {
+      ToastWrapper.error('No se encontraron calendarios de facturación.');
     }
-  }, [isLoadingIvas, isRefetchingIvas, ivasPagingRes?.data?.items?.length]);
-  const isCustomLoader = isLoadingIvas || isRefetchingIvas;
-  useLoaders(isCustomLoader);
+    // set calendarios
+    setCalendariosFacturacion(
+      calendarioFacturacionesPagingRes?.data?.items || [],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCustomLoading, calendarioFacturacionesPagingRes]);
+
+  if (isCustomLoading) return null;
 
   return (
     <>
       {/* ---------- CalendarioFacturacion ---------- */}
-      <CustomAutocomplete<CalendarioFacturacion>
+      <CustomAutocompleteSimple<CalendarioFacturacion>
         label="Dia de pago"
         name="dia_pago"
         // options
-        options={
-          calendariosFacturacion.filter(i => i.aplica_nuevo == true) || []
-        }
+        options={calendarioFacturacionesPagingRes?.data?.items || []}
         valueKey="dia_pago"
+        actualValueKey="dia_pago"
         defaultValue={form.getValues().dia_pago}
         isLoadingData={false}
         // vaidation
         control={form.control}
-        error={errors.dia_pago}
-        helperText={errors.dia_pago?.message}
         size={gridSizeMdLg4}
         onChangeRawValue={row => {
           form.setValue('dia_facturacion', row.dia_facturacion);
@@ -151,58 +162,6 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         defaultValue={form.getValues().aplica_reconexion}
         size={gridSizeMdLg3}
       />
-      */}
-      {/*
-        <>
-          <CustomAutocomplete<IVA>
-            label="Impuesto 1"
-            name="impuesto_1"
-            // options
-            options={ivasPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().impuesto_1}
-            isLoadingData={isLoadingIvas || isRefetchingIvas}
-            // vaidation
-            control={form.control}
-            error={errors.impuesto_1}
-            helperText={errors.impuesto_1?.message}
-            size={gridSizeMdLg4}
-            required={false}
-          />
-          <CustomAutocomplete<IVA>
-            label="Impuesto 2"
-            name="impuesto_2"
-            // options
-            options={ivasPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().impuesto_2}
-            isLoadingData={isLoadingIvas || isRefetchingIvas}
-            // vaidation
-            control={form.control}
-            error={errors.impuesto_2}
-            helperText={errors.impuesto_2?.message}
-            size={gridSizeMdLg4}
-            required={false}
-          />
-          <CustomAutocomplete<IVA>
-            label="Impuesto 3"
-            name="impuesto_3"
-            // options
-            options={ivasPagingRes?.data?.items || []}
-            valueKey="name"
-            actualValueKey="id"
-            defaultValue={form.getValues().impuesto_3}
-            isLoadingData={isLoadingIvas || isRefetchingIvas}
-            // vaidation
-            control={form.control}
-            error={errors.impuesto_3}
-            helperText={errors.impuesto_3?.message}
-            size={gridSizeMdLg4}
-            required={false}
-          />
-        </>
       */}
     </>
   );
