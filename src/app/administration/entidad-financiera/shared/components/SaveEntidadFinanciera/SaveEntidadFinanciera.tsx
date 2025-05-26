@@ -14,7 +14,7 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg12, gridSizeMdLg6 } from '@/shared/constants/ui';
+import { gridSizeMdLg6 } from '@/shared/constants/ui';
 import { EntidadFinanciera } from '@/shared/interfaces';
 import { entidadFinancieraFormSchema } from '@/shared/utils';
 import { returnUrlEntidadesFinancieraPage } from '../../../pages/tables/EntidadesFinancieraPage';
@@ -107,6 +107,24 @@ const SaveEntidadFinanciera: React.FC<SaveEntidadFinancieraProps> = ({
         size={gridSizeMdLg6}
         disabled={!!entidadfinanciera?.id}
       />
+      <CustomTextField
+        label="Ifi"
+        name="ifi"
+        control={form.control}
+        defaultValue={form.getValues().ifi}
+        error={errors.ifi}
+        helperText={errors.ifi?.message}
+        size={gridSizeMdLg6}
+        disabled={!!entidadfinanciera?.id}
+      />
+      <SampleCheckbox
+        label="state"
+        name="state"
+        control={form.control}
+        defaultValue={form.getValues().state}
+        isState
+        size={gridSizeMdLg6}
+      />
       <CustomTextArea
         label="Descripción"
         name="description"
@@ -115,14 +133,6 @@ const SaveEntidadFinanciera: React.FC<SaveEntidadFinancieraProps> = ({
         error={errors.description}
         helperText={errors.description?.message}
         required={false}
-      />
-      <SampleCheckbox
-        label="state"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
-        size={gridSizeMdLg12}
       />
     </SingleFormBoxScene>
   );

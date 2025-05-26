@@ -1,37 +1,41 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Grid } from '@mui/material';
 
 import {
-  CreateZonaParams,
   useCreateZona,
-  useFetchCiudades,
-  useFetchPaises,
-  useFetchProvincias,
   useFetchZonas,
   useUpdateZona,
+  useFetchPaises,
+  CreateZonaParams,
+  useFetchCiudades,
+  useFetchProvincias,
 } from '@/actions/app';
 import {
-  CustomAutocomplete,
+  SampleCheckbox,
   CustomTextField,
   CustomTypoLabel,
-  CustomTypoLabelEnum,
-  SampleCheckbox,
   SingleFormBoxScene,
+  CustomAutocomplete,
+  CustomTypoLabelEnum,
+  CustomAutocompleteArrString,
 } from '@/shared/components';
-import { CoordenadasType } from '@/shared/components/CustomMaps/CustomMap';
-import { SAVE_ZONA_PERMISSIONS } from '@/shared/constants/app';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
-import { useLoaders, useMapPolygonComponent } from '@/shared/hooks';
-import { useCheckPermissionsArray } from '@/shared/hooks/auth';
-import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
-import { Ciudad, Pais, Provincia } from '@/shared/interfaces';
-import { Zona } from '@/shared/interfaces/app/administration/zona';
-import { calcOtherZonesMultiPolygon, zonaFormSchema } from '@/shared/utils';
+import {
+  SAVE_ZONA_PERMISSIONS,
+  ZONA_SEMAFORO_ARRAY_CHOICES,
+} from '@/shared/constants/app';
 import { ToastWrapper } from '@/shared/wrappers';
+import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import { Ciudad, Pais, Provincia } from '@/shared/interfaces';
+import { useCheckPermissionsArray } from '@/shared/hooks/auth';
+import { Zona } from '@/shared/interfaces/app/administration/zona';
+import { useLoaders, useMapPolygonComponent } from '@/shared/hooks';
 import { returnUrlZonasPage } from '../../../pages/tables/ZonasPage';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { CoordenadasType } from '@/shared/components/CustomMaps/CustomMap';
+import { calcOtherZonesMultiPolygon, zonaFormSchema } from '@/shared/utils';
 
 export interface SaveZonaProps {
   title: string;
@@ -51,7 +55,7 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
 
   ///* form -------------------
   const form = useForm<SaveFormData>({
-    resolver: yupResolver(zonaFormSchema),
+    resolver: yupResolver(zonaFormSchema) as any,
     defaultValues: {
       state: true,
       has_coverage: true,
@@ -208,6 +212,29 @@ const SaveZona: React.FC<SaveZonaProps> = ({ title, zona }) => {
         error={errors.name}
         helperText={errors.name?.message}
         size={gridSizeMdLg6}
+      />
+      <CustomAutocompleteArrString
+        label="Semaforo"
+        name="semaforo"
+        control={form.control}
+        defaultValue={form.getValues('semaforo')}
+        options={ZONA_SEMAFORO_ARRAY_CHOICES}
+        isLoadingData={false}
+        error={errors.semaforo}
+        helperText={errors.semaforo?.message}
+        size={gridSizeMdLg6}
+        disableClearable
+      />
+      <CustomTextField
+        label="UID"
+        name="uid"
+        control={form.control}
+        defaultValue={form.getValues().uid}
+        error={errors.uid}
+        helperText={errors.uid?.message}
+        size={gridSizeMdLg6}
+        disabled={!!zona?.id}
+        ignoreTransform
       />
       <CustomAutocomplete<Pais>
         label="Pais"

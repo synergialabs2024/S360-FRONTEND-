@@ -1817,3 +1817,15 @@ export const PROMESA_PAGO_ESTADO_LINEA_REGISTRAR_ARRAY_CHOICES = [
   PromesaPagoEstadoLineaRegistrarEnumChoice.CANCELADO,
   PromesaPagoEstadoLineaRegistrarEnumChoice.NO_INSTALADO,
 ];
+
+export enum ZonaSemaforoTMEnumChoice {
+  VERDE = 'VERDE',
+  AMARILLO = 'AMARILLO',
+  ROJO = 'ROJO',
+}
+
+export const ZONA_SEMAFORO_ARRAY_CHOICES = [
+  ZonaSemaforoTMEnumChoice.VERDE,
+  ZonaSemaforoTMEnumChoice.AMARILLO,
+  ZonaSemaforoTMEnumChoice.ROJO,
+];

@@ -137,6 +137,9 @@ export interface Preventa {
   // helpers properties
   can_be_scheduled?: boolean;
   es_tercera_edad?: boolean; // <- sol_service
+
+  //
+  temp_password?: string;
 }
 
 export type PreventaPromocionSelectedOptions = {

@@ -1,7 +1,7 @@
 import type { MRT_ColumnDef, MRT_Row } from 'material-react-table';
 import { useMemo } from 'react';
 
-import { ImgModalComponent } from '@/shared/components';
+import { ImgModalComponent, PasswordTableCell } from '@/shared/components';
 import CopyTextOnClickBtn from '@/shared/components/CustomButtons/CopyTextOnClickBtn';
 import {
   IDENTIFICATION_TYPE_ARRAY_CHOICES_OBJ_SOL_SERVICE,
@@ -265,6 +265,20 @@ export const useColumnsPreventa = () => {
   const preventaRealizadas = useMemo<MRT_ColumnDef<Preventa>[]>(
     () => [
       ...preventaBaseColumns,
+      {
+        accessorKey: 'temp_password',
+        header: 'CONTRASEÑA TEMPORAL',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => {
+          return (
+            <PasswordTableCell
+              password={row.original?.temp_password || 'N/A'}
+            />
+          );
+        },
+      },
       {
         accessorKey: 'razon_social__finaliza_preventa',
         header: 'FINALIZADO POR',

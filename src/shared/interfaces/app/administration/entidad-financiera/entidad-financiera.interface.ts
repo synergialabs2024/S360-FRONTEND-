@@ -18,6 +18,7 @@ export interface EntidadFinanciera {
   state: boolean;
   code: string;
   description: string;
+  ifi: string;
 }
 
 export type EntidadFinancieraLimitData = Pick<
