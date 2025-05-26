@@ -1,8 +1,8 @@
-import { CoordenadasTypeString } from '@/shared';
+import { CoordenadasTypeString, ZonaSemaforoTMEnumChoice } from '@/shared';
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { ProvinciaLimitData } from '../provincia';
 import { CiudadLimitData } from '../ciudad';
 import { PaisLimitData } from '../pais';
-import { ProvinciaLimitData } from '../provincia';
 
 export interface ZonasPaginatedRes {
   status: number;
@@ -16,6 +16,8 @@ export interface Zona {
   uuid?: string;
   name: string;
   has_coverage: boolean;
+  uid: string;
+  semaforo: ZonaSemaforoTMEnumChoice;
 
   coordenadas?: CoordenadasTypeString[][];
 

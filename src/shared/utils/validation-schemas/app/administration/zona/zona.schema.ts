@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { fieldStateYupValidation } from '../../common';
+import { ZONA_SEMAFORO_ARRAY_CHOICES } from '@/shared/constants';
 
 export const zonaFormSchema = yup.object({
   name: yup
@@ -10,6 +11,14 @@ export const zonaFormSchema = yup.object({
     .boolean()
     .typeError('El campo has coverage es requerido')
     .required('El campo has coverage es requerido'),
+  uid: yup
+    .boolean()
+    .typeError('El campo UID es requerido')
+    .required('El campo UID coverage es requerido'),
+  semaforo: yup
+    .mixed()
+    .oneOf(ZONA_SEMAFORO_ARRAY_CHOICES, 'El semaforo debe ser elegido')
+    .required('El campo semaforo es requerido'),
   state: fieldStateYupValidation,
 
   pais: yup

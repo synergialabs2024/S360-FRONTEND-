@@ -1,35 +1,35 @@
 import { MRT_ColumnDef } from 'material-react-table';
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Grid } from '@mui/material';
+import { useMemo } from 'react';
 
-import { useFetchZonas, useUpdateZona, ZonaTSQEnum } from '@/actions/app';
-import { useGenericPOST } from '@/actions/shared';
-import { ROUTER_PATHS } from '@/router/constants';
-import {
-  CustomSearch,
-  CustomSingleButton,
-  CustomSwitch,
-  CustomTable,
-  SingleTableBoxScene,
-} from '@/shared/components';
-import { SAVE_ZONA_PERMISSIONS } from '@/shared/constants/app';
-import {
-  MODEL_BOOLEAN,
-  MODEL_STATE_BOOLEAN,
-  TABLE_CONSTANTS,
-} from '@/shared/constants/ui';
-import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
-import { useCheckPermission } from '@/shared/hooks/auth';
-import { ChangeModelStateData, PermissionsEnum } from '@/shared/interfaces';
-import { Zona } from '@/shared/interfaces/app/administration/zona';
 import {
   emptyCellNested,
   emptyCellOneLevel,
   formatDateWithTimeCell,
 } from '@/shared/utils';
-import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
+import {
+  CustomTable,
+  CustomSearch,
+  CustomSwitch,
+  CustomSingleButton,
+  SingleTableBoxScene,
+} from '@/shared/components';
+import {
+  MODEL_BOOLEAN,
+  TABLE_CONSTANTS,
+  MODEL_STATE_BOOLEAN,
+} from '@/shared/constants/ui';
+import { useGenericPOST } from '@/actions/shared';
+import { ROUTER_PATHS } from '@/router/constants';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { Grid } from '@mui/material';
+import { useCheckPermission } from '@/shared/hooks/auth';
+import { SAVE_ZONA_PERMISSIONS } from '@/shared/constants/app';
+import { Zona } from '@/shared/interfaces/app/administration/zona';
+import { hasAllPermissions, hasPermission } from '@/shared/utils/auth';
+import { useFetchZonas, useUpdateZona, ZonaTSQEnum } from '@/actions/app';
+import { ChangeModelStateData, PermissionsEnum } from '@/shared/interfaces';
+import { useTableFilter, useTableServerSideFiltering } from '@/shared/hooks';
 
 export const returnUrlZonasPage = ROUTER_PATHS.administracion.zonasNav;
 
@@ -116,6 +116,18 @@ const ZonasPage: React.FC<ZonasPageProps> = () => {
         header: 'NOMBRE',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
+      },
+      {
+        accessorKey: 'uid',
+        header: 'UID',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'uid'),
+      },
+      {
+        accessorKey: 'semaforo',
+        header: 'SEMAFORO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_NAME,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'semaforo'),
       },
       {
         accessorKey: 'has_coverage',

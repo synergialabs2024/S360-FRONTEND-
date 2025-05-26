@@ -108,6 +108,14 @@ const EntidadesFinancieraPage: React.FC<EntidadesFinancieraPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
       },
       {
+        accessorKey: 'ifi',
+        header: 'IFI',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'ifi'),
+      },
+      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
