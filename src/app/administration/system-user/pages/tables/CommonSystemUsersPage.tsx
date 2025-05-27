@@ -70,7 +70,7 @@ const CommonSystemUsersPage: React.FC<CommonSystemUsersPageProps> = ({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      identificacion: searchTerm,
+      user__razon_social: searchTerm,
       ...filterObject,
       filterByState: false,
       ...customParams,
@@ -111,7 +111,7 @@ const CommonSystemUsersPage: React.FC<CommonSystemUsersPageProps> = ({
         <CustomSearch
           onChange={onChangeFilter}
           value={globalFilter}
-          text="por identificación"
+          text="por nombre"
         />
 
         <CustomTable<SystemUserItem>

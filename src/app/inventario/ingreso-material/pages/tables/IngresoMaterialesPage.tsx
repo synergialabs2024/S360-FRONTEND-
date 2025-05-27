@@ -63,7 +63,7 @@ const IngresoMaterialesPage: React.FC<IngresoMaterialesPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Ingreso Material"
+      title="Ingreso de material"
       createPageUrl={`${returnUrlIngresoMaterialesPage}/crear`}
       showCreateBtn={hasPermission(
         PermissionsEnum.inventario_add_ingresomaterial,

@@ -84,7 +84,7 @@ const ActivacionInstallOTDetallesEquiposFormTab: React.FC<
         tabs={
           <FormTabsOnly value={tabValue} onChange={handleTabChange}>
             <Tab label="Servicio" value={1} {...a11yProps(1)} />
-            <Tab label="Ubicadión cliente y NAP" value={2} {...a11yProps(2)} />
+            <Tab label="Ubicación cliente y NAP" value={2} {...a11yProps(2)} />
           </FormTabsOnly>
         }
         sxContainer={{

@@ -1,7 +1,7 @@
-import Cards from 'react-credit-cards-2';
 import { UseFormReturn } from 'react-hook-form';
+import Cards from 'react-credit-cards-2';
+import { Grid } from '@mui/material';
 
-import { useFetchEntidadFinancieras } from '@/actions/app';
 import {
   EntidadFinanciera,
   gridSizeMdLg6,
@@ -17,7 +17,7 @@ import {
   CustomTypoLabelEnum,
   SelectTextFieldArrayString,
 } from '@/shared/components';
-import { Grid } from '@mui/material';
+import { useFetchEntidadFinancieras } from '@/actions/app';
 import { SaveFormDataAgendaVentas } from '../SaveAgendamiento';
 import InternetPlanPartSaveAgendaForm from './InternetPlanPartSaveAgendaForm';
 
@@ -40,8 +40,7 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
     preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.DEBITO;
   const isCredito =
     preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.CREDITO;
-  const isRecaudacion =
-    preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.RECAUDACIONES;
+  // const isRecaudacion = preventa.metodo_pago_data?.uuid === MetodoPagoEnumUUID.RECAUDACIONES;
 
   ///* fetch data ---------------------
   const {
@@ -76,21 +75,22 @@ const ServiceSaveAgendaStep: React.FC<ServiceSaveAgendaStepProps> = ({
           size={gridSizeMdLg6}
           disabled
         />
-
-        {isRecaudacion && (
-          <>
-            <CustomTextField
-              label="Entidad financiera"
-              name="entidadFinancieraName"
-              control={form.control}
-              defaultValue={form.getValues().entidadFinancieraName}
-              error={errors.entidadFinancieraName}
-              helperText={errors.entidadFinancieraName?.message}
-              size={gridSizeMdLg6}
-              disabled
-            />
-          </>
-        )}
+        {/*
+          {isRecaudacion && (
+            <>
+              <CustomTextField
+                label="Entidad financiera"
+                name="entidadFinancieraName"
+                control={form.control}
+                defaultValue={form.getValues().entidadFinancieraName}
+                error={errors.entidadFinancieraName}
+                helperText={errors.entidadFinancieraName?.message}
+                size={gridSizeMdLg6}
+                disabled
+              />
+            </>
+          )}
+        */}
 
         {isDebito && (
           <>
