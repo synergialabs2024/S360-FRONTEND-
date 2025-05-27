@@ -58,7 +58,7 @@ const EgresoMaterialesPage: React.FC<EgresoMaterialesPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Egreso Material"
+      title="Egreso de material"
       createPageUrl={`${returnUrlEgresoMaterialesPage}/crear`}
       showCreateBtn={hasPermission(
         PermissionsEnum.inventario_add_egresomaterial,

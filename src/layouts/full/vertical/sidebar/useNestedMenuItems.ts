@@ -478,13 +478,13 @@ export const useNestedMenu = () => {
             ///* Inventario Principal
             renderByModule(SidenavModulesEnum.INVENTARIO_INGRESO_MATERIAL, {
               id: 'ingreso-mercaderia',
-              title: 'Ingreso de Inventario',
+              title: 'Ingreso de material',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.ingresoMaterialesNav,
             }),
             renderByModule(SidenavModulesEnum.INVENTARIO_EGRESO_MATERIAL, {
               id: 'egreso-mercaderia',
-              title: 'Egreso de Inventario',
+              title: 'Egreso de material',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.egresoMaterialesNav,
             }),
@@ -492,7 +492,7 @@ export const useNestedMenu = () => {
               SidenavModulesEnum.INVENTARIO_TRANSFERENCIA_MATERIAL,
               {
                 id: 'transferencia-materiales',
-                title: 'Transferencia de materiales',
+                title: 'Transferencia de material',
                 type: MenuItemType.ITEM,
                 url: ROUTER_PATHS.inventario.transferenciaMaterialesNav,
               },
