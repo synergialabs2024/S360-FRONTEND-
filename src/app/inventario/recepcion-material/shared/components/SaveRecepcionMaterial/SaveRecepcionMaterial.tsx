@@ -35,7 +35,7 @@ import { useProductosStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlRecepcionMaterialPage } from '../../../pages/tables/RecepcionMaterialMainPage';
-import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
+import { returnUrlAprobarSolMaterialPage } from '../../../pages/tables/AprobarSolMaterial';
 
 export interface SaveRecepcionMaterialProps {
   title: string;
@@ -170,12 +170,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
       subtitle: '¿Desea ingresar la solicitud de este material?',
       onConfirm: () => {
         try {
-          navigate(
-            `${returnUrlTransferenciaMaterialesPage}/solicitud/${data.uuid}`,
-            {
-              state: { solicitud: 'solicitud_material' },
-            },
-          );
+          navigate(`${returnUrlAprobarSolMaterialPage}/editar/${data.uuid}`);
           setConfirmDialogIsOpen(false);
           if (data.id !== undefined) {
             updateRecepcionMaterialAprobarMutation.mutate({

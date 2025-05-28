@@ -7,6 +7,7 @@ export * from './motivo-egreso';
 export * from './motivo-ingreso';
 export * from './motivo-transferencia';
 export * from './movimiento-material';
+export * from './solicitud-compra';
 export * from './solicitud-devolucion';
 export * from './solicitud-material';
 export * from './solicitud-transferencia-material';

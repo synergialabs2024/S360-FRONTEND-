@@ -243,9 +243,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
     productosEnviar([]);
     if (!transferenciaMaterial) return;
     reset(transferenciaMaterial);
-    productosEnviar(transferenciaMaterial?.productos);
-    setUUIDUbicacion(transferenciaMaterial?.ubicacion_origen_data?.uuid || '');
-  }, [transferenciaMaterial, reset, productosEnviar]);
+  }, [reset, productosEnviar]);
 
   useEffect(() => {
     if (

@@ -47,6 +47,8 @@ export interface Producto {
   categoria_data?: CategoriaProducto;
 
   ubicaciones_producto?: UProducto;
+  cantidad: any;
+  series: any;
 }
 
 export interface PrecioProducto {

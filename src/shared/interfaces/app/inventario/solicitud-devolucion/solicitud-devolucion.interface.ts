@@ -1,6 +1,7 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
 import { Ubicacion } from '../ubicacion.interface';
 import { Bodega } from '../bodega';
+import { Producto } from '../producto.interface';
 
 export interface SolicitudDevolucionPaginatedRes {
   status: number;
@@ -17,7 +18,7 @@ export interface SolicitudDevolucion {
 
   state: boolean;
   observacion: string;
-  productos: Productos[];
+  productos: Producto[];
 
   //* fk
   bodega: number;
@@ -38,15 +39,6 @@ export interface SolicitudDevolucion {
 
   created_at?: string;
   modified_at?: string;
-}
-
-interface Productos {
-  producto: number | undefined;
-  stock_up?: number;
-  requiere_series?: boolean;
-  cantidad?: number;
-  series?: any[];
-  codigo?: string;
 }
 
 export type SolicitudDevolucionLimitData = Pick<

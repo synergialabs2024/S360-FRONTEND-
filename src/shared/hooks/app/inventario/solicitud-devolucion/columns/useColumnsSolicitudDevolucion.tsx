@@ -75,15 +75,6 @@ export const useColumnsSolicitudDevolucion = () => {
         Cell: ({ row }) => emptyCellNested(row, ['ubicacion_data', 'nombre']),
       },
       {
-        accessorKey: 'ingreso_material__secuencial',
-        header: 'INGRESO MATERIAL',
-        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        enableColumnFilter: true,
-        enableSorting: true,
-        Cell: ({ row }) =>
-          emptyCellNested(row, ['ingreso_material_data', 'secuencial']),
-      },
-      {
         accessorKey: 'user_create__razon_social',
         header: 'USUARIO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,

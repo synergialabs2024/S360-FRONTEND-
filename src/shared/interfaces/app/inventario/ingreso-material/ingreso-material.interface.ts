@@ -1,5 +1,7 @@
 import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { Ubicacion } from '../ubicacion.interface';
 import { Producto } from '../producto.interface';
+import { Bodega } from '../bodega';
 
 export interface IngresoMaterialesPaginatedRes {
   status: number;
@@ -24,6 +26,12 @@ export interface IngresoMaterial {
   ubicacion: number;
   motivo_ingreso: number;
   user_create: number;
+
+  bodega_data: Bodega;
+  ubicacion_data: Ubicacion;
+
+  // solicitud
+  estado_solicitud?: string;
 
   created_at?: string;
   modified_at?: string;

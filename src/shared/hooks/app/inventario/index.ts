@@ -8,6 +8,7 @@ export * from './movimiento-material';
 export * from './reporte-stock';
 export * from './motivo-inventario';
 export * from './solicitud-material';
+export * from './solicitud-compra';
 export * from './solicitud-devolucion';
 export * from './transferencia-material';
 
