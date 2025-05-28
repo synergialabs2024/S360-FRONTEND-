@@ -49,6 +49,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
 
   ///* local state --------------------
   const [openAddProducts, setOpenAddProducts] = useState<boolean>(false);
+  const [uuidUbicacion, setUUIDUbicacion] = useState<string | undefined>('');
 
   ///* global state --------------------
   const productosDisponibles = useProductosStore(s => s.productosDisponibles);
@@ -116,6 +117,13 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
         item => item.id === prod.producto,
       );
 
+      const validarCantidad = (
+        detalles?.ubicaciones_producto as unknown as {
+          stock: number;
+          ubicacion: string;
+        }[]
+      )?.find(i => i.ubicacion == uuidUbicacion);
+
       if (!detalles) {
         ToastWrapper.error(
           `No se encontró el producto con ID ${prod.producto}`,
@@ -134,6 +142,12 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
           `El producto "${detalles.codigo}" necesita cantidad.`,
         );
         return;
+      } else if (validarCantidad && validarCantidad.stock < prod.cantidad) {
+        ToastWrapper.error(
+          `El producto "${detalles.codigo}" tiene una cantidad
+          de ${prod.cantidad} y solo existe ${validarCantidad.stock}.`,
+        );
+        return;
       }
     }
 
@@ -148,6 +162,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
   useEffect(() => {
     productosEnviar([]);
     reset(solicitud_devolucion);
+    setUUIDUbicacion(user?.flota_data?.ubicacion_data?.uuid);
   }, [solicitud_devolucion, reset]);
 
   ///* columns --------------------
@@ -204,7 +219,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
         density="comfortable"
       />
       <ProductosDisponiblesModal
-        askADD={false}
+        askADD={true}
         pk_ubicacion={user?.flota_data?.ubicacion_data?.uuid}
         open={openAddProducts}
         onClose={() => setOpenAddProducts(false)}

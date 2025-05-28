@@ -54,6 +54,8 @@ export const flotaFormSchema = yup.object({
         return !othertelefonos.includes(value);
       },
     ),
+
+  /*
   telefono_2: yup
     .string()
     .required('El campo telefono 2 es requerido')
@@ -82,6 +84,7 @@ export const flotaFormSchema = yup.object({
         return !othertelefonos.includes(value);
       },
     ),
+    */
   // zonas: yup
   //   .number()
   //   .typeError('El campo zonas es requerido')

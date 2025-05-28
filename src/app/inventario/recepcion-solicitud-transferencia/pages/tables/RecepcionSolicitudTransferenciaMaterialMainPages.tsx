@@ -22,7 +22,7 @@ const SolicitudTransferenciaMaterialMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Aprobación de Solicitud Transferencia Material"
+      title="Recepción de Solicitud Transferencia Material"
       showCreateBtn={false}
       isMainTableStates
     >

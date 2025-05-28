@@ -742,6 +742,13 @@ export const ROUTER_PATHS = {
     solicitudDevolucionEditar: 'solicitud-devolucion/editar/:uuid',
     solicitudDevolucionNav: '/inventario/solicitud-devolucion',
 
+    ///* aprobacion devolucion
+    solicitudDevolucionAprobar: 'solicitud-devolucion-aprobar',
+    solicitudDevolucionAprobarCrear: 'solicitud-devolucion-aprobar/crear',
+    solicitudDevolucionAprobarEditar:
+      'solicitud-devolucion-aprobar/editar/:uuid',
+    solicitudDevolucionAprobarNav: '/inventario/solicitud-devolucion-aprobar',
+
     ///* Recepcion solicitud devolucion material
     recepcionSolicitudDevolucionMateriales:
       'recepcion-solicitud-devolucion-material',
@@ -752,11 +759,35 @@ export const ROUTER_PATHS = {
     recepcionSolicitudDevolucionMaterialesNav:
       '/inventario/recepcion-solicitud-devolucion-material',
 
+    ///* solicitud compra
+    solicitudCompra: 'solicitud-compra',
+    solicitudCompraCrear: 'solicitud-compra/crear',
+    solicitudCompraEditar: 'solicitud-compra/editar/:uuid',
+    solicitudCompraNav: '/inventario/solicitud-compra',
+
+    ///* solicitud compra aprobar
+    solicitudCompraAprobar: 'solicitud-compra-aprobar',
+    solicitudCompraAprobarCrear: 'solicitud-compra-aprobar/crear',
+    solicitudCompraAprobarEditar: 'solicitud-compra-aprobar/editar/:uuid',
+    solicitudCompraAprobarNav: '/inventario/solicitud-compra-aprobar',
+
+    ///* Recepcion solicitud compra material
+    recepcionSolicitudCompra: 'recepcion-solicitud-compra',
+    recepcionSolicitudCompraCrear: 'recepcion-solicitud-compra/crear',
+    recepcionSolicitudCompraEditar: 'recepcion-solicitud-compra/editar/:uuid',
+    recepcionSolicitudCompraNav: '/inventario/recepcion-solicitud-compra',
+
     ///* solicitud material
     solicitudMaterial: 'solicitud-material',
     solicitudMaterialCrear: 'solicitud-material/crear',
     solicitudMaterialEditar: 'solicitud-material/editar/:uuid',
     solicitudMaterialNav: '/inventario/solicitud-material',
+
+    ///* solicitud material aprobar
+    solicitudMaterialAprobar: 'solicitud-material-aprobar',
+    solicitudMaterialAprobarCrear: 'solicitud-material-aprobar/crear',
+    solicitudMaterialAprobarEditar: 'solicitud-material-aprobar/editar/:uuid',
+    solicitudMaterialAprobarNav: '/inventario/solicitud-material-aprobar',
 
     ///* Ingreso Material
     ingresoMateriales: 'ingreso-materiales',
@@ -779,8 +810,6 @@ export const ROUTER_PATHS = {
     ///* Transferencia Material
     transferenciaMateriales: 'transferencia-materiales',
     transferenciaMaterialesCrear: 'transferencia-materiales/crear',
-    transferenciaMaterialesSolicitud:
-      'transferencia-materiales/solicitud/:uuid',
     transferenciaMaterialesEditar: 'transferencia-materiales/editar/:uuid',
     transferenciaMaterialesNav: '/inventario/transferencia-materiales',
 
@@ -796,7 +825,7 @@ export const ROUTER_PATHS = {
     modeloInventariosEditar: 'modelo-inventarios/editar/:uuid',
     modeloInventariosNav: '/inventario/modelo-inventarios',
 
-    ///* solicitud material
+    ///* solicitud transferencia
     solicitudTransferenciaMaterial: 'solicitud-transferencia-material',
     solicitudTransferenciaMaterialCrear:
       'solicitud-transferencia-material/crear',
@@ -804,6 +833,14 @@ export const ROUTER_PATHS = {
       'solicitud-transferencia-material/editar/:uuid',
     solicitudTransferenciaMaterialNav:
       '/inventario/solicitud-transferencia-material',
+
+    ///* aprobacion tranferencia
+    solicitudTransferenciaAprobar: 'solicitud-transferencia-aprobar',
+    solicitudTransferenciaAprobarCrear: 'solicitud-transferencia-aprobar/crear',
+    solicitudTransferenciaAprobarEditar:
+      'solicitud-transferencia-aprobar/editar/:uuid',
+    solicitudTransferenciaAprobarNav:
+      '/inventario/solicitud-transferencia-aprobar',
 
     ///* Recepcion solicitud material
     recepcionSolicitudTransferenciaMateriales:

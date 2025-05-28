@@ -210,7 +210,7 @@ export const createCuentaContableCargaMasiva = async <T>(
   setIsGlobalLoading(true);
 
   return post<CuentaContable_CargaMasiva>(
-    '/cuenta_contable/carga-masiva/',
+    '/cuenta_contable/carga-masiva-2/',
     data,
     true,
   );

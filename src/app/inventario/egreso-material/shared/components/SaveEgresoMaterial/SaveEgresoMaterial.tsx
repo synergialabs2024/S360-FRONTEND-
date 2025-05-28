@@ -140,7 +140,6 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
       ToastWrapper.error('Campo Productos es requerido');
       return;
     }
-
     // Validaciones
     for (const prod of mappedProductos) {
       const detalles = productosPaging?.data.items.find(

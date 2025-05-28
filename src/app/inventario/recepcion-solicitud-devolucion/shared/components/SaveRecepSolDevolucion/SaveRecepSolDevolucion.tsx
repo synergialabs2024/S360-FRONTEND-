@@ -19,6 +19,7 @@ import {
   IngresosDisponiblesTableType,
   solicitudDevolucionFormSchema,
   useColumnsProductosDisponibles,
+  Producto,
 } from '@/shared';
 import {
   useFetchProductos,
@@ -30,7 +31,7 @@ import { useProductosStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlRecepcionSolicitudDevolucionMaterialesPage } from '../../../pages/tables/RecepcionSolDevolucionMainPages';
-import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
+import { returnUrlAprobarSolDevolucionPage } from '../../../pages/tables/AprobarSolDevolucion';
 
 export interface SaveRecepSolDevolucionProps {
   title: string;
@@ -139,7 +140,7 @@ const SaveRecepSolDevolucion: React.FC<SaveRecepSolDevolucionProps> = ({
     }
 
     data.estado_solicitud = 'APROBADO';
-    data.productos = mappedProductos;
+    data.productos = mappedProductos as Producto[];
 
     setConfirmDialog({
       isOpen: true,
@@ -147,12 +148,7 @@ const SaveRecepSolDevolucion: React.FC<SaveRecepSolDevolucionProps> = ({
       subtitle: '¿Desea ingresar la devolucion de este material?',
       onConfirm: () => {
         try {
-          navigate(
-            `${returnUrlTransferenciaMaterialesPage}/solicitud/${data.uuid}`,
-            {
-              state: { solicitud: 'solicitud_devolucion' },
-            },
-          );
+          navigate(`${returnUrlAprobarSolDevolucionPage}/editar/${data.uuid}`);
           setConfirmDialogIsOpen(false);
           if (data.id !== undefined) {
             updateRecepcionDevolucionAprobarMutation.mutate({

@@ -1495,14 +1495,6 @@ const CreateTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
-const UpdateTransferenciaMaterialPage = Loadable(
-  lazy(
-    () =>
-      import(
-        '@/app/inventario/transferencia-material/pages/forms/UpdateTransferenciaMaterialPage'
-      ),
-  ),
-);
 const RecepcionMaterialMainPage = Loadable(
   lazy(
     () =>
@@ -1516,6 +1508,22 @@ const UpdateRecepcionMaterialPage = Loadable(
     () =>
       import(
         '@/app/inventario/recepcion-material/pages/forms/UpdateRecepcionMaterialPage'
+      ),
+  ),
+);
+const AprobarSolMaterial = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-material/pages/tables/AprobarSolMaterial'
+      ),
+  ),
+);
+const UpdateAprobSolMaterialPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-material/pages/forms/UpdateAprobSolMaterialPage'
       ),
   ),
 );
@@ -1540,6 +1548,54 @@ const UpdateModeloInventariosPages = Loadable(
     () =>
       import(
         '@/app/inventario/modelo-inventario/pages/forms/UpdateModeloInventariosPages'
+      ),
+  ),
+);
+const SolicitudCompraMainPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/solicitud-compra/pages/tables/SolicitudCompraMainPages'
+      ),
+  ),
+);
+const CreateSolicitudCompraPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/solicitud-compra/pages/forms/CreateSolicitudCompraPages'
+      ),
+  ),
+);
+const RecepcionSolCompraMainPages = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-compra/pages/tables/RecepcionSolCompraMainPages'
+      ),
+  ),
+);
+const UpdateRecepSolCompraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-compra/pages/forms/UpdateRecepSolCompraPage'
+      ),
+  ),
+);
+const AprobarSolCompra = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-compra/pages/tables/AprobarSolCompra'
+      ),
+  ),
+);
+const UpdateAprobSolCompraPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-compra/pages/forms/UpdateAprobSolCompraPage'
       ),
   ),
 );
@@ -1591,6 +1647,22 @@ const CreateRecepcionSolicitudTransferenciaMaterialPage = Loadable(
       ),
   ),
 );
+const AprobarSolTransferencia = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-transferencia/pages/tables/AprobarSolTransferencia'
+      ),
+  ),
+);
+const UpdateAprobSolTransferenciaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-transferencia/pages/forms/UpdateAprobSolTransferenciaPage'
+      ),
+  ),
+);
 const RecepcionSolDevolucionMainPages = Loadable(
   lazy(
     () =>
@@ -1604,6 +1676,22 @@ const UpdateRecepSolDevolucionPage = Loadable(
     () =>
       import(
         '@/app/inventario/recepcion-solicitud-devolucion/pages/forms/UpdateRecepSolDevolucionPage'
+      ),
+  ),
+);
+const AprobarSolDevolucion = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-devolucion/pages/tables/AprobarSolDevolucion'
+      ),
+  ),
+);
+const UpdateAprobSolDevolucionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/recepcion-solicitud-devolucion/pages/forms/UpdateAprobSolDevolucionPage'
       ),
   ),
 );
@@ -3521,6 +3609,7 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario.solicitudMaterialCrear,
             element: <CreateSolicitudMaterialPage />,
           },
+
           /*  {
             path: ROUTER_PATHS.inventario.ubicacionesEditar,
             element: <UpdateUbicacionPage />,
@@ -3561,10 +3650,6 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario.transferenciaMaterialesCrear,
             element: <CreateTransferenciaMaterialPage />,
           },
-          {
-            path: ROUTER_PATHS.inventario.transferenciaMaterialesSolicitud,
-            element: <UpdateTransferenciaMaterialPage />,
-          },
           ///* Recepcion Material
           {
             path: ROUTER_PATHS.inventario.RecepcionMateriales,
@@ -3573,6 +3658,15 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.RecepcionMaterialesEditar,
             element: <UpdateRecepcionMaterialPage />,
+          },
+
+          {
+            path: ROUTER_PATHS.inventario.solicitudMaterialAprobar,
+            element: <AprobarSolMaterial />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudMaterialAprobarEditar,
+            element: <UpdateAprobSolMaterialPage />,
           },
 
           ///* Modelo Inventario
@@ -3589,6 +3683,34 @@ const AppRouter = [
             element: <UpdateModeloInventariosPages />,
           },
 
+          ///* Solicitud Compra
+          {
+            path: ROUTER_PATHS.inventario.solicitudCompra,
+            element: <SolicitudCompraMainPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudCompraCrear,
+            element: <CreateSolicitudCompraPages />,
+          },
+
+          {
+            path: ROUTER_PATHS.inventario.recepcionSolicitudCompra,
+            element: <RecepcionSolCompraMainPages />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.recepcionSolicitudCompraEditar,
+            element: <UpdateRecepSolCompraPage />,
+          },
+
+          {
+            path: ROUTER_PATHS.inventario.solicitudCompraAprobar,
+            element: <AprobarSolCompra />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudCompraAprobarEditar,
+            element: <UpdateAprobSolCompraPage />,
+          },
+
           ///* Solicitud Devolucion
           {
             path: ROUTER_PATHS.inventario.solicitudDevolucion,
@@ -3597,6 +3719,15 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.solicitudDevolucionCrear,
             element: <CreateSolicitudDevolucionPages />,
+          },
+
+          {
+            path: ROUTER_PATHS.inventario.solicitudDevolucionAprobar,
+            element: <AprobarSolDevolucion />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudDevolucionAprobarEditar,
+            element: <UpdateAprobSolDevolucionPage />,
           },
 
           ///* Solicitud Transferencia Material
@@ -3619,6 +3750,14 @@ const AppRouter = [
             path: ROUTER_PATHS.inventario
               .recepcionSolicitudTransferenciaMaterialesEditar,
             element: <CreateRecepcionSolicitudTransferenciaMaterialPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudTransferenciaAprobar,
+            element: <AprobarSolTransferencia />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.solicitudTransferenciaAprobarEditar,
+            element: <UpdateAprobSolTransferenciaPage />,
           },
 
           ///* Recepcion Solicitud Devolucion

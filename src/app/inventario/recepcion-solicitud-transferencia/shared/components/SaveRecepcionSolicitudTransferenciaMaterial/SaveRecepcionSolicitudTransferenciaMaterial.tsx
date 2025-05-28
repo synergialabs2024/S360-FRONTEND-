@@ -19,6 +19,7 @@ import {
   SolicitudTransferenciaMaterial,
   useColumnsProductosDisponibles,
   solicitudTransferenciaMaterialFormSchema,
+  Producto,
 } from '@/shared';
 import {
   useFetchProductos,
@@ -29,7 +30,7 @@ import { useProductosStore } from '@/store/app';
 import { useUiConfirmModalStore } from '@/store/ui';
 import ProductosDisponiblesModal from '@/shared/hooks/app/inventario/modals/ProductosDisponiblesModal';
 import { returnUrlRecepcionSolicitudTransferenciaMaterialesPage } from '../../../pages/tables/RecepcionSolicitudTransferenciaMaterialMainPages';
-import { returnUrlTransferenciaMaterialesPage } from '@/app/inventario/transferencia-material/pages/tables/TransferenciaMaterialPage';
+import { returnUrlAprobarSolTransferenciaPage } from '../../../pages/tables/AprobarSolTransferencia';
 
 export interface SaveRecepcionSolicitudTransferenciaMaterialProps {
   title: string;
@@ -147,7 +148,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
     }
 
     data.estado_solicitud = 'APROBADO';
-    data.productos = mappedProductos;
+    data.productos = mappedProductos as Producto[];
 
     setConfirmDialog({
       isOpen: true,
@@ -156,10 +157,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
       onConfirm: () => {
         try {
           navigate(
-            `${returnUrlTransferenciaMaterialesPage}/solicitud/${data.uuid}`,
-            {
-              state: { solicitud: 'solicitud_transferencia' },
-            },
+            `${returnUrlAprobarSolTransferenciaPage}/editar/${data.uuid}`,
           );
           setConfirmDialogIsOpen(false);
           if (data.id !== undefined) {

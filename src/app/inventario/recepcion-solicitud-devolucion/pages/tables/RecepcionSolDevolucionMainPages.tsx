@@ -22,7 +22,7 @@ const SolicitudDevolucionMaterialMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Aprobación de Solicitud Devolucion Material"
+      title="Recepcion de solicitud Devolucion Material"
       showCreateBtn={false}
       isMainTableStates
     >
