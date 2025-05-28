@@ -214,7 +214,7 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.configuracionPlantillasNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMIN_CALENDARIO_FACTURACION, {
               id: 'calendario-facturacion',
               title: 'Calendario de facturación',
               type: MenuItemType.ITEM,
@@ -498,30 +498,48 @@ export const useNestedMenu = () => {
               },
             ),
             ///* Inventario Recepciones
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'recepcion-solicitud-compras',
-              title: 'Recepción de solicitudes de compra',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.recepcionSolicitudCompraNav,
-            }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'aprobacion-solicitud-compra',
-              title: 'Aprobación de solicitudes de compra',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.solicitudCompraAprobarNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_COMPRA,
+              {
+                id: 'recepcion-solicitud-compras',
+                title: 'Recepción de solicitudes de compra',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.recepcionSolicitudCompraNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_APROBAR_SOLICITUD_COMPRA,
+              {
+                id: 'aprobacion-solicitud-compra',
+                title: 'Aprobación de solicitudes de compra',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.solicitudCompraAprobarNav,
+              },
+            ),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_APROBAR_SOLICITUD_MATERIAL,
+              {
+                id: 'aprobacion-solicitud-materiales',
+                title: 'Aprobación de solicitudes de materiales',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.solicitudMaterialAprobarNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
               id: 'recepcion-solicitud-materiales',
               title: 'Recepción de solicitudes de materiales',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.RecepcionMaterialesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'aprobacion-solicitud-devoluciones',
-              title: 'Aprobación de solicitudes de devoluciones',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.solicitudDevolucionAprobarNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_APROBAR_SOLICITUD_DEVOLUCION,
+              {
+                id: 'aprobacion-solicitud-devoluciones',
+                title: 'Aprobación de solicitudes de devoluciones',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.solicitudDevolucionAprobarNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.INVENTARIO_RECEPCION_MATERIAL, {
               id: 'recepcion-solicitud-devoluciones',
               title: 'Recepción de solicitudes de devoluciones',
@@ -529,12 +547,15 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.inventario
                 .recepcionSolicitudDevolucionMaterialesNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'aprobacion-solicitud-transferencia',
-              title: 'Aprobación de solicitudes de transferencia',
-              type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.inventario.solicitudTransferenciaAprobarNav,
-            }),
+            renderByModule(
+              SidenavModulesEnum.INVENTARIO_APROBAR_SOLICITUD_TRANSFERENCIA,
+              {
+                id: 'aprobacion-solicitud-transferencia',
+                title: 'Aprobación de solicitudes de transferencia',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.inventario.solicitudTransferenciaAprobarNav,
+              },
+            ),
             renderByModule(
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_TRANSFERENCIA_MATERIAL,
               {
