@@ -414,6 +414,14 @@ const UpdateParametroSistemaPage = Loadable(
       ),
   ),
 );
+const CreateParametroSistemaFacturacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/parametro-sistema-facturacion/pages/form/CreateParametroSistemaFacturacionPage'
+      ),
+  ),
+);
 
 ///* NOMINA
 //Cargo
@@ -2652,6 +2660,12 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.parametrosSistemasEditar,
             element: <UpdateParametroSistemaPage />,
+          },
+
+          {
+            path: ROUTER_PATHS.administracion
+              .parametrosSistemasFacturacionCrearNav,
+            element: <CreateParametroSistemaFacturacionPage />,
           },
 
           ///* Centro de Costo

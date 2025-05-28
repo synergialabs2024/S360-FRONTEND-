@@ -146,6 +146,16 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.administracion.parametrosSistemasNav,
             }),
+            renderByModule(
+              SidenavModulesEnum.ADMIN_PARAMETRO_SISTEMA_FACTURACION,
+              {
+                id: 'parametros-sistemas-facturacion',
+                title: 'Parámetro del sistema de facturación',
+                type: MenuItemType.ITEM,
+                url: ROUTER_PATHS.administracion
+                  .parametrosSistemasFacturacionCrearNav,
+              },
+            ),
             renderByModule(SidenavModulesEnum.ADMIN_CODIGO_OTP, {
               id: 'codigos-otp-admin',
               title: 'Administracion de Codigo OTP',

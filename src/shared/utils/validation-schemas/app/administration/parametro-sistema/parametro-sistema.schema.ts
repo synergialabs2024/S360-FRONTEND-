@@ -99,3 +99,35 @@ export const parametro_sistemaFormSchema = yup.object().shape({
           ),
     }),
 });
+
+export const parametro_sistemaFacturacionFormSchema = yup.object().shape({
+  SECUENCIAL_FACTURA: yup
+    .string()
+    .required('El campo secuencial factura es requerido.'),
+  FIRMA_CLAVE: yup.string().required('El campo firma clave es requerido.'),
+  RUC_EMPRESA: yup.string().required('El campo ruc empresa es requerido.'),
+  RAZON_SOCIAL: yup.string().required('El campo razon social es requerido.'),
+  NOMBRE_COMERCIAL: yup
+    .string()
+    .required('El campo nombre comercial es requerido.'),
+  DIRECCION_MATRIZ: yup
+    .string()
+    .required('El campo direccion matriz es requerido.'),
+  ESTABLECIMIENTO: yup
+    .string()
+    .required('El campo establecimiento es requerido.'),
+  PUNTO_EMISION: yup.string().required('El campo punto emision es requerido.'),
+  AMBIENTE_SRI: yup.string().required('El campo ambiente sri es requerido.'),
+  OBLIGADO_CONTABILIDAD: yup
+    .string()
+    .required('El campo obligado contabilidad es requerido.'),
+  CONTRIBUYENTE_ESPECIAL: yup
+    .string()
+    .required('El campo contribuyente especial es requerido.'),
+  DIRECCION_ESTABLECIMIENTO: yup
+    .string()
+    .required('El campo direccion establecimiento es requerido.'),
+  REGIMEN_MICROEMPRESAS: yup
+    .string()
+    .required('El campo regimen microempresas es requerido.'),
+});

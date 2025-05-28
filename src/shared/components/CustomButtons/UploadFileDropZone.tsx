@@ -13,7 +13,7 @@ export interface UploadFileDropZoneProps {
   buttonLabel: string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>;
   selectedFile: File | null;
-  type: 'pdf' | 'excel' | 'word';
+  type: 'pdf' | 'excel' | 'word' | 'any';
   isUpdating?: boolean;
   fileUrl?: string;
   setIsUpdatingCb?: Function;
@@ -32,6 +32,7 @@ const fileTypes = {
   excel:
     '.xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   word: '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  any: '*/*',
 };
 
 const UploadFileDropZone: React.FC<UploadFileDropZoneProps> = ({
@@ -115,7 +116,7 @@ const UploadFileDropZone: React.FC<UploadFileDropZoneProps> = ({
           </Box>
         </label>
       </Box>
-      {(selectedFile || fileName) && (
+      {selectedFile && (
         <Box sx={{ position: 'relative', marginTop: '10px' }}>
           {!disabledInputAndRemoveBtn && (
             <Tooltip title="Remover" arrow>

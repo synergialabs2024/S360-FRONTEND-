@@ -6,6 +6,7 @@ import { handleAxiosError } from '@/shared/axios/axios.utils';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
   ParametroSistema,
+  ParametroSistemaFacturacion,
   ParametrosSistemasPaginatedRes,
   UseFetchEnabledParams,
   UseMutationParams,
@@ -84,6 +85,47 @@ export const useCreateParametroSistema = <T>({
   });
 };
 
+export const useCreateParametroSistemaFacturacion = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateParametroSistemaFacturacionParams<T>) =>
+      createParametroSistemaFacturacion(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [ParametroSistemaTSQEnum.PARAMETROS_SISTEMAS],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast ||
+            'Parametro Sistema Facturacion creado correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
 export const useUpdateParametroSistema = <T>({
   navigate,
   returnUrl,
@@ -137,6 +179,12 @@ export interface UpdateParametroSistemaParams<T> {
   id: number;
   data: T;
 }
+//Facturacion
+export type CreateParametroSistemaFacturacionParams<T> = T;
+export type CreateParametroSistemaFacturacionParamsBase = Omit<
+  ParametroSistemaFacturacion,
+  'id'
+>;
 
 export const getParametrosSistemas = async (
   params?: GetParametrosSistemasParams,
@@ -173,6 +221,19 @@ export const createParametroSistema = async <T>(
   setIsGlobalLoading(true);
 
   return post<ParametroSistema>('/parametrosistema/', data, true);
+};
+
+export const createParametroSistemaFacturacion = async <T>(
+  data: CreateParametroSistemaFacturacionParams<T>,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<ParametroSistemaFacturacion>(
+    '/parametrosistema/facturacion/',
+    data,
+    true,
+  );
 };
 
 export const updateParametroSistema = async <T>({

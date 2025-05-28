@@ -118,6 +118,9 @@ export const ROUTER_PATHS = {
     parametrosSistemasEditar: 'parametros-sistemas/editar/:uuid',
     parametrosSistemasNav: '/parametrizacion/parametros-sistemas',
 
+    parametrosSistemasFacturacionCrearNav:
+      '/parametrizacion/parametros-sistemas-facturacion/crear',
+
     ///* codigos otp
     codigosOtp: 'codigos-otp',
     codigosOtpNav: '/parametrizacion/codigos-otp',
