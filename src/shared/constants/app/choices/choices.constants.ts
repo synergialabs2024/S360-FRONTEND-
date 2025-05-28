@@ -674,6 +674,7 @@ export enum BucketTypeEnumChoice {
 
   // Cuenta Contable
   FILES_CUENTA_CONTABLE = 'files/cuenta_contable',
+  FILES_PARAMETRO_SISTEMA_FACTURACION = 'files/parametro_sistema_facturacion',
 }
 
 export enum BucketKeyNameEnumChoice {
