@@ -57,7 +57,7 @@ const AgendasAprobadasVentaPage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      solicitud_servicio__identificacion: searchTerm,
       ...filterObject,
       filterByState: false,
 
