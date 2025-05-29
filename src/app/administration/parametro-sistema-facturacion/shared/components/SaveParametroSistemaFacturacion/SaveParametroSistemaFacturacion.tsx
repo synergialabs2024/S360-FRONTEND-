@@ -55,6 +55,7 @@ const SaveParametroSistemaFacturacion: React.FC<
   const createParametroSistemaFacturacionMutation =
     useCreateParametroSistemaFacturacion({
       navigate,
+      returnUrl: returnUrlParamestrosSistemasPage,
       enableErrorNavigate: false,
     });
 

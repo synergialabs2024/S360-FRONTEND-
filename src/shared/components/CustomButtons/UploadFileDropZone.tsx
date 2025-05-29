@@ -13,7 +13,7 @@ export interface UploadFileDropZoneProps {
   buttonLabel: string;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>;
   selectedFile: File | null;
-  type: 'pdf' | 'excel' | 'word' | 'any';
+  type: 'pdf' | 'excel' | 'word' | 'p12' | 'any';
   isUpdating?: boolean;
   fileUrl?: string;
   setIsUpdatingCb?: Function;
@@ -33,6 +33,7 @@ const fileTypes = {
     '.xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   word: '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   any: '*/*',
+  p12: '.p12,application/x-pkcs12',
 };
 
 const UploadFileDropZone: React.FC<UploadFileDropZoneProps> = ({
