@@ -130,7 +130,6 @@ const SaveEncuestaPlantillas: React.FC<SaveEncuestaPlantillasProps> = ({
         defaultValue={form.getValues().description}
         error={errors.description}
         helperText={errors.description?.message}
-        disabled={!!encuestaPlantillas?.id && !!encuestaPlantillas?.description}
       />
 
       <Grid item container {...gridSizeMdLg12} spacing={2}>

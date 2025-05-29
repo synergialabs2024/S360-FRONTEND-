@@ -154,10 +154,6 @@ const Modern = () => {
   const customLoader = isLoading || isRefetching;
   useLoaders(customLoader);
 
-  useEffect(() => {
-    console.log('DashboardPagingRes', DashboardPagingRes);
-  });
-
   return (
     <PageContainer title="S360" description="Sistema empresarial S360">
       <Box>

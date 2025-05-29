@@ -203,11 +203,15 @@ const { VITE_ERPAPI_URL } = getEnvs();
 
 export const ReportUbicacionProductoExcel = async (params: any) => {
   try {
+    const storedToken = localStorage.getItem('token');
     const response = await axios.get(
       `${VITE_ERPAPI_URL}/ubicacion-producto/report/excel/`,
       {
         params,
         responseType: 'blob',
+        headers: {
+          Authorization: 'Token ' + storedToken,
+        },
       },
     );
 
