@@ -10,8 +10,10 @@ import {
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
-import { getUrlParams } from '@/shared/utils';
+import { getEnvs, getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
+import axios from 'axios';
+import { useAuthStore } from '@/store/auth';
 
 const { get, post, patch } = erpAPI();
 
@@ -163,4 +165,50 @@ export const updateTransaccion = async <T>({
   setIsGlobalLoading(true);
 
   return patch<Transaccion>(`/transaccion/${id}/`, data, true);
+};
+
+// export const getExcelTransaccions = async (params?: GetTransaccionsParams) => {
+//   const stateParams = { ...params };
+
+//   // filter by state
+//   delete stateParams.filterByState;
+
+//   const queryParams = getUrlParams(stateParams);
+//   return get<TransaccionesPaginatedRes>(`/transaccion/report/excel/?${queryParams}`, true);
+// };
+
+///*  Reporte
+const { VITE_ERPAPI_URL } = getEnvs();
+
+export const getExcelTransaccions = async (params?: GetTransaccionsParams) => {
+  try {
+    const storedToken = useAuthStore.getState().token;
+
+    const stateParams = { ...params };
+    // filter by state
+    delete stateParams.filterByState;
+
+    const response = await axios.get(
+      `${VITE_ERPAPI_URL}/transaccion/report/excel/`,
+      {
+        params,
+        responseType: 'blob',
+        headers: {
+          Authorization: 'Token ' + storedToken,
+        },
+      },
+    );
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Transacciones.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error descargando el Excel:', error);
+    handleAxiosError(error);
+  }
 };
