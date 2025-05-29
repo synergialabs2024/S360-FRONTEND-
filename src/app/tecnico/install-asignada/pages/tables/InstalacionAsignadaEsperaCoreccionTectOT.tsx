@@ -19,6 +19,7 @@ import {
   GridTableTabsContainerOnly,
 } from '@/shared/components';
 import { useCheckPermission } from '@/shared/hooks/auth';
+import { hasPermission } from '@/shared/utils/auth';
 
 export type InstalacionAsignadaEsperaCoreccionTectOTProps = {};
 
@@ -111,7 +112,7 @@ const InstalacionAsignadaEsperaCoreccionTectOT: React.FC<
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={true}
         // crud
-        canEdit={true}
+        canEdit={hasPermission(PermissionsEnum.tecnico_change_ordentrabajo)}
         onEdit={onEdit}
         arrowIcon
         canDelete={false}

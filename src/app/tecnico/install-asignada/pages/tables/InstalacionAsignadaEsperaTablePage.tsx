@@ -31,6 +31,7 @@ import { useAuthStore } from '@/store/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { InstallAsignPendienteTableBtns } from '../../shared/components/tables';
 import { returnUrlInstallAsignadasOT } from './InstalacionesAsignadasOTMainPage';
+import { hasPermission } from '@/shared/utils/auth';
 
 export type InstalacionAsignadaEsperaTablePageProps = {};
 
@@ -178,7 +179,7 @@ const InstalacionAsignadaEsperaTablePage: React.FC<
         actionsColumnSize={TABLE_CONSTANTS.ACTIONCOLUMN_WIDTH}
         enableActionsColumn={true}
         // crud
-        canEdit={true}
+        canEdit={hasPermission(PermissionsEnum.tecnico_change_ordentrabajo)}
         editIconToolTipTitle="Gestionar"
         onEdit={onEdit}
         onConditionEdit={ot => {

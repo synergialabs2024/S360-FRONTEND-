@@ -16,6 +16,7 @@ import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useFetchTickets } from '@/actions/app/tickets';
 import { useNavigate } from 'react-router';
+import { hasPermission } from '@/shared/utils/auth';
 
 export type TicketsTecnicoByStatePageProps = {
   state: EstadoTicketTecnicoEnumChoice;
@@ -26,7 +27,7 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  useCheckPermission(PermissionsEnum.comercial_view_preventa);
+  useCheckPermission(PermissionsEnum.tecnico_view_tickettecnico);
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =
     useTableServerSideFiltering();
@@ -134,7 +135,7 @@ const TicketsTecnicoByStatePage: React.FC<TicketsTecnicoByStatePageProps> = ({
         enableActionsColumn={true}
         // crud
         editIconToolTipTitle="Gestionar"
-        canEdit={true}
+        canEdit={hasPermission(PermissionsEnum.tecnico_change_tickettecnico)}
         // canDelete={false}
         onConditionEdit={ticketVisita => {
           return (

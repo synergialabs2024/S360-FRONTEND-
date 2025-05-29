@@ -29,6 +29,7 @@ import { useCheckPermission } from '@/shared/hooks/auth';
 import { useAuthStore } from '@/store/auth';
 import { useUiConfirmModalStore } from '@/store/ui';
 import dayjs from 'dayjs';
+import { hasPermission } from '@/shared/utils/auth';
 
 export type InstalacionAsignadaOTByStateProps = {
   state: EstadoOrdenTrabajoEnumChoice;
@@ -112,7 +113,10 @@ const InstalacionAsignadaOTByState: React.FC<
 
   ///* handlers ---------------------
   const calcEnableActionsColumn = () => {
-    return state === EstadoOrdenTrabajoEnumChoice.PENDIENTE;
+    return (
+      state === EstadoOrdenTrabajoEnumChoice.PENDIENTE &&
+      hasPermission(PermissionsEnum.tecnico_change_ordentrabajo)
+    );
   };
   const onEdit = (row: OrdenTrabajo) => {
     setSelectedOT(row);

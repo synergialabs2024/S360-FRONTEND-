@@ -9,7 +9,7 @@ import {
 import { Tab } from '@mui/material';
 import TicketsTecnicoByStatePage from './TicketsTecnicoByStatePage';
 
-export const returnUrlTicketsCrear = ROUTER_PATHS.tickets.ticketsNav;
+export const returnUrlTicketsCrear = ROUTER_PATHS.tecnico.ticketsNav;
 
 export type TicketsTecnicoPageProps = {};
 
