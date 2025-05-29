@@ -87,6 +87,7 @@ export enum PermissionsEnum {
   comercial_view_solicitudservicio = 'comercial.view_solicitudservicio',
   comercial_view_solicitudservicioconvenio = 'comercial.view_solicitudservicioconvenio',
   comercial_view_trazabilidadventa = 'comercial.view_trazabilidadventa',
+  comercial_view_ordentrabajo = 'comercial.view_ordentrabajo',
   contabilidad_view_abitmediapagoslog = 'contabilidad.view_abitmediapagoslog',
   contabilidad_view_asientocontable = 'contabilidad.view_asientocontable',
   contabilidad_view_asientocontablelibro = 'contabilidad.view_asientocontablelibro',

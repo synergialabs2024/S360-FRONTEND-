@@ -21,7 +21,7 @@ export type InstalacionesComercialOTMainPageProps = {};
 const InstalacionesComercialOTMainPage: React.FC<
   InstalacionesComercialOTMainPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
+  useCheckPermission(PermissionsEnum.comercial_view_ordentrabajo);
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
@@ -36,7 +36,11 @@ const InstalacionesComercialOTMainPage: React.FC<
         isMainTableStates
       >
         <Tab label={'ASIGNADAS'} value={1} {...a11yProps(1)} />
-        <Tab label={'ASIGNADAS RECOORDINADAS'} value={4} {...a11yProps(4)} />
+
+        <Tab label={'ESPERA REVISIÓN'} value={5} {...a11yProps(5)} />
+
+        <Tab label={'PENDIENTES CORRECCIÓN'} value={6} {...a11yProps(6)} />
+
         <Tab label={'FINALIZADAS'} value={2} {...a11yProps(2)} />
 
         <Tab label={'PRE RECHAZADAS'} value={3} {...a11yProps(3)} />
@@ -47,10 +51,22 @@ const InstalacionesComercialOTMainPage: React.FC<
           state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
         />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={4} ptGrid="0">
+      {/* <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <InstalacionComercialOTByState
           state={EstadoOrdenTrabajoEnumChoice.PENDIENTE}
           isRecoordinada
+        />
+      </CustomTabPanel> */}
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <InstalacionComercialOTByState
+          state={EstadoOrdenTrabajoEnumChoice.ESPERA_AUDITORIA}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={6} ptGrid="0">
+        <InstalacionComercialOTByState
+          state={EstadoOrdenTrabajoEnumChoice.ESPERA_CORRECCION}
         />
       </CustomTabPanel>
 

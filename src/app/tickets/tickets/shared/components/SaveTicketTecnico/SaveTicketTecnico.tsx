@@ -229,7 +229,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       }
 
       const contrato = cedulaData.data.find(
-        item => item.contrato_data.numero_contrato === numeroContrato,
+        item => item.contrato_data?.numero_contrato === numeroContrato,
       );
 
       console.log('contrato', contrato);
@@ -237,19 +237,19 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       if (contrato) {
         form.setValue(
           'razon_social',
-          contrato.solicitud_servicio_data.razon_social,
+          contrato.solicitud_servicio_data?.razon_social,
         );
 
         form.setValue(
           'coordenadas',
-          contrato.solicitud_servicio_data.coordenadas,
+          contrato.solicitud_servicio_data?.coordenadas,
         );
 
-        form.setValue('telefono', contrato.solicitud_servicio_data.celular);
+        form.setValue('telefono', contrato.solicitud_servicio_data?.celular);
 
-        form.setValue('zona', contrato.zona_data.name);
+        form.setValue('zona', contrato.zona_data?.name);
         form.setValue('celular_adicional', contrato.celular_adicional);
-        form.setValue('nap', contrato.nap_data.name);
+        form.setValue('nap', contrato.nap_data?.name);
       } else {
         console.log('No se encontró el contrato con el número especificado.');
       }
