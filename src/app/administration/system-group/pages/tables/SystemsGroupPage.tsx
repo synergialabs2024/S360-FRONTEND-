@@ -88,6 +88,14 @@ const SystemsGroupPage: React.FC<SystemsGroupPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
+        accessorKey: 'codigo',
+        header: 'CODIGO',
+        size: 222,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'codigo'),
+      },
+      {
         accessorKey: 'description',
         header: 'DESCRIPCIÓN',
         size: 180,

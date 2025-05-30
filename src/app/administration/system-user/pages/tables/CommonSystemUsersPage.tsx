@@ -70,7 +70,7 @@ const CommonSystemUsersPage: React.FC<CommonSystemUsersPageProps> = ({
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      user__razon_social: searchTerm,
+      razon_social: searchTerm,
       ...filterObject,
       filterByState: false,
       ...customParams,
