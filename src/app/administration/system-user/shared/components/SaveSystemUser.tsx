@@ -440,7 +440,7 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
           }}
         />
         <CustomTextField
-          label="Razón social"
+          label="Nombre"
           name="razon_social"
           control={form.control}
           defaultValue={form.getValues().razon_social}

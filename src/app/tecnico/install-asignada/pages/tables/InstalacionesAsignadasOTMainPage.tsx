@@ -28,7 +28,7 @@ const InstalacionesAsignadasOTMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Instalaciones"
+      title="Órdenes de trabajo asignadas"
       showCreateBtn={false}
       isMainTableStates
     >

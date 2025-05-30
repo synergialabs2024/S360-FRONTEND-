@@ -24,7 +24,7 @@ const AgendamientoVentasMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Agendamientos"
+      title="Agendamiento"
       showCreateBtn={false}
       isMainTableStates
     >

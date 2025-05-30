@@ -65,8 +65,11 @@ export const useColumnsTransaccionesCliente = () => {
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }) => {
+          //const saldo = row.original?.saldo_data;
+          // return saldo ? formatCurrency(saldo?.monto) : '0.00';
           const saldo = row.original?.saldo_data;
-          return saldo ? formatCurrency(saldo?.monto) : '0.00';
+          const monto = Array.isArray(saldo) ? 0 : saldo?.monto;
+          return formatCurrency(monto ?? 0);
         },
       },
 
