@@ -32,7 +32,7 @@ const InstalacionComercialOTByState: React.FC<
 > = ({ state, isRecoordinada = false }) => {
   const navigate = useNavigate();
 
-  useCheckPermission(PermissionsEnum.comercial_view_ordentrabajo);
+  useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
 
   // server side filters - colums table
   const { filterObject, columnFilters, setColumnFilters } =

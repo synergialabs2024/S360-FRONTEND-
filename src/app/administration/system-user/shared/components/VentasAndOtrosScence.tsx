@@ -164,9 +164,22 @@ const VentasAndOtrosScence: React.FC<VentasAndOtrosScenceProps> = ({
   // alerts no data | empty arr
   useEffect(() => {
     if (isLoadingAreas) return;
-    !areaPagingRes?.data?.items?.length &&
-      ToastWrapper.warning('No se encontraron áreas disponibles');
-  }, [areaPagingRes?.data?.items?.length, isLoadingAreas]);
+    if (
+      form.getValues().role == UserRolesEnumChoice.ADMINISTRADOR ||
+      form.getValues().role == UserRolesEnumChoice.COORDINADOR ||
+      form.getValues().role == UserRolesEnumChoice.SUPERVISOR ||
+      form.getValues().role == UserRolesEnumChoice.AGENTE
+    ) {
+      !areaPagingRes?.data?.items?.length &&
+        ToastWrapper.warning('No se encontraron áreas disponibles');
+    } else {
+      return;
+    }
+  }, [
+    areaPagingRes?.data?.items?.length,
+    isLoadingAreas,
+    form.getValues().role,
+  ]);
 
   useEffect(() => {
     if (!systemUserItem) return;

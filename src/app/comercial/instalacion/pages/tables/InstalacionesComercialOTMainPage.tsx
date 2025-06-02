@@ -21,7 +21,7 @@ export type InstalacionesComercialOTMainPageProps = {};
 const InstalacionesComercialOTMainPage: React.FC<
   InstalacionesComercialOTMainPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.comercial_view_ordentrabajo);
+  useCheckPermission(PermissionsEnum.tecnico_view_ordentrabajo);
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
