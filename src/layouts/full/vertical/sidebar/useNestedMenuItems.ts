@@ -508,6 +508,7 @@ export const useNestedMenu = () => {
               },
             ),
             ///* Inventario Recepciones
+            /*
             renderByModule(
               SidenavModulesEnum.INVENTARIO_RECEPCION_SOLICITUD_COMPRA,
               {
@@ -526,6 +527,7 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.inventario.solicitudCompraAprobarNav,
               },
             ),
+            */
             renderByModule(
               SidenavModulesEnum.INVENTARIO_APROBAR_SOLICITUD_MATERIAL,
               {
@@ -648,12 +650,14 @@ export const useNestedMenu = () => {
             }),
             */
             ///* Inventario Solicitudes
+            /*
             renderByModule(SidenavModulesEnum.TECNICO_SOLICITUD_MATERIAL, {
               id: 'solicitud-compra',
               title: 'Solicitud de compra',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.solicitudCompraNav,
             }),
+            */
             renderByModule(SidenavModulesEnum.TECNICO_SOLICITUD_MATERIAL, {
               id: 'solicitud-material',
               title: 'Solicitud de Material',
