@@ -1,9 +1,13 @@
-import { Grid, IconButton } from '@mui/material';
-import { MdArrowRightAlt } from 'react-icons/md';
+import { Grid } from '@mui/material';
 import { useState } from 'react';
 
-import { ScrollableDialogProps, SimpleTable } from '@/shared/components';
+import {
+  ScrollableDialogProps,
+  SimpleTable,
+  SingleIconButton,
+} from '@/shared/components';
 import { Rubro, Transaccion, useColumnsTransaccionesCliente } from '@/shared';
+import { IconEye } from '@tabler/icons-react';
 
 export type ClienteFibraTransaccionesActionBtnColumnsProps = {
   transaccion: Transaccion;
@@ -32,15 +36,14 @@ const ClienteFibraTransaccionesActionBtnColumns: React.FC<
 
   return (
     <>
-      <IconButton
-        component="span"
-        color="primary"
-        size="small"
-        onClick={() => setOpen(!open)}
-        style={{ cursor: 'pointer' }}
-      >
-        <MdArrowRightAlt />
-      </IconButton>
+      <SingleIconButton
+        label="Ver"
+        startIcon={<IconEye />}
+        color="inherit"
+        onClick={() => {
+          setOpen(!open);
+        }}
+      />
       {open && (
         <ScrollableDialogProps
           open={open}

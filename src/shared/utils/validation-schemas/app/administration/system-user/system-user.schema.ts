@@ -82,6 +82,7 @@ export const systemUserFormSchema = yup.object({
       is: true,
       then: schema => schema.required('El campo cargo es requerido'),
     }),
+  /*
   salary: yup
     .number()
     .optional()
@@ -91,6 +92,7 @@ export const systemUserFormSchema = yup.object({
       is: true,
       then: schema => schema.required('El campo salario es requerido'),
     }),
+    */
   phone_1: yup
     .string()
     .optional()
@@ -108,7 +110,7 @@ export const systemUserFormSchema = yup.object({
         return !otherPhones.includes(value);
       },
     ),
-
+  /*
   phone_2: yup
     .string()
     .optional()
@@ -126,7 +128,6 @@ export const systemUserFormSchema = yup.object({
         return !otherPhones.includes(value);
       },
     ),
-
   phone_3: yup
     .string()
     .optional()
@@ -140,6 +141,7 @@ export const systemUserFormSchema = yup.object({
         return !otherPhones.includes(value);
       },
     ),
+    */
   address: yup
     .string()
     .optional()
@@ -148,6 +150,7 @@ export const systemUserFormSchema = yup.object({
       is: true,
       then: schema => schema.required('El campo dirección es requerido'),
     }),
+  /*
   pais: yup
     .number()
     .optional()
@@ -185,4 +188,5 @@ export const systemUserFormSchema = yup.object({
     .optional()
     .nullable()
     .typeError('El campo sector es requerido'),
+    */
 });

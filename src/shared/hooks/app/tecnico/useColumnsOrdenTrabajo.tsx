@@ -14,7 +14,7 @@ import { ImgModalComponent } from '@/shared/components';
 type MRTOTrabajoType = { row: MRT_Row<OrdenTrabajo> };
 
 export const useColumnsOrdenTrabajo = () => {
-  const otColumnsBase01 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
+  const otColumnsBase01_1 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
       {
         accessorKey: 'identificacion',
@@ -61,6 +61,11 @@ export const useColumnsOrdenTrabajo = () => {
         Cell: ({ row }) =>
           emptyCellNested(row, ['solicitud_servicio_data', 'direccion']),
       },
+    ],
+    [],
+  );
+  const otColumnsBase01_NombreNormal = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
+    () => [
       {
         accessorKey: 'solicitud_servicio__celular',
         header: 'NUMERO CONTACTO',
@@ -70,6 +75,31 @@ export const useColumnsOrdenTrabajo = () => {
         Cell: ({ row }) =>
           emptyCellNested(row, ['solicitud_servicio_data', 'celular']),
       },
+    ],
+    [],
+  );
+  const otColumnsBase01_NombreValidation = useMemo<
+    MRT_ColumnDef<OrdenTrabajo>[]
+  >(
+    () => [
+      {
+        accessorKey: 'solicitud_servicio__celular',
+        header: 'NUMERO CONTACTO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => {
+          const canBeManaged = row.original.can_be_managed;
+          const celular = row.original.solicitud_servicio_data?.celular;
+
+          return canBeManaged ? celular || '—' : 'N/A';
+        },
+      },
+    ],
+    [],
+  );
+  const otColumnsBase01_2 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
+    () => [
       {
         accessorKey: 'solicitud_servicio__coordenadas',
         header: 'COORDENADAS',
@@ -96,6 +126,16 @@ export const useColumnsOrdenTrabajo = () => {
     ],
     [],
   );
+
+  const otColumnsBase01 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
+    () => [
+      ...otColumnsBase01_1,
+      ...otColumnsBase01_NombreNormal,
+      ...otColumnsBase01_2,
+    ],
+    [otColumnsBase01_1, otColumnsBase01_NombreNormal, otColumnsBase01_2],
+  );
+
   const otColumnsBase02 = useMemo<MRT_ColumnDef<OrdenTrabajo>[]>(
     () => [
       {
@@ -391,7 +431,9 @@ export const useColumnsOrdenTrabajo = () => {
     MRT_ColumnDef<OrdenTrabajo>[]
   >(
     () => [
-      ...otColumnsBase01,
+      ...otColumnsBase01_1,
+      ...otColumnsBase01_NombreValidation,
+      ...otColumnsBase01_2,
       ...otColumnsBase02,
       ...otColumnsBase03,
       ...otColumnsBase04,
