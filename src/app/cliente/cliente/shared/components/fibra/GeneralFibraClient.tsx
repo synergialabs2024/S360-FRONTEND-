@@ -22,7 +22,6 @@ import FibraClientSummaryFormPart from './summary/FibraClientSummaryFormPart';
 import ClientesPagosManualesByStatePage from './pagos-manuales/ClientesPagosManualesByStatePage';
 import ClientesReversoByStatePage from './reverso/ClientesReversoByStatePage';
 import GenericHistoricoTicketsTab from './historial-tickets/tabs/GenericHistoricoTicketsTab';
-import { ClienteFibrLogsTab } from './logs';
 
 export type GeneralFibraClientProps = {
   serviceLine?: LineaServicio;
@@ -93,7 +92,7 @@ const GeneralFibraClient: React.FC<GeneralFibraClientProps> = ({
 
       {/* ========================= Logs ========================= */}
       <CustomTabPanel index={6} value={tabValue}>
-        <ClienteFibrLogsTab serviceLine={serviceLine} />
+        logs
       </CustomTabPanel>
 
       {/* ========================= Pagos Manuales ========================= */}
