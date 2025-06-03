@@ -534,6 +534,11 @@ export const ROUTER_PATHS = {
     aprobacionTicketsVisita: 'tickets-visita/aprobacion',
     aprobacionTicketsVisitaRecoordinacion: 'tickets-visita/aprobacion/:uuid',
     aprobacionicketsVisitaNav: '/operaciones/tickets-visita/aprobacion',
+
+    cambioOnuActivacion: 'cambio-onu-activacion',
+    cambioOnuActivacionCrear: 'cambio-onu-activacion/crear',
+    cambioOnuActivacionEditar: 'cambio-onu-activacion/editar/:uuid',
+    cambioOnuActivacionNav: '/operaciones/cambio-onu-activacion',
   },
 
   /////* Infraestructura ----------------
@@ -1035,5 +1040,16 @@ export const ROUTER_PATHS = {
     encuestaPlantillasCrear: 'encuesta-plantillas/crear',
     encuestaPlantillasEditar: 'encuesta-plantillas/editar/:uuid',
     encuestaPlantillasNav: '/customer-experience/encuesta-plantillas',
+  },
+
+  /////* SAC ----------------
+  sac: {
+    root: 'sac',
+
+    ///* Cambio Onu
+    cambioOnu: 'cambio-onu',
+    cambioOnuCrear: 'cambio-onu/crear',
+    cambioOnuEditar: 'cambio-onu/editar/:uuid',
+    cambioOnuNav: '/sac/cambio-onu',
   },
 };

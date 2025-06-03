@@ -1319,6 +1319,11 @@ export enum BucketKeyTicketEnumChoice {
   FOTO_ENTREGA_UPS = 'foto_entrega_ups',
 }
 
+export enum cambioOnuSacEnumChoice {
+  PENDIENTE = 'PENDIENTE',
+  REALIZADO = 'REALIZADO',
+}
+
 // Cartera
 export enum estadoDeudaTypeEnumChoice {
   ACTIVO = 'ACTIVO',

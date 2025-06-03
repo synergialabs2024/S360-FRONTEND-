@@ -23,7 +23,6 @@ import {
   gridSizeMdLg1,
   gridSizeMdLg4,
   gridSizeMdLg6,
-  gridSizeMdLg7,
   gridSizeMdLg12,
   ShowTraceModal,
   PermissionsEnum,
@@ -38,6 +37,7 @@ import { useRubroStore } from '@/store/app/rubros';
 import SoporteTecnicoTitle from './SoporteTecnicoTitle';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlSoporteTecnico } from '../../../pages/tables/SoporteTecnicoPages';
+import HistorialTickets from '@/shared/hooks/app/sac/historial-tickets/modal/HistorialTickets';
 
 export interface SaveSoporteTecnicoProps {
   soporte_tecnico?: LineaServicio & {
@@ -124,7 +124,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         text="Informacion principal"
         pt={CustomTypoLabelEnum.ptMiddlePosition}
       />
-      <Grid container item {...gridSizeMdLg7} spacing={2}>
+      <Grid container item {...gridSizeMdLg6} spacing={2}>
         {[
           {
             label: 'PLAN:',
@@ -237,6 +237,19 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
           typeBtn="icon"
           ipItem={soporte_tecnico?.orden_trabajo_data?.ipv4 || ''}
           modalTitle="PING"
+        />
+      </Grid>
+      <Grid
+        mt={9}
+        container
+        justifyContent="center"
+        alignItems="center"
+        {...gridSizeMdLg1}
+      >
+        <HistorialTickets
+          typeBtn="icon"
+          cedula={soporte_tecnico?.solicitud_servicio_data?.identificacion!}
+          modalTitle="HISTORICO TICKETS"
         />
       </Grid>
       <CustomTextFieldNoForm

@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 
 import {
+  CustomTextAreaNoForm,
   CustomTextFieldNoForm,
   CustomTypoLabel,
   CustomTypoLabelEnum,
@@ -207,8 +208,8 @@ const HistoricoTicketModal: React.FC<HistoricoTicketModalProps> = ({
                 disabled
               />
 
-              <CustomTextFieldNoForm
-                label="OBSERVACION EXTRA"
+              <CustomTextAreaNoForm
+                label="DETALLE DE LA SOLUCION"
                 value={data?.observaciones_extra}
                 required={false}
                 disabled

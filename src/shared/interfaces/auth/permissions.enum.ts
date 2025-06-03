@@ -167,6 +167,7 @@ export enum PermissionsEnum {
   users_view_customgroup = 'users.view_customgroup',
   users_view_user = 'users.view_usuario',
   webhooks_view_webhooklog = 'webhooks.view_webhooklog',
+  sac_view_cambioonu = 'sac.view_cambioonu',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -492,6 +493,7 @@ export enum PermissionsEnum {
   users_change_customgroup = 'users.change_customgroup',
   users_change_user = 'users.change_usuario',
   webhooks_change_webhooklog = 'webhooks.change_webhooklog',
+  sac_change_cambioonu = 'sac.change_cambioonu',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',

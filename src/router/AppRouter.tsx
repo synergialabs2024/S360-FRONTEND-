@@ -9,6 +9,7 @@ import AuthRoutes from './AuthRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { ROUTER_PATHS } from './constants';
 import CustomerExperienceModule from '@/app/customer-experience/CustomerExperienceModule';
+import SacModule from '@/app/sac/SacModule';
 
 const AuthLayout = Loadable(
   lazy(() => import('@/auth/pages/LoginPage/LoginPage')),
@@ -2427,6 +2428,20 @@ const UpdateEncuestaPlantillasFormPage = Loadable(
   ),
 );
 
+// Sac
+const CambioOnuSacPage = Loadable(
+  lazy(() => import('@/app/sac/cambio-onu/pages/tables/CambioOnuSacPage')),
+);
+
+const CambioOnuActivacionPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/operaciones/cambio-onu-activacion/pages/tables/CambioOnuActivacionPage'
+      ),
+  ),
+);
+
 const AppRouter = [
   ////* Auth
   {
@@ -3511,6 +3526,10 @@ const AppRouter = [
               .aprobacionTicketsVisitaRecoordinacion,
             element: <AprobacionTicketVisita />,
           },
+          {
+            path: ROUTER_PATHS.operaciones.cambioOnuActivacion,
+            element: <CambioOnuActivacionPage />,
+          },
 
           //
         ],
@@ -4281,6 +4300,19 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.customerExperience.encuestaPlantillasEditar,
             element: <UpdateEncuestaPlantillasFormPage />,
+          },
+        ],
+      },
+
+      //////////* Sac ------------
+      {
+        path: ROUTER_PATHS.sac.root,
+        element: <SacModule />,
+        children: [
+          ///* Cambio Onu
+          {
+            path: ROUTER_PATHS.sac.cambioOnu,
+            element: <CambioOnuSacPage />,
           },
         ],
       },

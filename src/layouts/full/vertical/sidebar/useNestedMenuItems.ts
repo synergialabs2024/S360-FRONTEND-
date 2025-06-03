@@ -782,6 +782,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
             }),
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'cambio-onu-activacion',
+              title: 'Cambio onu Activacion',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.operaciones.cambioOnuActivacionNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Logistica ----------------
@@ -1659,6 +1665,21 @@ export const useNestedMenu = () => {
                 url: ROUTER_PATHS.buzonTareas.clientesSuspendidosAsignadasNav,
               },
             ),
+          ].filter(item => !!item) as NestedMenuItem[],
+        },
+        /////* Sac ----------------
+        {
+          id: 'sac',
+          title: 'Sac',
+          type: MenuItemType.COLLAPSE,
+          icon: IconRouter,
+          children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'cambio-onu',
+              title: 'Cambio Onu',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.sac.cambioOnuNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
       ],

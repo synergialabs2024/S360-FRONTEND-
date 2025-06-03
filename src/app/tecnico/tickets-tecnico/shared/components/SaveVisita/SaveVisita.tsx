@@ -49,7 +49,9 @@ export interface SaveVisitaProps {
   ticket?: Ticket;
 }
 
-export type InstallAsignTicketTecnicoSaveFormData = CreateTicketParamsBase & {};
+export type InstallAsignTicketTecnicoSaveFormData = CreateTicketParamsBase & {
+  is_cambio_onu?: boolean;
+};
 
 const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
   ///* local states ---------------------
@@ -67,6 +69,14 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
       navigate(returnUrlTicketVisitaTecnico);
     },
   });
+
+  const updCambioOnu = useGenericPATCH<any, Ticket>(
+    `/ticket-tecnico/cambio-onu/${ticket?.id}/`,
+    TicketTSQEnum.TICKETS,
+    {
+      customMessageToast: 'Cambio Onu realizado correctamente.',
+    },
+  );
 
   ///* global states ---------------------
   const clearAll = useInstalacionesStore(state => state.clearAll);
@@ -383,6 +393,10 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
         url_foto_entrega_ups: entregaUpsPhoto?.streamUlr,
       }),
     });
+
+    if (data.is_cambio_onu) {
+      updCambioOnu.mutate({});
+    }
   };
 
   return (

@@ -3,11 +3,13 @@ import {
   CustomTextArea,
   CustomTypoLabel,
   CustomTypoLabelEnum,
+  SampleCheckbox,
   SelectArrayString,
 } from '@/shared/components';
 import { Ticket } from '@/shared/interfaces/app/ticket/ticket.interface';
 import { useFetchSolucionesTickets } from '@/actions/app/tickets';
 import { InstallAsignTicketTecnicoSaveFormData } from '../SaveVisita/SaveVisita';
+import { gridSizeMdLg6 } from '@/shared';
 export type InstallAsigTicketSolucionFormTabProps = {
   form: UseFormReturn<InstallAsignTicketTecnicoSaveFormData>;
   ticket: Ticket;
@@ -64,6 +66,14 @@ const InstallAsigTicketSolucionFormTab: React.FC<
           defaultValue={form.getValues().observacion_extra_solucion_visita}
           error={errors.observacion_extra_solucion_visita}
           helperText={errors.observacion_extra_solucion_visita?.message}
+        />
+
+        <SampleCheckbox
+          label="Cambio Onu"
+          name="is_cambio_onu"
+          control={form.control}
+          defaultValue={form.getValues().is_cambio_onu ?? false}
+          size={gridSizeMdLg6}
         />
       </>
     </>
