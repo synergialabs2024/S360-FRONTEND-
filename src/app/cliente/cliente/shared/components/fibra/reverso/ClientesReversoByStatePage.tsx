@@ -152,8 +152,14 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
       const tokenData = await fetchAuthToken();
       const allTransacciones = [];
 
-      // Recorrer todos los items y buscar sus transacciones
-      for (const item of TransaccionsPagingRes.data.items) {
+      // Eliminar duplicados basados en numero_transaccion
+      const uniqueItems = TransaccionsPagingRes.data.items.filter(
+        (item: any, index: number, self: any[]) =>
+          index ===
+          self.findIndex(t => t.numero_transaccion === item.numero_transaccion),
+      );
+
+      for (const item of uniqueItems) {
         if (item.numero_transaccion) {
           const transacciones = await fetchTransacciones(
             tokenData.access_token,
@@ -168,7 +174,6 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
 
       setTransaccionesData(allTransacciones);
 
-      // Si hay transacciones, establecer la primera como filtrada
       if (allTransacciones.length > 0) {
         const numeroAutorizacion = allTransacciones[0].numeroAutorizacion;
         const transaccionEncontrada = TransaccionsPagingRes.data.items.find(
