@@ -7,4 +7,5 @@ export * from './promesa-pago';
 export * from './mantenedor-activaciones';
 export * from './mantenedor-suspension';
 export * from './activacion-manual';
+export * from './suspension-internet';
 export * from './cambio-domicilio';

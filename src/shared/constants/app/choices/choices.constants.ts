@@ -1761,7 +1761,7 @@ export enum TrazabilidadModeloNameTMEnumChoice {
   ORDEN_TRABAJO = 'ORDEN TRABAJO',
   TICKET_TECNICO = 'TICKET TECNICO',
   SOLICITUD_SERVICIO_CONVENIO = 'SOLICITUD_SERVICIO_CONVENIO',
-  TELEVENTA = 'TELEVENTA',
+  TELEVENTA = 'LEED TELEVENTA',
   CLIENTE_PENDIENTE_DEVOLUCION = 'CLIENTE_PENDIENTE_DEVOLUCION',
   SOLICITUD_DESBLOQUEO_VENTAS = 'SOLICITUD_DESBLOQUEO_VENTAS',
   SOLICITUD_APROBACION_IA_PREVENTA = 'SOLICITUD APROBACION IA PREVENTA',
@@ -1834,4 +1834,26 @@ export const ZONA_SEMAFORO_ARRAY_CHOICES = [
   ZonaSemaforoTMEnumChoice.VERDE,
   ZonaSemaforoTMEnumChoice.AMARILLO,
   ZonaSemaforoTMEnumChoice.ROJO,
+];
+
+export enum SuspensionInternetTipoTMEnumChoice {
+  AUTOMATICA = 'AUTOMATICA',
+  MANUAL = 'MANUAL',
+}
+
+export const SUSPENSION_INTERNET_TIPO_ARRAY_CHOICES = [
+  SuspensionInternetTipoTMEnumChoice.AUTOMATICA,
+  SuspensionInternetTipoTMEnumChoice.MANUAL,
+];
+
+export enum SuspensionInternetEstadoTMEnumChoice {
+  ACTIVO = 'ACTIVO',
+  INACTIVO = 'INACTIVO',
+  CANCELADO = 'CANCELADO',
+}
+
+export const SUSPENSION_INTERNET_ESTADO_ARRAY_CHOICES = [
+  SuspensionInternetEstadoTMEnumChoice.ACTIVO,
+  SuspensionInternetEstadoTMEnumChoice.INACTIVO,
+  SuspensionInternetEstadoTMEnumChoice.CANCELADO,
 ];
