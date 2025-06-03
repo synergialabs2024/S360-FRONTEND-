@@ -1,8 +1,12 @@
-import { Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
+import { Grid } from '@mui/material';
 
-import { RubroTSQEnum, useFetchRubros } from '@/actions/app';
+import {
+  RubroTSQEnum,
+  useFetchRubros,
+  useGetRubroStatisticsLine,
+} from '@/actions/app';
 import { useGenericPOST } from '@/actions/shared';
 import {
   LineaServicio,
@@ -12,7 +16,11 @@ import {
   useTableFilter,
   useTableServerSideFiltering,
 } from '@/shared';
-import { CustomSingleButton, CustomTable } from '@/shared/components';
+import {
+  ChipModelState,
+  CustomSingleButton,
+  CustomTable,
+} from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { ClienteFibraRubroLibreModal } from './libre';
@@ -67,6 +75,8 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
     },
   });
 
+  const { data } = useGetRubroStatisticsLine(serviceLine?.id!);
+
   const isCustomLoading = isRubrosLoading || isRubrosRefetching;
   useLoaders(isCustomLoading);
 
@@ -75,7 +85,7 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
     '/rubro/direct-create/',
     RubroTSQEnum.RUBROS,
     {
-      customMessageToast: 'Rubro de servicio creado correctamente',
+      customMessageToast: 'Rubro de creado correctamente',
       customOnSuccess() {},
       customOnSettled() {
         setConfirmDialogIsOpen(false);
@@ -102,21 +112,83 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
     <>
       <Grid item container xs={12}>
         {/* ================= buttons ================= */}
-        <Grid item container xs={12} my={3}>
-          <span className="spacer"></span>
+        <Grid
+          item
+          container
+          xs={12}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          {/* Columna izquierda: estadísticas en grilla 3x3 */}
+          <Grid item md={9}>
+            {data?.data?.statistics ? (
+              <Grid container spacing={1} wrap="wrap">
+                {[
+                  {
+                    label: 'Total Rubro',
+                    value: data.data.statistics.total_rubros,
+                  },
+                  {
+                    label: 'Total Rubro Libre',
+                    value: data.data.statistics.total_rubros_libre,
+                  },
+                  {
+                    label: 'Total Rubro Producto',
+                    value: data.data.statistics.total_rubros_producto,
+                  },
+                  {
+                    label: 'Total Rubro Pagados',
+                    value: data.data.statistics.total_rubros_pagados,
+                  },
+                  {
+                    label: 'Total Rubro no Pagados',
+                    value: data.data.statistics.total_rubros_no_pagados,
+                  },
+                  {
+                    label: 'Total Rubro con Mikro',
+                    value:
+                      data.data.statistics.total_rubros_servicio_with_mikro,
+                  },
+                  {
+                    label: 'Total Rubro con Mikro no Pagado',
+                    value:
+                      data.data.statistics
+                        .total_rubros_servicio_with_mikro_pagados,
+                  },
+                  {
+                    label: 'Total Rubro sin Mikro',
+                    value:
+                      data.data.statistics.total_rubros_servicio_without_mikro,
+                  },
+                  {
+                    label: 'Total Rubro sin Mikro no Pagado',
+                    value:
+                      data.data.statistics
+                        .total_rubros_servicio_without_mikro_pagados,
+                  },
+                ].map((item, index) => (
+                  <Grid item key={index}>
+                    <ChipModelState
+                      label={`${item.label}: ${item.value}`}
+                      color="primary"
+                      sxChip={{ height: 'auto' }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            ) : null}
+          </Grid>
 
-          <Grid item container md={6} justifyContent="flex-end" spacing={1}>
+          {/* Columna derecha: botones */}
+          <Grid item container md={3} justifyContent="flex-end" spacing={1}>
             <CustomSingleButton
               label="RUBRO LIBRE"
               color="primary"
               variant="text"
               startIcon={<FiPlus />}
-              onClick={() => {
-                setIsOpenFreeRubroModal(true);
-              }}
+              onClick={() => setIsOpenFreeRubroModal(true)}
               justifyContent="flex-end"
             />
-
             <CustomSingleButton
               label="RUBRO DE SERVICIO"
               variant="text"
@@ -126,7 +198,7 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
                 setConfirmDialog({
                   isOpen: true,
                   title: 'Crear Rubro de Servicio',
-                  subtitle: `¿Está seguro de generar el rubro de servicio para el cliente ${serviceLine?.cliente_data?.razon_social} en el contrato ${serviceLine?.contrato_data?.numero_contrato}? Una vez creado no se podrá eliminar.`,
+                  subtitle: `¿Está seguro de generar el rubro de para el cliente ${serviceLine?.cliente_data?.razon_social} en el contrato ${serviceLine?.contrato_data?.numero_contrato}? Una vez creado no se podrá eliminar.`,
                   onConfirm: () => {
                     createDirectRubro.mutate({
                       linea_servicio: serviceLine?.id,

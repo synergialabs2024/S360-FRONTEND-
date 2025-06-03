@@ -27,7 +27,7 @@ const RecepcionMaterialMainPage: React.FC<RecepcionMaterialPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Recepcion de solicitud de materiales"
+      title="Recepción de solicitudes de materiales"
       showCreateBtn={false}
       isMainTableStates
     >

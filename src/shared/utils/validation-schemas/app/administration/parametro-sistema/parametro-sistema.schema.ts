@@ -108,7 +108,7 @@ export const parametro_sistemaFacturacionFormSchema = yup.object().shape({
   RUC_EMPRESA: yup
     .string()
     .required('El campo RUC empresa es requerido.')
-    .matches(/^\d{11}$/, 'El RUC debe tener exactamente 11 dígitos numéricos.'),
+    .matches(/^\d{13}$/, 'El RUC debe tener exactamente 13 dígitos numéricos.'),
   RAZON_SOCIAL: yup.string().required('El campo razon social es requerido.'),
   NOMBRE_COMERCIAL: yup
     .string()
