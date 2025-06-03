@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
+import { Grid, Tab } from '@mui/material';
 import { FiPlus } from 'react-icons/fi';
-import { Grid } from '@mui/material';
 
 import {
   RubroTSQEnum,
   useFetchRubros,
   useGetRubroStatisticsLine,
 } from '@/actions/app';
-import { useGenericPOST } from '@/actions/shared';
 import {
   LineaServicio,
   Rubro,
@@ -15,12 +14,18 @@ import {
   useLoaders,
   useTableFilter,
   useTableServerSideFiltering,
+  useTabsOnly,
 } from '@/shared';
 import {
+  a11yProps,
   ChipModelState,
   CustomSingleButton,
   CustomTable,
+  CustomTabPanel,
+  FormTabsOnly,
+  NestedTabsScene,
 } from '@/shared/components';
+import { useGenericPOST } from '@/actions/shared';
 import { useRubroStore } from '@/store/app/rubros';
 import { useUiConfirmModalStore } from '@/store/ui';
 import { ClienteFibraRubroLibreModal } from './libre';
@@ -32,6 +37,11 @@ export type ClienteFibraRubroTabProps = {
 const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
   serviceLine,
 }) => {
+  ///* hooks ---------------------
+  const { tabValue, handleTabChange } = useTabsOnly({
+    initialTabValue: 1,
+  });
+
   ///* local state -------------------------
   const [isOpenFreeRubroModal, setIsOpenFreeRubroModal] =
     useState<boolean>(false);
@@ -108,6 +118,23 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const renderChips = (
+    items: { label: string; value: number | string | null | undefined }[],
+    color: 'warning' | 'success',
+  ) => (
+    <Grid container spacing={2} wrap="wrap">
+      {items.map((item, index) => (
+        <Grid item key={index} xs={12} sm="auto">
+          <ChipModelState
+            label={`${item.label}: ${item.value ?? 0}`}
+            color={color}
+            sxChip={{ height: '35px' }}
+          />
+        </Grid>
+      ))}
+    </Grid>
+  );
+
   return (
     <>
       <Grid item container xs={12}>
@@ -116,67 +143,88 @@ const ClienteFibraRubroTab: React.FC<ClienteFibraRubroTabProps> = ({
           item
           container
           xs={12}
+          sx={{ mb: 5 }}
           justifyContent="space-between"
           alignItems="center"
         >
           {/* Columna izquierda: estadísticas en grilla 3x3 */}
           <Grid item md={9}>
-            {data?.data?.statistics ? (
-              <Grid container spacing={1} wrap="wrap">
-                {[
-                  {
-                    label: 'Total Rubro',
-                    value: data.data.statistics.total_rubros,
-                  },
-                  {
-                    label: 'Total Rubro Libre',
-                    value: data.data.statistics.total_rubros_libre,
-                  },
-                  {
-                    label: 'Total Rubro Producto',
-                    value: data.data.statistics.total_rubros_producto,
-                  },
-                  {
-                    label: 'Total Rubro Pagados',
-                    value: data.data.statistics.total_rubros_pagados,
-                  },
-                  {
-                    label: 'Total Rubro no Pagados',
-                    value: data.data.statistics.total_rubros_no_pagados,
-                  },
-                  {
-                    label: 'Total Rubro con Mikro',
-                    value:
-                      data.data.statistics.total_rubros_servicio_with_mikro,
-                  },
-                  {
-                    label: 'Total Rubro con Mikro no Pagado',
-                    value:
-                      data.data.statistics
-                        .total_rubros_servicio_with_mikro_pagados,
-                  },
-                  {
-                    label: 'Total Rubro sin Mikro',
-                    value:
-                      data.data.statistics.total_rubros_servicio_without_mikro,
-                  },
-                  {
-                    label: 'Total Rubro sin Mikro no Pagado',
-                    value:
-                      data.data.statistics
-                        .total_rubros_servicio_without_mikro_pagados,
-                  },
-                ].map((item, index) => (
-                  <Grid item key={index}>
-                    <ChipModelState
-                      label={`${item.label}: ${item.value}`}
-                      color="primary"
-                      sxChip={{ height: 'auto' }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            ) : null}
+            <NestedTabsScene
+              tabs={
+                <FormTabsOnly value={tabValue} onChange={handleTabChange}>
+                  <Tab label="Total" value={1} {...a11yProps(1)} />
+                  <Tab label="Total Mikro" value={2} {...a11yProps(2)} />
+                </FormTabsOnly>
+              }
+              sxContainer={{
+                pt: 0,
+                pb: 0,
+                mt: -10,
+              }}
+            >
+              {/* ========================= NORMAL ========================= */}
+              <CustomTabPanel index={1} value={tabValue}>
+                {data?.data?.statistics &&
+                  renderChips(
+                    [
+                      {
+                        label: 'Total Rubro',
+                        value: data.data.statistics.total_rubros,
+                      },
+                      {
+                        label: 'Total Rubro Libre',
+                        value: data.data.statistics.total_rubros_libre,
+                      },
+                      {
+                        label: 'Total Rubro Producto',
+                        value: data.data.statistics.total_rubros_producto,
+                      },
+                      {
+                        label: 'Total Rubro Pagados',
+                        value: data.data.statistics.total_rubros_pagados,
+                      },
+                      {
+                        label: 'Total Rubro no Pagados',
+                        value: data.data.statistics.total_rubros_no_pagados,
+                      },
+                    ],
+                    'warning',
+                  )}
+              </CustomTabPanel>
+
+              {/* ========================= MIKRO ========================= */}
+              <CustomTabPanel index={2} value={tabValue}>
+                {data?.data?.statistics &&
+                  renderChips(
+                    [
+                      {
+                        label: 'Total Rubro con Mikro',
+                        value:
+                          data.data.statistics.total_rubros_servicio_with_mikro,
+                      },
+                      {
+                        label: 'Total Rubro con Mikro no Pagado',
+                        value:
+                          data.data.statistics
+                            .total_rubros_servicio_with_mikro_pagados,
+                      },
+                      {
+                        label: 'Total Rubro sin Mikro',
+                        value:
+                          data.data.statistics
+                            .total_rubros_servicio_without_mikro,
+                      },
+                      {
+                        label: 'Total Rubro sin Mikro no Pagado',
+                        value:
+                          data.data.statistics
+                            .total_rubros_servicio_without_mikro_pagados,
+                      },
+                    ],
+                    'success',
+                  )}
+              </CustomTabPanel>
+            </NestedTabsScene>
           </Grid>
 
           {/* Columna derecha: botones */}
