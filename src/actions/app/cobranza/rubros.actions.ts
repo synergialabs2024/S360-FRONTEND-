@@ -7,6 +7,7 @@ import {
   PagingPartialParams,
   Rubro,
   RubrosPaginatedRes,
+  RubroStatisticsLine,
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
@@ -43,6 +44,13 @@ export const useGetRubro = (uuid: string) => {
   return useQuery({
     queryKey: [RubroTSQEnum.RUBRO, uuid],
     queryFn: () => getRubro(uuid),
+    retry: false,
+  });
+};
+export const useGetRubroStatisticsLine = (id: number) => {
+  return useQuery({
+    queryKey: [RubroTSQEnum.RUBRO, id],
+    queryFn: () => getRubroStatisticsLine(id),
     retry: false,
   });
 };
@@ -144,6 +152,21 @@ export const getRubro = async (uuid: string) => {
     return await get<Rubro>(`/rubro/${uuid}`, true);
   } catch (error) {
     handleAxiosError(error);
+  }
+};
+
+export const getRubroStatisticsLine = async (id: number) => {
+  if (id == undefined) {
+    return;
+  } else {
+    try {
+      return await get<RubroStatisticsLine>(
+        `/rubro/statistics/line/${id}`,
+        true,
+      );
+    } catch (error) {
+      handleAxiosError(error);
+    }
   }
 };
 

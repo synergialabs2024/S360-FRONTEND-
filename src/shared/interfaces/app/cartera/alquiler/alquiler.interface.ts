@@ -33,7 +33,7 @@ export interface Alquiler {
   modified_at?: string;
 }
 
-export interface AuditLogs {
+interface AuditLogs {
   id?: number;
   uuid?: string;
 

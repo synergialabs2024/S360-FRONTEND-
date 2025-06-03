@@ -110,6 +110,23 @@ export type BaseRubroDetail = {
   es_discapacitado?: boolean;
   mayor_edad_discapacitado?: MayorEdadOrDiscapacidadDetail[];
 };
+export type RubroStatisticsLine = {
+  linea_servicio: number;
+  cliente: number;
+  contrato: number;
+  configuracion_plantilla: number;
+  statistics: {
+    total_rubros_servicio_with_mikro: number;
+    total_rubros_servicio_without_mikro: number;
+    total_rubros_servicio_with_mikro_pagados: number;
+    total_rubros_servicio_without_mikro_pagados: number;
+    total_rubros_libre: number;
+    total_rubros_producto: number;
+    total_rubros: number;
+    total_rubros_pagados: number;
+    total_rubros_no_pagados: number;
+  };
+};
 export type BaseRubroDetailProductData = Pick<
   Producto,
   'id' | 'uuid' | 'nombre'
