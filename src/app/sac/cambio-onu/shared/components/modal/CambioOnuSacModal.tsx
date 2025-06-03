@@ -56,42 +56,6 @@ const CambioOnuSacModal: React.FC<CambioOnuSacModalProps> = ({
     },
   });
 
-  ///* mutations --------------------------
-  // const createPagoManual = async (accessToken: string) => {
-  //   setIsLoading(true);
-  //   const fechaTransaccion = dayjs().format('YYYYMMDD');
-  //   try {
-  //     const response = await axios.post(
-  //       'https://s360-switch-transaccional.yiga5.com/api/v1/nuevo-pago/',
-  //       {
-  //         contrapartida: serviceLine?.cliente_data?.identificacion,
-  //         linea: rubro?.linea,
-  //         deuda: rubro?.deuda,
-  //         canalPago: 'WEB',
-  //         fechaTransaccion: fechaTransaccion,
-  //         numeroAutorizacion: form.getValues().numero_autorizacion,
-  //         ifi: form.getValues().code,
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       },
-  //     );
-  //     toast.success('Pago manual generado correctamente');
-  //     return response.data;
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.error('Error de Axios:', error.response?.data || error.message);
-  //     }
-  //     toast.error('Ha ocurrido un error al generar el pago manual');
-  //     throw error;
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleClose = () => {
     form.reset();
     onClose();

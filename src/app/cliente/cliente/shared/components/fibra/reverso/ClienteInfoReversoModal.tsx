@@ -14,7 +14,12 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { getEnvs } from '@/shared/utils/get-evns';
 
-const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
+const {
+  VITE_CLIENT_ID,
+  VITE_CLIENT_SECRET,
+  VITE_GRANT_TYPE,
+  VITE_PAGOMANUAL_URL,
+} = getEnvs();
 
 export type ClienteInfoReversoModalProps = {
   open: boolean;
@@ -56,7 +61,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
     const fechaTransaccion = dayjs().format('YYYYMMDD');
     try {
       const response = await axios.post(
-        'https://s360-switch-transaccional.yiga5.com/api/v1/nuevo-reverso/',
+        `${VITE_PAGOMANUAL_URL}/nuevo-reverso/`,
         {
           contrapartida: serviceLine?.cliente_data?.identificacion,
           linea: rubro?.service_code,
@@ -88,7 +93,7 @@ const ClienteInfoReversoModal: React.FC<ClienteInfoReversoModalProps> = ({
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
+        `${VITE_PAGOMANUAL_URL}/oauth/token/`,
         {
           client_id: VITE_CLIENT_ID,
           client_secret: VITE_CLIENT_SECRET,

@@ -5,7 +5,12 @@ import { useCallback, useEffect, useState } from 'react';
 import ClienteInfoPagoManualModal from './ClienteInfoPagoManualModal';
 import axios from 'axios';
 
-const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
+const {
+  VITE_CLIENT_ID,
+  VITE_CLIENT_SECRET,
+  VITE_GRANT_TYPE,
+  VITE_PAGOMANUAL_URL,
+} = getEnvs();
 
 export type ClientesPagosManualesByStatePageProps = {
   state?: EstadoTareaEnumChoice;
@@ -28,7 +33,7 @@ const ClientesPagosManualesByStatePage: React.FC<
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
+        `${VITE_PAGOMANUAL_URL}/oauth/token/`,
         {
           client_id: VITE_CLIENT_ID,
           client_secret: VITE_CLIENT_SECRET,
@@ -52,7 +57,7 @@ const ClientesPagosManualesByStatePage: React.FC<
   const fetchNuevaConsultaContrapartida = async (accessToken: string) => {
     try {
       const response = await axios.post(
-        'https://s360-switch-transaccional.yiga5.com/api/v1/nueva-consulta-contrapartida/',
+        `${VITE_PAGOMANUAL_URL}/nueva-consulta-contrapartida/`,
         {
           contrapartida: serviceLine?.cliente_data?.identificacion,
         },

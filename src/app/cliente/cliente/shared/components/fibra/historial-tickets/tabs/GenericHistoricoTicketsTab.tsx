@@ -6,6 +6,9 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import HistoricoTicketModal from './HistoricoTicketModal';
+import { getEnvs } from '@/shared';
+
+const { VITE_SOEI_URL } = getEnvs();
 
 export type GenericHistoricoTicketsTabProps = {
   cedula: string;
@@ -62,7 +65,7 @@ const GenericHistoricoTicketsTab: React.FC<GenericHistoricoTicketsTabProps> = ({
     setIsLoading(true);
     try {
       const response = await axios.post(
-        'https://us-central1-sistema-gestion-intercommerce.cloudfunctions.net/api/getTicketsByEstado',
+        `${VITE_SOEI_URL}/getTicketsByEstado`,
         { cedula: cedula },
         {
           headers: {

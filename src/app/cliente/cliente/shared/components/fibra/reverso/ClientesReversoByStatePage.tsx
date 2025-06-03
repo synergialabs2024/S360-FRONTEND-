@@ -20,7 +20,12 @@ export type ClientesReversoByStatePageProps = {
 const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   serviceLine,
 }) => {
-  const { VITE_CLIENT_ID, VITE_CLIENT_SECRET, VITE_GRANT_TYPE } = getEnvs();
+  const {
+    VITE_CLIENT_ID,
+    VITE_CLIENT_SECRET,
+    VITE_GRANT_TYPE,
+    VITE_PAGOMANUAL_URL,
+  } = getEnvs();
 
   const [open, setOpen] = useState(false);
   const [selectedRubro, setSelectedRubro] = useState<Rubro | null>(null);
@@ -39,7 +44,7 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   const fetchAuthToken = async () => {
     try {
       const response = await axios.post(
-        'https://s360-switch-transaccional.yiga5.com/api/v1/oauth/token/',
+        `${VITE_PAGOMANUAL_URL}/oauth/token/`,
         {
           client_id: VITE_CLIENT_ID,
           client_secret: VITE_CLIENT_SECRET,
@@ -66,7 +71,7 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   ) => {
     try {
       const response = await axios.get(
-        `https://s360-switch-transaccional.yiga5.com/api/v1/transaccion/?numeroAutorizacion=${contrapartida}&reversado=false`,
+        `${VITE_PAGOMANUAL_URL}/transaccion/?numeroAutorizacion=${contrapartida}&reversado=false`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -161,7 +166,6 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
         }
       }
 
-      console.log('Transacciones encontradas:', allTransacciones);
       setTransaccionesData(allTransacciones);
 
       // Si hay transacciones, establecer la primera como filtrada
@@ -184,10 +188,6 @@ const ClientesReversoByStatePage: React.FC<ClientesReversoByStatePageProps> = ({
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  useEffect(() => {
-    console.log('TransaccionsPagingRes', TransaccionsPagingRes);
-  }, []);
 
   const isCustomLoading = isTransaccionsLoading || isTransaccionsRefetching;
   useLoaders(isCustomLoading);

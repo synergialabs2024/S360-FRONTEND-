@@ -18,4 +18,8 @@ export const getEnvs = () => ({
   VITE_CLIENT_ID: import.meta.env.VITE_CLIENT_ID,
   VITE_CLIENT_SECRET: import.meta.env.VITE_CLIENT_SECRET,
   VITE_GRANT_TYPE: import.meta.env.VITE_GRANT_TYPE,
+
+  VITE_PAGOMANUAL_URL: import.meta.env.VITE_PAGOMANUAL_URL,
+
+  VITE_SOEI_URL: import.meta.env.VITE_SOEI_URL,
 });

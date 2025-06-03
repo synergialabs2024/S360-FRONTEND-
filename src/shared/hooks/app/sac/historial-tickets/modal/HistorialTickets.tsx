@@ -6,6 +6,9 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { es } from 'date-fns/locale';
 import HistoricoTicketModal from '@/app/cliente/cliente/shared/components/fibra/historial-tickets/tabs/HistoricoTicketModal';
+import { getEnvs } from '@/shared/utils';
+
+const { VITE_SOEI_URL } = getEnvs();
 
 export type ShowPingModalProps = {
   modalTitle?: string;
@@ -65,7 +68,7 @@ const HistorialTickets: React.FC<ShowPingModalProps> = ({
     setIsLoading(true);
     try {
       const response = await axios.post(
-        'https://us-central1-sistema-gestion-intercommerce.cloudfunctions.net/api/getTicketsByEstado',
+        `${VITE_SOEI_URL}/getTicketsByEstado`,
         { cedula: cedula },
         {
           headers: {
