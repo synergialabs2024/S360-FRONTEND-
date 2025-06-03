@@ -110,7 +110,10 @@ const ClientesPagosManualesByStatePage: React.FC<
 
       // Guarda las líneas en el estado
       if (consultaData?.lineas) {
-        setLineasData(consultaData.lineas);
+        const lineasFiltradas = consultaData.lineas.filter(
+          (linea: any) => linea.deuda !== '0.00',
+        );
+        setLineasData(lineasFiltradas);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -124,7 +127,6 @@ const ClientesPagosManualesByStatePage: React.FC<
   return (
     <>
       <Grid item container xs={12}>
-        {/* ================= table ================= */}
         {/* ================= Tabla de Líneas ================= */}
         <Grid item xs={12}>
           <CustomTable
