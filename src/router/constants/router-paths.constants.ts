@@ -28,6 +28,10 @@ export const ROUTER_PATHS = {
   administracion: {
     root: 'parametrizacion',
 
+    ///* configuracion empresa
+    configuracionEmpresa: 'configuracion-empresa',
+    configuracionEmpresaNav: '/parametrizacion/configuracion-empresa',
+
     ///* tipo regimen
     tiposRegimen: 'tipos-regimen',
     tiposRegimenCrear: 'tipos-regimen/crear',

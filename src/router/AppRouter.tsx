@@ -42,6 +42,14 @@ const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 // const AdministrationModule = Loadable(
 //   lazy(() => import('@/app/administration/AdministrationModule')),
 // );
+const ConfiguracionEmpresaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/configuracion-empresa/pages/tables/ConfiguracionEmpresaPage'
+      ),
+  ),
+);
 const PaisesPage = Loadable(
   lazy(() => import('@/app/administration/pais/pages/tables/PaisesPage')),
 );
@@ -2471,6 +2479,11 @@ const AppRouter = [
         path: ROUTER_PATHS.administracion.root,
         element: <AdministrationModule />,
         children: [
+          ///* configuracion empresa
+          {
+            path: ROUTER_PATHS.administracion.configuracionEmpresa,
+            element: <ConfiguracionEmpresaPage />,
+          },
           ///* pais
           {
             path: ROUTER_PATHS.administracion.pais,

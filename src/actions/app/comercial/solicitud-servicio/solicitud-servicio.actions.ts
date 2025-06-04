@@ -3,7 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { handleAxiosError } from '@/shared/axios/axios.utils';
 
-import { CreateCedulaCitizenParams } from '@/actions/consultas-api';
+import {
+  CedulaCitizenTSQEnum,
+  CreateCedulaCitizenParams,
+} from '@/actions/consultas-api';
 import { EquifaxEdentificationType, OtpStatesEnumChoice } from '@/shared';
 import { erpAPI } from '@/shared/axios/erp-api';
 import {
@@ -14,7 +17,10 @@ import {
   UseFetchEnabledParams,
   UseMutationParams,
 } from '@/shared/interfaces';
-import { EquifaxServicioCedula } from '@/shared/interfaces/consultas-api';
+import {
+  EquifaxServicioCedula,
+  SearchIdentificacion,
+} from '@/shared/interfaces/consultas-api';
 import { getUrlParams } from '@/shared/utils';
 import { useUiStore } from '@/store/ui';
 import { CodigoOtpTSQEnum } from '../codigo-otp';
@@ -422,3 +428,58 @@ export type CancelSolServiceData = Pick<
   SolicitudServicio,
   'motivo_rechazo' | 'observacion_cancelacion'
 >;
+
+//////////* Search Idenfiticacion
+
+export const useCreateSearchIdentificacion = <T>({
+  navigate,
+  returnUrl,
+  returnErrorUrl,
+  customMessageToast,
+  customMessageErrorToast,
+  enableNavigate = true,
+  enableErrorNavigate = false,
+  enableToast = true,
+}: UseMutationParams) => {
+  const queryClient = useQueryClient();
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+
+  return useMutation({
+    mutationFn: (params: CreateCedulaCitizenParams<T>) =>
+      createSearchCedulaRuc(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [CedulaCitizenTSQEnum.CEDULACITIZENS],
+      });
+      enableNavigate && navigate && returnUrl && navigate(returnUrl);
+      enableToast &&
+        ToastWrapper.success(
+          customMessageToast || 'Identificacion consultada correctamente',
+        );
+    },
+    onError: error => {
+      enableErrorNavigate &&
+        navigate &&
+        returnUrl &&
+        navigate(returnErrorUrl || returnUrl || '');
+
+      handleAxiosError(error, customMessageErrorToast);
+    },
+    onSettled: () => {
+      setIsGlobalLoading(false);
+    },
+  });
+};
+
+export const createSearchCedulaRuc = async <T>(
+  data: CreateCedulaCitizenParams<T>,
+) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+
+  return post<SearchIdentificacion>(
+    '/solicitudservicio/search/identificacion/',
+    data,
+    true,
+  );
+};

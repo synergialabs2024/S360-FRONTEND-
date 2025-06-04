@@ -162,9 +162,7 @@ const AutorizacionOnusPage: React.FC<AutorizacionOnusPageProps> = () => {
                 color="primary"
                 variant="text"
                 startIcon={<IconSearch />}
-                onClick={handleSubmit(onSave, () => {
-                  console.log('hola');
-                })}
+                onClick={handleSubmit(onSave, () => {})}
                 justifyContent="flex-end"
               />
             </Grid>
