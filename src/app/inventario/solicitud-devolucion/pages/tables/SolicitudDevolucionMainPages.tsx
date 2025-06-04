@@ -21,7 +21,7 @@ const SolicitudDevolucionMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Solicitud Devolucion"
+      title="Solicitud de devolucion"
       createPageUrl={`${returnUrlSolicitudDevolucionPage}/crear`}
       isMainTableStates
     >

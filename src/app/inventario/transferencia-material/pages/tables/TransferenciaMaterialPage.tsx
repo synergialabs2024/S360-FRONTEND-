@@ -11,7 +11,6 @@ import {
   useColumnsTransferenciaMaterial,
 } from '@/shared';
 import { ROUTER_PATHS } from '@/router/constants';
-import { hasPermission } from '@/shared/utils/auth';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { useFetchTransferenciaMateriales } from '@/actions/app';
 
@@ -59,11 +58,8 @@ const TransferenciaMaterialesPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Transferencia Materiales"
-      createPageUrl={`${returnUrlTransferenciaMaterialesPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.inventario_add_transferenciamaterial,
-      )}
+      title="Transferencia de materiales"
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}
