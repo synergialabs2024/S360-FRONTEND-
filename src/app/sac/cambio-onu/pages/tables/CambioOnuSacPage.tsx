@@ -9,8 +9,7 @@ import {
 import { Tab } from '@mui/material';
 import CambioOnuSacByStatePage from './CambioOnuSacByStatePage';
 
-export const returnUrlTicketsCrear =
-  ROUTER_PATHS.operaciones.cambioOnuActivacionNav;
+export const returnCambioOnuSac = ROUTER_PATHS.sac.cambioOnuNav;
 
 export type AprobacionTicketsVisitaPageProps = {};
 

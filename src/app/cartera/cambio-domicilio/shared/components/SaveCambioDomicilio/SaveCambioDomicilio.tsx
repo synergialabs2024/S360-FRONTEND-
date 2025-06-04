@@ -503,7 +503,7 @@ const SaveCambioDomicilio: React.FC<SavePromesaPagoProps> = ({ title }) => {
             Array.isArray(cedulaData?.data)
               ? cedulaData.data.map(item => ({
                   ...item,
-                  numero_contrato: item?.contrato_data?.numero_contrato,
+                  numero_contrato: item?.contrato_data?.identificacion_pago,
                 }))
               : []
           }

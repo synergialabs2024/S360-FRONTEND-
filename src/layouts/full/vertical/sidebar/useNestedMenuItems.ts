@@ -1567,7 +1567,6 @@ export const useNestedMenu = () => {
               id: 'parametros',
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
-              icon: IconBuildingWarehouse,
               children: [
                 renderByModule(SidenavModulesEnum.INDEFINIDO, {
                   id: 'asuntos',
