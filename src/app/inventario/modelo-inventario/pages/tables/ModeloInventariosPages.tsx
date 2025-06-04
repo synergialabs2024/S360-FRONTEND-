@@ -83,7 +83,7 @@ const ModeloInventariosPages: React.FC<ModeloInventariosPagesProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Modelo Inventario"
+      title="Modelo de Inventario"
       createPageUrl={`${returnUrlModeloInventariosPage}/crear`}
       showCreateBtn={hasPermission(
         PermissionsEnum.inventario_add_modeloinventario,

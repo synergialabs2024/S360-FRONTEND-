@@ -58,7 +58,7 @@ const RecepcionSolicitudDevolucionMaterialStatePage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       ...filterObject,
 
       estado_solicitud: state,
@@ -97,7 +97,7 @@ const RecepcionSolicitudDevolucionMaterialStatePage: React.FC<
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por identificación"
+        text="por numero de registro"
       />
       <CustomTable<SolicitudDevolucion>
         columns={solicitudDevolucionColumns}

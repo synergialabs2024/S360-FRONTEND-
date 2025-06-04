@@ -59,7 +59,7 @@ const AprobarSolMaterialPage: React.FC<AprobarSolMaterialPageProps> = () => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       estado_solicitud: 'APROBADO',
       ...filterObject,
       filterByState: false,
@@ -86,16 +86,13 @@ const AprobarSolMaterialPage: React.FC<AprobarSolMaterialPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Aprobar solicitud de material"
-      createPageUrl={`${returnUrlAprobarSolMaterialPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.inventario_change_solicitudmaterial,
-      )}
+      title="Aprobación de solicitudes de materiales"
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por numero registro"
       />
 
       <CustomTable<SolicitudMaterial>

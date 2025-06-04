@@ -22,7 +22,7 @@ const SolicitudTransferenciaMaterialMainPage: React.FC<
 
   return (
     <SingleTableBoxScene
-      title="Solicitud Transferencia Material"
+      title="Solicitud de transferencia material"
       createPageUrl={`${returnUrlSolicitudTransferenciaMaterialesPage}/crear`}
       isMainTableStates
     >

@@ -2,8 +2,8 @@ import {
   useTableFilter,
   PermissionsEnum,
   TABLE_CONSTANTS,
-  useTableServerSideFiltering,
   SolicitudDevolucion,
+  useTableServerSideFiltering,
   useColumnsSolicitudDevolucion,
 } from '@/shared';
 import {
@@ -60,7 +60,7 @@ const AprobarSolDevolucionPage: React.FC<
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      secuencial: searchTerm,
       estado_solicitud: 'APROBADO',
       ...filterObject,
       filterByState: false,
@@ -88,15 +88,12 @@ const AprobarSolDevolucionPage: React.FC<
   return (
     <SingleTableBoxScene
       title="Aprobar solicitud de devolucion"
-      createPageUrl={`${returnUrlAprobarSolDevolucionPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.inventario_change_solicituddevolicion,
-      )}
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}
-        text="por nombre"
+        text="por numero registro"
       />
 
       <CustomTable<SolicitudDevolucion>
