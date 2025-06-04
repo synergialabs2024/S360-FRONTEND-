@@ -6,7 +6,6 @@ import {
   PagingPartialParams,
   ConfiguracionEmpresa,
   UseFetchEnabledParams,
-  ConfiguracionEmpresasPaginatedRes,
 } from '@/shared/interfaces';
 import { useUiStore } from '@/store/ui';
 import { getUrlParams } from '@/shared/utils';
@@ -93,10 +92,7 @@ export const getConfiguracionEmpresas = async (
 ) => {
   const stateParams = { ...params };
   const queryParams = getUrlParams(stateParams);
-  return get<ConfiguracionEmpresasPaginatedRes>(
-    `/company/my?${queryParams}`,
-    true,
-  );
+  return get<ConfiguracionEmpresa>(`/company/my?${queryParams}`, true);
 };
 
 export const updateConfiguracionEmpresa = async <T>({

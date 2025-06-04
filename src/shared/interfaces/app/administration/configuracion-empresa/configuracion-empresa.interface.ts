@@ -12,6 +12,7 @@ export interface ConfiguracionEmpresa {
   id?: number;
   uuid?: string;
 
+  schema_name: string;
   company_name: string;
   commercial_name: string;
   main_address: string;

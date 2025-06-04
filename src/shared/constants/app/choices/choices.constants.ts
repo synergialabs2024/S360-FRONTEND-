@@ -656,6 +656,9 @@ const { VITE_MINIO_BUCKET_NAME } = getEnvs();
 export enum BucketTypeEnumChoice {
   BUCKET_BASE = VITE_MINIO_BUCKET_NAME,
 
+  // conf compañia
+  FILES_MY_COMPANY = 'files/my_company',
+
   // preventa
   IMAGES_IDENTIFICACION = 'images/identificacion',
   IMAGES_VIVIENDA = 'images/vivienda',
