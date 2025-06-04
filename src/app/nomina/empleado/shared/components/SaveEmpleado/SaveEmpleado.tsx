@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   CreateEmpleadoParamsBase,
   useCreateEmpleado,
+  useCreateSearchIdentificacion,
   useFetchAreas,
   useFetchCanalVentas,
   useFetchCargos,
@@ -34,6 +35,7 @@ import {
 import {
   EMPLOYEE_TYPE_ARRAY_CHOICES,
   IDENTIFICATION_TYPE_ARRAY_CHOICES,
+  IdentificationTypeEnumChoice,
   SAVE_EMPLEADO_PERMISSIONS,
   TIPO_VINCULACION_FLOTA_ARRAY_CHOICES,
 } from '@/shared/constants/app';
@@ -192,6 +194,112 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
     navigate,
     returnUrl: returnUrlEmpleadosPage,
   });
+  const createSearchIdentificacionMutation = useCreateSearchIdentificacion({
+    navigate,
+    enableErrorNavigate: false,
+  });
+
+  const handleFetchCedulaRucInfo = async (value: string) => {
+    if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
+      const payload = {
+        tipo_identificacion: 'ci',
+        identificacion: value,
+      };
+      createSearchIdentificacionMutation.mutate(payload, {
+        onSuccess: data => {
+          form.setValue('area', undefined);
+          form.setValue('canal_venta', undefined);
+          form.setValue('cargo', undefined);
+          form.setValue('centro_costo', undefined);
+          form.setValue('ciudad', undefined);
+          form.setValue('departamento', undefined);
+          form.setValue('empleado_vinculacion', undefined);
+          form.setValue('empresa', undefined);
+          form.setValue('pais', undefined);
+          form.setValue('empresa', undefined);
+          form.setValue('phone_2', undefined as any);
+          form.setValue('phone_3', undefined as any);
+          form.setValue('provincia', undefined);
+          form.setValue('salary', undefined as any);
+          form.setValue('sector', undefined);
+          form.setValue('state', undefined as any);
+          form.setValue('tipo_empleado', undefined as any);
+          form.setValue('tipo_vinculacion', undefined);
+          form.setValue('user', undefined);
+          form.setValue('zona', undefined);
+
+          const contactoEmail = data.data.contactos?.find(
+            i => i.tipo === 'Email',
+          );
+          const contactoDireccion = data.data.contactos?.find(
+            i => i.tipo === 'Direccion',
+          );
+          form.setValue(
+            'razon_social',
+            data.data.nombres ? data.data.nombres : (undefined as any),
+          );
+          form.setValue(
+            'email',
+            contactoEmail?.contacto
+              ? contactoEmail.contacto
+              : (undefined as any),
+          );
+          form.setValue(
+            'address',
+            contactoDireccion?.contacto
+              ? contactoDireccion.contacto
+              : (undefined as any),
+          );
+        },
+      });
+    } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
+      const payload = {
+        tipo_identificacion: 'ruc',
+        identificacion: value,
+      };
+      createSearchIdentificacionMutation.mutate(payload, {
+        onSuccess: data => {
+          form.setValue('area', undefined);
+          form.setValue('canal_venta', undefined);
+          form.setValue('cargo', undefined);
+          form.setValue('centro_costo', undefined);
+          form.setValue('ciudad', undefined);
+          form.setValue('departamento', undefined);
+          form.setValue('empleado_vinculacion', undefined);
+          form.setValue('empresa', undefined);
+          form.setValue('pais', undefined);
+          form.setValue('empresa', undefined);
+          form.setValue('phone_2', undefined as any);
+          form.setValue('phone_3', undefined as any);
+          form.setValue('provincia', undefined);
+          form.setValue('salary', undefined as any);
+          form.setValue('sector', undefined);
+          form.setValue('state', undefined as any);
+          form.setValue('tipo_empleado', undefined as any);
+          form.setValue('tipo_vinculacion', undefined);
+          form.setValue('user', undefined);
+          form.setValue('zona', undefined);
+
+          form.setValue(
+            'razon_social',
+            data.data.nombres ? data.data.nombres : (undefined as any),
+          );
+          form.setValue(
+            'email',
+            data.data.email ? data.data.email : (undefined as any),
+          );
+          form.setValue(
+            'phone_1',
+            data.data.movil ? data.data.movil : (undefined as any),
+          );
+          form.setValue(
+            'address',
+            data.data.direccion ? data.data.direccion : (undefined as any),
+          );
+        },
+      });
+    }
+  };
 
   ///* handlers ---------------------
   const onSave = async (data: SaveFormData) => {
@@ -321,9 +429,10 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
           helperText={errors.tipo_identificacion?.message}
           size={gridSizeMdLg6}
           disableClearable
-          onChangeValue={() => {
-            form.setValue('identificacion', '');
-            form.setValue('razon_social', '');
+          onChangeValue={value => {
+            form.reset({
+              tipo_identificacion: value ? value : undefined,
+            });
           }}
         />
         <InputAndBtnGridSpace
@@ -336,8 +445,8 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
               defaultValue={form.getValues('identificacion')}
               error={errors.identificacion}
               helperText={errors.identificacion?.message}
-              onFetchCedulaRucInfo={value => {
-                alert(value);
+              onFetchCedulaRucInfo={async value => {
+                await handleFetchCedulaRucInfo(value);
               }}
               disabled={!watchedIdentificationType}
             />

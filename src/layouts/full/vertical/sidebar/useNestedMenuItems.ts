@@ -104,6 +104,12 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUserShield,
           children: [
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'configuracion-empresa',
+              title: 'Configuración de mi Empresa',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.administracion.configuracionEmpresaNav,
+            }),
             renderByModule(SidenavModulesEnum.ADMIN_PROVINCIAS, {
               id: 'provincias',
               title: 'Provincias',

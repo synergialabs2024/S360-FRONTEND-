@@ -18,6 +18,7 @@ import {
   useFetchCanalVentas,
   useFetchSystemGroups,
   CreateUserProfileData,
+  useCreateSearchIdentificacion,
 } from '@/actions/app';
 import {
   Pais,
@@ -59,8 +60,6 @@ import { useLoaders, useTabsOnly } from '@/shared/hooks';
 import VentasAndOtrosScence from './VentasAndOtrosScence';
 import { gridSize, gridSizeMdLg6 } from '@/shared/constants/ui';
 import { returnUrlSystemUserPage } from '../../pages/tables/SystemUserPage';
-import { SearchCedulaParams, useSearchCedula } from '@/actions/consultas-api';
-import { PersonaInformacion } from '@/shared/interfaces/consultas-api/persona-informacion.interface';
 
 export type SaveSystemUserProps = {
   title: string;
@@ -200,12 +199,14 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
   });
 
   // handlers ------------
+  /*
   const onSuccessSearchCedula = (personaInformacion: PersonaInformacion) => {
     form.reset({
       ...form.getValues(),
       razon_social: personaInformacion?.nombres,
     });
   };
+  */
 
   ///* mutation ----------------
   const createUser = useCreateSystemUser<CreateUserProfileData>({
@@ -216,21 +217,109 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
     navigate,
     returnUrl: returnUrlSystemUserPage,
   });
-  const useSearchCedulaMutation = useSearchCedula<SearchCedulaParams>({
+  const createSearchIdentificacionMutation = useCreateSearchIdentificacion({
+    navigate,
     enableErrorNavigate: false,
-    customOnSuccess: data => {
-      onSuccessSearchCedula(data as PersonaInformacion);
-    },
   });
   const handleFetchCedulaRucInfo = async (value: string) => {
     if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
-      await useSearchCedulaMutation.mutateAsync({
-        cedula: value,
+      const payload = {
+        tipo_identificacion: 'ci',
+        identificacion: value,
+      };
+      createSearchIdentificacionMutation.mutate(payload, {
+        onSuccess: data => {
+          console.log(data.data);
+
+          form.setValue('area', undefined);
+          form.setValue('canal_venta', undefined);
+          form.setValue('cargo', undefined);
+          form.setValue('centro_costo', undefined);
+          form.setValue('ciudad', undefined);
+          form.setValue('departamento', undefined);
+          form.setValue('groups', []);
+          form.setValue('pais', undefined);
+          form.setValue('password', undefined);
+          form.setValue('phone_2', undefined as any);
+          form.setValue('phone_3', undefined as any);
+          form.setValue('provincia', undefined);
+          form.setValue('role', undefined as any);
+          form.setValue('salary', undefined as any);
+          form.setValue('sector', undefined);
+          form.setValue('tipo_empleado', undefined as any);
+          form.setValue('username', undefined as any);
+          form.setValue('zona', undefined);
+
+          const contactoEmail = data.data.contactos?.find(
+            i => i.tipo === 'Email',
+          );
+          const contactoDireccion = data.data.contactos?.find(
+            i => i.tipo === 'Direccion',
+          );
+          console.log(contactoEmail);
+
+          form.setValue(
+            'razon_social',
+            data.data.nombres ? data.data.nombres : undefined,
+          );
+          form.setValue(
+            'email',
+            contactoEmail?.contacto
+              ? contactoEmail.contacto
+              : (undefined as any),
+          );
+          form.setValue(
+            'address',
+            contactoDireccion?.contacto
+              ? contactoDireccion.contacto
+              : undefined,
+          );
+        },
       });
     } else if (watchedIdentificationType === IdentificationTypeEnumChoice.RUC) {
-      // await useSearchRucMutation.mutateAsync({
-      //   ruc: value,
-      // });
+      const payload = {
+        tipo_identificacion: 'ruc',
+        identificacion: value,
+      };
+      createSearchIdentificacionMutation.mutate(payload, {
+        onSuccess: data => {
+          form.setValue('area', undefined);
+          form.setValue('canal_venta', undefined);
+          form.setValue('cargo', undefined);
+          form.setValue('centro_costo', undefined);
+          form.setValue('ciudad', undefined);
+          form.setValue('departamento', undefined);
+          form.setValue('groups', []);
+          form.setValue('pais', undefined);
+          form.setValue('password', undefined);
+          form.setValue('phone_2', undefined as any);
+          form.setValue('phone_3', undefined as any);
+          form.setValue('provincia', undefined);
+          form.setValue('role', undefined as any);
+          form.setValue('salary', undefined as any);
+          form.setValue('sector', undefined);
+          form.setValue('tipo_empleado', undefined as any);
+          form.setValue('username', undefined as any);
+          form.setValue('zona', undefined);
+
+          form.setValue(
+            'razon_social',
+            data.data.nombres ? data.data.nombres : (undefined as any),
+          );
+          form.setValue(
+            'email',
+            data.data.email ? data.data.email : (undefined as any),
+          );
+          form.setValue(
+            'phone_1',
+            data.data.movil ? data.data.movil : undefined,
+          );
+          form.setValue(
+            'address',
+            data.data.direccion ? data.data.direccion : undefined,
+          );
+        },
+      });
     }
   };
 
@@ -390,8 +479,6 @@ const SaveSystemUser: React.FC<SaveSystemUserProps> = ({
           size={gridSizeMdLg6}
           disableClearable
           onChangeValue={value => {
-            // form.setValue('identificacion', '');
-            // form.setValue('razon_social', '');
             form.reset({
               tipo_identificacion: value ? value : undefined,
             });

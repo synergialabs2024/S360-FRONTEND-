@@ -74,14 +74,22 @@ const ConfigPlantillaClienteFibraPart: React.FC<
   const onSave = async (data: SaveFormDataConfigPlantilla) => {
     if (!isValid) return;
 
-    ///* upd
     if (serviceLine?.contrato_data?.id) {
       updateConfiguracionPlantillaMutation.mutate({
-        ...data,
         dias_gracia: +(data.dias_gracia || 0),
-      });
+        dia_pago: data.dia_pago,
+        dia_pago_limite: data.dia_pago_limite,
+        dia_suspension: data.dia_suspension,
+        dia_facturacion: data.dia_facturacion,
+      } as CreateConfiguracionPlantillaParamsBase);
+
       return;
     }
+    /*if (serviceLine?.contrato_data?.id) {
+    updateConfiguracionPlantillaMutation.mutate({
+      ...data,
+      dias_gracia: +(data.dias_gracia || 0),
+    });return;}*/
   };
 
   ///* effects ---------------------

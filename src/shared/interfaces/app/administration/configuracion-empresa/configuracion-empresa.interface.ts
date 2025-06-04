@@ -1,0 +1,40 @@
+import { PagingMetaResponse } from '@/shared/interfaces/common';
+import { YesNoEnumChoice } from '@/shared/constants';
+
+export interface ConfiguracionEmpresasPaginatedRes {
+  status: number;
+  message: string;
+  meta: PagingMetaResponse;
+  items: ConfiguracionEmpresa[];
+}
+
+export interface ConfiguracionEmpresa {
+  id?: number;
+  uuid?: string;
+
+  company_name: string;
+  commercial_name: string;
+  main_address: string;
+  establishment_address: string;
+  establishment_code: string;
+  issuing_point_code: string;
+  special_taxpayer: string;
+  obligated_accounting: YesNoEnumChoice;
+  logo_1_url: string;
+  logo_2_url: string;
+  mobile: string;
+  phone: string;
+
+  email: string;
+  website: string;
+  description: string;
+  url_oficina_virtual_aceptacion: string;
+
+  created_at?: string;
+  modified_at?: string;
+}
+
+export type ConfiguracionEmpresaLimitData = Pick<
+  ConfiguracionEmpresa,
+  'uuid' | 'company_name'
+>;
