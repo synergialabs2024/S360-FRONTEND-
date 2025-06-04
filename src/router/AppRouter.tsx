@@ -50,6 +50,14 @@ const ConfiguracionEmpresaPage = Loadable(
       ),
   ),
 );
+const UpdateConfEmpresaPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/administration/configuracion-empresa/pages/forms/UpdateConfEmpresaPage'
+      ),
+  ),
+);
 const PaisesPage = Loadable(
   lazy(() => import('@/app/administration/pais/pages/tables/PaisesPage')),
 );
@@ -2483,6 +2491,10 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.administracion.configuracionEmpresa,
             element: <ConfiguracionEmpresaPage />,
+          },
+          {
+            path: ROUTER_PATHS.administracion.configuracionEmpresaEditar,
+            element: <UpdateConfEmpresaPage />,
           },
           ///* pais
           {

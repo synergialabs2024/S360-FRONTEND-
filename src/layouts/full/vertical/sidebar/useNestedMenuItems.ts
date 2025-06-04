@@ -104,7 +104,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconUserShield,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.ADMIN_CONF_EMPRESA, {
               id: 'configuracion-empresa',
               title: 'Configuración de mi Empresa',
               type: MenuItemType.ITEM,

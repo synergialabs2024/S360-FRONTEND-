@@ -30,6 +30,7 @@ export const ROUTER_PATHS = {
 
     ///* configuracion empresa
     configuracionEmpresa: 'configuracion-empresa',
+    configuracionEmpresaEditar: 'configuracion-empresa/editar',
     configuracionEmpresaNav: '/parametrizacion/configuracion-empresa',
 
     ///* tipo regimen

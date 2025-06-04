@@ -1,7 +1,11 @@
 import { YES_NO_ARRAY_CHOICES } from '@/shared/constants';
 import * as yup from 'yup';
 
-export const areaFormSchema = yup.object({
+export const configuracionEmpresaFormSchema = yup.object({
+  schema_name: yup
+    .string()
+    .required('El campo Nombre del esquema es requerido')
+    .max(30, 'El campo Nombre del esquema no debe exceder los 30 caracteres'),
   company_name: yup
     .string()
     .required('El campo Razón social es requerido')
@@ -35,15 +39,15 @@ export const areaFormSchema = yup.object({
     .string()
     .required('El campo Código del Punto de Emisión es requerido')
     .max(
-      13,
-      'El campo Código del Punto de Emisión no debe exceder los 13 caracteres',
+      3,
+      'El campo Código del Punto de Emisión no debe exceder los 3 caracteres',
     ),
   special_taxpayer: yup
     .string()
     .required('El campo Contribuyente Especial es requerido')
     .max(
-      200,
-      'El campo Contribuyente Especial no debe exceder los 200 caracteres',
+      13,
+      'El campo Contribuyente Especial no debe exceder los 13 caracteres',
     ),
   obligated_accounting: yup
     .mixed()
@@ -52,21 +56,6 @@ export const areaFormSchema = yup.object({
       'El Obligado a Llevar Contabilidad debe ser elegido',
     )
     .required('El campo Obligado a Llevar Contabilidad es requerido'),
-
-  logo_1_url: yup
-    .string()
-    .required('El campo URL del primer logotipo es requerido')
-    .max(
-      400,
-      'El campo URL del primer logotipo no debe exceder los 400 caracteres',
-    ),
-  logo_2_url: yup
-    .string()
-    .required('El campo URL del segundo logotipo es requerido')
-    .max(
-      400,
-      'El campo URL del segundo logotipo no debe exceder los 400 caracteres',
-    ),
   mobile: yup
     .string()
     .required('El campo Teléfono celular es requerido')
@@ -83,18 +72,18 @@ export const areaFormSchema = yup.object({
     .string()
     .required('El campo Dirección de página web es requerido')
     .max(
-      13,
-      'El campo Dirección de página web no debe exceder los 13 caracteres',
+      250,
+      'El campo Dirección de página web no debe exceder los 250 caracteres',
     ),
   description: yup
     .string()
     .required('El campo Descripción es requerido')
-    .max(200, 'El campo Descripción no debe exceder los 200 caracteres'),
+    .max(500, 'El campo Descripción no debe exceder los 500 caracteres'),
   url_oficina_virtual_aceptacion: yup
     .string()
     .required('El campo Url oficina virtual aceptacion es requerido')
     .max(
-      200,
-      'El campo Url oficina virtual aceptacion no debe exceder los 200 caracteres',
+      400,
+      'El campo Url oficina virtual aceptacion no debe exceder los 400 caracteres',
     ),
 });
