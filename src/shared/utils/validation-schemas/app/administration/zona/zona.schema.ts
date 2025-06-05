@@ -12,7 +12,7 @@ export const zonaFormSchema = yup.object({
     .typeError('El campo has coverage es requerido')
     .required('El campo has coverage es requerido'),
   uid: yup
-    .boolean()
+    .string()
     .typeError('El campo UID es requerido')
     .required('El campo UID coverage es requerido'),
   semaforo: yup

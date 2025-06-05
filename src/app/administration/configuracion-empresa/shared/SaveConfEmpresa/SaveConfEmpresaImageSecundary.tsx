@@ -20,7 +20,7 @@ const SaveConfEmpresaImageSecundary: React.FC<
   return (
     <>
       <CustomTypoLabel
-        text="Logo Secundario"
+        text="Logo Secundario de Contrato"
         pt={CustomTypoLabelEnum.ptMiddlePosition}
       />
 

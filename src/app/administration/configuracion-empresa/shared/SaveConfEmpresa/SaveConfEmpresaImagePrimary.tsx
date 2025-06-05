@@ -25,7 +25,7 @@ const SaveConfEmpresaImagePrimary: React.FC<
       />
 
       <UploadImageDropZoneComponent
-        buttonLabel="Primer Logo"
+        buttonLabel="Primer Logo del Contrato"
         selectedImage={Image_url_1}
         setSelectedImage={setImage_url_1}
         sizeContainer={gridSize}

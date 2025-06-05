@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { ButtonVariantType, ColorButtonType } from '@/shared/interfaces';
+import { useIsMediaQuery } from '@/shared/hooks';
 
 export interface ScrollableDialogPropsProps {
   open: boolean;
@@ -78,13 +79,19 @@ const ScrollableDialogProps: React.FC<ScrollableDialogPropsProps> = ({
   additionalBtnVariant = 'text',
   onAdditionalBtn,
 }) => {
+  const isMobile = useIsMediaQuery('sm');
   return (
     <>
       <Dialog
         open={open}
         onClose={onClose}
         scroll="paper"
-        sx={{ '& .MuiDialog-paper': { width, minWidth } }}
+        sx={{
+          '& .MuiDialog-paper': {
+            width,
+            minWidth: isMobile ? '90%' : minWidth,
+          },
+        }}
       >
         {/* ========= Title ========= */}
         <DialogTitle style={{ padding: '24px 24px' }} id="scroll-dialog-title">
