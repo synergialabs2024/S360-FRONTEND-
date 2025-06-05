@@ -31,29 +31,25 @@ export const useColumsFactura = () => {
         enableSorting: false,
         Cell: ({ row }: MRTFacturaType) => {
           const pdf = row?.original.url_pdf;
-          if (!pdf) return 'N/A';
-
-          return <PDFIconButton url={pdf} />;
+          return <PDFIconButton url={pdf} disabled={!pdf} />;
         },
       },
       {
-        accessorKey: 'url_xml',
+        accessorKey: 'xml',
         header: 'XML',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
         enableColumnFilter: false,
         enableSorting: false,
         Cell: ({ row }: MRTFacturaType) => {
-          const xml = row?.original.url_xml;
-          if (!xml) return 'N/A';
-
-          return <PDFIconButton url={xml} isXml />;
+          const xml = row?.original.xml;
+          return <PDFIconButton url={xml} disabled={!xml} isXml />;
         },
       },
       {
-        accessorKey: 'total',
+        accessorKey: 'importe_total',
         header: 'TOTAL',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
-        Cell: ({ row }) => emptyCellOneLevel(row, 'total'),
+        Cell: ({ row }) => emptyCellOneLevel(row, 'importe_total'),
       },
 
       {

@@ -15,6 +15,7 @@ export interface Factura {
 
   url_pdf: string;
   url_xml: string;
+  xml: string;
 
   total: string;
   clave_acceso: string;

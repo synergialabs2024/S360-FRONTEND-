@@ -20,7 +20,6 @@ import {
   ColorChipType,
   LineaServicio,
   ShowPingModal,
-  gridSizeMdLg1,
   gridSizeMdLg4,
   gridSizeMdLg6,
   gridSizeMdLg12,
@@ -28,6 +27,8 @@ import {
   PermissionsEnum,
   soporteTecnicoFormSchema,
   ShowEquipoMaterialUtilizadosModal,
+  gridSizeMdLg2,
+  ShowHistorialTicketsYSModal,
 } from '@/shared';
 import {
   useUpdateSolicitudServicio,
@@ -174,7 +175,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
           container
           justifyContent="center"
           alignItems="center"
-          {...gridSizeMdLg1}
+          {...{ xs: 12, sm: 12, md: 1.5, lg: 1.5 }}
         >
           <ShowEquipoMaterialUtilizadosModal
             tipo_utilizado={tipo as TipoUtilizado}
@@ -188,7 +189,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         container
         justifyContent="center"
         alignItems="center"
-        {...gridSizeMdLg1}
+        {...{ xs: 12, sm: 12, md: 1.5, lg: 1.5 }}
       >
         <ImgModalComponent
           urls={{
@@ -218,7 +219,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         container
         justifyContent="center"
         alignItems="center"
-        {...gridSizeMdLg1}
+        {...{ xs: 12, sm: 12, md: 1.5, lg: 1.5 }}
       >
         <ShowTraceModal
           typeBtn="icon"
@@ -226,12 +227,20 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
           modalTitle="TRACING"
         />
       </Grid>
+      <CustomTextFieldNoForm
+        label="Codigo"
+        size={gridSizeMdLg6}
+        value={soporte_tecnico?.contrato_data?.numero_contrato}
+        required={false}
+        disabled
+      />
       <Grid
         mt={9}
         container
         justifyContent="center"
         alignItems="center"
-        {...gridSizeMdLg1}
+        {...gridSizeMdLg2}
+        sx={{ mt: 4 }}
       >
         <ShowPingModal
           typeBtn="icon"
@@ -244,7 +253,8 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         container
         justifyContent="center"
         alignItems="center"
-        {...gridSizeMdLg1}
+        {...gridSizeMdLg2}
+        sx={{ mt: 4 }}
       >
         <HistorialTickets
           typeBtn="icon"
@@ -252,13 +262,19 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
           modalTitle="HISTORICO TICKETS"
         />
       </Grid>
-      <CustomTextFieldNoForm
-        label="Codigo"
-        size={gridSizeMdLg6}
-        value={soporte_tecnico?.contrato_data?.numero_contrato}
-        required={false}
-        disabled
-      />
+      <Grid
+        mt={9}
+        container
+        justifyContent="center"
+        alignItems="center"
+        {...gridSizeMdLg2}
+        sx={{ mt: 4 }}
+      >
+        <ShowHistorialTicketsYSModal
+          cedula={soporte_tecnico?.solicitud_servicio_data?.identificacion!}
+          title="HISTORICO TICKETS YIGASUITE"
+        />
+      </Grid>
       <CustomTextFieldNoForm
         label="IP Servicio"
         size={gridSizeMdLg6}
@@ -310,14 +326,14 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
       />
       <CustomTextFieldNoForm
         label="Promocion"
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         value={soporte_tecnico?.preventa_data?.promociones?.[0]}
         required={false}
         disabled
       />
       <CustomTextFieldNoForm
         label="Prioridad"
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         value={
           soporte_tecnico?.contrato_data?.plan_internet_ingreso_data?.prioridad
         }
@@ -326,7 +342,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
       />
       <CustomTextFieldNoForm
         label="Tercera Edad"
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         value={soporte_tecnico?.cliente_data?.es_tercera_edad ? 'Sí' : 'No'}
         required={false}
         disabled

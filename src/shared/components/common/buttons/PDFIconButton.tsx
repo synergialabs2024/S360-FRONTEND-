@@ -29,7 +29,16 @@ const PDFIconButton: React.FC<PDFIconButtonProps> = ({
             return;
           }
 
-          window.open(url, '_blank');
+          if (isXml) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'archivo.xml'); // Puedes cambiar el nombre si quieres
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            window.open(url, '_blank');
+          }
         }}
       />
     </>

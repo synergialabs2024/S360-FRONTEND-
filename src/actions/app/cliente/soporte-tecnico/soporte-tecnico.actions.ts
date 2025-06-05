@@ -9,12 +9,15 @@ import {
   UseFetchEnabledParams,
   SoporteTecnicoPaginatedRes,
   SoporteTecnicoCliente,
+  getEnvs,
 } from '@/shared';
 import { useUiStore } from '@/store/ui';
 import { erpAPI } from '@/shared/axios/erp-api';
 import { handleAxiosError } from '@/shared/axios/axios.utils';
+import axios from 'axios';
 
 const { get, post, patch } = erpAPI();
+const { VITE_SOEI_URL } = getEnvs();
 
 export enum SoporteTecnicoTSQEnum {
   SOPORTETECNICOS = 'soporte-tecnicos',
@@ -228,4 +231,20 @@ export const updateSoporteTecnicoCliente = async <T>({
     data,
     true,
   );
+};
+
+export const getTicketsCRMHistorial = async (params?: string) => {
+  const setIsGlobalLoading = useUiStore.getState().setIsGlobalLoading;
+  setIsGlobalLoading(true);
+  try {
+    const response = await axios.post(`${VITE_SOEI_URL}/getTicketsCRM`, {
+      cedula: params,
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  } finally {
+    setIsGlobalLoading(false);
+  }
 };
