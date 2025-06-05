@@ -1055,5 +1055,10 @@ export const ROUTER_PATHS = {
     cambioOnuCrear: 'cambio-onu/crear',
     cambioOnuEditar: 'cambio-onu/editar/:uuid',
     cambioOnuNav: '/sac/cambio-onu',
+
+    //* Soporte Tecnico
+    soporteTecnico: 'soporte-tecnico',
+    soporteTecnicoEditar: 'soporte-tecnico/:uuid',
+    soporteTecnicoNav: '/sac/soporte-tecnico',
   },
 };

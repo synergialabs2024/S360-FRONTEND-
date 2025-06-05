@@ -177,4 +177,5 @@ export enum SidenavModulesEnum {
 
   // Sac
   SAC_CAMBIO_ONU = 'SAC.CAMBIO_ONU',
+  SAC_SOPORTE_TECNICO = 'SAC.SOPORTE_TECNICO',
 }

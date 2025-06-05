@@ -788,12 +788,12 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.operaciones.aprobacionicketsVisitaNav,
             }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            /* renderByModule(SidenavModulesEnum.OPERACIONES_CAMBIO_ONU_ACTIVACION, {
               id: 'cambio-onu-activacion',
               title: 'Cambio onu Activacion',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.operaciones.cambioOnuActivacionNav,
-            }),
+            }), */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Logistica ----------------
@@ -910,12 +910,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            renderByModule(SidenavModulesEnum.CLIENTE_SOPORTE_TECNICO, {
+            /* renderByModule(SidenavModulesEnum.CLIENTE_SOPORTE_TECNICO, {
               id: 'soporte-tecnico',
               title: 'Soporte tecnico',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.clientes.soporteTecnicoNav,
-            }),
+            }), */
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Cartera ----------------
@@ -1568,13 +1568,13 @@ export const useNestedMenu = () => {
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
               children: [
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ASUNTO, {
                   id: 'asuntos',
                   title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ORIGEN, {
                   id: 'origenes',
                   title: 'Origen ticket',
                   type: MenuItemType.ITEM,
@@ -1679,11 +1679,17 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
-              id: 'cambio-onu',
-              title: 'Cambio Onu',
+            // renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            //   id: 'cambio-onu',
+            //   title: 'Cambio Onu',
+            //   type: MenuItemType.ITEM,
+            //   url: ROUTER_PATHS.sac.cambioOnuNav,
+            // }),
+            renderByModule(SidenavModulesEnum.SAC_SOPORTE_TECNICO, {
+              id: 'soporte-tecnico',
+              title: 'Soporte tecnico',
               type: MenuItemType.ITEM,
-              url: ROUTER_PATHS.sac.cambioOnuNav,
+              url: ROUTER_PATHS.sac.soporteTecnicoNav,
             }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
