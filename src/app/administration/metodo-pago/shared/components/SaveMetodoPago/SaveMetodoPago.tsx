@@ -14,7 +14,12 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg12, MetodoPago, metodoPagoFormSchema } from '@/shared';
+import {
+  gridSizeMdLg12,
+  gridSizeMdLg6,
+  MetodoPago,
+  metodoPagoFormSchema,
+} from '@/shared';
 import { returnUrlMetodosPagoPage } from '../../../pages/tables/MetodosPagoPage';
 
 export interface SaveMetodoPagoProps {
@@ -93,6 +98,17 @@ const SaveMetodoPago: React.FC<SaveMetodoPagoProps> = ({
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
+        size={gridSizeMdLg6}
+      />
+      <CustomTextField
+        label="Codigo"
+        name="code"
+        control={form.control}
+        defaultValue={form.getValues().code}
+        error={errors.code}
+        helperText={errors.code?.message}
+        size={gridSizeMdLg6}
+        disabled={!!metodopago?.id}
       />
       <CustomTextArea
         label="Descripción"

@@ -46,12 +46,6 @@ const ConfigPlantillaClienteFibraFacturacionCards: React.FC<
       color: 'error.main',
       Icon: IconCalendarPause,
     },
-    {
-      label: 'Día de gracia',
-      value: form.watch('dias_gracia'),
-      color: 'success.main',
-      Icon: IconCalendarPlus,
-    },
   ];
 
   return (
@@ -73,6 +67,20 @@ const ConfigPlantillaClienteFibraFacturacionCards: React.FC<
           </Box>
         </Grid>
       ))}
+
+      <Grid item xs={4}>
+        <Box
+          sx={{
+            backgroundColor: 'success.main',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <IconCalendarPlus />
+          <Grid sx={{ margin: '10px' }}>Día de gracia: 5</Grid>
+        </Box>
+      </Grid>
     </Grid>
   );
 };
