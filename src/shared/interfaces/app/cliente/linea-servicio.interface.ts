@@ -80,6 +80,8 @@ export interface LineaServicio {
   client_lines_data?: ClientLimiTypeData[]; // to handle switch between services (all except NO_INSTALADO)
 
   promociones_data?: PromocionLimitData[]; // contract.promociones
+
+  serie_ont?: string;
 }
 
 export type ClientLimiTypeData = Pick<

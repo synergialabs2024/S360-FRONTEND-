@@ -140,6 +140,7 @@ export type GetUbicacionProductosParams = Partial<UbicacionProducto> &
     producto__modelo__nombre?: string;
     producto__modelo__codigo?: string;
     ubicacion__pk?: number;
+    ubicacion__codigo?: string;
 
     // helpers
     unique_centro_costo_equipos_venta?: boolean;

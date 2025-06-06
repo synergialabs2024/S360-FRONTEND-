@@ -1860,3 +1860,9 @@ export const SUSPENSION_INTERNET_ESTADO_ARRAY_CHOICES = [
   SuspensionInternetEstadoTMEnumChoice.INACTIVO,
   SuspensionInternetEstadoTMEnumChoice.CANCELADO,
 ];
+
+//
+
+export enum CambioOnuInventarioEnumChoice {
+  UBICACION_CAMBIO_ONU = 'UBICACION CAMBIO ONU',
+}

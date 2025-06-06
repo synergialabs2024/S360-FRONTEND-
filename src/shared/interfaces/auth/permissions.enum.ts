@@ -460,6 +460,7 @@ export enum PermissionsEnum {
   inventario_change_transferenciamaterial = 'inventario.change_transferenciamaterial',
   inventario_change_ubicacion = 'inventario.change_ubicacion',
   inventario_change_ubicacionproducto = 'inventario.change_ubicacionproducto',
+  inventario_change_cambioonu = 'inventario.change_cambioonu',
   mantenimientoope_change_flota = 'mantenimientoope.change_flota',
   mantenimientoope_change_planificador = 'mantenimientoope.change_planificador',
   mantenimientoope_change_tipoinstalacion = 'mantenimientoope.change_tipoinstalacion',

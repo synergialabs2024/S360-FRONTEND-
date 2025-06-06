@@ -632,6 +632,13 @@ export const useNestedMenu = () => {
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
+            /* renderByModule(SidenavModulesEnum.INVENTARIO_CAMBIO_ONU, { */
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+              id: 'cambio-onu',
+              title: 'Cambio Onu',
+              type: MenuItemType.ITEM,
+              url: ROUTER_PATHS.inventario.cambioOnuNav,
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Tecnicos ----------------
@@ -1568,7 +1575,7 @@ export const useNestedMenu = () => {
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
               children: [
-                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ASUNTO, {
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
                   id: 'asuntos',
                   title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
