@@ -7,14 +7,9 @@ import { useEffect } from 'react';
 import {
   useUpdateConfiguracionEmpresa,
   CreateConfiguracionEmpresaParamsBase,
-  useFetchPaises,
-  useFetchProvincias,
-  useFetchCiudades,
-  useFetchSectores,
 } from '@/actions/app';
 import {
   a11yProps,
-  CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomTabPanel,
   CustomTextArea,
@@ -24,17 +19,12 @@ import {
 } from '@/shared/components';
 import {
   BucketTypeEnumChoice,
-  Ciudad,
   ConfiguracionEmpresa,
   configuracionEmpresaFormSchema,
   gridSizeMdLg10,
   gridSizeMdLg12,
   gridSizeMdLg6,
-  Pais,
-  Provincia,
-  Sector,
   ToastWrapper,
-  useLoaders,
   useTabsOnly,
   useUploadImageGeneric,
   YES_NO_ARRAY_CHOICES,
@@ -69,6 +59,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
     defaultValues: {},
   });
 
+  /*
   const watchedPais = form.watch('pais');
   const watchedProvincia = form.watch('provincia');
   const watchedCiudad = form.watch('ciudad');
@@ -116,6 +107,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
       page_size: 1000,
     },
   });
+  */
 
   const {
     UploadImageDropZoneComponent,
@@ -186,6 +178,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
   }, [conf_empresa, reset]);
 
   // alerts
+  /*
   useEffect(() => {
     if (isLoadingProvincias || isRefetchingProvincias || !watchedPais) return;
     !provinciasPagingRes?.data?.items?.length &&
@@ -228,6 +221,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
     isRefetchingSectores;
 
   useLoaders(customLoader);
+  */
 
   return (
     <TabsFormBoxScene
@@ -365,6 +359,8 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           size={gridSizeMdLg6}
           ignoreTransform
         />
+
+        {/** 
         <CustomAutocomplete<Pais>
           label="Pais"
           name="pais"
@@ -425,6 +421,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           helperText={errors.sector?.message}
           size={gridSizeMdLg6}
         />
+        */}
         <CustomTextField
           label="Dirección de página web"
           name="website"

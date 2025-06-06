@@ -102,6 +102,14 @@ const MetodosPagoPage: React.FC<MetodosPagoPageProps> = () => {
         Cell: ({ row }) => emptyCellOneLevel(row, 'name'),
       },
       {
+        accessorKey: 'code',
+        header: 'Codigo',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) => emptyCellOneLevel(row, 'code'),
+      },
+      {
         accessorKey: 'state',
         header: 'ESTADO',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,

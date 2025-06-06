@@ -106,6 +106,8 @@ export const configuracionEmpresaFormSchema = yup.object({
       'El campo Url oficina virtual aceptacion no debe exceder los 400 caracteres',
     )
     .matches(UUID_AT_END_REGEX, 'La URL debe terminar con un UUID válido'),
+
+  /*
   pais: yup
     .number()
     .typeError('El campo pais es requerido')
@@ -122,4 +124,5 @@ export const configuracionEmpresaFormSchema = yup.object({
     .number()
     .typeError('El campo sector es requerido')
     .required('El campo sector es requerido'),
+    */
 });

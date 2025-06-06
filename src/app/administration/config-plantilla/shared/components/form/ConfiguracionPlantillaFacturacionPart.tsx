@@ -2,18 +2,15 @@ import { UseFormReturn } from 'react-hook-form';
 import { useEffect } from 'react';
 
 import {
-  CustomAutocomplete,
-  CustomTextFieldNoForm,
-  CustomAutocompleteSimple,
-} from '@/shared/components';
-import {
   useLoaders,
   ToastWrapper,
   gridSizeMdLg4,
   CalendarioFacturacion,
-  DiasAntesCreacionFacturaType,
-  CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ,
 } from '@/shared';
+import {
+  CustomTextFieldNoForm,
+  CustomAutocompleteSimple,
+} from '@/shared/components';
 import { useRubroStore } from '@/store/app/rubros';
 import { useFetchCalendarioFacturaciones } from '@/actions/app';
 import { SaveFormDataConfigPlantilla } from './SaveConfiguracionPlantilla';
@@ -29,9 +26,6 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
   const setCalendariosFacturacion = useRubroStore(
     s => s.setCalendariosFacturacion,
   );
-
-  ///* form ---------------------
-  const { errors } = form?.formState || {};
 
   ///* fetch data ----------------
   const {
@@ -119,23 +113,14 @@ const ConfiguracionPlantillaFacturacionPart: React.FC<
         required={false}
         disabled
       />
-
-      <CustomAutocomplete<DiasAntesCreacionFacturaType>
+      <CustomTextFieldNoForm
         label="Crea factura días antes"
-        name="crea_factura"
-        // options
-        options={CREAR_FACTURA_DIAS_ANTES_ARRAY_OBJ}
-        valueKey="label"
-        actualValueKey="value"
-        defaultValue={form.getValues().crea_factura}
-        isLoadingData={false}
-        // vaidation
-        control={form.control}
-        error={errors.crea_factura}
-        helperText={errors.crea_factura?.message}
         size={gridSizeMdLg4}
+        value={5}
+        required={false}
         disabled
       />
+
       {/*
       <SampleCheckbox
         label="Bajar velocidad"
