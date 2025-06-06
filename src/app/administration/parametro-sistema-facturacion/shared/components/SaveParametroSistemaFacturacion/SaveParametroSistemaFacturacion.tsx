@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  CreateParametroSistemaFacturacionParamsBase,
-  useCreateParametroSistemaFacturacion,
-} from '@/actions/app';
+  ToastWrapper,
+  BucketTypeEnumChoice,
+  useUploadFileGeneric,
+} from '@/shared';
 import {
+  PermissionsEnum,
+  ParametroSistemaFacturacion,
+} from '@/shared/interfaces';
+import {
+  CustomPasswordTextField,
   CustomTextField,
   SingleFormBoxScene,
   UploadFileDropZone,
@@ -17,16 +23,15 @@ import {
   gridSizeMdLg4,
   gridSizeMdLg6,
 } from '@/shared/constants/ui';
+import {
+  useCreateParametroSistemaFacturacion,
+  useFetchParametrosSistemaFacturacion,
+  CreateParametroSistemaFacturacionParamsBase,
+} from '@/actions/app';
 import { useCheckPermission } from '@/shared/hooks/auth';
-import { PermissionsEnum } from '@/shared/interfaces';
+import { uploadFileToBucket } from '@/actions/statics-api';
 import { parametro_sistemaFacturacionFormSchema } from '@/shared/utils';
 import { returnUrlParamestrosSistemasPage } from '@/app/administration/parametro-sistema/pages/tables/ParametrosSistemasPage';
-import {
-  BucketTypeEnumChoice,
-  ToastWrapper,
-  useUploadFileGeneric,
-} from '@/shared';
-import { uploadFileToBucket } from '@/actions/statics-api';
 
 export interface SaveParametroSistemaFacturacionProps {}
 
@@ -38,6 +43,9 @@ const SaveParametroSistemaFacturacion: React.FC<
   useCheckPermission(PermissionsEnum.administration_view_parametrosistema);
   const navigate = useNavigate();
 
+  ///* local state ----------------
+  const [canWritePassword] = useState<boolean>(true);
+
   //* State Global
   const { file1: File_url, setFile1: setFile_url } = useUploadFileGeneric();
 
@@ -46,10 +54,24 @@ const SaveParametroSistemaFacturacion: React.FC<
     resolver: yupResolver(parametro_sistemaFacturacionFormSchema) as any,
   });
 
+  const watchedFIRMA_URL = form.watch('FIRMA_URL');
+
   const {
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = form;
+
+  const { data: ParamSisFacturacionPagingRes } =
+    useFetchParametrosSistemaFacturacion({});
+
+  useEffect(() => {
+    if (ParamSisFacturacionPagingRes) {
+      reset(
+        ParamSisFacturacionPagingRes as unknown as ParametroSistemaFacturacion,
+      );
+    }
+  }, [ParamSisFacturacionPagingRes]);
 
   ///* mutations
   const createParametroSistemaFacturacionMutation =
@@ -62,27 +84,26 @@ const SaveParametroSistemaFacturacion: React.FC<
   ///* handlers
   const onSave = async (data: SaveFormData) => {
     if (!isValid) return;
-    if (!File_url) return ToastWrapper.error('La archivo p12 es requerido');
+
+    // validate file -----------
+    if (!File_url && !watchedFIRMA_URL) {
+      return ToastWrapper.error('El logo principal es requerida');
+    }
 
     // upload ----
-    const [Url] = await Promise.all([
-      uploadFileToBucket({
-        file: File_url,
-        file_name: 'file_parametrosistema_facturacion_p12',
-        bucketDir: BucketTypeEnumChoice.FILES_PARAMETRO_SISTEMA_FACTURACION,
-      }),
-    ]);
-
-    data.FIRMA_URL = Url.streamUlr;
+    if (File_url) {
+      const [Url] = await Promise.all([
+        uploadFileToBucket({
+          file: File_url,
+          file_name: 'file_parametrosistema_facturacion_p12',
+          bucketDir: BucketTypeEnumChoice.FILES_PARAMETRO_SISTEMA_FACTURACION,
+        }),
+      ]);
+      data.FIRMA_URL = Url.streamUlr;
+    }
 
     ///* create
-    try {
-      createParametroSistemaFacturacionMutation.mutate(data);
-    } catch (error) {
-      return;
-    }
-    form.reset();
-    setFile_url(null);
+    createParametroSistemaFacturacionMutation.mutate(data);
   };
 
   return (
@@ -103,16 +124,17 @@ const SaveParametroSistemaFacturacion: React.FC<
         ignoreTransform
       />
 
-      <CustomTextField
+      <CustomPasswordTextField
         label="CLAVE FIRMA P12"
         name="FIRMA_CLAVE"
-        control={form.control}
         defaultValue={form.getValues().FIRMA_CLAVE}
-        error={errors.FIRMA_CLAVE}
-        helperText={errors.FIRMA_CLAVE?.message}
+        control={form.control}
+        errors={errors?.FIRMA_CLAVE}
+        helperText={errors?.FIRMA_CLAVE?.message}
+        disabled={!canWritePassword}
         size={gridSizeMdLg4}
-        ignoreTransform
       />
+
       <CustomTextField
         label="RUC EMPRESARIAL"
         name="RUC_EMPRESA"
