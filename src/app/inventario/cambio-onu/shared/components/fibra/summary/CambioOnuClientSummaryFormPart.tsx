@@ -1,5 +1,5 @@
+import ContractFibraClientPart from '@/app/cliente/cliente/shared/components/fibra/summary/ContractFibraClientPart';
 import { LineaServicio } from '@/shared';
-import ContractFibraClientPart from './ContractFibraClientPart';
 
 export type CambioOnuClientSummaryFormPartProps = {
   serviceLine: LineaServicio;
