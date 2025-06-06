@@ -1818,6 +1818,20 @@ const UpdateCuentaContablePage = Loadable(
       ),
   ),
 );
+
+const ClientesCambioOnuMainPage = Loadable(
+  lazy(
+    () =>
+      import(
+        '@/app/inventario/cambio-onu/pages/tables/ClientesCambioOnuMainPage'
+      ),
+  ),
+);
+const CreateCambioOnuPage = Loadable(
+  lazy(
+    () => import('@/app/inventario/cambio-onu/pages/forms/CreateCambioOnuPage'),
+  ),
+);
 ///* Logistica ------------
 //TipoInstalacion
 const TipoInstalacionesPage = Loadable(
@@ -3891,6 +3905,16 @@ const AppRouter = [
           {
             path: ROUTER_PATHS.inventario.cuentaContablesEditar,
             element: <UpdateCuentaContablePage />,
+          },
+
+          // Cambio Onu
+          {
+            path: ROUTER_PATHS.inventario.cambioOnu,
+            element: <ClientesCambioOnuMainPage />,
+          },
+          {
+            path: ROUTER_PATHS.inventario.cambioOnuEditar,
+            element: <CreateCambioOnuPage />,
           },
         ],
       },

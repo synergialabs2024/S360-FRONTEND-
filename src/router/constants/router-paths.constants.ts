@@ -892,6 +892,12 @@ export const ROUTER_PATHS = {
     cuentaContablesCrear: 'cuenta-contable/crear',
     cuentaContablesEditar: 'cuenta-contable/editar/:uuid',
     cuentaContablesNav: '/inventario/cuenta-contable',
+
+    ///* Cambio Onu
+    cambioOnu: 'cambio-onu',
+    cambioOnuCrear: 'cambio-onu/crear',
+    cambioOnuEditar: 'cambio-onu/editar/:uuid',
+    cambioOnuNav: '/inventario/cambio-onu',
   },
   // // LOGISTICA =================================
   logistica: {
