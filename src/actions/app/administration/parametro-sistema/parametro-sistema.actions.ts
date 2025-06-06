@@ -37,6 +37,22 @@ export const useFetchParametrosSistemas = ({
   });
 };
 
+export const useFetchParametrosSistemaFacturacion = ({
+  enabled = true,
+  params,
+  refetchInterval,
+}: UseFetchEnabledParams<GetParametrosSistemaFacturacionParams>) => {
+  return useQuery({
+    queryKey: [
+      ParametroSistemaTSQEnum.PARAMETROS_SISTEMAS,
+      ...Object.values(params || {}),
+    ],
+    queryFn: () => getParametroSistemaFacturacion(params),
+    enabled: enabled,
+    ...(refetchInterval && { refetchInterval }),
+  });
+};
+
 export const useGetParametroSistema = (uuid: string) => {
   return useQuery({
     queryKey: [ParametroSistemaTSQEnum.PARAMETRO_SISTEMA, uuid],
@@ -173,6 +189,13 @@ export type GetParametrosSistemasParams = Partial<ParametroSistema> & {
 
   filterByState?: boolean;
 };
+export type GetParametrosSistemaFacturacionParams =
+  Partial<ParametroSistemaFacturacion> & {
+    page?: number;
+    page_size?: number;
+
+    filterByState?: boolean;
+  };
 export type CreateParametroSistemaParams<T> = T;
 export type CreateParametroSistemaParamsBase = Omit<ParametroSistema, 'id'>;
 export interface UpdateParametroSistemaParams<T> {
@@ -212,6 +235,18 @@ export const getParametroSistema = async (uuid: string) => {
   } catch (error) {
     handleAxiosError(error);
   }
+};
+
+export const getParametroSistemaFacturacion = async (
+  params?: GetParametrosSistemaFacturacionParams,
+) => {
+  const stateParams = { ...params };
+
+  const queryParams = getUrlParams(stateParams);
+  return get<ParametroSistemaFacturacion[]>(
+    `/parametrosistema/facturacion/?${queryParams}`,
+    true,
+  );
 };
 
 export const createParametroSistema = async <T>(

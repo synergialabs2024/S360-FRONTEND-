@@ -7,9 +7,14 @@ import { useEffect } from 'react';
 import {
   useUpdateConfiguracionEmpresa,
   CreateConfiguracionEmpresaParamsBase,
+  useFetchPaises,
+  useFetchProvincias,
+  useFetchCiudades,
+  useFetchSectores,
 } from '@/actions/app';
 import {
   a11yProps,
+  CustomAutocomplete,
   CustomAutocompleteArrString,
   CustomTabPanel,
   CustomTextArea,
@@ -19,12 +24,17 @@ import {
 } from '@/shared/components';
 import {
   BucketTypeEnumChoice,
+  Ciudad,
   ConfiguracionEmpresa,
   configuracionEmpresaFormSchema,
   gridSizeMdLg10,
   gridSizeMdLg12,
   gridSizeMdLg6,
+  Pais,
+  Provincia,
+  Sector,
   ToastWrapper,
+  useLoaders,
   useTabsOnly,
   useUploadImageGeneric,
   YES_NO_ARRAY_CHOICES,
@@ -57,6 +67,54 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
   const form = useForm<SaveFormData>({
     resolver: yupResolver(configuracionEmpresaFormSchema) as any,
     defaultValues: {},
+  });
+
+  const watchedPais = form.watch('pais');
+  const watchedProvincia = form.watch('provincia');
+  const watchedCiudad = form.watch('ciudad');
+
+  ///* fetch data
+  const {
+    data: paisesPagingRes,
+    isLoading: isLoadingPaises,
+    isRefetching: isRefetchingPaises,
+  } = useFetchPaises({
+    params: {
+      page_size: 1000,
+    },
+  });
+  const {
+    data: provinciasPagingRes,
+    isLoading: isLoadingProvincias,
+    isRefetching: isRefetchingProvincias,
+  } = useFetchProvincias({
+    enabled: !!watchedPais,
+    params: {
+      pais: watchedPais,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: ciudadesPagingRes,
+    isLoading: isLoadingCiudades,
+    isRefetching: isRefetchingCiudades,
+  } = useFetchCiudades({
+    enabled: !!watchedProvincia,
+    params: {
+      provincia: watchedProvincia,
+      page_size: 1000,
+    },
+  });
+  const {
+    data: sectoresPagingRes,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
+  } = useFetchSectores({
+    enabled: !!watchedCiudad,
+    params: {
+      ciudad: watchedCiudad,
+      page_size: 1000,
+    },
   });
 
   const {
@@ -126,6 +184,50 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
     if (!conf_empresa?.id) return;
     reset(conf_empresa);
   }, [conf_empresa, reset]);
+
+  // alerts
+  useEffect(() => {
+    if (isLoadingProvincias || isRefetchingProvincias || !watchedPais) return;
+    !provinciasPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron provincias para el país seleccionado',
+      );
+    if (isLoadingCiudades || isRefetchingCiudades || !watchedProvincia) return;
+    !ciudadesPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron ciudades para la provincia seleccionada',
+      );
+    if (isLoadingSectores || isRefetchingSectores || !watchedCiudad) return;
+    !sectoresPagingRes?.data?.items?.length &&
+      ToastWrapper.error(
+        'No se encontraron sector para la ciudad seleccionada',
+      );
+  }, [
+    watchedPais,
+    watchedProvincia,
+    watchedCiudad,
+    provinciasPagingRes,
+    ciudadesPagingRes,
+    sectoresPagingRes,
+    isLoadingProvincias,
+    isLoadingCiudades,
+    isLoadingSectores,
+    isRefetchingProvincias,
+    isRefetchingCiudades,
+    isRefetchingSectores,
+  ]);
+
+  const customLoader =
+    isLoadingPaises ||
+    isRefetchingPaises ||
+    isLoadingProvincias ||
+    isRefetchingProvincias ||
+    isLoadingCiudades ||
+    isRefetchingCiudades ||
+    isLoadingSectores ||
+    isRefetchingSectores;
+
+  useLoaders(customLoader);
 
   return (
     <TabsFormBoxScene
@@ -263,6 +365,66 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           size={gridSizeMdLg6}
           ignoreTransform
         />
+        <CustomAutocomplete<Pais>
+          label="Pais"
+          name="pais"
+          // options
+          options={paisesPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().pais}
+          isLoadingData={isLoadingPaises || isRefetchingPaises}
+          // vaidation
+          control={form.control}
+          error={errors.pais}
+          helperText={errors.pais?.message}
+        />
+        <CustomAutocomplete<Provincia>
+          label="Provincia"
+          name="provincia"
+          // options
+          options={provinciasPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().provincia}
+          isLoadingData={isLoadingProvincias || isRefetchingProvincias}
+          // vaidation
+          control={form.control}
+          error={errors.provincia}
+          helperText={errors.provincia?.message}
+          size={gridSizeMdLg6}
+        />
+        <CustomAutocomplete<Ciudad>
+          label="Ciudad"
+          name="ciudad"
+          // options
+          options={ciudadesPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().ciudad}
+          isLoadingData={isLoadingCiudades || isRefetchingCiudades}
+          // vaidation
+          control={form.control}
+          error={errors.ciudad}
+          helperText={errors.ciudad?.message}
+          size={gridSizeMdLg6}
+        />
+
+        <CustomAutocomplete<Sector>
+          label="Sector"
+          name="sector"
+          // options
+          options={sectoresPagingRes?.data?.items || []}
+          valueKey="name"
+          actualValueKey="id"
+          defaultValue={form.getValues().sector}
+          isLoadingData={isLoadingSectores || isRefetchingSectores}
+          // vaidation
+          control={form.control}
+          error={errors.sector}
+          helperText={errors.sector?.message}
+          size={gridSizeMdLg6}
+        />
         <CustomTextField
           label="Dirección de página web"
           name="website"
@@ -280,7 +442,24 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           defaultValue={form.getValues().url_oficina_virtual_aceptacion}
           error={errors.url_oficina_virtual_aceptacion}
           helperText={errors.url_oficina_virtual_aceptacion?.message}
-          size={gridSizeMdLg6}
+          ignoreTransform
+        />
+        <CustomTextField
+          label="URL de imagen del email para aceptar contrato"
+          name="url_imagen_email_aceptar_contrato"
+          control={form.control}
+          defaultValue={form.getValues().url_imagen_email_aceptar_contrato}
+          error={errors.url_imagen_email_aceptar_contrato}
+          helperText={errors.url_imagen_email_aceptar_contrato?.message}
+          ignoreTransform
+        />
+        <CustomTextField
+          label="Url oficina virtual aceptacion"
+          name="url_oficina_virtual_activacion"
+          control={form.control}
+          defaultValue={form.getValues().url_oficina_virtual_activacion}
+          error={errors.url_oficina_virtual_activacion}
+          helperText={errors.url_oficina_virtual_activacion?.message}
           ignoreTransform
         />
         <CustomTextArea
@@ -302,7 +481,6 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
         {conf_empresa?.logo_1_url && Image_url_1 == null ? (
           <Grid
             mt={9}
-            container
             justifyContent="center"
             alignItems="center"
             {...gridSizeMdLg12}
@@ -322,7 +500,6 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
         {conf_empresa?.logo_2_url && Image_url_2 == null ? (
           <Grid
             mt={9}
-            container
             justifyContent="center"
             alignItems="center"
             {...gridSizeMdLg12}

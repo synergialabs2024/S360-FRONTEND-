@@ -474,8 +474,8 @@ export const useNestedMenu = () => {
         },
         /////* Gestion de Inventarios ----------------
         {
-          id: 'gestion-iventarios',
-          title: 'Gestion de Iventarios',
+          id: 'gestion-inventarios',
+          title: 'Gestion de Inventarios',
           type: MenuItemType.COLLAPSE,
           icon: IconBuildingWarehouse,
           children: [
