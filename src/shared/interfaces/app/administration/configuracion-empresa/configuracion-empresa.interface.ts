@@ -33,12 +33,10 @@ export interface ConfiguracionEmpresa {
   url_imagen_email_aceptar_contrato: string;
   url_oficina_virtual_activacion: string;
 
-  /*
-  pais: number;
-  provincia: number;
-  ciudad: number;
-  sector: number;
-  */
+  parroquia_name_contrato: string;
+  provincia_name_contrato: string;
+  ciudad_name_contrato: string;
+  canton_name_contrato: string;
 
   created_at?: string;
   modified_at?: string;

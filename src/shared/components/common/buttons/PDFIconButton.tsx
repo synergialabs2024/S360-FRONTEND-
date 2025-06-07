@@ -30,12 +30,9 @@ const PDFIconButton: React.FC<PDFIconButtonProps> = ({
           }
 
           if (isXml) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'archivo.xml'); // Puedes cambiar el nombre si quieres
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const blob = new Blob([url], { type: 'text/xml' });
+            const blobUrl = URL.createObjectURL(blob);
+            window.open(blobUrl, '_blank');
           } else {
             window.open(url, '_blank');
           }
