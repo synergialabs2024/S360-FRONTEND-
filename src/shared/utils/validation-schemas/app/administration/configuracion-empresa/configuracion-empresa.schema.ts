@@ -1,9 +1,6 @@
 import { YES_NO_ARRAY_CHOICES } from '@/shared/constants';
 import * as yup from 'yup';
 
-const UUID_AT_END_REGEX =
-  /\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$/;
-
 export const configuracionEmpresaFormSchema = yup.object({
   schema_name: yup
     .string()
@@ -105,24 +102,22 @@ export const configuracionEmpresaFormSchema = yup.object({
       400,
       'El campo Url oficina virtual aceptacion no debe exceder los 400 caracteres',
     )
-    .matches(UUID_AT_END_REGEX, 'La URL debe terminar con un UUID válido'),
+    .matches(/:uuid$/, 'La URL debe terminar con ":uuid"'),
 
-  /*
-  pais: yup
+  parroquia_name_contrato: yup
     .number()
-    .typeError('El campo pais es requerido')
-    .required('El campo pais es requerido'),
-  provincia: yup
+    .typeError('El campo parroquia es requerido')
+    .required('El campo parroquia es requerido'),
+  provincia_name_contrato: yup
     .number()
     .typeError('El campo provincia es requerido')
     .required('El campo provincia es requerido'),
-  ciudad: yup
+  ciudad_name_contrato: yup
     .number()
     .typeError('El campo ciudad es requerido')
     .required('El campo ciudad es requerido'),
-  sector: yup
+  canton_name_contrato: yup
     .number()
-    .typeError('El campo sector es requerido')
-    .required('El campo sector es requerido'),
-    */
+    .typeError('El campo canton es requerido')
+    .required('El campo canton es requerido'),
 });

@@ -59,56 +59,6 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
     defaultValues: {},
   });
 
-  /*
-  const watchedPais = form.watch('pais');
-  const watchedProvincia = form.watch('provincia');
-  const watchedCiudad = form.watch('ciudad');
-
-  ///* fetch data
-  const {
-    data: paisesPagingRes,
-    isLoading: isLoadingPaises,
-    isRefetching: isRefetchingPaises,
-  } = useFetchPaises({
-    params: {
-      page_size: 1000,
-    },
-  });
-  const {
-    data: provinciasPagingRes,
-    isLoading: isLoadingProvincias,
-    isRefetching: isRefetchingProvincias,
-  } = useFetchProvincias({
-    enabled: !!watchedPais,
-    params: {
-      pais: watchedPais,
-      page_size: 1000,
-    },
-  });
-  const {
-    data: ciudadesPagingRes,
-    isLoading: isLoadingCiudades,
-    isRefetching: isRefetchingCiudades,
-  } = useFetchCiudades({
-    enabled: !!watchedProvincia,
-    params: {
-      provincia: watchedProvincia,
-      page_size: 1000,
-    },
-  });
-  const {
-    data: sectoresPagingRes,
-    isLoading: isLoadingSectores,
-    isRefetching: isRefetchingSectores,
-  } = useFetchSectores({
-    enabled: !!watchedCiudad,
-    params: {
-      ciudad: watchedCiudad,
-      page_size: 1000,
-    },
-  });
-  */
-
   const {
     UploadImageDropZoneComponent,
     image1: Image_url_1,
@@ -177,52 +127,6 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
     reset(conf_empresa);
   }, [conf_empresa, reset]);
 
-  // alerts
-  /*
-  useEffect(() => {
-    if (isLoadingProvincias || isRefetchingProvincias || !watchedPais) return;
-    !provinciasPagingRes?.data?.items?.length &&
-      ToastWrapper.error(
-        'No se encontraron provincias para el país seleccionado',
-      );
-    if (isLoadingCiudades || isRefetchingCiudades || !watchedProvincia) return;
-    !ciudadesPagingRes?.data?.items?.length &&
-      ToastWrapper.error(
-        'No se encontraron ciudades para la provincia seleccionada',
-      );
-    if (isLoadingSectores || isRefetchingSectores || !watchedCiudad) return;
-    !sectoresPagingRes?.data?.items?.length &&
-      ToastWrapper.error(
-        'No se encontraron sector para la ciudad seleccionada',
-      );
-  }, [
-    watchedPais,
-    watchedProvincia,
-    watchedCiudad,
-    provinciasPagingRes,
-    ciudadesPagingRes,
-    sectoresPagingRes,
-    isLoadingProvincias,
-    isLoadingCiudades,
-    isLoadingSectores,
-    isRefetchingProvincias,
-    isRefetchingCiudades,
-    isRefetchingSectores,
-  ]);
-
-  const customLoader =
-    isLoadingPaises ||
-    isRefetchingPaises ||
-    isLoadingProvincias ||
-    isRefetchingProvincias ||
-    isLoadingCiudades ||
-    isRefetchingCiudades ||
-    isLoadingSectores ||
-    isRefetchingSectores;
-
-  useLoaders(customLoader);
-  */
-
   return (
     <TabsFormBoxScene
       titlePage={title}
@@ -231,7 +135,8 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>
           <Tab label="Formulario" value={1} {...a11yProps(1)} />
-          <Tab label="Imagenes" value={2} {...a11yProps(2)} />
+          <Tab label="Url" value={2} {...a11yProps(2)} />
+          <Tab label="Imagenes" value={3} {...a11yProps(3)} />
         </FormTabsOnly>
       }
       formSize={gridSizeMdLg10}
@@ -359,69 +264,48 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           size={gridSizeMdLg6}
           ignoreTransform
         />
-
-        {/** 
-        <CustomAutocomplete<Pais>
-          label="Pais"
-          name="pais"
-          // options
-          options={paisesPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().pais}
-          isLoadingData={isLoadingPaises || isRefetchingPaises}
-          // vaidation
+        <CustomTextField
+          label="Parroquia"
+          name="parroquia_name_contrato"
           control={form.control}
-          error={errors.pais}
-          helperText={errors.pais?.message}
+          defaultValue={form.getValues().parroquia_name_contrato}
+          error={errors.parroquia_name_contrato}
+          helperText={errors.parroquia_name_contrato?.message}
+          size={gridSizeMdLg6}
+          ignoreTransform
         />
-        <CustomAutocomplete<Provincia>
+        <CustomTextField
           label="Provincia"
-          name="provincia"
-          // options
-          options={provinciasPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().provincia}
-          isLoadingData={isLoadingProvincias || isRefetchingProvincias}
-          // vaidation
+          name="provincia_name_contrato"
           control={form.control}
-          error={errors.provincia}
-          helperText={errors.provincia?.message}
+          defaultValue={form.getValues().provincia_name_contrato}
+          error={errors.provincia_name_contrato}
+          helperText={errors.provincia_name_contrato?.message}
           size={gridSizeMdLg6}
+          ignoreTransform
         />
-        <CustomAutocomplete<Ciudad>
+        <CustomTextField
           label="Ciudad"
-          name="ciudad"
-          // options
-          options={ciudadesPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().ciudad}
-          isLoadingData={isLoadingCiudades || isRefetchingCiudades}
-          // vaidation
+          name="ciudad_name_contrato"
           control={form.control}
-          error={errors.ciudad}
-          helperText={errors.ciudad?.message}
+          defaultValue={form.getValues().ciudad_name_contrato}
+          error={errors.ciudad_name_contrato}
+          helperText={errors.ciudad_name_contrato?.message}
           size={gridSizeMdLg6}
+          ignoreTransform
         />
-
-        <CustomAutocomplete<Sector>
-          label="Sector"
-          name="sector"
-          // options
-          options={sectoresPagingRes?.data?.items || []}
-          valueKey="name"
-          actualValueKey="id"
-          defaultValue={form.getValues().sector}
-          isLoadingData={isLoadingSectores || isRefetchingSectores}
-          // vaidation
+        <CustomTextField
+          label="Canton"
+          name="canton_name_contrato"
           control={form.control}
-          error={errors.sector}
-          helperText={errors.sector?.message}
+          defaultValue={form.getValues().canton_name_contrato}
+          error={errors.canton_name_contrato}
+          helperText={errors.canton_name_contrato?.message}
           size={gridSizeMdLg6}
+          ignoreTransform
         />
-        */}
+      </CustomTabPanel>
+      <CustomTabPanel index={2} value={tabValue}>
         <CustomTextField
           label="Dirección de página web"
           name="website"
@@ -429,7 +313,6 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           defaultValue={form.getValues().website}
           error={errors.website}
           helperText={errors.website?.message}
-          size={gridSizeMdLg6}
           ignoreTransform
         />
         <CustomTextField
@@ -469,7 +352,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           size={gridSizeMdLg12}
         />
       </CustomTabPanel>
-      <CustomTabPanel index={2} value={tabValue}>
+      <CustomTabPanel index={3} value={tabValue}>
         <SaveConfEmpresaImagePrimary
           UploadImageDropZoneComponent={UploadImageDropZoneComponent}
           Image_url_1={Image_url_1}
