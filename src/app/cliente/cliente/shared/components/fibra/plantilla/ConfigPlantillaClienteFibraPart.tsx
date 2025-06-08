@@ -11,7 +11,7 @@ import { useGenericPATCH } from '@/actions/shared';
 import { ConfiguracionPlantillaFacturacionPart } from '@/app/administration/config-plantilla/shared/components';
 import { SaveFormDataConfigPlantilla } from '@/app/administration/config-plantilla/shared/components/form/SaveConfiguracionPlantilla';
 import {
-  configuracionPlantillaFormSchema,
+  configuracionPlantillaClienteFormSchema,
   Contrato,
   getKeysFormErrorsMessage,
   gridSizeMdLg6,
@@ -46,7 +46,7 @@ const ConfigPlantillaClienteFibraPart: React.FC<
 
   ///* form ---------------------
   const form = useForm<SaveFormDataConfigPlantilla>({
-    resolver: yupResolver(configuracionPlantillaFormSchema) as any,
+    resolver: yupResolver(configuracionPlantillaClienteFormSchema) as any,
     defaultValues: {
       state: true,
     },

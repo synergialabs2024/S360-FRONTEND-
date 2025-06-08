@@ -16,8 +16,10 @@ export interface SoporteTecnico {
 
 export interface SoporteTecnicoCliente {
   celular: string;
+  celular_adicional: string;
   email: string;
   direccion_referencia: string;
+  coordenadas: string;
 }
 
 export interface SoporteTecnicoHistorialYigasuite {

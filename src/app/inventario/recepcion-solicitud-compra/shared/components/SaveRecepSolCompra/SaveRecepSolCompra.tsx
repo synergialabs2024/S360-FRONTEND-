@@ -248,7 +248,7 @@ const SaveRecepSolCompra: React.FC<SaveRecepSolCompraProps> = ({
       <CustomMinimalTable<IngresosDisponiblesTableType>
         columns={crearMaterialColumnsSolicitud}
         data={ingresosDisponibles || []}
-        enablePagination
+        //enablePagination
         density="comfortable"
       />
     </SingleFormBoxScene>

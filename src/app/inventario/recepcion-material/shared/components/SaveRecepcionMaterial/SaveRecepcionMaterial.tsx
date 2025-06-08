@@ -296,7 +296,7 @@ const SaveRecepcionMaterial: React.FC<SaveRecepcionMaterialProps> = ({
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumnsSolicitud}
           data={productosDisponibles || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
       </SingleFormBoxScene>

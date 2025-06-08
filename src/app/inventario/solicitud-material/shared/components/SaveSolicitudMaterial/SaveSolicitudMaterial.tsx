@@ -202,7 +202,7 @@ const SaveSolicitudMaterial: React.FC<SaveSolicitudMaterialProps> = ({
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumnsSinSerie}
           data={productosConUbicacion || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
         <ProductosDisponiblesModal

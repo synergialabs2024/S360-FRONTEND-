@@ -280,7 +280,7 @@ const SaveRecepcionSolicitudTransferenciaMaterial: React.FC<
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumnsSolicitud}
           data={productosDisponibles || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
         <ProductosDisponiblesModal

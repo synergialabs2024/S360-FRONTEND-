@@ -177,6 +177,7 @@ export interface UpdateSoporteTecnicoParams<T> {
   id: number;
   data: T;
 }
+export type SoporteTecnicoClienteParamsBase = Omit<SoporteTecnicoCliente, 'id'>;
 export interface SoporteTecnicoClienteParams<T> {
   id: number;
   data: T;

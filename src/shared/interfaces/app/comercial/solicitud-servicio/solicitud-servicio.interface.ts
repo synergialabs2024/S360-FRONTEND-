@@ -31,6 +31,7 @@ export interface SolicitudServicio {
   razon_social: string;
   email: string;
   celular: string;
+  celular_adicional?: string;
   direccion_referencia: string;
   direccion: string; // unique for each user
   es_discapacitado: boolean;

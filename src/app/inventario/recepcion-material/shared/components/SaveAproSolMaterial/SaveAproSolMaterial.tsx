@@ -369,7 +369,7 @@ const SaveAprobSolMaterial: React.FC<SaveAprobSolMaterialProps> = ({
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumns}
           data={productosConUbicacion || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
         <ProductosDisponiblesModal

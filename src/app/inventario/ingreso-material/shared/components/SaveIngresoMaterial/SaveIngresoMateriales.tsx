@@ -320,7 +320,7 @@ const SaveIngresoMateriales: React.FC<SaveIngresoMaterialesProps> = ({
       <CustomMinimalTable<ProductosDisponiblesTableType>
         columns={crearMaterialColumnsIngreso}
         data={productosDisponibles || []}
-        enablePagination
+        //enablePagination
         density="comfortable"
       />
       <ProductosDisponiblesModal

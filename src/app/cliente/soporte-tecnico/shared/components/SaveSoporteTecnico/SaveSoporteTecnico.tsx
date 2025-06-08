@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import React, { useEffect } from 'react';
-import { Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Grid, Typography } from '@mui/material';
 
 import {
   CustomTextArea,
@@ -15,6 +15,10 @@ import {
   CustomTypoLabelEnum,
   CustomNumberTextField,
   CustomTextFieldNoForm,
+  CustomCoordsTextField,
+  InputAndBtnGridSpace,
+  SingleIconButton,
+  MapModalComponent,
 } from '@/shared/components';
 import {
   ColorChipType,
@@ -29,16 +33,24 @@ import {
   ShowEquipoMaterialUtilizadosModal,
   gridSizeMdLg2,
   ShowHistorialTicketsYSModal,
+  gridSize,
+  gridSizeMdLg11,
+  gridSizeMdLg1,
 } from '@/shared';
 import {
-  useUpdateSolicitudServicio,
   CreateSolicitudServicioClienteParamsBase,
+  useUpdateSoporteTecnicoCliente,
+  SoporteTecnicoClienteParamsBase,
+  useFetchZonas,
 } from '@/actions/app';
 import { useRubroStore } from '@/store/app/rubros';
 import SoporteTecnicoTitle from './SoporteTecnicoTitle';
 import { useCheckPermission } from '@/shared/hooks/auth';
 import { returnUrlSoporteTecnico } from '../../../pages/tables/SoporteTecnicoPages';
 import HistorialTickets from '@/shared/hooks/app/sac/historial-tickets/modal/HistorialTickets';
+import { useMapComponent } from '@/shared/hooks/ui/useMapComponent';
+import { useLocationCoords } from '@/shared/hooks/ui/useLocationCoords';
+import { FaMapLocationDot } from 'react-icons/fa6';
 
 export interface SaveSoporteTecnicoProps {
   soporte_tecnico?: LineaServicio & {
@@ -55,6 +67,9 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
 }) => {
   useCheckPermission(PermissionsEnum.clientes_view_cliente);
 
+  ///* local state ---------------------
+  const [openMapModal, setOpenMapModal] = useState<boolean>(false);
+
   ///* form
   const form = useForm<SaveFormData>({
     resolver: yupResolver(soporteTecnicoFormSchema) as any,
@@ -66,9 +81,27 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
     },
   });
 
+  // map --------
+  const { Map, latLng, napsByCoords, setLatLng } = useMapComponent({
+    form,
+    initialCoords: String(
+      soporte_tecnico?.solicitud_servicio_data?.coordenadas,
+    ),
+    enableFetchNaps: true,
+  });
+  useLocationCoords({
+    //isEditting: !!isEdit,
+    form,
+    setLatLng,
+  });
+
+  useLocationCoords({
+    setLatLng,
+  });
+
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = form;
 
   const items = [
@@ -84,6 +117,12 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
     },
   ];
 
+  const { data: zonasPaging } = useFetchZonas({
+    params: {
+      page_size: 1200,
+    },
+  });
+
   ///* hooks ----------------
   const navigate = useNavigate();
 
@@ -91,14 +130,13 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
   const clearAllRubroStore = useRubroStore(s => s.clearAllMinusSL);
 
   const updateClienteMutation =
-    useUpdateSolicitudServicio<CreateSolicitudServicioClienteParamsBase>({
+    useUpdateSoporteTecnicoCliente<SoporteTecnicoClienteParamsBase>({
       navigate,
       returnUrl: returnUrlSoporteTecnico,
     });
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
-    if (!isValid) return;
     if (soporte_tecnico?.solicitud_servicio_data?.id) {
       updateClienteMutation.mutate({
         id: soporte_tecnico.solicitud_servicio_data.id!,
@@ -311,13 +349,6 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         disabled
       />
       <CustomTextFieldNoForm
-        label="Coordenadas"
-        size={gridSizeMdLg6}
-        value={soporte_tecnico?.solicitud_servicio_data?.coordenadas}
-        required={false}
-        disabled
-      />
-      <CustomTextFieldNoForm
         label="Agente Vendedor"
         size={gridSizeMdLg6}
         value={soporte_tecnico?.vendedor_data?.razon_social}
@@ -340,12 +371,88 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         required={false}
         disabled
       />
-      <CustomTextFieldNoForm
-        label="Tercera Edad"
-        size={gridSizeMdLg6}
-        value={soporte_tecnico?.cliente_data?.es_tercera_edad ? 'Sí' : 'No'}
-        required={false}
-        disabled
+      <InputAndBtnGridSpace
+        mainGridSize={gridSize}
+        inputGridSize={gridSizeMdLg11}
+        inputNode={
+          <CustomCoordsTextField
+            label="Coordenadas"
+            name="coordenadas"
+            control={form.control}
+            defaultValue={form.getValues().coordenadas || ''}
+            error={errors.coordenadas as any}
+            helperText={errors.coordenadas?.message as any}
+            //disabled={disabledInputCoords}
+            onChangeValue={(value, isValidCoords) => {
+              if (isValidCoords) {
+                const s = value.split(',');
+                setLatLng({ lat: s[0], lng: s[1] });
+                console.log(value);
+                //onChangeCoordsInput && onChangeCoordsInput(value);
+              }
+            }}
+          />
+        }
+        btnLabel="Ver mapa"
+        overrideBtnNode
+        customBtnNode={
+          <>
+            <SingleIconButton
+              startIcon={<FaMapLocationDot />}
+              label={'Ver mapa'}
+              color={'primary'}
+              onClick={() => {
+                setOpenMapModal(true);
+              }}
+            />
+
+            <MapModalComponent
+              open={openMapModal}
+              onClose={() => {
+                setOpenMapModal(false);
+              }}
+              //
+              showCustomTitleNode
+              customTitleNode={
+                <Grid item container xs={12}>
+                  <Typography variant="h4">
+                    Ubicación | Coordenadas:{' '}
+                    <span
+                      style={{
+                        fontSize: '0.93rem',
+                        fontWeight: 400,
+                      }}
+                    >
+                      {latLng?.lat}, {latLng?.lng}
+                    </span>
+                  </Typography>
+                </Grid>
+              }
+              minWidthModal="70%"
+              contentNodeOverride={
+                <Map
+                  coordenadas={
+                    latLng
+                      ? {
+                        lat: latLng.lat,
+                        lng: latLng.lng,
+                      }
+                      : { lat: 0, lng: 0 }
+                  }
+                  //canDragMarker={canDragMarker}
+                  setLatLng={setLatLng}
+                  showCoverage
+                  coverageZones={zonasPaging?.data?.items || []}
+                  //
+                  showNaps={true}
+                  naps={napsByCoords || []}
+                />
+              }
+              canDragMarker={false}
+            />
+          </>
+        }
+        btnGridSize={gridSizeMdLg1}
       />
       <CustomTypoLabel
         text="Informacion adicional"
@@ -401,12 +508,26 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         disabled
       />
       <CustomNumberTextField
-        label="Telefono"
+        label="Celular"
         name="celular"
         control={form.control}
         defaultValue={soporte_tecnico?.solicitud_servicio_data?.celular}
         error={errors.celular}
         helperText={errors.celular?.message}
+        size={gridSizeMdLg6}
+        required={false}
+        min={0}
+        max={20}
+      />
+      <CustomNumberTextField
+        label="Celular adicional"
+        name="celular_adicional"
+        control={form.control}
+        defaultValue={
+          soporte_tecnico?.solicitud_servicio_data?.celular_adicional
+        }
+        error={errors.celular_adicional}
+        helperText={errors.celular_adicional?.message}
         size={gridSizeMdLg6}
         required={false}
         min={0}
@@ -423,6 +544,13 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         size={gridSizeMdLg6}
         required={false}
         ignoreTransform
+      />
+      <CustomTextFieldNoForm
+        label="Tercera Edad"
+        size={gridSizeMdLg6}
+        value={soporte_tecnico?.cliente_data?.es_tercera_edad ? 'Sí' : 'No'}
+        required={false}
+        disabled
       />
       <CustomTextFieldNoForm
         label="Direccion Helper"
