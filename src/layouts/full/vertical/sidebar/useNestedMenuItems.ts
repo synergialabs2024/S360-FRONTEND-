@@ -919,12 +919,12 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.notFound,
             }),
             */
-            /* renderByModule(SidenavModulesEnum.CLIENTE_SOPORTE_TECNICO, {
+            renderByModule(SidenavModulesEnum.CLIENTE_SOPORTE_TECNICO, {
               id: 'soporte-tecnico',
               title: 'Soporte tecnico',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.clientes.soporteTecnicoNav,
-            }), */
+            }),
           ].filter(item => !!item) as NestedMenuItem[],
         },
         /////* Cartera ----------------

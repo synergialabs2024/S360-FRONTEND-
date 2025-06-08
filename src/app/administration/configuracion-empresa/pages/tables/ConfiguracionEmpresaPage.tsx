@@ -170,6 +170,38 @@ const ConfiguracionsEmpresaPage: React.FC<
                           required={false}
                           disabled
                         />
+                        <CustomTextFieldNoForm
+                          label="Parroquia"
+                          size={gridSizeMdLg6}
+                          value={
+                            EmpresaPagingRes?.data?.parroquia_name_contrato
+                          }
+                          required={false}
+                          disabled
+                        />
+                        <CustomTextFieldNoForm
+                          label="Provincia"
+                          size={gridSizeMdLg6}
+                          value={
+                            EmpresaPagingRes?.data?.provincia_name_contrato
+                          }
+                          required={false}
+                          disabled
+                        />
+                        <CustomTextFieldNoForm
+                          label="Ciudad"
+                          size={gridSizeMdLg6}
+                          value={EmpresaPagingRes?.data?.ciudad_name_contrato}
+                          required={false}
+                          disabled
+                        />
+                        <CustomTextFieldNoForm
+                          label="Cantón"
+                          size={gridSizeMdLg6}
+                          value={EmpresaPagingRes?.data?.canton_name_contrato}
+                          required={false}
+                          disabled
+                        />
                       </CustomTabPanel>
 
                       {/* ========================= Parte 2 ========================= */}
@@ -178,6 +210,26 @@ const ConfiguracionsEmpresaPage: React.FC<
                           label="Dirección de página web"
                           size={gridSizeMdLg12}
                           value={EmpresaPagingRes?.data?.website}
+                          required={false}
+                          disabled
+                        />
+                        <CustomTextFieldNoForm
+                          label="URL de imagen del email para aceptar contrato"
+                          size={gridSizeMdLg12}
+                          value={
+                            EmpresaPagingRes?.data
+                              ?.url_imagen_email_aceptar_contrato
+                          }
+                          required={false}
+                          disabled
+                        />
+                        <CustomTextFieldNoForm
+                          label="Url oficina virtual activación"
+                          size={gridSizeMdLg12}
+                          value={
+                            EmpresaPagingRes?.data
+                              ?.url_oficina_virtual_activacion
+                          }
                           required={false}
                           disabled
                         />
