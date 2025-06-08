@@ -90,10 +90,7 @@ const AprobarSolTransferenciaPage: React.FC<
   return (
     <SingleTableBoxScene
       title="Aprobar solicitud de transferencia"
-      createPageUrl={`${returnUrlAprobarSolTransferenciaPage}/crear`}
-      showCreateBtn={hasPermission(
-        PermissionsEnum.inventario_change_solicitudtransferenciamaterial,
-      )}
+      showCreateBtn={false}
     >
       <CustomSearch
         onChange={onChangeFilter}
