@@ -119,6 +119,12 @@ const SaveActualizacionSerieOnu: React.FC<SaveActualizacionSerieOnuProps> = ({
     });
   };
 
+  useEffect(() => {
+    console.log('selectedSerie', selectedSerie);
+    console.log('equiposUtilizados?.at(0)', equiposUtilizados?.at(0));
+    console.log('equiposUtilizados?.at(0)', equiposUtilizados?.at(0));
+  });
+
   ///* effects ---------------------
   useEffect(() => {
     if (!ordentrabajo?.id) return;

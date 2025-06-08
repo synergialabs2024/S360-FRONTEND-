@@ -135,7 +135,8 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
       );
 
     uploadOTInstalacion.mutate({
-      serie_ont: selectedSerie,
+      // serie_onu_nueva: selectedSerie,
+      // producto_onu_nueva:
     });
   };
 
@@ -165,7 +166,7 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
           label="Serie Actual Ont"
           name="serie_ont"
           control={form.control}
-          defaultValue={form.getValues().serie_ont}
+          defaultValue={serviceLine?.contrato_data?.serie_ont}
           error={errors.serie_ont}
           helperText={errors.serie_ont?.message}
           disabled

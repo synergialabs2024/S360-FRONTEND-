@@ -366,7 +366,7 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
       });
     }
 
-    uploadTicketVisitaTecnico.mutate({
+    uploadTicketVisitaTecnico.mutateAsync({
       solucion_tecnico: data.solucion_tecnico,
       observacion_extra_solucion_visita: data.observacion_extra_solucion_visita,
       modelo_fibra_utilizada: data.modelo_fibra_utilizada,
@@ -395,7 +395,7 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
     });
 
     if (data.is_cambio_onu) {
-      updCambioOnu.mutate({});
+      updCambioOnu.mutateAsync({});
     }
   };
 

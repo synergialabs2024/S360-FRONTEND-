@@ -298,7 +298,7 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
           },
         ); */
 
-        requestUpdOT.mutate({
+        requestUpdOT.mutateAsync({
           asunto_ticket_tecnico: ticket?.asunto_ticket_tecnico,
           linea_servicio: ticket?.linea_servicio,
 

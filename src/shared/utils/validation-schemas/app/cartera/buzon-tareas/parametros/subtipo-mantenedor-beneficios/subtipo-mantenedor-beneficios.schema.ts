@@ -11,15 +11,15 @@ export const subtipoMantenedorBeneficiosFormSchema = yup.object({
     .typeError('El campo codigo es requerido')
     .required('El campo codigo es requerido'),
 
-  description: yup
-    .string()
-    .typeError('El campo descripcion es requerido')
-    .required('El campo descripcion es requerido'),
+  // description: yup
+  //   .string()
+  //   .typeError('El campo descripcion es requerido')
+  //   .required('El campo descripcion es requerido'),
 
-  motivo: yup
-    .string()
-    .typeError('El campo motivo es requerido')
-    .required('El campo motivo es requerido'),
+  // motivo: yup
+  //   .string()
+  //   .typeError('El campo motivo es requerido')
+  //   .required('El campo motivo es requerido'),
 
   causa: yup
     .string()
