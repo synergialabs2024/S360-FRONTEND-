@@ -18,6 +18,7 @@ import { MdEdit } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { useSystemUsersColumns } from '../../shared/hooks/useSystemUsersColumns';
 import { returnUrlSystemUserPage } from './SystemUserPage';
+import CustomUserTableBtns from './CustomUserTableBtns';
 
 export type CommonSystemUsersPageProps = {
   title: string;
@@ -140,6 +141,10 @@ const CommonSystemUsersPage: React.FC<CommonSystemUsersPageProps> = ({
           canDelete={false}
           editIcon={custoEditIcon}
           editIconToolTipTitle={customEditIconToolTipTitle}
+          showCustomButtonsSpaceEnd
+          customButtonsSpaceEnd={(sui: SystemUserItem) => (
+            <CustomUserTableBtns sui={sui} />
+          )}
         />
       </SingleTableBoxScene>
     </>

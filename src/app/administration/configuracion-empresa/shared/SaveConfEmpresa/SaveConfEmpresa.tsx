@@ -334,7 +334,7 @@ const SaveConfEmpresa: React.FC<SaveConfEmpresaProps> = ({
           ignoreTransform
         />
         <CustomTextField
-          label="Url oficina virtual aceptacion"
+          label="Url oficina virtual activación"
           name="url_oficina_virtual_activacion"
           control={form.control}
           defaultValue={form.getValues().url_oficina_virtual_activacion}
