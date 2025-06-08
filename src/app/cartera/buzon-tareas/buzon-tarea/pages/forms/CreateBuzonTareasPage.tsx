@@ -5,7 +5,7 @@ import SaveBuzonTareas from '../../shared/components/SaveBuzonTareas/SaveBuzonTa
 
 export type BuzonTareasPageProps = {};
 
-export const returnUrlCambioPlanPage = ROUTER_PATHS.cartera.promesapagoNav;
+export const returnUrlCambioPlanPage = ROUTER_PATHS.cartera.buzontareasNav;
 
 const CreateBuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
   useCheckPermission(PermissionsEnum.cartera_add_buzontareamantenedor);

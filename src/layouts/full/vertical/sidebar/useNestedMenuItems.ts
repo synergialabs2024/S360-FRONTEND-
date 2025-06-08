@@ -1583,7 +1583,7 @@ export const useNestedMenu = () => {
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
-                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ORIGEN, {
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
                   id: 'origenes',
                   title: 'Origen ticket',
                   type: MenuItemType.ITEM,

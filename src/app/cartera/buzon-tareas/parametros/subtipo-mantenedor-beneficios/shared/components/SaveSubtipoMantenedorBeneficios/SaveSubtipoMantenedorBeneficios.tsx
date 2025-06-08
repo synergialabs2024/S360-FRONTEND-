@@ -231,6 +231,7 @@ const SaveSubtipoMantenedorBeneficios: React.FC<
         defaultValue={form.getValues().description}
         error={errors.description}
         helperText={errors.description?.message}
+        required={false}
       />
 
       <SampleCheckbox
