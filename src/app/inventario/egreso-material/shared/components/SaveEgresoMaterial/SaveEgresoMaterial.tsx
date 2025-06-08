@@ -334,7 +334,7 @@ const SaveEgresoMaterial: React.FC<SaveEgresoMaterialProps> = ({ title }) => {
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumns}
           data={productosConUbicacion || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
         <ProductosDisponiblesModal

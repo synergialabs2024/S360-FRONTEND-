@@ -92,3 +92,26 @@ export const configuracionPlantillaFormSchema = yup.object({
   // impuesto_2: yup.number().optional().nullable(),
   // impuesto_3: yup.number().optional().nullable(),
 });
+
+export const configuracionPlantillaClienteFormSchema = yup.object({
+  dias_gracia: yup
+    .string()
+    .required('El campo dias gracia es requerido')
+    .max(200, 'El campo dias gracia no debe exceder los 200 caracteres'),
+  dia_pago: yup
+    .number()
+    .typeError('El campo dia pago es requerido')
+    .required('El campo dia pago es requerido'),
+  dia_pago_limite: yup
+    .number()
+    .typeError('El campo dia pago limite es requerido')
+    .required('El campo dia pago limite es requerido'),
+  dia_suspension: yup
+    .number()
+    .typeError('El campo dia suspension es requerido')
+    .required('El campo dia suspension es requerido'),
+  dia_facturacion: yup
+    .number()
+    .typeError('El campo dia facturacion es requerido')
+    .required('El campo dia facturacion es requerido'),
+});

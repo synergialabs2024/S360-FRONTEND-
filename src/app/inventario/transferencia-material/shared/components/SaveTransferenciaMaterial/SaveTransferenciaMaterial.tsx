@@ -441,7 +441,7 @@ const SaveTransferenciaMaterial: React.FC<SaveTransferenciaMaterialProps> = ({
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumns}
           data={productosConUbicacion || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
         <ProductosDisponiblesModal

@@ -320,7 +320,7 @@ const SaveAprobSolTransferencia: React.FC<SaveAprobSolTransferenciaProps> = ({
         <CustomMinimalTable<ProductosDisponiblesTableType>
           columns={crearMaterialColumns}
           data={productosConUbicacion || []}
-          enablePagination
+          //enablePagination
           density="comfortable"
         />
         <ProductosDisponiblesModal

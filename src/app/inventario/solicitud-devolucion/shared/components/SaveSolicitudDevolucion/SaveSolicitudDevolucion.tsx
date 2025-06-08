@@ -215,7 +215,7 @@ const SaveSolicitudDevolucion: React.FC<SaveSolicitudDevolucionProps> = ({
       <CustomMinimalTable<ProductosDisponiblesTableType>
         columns={crearMaterialColumnsSinSerie}
         data={productosConUbicacion || []}
-        enablePagination
+        //enablePagination
         density="comfortable"
       />
       <ProductosDisponiblesModal
