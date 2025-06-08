@@ -59,7 +59,8 @@ const TransferenciaMaterialesPage: React.FC<
   return (
     <SingleTableBoxScene
       title="Transferencia de materiales"
-      showCreateBtn={false}
+      createPageUrl={`${returnUrlTransferenciaMaterialesPage}/crear`}
+      showCreateBtn={true}
     >
       <CustomSearch
         onChange={onChangeFilter}
