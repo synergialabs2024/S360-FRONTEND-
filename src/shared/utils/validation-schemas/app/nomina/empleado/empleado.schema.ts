@@ -57,7 +57,10 @@ export const empleadoFormSchema = yup.object({
     .number()
     .typeError('El campo departamento es requerido')
     .required('El campo departamento es requerido'),
-  canal_venta: yup.string().optional().nullable(),
+  canal_venta: yup
+    .number()
+    .typeError('El campo canal venta es requerido')
+    .required('El campo canal venta es requerido'),
   cargo: yup
     .number()
     .typeError('El campo cargo es requerido')

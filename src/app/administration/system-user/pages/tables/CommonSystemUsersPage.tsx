@@ -143,7 +143,9 @@ const CommonSystemUsersPage: React.FC<CommonSystemUsersPageProps> = ({
           editIconToolTipTitle={customEditIconToolTipTitle}
           showCustomButtonsSpaceEnd
           customButtonsSpaceEnd={(sui: SystemUserItem) => (
-            <CustomUserTableBtns sui={sui} />
+            <>
+              <CustomUserTableBtns sui={sui} />
+            </>
           )}
         />
       </SingleTableBoxScene>

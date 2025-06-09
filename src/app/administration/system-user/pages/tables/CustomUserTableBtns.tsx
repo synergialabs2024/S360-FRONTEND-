@@ -1,23 +1,24 @@
-import { SystemUserTSQEnum } from '@/actions/app';
-import { useGenericPATCH } from '@/actions/shared';
-import { changePasswordSchema, SystemUserItem } from '@/shared';
-import {
-  CustomPasswordTextField,
-  ScrollableDialogProps,
-  SingleIconButton,
-} from '@/shared/components';
-import { useUiConfirmModalStore } from '@/store/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { TbPasswordUser } from 'react-icons/tb';
+import { useForm } from 'react-hook-form';
 import { Grid } from '@mui/material';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { TbPasswordUser } from 'react-icons/tb';
+
+import {
+  SingleIconButton,
+  ScrollableDialogProps,
+  CustomPasswordTextField,
+} from '@/shared/components';
+import { SystemUserTSQEnum } from '@/actions/app';
+import { useGenericPATCH } from '@/actions/shared';
+import { useUiConfirmModalStore } from '@/store/ui';
+import { changePasswordUserSchema, SystemUserItem } from '@/shared';
 
 export type CustomUserTableBtnsProps = { sui: SystemUserItem };
 
 type SaveChangePasswordData = {
-  password: string;
-  confirm_password?: string;
+  new_password: string;
+  confirm_new_password?: string;
 };
 
 const CustomUserTableBtns: React.FC<CustomUserTableBtnsProps> = ({ sui }) => {
@@ -35,10 +36,10 @@ const CustomUserTableBtns: React.FC<CustomUserTableBtnsProps> = ({ sui }) => {
 
   ///* form ----------------
   const form = useForm<SaveChangePasswordData>({
-    resolver: yupResolver(changePasswordSchema) as any,
+    resolver: yupResolver(changePasswordUserSchema) as any,
     defaultValues: {
-      password: '',
-      confirm_password: '',
+      new_password: '',
+      confirm_new_password: '',
     },
   });
   const {
@@ -49,15 +50,19 @@ const CustomUserTableBtns: React.FC<CustomUserTableBtnsProps> = ({ sui }) => {
   const changePasswordMutation = useGenericPATCH<
     SaveChangePasswordData,
     SystemUserItem
-  >(`/usuario/${localUserItems?.user.id}/`, SystemUserTSQEnum.SYSTEMUSERS, {
-    customMessageToast: `Se ha cambiado la contraseña del usuario ${localUserItems?.user.razon_social}`,
-    customOnSuccess() {
-      setOpenChangePassword(false);
-      setLocalUserItems(null);
-      setConfirmDialogIsOpen(false);
-      form.reset();
+  >(
+    `/usuario/change-password/${localUserItems?.user.id}/`,
+    SystemUserTSQEnum.SYSTEMUSERS,
+    {
+      customMessageToast: `Se ha cambiado la contraseña del usuario ${localUserItems?.user.razon_social}`,
+      customOnSuccess() {
+        setOpenChangePassword(false);
+        setLocalUserItems(null);
+        setConfirmDialogIsOpen(false);
+        form.reset();
+      },
     },
-  });
+  );
 
   ///* handlers ------------
   const onSave = (data: SaveChangePasswordData) => {
@@ -69,7 +74,8 @@ const CustomUserTableBtns: React.FC<CustomUserTableBtnsProps> = ({ sui }) => {
       onConfirm: () => {
         if (localUserItems?.user) {
           changePasswordMutation.mutate({
-            password: data.password,
+            new_password: data.new_password,
+            confirm_new_password: data.confirm_new_password,
           });
         }
       },
@@ -107,19 +113,19 @@ const CustomUserTableBtns: React.FC<CustomUserTableBtnsProps> = ({ sui }) => {
             <Grid item container spacing={3} py={3}>
               <CustomPasswordTextField
                 label="Nueva Contraseña"
-                name="password"
-                defaultValue={form.getValues().password}
+                name="new_password"
+                defaultValue={form.getValues().new_password}
                 control={form.control}
-                errors={errors?.password}
-                helperText={errors?.password?.message}
+                errors={errors?.new_password}
+                helperText={errors?.new_password?.message}
               />
               <CustomPasswordTextField
                 label="Confirmar Nueva Contraseña"
-                name="confirm_password"
-                defaultValue={form.getValues().confirm_password}
+                name="confirm_new_password"
+                defaultValue={form.getValues().confirm_new_password}
                 control={form.control}
-                errors={errors?.confirm_password}
-                helperText={errors?.confirm_password?.message}
+                errors={errors?.confirm_new_password}
+                helperText={errors?.confirm_new_password?.message}
               />
             </Grid>
           }

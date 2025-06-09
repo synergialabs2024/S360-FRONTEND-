@@ -222,7 +222,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
           form.setValue('provincia', undefined);
           form.setValue('salary', undefined as any);
           form.setValue('sector', undefined);
-          form.setValue('state', undefined as any);
+          form.setValue('state', true);
           form.setValue('tipo_empleado', undefined as any);
           form.setValue('tipo_vinculacion', undefined);
           form.setValue('user', undefined);
@@ -274,7 +274,7 @@ const SaveEmpleado: React.FC<SaveEmpleadoProps> = ({ title, empleado }) => {
           form.setValue('provincia', undefined);
           form.setValue('salary', undefined as any);
           form.setValue('sector', undefined);
-          form.setValue('state', undefined as any);
+          form.setValue('state', true);
           form.setValue('tipo_empleado', undefined as any);
           form.setValue('tipo_vinculacion', undefined);
           form.setValue('user', undefined);

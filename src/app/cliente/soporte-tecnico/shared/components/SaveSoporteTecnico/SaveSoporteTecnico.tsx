@@ -107,7 +107,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
     enableFetchNaps: true,
   });
   useLocationCoords({
-    //isEditting: !!isEdit,
+    isEditting: true,
     form,
     setLatLng,
   });
@@ -181,7 +181,6 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         'La Coordenada debe estar dentro de una zona valida',
       );
     }
-    console.log(data);
     if (soporte_tecnico?.solicitud_servicio_data?.id) {
       updateClienteMutation.mutate({
         id: soporte_tecnico.solicitud_servicio_data.id!,
@@ -258,6 +257,17 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
       );
     }
   }, [watchedZone, sectoresPaging, isLoadingSectores, isRefetchingSectores]);
+
+  console.log(soporte_tecnico?.contrato_data?.sector);
+  useEffect(() => {
+    const coordenadasStr = form.getValues().coordenadas;
+    if (coordenadasStr) {
+      const [lat, lng] = coordenadasStr.split(',').map(Number);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setLatLng({ lat, lng });
+      }
+    }
+  }, []);
 
   const customLoading =
     isLoadingNaps || isRefetchingNaps || isLoadingZonas || isRefetchingZonas;
@@ -489,7 +499,7 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
             label="Coordenadas"
             name="coordenadas"
             control={form.control}
-            defaultValue={form.getValues().coordenadas || ''}
+            defaultValue={form.getValues().coordenadas}
             error={errors.coordenadas as any}
             helperText={errors.coordenadas?.message as any}
             onChangeValue={(value, isValidCoords) => {

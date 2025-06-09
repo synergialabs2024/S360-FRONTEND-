@@ -1,6 +1,7 @@
 import { UserRolesEnumChoice } from '@/shared/constants';
 import * as yup from 'yup';
 import { emailYupValidation } from '../../common';
+import { passwordYupValidation2 } from '../../../auth';
 
 export const systemUserFormSchema = yup.object({
   username: yup
@@ -189,4 +190,12 @@ export const systemUserFormSchema = yup.object({
     .nullable()
     .typeError('El campo sector es requerido'),
     */
+});
+
+export const changePasswordUserSchema = yup.object({
+  new_password: passwordYupValidation2,
+  confirm_new_password: yup
+    .string()
+    .required('Debes confirmar la contraseña')
+    .oneOf([yup.ref('new_password')], 'Las contraseñas no coinciden'),
 });
