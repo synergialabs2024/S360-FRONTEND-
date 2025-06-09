@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router';
 import { useSystemUsersColumns } from '../../shared/hooks/useSystemUsersColumns';
 import { returnUrlSystemUserPage } from './SystemUserPage';
 import CustomUserTableBtns from './CustomUserTableBtns';
+import CustomUserDecline from './CustomUserDecline';
 
 export type CommonSystemUsersPageProps = {
   title: string;
@@ -145,6 +146,7 @@ const CommonSystemUsersPage: React.FC<CommonSystemUsersPageProps> = ({
           customButtonsSpaceEnd={(sui: SystemUserItem) => (
             <>
               <CustomUserTableBtns sui={sui} />
+              <CustomUserDecline sui={sui} />
             </>
           )}
         />

@@ -25,6 +25,7 @@ export interface SystemUser {
   razon_social?: string;
   tipo_identificacion: string; // choice
   identificacion: string;
+  state: boolean;
 
   ///* fk
   groups: number[];
