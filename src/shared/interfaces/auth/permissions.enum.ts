@@ -169,6 +169,7 @@ export enum PermissionsEnum {
   users_view_user = 'users.view_usuario',
   webhooks_view_webhooklog = 'webhooks.view_webhooklog',
   sac_view_cambioonu = 'sac.view_cambioonu',
+  buzontarea_view_tareas = 'buzontarea.view_tareas',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',
@@ -332,6 +333,7 @@ export enum PermissionsEnum {
   users_add_customgroup = 'users.add_customgroup',
   users_add_user = 'users.add_usuario',
   webhooks_add_webhooklog = 'webhooks.add_webhooklog',
+  buzontarea_add_tareas = 'buzontarea.add_tareas',
 
   // // // // CHANGE ---------------------------
   admin_change_logentry = 'admin.change_logentry',
@@ -496,6 +498,7 @@ export enum PermissionsEnum {
   users_change_user = 'users.change_usuario',
   webhooks_change_webhooklog = 'webhooks.change_webhooklog',
   sac_change_cambioonu = 'sac.change_cambioonu',
+  buzontarea_change_tareas = 'buzontarea.change_tareas',
 
   // // // // DELETE ---------------------------
   admin_delete_logentry = 'admin.delete_logentry',

@@ -1664,7 +1664,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
-            renderByModule(SidenavModulesEnum.BUZONTAREAS_ASIGNADA, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'tareas',
               title: 'Tareas',
               type: MenuItemType.ITEM,

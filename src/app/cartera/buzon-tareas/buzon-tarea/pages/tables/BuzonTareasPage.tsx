@@ -1,5 +1,5 @@
 import { ROUTER_PATHS } from '@/router/constants';
-import { EstadoTareaEnumChoice, useTabsOnly } from '@/shared';
+import { EstadoTareaEnumChoice, PermissionsEnum, useTabsOnly } from '@/shared';
 import {
   a11yProps,
   BoxFormTabsOnly,
@@ -8,12 +8,15 @@ import {
 } from '@/shared/components';
 import { Tab } from '@mui/material';
 import BuzonTareasByStatePage from './BuzonTareasByStatePage';
+import { useCheckPermission } from '@/shared/hooks/auth';
 
 export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
 
 export type BuzonTareasPageProps = {};
 
 const BuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
+  useCheckPermission(PermissionsEnum.buzontarea_view_tareas);
+
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
