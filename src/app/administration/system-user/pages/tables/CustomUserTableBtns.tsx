@@ -95,6 +95,7 @@ const CustomUserTableBtns: React.FC<CustomUserTableBtnsProps> = ({ sui }) => {
         color="inherit"
         label="Cambiar Contraseña"
         tooltipPlacement="bottom"
+        disabled={!sui.user.state}
       />
 
       {/* -------------- MODALS -------------- */}
