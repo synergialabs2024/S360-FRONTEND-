@@ -176,197 +176,181 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
       onConfirm: async () => {
         setConfirmDialogIsOpen(false);
         // upload images ----
-        try {
-          const [
-            antesSolucionPhoto,
-            despuesSolucionPhoto,
-            testVelocidadPhoto,
-            potenciaAntesSolucionPhoto,
-            potenciaDespuesSolucionPhoto,
-            problemaEncontradoPhoto,
-            solucionPhoto,
-          ] = await Promise.all([
-            uploadFileToBucket({
-              file: fotoAntesSolucion!,
-              file_name: BucketKeyTicketEnumChoice.FOTO_ANTES_SOLUCION,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-            uploadFileToBucket({
-              file: fotoDespuesSolucion!,
-              file_name: BucketKeyTicketEnumChoice.FOTO_DESPUES_SOLUCION,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-            uploadFileToBucket({
-              file: fotoTestVelocidad!,
-              file_name: BucketKeyTicketEnumChoice.FOTO_TEST_VELOCIDAD,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-            uploadFileToBucket({
-              file: fotoPotenciaAntesSolucion!,
-              file_name: BucketKeyTicketEnumChoice.FOTO_POTENCIA_ANTES_SOLUCION,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-            uploadFileToBucket({
-              file: fotoPotenciaDespuesSolucion!,
-              file_name:
-                BucketKeyTicketEnumChoice.FOTO_POTENCIA_DESPUES_SOLUCION,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-            uploadFileToBucket({
-              file: fotoProblemaEncontrado!,
-              file_name: BucketKeyTicketEnumChoice.FOTO_PROBLEMA_ENCONTRADO,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-            uploadFileToBucket({
-              file: fotoSolucion!,
-              file_name: BucketKeyTicketEnumChoice.FOTO_SOLUCION,
-              bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-            }),
-          ]);
+        const [
+          antesSolucionPhoto,
+          despuesSolucionPhoto,
+          testVelocidadPhoto,
+          potenciaAntesSolucionPhoto,
+          potenciaDespuesSolucionPhoto,
+          problemaEncontradoPhoto,
+          solucionPhoto,
+        ] = await Promise.all([
+          uploadFileToBucket({
+            file: fotoAntesSolucion!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_ANTES_SOLUCION,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+          uploadFileToBucket({
+            file: fotoDespuesSolucion!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_DESPUES_SOLUCION,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+          uploadFileToBucket({
+            file: fotoTestVelocidad!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_TEST_VELOCIDAD,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+          uploadFileToBucket({
+            file: fotoPotenciaAntesSolucion!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_POTENCIA_ANTES_SOLUCION,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+          uploadFileToBucket({
+            file: fotoPotenciaDespuesSolucion!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_POTENCIA_DESPUES_SOLUCION,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+          uploadFileToBucket({
+            file: fotoProblemaEncontrado!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_PROBLEMA_ENCONTRADO,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+          uploadFileToBucket({
+            file: fotoSolucion!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_SOLUCION,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          }),
+        ]);
 
-          let entregaMeshPhoto = null;
-          if (fotoEntregaMesh) {
-            try {
-              entregaMeshPhoto = await uploadFileToBucket({
-                file: fotoEntregaMesh!,
-                file_name: BucketKeyTicketEnumChoice.FOTO_ENTREGA_MESH,
-                bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-              });
-            } catch (error) {
-              ToastWrapper.error('Error subiendo entrega Mesh');
-            }
-          }
-
-          let entregaUpsPhoto = null;
-          if (fotoEntregaUps) {
-            try {
-              entregaUpsPhoto = await uploadFileToBucket({
-                file: fotoEntregaUps!,
-                file_name: BucketKeyTicketEnumChoice.FOTO_ENTREGA_UPS,
-                bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
-              });
-            } catch (error) {
-              ToastWrapper.error('Error subiendo entrega UPS');
-            }
-          }
-
-          /* const updatedImages: Partial<UploadTicketVisitaCorreccionFotosData> =
-            {};
-  
-          updatedImages.linea_servicio = ticket!.linea_servicio;
-  
-          requiredImages.forEach(({ label, image }) => {
-            if (image) {
-              switch (label) {
-                case 'Foto Antes Solucion':
-                  updatedImages.url_foto_antes_solucion =
-                    antesSolucionPhoto?.streamUlr || '';
-                  break;
-                case 'Foto Despues Solucion':
-                  updatedImages.url_foto_despues_solucion =
-                    despuesSolucionPhoto?.streamUlr;
-                  break;
-                case 'Foto Test Velocidad':
-                  updatedImages.url_foto_test_velocidad =
-                    testVelocidadPhoto?.streamUlr;
-                  break;
-                case 'Foto Potencia Antes Solucion':
-                  updatedImages.url_foto_potencia_antes_solucion =
-                    potenciaAntesSolucionPhoto?.streamUlr;
-                  break;
-                case 'Foto Potencia Despues Solucion':
-                  updatedImages.url_foto_potencia_despues_solucion =
-                    potenciaDespuesSolucionPhoto?.streamUlr;
-                  break;
-                case 'Foto Problema Encontrado':
-                  updatedImages.url_foto_problema_encontrado =
-                    problemaEncontradoPhoto?.streamUlr;
-                  break;
-                case 'Foto Solucion':
-                  updatedImages.url_foto_solucion = solucionPhoto?.streamUlr;
-                  break;
-                case 'Foto Entrega Mesh':
-                  updatedImages.url_foto_entrega_mesh =
-                    entregaMeshPhoto?.streamUlr;
-                  break;
-                case 'Foto Entrega Ups':
-                  updatedImages.url_foto_entrega_ups = entregaUpsPhoto?.streamUlr;
-                  break;
-                default:
-                  break;
-              }
-            }
+        let entregaMeshPhoto = null;
+        if (fotoEntregaMesh) {
+          entregaMeshPhoto = await uploadFileToBucket({
+            file: fotoEntregaMesh!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_ENTREGA_MESH,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
           });
-  
-          requestUpdOT.mutate(
-            updatedImages as UploadTicketVisitaCorreccionFotosData, // Forzar el tipo
-  
-            {
-              onSuccess: () => {
-                navigate(returnUrlInstallAsignadasOT);
-              },
-            },
-          ); */
-
-          requestUpdOT.mutate({
-            asunto_ticket_tecnico: ticket?.asunto_ticket_tecnico,
-            linea_servicio: ticket?.linea_servicio,
-
-            url_foto_antes_solucion:
-              antesSolucionPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_antes_solucion
-                : antesSolucionPhoto?.streamUlr,
-
-            url_foto_despues_solucion:
-              despuesSolucionPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_despues_solucion
-                : despuesSolucionPhoto?.streamUlr,
-
-            url_foto_test_velocidad:
-              testVelocidadPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_test_velocidad
-                : testVelocidadPhoto?.streamUlr,
-
-            url_foto_potencia_antes_solucion:
-              potenciaAntesSolucionPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_potencia_antes_solucion
-                : potenciaAntesSolucionPhoto?.streamUlr,
-
-            url_foto_potencia_despues_solucion:
-              potenciaDespuesSolucionPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_potencia_despues_solucion
-                : potenciaDespuesSolucionPhoto?.streamUlr,
-
-            url_foto_problema_encontrado:
-              problemaEncontradoPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_problema_encontrado
-                : problemaEncontradoPhoto?.streamUlr,
-
-            url_foto_solucion:
-              solucionPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_solucion
-                : solucionPhoto?.streamUlr,
-
-            ...(entregaMeshPhoto && {
-              url_foto_entrega_mesh:
-                entregaMeshPhoto?.streamUlr.length === 0
-                  ? ticket?.url_foto_entrega_mesh
-                  : entregaMeshPhoto?.streamUlr,
-            }),
-            ...(entregaUpsPhoto && {
-              url_foto_entrega_ups:
-                entregaUpsPhoto?.streamUlr.length === 0
-                  ? ticket?.url_foto_entrega_ups
-                  : entregaUpsPhoto?.streamUlr,
-            }),
-          });
-        } catch (e) {
-          ToastWrapper.error(
-            'Ocurrió un error al subir una o más imágenes. Intente nuevamente.',
-          );
         }
-      },
 
+        let entregaUpsPhoto = null;
+        if (fotoEntregaUps) {
+          entregaUpsPhoto = await uploadFileToBucket({
+            file: fotoEntregaUps!,
+            file_name: BucketKeyTicketEnumChoice.FOTO_ENTREGA_UPS,
+            bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
+          });
+        }
+
+        /* const updatedImages: Partial<UploadTicketVisitaCorreccionFotosData> =
+          {};
+
+        updatedImages.linea_servicio = ticket!.linea_servicio;
+
+        requiredImages.forEach(({ label, image }) => {
+          if (image) {
+            switch (label) {
+              case 'Foto Antes Solucion':
+                updatedImages.url_foto_antes_solucion =
+                  antesSolucionPhoto?.streamUlr || '';
+                break;
+              case 'Foto Despues Solucion':
+                updatedImages.url_foto_despues_solucion =
+                  despuesSolucionPhoto?.streamUlr;
+                break;
+              case 'Foto Test Velocidad':
+                updatedImages.url_foto_test_velocidad =
+                  testVelocidadPhoto?.streamUlr;
+                break;
+              case 'Foto Potencia Antes Solucion':
+                updatedImages.url_foto_potencia_antes_solucion =
+                  potenciaAntesSolucionPhoto?.streamUlr;
+                break;
+              case 'Foto Potencia Despues Solucion':
+                updatedImages.url_foto_potencia_despues_solucion =
+                  potenciaDespuesSolucionPhoto?.streamUlr;
+                break;
+              case 'Foto Problema Encontrado':
+                updatedImages.url_foto_problema_encontrado =
+                  problemaEncontradoPhoto?.streamUlr;
+                break;
+              case 'Foto Solucion':
+                updatedImages.url_foto_solucion = solucionPhoto?.streamUlr;
+                break;
+              case 'Foto Entrega Mesh':
+                updatedImages.url_foto_entrega_mesh =
+                  entregaMeshPhoto?.streamUlr;
+                break;
+              case 'Foto Entrega Ups':
+                updatedImages.url_foto_entrega_ups = entregaUpsPhoto?.streamUlr;
+                break;
+              default:
+                break;
+            }
+          }
+        });
+
+        requestUpdOT.mutate(
+          updatedImages as UploadTicketVisitaCorreccionFotosData, // Forzar el tipo
+
+          {
+            onSuccess: () => {
+              navigate(returnUrlInstallAsignadasOT);
+            },
+          },
+        ); */
+
+        requestUpdOT.mutate({
+          asunto_ticket_tecnico: ticket?.asunto_ticket_tecnico,
+          linea_servicio: ticket?.linea_servicio,
+
+          url_foto_antes_solucion:
+            antesSolucionPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_antes_solucion
+              : antesSolucionPhoto?.streamUlr,
+
+          url_foto_despues_solucion:
+            despuesSolucionPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_despues_solucion
+              : despuesSolucionPhoto?.streamUlr,
+
+          url_foto_test_velocidad:
+            testVelocidadPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_test_velocidad
+              : testVelocidadPhoto?.streamUlr,
+
+          url_foto_potencia_antes_solucion:
+            potenciaAntesSolucionPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_potencia_antes_solucion
+              : potenciaAntesSolucionPhoto?.streamUlr,
+
+          url_foto_potencia_despues_solucion:
+            potenciaDespuesSolucionPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_potencia_despues_solucion
+              : potenciaDespuesSolucionPhoto?.streamUlr,
+
+          url_foto_problema_encontrado:
+            problemaEncontradoPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_problema_encontrado
+              : problemaEncontradoPhoto?.streamUlr,
+
+          url_foto_solucion:
+            solucionPhoto?.streamUlr.length === 0
+              ? ticket?.url_foto_solucion
+              : solucionPhoto?.streamUlr,
+
+          ...(entregaMeshPhoto && {
+            url_foto_entrega_mesh:
+              entregaMeshPhoto?.streamUlr.length === 0
+                ? ticket?.url_foto_entrega_mesh
+                : entregaMeshPhoto?.streamUlr,
+          }),
+          ...(entregaUpsPhoto && {
+            url_foto_entrega_ups:
+              entregaUpsPhoto?.streamUlr.length === 0
+                ? ticket?.url_foto_entrega_ups
+                : entregaUpsPhoto?.streamUlr,
+          }),
+        });
+      },
       confirmTextBtn: 'SI, CONTINUAR',
       cancelTextBtn: 'CERRAR',
       onClose: () => {
