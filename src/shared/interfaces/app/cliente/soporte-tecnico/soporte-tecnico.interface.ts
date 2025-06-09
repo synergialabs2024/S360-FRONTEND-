@@ -20,6 +20,11 @@ export interface SoporteTecnicoCliente {
   email: string;
   direccion_referencia: string;
   coordenadas: string;
+  pais: number;
+  provincia: number;
+  ciudad: number;
+  zona: number;
+  sector: number;
 }
 
 export interface SoporteTecnicoHistorialYigasuite {

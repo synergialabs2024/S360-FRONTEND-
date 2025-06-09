@@ -34,4 +34,4 @@ export interface Sector {
   zona_data?: ZonaLimitData;
 }
 
-export type SectorLimitData = Pick<Sector, 'uuid' | 'name'>;
+export type SectorLimitData = Pick<Sector, 'uuid' | 'name' | 'id'>;
