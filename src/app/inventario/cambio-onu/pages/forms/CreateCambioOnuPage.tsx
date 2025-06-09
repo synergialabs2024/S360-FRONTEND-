@@ -12,7 +12,7 @@ export type CreateCambioDomicilioPageProps = {};
 const CreateCambioDomicilioPage: React.FC<
   CreateCambioDomicilioPageProps
 > = () => {
-  useCheckPermission(PermissionsEnum.clientes_change_cliente);
+  useCheckPermission(PermissionsEnum.inventario_change_cambioonu);
 
   const { uuid } = useParams();
   const { data, isLoading, isRefetching } = useGetLineaServicio(uuid!);

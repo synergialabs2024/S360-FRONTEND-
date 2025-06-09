@@ -169,9 +169,6 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
   };
 
   const onSave = async (data: SaveFormData) => {
-    console.log('watchedLineaServicio', watchedLineaServicio);
-    console.log('data.observacion', data.observacion);
-    console.log('data.fecha_promesa_pago', data.fecha_promesa_pago);
     setConfirmDialog({
       isOpen: true,
       title: 'Mantenedor activaciones',
@@ -319,17 +316,6 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
     [],
   );
 
-  useEffect(() => {
-    console.log(
-      'mantenedorActivacionesPagingRes',
-      mantenedorActivacionesPagingRes,
-    );
-    console.log(
-      'mantenedorActivacionesPagingRes?.data?.items?.[0]?.mantenedor_base_data?.tiempo_limite',
-      mantenedorActivacionesPagingRes?.data?.items?.[0]?.mantenedor_base_data
-        ?.tiempo_limite,
-    );
-  });
   return (
     <SingleFormBoxScene
       titlePage={title}
@@ -420,7 +406,6 @@ const SavePromesaPago: React.FC<SavePromesaPagoProps> = ({
         helperText={errors.numero_contrato?.message}
         size={gridSizeMdLg6}
         onChangeRawValue={i => {
-          console.log('i.numero_contrato', i.numero_contrato);
           setNumeroContrato(i.numero_contrato);
         }}
       />

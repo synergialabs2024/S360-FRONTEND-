@@ -23,11 +23,7 @@ import { ClienteFibraTitle } from '@/app/cliente/cliente/shared/components';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  LineaServicioTSQEnum,
-  UpdateSerieOnt,
-  UploadInstalacionONTData,
-} from '@/actions/app';
+import { LineaServicioTSQEnum, UpdateSerieOnt } from '@/actions/app';
 import { useInstalacionesStore } from '@/store/app';
 import { EquiposUtilizadosOTTableType } from '@/app/tecnico/install-asignada/shared/components/form';
 import { returnUrlCambioOnuClientesFibraPage } from '../../../pages/tables/ClientesCambioOnuMainPage';
@@ -63,10 +59,7 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
 
   ///* mutations ---------------------
 
-  const uploadOTInstalacion = useGenericPATCH<
-    UploadInstalacionONTData,
-    LineaServicio
-  >(
+  const uploadOTInstalacion = useGenericPATCH<any, LineaServicio>(
     `/linea-servicio/cambio-onu-simple/${serviceLine?.id!}/`,
     LineaServicioTSQEnum.LINEASERVICIOS,
     {
@@ -99,10 +92,6 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
 
   const selectedSerie = form.watch('new_serie_ont');
 
-  useEffect(() => {
-    console.log('equiposUtilizados', equiposUtilizados);
-  });
-
   ///* handlers ---------------------
   const onSave = async () => {
     if (!equiposUtilizados?.length)
@@ -132,6 +121,7 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
       );
 
     const selectedSerie = ont?.savedSeries?.at(0);
+    const productoId = ont?.producto_data?.id;
 
     if (selectedSerie === form.getValues().serie_ont)
       return ToastWrapper.error(
@@ -139,8 +129,8 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
       );
 
     uploadOTInstalacion.mutate({
-      // serie_onu_nueva: selectedSerie,
-      // producto_onu_nueva:
+      serie_onu_nueva: selectedSerie,
+      producto_onu_nueva: productoId,
     });
   };
 
@@ -148,8 +138,14 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
 
   return (
     <TabsFormBoxScene
-      titlePageNode={<ClienteFibraTitle serviceLine={serviceLine!} />}
-      showBtns={false}
+      titlePageNode={
+        <ClienteFibraTitle
+          serviceLine={serviceLine!}
+          returnUrl={returnUrlCambioOnuClientesFibraPage}
+        />
+      }
+      showBtns={true}
+      saveTextBtn="Realizar cambio onu"
       // tabs -------------
       tabs={
         <FormTabsOnly value={tabValue} onChange={handleTabChange}>

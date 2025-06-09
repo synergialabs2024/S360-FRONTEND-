@@ -247,8 +247,53 @@ export const useColumnsClientes = () => {
     [clientesFibraColumnsB01, clientesFibraColumnsB02, clientesFibraColumnsB03],
   );
 
+  const clientesFibraColumnsActivosNoLinkCambioOnu = useMemo<
+    MRT_ColumnDef<Cliente>[]
+  >(
+    () => [
+      {
+        accessorKey: 'identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }: MRTClienteType) =>
+          emptyCellOneLevel(row, 'identificacion'),
+      },
+      {
+        accessorKey: 'razon_social',
+        header: 'NOMBRES',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }: MRTClienteType) =>
+          emptyCellOneLevel(row, 'razon_social'),
+      },
+      ...clientesFibraColumnsB02,
+      ...clientesFibraColumnsB03,
+      {
+        accessorKey: 'created_at',
+        header: 'CREADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'created_at'),
+      },
+      {
+        accessorKey: 'modified_at',
+        header: 'MODIFICADO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: false,
+        enableSorting: false,
+        Cell: ({ row }) => formatDateWithTimeCell(row, 'modified_at'),
+      },
+    ],
+    [clientesFibraColumnsB01, clientesFibraColumnsB02, clientesFibraColumnsB03],
+  );
+
   return {
     clientesFibraColumnsActivos,
     clientesFibraColumnsActivosNoLink,
+    clientesFibraColumnsActivosNoLinkCambioOnu,
   };
 };

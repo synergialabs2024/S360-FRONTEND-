@@ -132,6 +132,7 @@ export enum PermissionsEnum {
   inventario_view_transferenciamaterial = 'inventario.view_transferenciamaterial',
   inventario_view_ubicacion = 'inventario.view_ubicacion',
   inventario_view_ubicacionproducto = 'inventario.view_ubicacionproducto',
+  inventario_view_cambioonu = 'inventario.view_cambioonu',
   mantenimientoope_view_flota = 'mantenimientoope.view_flota',
   mantenimientoope_view_planificador = 'mantenimientoope.view_planificador',
   mantenimientoope_view_tipoinstalacion = 'mantenimientoope.view_tipoinstalacion',

@@ -17,10 +17,12 @@ import { returnUrlClientesFibraPage } from '../../../pages/tables/ClientesFibraM
 
 export type ClienteFibraTitleProps = {
   serviceLine: LineaServicio;
+  returnUrl?: string;
 };
 
 const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
   serviceLine,
+  returnUrl,
 }) => {
   ///* hooks ----------------
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ const ClienteFibraTitle: React.FC<ClienteFibraTitleProps> = ({
             label="Volver"
             tooltipPlacement="left"
             onClick={() => {
-              navigate(returnUrlClientesFibraPage);
+              navigate(returnUrl || returnUrlClientesFibraPage);
             }}
             color="inherit"
             size={gridSize}

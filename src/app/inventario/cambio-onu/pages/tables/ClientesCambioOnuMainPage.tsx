@@ -28,7 +28,7 @@ const ClientesCambioOnuMainPage: React.FC<
   ClientesCambioOnuMainPageProps
 > = () => {
   ///* hooks -----------------
-  useCheckPermission(PermissionsEnum.clientes_view_cliente);
+  useCheckPermission(PermissionsEnum.inventario_view_cambioonu);
 
   const navigate = useNavigate();
 
@@ -70,7 +70,7 @@ const ClientesCambioOnuMainPage: React.FC<
   };
 
   ///* columns ---------------------------
-  const { clientesFibraColumnsActivos } = useColumnsClientes();
+  const { clientesFibraColumnsActivosNoLinkCambioOnu } = useColumnsClientes();
 
   return (
     <SingleTableBoxScene title="Clientes (Cambio Onu)" showCreateBtn={false}>
@@ -81,7 +81,7 @@ const ClientesCambioOnuMainPage: React.FC<
       />
 
       <CustomTable<Cliente>
-        columns={clientesFibraColumnsActivos}
+        columns={clientesFibraColumnsActivosNoLinkCambioOnu}
         data={clientesPagingRes?.data?.items || []}
         isLoading={isLoadingClientes}
         isRefetching={isRefetchingClientes}

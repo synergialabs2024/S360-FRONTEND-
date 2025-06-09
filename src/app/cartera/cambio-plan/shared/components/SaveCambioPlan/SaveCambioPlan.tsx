@@ -250,7 +250,7 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
       }
 
       const contrato = cedulaData.data.find(
-        item => item.contrato_data.numero_contrato === numeroContrato,
+        item => item.contrato_data?.identificacion_pago === numeroContrato,
       );
 
       form.setValue('linea_servicio_data', contrato);
@@ -258,17 +258,17 @@ const SaveCambioPlan: React.FC<SavePromesaPagoProps> = ({ title }) => {
       if (contrato) {
         form.setValue(
           'plan_actual',
-          contrato.contrato_data.plan_internet_actual_data.name,
+          contrato.contrato_data?.plan_internet_actual_data?.name,
         );
         form.setValue(
           'precio_plan_actual',
-          contrato.contrato_data.plan_internet_actual_data.valor,
+          contrato.contrato_data?.plan_internet_actual_data?.valor,
         );
-        form.setValue('num_contrato', contrato.contrato_data.id);
-        form.setValue('cliente', contrato.contrato_data.cliente);
+        form.setValue('num_contrato', contrato.contrato_data?.id);
+        form.setValue('cliente', contrato.contrato_data?.cliente);
         form.setValue(
           'linea_servicio',
-          contrato.solicitud_servicio_data.linea_servicio,
+          contrato.solicitud_servicio_data?.linea_servicio,
         );
         if (
           Number(watchedPlanNuevoId) >

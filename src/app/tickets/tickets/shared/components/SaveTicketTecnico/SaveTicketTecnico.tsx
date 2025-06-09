@@ -228,8 +228,11 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
         ToastWrapper.error('No existen lineas para la cedula digitada');
       }
 
+      console.log('cedulaData', cedulaData);
+      console.log('numeroContrato', numeroContrato);
+
       const contrato = cedulaData.data.find(
-        item => item.contrato_data?.numero_contrato === numeroContrato,
+        item => item.contrato_data?.identificacion_pago === numeroContrato,
       );
 
       console.log('contrato', contrato);

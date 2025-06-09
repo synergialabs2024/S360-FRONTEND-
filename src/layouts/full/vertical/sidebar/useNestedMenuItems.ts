@@ -633,7 +633,7 @@ export const useNestedMenu = () => {
               url: ROUTER_PATHS.inventario.cuentaContablesNav,
             }),
             /* renderByModule(SidenavModulesEnum.INVENTARIO_CAMBIO_ONU, { */
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.INVENTARIO_CAMBIO_ONU, {
               id: 'cambio-onu',
               title: 'Cambio Onu',
               type: MenuItemType.ITEM,
@@ -1577,13 +1577,13 @@ export const useNestedMenu = () => {
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
               children: [
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ASUNTO, {
                   id: 'asuntos',
                   title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ORIGEN, {
                   id: 'origenes',
                   title: 'Origen ticket',
                   type: MenuItemType.ITEM,
