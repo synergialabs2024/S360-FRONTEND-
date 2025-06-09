@@ -223,29 +223,51 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
         ]);
 
         // Validación de URLs requeridos
+        // Validación de URLs requeridas (existentes o recién subidas)
         const requiredUrls = [
-          { url: antesSolucionPhoto?.streamUlr, name: 'Foto antes solución' },
           {
-            url: despuesSolucionPhoto?.streamUlr,
+            url:
+              antesSolucionPhoto?.streamUlr || ticket?.url_foto_antes_solucion,
+            name: 'Foto antes solución',
+          },
+          {
+            url:
+              despuesSolucionPhoto?.streamUlr ||
+              ticket?.url_foto_despues_solucion,
             name: 'Foto después solución',
           },
-          { url: testVelocidadPhoto?.streamUlr, name: 'Test de velocidad' },
           {
-            url: potenciaAntesSolucionPhoto?.streamUlr,
+            url:
+              testVelocidadPhoto?.streamUlr || ticket?.url_foto_test_velocidad,
+            name: 'Test de velocidad',
+          },
+          {
+            url:
+              potenciaAntesSolucionPhoto?.streamUlr ||
+              ticket?.url_foto_potencia_antes_solucion,
             name: 'Potencia antes solución',
           },
           {
-            url: potenciaDespuesSolucionPhoto?.streamUlr,
+            url:
+              potenciaDespuesSolucionPhoto?.streamUlr ||
+              ticket?.url_foto_potencia_despues_solucion,
             name: 'Potencia después solución',
           },
           {
-            url: problemaEncontradoPhoto?.streamUlr,
+            url:
+              problemaEncontradoPhoto?.streamUlr ||
+              ticket?.url_foto_problema_encontrado,
             name: 'Problema encontrado',
           },
-          { url: solucionPhoto?.streamUlr, name: 'Solución' },
+          {
+            url: solucionPhoto?.streamUlr || ticket?.url_foto_solucion,
+            name: 'Solución',
+          },
         ];
 
-        const missingUrl = requiredUrls.find(item => !item.url);
+        const missingUrl = requiredUrls.find(
+          item => !item.url || item.url === '',
+        );
         if (missingUrl) {
           ToastWrapper.error(
             `La imagen ${missingUrl.name} no se subió correctamente y es requerida`,
