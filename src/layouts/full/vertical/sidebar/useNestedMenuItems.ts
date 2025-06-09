@@ -868,7 +868,7 @@ export const useNestedMenu = () => {
             }),
             renderByModule(SidenavModulesEnum.INFRAESTRUCTURA_PRIMARY_NAP, {
               id: 'primary-naps',
-              title: 'NAPs Primarias',
+              title: 'Cajas Nap Primarias',
               type: MenuItemType.ITEM,
               url: ROUTER_PATHS.infraestructura.primarynapsNav,
             }),

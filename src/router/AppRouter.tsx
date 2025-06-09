@@ -2941,7 +2941,7 @@ const AppRouter = [
           ///* Buzon de Tareas
 
           {
-            path: ROUTER_PATHS.cartera.buzontareasNav,
+            path: ROUTER_PATHS.cartera.buzontareas,
             element: <BuzonTareasPage />,
           },
           {

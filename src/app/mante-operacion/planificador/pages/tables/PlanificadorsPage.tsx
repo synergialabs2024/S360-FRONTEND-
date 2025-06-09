@@ -91,7 +91,10 @@ const PlanificadorsPage: React.FC<PlanificadorsPageProps> = () => {
   const { flotasColumns } = useColumnsFlota();
 
   return (
-    <SingleTableBoxScene title="Planificador" showCreateBtn={false}>
+    <SingleTableBoxScene
+      title="Planificador | Organización de horarios"
+      showCreateBtn={false}
+    >
       <CustomSearch
         onChange={onChangeFilter}
         value={globalFilter}

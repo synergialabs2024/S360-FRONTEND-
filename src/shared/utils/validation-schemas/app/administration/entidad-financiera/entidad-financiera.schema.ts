@@ -14,6 +14,10 @@ export const entidadFinancieraFormSchema = yup.object({
     .string()
     .required('El campo codigo es requerido')
     .max(10, 'El campo codigo no debe exceder los 10 caracteres'),
+  codigo_sri: yup
+    .string()
+    .required('El campo codigo sri es requerido')
+    .max(100, 'El campo codigo sri no debe exceder los 100 caracteres'),
   ifi: yup
     .string()
     .required('El campo ifi es requerido')

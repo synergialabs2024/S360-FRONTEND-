@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
 
 import { ScrollableDialogProps } from '../../CustomDialogs';
+import { IconEye } from '@tabler/icons-react';
 
 export type ViewMoreTextModalTableCellProps = {
   longText: string;
@@ -9,6 +10,7 @@ export type ViewMoreTextModalTableCellProps = {
   modalTitle?: string;
   viewMoreText?: string;
   defaultText?: string;
+  iconEyes?: boolean;
 };
 
 const ViewMoreTextModalTableCell: React.FC<ViewMoreTextModalTableCellProps> = ({
@@ -16,6 +18,7 @@ const ViewMoreTextModalTableCell: React.FC<ViewMoreTextModalTableCellProps> = ({
   limit = 42,
   modalTitle = 'Texto completo',
   viewMoreText = 'Ver más',
+  iconEyes = false,
   defaultText = 'N/A',
 }) => {
   ///* local state -------------
@@ -38,7 +41,7 @@ const ViewMoreTextModalTableCell: React.FC<ViewMoreTextModalTableCellProps> = ({
               onClick={() => setOpen(!open)}
               style={{ cursor: 'pointer' }}
             >
-              {viewMoreText}
+              {iconEyes ? <IconEye /> : viewMoreText}
             </Button>
           </>
         ) : (

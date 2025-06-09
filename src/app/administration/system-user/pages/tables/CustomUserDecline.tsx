@@ -1,12 +1,12 @@
+import { IconUserCancel } from '@tabler/icons-react';
 import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
 
-import { SingleIconButton, ScrollableDialogProps } from '@/shared/components';
+import { SystemUserItem } from '@/shared';
 import { SystemUserTSQEnum } from '@/actions/app';
 import { useGenericPATCH } from '@/actions/shared';
 import { useUiConfirmModalStore } from '@/store/ui';
-import { SystemUserItem } from '@/shared';
-import { IconUserCancel } from '@tabler/icons-react';
+import { SingleIconButton, ScrollableDialogProps } from '@/shared/components';
 
 export type CustomUserDeclineProps = { sui: SystemUserItem };
 
@@ -18,8 +18,8 @@ const CustomUserDecline: React.FC<CustomUserDeclineProps> = ({ sui }) => {
   const [openChangeDecline, setOpenChangeDecline] = useState(false);
 
   ///* global state -----------
-  const setConfirmDialog = useUiConfirmModalStore(s => s.setConfirmDialog);
-  const setConfirmDialogIsOpen = useUiConfirmModalStore(
+  const setConfirmDialog2 = useUiConfirmModalStore(s => s.setConfirmDialog);
+  const setConfirmDialogIsOpen2 = useUiConfirmModalStore(
     s => s.setConfirmDialogIsOpen,
   );
 
@@ -32,25 +32,24 @@ const CustomUserDecline: React.FC<CustomUserDeclineProps> = ({ sui }) => {
       customOnSuccess() {
         setOpenChangeDecline(false);
         setLocalUserItems(null);
-        setConfirmDialogIsOpen(false);
+        setConfirmDialogIsOpen2(false); // ✅ cerrar el modal aquí
       },
     },
   );
 
   const onSaveDecline = () => {
-    setConfirmDialog({
+    setConfirmDialog2({
       isOpen: true,
       title: '¿Está seguro que deseas inhabilitar este usuario?',
-      subtitle: 'Al inhabilitarlo, no podra iniciar sesión este usuario.',
+      subtitle: 'Al inhabilitarlo, no podrá iniciar sesión este usuario.',
       onConfirm: () => {
         if (localUserItems?.user) {
           changeDeclineMutation.mutate({});
-          setConfirmDialogIsOpen(false);
         }
       },
     });
 
-    setConfirmDialogIsOpen(false);
+    setConfirmDialogIsOpen2(true);
   };
 
   return (
@@ -64,29 +63,28 @@ const CustomUserDecline: React.FC<CustomUserDeclineProps> = ({ sui }) => {
         color="inherit"
         label="Inhabilitar usuario"
         tooltipPlacement="bottom"
+        disabled={!sui.user.state}
       />
 
       {/* -------------- MODALS -------------- */}
-      <>
-        <ScrollableDialogProps
-          title={`Inhabilitar: ${localUserItems?.user.razon_social || ''}`}
-          open={openChangeDecline}
-          onClose={() => {
-            setOpenChangeDecline(false);
-            setLocalUserItems(null);
-            setConfirmDialogIsOpen(false);
-          }}
-          onConfirm={onSaveDecline}
-          contentNode={
-            <Box py={3} ml={5} mt={2}>
-              <Typography variant="body1" color="text.secondary">
-                Una vez inhabilitado, este usuario no solo no podrá iniciar
-                sesión, no podra habilitarse nuevamente
-              </Typography>
-            </Box>
-          }
-        />
-      </>
+      <ScrollableDialogProps
+        title={`Inhabilitar: ${localUserItems?.user.razon_social || ''}`}
+        open={openChangeDecline}
+        onClose={() => {
+          setOpenChangeDecline(false);
+          setLocalUserItems(null);
+          setConfirmDialogIsOpen2(false);
+        }}
+        onConfirm={onSaveDecline}
+        contentNode={
+          <Box py={3} ml={5} mt={2}>
+            <Typography variant="body1" color="text.secondary">
+              Una vez inhabilitado, este usuario no solo no podrá iniciar
+              sesión, no podrá habilitarse nuevamente.
+            </Typography>
+          </Box>
+        }
+      />
     </>
   );
 };
