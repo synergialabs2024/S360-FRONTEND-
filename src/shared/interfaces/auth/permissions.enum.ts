@@ -169,7 +169,7 @@ export enum PermissionsEnum {
   users_view_user = 'users.view_usuario',
   webhooks_view_webhooklog = 'webhooks.view_webhooklog',
   sac_view_cambioonu = 'sac.view_cambioonu',
-  buzontarea_view_tareas = 'buzontarea.view_tareas',
+  //buzontarea_view_tareas = 'buzontarea.view_tareas',
 
   // // // // ADD ---------------------------
   admin_add_logentry = 'admin.add_logentry',

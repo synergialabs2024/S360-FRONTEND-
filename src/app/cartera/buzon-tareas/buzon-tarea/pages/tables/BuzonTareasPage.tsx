@@ -15,7 +15,7 @@ export const returnUrlBuzonTareasPage = ROUTER_PATHS.cartera.buzontareasNav;
 export type BuzonTareasPageProps = {};
 
 const BuzonTareasPage: React.FC<BuzonTareasPageProps> = () => {
-  useCheckPermission(PermissionsEnum.buzontarea_view_tareas);
+  useCheckPermission(PermissionsEnum.cartera_view_buzontareamantenedor);
 
   const { tabValue, handleTabChange } = useTabsOnly();
 
