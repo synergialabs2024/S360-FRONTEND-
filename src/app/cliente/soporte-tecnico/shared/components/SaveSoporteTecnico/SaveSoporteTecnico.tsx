@@ -19,6 +19,7 @@ import {
   InputAndBtnGridSpace,
   SingleIconButton,
   MapModalComponent,
+  CustomAutocomplete,
 } from '@/shared/components';
 import {
   ColorChipType,
@@ -36,12 +37,18 @@ import {
   gridSize,
   gridSizeMdLg11,
   gridSizeMdLg1,
+  ToastWrapper,
+  useLoaders,
+  Zona,
+  Sector,
 } from '@/shared';
 import {
   CreateSolicitudServicioClienteParamsBase,
   useUpdateSoporteTecnicoCliente,
   SoporteTecnicoClienteParamsBase,
   useFetchZonas,
+  useGetZoneByCoords,
+  useFetchSectores,
 } from '@/actions/app';
 import { useRubroStore } from '@/store/app/rubros';
 import SoporteTecnicoTitle from './SoporteTecnicoTitle';
@@ -69,6 +76,8 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
 
   ///* local state ---------------------
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
+  const [onCoord, setOnCoord] = useState<boolean>(false);
+  const [dataCoord, setDataCoord] = useState<Zona>();
 
   ///* form
   const form = useForm<SaveFormData>({
@@ -81,8 +90,17 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
     },
   });
 
+  const watchedZone = form.watch('zona');
+
   // map --------
-  const { Map, latLng, napsByCoords, setLatLng } = useMapComponent({
+  const {
+    Map,
+    latLng,
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    setLatLng,
+  } = useMapComponent({
     form,
     initialCoords: String(
       soporte_tecnico?.solicitud_servicio_data?.coordenadas,
@@ -95,8 +113,35 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
     setLatLng,
   });
 
-  useLocationCoords({
-    setLatLng,
+  const {
+    data: zonaByCoordsRes,
+    isLoading: isLoadingZonaByCoords,
+    isRefetching: isRefetchingZonaByCoords,
+  } = useGetZoneByCoords(
+    {
+      coords: `${latLng?.lat},${latLng?.lng}`,
+    },
+    !!latLng?.lat && !!latLng?.lng,
+  );
+  const {
+    data: zonasPaging,
+    isLoading: isLoadingZonas,
+    isRefetching: isRefetchingZonas,
+  } = useFetchZonas({
+    params: {
+      page_size: 1200,
+    },
+  });
+  const {
+    data: sectoresPaging,
+    isLoading: isLoadingSectores,
+    isRefetching: isRefetchingSectores,
+  } = useFetchSectores({
+    enabled: !!watchedZone,
+    params: {
+      page_size: 900,
+      zona: watchedZone,
+    },
   });
 
   const {
@@ -117,12 +162,6 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
     },
   ];
 
-  const { data: zonasPaging } = useFetchZonas({
-    params: {
-      page_size: 1200,
-    },
-  });
-
   ///* hooks ----------------
   const navigate = useNavigate();
 
@@ -137,6 +176,13 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
 
   ///* handlers
   const onSave = async (data: SaveFormData) => {
+    if (!onCoord) {
+      setOpenMapModal(true);
+      return ToastWrapper.warning(
+        'La Coordenada debe estar dentro de una zona valida',
+      );
+    }
+    console.log(data);
     if (soporte_tecnico?.solicitud_servicio_data?.id) {
       updateClienteMutation.mutate({
         id: soporte_tecnico.solicitud_servicio_data.id!,
@@ -152,6 +198,71 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
       clearAllRubroStore();
     };
   }, [clearAllRubroStore]);
+
+  ///* effects ---------------------
+  // set zone to up
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+
+    if (isLoadingZonaByCoords || isRefetchingZonaByCoords) return;
+    const zone = zonaByCoordsRes?.data;
+    if (!zone) {
+      ToastWrapper.warning(
+        'No se encontraron zonas con cobertura para las coordenadas proporcionadas',
+      );
+      return;
+    }
+    setDataCoord(zone);
+    form.reset({
+      ...form.getValues(),
+      pais: zone?.pais!,
+      provincia: zone?.provincia!,
+      ciudad: zone?.ciudad!,
+      zona: zone?.id,
+    });
+  }, [
+    zonaByCoordsRes,
+    isLoadingZonaByCoords,
+    isRefetchingZonaByCoords,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
+  //// alerts
+  // naps available
+  useEffect(() => {
+    if (!latLng?.lat || !latLng?.lng) return;
+    if (isLoadingNaps || isRefetchingNaps) return;
+    const thereAreNaps = !!napsByCoords?.length;
+    if (!thereAreNaps) {
+      ToastWrapper.warning(
+        'No se encontraron cajas disponibles para las coordenadas ingresadas',
+      );
+    }
+    setOnCoord(thereAreNaps);
+  }, [
+    napsByCoords,
+    isLoadingNaps,
+    isRefetchingNaps,
+    form,
+    latLng?.lat,
+    latLng?.lng,
+  ]);
+  // sectores available
+  useEffect(() => {
+    if (!watchedZone) return;
+    if (isLoadingSectores || isRefetchingSectores) return;
+    const thereAreSectores = !!sectoresPaging?.data?.items.length;
+    if (!thereAreSectores) {
+      ToastWrapper.warning(
+        'No se encontraron sectores para la zona seleccionada',
+      );
+    }
+  }, [watchedZone, sectoresPaging, isLoadingSectores, isRefetchingSectores]);
+
+  const customLoading =
+    isLoadingNaps || isRefetchingNaps || isLoadingZonas || isRefetchingZonas;
+  useLoaders(customLoading);
 
   return (
     <SingleFormBoxScene
@@ -382,13 +493,10 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
             defaultValue={form.getValues().coordenadas || ''}
             error={errors.coordenadas as any}
             helperText={errors.coordenadas?.message as any}
-            //disabled={disabledInputCoords}
             onChangeValue={(value, isValidCoords) => {
               if (isValidCoords) {
                 const s = value.split(',');
                 setLatLng({ lat: s[0], lng: s[1] });
-                console.log(value);
-                //onChangeCoordsInput && onChangeCoordsInput(value);
               }
             }}
           />
@@ -439,7 +547,6 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
                       }
                       : { lat: 0, lng: 0 }
                   }
-                  //canDragMarker={canDragMarker}
                   setLatLng={setLatLng}
                   showCoverage
                   coverageZones={zonasPaging?.data?.items || []}
@@ -459,11 +566,55 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
         pt={CustomTypoLabelEnum.ptMiddlePosition}
       />
       <CustomTextFieldNoForm
+        label="Pais"
+        size={gridSizeMdLg6}
+        value={dataCoord?.pais_data?.name!}
+        required={false}
+        disabled
+      />
+      <CustomTextFieldNoForm
+        label="Provincia"
+        size={gridSizeMdLg6}
+        value={dataCoord?.provincia_data?.name!}
+        required={false}
+        disabled
+      />
+      <CustomTextFieldNoForm
+        label="Ciudad"
+        size={gridSizeMdLg6}
+        value={dataCoord?.ciudad_data?.name!}
+        required={false}
+        disabled
+      />
+      <CustomTextFieldNoForm
+        label="zona"
+        size={gridSizeMdLg6}
+        value={dataCoord?.name!}
+        required={false}
+        disabled
+      />
+      <CustomTextFieldNoForm
         label="Cedula / RUC"
         size={gridSizeMdLg6}
         value={soporte_tecnico?.solicitud_servicio_data?.identificacion}
         required={false}
         disabled
+      />
+      <CustomAutocomplete<Sector>
+        label="Sector"
+        name="sector"
+        // options
+        options={sectoresPaging?.data?.items || []}
+        valueKey="name"
+        actualValueKey="id"
+        //defaultValue={soporte_tecnico?.sector_data?.id!}
+        defaultValue={form.getValues().sector}
+        isLoadingData={isLoadingSectores || isRefetchingSectores}
+        // vaidation
+        control={form.control}
+        error={errors.sector as any}
+        helperText={errors.sector?.message as any}
+        size={gridSizeMdLg6}
       />
       <CustomTextFieldNoForm
         label="Nombres"
