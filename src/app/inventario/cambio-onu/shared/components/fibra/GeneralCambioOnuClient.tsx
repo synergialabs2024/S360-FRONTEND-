@@ -99,6 +99,10 @@ const GeneralCambioOnuClient: React.FC<GeneralCambioOnuClientProps> = ({
 
   const selectedSerie = form.watch('new_serie_ont');
 
+  useEffect(() => {
+    console.log('equiposUtilizados', equiposUtilizados);
+  });
+
   ///* handlers ---------------------
   const onSave = async () => {
     if (!equiposUtilizados?.length)

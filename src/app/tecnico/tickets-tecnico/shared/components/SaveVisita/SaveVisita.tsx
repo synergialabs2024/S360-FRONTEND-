@@ -348,6 +348,31 @@ const SaveVisita: React.FC<SaveVisitaProps> = ({ titleNode, ticket }) => {
       }),
     ]);
 
+    // Validación de URLs requeridos
+    const requiredUrls = [
+      { url: antesSolucionPhoto?.streamUlr, name: 'Foto antes solución' },
+      { url: despuesSolucionPhoto?.streamUlr, name: 'Foto después solución' },
+      { url: testVelocidadPhoto?.streamUlr, name: 'Test de velocidad' },
+      {
+        url: potenciaAntesSolucionPhoto?.streamUlr,
+        name: 'Potencia antes solución',
+      },
+      {
+        url: potenciaDespuesSolucionPhoto?.streamUlr,
+        name: 'Potencia después solución',
+      },
+      { url: problemaEncontradoPhoto?.streamUlr, name: 'Problema encontrado' },
+      { url: solucionPhoto?.streamUlr, name: 'Solución' },
+    ];
+
+    const missingUrl = requiredUrls.find(item => !item.url);
+    if (missingUrl) {
+      ToastWrapper.error(
+        `La imagen ${missingUrl.name} no se subió correctamente y es requerida`,
+      );
+      return;
+    }
+
     let entregaMeshPhoto = null;
     if (fotoEntregaMesh) {
       entregaMeshPhoto = await uploadFileToBucket({
