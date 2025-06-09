@@ -356,51 +356,64 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
           linea_servicio: ticket?.linea_servicio,
 
           url_foto_antes_solucion:
-            antesSolucionPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_antes_solucion
-              : antesSolucionPhoto?.streamUlr,
+            antesSolucionPhoto?.streamUlr &&
+            antesSolucionPhoto?.streamUlr !== ticket?.url_foto_antes_solucion
+              ? antesSolucionPhoto?.streamUlr
+              : ticket?.url_foto_antes_solucion,
 
           url_foto_despues_solucion:
-            despuesSolucionPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_despues_solucion
-              : despuesSolucionPhoto?.streamUlr,
+            despuesSolucionPhoto?.streamUlr &&
+            despuesSolucionPhoto?.streamUlr !==
+              ticket?.url_foto_despues_solucion
+              ? despuesSolucionPhoto?.streamUlr
+              : ticket?.url_foto_despues_solucion,
 
           url_foto_test_velocidad:
-            testVelocidadPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_test_velocidad
-              : testVelocidadPhoto?.streamUlr,
+            testVelocidadPhoto?.streamUlr &&
+            testVelocidadPhoto?.streamUlr !== ticket?.url_foto_test_velocidad
+              ? testVelocidadPhoto?.streamUlr
+              : ticket?.url_foto_test_velocidad,
 
           url_foto_potencia_antes_solucion:
-            potenciaAntesSolucionPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_potencia_antes_solucion
-              : potenciaAntesSolucionPhoto?.streamUlr,
+            potenciaAntesSolucionPhoto?.streamUlr &&
+            potenciaAntesSolucionPhoto?.streamUlr !==
+              ticket?.url_foto_potencia_antes_solucion
+              ? potenciaAntesSolucionPhoto?.streamUlr
+              : ticket?.url_foto_potencia_antes_solucion,
 
           url_foto_potencia_despues_solucion:
-            potenciaDespuesSolucionPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_potencia_despues_solucion
-              : potenciaDespuesSolucionPhoto?.streamUlr,
+            potenciaDespuesSolucionPhoto?.streamUlr &&
+            potenciaDespuesSolucionPhoto?.streamUlr !==
+              ticket?.url_foto_potencia_despues_solucion
+              ? potenciaDespuesSolucionPhoto?.streamUlr
+              : ticket?.url_foto_potencia_despues_solucion,
 
           url_foto_problema_encontrado:
-            problemaEncontradoPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_problema_encontrado
-              : problemaEncontradoPhoto?.streamUlr,
+            problemaEncontradoPhoto?.streamUlr &&
+            problemaEncontradoPhoto?.streamUlr !==
+              ticket?.url_foto_problema_encontrado
+              ? problemaEncontradoPhoto?.streamUlr
+              : ticket?.url_foto_problema_encontrado,
 
           url_foto_solucion:
-            solucionPhoto?.streamUlr.length === 0
-              ? ticket?.url_foto_solucion
-              : solucionPhoto?.streamUlr,
+            solucionPhoto?.streamUlr &&
+            solucionPhoto?.streamUlr !== ticket?.url_foto_solucion
+              ? solucionPhoto?.streamUlr
+              : ticket?.url_foto_solucion,
 
           ...(entregaMeshPhoto && {
             url_foto_entrega_mesh:
-              entregaMeshPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_entrega_mesh
-                : entregaMeshPhoto?.streamUlr,
+              entregaMeshPhoto?.streamUlr &&
+              entregaMeshPhoto?.streamUlr !== ticket?.url_foto_entrega_mesh
+                ? entregaMeshPhoto?.streamUlr
+                : ticket?.url_foto_entrega_mesh,
           }),
           ...(entregaUpsPhoto && {
             url_foto_entrega_ups:
-              entregaUpsPhoto?.streamUlr.length === 0
-                ? ticket?.url_foto_entrega_ups
-                : entregaUpsPhoto?.streamUlr,
+              entregaUpsPhoto?.streamUlr &&
+              entregaUpsPhoto?.streamUlr !== ticket?.url_foto_entrega_ups
+                ? entregaUpsPhoto?.streamUlr
+                : ticket?.url_foto_entrega_ups,
           }),
         });
       },
