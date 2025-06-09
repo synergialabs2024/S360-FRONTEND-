@@ -25,7 +25,6 @@ import {
   ColorChipType,
   LineaServicio,
   ShowPingModal,
-  gridSizeMdLg4,
   gridSizeMdLg6,
   gridSizeMdLg12,
   ShowTraceModal,
@@ -639,21 +638,21 @@ const SaveSoporteTecnico: React.FC<SaveSoporteTecnicoProps> = ({
       />
       <CustomTextFieldNoForm
         label="Datos GPON"
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         value={soporte_tecnico?.nap_data?.name}
         required={false}
         disabled
       />
       <CustomTextFieldNoForm
         label="Router MAC"
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         value={soporte_tecnico?.orden_trabajo_data?.serie_ont}
         required={false}
         disabled
       />
       <CustomTextFieldNoForm
         label="Router Modelo"
-        size={gridSizeMdLg4}
+        size={gridSizeMdLg6}
         value={soporte_tecnico?.orden_trabajo_data?.modelo_ont_wifi}
         required={false}
         disabled

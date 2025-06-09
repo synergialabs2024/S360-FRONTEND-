@@ -105,19 +105,19 @@ export const configuracionEmpresaFormSchema = yup.object({
     .matches(/:uuid$/, 'La URL debe terminar con ":uuid"'),
 
   parroquia_name_contrato: yup
-    .number()
+    .string()
     .typeError('El campo parroquia es requerido')
     .required('El campo parroquia es requerido'),
   provincia_name_contrato: yup
-    .number()
+    .string()
     .typeError('El campo provincia es requerido')
     .required('El campo provincia es requerido'),
   ciudad_name_contrato: yup
-    .number()
+    .string()
     .typeError('El campo ciudad es requerido')
     .required('El campo ciudad es requerido'),
   canton_name_contrato: yup
-    .number()
+    .string()
     .typeError('El campo canton es requerido')
     .required('El campo canton es requerido'),
 });
