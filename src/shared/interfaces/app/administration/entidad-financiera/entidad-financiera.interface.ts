@@ -19,6 +19,7 @@ export interface EntidadFinanciera {
   code: string;
   description: string;
   ifi: string;
+  codigo_sri: string;
 }
 
 export type EntidadFinancieraLimitData = Pick<

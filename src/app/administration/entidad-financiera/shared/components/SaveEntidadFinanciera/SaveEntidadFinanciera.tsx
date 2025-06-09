@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
 import {
   CreateEntidadFinancieraParamsBase,
@@ -14,7 +14,11 @@ import {
   SampleCheckbox,
   SingleFormBoxScene,
 } from '@/shared/components';
-import { gridSizeMdLg6 } from '@/shared/constants/ui';
+import {
+  gridSizeMdLg10,
+  gridSizeMdLg2,
+  gridSizeMdLg4,
+} from '@/shared/constants/ui';
 import { EntidadFinanciera } from '@/shared/interfaces';
 import { entidadFinancieraFormSchema } from '@/shared/utils';
 import { returnUrlEntidadesFinancieraPage } from '../../../pages/tables/EntidadesFinancieraPage';
@@ -95,7 +99,15 @@ const SaveEntidadFinanciera: React.FC<SaveEntidadFinancieraProps> = ({
         defaultValue={form.getValues().name}
         error={errors.name}
         helperText={errors.name?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg10}
+      />
+      <SampleCheckbox
+        label="state"
+        name="state"
+        control={form.control}
+        defaultValue={form.getValues().state}
+        isState
+        size={gridSizeMdLg2}
       />
       <CustomTextField
         label="Codigo"
@@ -104,7 +116,17 @@ const SaveEntidadFinanciera: React.FC<SaveEntidadFinancieraProps> = ({
         defaultValue={form.getValues().code}
         error={errors.code}
         helperText={errors.code?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
+        disabled={!!entidadfinanciera?.id}
+      />
+      <CustomTextField
+        label="Codigo Sri"
+        name="codigo_sri"
+        control={form.control}
+        defaultValue={form.getValues().codigo_sri}
+        error={errors.codigo_sri}
+        helperText={errors.codigo_sri?.message}
+        size={gridSizeMdLg4}
         disabled={!!entidadfinanciera?.id}
       />
       <CustomTextField
@@ -114,16 +136,8 @@ const SaveEntidadFinanciera: React.FC<SaveEntidadFinancieraProps> = ({
         defaultValue={form.getValues().ifi}
         error={errors.ifi}
         helperText={errors.ifi?.message}
-        size={gridSizeMdLg6}
+        size={gridSizeMdLg4}
         disabled={!!entidadfinanciera?.id}
-      />
-      <SampleCheckbox
-        label="state"
-        name="state"
-        control={form.control}
-        defaultValue={form.getValues().state}
-        isState
-        size={gridSizeMdLg6}
       />
       <CustomTextArea
         label="Descripción"
