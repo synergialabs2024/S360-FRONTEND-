@@ -30,7 +30,7 @@ const AprobacionTicketsVisitaPage: React.FC<
         isMainTableStates
       >
         <Tab label={'ESPERA'} value={1} {...a11yProps(1)} />
-        <Tab label={'APROBADO'} value={2} {...a11yProps(2)} />
+        <Tab label={'REALIZADO'} value={2} {...a11yProps(2)} />
         <Tab
           label={'PENDIENTE CORRECCION AUDITORIA'}
           value={3}
@@ -41,6 +41,7 @@ const AprobacionTicketsVisitaPage: React.FC<
           value={4}
           {...a11yProps(4)}
         />
+        <Tab label={'CERRADO'} value={5} {...a11yProps(5)} />
       </BoxFormTabsOnly>
 
       <CustomTabPanel value={tabValue} index={1} ptGrid="0">
@@ -64,6 +65,12 @@ const AprobacionTicketsVisitaPage: React.FC<
       <CustomTabPanel value={tabValue} index={4} ptGrid="0">
         <AprobacionTicketsVisitaByStatePage
           state={EstadoTicketTecnicoEnumChoice.ESPERA_CORREGIDOS_AUDITORIA}
+        />
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={5} ptGrid="0">
+        <AprobacionTicketsVisitaByStatePage
+          state={EstadoTicketTecnicoEnumChoice.CERRADO}
         />
       </CustomTabPanel>
     </SingleTableBoxScene>
