@@ -56,7 +56,6 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
   // otp ------
 
   const clearAllTimers = useGenericCountdownStore(s => s.clearAll);
-  const setIsGlobalLoading = useUiStore(state => state.setIsGlobalLoading);
 
   ///* form --------------------------
   const form = useForm<UploadTicketVisitaCorreccionFotosData>({});
@@ -181,7 +180,6 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
       onConfirm: async () => {
         setConfirmDialogIsOpen(false);
         // upload images ----
-        setIsGlobalLoading(true);
         const [
           antesSolucionPhoto,
           despuesSolucionPhoto,
@@ -227,37 +225,6 @@ const SaveCorreccionFotosTv: React.FC<SaveCorreccionFotosTvProps> = ({
             bucketDir: BucketTypeEnumChoice.IMAGES_TICKETS_VISITAS,
           }),
         ]);
-
-        const requiredUrls = [
-          { url: antesSolucionPhoto?.streamUlr, name: 'Foto antes solución' },
-          {
-            url: despuesSolucionPhoto?.streamUlr,
-            name: 'Foto después solución',
-          },
-          { url: testVelocidadPhoto?.streamUlr, name: 'Test de velocidad' },
-          {
-            url: potenciaAntesSolucionPhoto?.streamUlr,
-            name: 'Potencia antes solución',
-          },
-          {
-            url: potenciaDespuesSolucionPhoto?.streamUlr,
-            name: 'Potencia después solución',
-          },
-          {
-            url: problemaEncontradoPhoto?.streamUlr,
-            name: 'Problema encontrado',
-          },
-          { url: solucionPhoto?.streamUlr, name: 'Solución' },
-        ];
-
-        const missingUrl = requiredUrls.find(item => !item.url);
-        if (missingUrl) {
-          ToastWrapper.error(
-            `La imagen ${missingUrl.name} no se subió correctamente y es requerida`,
-          );
-          setIsGlobalLoading(false);
-          return;
-        }
 
         let entregaMeshPhoto = null;
         if (fotoEntregaMesh) {
