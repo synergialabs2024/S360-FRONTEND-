@@ -18,11 +18,7 @@ import {
 } from '@/shared/components';
 
 import { getKeysFormErrorsMessage } from '@/shared/utils';
-import {
-  useGenericCountdownStore,
-  useUiConfirmModalStore,
-  useUiStore,
-} from '@/store/ui';
+import { useGenericCountdownStore, useUiConfirmModalStore } from '@/store/ui';
 
 import { SingleImageModal } from '@/shared/components/ui';
 import { Grid } from '@mui/material';
