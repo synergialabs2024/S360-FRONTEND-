@@ -639,12 +639,14 @@ export enum enumAdministracionParamsUUID {
 }
 export enum InvetarioCodesEnum {
   DIGITAL = 'DIGITAL',
+  DIGITAL_DIFERIDO = 'DIGITAL DIFERIDO',
   MATERIALES = 'MATERIALES',
   EQUIPOS = 'EQUIPOS',
   PREMIO = 'PREMIO',
 }
 export const CATEGORIA_TYPE_ARRAY_CHOICES = [
   InvetarioCodesEnum.DIGITAL,
+  InvetarioCodesEnum.DIGITAL_DIFERIDO,
   InvetarioCodesEnum.MATERIALES,
   InvetarioCodesEnum.EQUIPOS,
   InvetarioCodesEnum.PREMIO,
