@@ -61,6 +61,7 @@ const ShowComentarioCRMModal: React.FC<ShowComentarioCRMModalProps> = ({
           return (
             <ViewMoreTextModalTableCell
               longText={str}
+              iconEyes
               limit={27}
               modalTitle={`Comentario de ${row?.original?.usuario}`}
             />

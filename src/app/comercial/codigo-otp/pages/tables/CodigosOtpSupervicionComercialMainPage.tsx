@@ -22,7 +22,7 @@ const CodigosOtpSupervicionComercialMainPage: React.FC<
   const { tabValue, handleTabChange } = useTabsOnly();
 
   return (
-    <SingleTableBoxScene title="Códigos OTP" showCreateBtn={false}>
+    <SingleTableBoxScene title="Liberación de Código OTP" showCreateBtn={false}>
       <BoxFormTabsOnly
         tabValue={tabValue}
         handleTabChange={handleTabChange}

@@ -80,7 +80,7 @@ const RutasPage: React.FC<RutasPageProps> = () => {
 
   return (
     <SingleTableBoxScene
-      title="Ruta"
+      title="Rutas"
       createPageUrl={`${returnUrlRutasPage}/crear`}
       showCreateBtn={hasAllPermissions([
         PermissionsEnum.infraestructura_add_ruta,
