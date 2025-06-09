@@ -1566,7 +1566,7 @@ export const useNestedMenu = () => {
             //   type: MenuItemType.ITEM,
             //   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
             // }),
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.TICKETS, {
               id: 'lista-tickets',
               title: 'Tickets',
               type: MenuItemType.ITEM,
@@ -1577,13 +1577,13 @@ export const useNestedMenu = () => {
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
               children: [
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ASUNTO, {
                   id: 'asuntos',
                   title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
-                renderByModule(SidenavModulesEnum.INDEFINIDO, {
+                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ORIGEN, {
                   id: 'origenes',
                   title: 'Origen ticket',
                   type: MenuItemType.ITEM,
@@ -1664,7 +1664,7 @@ export const useNestedMenu = () => {
           type: MenuItemType.COLLAPSE,
           icon: IconRouter,
           children: [
-            renderByModule(SidenavModulesEnum.INDEFINIDO, {
+            renderByModule(SidenavModulesEnum.BUZONTAREAS_ASIGNADA, {
               id: 'tareas',
               title: 'Tareas',
               type: MenuItemType.ITEM,
