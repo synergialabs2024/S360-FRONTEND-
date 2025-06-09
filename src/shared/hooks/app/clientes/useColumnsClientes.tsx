@@ -13,6 +13,21 @@ export const useColumnsClientes = () => {
   const clientesFibraColumnsB00 = useMemo<MRT_ColumnDef<Cliente>[]>(
     () => [
       {
+        accessorKey: 'estado_contrato',
+        header: 'ESTADO CONTRATO',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,
+        enableColumnFilter: true,
+        enableSorting: true,
+        // Cell: ({ row }) =>
+        //   emptyCellNested(row, ['original','linea_servicio_data', 'contrato_data', 'id']),
+        Cell: ({ row }: MRTClienteType) => {
+          console.log('row', row);
+          const original = row?.original;
+          const firstLine = original?.linea_servicio_data?.[0];
+          return firstLine?.contrato_data?.estado_contrato || 'N/A';
+        },
+      },
+      {
         accessorKey: 'identificacion',
         header: 'IDENTIFICACION',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_SMALL,

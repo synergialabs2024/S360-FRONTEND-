@@ -113,6 +113,14 @@ const SingleImageModal: React.FC<SingleImageModalProps> = ({
         <Fade in={open} timeout={500}>
           <ModalContent>
             {/* ======== Image + Zoom ======== */}
+            {!imageError && image.imgUrl && (
+              <Img
+                src={image.imgUrl}
+                alt={image.title}
+                style={{ maxHeight: '90vh', maxWidth: '90vw' }}
+                onError={handleImageError}
+              />
+            )}
 
             {/* ======== Close Button ======== */}
             <Tooltip title="Cerrar" placement="right" arrow>

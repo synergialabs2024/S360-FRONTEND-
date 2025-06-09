@@ -13,6 +13,7 @@ import {
   IdentificationTypeEnumChoice,
   ToastWrapper,
   TURNOS_TICKETS_ARRAY_CHOICES,
+  useIsMediaQuery,
   useLoaders,
   useUploadImageGeneric,
 } from '@/shared';
@@ -24,6 +25,8 @@ import {
   CustomScanLoad,
   CustomTextArea,
   CustomTextField,
+  CustomTypoLabel,
+  CustomTypoLabelEnum,
   InputAndBtnGridSpace,
   SelectArrayString,
   SingleFormBoxScene,
@@ -47,6 +50,7 @@ import { Asunto, Origen } from '@/shared/interfaces/app/ticket';
 import DocsSaveFotosOpenTicket from '../SaveFotosOpenTicket/DocsSaveFotosOpenTicket';
 import { useGenericPOST } from '@/actions/shared';
 import { uploadFileToBucket } from '@/actions/statics-api';
+import { SingleImageModal } from '@/shared/components/ui';
 
 export type SaveTicketTecnicoProps = {
   title: string;
@@ -99,6 +103,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
   const watchedIdentification = form.watch('identificacion');
   const watchedIsFormBlocked = form.watch('isFormBlocked');
   const watchedIsCliente = form.watch('es_cliente');
+  const watchedFotoVivienda = form.watch('url_foto_vivienda');
 
   ///* fetch data ---------------------
 
@@ -193,8 +198,6 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
           identificacion: value,
         });
         setCedulaData(response ?? null);
-        // Ahora puedes acceder a la respuesta
-        console.log(searchCedulaMutation.data); // Aquí obtienes la data
       } catch (error) {
         // Manejo de errores si la mutación falla
         ToastWrapper.error('Error al obtener los datos');
@@ -210,32 +213,19 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
   const isCustomLoadingAsuntos = isLoadingAsuntos || isRefetchingAsunto;
   useLoaders(isCustomLoadingAsuntos);
 
-  useEffect(() => {
-    if (searchCedulaMutation.data) {
-      console.log(searchCedulaMutation.data); // Manejar los datos cuando estén disponibles
-    }
-  }, [searchCedulaMutation.data]);
-
   const [numeroContrato, setNumeroContrato] = useState<string | undefined>(
     undefined,
   );
 
   useEffect(() => {
     if (Array.isArray(cedulaData?.data)) {
-      console.log('cedulaData.data', cedulaData.data);
-
       if (cedulaData.data.length === 0) {
         ToastWrapper.error('No existen lineas para la cedula digitada');
       }
 
-      console.log('cedulaData', cedulaData);
-      console.log('numeroContrato', numeroContrato);
-
       const contrato = cedulaData.data.find(
         item => item.contrato_data?.identificacion_pago === numeroContrato,
       );
-
-      console.log('contrato', contrato);
 
       if (contrato) {
         form.setValue(
@@ -253,6 +243,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
         form.setValue('zona', contrato.zona_data?.name);
         form.setValue('celular_adicional', contrato.celular_adicional);
         form.setValue('nap', contrato.nap_data?.name);
+        form.setValue('url_foto_vivienda', contrato.url_foto_vivienda);
       } else {
         console.log('No se encontró el contrato con el número especificado.');
       }
@@ -326,6 +317,27 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
     });
   };
 
+  const isMobile = useIsMediaQuery('sm');
+
+  const titleAndImage = (title: string, imgUrl: string) => {
+    return (
+      <Grid item xs={isMobile ? 8 : 6} sx={isMobile ? { mb: 2 } : {}} pb={2}>
+        <CustomTypoLabel
+          text={title}
+          pt={CustomTypoLabelEnum.ptMiddlePosition}
+        />
+        <SingleImageModal
+          image={{
+            id: 1,
+            imgUrl: imgUrl || '',
+            title: title,
+          }}
+          widthPercentage={isMobile ? '100%' : '60%'}
+        />
+      </Grid>
+    );
+  };
+
   return (
     <SingleFormBoxScene
       titlePage={title}
@@ -358,7 +370,6 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
             error={errors.identificacion}
             helperText={errors.identificacion?.message}
             onFetchCedulaRucInfo={async value => {
-              console.log('value', value);
               await handleFetchCedulaRucInfo(value);
             }}
             disabled={!watchedIdentificationType}
@@ -570,6 +581,10 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
             UploadImageDropZoneComponent={UploadImageDropZoneComponent}
             viviendaImg={viviendaImg}
             setViviendaImg={setViviendaImg}
+            viviendaImgLabel={titleAndImage(
+              'Foto vivienda',
+              watchedFotoVivienda || '',
+            )}
             // cedula no rostro
             opcionalImg={opcionalImg}
             setOpcionalImg={setOpcionalImg}

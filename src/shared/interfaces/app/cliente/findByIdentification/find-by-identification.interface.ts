@@ -28,6 +28,7 @@ export interface FindByIdentification {
   departamento: number;
   canal_venta: number;
   vendedor: number;
+  url_foto_vivienda: string;
 }
 
 export interface NapData {

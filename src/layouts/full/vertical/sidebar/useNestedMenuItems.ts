@@ -1566,7 +1566,7 @@ export const useNestedMenu = () => {
             //   type: MenuItemType.ITEM,
             //   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
             // }),
-            renderByModule(SidenavModulesEnum.TICKETS, {
+            renderByModule(SidenavModulesEnum.INDEFINIDO, {
               id: 'lista-tickets',
               title: 'Tickets',
               type: MenuItemType.ITEM,
@@ -1577,13 +1577,13 @@ export const useNestedMenu = () => {
               title: 'Parametros',
               type: MenuItemType.COLLAPSE,
               children: [
-                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ASUNTO, {
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
                   id: 'asuntos',
                   title: 'Asunto ticket',
                   type: MenuItemType.ITEM,
                   url: ROUTER_PATHS.tickets.parametrosAsuntosNav,
                 }),
-                renderByModule(SidenavModulesEnum.TICKETS_PARAMETROS_ORIGEN, {
+                renderByModule(SidenavModulesEnum.INDEFINIDO, {
                   id: 'origenes',
                   title: 'Origen ticket',
                   type: MenuItemType.ITEM,

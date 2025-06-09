@@ -65,7 +65,7 @@ export const ticketFormSchema = yup.object({
     .string()
     .required('El campo detalle adicional ticket es requerido')
     .max(
-      200,
+      400,
       'El campo tipo identificacion no debe exceder los 200 caracteres',
     ),
 });
