@@ -64,10 +64,7 @@ export const ticketFormSchema = yup.object({
   detalle_adicional_ticket: yup
     .string()
     .required('El campo detalle adicional ticket es requerido')
-    .max(
-      400,
-      'El campo tipo identificacion no debe exceder los 200 caracteres',
-    ),
+    .max(400, 'El campo detalle no debe exceder los 400 caracteres'),
 });
 
 export const reAgendamientoTicketVisitaFormSchema = yup.object({

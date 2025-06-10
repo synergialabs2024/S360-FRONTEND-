@@ -9,7 +9,9 @@ import {
   ContratoData,
   FindByIdentification,
   getKeysFormErrorsMessage,
+  gridSize,
   gridSizeMdLg6,
+  IDENTIFICATION_TYPE_ARRAY_CHOICES,
   IdentificationTypeEnumChoice,
   ToastWrapper,
   TURNOS_TICKETS_ARRAY_CHOICES,
@@ -20,8 +22,9 @@ import {
 import { useEffect, useState } from 'react';
 import {
   CustomAutocomplete,
+  CustomAutocompleteArrString,
   CustomDatePicker,
-  CustomIdentificacionTextField,
+  CustomIdentificacionTextField2,
   CustomScanLoad,
   CustomTextArea,
   CustomTextField,
@@ -143,9 +146,10 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
 
   // handlers ------------
 
-  const clearForm = () => {
+  const clearForm = (clearIdentificaicon = true) => {
     form.reset({
       ...form.getValues(),
+      ...(clearIdentificaicon && { identificacion: '' }),
       origen_ticket: undefined,
       asunto_ticket: undefined,
       numero_contrato: '',
@@ -161,6 +165,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
       detalle_adicional_ticket: '',
       url_foto_vivienda: '',
       url_foto_opcional: '',
+      isValidIdentificacion: false, // helper
     });
 
     setAplicaRestriccionCiudadano(false);
@@ -177,6 +182,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
     useState<ApiResponse<FindByIdentification> | null>(null);
 
   const handleFetchCedulaRucInfo = async (value: string) => {
+    clearForm(false);
     if (watchedIdentificationType === IdentificationTypeEnumChoice.CEDULA) {
       setIsCheckingIdentificacion(true);
       try {
@@ -360,9 +366,27 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
           watchedIsCliente={watchedIsCliente!}
         />
       </Grid>
+
+      <CustomAutocompleteArrString
+        label="Tipo de identificación"
+        name="tipo_identificacion"
+        options={IDENTIFICATION_TYPE_ARRAY_CHOICES || []}
+        control={form.control}
+        defaultValue={form.getValues().tipo_identificacion}
+        error={errors.tipo_identificacion}
+        helperText={errors.tipo_identificacion?.message}
+        isLoadingData={false}
+        size={gridSizeMdLg6}
+        disableClearable
+        onChangeValue={() => {
+          clearForm();
+        }}
+        // disabled
+      />
+
       <InputAndBtnGridSpace
         inputNode={
-          <CustomIdentificacionTextField
+          <CustomIdentificacionTextField2
             label="Identificación"
             name="identificacion"
             control={form.control}
@@ -373,12 +397,33 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
               await handleFetchCedulaRucInfo(value);
             }}
             disabled={!watchedIdentificationType}
-            onChangeValue={value => {
-              if (!value?.length || value.length === 10) {
+            autofocus
+            onChange={identificacion => {
+              if (identificacion === '' /* || identificacion?.length < 10 */) {
                 clearForm();
                 setNumeroContrato(undefined);
+                form.setValue(
+                  'tipo_identificacion',
+                  IdentificationTypeEnumChoice.CEDULA,
+                );
+              }
+
+              if (identificacion.length > 10 && identificacion.length <= 13) {
+                form.setValue(
+                  'tipo_identificacion',
+                  IdentificationTypeEnumChoice.RUC,
+                );
+                clearForm(false);
+                form.setValue('identificacion', identificacion);
+              }
+              if (identificacion.length === 10) {
+                form.setValue(
+                  'tipo_identificacion',
+                  IdentificationTypeEnumChoice.CEDULA,
+                );
               }
             }}
+            size={gridSize}
           />
         }
         btnLabel="Buscar"
@@ -425,7 +470,7 @@ const SaveTicketTecnico: React.FC<SaveTicketTecnicoProps> = ({
         control={form.control}
         error={errors.numero_contrato}
         helperText={errors.numero_contrato?.message}
-        size={gridSizeMdLg6}
+        size={gridSize}
         onChangeRawValue={i => {
           setNumeroContrato(i.numero_contrato);
         }}

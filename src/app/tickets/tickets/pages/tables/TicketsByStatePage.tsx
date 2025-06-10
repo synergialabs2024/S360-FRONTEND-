@@ -45,7 +45,7 @@ const TicketsByStatePage: React.FC<TicketsByStatePageProps> = ({ state }) => {
     params: {
       page: pageIndex + 1,
       page_size: pageSize,
-      name: searchTerm,
+      identificacion: searchTerm,
       ...filterObject,
       estado_ticket: state,
     },

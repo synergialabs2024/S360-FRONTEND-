@@ -10,6 +10,19 @@ export const useColumnsTickets = () => {
   const ticketBaseColumns01 = useMemo<MRT_ColumnDef<Ticket>[]>(
     () => [
       {
+        accessorKey: 'identificacion',
+        header: 'IDENTIFICACION',
+        size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
+        enableColumnFilter: true,
+        enableSorting: true,
+        Cell: ({ row }) =>
+          emptyCellNested(row, [
+            'linea_servicio_data',
+            'cliente_data',
+            'identificacion',
+          ]),
+      },
+      {
         accessorKey: 'estado_ticket',
         header: 'ESTADO TICKET',
         size: TABLE_CONSTANTS.COLUMN_WIDTH_MEDIUM,
