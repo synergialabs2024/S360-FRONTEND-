@@ -21,6 +21,7 @@ import { IconCircle } from '@tabler/icons-react';
 import { IconPlus } from '@tabler/icons-react';
 // import { IconTrash } from '@tabler/icons-react';
 
+import { useIsMediaQuery } from '@/shared/hooks';
 import { useNavigate } from 'react-router-dom';
 
 interface BreadCrumbType {
@@ -38,8 +39,9 @@ const Breadcrumb = ({
   children,
   createPageUrl,
   onClickCreateBtn,
-  showCreateBtn
+  showCreateBtn,
 }: BreadCrumbType) => {
+  const isMobile = useIsMediaQuery('sm');
   const navigate = useNavigate();
   const BCrumb = [
     {
@@ -109,10 +111,14 @@ const Breadcrumb = ({
         <Grid item xs={12} sm={6} lg={4} display="flex" alignItems="flex-end">
           <Box
             sx={{
-              display: { xs: 'none', md: 'block', lg: 'flex' },
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              width: '100%',
+              ...(isMobile
+                ? {}
+                : {
+                  display: { xs: 'none', md: 'block', lg: 'flex' },
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  width: '100%',
+                }),
             }}
           >
             {children ? (
@@ -121,23 +127,20 @@ const Breadcrumb = ({
               <>
                 {/* <imgrelative src={breadcrumbImg} alt={breadcrumbImg} width={'165px'} /> */}
                 <Stack spacing={1} direction="row" justifyContent="center">
-                  {
-                    showCreateBtn &&
-                    (
-                      <Tooltip title="Nuevo">
-                        <Fab
-                          color="secondary"
-                          aria-label="plus"
-                          onClick={
-                            onClickCreateBtn ||
-                            (() => createPageUrl && navigate(createPageUrl))
-                          }
-                        >
-                          <IconPlus width={20} />
-                        </Fab>
-                      </Tooltip>
-                    )
-                  }
+                  {showCreateBtn && (
+                    <Tooltip title="Nuevo">
+                      <Fab
+                        color="secondary"
+                        aria-label="plus"
+                        onClick={
+                          onClickCreateBtn ||
+                          (() => createPageUrl && navigate(createPageUrl))
+                        }
+                      >
+                        <IconPlus width={20} />
+                      </Fab>
+                    </Tooltip>
+                  )}
                 </Stack>
               </>
             )}
